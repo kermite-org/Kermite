@@ -1,5 +1,6 @@
 import { useEffect } from 'qx';
 import {
+  compareObjectByJsonStringify,
   forceChangeFilePathExtension,
   ILayoutEditSource,
   IPersistKeyboardDesign,
@@ -17,6 +18,7 @@ import { UiLayouterCore } from '~/ui/pages/layouter';
 export interface ILayoutManagerModel {
   editSource: ILayoutEditSource;
   isModified: boolean;
+  hasLayoutEntities: boolean;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
   createForProject(projectId: string, layoutName: string): void;
@@ -52,10 +54,30 @@ async function checkShallLoadData(): Promise<boolean> {
   });
 }
 
+async function checkShallLoadDataForProfile(): Promise<boolean> {
+  const profileModified = !compareObjectByJsonStringify(
+    uiState.core.loadedProfileData,
+    uiState.core.editProfileData,
+  );
+  if (!profileModified) {
+    return true;
+  }
+  return await modalConfirm({
+    message: 'Unsaved changes of current profile will be lost. Are you OK?',
+    caption: 'create new profile',
+  });
+}
+
 const layoutManagerActions = {
   async createNewLayout() {
     if (!(await checkShallLoadData())) {
       return;
+    }
+    if (
+      layoutManagerReader.editSource.type === 'CurrentProfile' &&
+      layoutManagerReader.isModified
+    ) {
+      editorModel.restoreOriginalDesign();
     }
     dispatchCoreAction({ layout_createNewLayout: 1 });
   },
@@ -137,10 +159,16 @@ const layoutManagerActions = {
     });
     if (ok) {
       dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
+      if (!isProfile) {
+        UiLayouterCore.rebase();
+      }
     }
   },
 
   async createNewProfileFromCurrentLayout() {
+    if (!(await checkShallLoadDataForProfile())) {
+      return;
+    }
     const { editSource } = layoutManagerReader;
     let projectId = '000000';
     if (editSource.type === 'ProjectLayout') {
@@ -170,7 +198,7 @@ const layoutManagerActions = {
 };
 
 const local = new (class {
-  layoutEditSource: ILayoutEditSource | undefined;
+  layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
 })();
 
 export const layoutManagerRootModel = {
@@ -182,19 +210,17 @@ export const layoutManagerRootModel = {
         UiLayouterCore.loadEditDesign(loadedLayoutData);
         local.layoutEditSource = layoutEditSource;
       }
+    }, [layoutEditSource]);
 
+    useEffect(() => {
       return () => {
-        if (
-          layoutEditSource.type === 'CurrentProfile' &&
-          UiLayouterCore.getIsModified()
-        ) {
+        const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
+        if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
           const design = UiLayouterCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
       };
-    }, [layoutEditSource]);
-
-    useEffect(() => {}, []);
+    }, []);
   },
 };
 
@@ -218,6 +244,7 @@ export function useLayoutManagerModel(): ILayoutManagerModel {
   return {
     editSource,
     isModified,
+    hasLayoutEntities: UiLayouterCore.hasEditLayoutEntities(),
     createNewLayout,
     loadCurrentProfileLayout,
     createForProject,

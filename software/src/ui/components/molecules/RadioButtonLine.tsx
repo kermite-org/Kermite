@@ -6,6 +6,7 @@ type Props = {
   onClick?: () => void;
   text: string;
   disabled?: boolean;
+  radioGroupName?: string;
 };
 
 export const RadioButtonLine: FC<Props> = ({
@@ -14,10 +15,12 @@ export const RadioButtonLine: FC<Props> = ({
   onClick,
   text,
   disabled,
+  radioGroupName,
 }) => (
   <label css={style} classNames={[className, disabled && '--disabled']}>
     <input
       type="radio"
+      name={radioGroupName}
       checked={checked}
       onClick={onClick}
       disabled={disabled}

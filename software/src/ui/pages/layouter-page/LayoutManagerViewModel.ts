@@ -4,6 +4,7 @@ import { ISelectorOption } from '~/ui/base';
 import {
   globalSettingsReader,
   projectPackagesReader,
+  uiState,
   uiStateReader,
 } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/pages/layouter';
@@ -34,10 +35,11 @@ export interface ILayoutManagerViewModel {
   currentLayoutName: string;
   setCurrentLayoutName(text: string): void;
 
+  canCreateNewLayout: boolean;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
-  canLoadFromProject: boolean;
   createForProject(): void;
+  canLoadFromProject: boolean;
   loadFromProject(): void;
   canSaveToProject: boolean;
   saveToProject(): void;
@@ -52,8 +54,10 @@ export interface ILayoutManagerViewModel {
   canShowEditLayoutFileInFiler: boolean;
   showEditLayoutFileInFiler(): void;
   canOpenProjectIoModal: boolean;
+  canCreateProfile: boolean;
   createNewProfileFromCurrentLayout(): void;
   editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
+  canEditCurrentProfile: boolean;
   setEditTargetRadioSelection: (
     value: ILayoutManagerEditTargetRadioSelection,
   ) => void;
@@ -138,6 +142,16 @@ function useLayoutManagerViewModelImpl(
       ? 'CurrentProfile'
       : 'LayoutFile';
 
+  const canCreateNewLayout =
+    model.editSource.type === 'LayoutNewlyCreated'
+      ? model.hasLayoutEntities
+      : true;
+
+  const canCreateProfile = model.hasLayoutEntities;
+  const canEditCurrentProfile =
+    uiState.core.profileEditSource.type === 'InternalProfile' ||
+    uiState.core.profileEditSource.type === 'ProfileNewlyCreated';
+
   return {
     editSourceText: getEditSourceDisplayText(
       model.editSource,
@@ -150,6 +164,7 @@ function useLayoutManagerViewModelImpl(
     currentLayoutName: local.currentLayoutName,
     setCurrentLayoutName,
     targetProjectLayoutFilePath: getSavingPackageFilePath(),
+    canCreateNewLayout,
     createNewLayout: () => model.createNewLayout(),
     loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
     canLoadFromProject: isProjectLayoutSourceSpecified,
@@ -185,9 +200,11 @@ function useLayoutManagerViewModelImpl(
       model.editSource.type === 'ProjectLayout',
     showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
     canOpenProjectIoModal: isLocalProjectsAvailable,
+    canCreateProfile,
     createNewProfileFromCurrentLayout: () =>
       model.createNewProfileFromCurrentLayout(),
     editTargetRadioSelection,
+    canEditCurrentProfile,
     setEditTargetRadioSelection: (value) => {
       if (editTargetRadioSelection !== value) {
         if (value === 'CurrentProfile') {

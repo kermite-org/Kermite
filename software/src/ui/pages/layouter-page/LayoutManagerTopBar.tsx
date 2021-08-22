@@ -21,11 +21,14 @@ export const LayoutManagerTopBar: FC = () => {
           text="Current Profile"
           checked={vm.editTargetRadioSelection === 'CurrentProfile'}
           onClick={() => vm.setEditTargetRadioSelection('CurrentProfile')}
+          radioGroupName="radio_group_edit_target_selection"
+          disabled={!vm.canEditCurrentProfile}
         />
         <RadioButtonLine
           text="Layout File"
           checked={vm.editTargetRadioSelection === 'LayoutFile'}
           onClick={() => vm.setEditTargetRadioSelection('LayoutFile')}
+          radioGroupName="radio_group_edit_target_selection"
         />
       </div>
       <div
