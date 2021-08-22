@@ -134,7 +134,7 @@ export const textSourceEnglish = {
   label_assigner_newProfileModal_targetKeyboard: 'Target Keyboard',
   label_assigner_newProfileModal_layout: 'Layout',
   label_assigner_profileNameEditModal_modalTitleRename: 'Rename Profile',
-  label_assigner_profileNameEditModal_modalTitleCopy: 'Copy Profile',
+  label_assigner_profileNameEditModal_modalTitleCopy: 'Save Profile As',
   label_assigner_profileNameEditModal_modalTitleSave: 'Save Profile',
   label_assigner_profileNameEditModal_newProfileName: 'New Profile Name',
   label_assigner_confirmModal_deleteProfile_modalTitle: 'Delete Profile',
@@ -383,7 +383,7 @@ export const textSourceJapanese = {
   label_assigner_newProfileModal_layout: 'レイアウト',
   label_assigner_profileNameEditModal_modalTitleRename:
     'プロファイルの名前を変更',
-  label_assigner_profileNameEditModal_modalTitleCopy: 'プロファイルをコピー',
+  label_assigner_profileNameEditModal_modalTitleCopy: 'プロファイルを別名で保存',
   label_assigner_profileNameEditModal_modalTitleSave: 'プロファイルを保存',
   label_assigner_profileNameEditModal_newProfileName: 'プロファイル名',
   label_assigner_confirmModal_deleteProfile_modalTitle: 'プロファイルを削除',
