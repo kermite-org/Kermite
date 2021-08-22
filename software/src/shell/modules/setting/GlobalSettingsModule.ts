@@ -2,7 +2,7 @@ import { globalSettingsDefault, globalSettingsLoadingSchema } from '~/shared';
 import { appEnv, applicationStorage } from '~/shell/base';
 import { pathResolve } from '~/shell/funcs';
 import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
-import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
+import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 
 export const globalSettingsModule = createCoreModule({
   config_loadGlobalSettings() {

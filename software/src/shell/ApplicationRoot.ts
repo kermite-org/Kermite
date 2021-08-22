@@ -12,17 +12,20 @@ import {
   dispatchCoreAction,
   profilesReader,
 } from '~/shell/global';
-import { keyboardConfigModule, projectPackageModule } from '~/shell/modules';
-import { globalSettingsModule } from '~/shell/modules/GlobalSettingsModule';
-import { checkLocalRepositoryFolder } from '~/shell/projectResources/LocalResourceHelper';
+import {
+  keyboardConfigModule,
+  projectPackageModule,
+  layoutManager,
+} from '~/shell/modules';
+import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
+import { profileManager } from '~/shell/modules/profile/ProfileManager';
+import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModule';
+import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
+import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import { layoutManager } from '~/shell/services/layout/LayoutManager';
-import { layoutManagerModule } from '~/shell/services/layout/LayoutManagerModule';
-import { profileManager } from '~/shell/services/profile/ProfileManager';
-import { profileManagerModule } from '~/shell/services/profile/ProfileManagerModule';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 

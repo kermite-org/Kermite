@@ -1,3 +1,4 @@
-export * from './GlobalSettingsModule';
-export * from './KeyboardConfigProvider';
-export * from './ProjectPackageModule';
+export * from './setting/GlobalSettingsModule';
+export * from './setting/KeyboardConfigProvider';
+export * from './project/ProjectPackageModule';
+export * from './layout/LayoutManager';
