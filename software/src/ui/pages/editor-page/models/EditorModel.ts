@@ -239,6 +239,12 @@ export class EditorModel {
       this.preModifiedDesign = design;
     }
   }
+
+  restoreOriginalDesign() {
+    this.profileData.keyboardDesign = duplicateObjectByJsonStringifyParse(
+      this.loadedProfileData.keyboardDesign,
+    );
+  }
 }
 
 export const editorModel = new EditorModel();

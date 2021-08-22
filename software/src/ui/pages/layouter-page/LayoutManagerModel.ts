@@ -58,6 +58,12 @@ const layoutManagerActions = {
     if (!(await checkShallLoadData())) {
       return;
     }
+    if (
+      layoutManagerReader.editSource.type === 'CurrentProfile' &&
+      layoutManagerReader.isModified
+    ) {
+      editorModel.restoreOriginalDesign();
+    }
     dispatchCoreAction({ layout_createNewLayout: 1 });
   },
 
@@ -183,16 +189,17 @@ export const layoutManagerRootModel = {
         UiLayouterCore.loadEditDesign(loadedLayoutData);
         local.layoutEditSource = layoutEditSource;
       }
+    }, [layoutEditSource]);
 
+    useEffect(() => {
       return () => {
-        if (layoutEditSource.type === 'CurrentProfile') {
+        const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
+        if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
           const design = UiLayouterCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
       };
-    }, [layoutEditSource]);
-
-    useEffect(() => {}, []);
+    }, []);
   },
 };
 
