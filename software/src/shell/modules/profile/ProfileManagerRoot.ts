@@ -151,7 +151,7 @@ function terminate() {
   coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
 }
 
-export const profileManager = {
+export const profileManagerRoot = {
   initializeAsync,
   terminate,
 };

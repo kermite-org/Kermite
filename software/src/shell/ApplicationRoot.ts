@@ -15,11 +15,11 @@ import {
 import {
   keyboardConfigModule,
   projectPackageModule,
-  layoutManager,
+  layoutManagerRoot,
 } from '~/shell/modules';
 import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
-import { profileManager } from '~/shell/modules/profile/ProfileManager';
 import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModule';
+import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
@@ -148,8 +148,8 @@ export class ApplicationRoot {
       keyboardConfigModule.config_loadKeyboardConfig(1);
       await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
-      await profileManager.initializeAsync();
-      await layoutManager.initializeAsync();
+      await profileManagerRoot.initializeAsync();
+      await layoutManagerRoot.initializeAsync();
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
       commitCoreState({
@@ -166,8 +166,8 @@ export class ApplicationRoot {
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
       this.windowWrapper.terminate();
-      profileManager.terminate();
-      layoutManager.terminate();
+      profileManagerRoot.terminate();
+      layoutManagerRoot.terminate();
       await applicationStorage.terminateAsync();
     });
   }

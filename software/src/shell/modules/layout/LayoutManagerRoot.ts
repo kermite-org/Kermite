@@ -82,7 +82,7 @@ function terminate() {
   coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
 }
 
-export const layoutManager = {
+export const layoutManagerRoot = {
   initializeAsync,
   terminate,
 };

@@ -1,7 +1,7 @@
 import produce from 'immer';
 import { IActionReceiver, ICoreAction } from '~/shared';
 import { commitCoreState, coreState } from '~/shell/global';
-import { ProjectPackageProvider } from '~/shell/modules/project/ProjectPackageProvider';
+import { ProjectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
 const projectPackageProvider = new ProjectPackageProvider();
 
