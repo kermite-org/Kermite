@@ -171,7 +171,7 @@ const layoutManagerActions = {
 };
 
 const local = new (class {
-  layoutEditSource: ILayoutEditSource | undefined;
+  layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
 })();
 
 export const layoutManagerRootModel = {
