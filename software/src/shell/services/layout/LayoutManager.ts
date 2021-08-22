@@ -1,4 +1,4 @@
-import { ILayoutEditSource } from '~/shared';
+import { ICoreState, ILayoutEditSource } from '~/shared';
 import {
   vObject,
   vSchemaOneOf,
@@ -6,7 +6,7 @@ import {
   vValueEquals,
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { coreState, profilesReader } from '~/shell/global';
+import { coreState, coreStateManager, profilesReader } from '~/shell/global';
 import { layoutManagerModule } from '~/shell/services/layout/LayoutManagerModule';
 
 const layoutEditSourceSchema = vSchemaOneOf([
@@ -41,6 +41,17 @@ async function loadLayoutByEditSource(editSource: ILayoutEditSource) {
   }
 }
 
+function onCoreStateChange(diff: Partial<ICoreState>) {
+  if (diff.profileEditSource) {
+    if (
+      coreState.layoutEditSource.type === 'CurrentProfile' &&
+      diff.profileEditSource.type !== 'InternalProfile'
+    ) {
+      layoutManagerModule.layout_createNewLayout(1);
+    }
+  }
+}
+
 async function initializeAsync() {
   const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
     'layoutEditSource',
@@ -62,9 +73,12 @@ async function initializeAsync() {
       layoutManagerModule.layout_createNewLayout(1);
     }
   }
+
+  coreStateManager.coreStateEventPort.subscribe(onCoreStateChange);
 }
 function terminate() {
   applicationStorage.writeItem('layoutEditSource', coreState.layoutEditSource);
+  coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
 }
 
 export const layoutManager = {
