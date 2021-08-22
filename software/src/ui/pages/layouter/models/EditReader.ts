@@ -221,6 +221,12 @@ class EditReader {
   get worldMousePos() {
     return appState.env.worldMousePos;
   }
+
+  get hasLayoutEntities() {
+    const numKeys = Object.keys(editReader.design.keyEntities).length;
+    const numShapes = Object.keys(editReader.design.outlineShapes).length;
+    return numKeys > 0 || numShapes > 0;
+  }
 }
 
 export const editReader = new EditReader();

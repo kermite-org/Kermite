@@ -1,10 +1,8 @@
 import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
-  createFallbackPersistKeyboardDesign,
   forceChangeFilePathExtension,
   ILayoutEditSource,
-  ILayoutManagerCommand,
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent, router } from '~/ui/base';
@@ -19,8 +17,8 @@ import { UiLayouterCore } from '~/ui/pages/layouter';
 
 export interface ILayoutManagerModel {
   editSource: ILayoutEditSource;
-  loadedDesign: IPersistKeyboardDesign;
   isModified: boolean;
+  hasLayoutEntities: boolean;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
   createForProject(projectId: string, layoutName: string): void;
@@ -37,28 +35,14 @@ export interface ILayoutManagerModel {
   showEditLayoutFileInFiler(): void;
 }
 
-let _prevLoadedDesign: IPersistKeyboardDesign | undefined;
-let _keepUnsavedNewDesign: boolean = false;
-
-const local = new (class {
-  loadedLayoutData: IPersistKeyboardDesign = createFallbackPersistKeyboardDesign();
-})();
-
 export const layoutManagerReader = {
   get editSource(): ILayoutEditSource {
     return uiState.core.layoutEditSource;
-  },
-  get loadedDesign() {
-    return local.loadedLayoutData;
   },
   get isModified() {
     return UiLayouterCore.getIsModified();
   },
 };
-
-function sendCommand(command: ILayoutManagerCommand) {
-  ipcAgent.async.layout_executeLayoutManagerCommands([command]);
-}
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {
@@ -70,34 +54,55 @@ async function checkShallLoadData(): Promise<boolean> {
   });
 }
 
+async function checkShallLoadDataForProfile(): Promise<boolean> {
+  const profileModified = !compareObjectByJsonStringify(
+    uiState.core.loadedProfileData,
+    uiState.core.editProfileData,
+  );
+  if (!profileModified) {
+    return true;
+  }
+  return await modalConfirm({
+    message: 'Unsaved changes of current profile will be lost. Are you OK?',
+    caption: 'create new profile',
+  });
+}
+
 const layoutManagerActions = {
   async createNewLayout() {
     if (!(await checkShallLoadData())) {
       return;
     }
-    _keepUnsavedNewDesign = false;
-    sendCommand({ type: 'createNewLayout' });
+    if (
+      layoutManagerReader.editSource.type === 'CurrentProfile' &&
+      layoutManagerReader.isModified
+    ) {
+      editorModel.restoreOriginalDesign();
+    }
+    dispatchCoreAction({ layout_createNewLayout: 1 });
   },
 
   async loadCurrentProfileLayout() {
     if (!(await checkShallLoadData())) {
       return;
     }
-    sendCommand({ type: 'loadCurrentProfileLayout' });
+    dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
 
   async createForProject(projectId: string, layoutName: string) {
     if (!(await checkShallLoadData())) {
       return;
     }
-    sendCommand({ type: 'createForProject', projectId, layoutName });
+    dispatchCoreAction({
+      layout_createProjectLayout: { projectId, layoutName },
+    });
   },
 
   async loadFromProject(projectId: string, layoutName: string) {
     if (!(await checkShallLoadData())) {
       return;
     }
-    sendCommand({ type: 'loadFromProject', projectId, layoutName });
+    dispatchCoreAction({ layout_loadProjectLayout: { projectId, layoutName } });
   },
 
   async saveToProject(
@@ -117,7 +122,9 @@ const layoutManagerActions = {
         return;
       }
     }
-    sendCommand({ type: 'saveToProject', projectId, layoutName, design });
+    dispatchCoreAction({
+      layout_saveProjectLayout: { projectId, layoutName, design },
+    });
   },
 
   async loadFromFileWithDialog() {
@@ -126,7 +133,7 @@ const layoutManagerActions = {
     }
     const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
     if (filePath) {
-      sendCommand({ type: 'loadFromFile', filePath });
+      dispatchCoreAction({ layout_loadFromFile: { filePath } });
     }
   },
 
@@ -137,7 +144,9 @@ const layoutManagerActions = {
         filePath,
         '.layout.json',
       );
-      sendCommand({ type: 'saveToFile', filePath: modFilePath, design });
+      dispatchCoreAction({
+        layout_saveToFile: { filePath: modFilePath, design },
+      });
     }
   },
 
@@ -149,11 +158,17 @@ const layoutManagerActions = {
       caption: 'Save',
     });
     if (ok) {
-      sendCommand({ type: 'save', design });
+      dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
+      if (!isProfile) {
+        UiLayouterCore.rebase();
+      }
     }
   },
 
   async createNewProfileFromCurrentLayout() {
+    if (!(await checkShallLoadDataForProfile())) {
+      return;
+    }
     const { editSource } = layoutManagerReader;
     let projectId = '000000';
     if (editSource.type === 'ProjectLayout') {
@@ -175,60 +190,42 @@ const layoutManagerActions = {
       },
     });
     router.navigateTo('/editor');
-    sendCommand({ type: 'loadCurrentProfileLayout' });
+    dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
-  async showEditLayoutFileInFiler() {
-    await ipcAgent.async.layout_showEditLayoutFileInFiler();
+  showEditLayoutFileInFiler() {
+    dispatchCoreAction({ layout_showEditLayoutFileInFiler: 1 });
   },
 };
 
-function updateBeforeRender() {
-  const sourceLayoutData = uiState.core.loadedLayoutData;
+const local = new (class {
+  layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
+})();
 
-  useEffect(() => {
-    const same = compareObjectByJsonStringify(
-      sourceLayoutData,
-      _prevLoadedDesign,
-    );
-    const isClean = compareObjectByJsonStringify(
-      sourceLayoutData,
-      createFallbackPersistKeyboardDesign(),
-    );
-    if (isClean && _keepUnsavedNewDesign) {
-      return;
-    }
-    if (!same || isClean) {
-      UiLayouterCore.loadEditDesign(sourceLayoutData);
-      _prevLoadedDesign = sourceLayoutData;
-    }
-  }, [sourceLayoutData]);
+export const layoutManagerRootModel = {
+  updateBeforeRender() {
+    const { layoutEditSource, loadedLayoutData } = uiState.core;
 
-  // useEffect(() => {
-  //   if (uiState.core.loadedProfileData) {
-  //     if (this.editSource.type === 'CurrentProfile') {
-  //       this.sendCommand({ type: 'loadCurrentProfileLayout' });
-  //     }
-  //   }
-  // }, [uiState.core]);
+    useEffect(() => {
+      if (layoutEditSource !== local.layoutEditSource) {
+        UiLayouterCore.loadEditDesign(loadedLayoutData);
+        local.layoutEditSource = layoutEditSource;
+      }
+    }, [layoutEditSource]);
 
-  useEffect(() => {
-    return () => {
-      const { isModified, editSource } = layoutManagerReader;
-      if (isModified) {
-        if (editSource.type === 'CurrentProfile') {
+    useEffect(() => {
+      return () => {
+        const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
+        if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
           const design = UiLayouterCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
-        if (editSource.type === 'LayoutNewlyCreated') {
-          _keepUnsavedNewDesign = true;
-        }
-      }
-    };
-  }, []);
-}
+      };
+    }, []);
+  },
+};
 
 export function useLayoutManagerModel(): ILayoutManagerModel {
-  const { editSource, loadedDesign, isModified } = layoutManagerReader;
+  const { editSource, isModified } = layoutManagerReader;
   const {
     createNewLayout,
     loadCurrentProfileLayout,
@@ -242,12 +239,12 @@ export function useLayoutManagerModel(): ILayoutManagerModel {
     showEditLayoutFileInFiler,
   } = layoutManagerActions;
 
-  updateBeforeRender();
+  layoutManagerRootModel.updateBeforeRender();
 
   return {
     editSource,
-    loadedDesign,
     isModified,
+    hasLayoutEntities: UiLayouterCore.hasEditLayoutEntities(),
     createNewLayout,
     loadCurrentProfileLayout,
     createForProject,
