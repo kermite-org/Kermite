@@ -1,3 +1,4 @@
+import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
@@ -7,6 +8,16 @@ import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
+
+async function checkShallLoadData(): Promise<boolean> {
+  if (!editorModel.checkDirty()) {
+    return true;
+  }
+  return await modalConfirm({
+    message: 'Unsaved changes will be lost. Are you OK?',
+    caption: 'Load',
+  });
+}
 
 const checkValidNewProfileName = async (
   projectId: string,
@@ -34,6 +45,10 @@ const checkValidNewProfileName = async (
 };
 
 const createProfile = async () => {
+  if (!(await checkShallLoadData())) {
+    return;
+  }
+  asyncRerender();
   const res = await callProfileSetupModal(undefined);
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (res && res.profileName && res.projectKey && res.layoutKey) {
@@ -143,6 +158,9 @@ const onSaveButton = () => {
 };
 
 const handleImportFromFile = async () => {
+  if (!(await checkShallLoadData())) {
+    return;
+  }
   const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
   if (filePath) {
     profilesActions.importFromFile(filePath);
