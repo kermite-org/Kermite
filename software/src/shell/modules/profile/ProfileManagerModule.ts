@@ -130,7 +130,6 @@ export const profileManagerModule = createCoreModule({
     if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }
-    await profileManagerCore.deleteProfile(profileEntry);
     await profileManagerCore.saveProfile(
       newProfileEntry,
       coreState.editProfileData,
