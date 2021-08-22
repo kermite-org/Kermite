@@ -4,6 +4,7 @@ import { ISelectorOption } from '~/ui/base';
 import {
   globalSettingsReader,
   projectPackagesReader,
+  uiState,
   uiStateReader,
 } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/pages/layouter';
@@ -56,6 +57,7 @@ export interface ILayoutManagerViewModel {
   canCreateProfile: boolean;
   createNewProfileFromCurrentLayout(): void;
   editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
+  canEditCurrentProfile: boolean;
   setEditTargetRadioSelection: (
     value: ILayoutManagerEditTargetRadioSelection,
   ) => void;
@@ -146,6 +148,9 @@ function useLayoutManagerViewModelImpl(
       : true;
 
   const canCreateProfile = model.hasLayoutEntities;
+  const canEditCurrentProfile =
+    uiState.core.profileEditSource.type === 'InternalProfile' ||
+    uiState.core.profileEditSource.type === 'ProfileNewlyCreated';
 
   return {
     editSourceText: getEditSourceDisplayText(
@@ -199,6 +204,7 @@ function useLayoutManagerViewModelImpl(
     createNewProfileFromCurrentLayout: () =>
       model.createNewProfileFromCurrentLayout(),
     editTargetRadioSelection,
+    canEditCurrentProfile,
     setEditTargetRadioSelection: (value) => {
       if (editTargetRadioSelection !== value) {
         if (value === 'CurrentProfile') {
