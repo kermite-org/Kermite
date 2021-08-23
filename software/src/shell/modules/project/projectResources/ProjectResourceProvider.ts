@@ -7,9 +7,9 @@ import {
 import {
   IProjectResourceProvider,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/Interfaces';
-import { ProjectResourceProviderImpl_Local } from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
-import { ProjectResourceProviderImpl_Remote } from '~/shell/projectResources/ProjectResourceProviderImpl_Remote';
+} from '~/shell/modules/project/projectResources/Interfaces';
+import { ProjectResourceProviderImpl_Local } from '~/shell/modules/project/projectResources/ProjectResourceProviderImpl_Local';
+import { ProjectResourceProviderImpl_Remote } from '~/shell/modules/project/projectResources/ProjectResourceProviderImpl_Remote';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class ProjectResourceProvider_OBSOLETE

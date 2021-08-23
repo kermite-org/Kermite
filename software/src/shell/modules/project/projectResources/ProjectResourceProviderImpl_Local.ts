@@ -21,13 +21,13 @@ import {
   pathJoin,
   pathRelative,
 } from '~/shell/funcs';
+import { globalSettingsReader } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
-import { globalSettingsReader } from '~/shell/modules/GlobalSettingsModule';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/Interfaces';
+} from '~/shell/modules/project/projectResources/Interfaces';
 
 interface IParameterConfigurationEntry {
   targetVariationNames?: string[];

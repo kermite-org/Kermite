@@ -16,7 +16,7 @@ import {
   pathDirname,
 } from '~/shell/funcs';
 import { coreState } from '~/shell/global';
-import { IFirmwareBinaryFileSpec } from '~/shell/projectResources';
+import { IFirmwareBinaryFileSpec } from '~/shell/modules/project/projectResources';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
 
 const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
