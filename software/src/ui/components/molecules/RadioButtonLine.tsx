@@ -33,6 +33,7 @@ const style = css`
   cursor: pointer;
 
   > input {
+    cursor: pointer;
     margin-right: 2px;
   }
 
