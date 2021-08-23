@@ -2,6 +2,7 @@
 #include "commandDefinitions.h"
 #include "configManager.h"
 #include "dataStorage.h"
+#include "firmwareConfigurationData.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
@@ -123,7 +124,7 @@ static void emitDeviceAttributesResponse() {
   p[3] = Kermite_ProfileBinaryFormatRevision;
   p[4] = Kermite_ConfigParametersRevision;
   utils_copyBytes(p + 5, (uint8_t *)Kermite_Project_McuCode, 10);
-  utils_copyBytes(p + 15, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
+  utils_copyBytes(p + 15, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
   p[21] = Kermite_Project_IsResourceOriginOnline;
   p[22] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
   p[23] = Kermite_Project_ReleaseBuildRevision & 0xFF;

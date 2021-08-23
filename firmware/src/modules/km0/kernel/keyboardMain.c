@@ -3,6 +3,7 @@
 #include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
+#include "firmwareConfigurationData.h"
 #include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "keyboardMainInternal.h"
@@ -114,7 +115,7 @@ static void debugDumpLocalOutputState() {
 static void setupSerialNumberText() {
   uint8_t *serialNumberTextBuf = usbioCore_getSerialNumberTextBufferPointer();
   utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_Project_McuCode, 10);
-  utils_copyBytes(serialNumberTextBuf + 10, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
+  utils_copyBytes(serialNumberTextBuf + 10, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
 }
 
