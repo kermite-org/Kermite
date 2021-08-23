@@ -134,9 +134,6 @@ static void emitDeviceAttributesResponse() {
   p[48] = keyMappingDataCapacity >> 8 & 0xFF;
   p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);
-  uint16_t parameterExposeFlags = configManager_getParameterExposeFlags();
-  p[50] = parameterExposeFlags >> 8 & 0xFF;
-  p[51] = parameterExposeFlags & 0xFF;
 }
 
 static void emitCustomParametersReadResponse() {
@@ -144,8 +141,11 @@ static void emitCustomParametersReadResponse() {
   uint8_t *p = rawHidTempBuf;
   p[0] = RawHidOpcode_ParametersReadAllResponse;
   p[1] = num;
-  configManager_readSystemParameterValues(p + 2, num);
-  configManager_readSystemParameterMaxValues(p + 2 + num, num);
+  uint16_t parameterExposeFlags = configManager_getParameterExposeFlags();
+  p[2] = parameterExposeFlags >> 8 & 0xFF;
+  p[3] = parameterExposeFlags & 0xFF;
+  configManager_readSystemParameterValues(p + 4, num);
+  configManager_readSystemParameterMaxValues(p + 4 + num, num);
   emitGenericHidData(rawHidTempBuf);
 }
 
