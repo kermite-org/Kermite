@@ -5,18 +5,16 @@ import { projectPackagesReader } from '~/ui/commonStore';
 import {
   ClosableOverlay,
   CommonDialogFrame,
-  DialogContentRow,
-  GeneralSelector,
-  DialogButtonsRow,
-  DialogButton,
   createModal,
   cssCommonPropertiesTable,
-  cssCommonTextInput,
+  DialogButton,
+  DialogButtonsRow,
+  DialogContentRow,
+  GeneralSelector,
 } from '~/ui/components';
-import { reflectFieldValue, fieldSetter, useMemoEx } from '~/ui/helpers';
+import { fieldSetter, useMemoEx } from '~/ui/helpers';
 
 interface ICreateProfileDialogEditValues {
-  profileName: string;
   projectKey: string;
   layoutKey: string;
 }
@@ -43,18 +41,6 @@ const ProfileSetupModalContent = (props: {
         <DialogContentRow>
           <table css={cssCommonPropertiesTable}>
             <tbody>
-              <tr>
-                <td>Profile Name</td>
-                <td>
-                  <input
-                    type="text"
-                    css={cssCommonTextInput}
-                    value={editValues.profileName}
-                    onInput={reflectFieldValue(editValues, 'profileName')}
-                    spellcheck={'false' as any}
-                  />
-                </td>
-              </tr>
               <tr>
                 <td>Target Keyboard</td>
                 <td>
@@ -144,10 +130,7 @@ function useProfileSetupModalViewModel(): IProfileSetupModalViewModel {
   }, [layoutOptions]);
 
   const canSubmit =
-    (!!editValues.profileName &&
-      !!editValues.projectKey &&
-      !!editValues.layoutKey) ||
-    false;
+    (!!editValues.projectKey && !!editValues.layoutKey) || false;
 
   return {
     projectOptions,

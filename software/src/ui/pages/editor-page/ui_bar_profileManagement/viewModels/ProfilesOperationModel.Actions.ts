@@ -52,16 +52,13 @@ const createProfile = async () => {
   asyncRerender();
   const res = await callProfileSetupModal(undefined);
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-  if (res && res.profileName && res.projectKey && res.layoutKey) {
-    const { profileName, projectKey, layoutKey } = res;
+  if (res && res.projectKey && res.layoutKey) {
+    const { projectKey, layoutKey } = res;
     const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
-    const nameValid = await checkValidNewProfileName(projectId, profileName);
-    if (nameValid) {
-      profilesActions.createProfile(profileName, origin, projectId, {
-        type: 'blank',
-        layoutName: layoutKey,
-      });
-    }
+    profilesActions.createProfileUnnamed(origin, projectId, {
+      type: 'blank',
+      layoutName: layoutKey,
+    });
   }
 };
 
