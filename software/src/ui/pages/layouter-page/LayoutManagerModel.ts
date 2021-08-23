@@ -150,19 +150,18 @@ const layoutManagerActions = {
     }
   },
 
-  async save(design: IPersistKeyboardDesign) {
+  save(design: IPersistKeyboardDesign) {
     const { editSource } = layoutManagerReader;
     const isProfile = editSource.type === 'CurrentProfile';
-    const ok = await modalConfirm({
-      message: `${isProfile ? 'Profile' : 'File'} overwritten. Are you ok?`,
-      caption: 'Save',
-    });
-    if (ok) {
-      dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
-      if (!isProfile) {
-        UiLayouterCore.rebase();
-      }
+    if (isProfile) {
+      throw new Error('invalid handler invocation');
     }
+    // const ok = await modalConfirm({
+    //   message: `File overwritten. Are you ok?`,
+    //   caption: 'Save',
+    // });
+    dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
+    UiLayouterCore.rebase();
   },
 
   async createNewProfileFromCurrentLayout() {
