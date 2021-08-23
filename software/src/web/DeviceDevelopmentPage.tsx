@@ -3,7 +3,10 @@ import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 
 async function setupDevice() {
   const devices = await navigator.hid.requestDevice({
-    filters: [{ vendorId: 0xf055, productId: 0xa579 }],
+    filters: [
+      { vendorId: 0xf055, productId: 0xa577 },
+      { vendorId: 0xf055, productId: 0xa579 },
+    ],
   });
 
   console.log({ devices });
