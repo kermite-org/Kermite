@@ -239,6 +239,10 @@ static void updateFrame() {
 }
 
 void rgbLighting_preConfigure() {
+  configManager_setParameterExposeFlag(SystemParameter_GlowActive);
+  configManager_setParameterExposeFlag(SystemParameter_GlowColor);
+  configManager_setParameterExposeFlag(SystemParameter_GlowBrightness);
+  configManager_setParameterExposeFlag(SystemParameter_GlowPattern);
   configManager_overrideParameterMaxValue(SystemParameter_GlowColor, 12);
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
 }

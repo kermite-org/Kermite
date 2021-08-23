@@ -388,6 +388,9 @@ uint8_t *keyboardMain_getInputScanSlotFlags() {
 }
 
 void keyboardMain_initialize() {
+  configManager_setParameterExposeFlag(SystemParameter_EmitRealtimeEvents);
+  configManager_setParameterExposeFlag(SystemParameter_SystemLayout);
+  configManager_setParameterExposeFlag(SystemParameter_WiringMode);
   dataMemory_initialize();
   dataStorage_initialize();
   configManager_addParameterChangeListener(parameterValueHandler);
