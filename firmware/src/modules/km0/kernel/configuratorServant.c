@@ -134,6 +134,9 @@ static void emitDeviceAttributesResponse() {
   p[48] = keyMappingDataCapacity >> 8 & 0xFF;
   p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);
+  uint16_t parameterExposeFlags = configManager_getParameterExposeFlags();
+  p[50] = parameterExposeFlags >> 8 & 0xFF;
+  p[51] = parameterExposeFlags & 0xFF;
 }
 
 static void emitCustomParametersReadResponse() {

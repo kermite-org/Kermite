@@ -47,6 +47,7 @@ namespace CommunicationDataBinaryFormat {
     [24_39]: { variationName: Bytes<16> };
     [40_47]: { deviceInstanceCode: Bytes<8> };
     [48_49]: { assignStorageCapacity: u16 };
+    [50_51]: { parameterExposeFlags: u16 };
   };
 
   type PktDeviceInstanceCodeWriteOperation = PacketHostToDevice & {
