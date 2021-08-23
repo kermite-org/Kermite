@@ -1,6 +1,7 @@
 #include "utils.h"
 #include "bitOperations.h"
 #include <stdio.h>
+#include <string.h>
 
 void utils_debugShowBytes(uint8_t *buf, uint16_t len) {
   for (uint16_t i = 0; i < len; i++) {
@@ -42,6 +43,17 @@ bool utils_compareBytes(uint8_t *arr1, uint8_t *arr2, uint16_t len) {
     }
   }
   return true;
+}
+
+void utils_copyString(char *dst, char *src, uint16_t maxLen) {
+  size_t len = strlen((const char *)src);
+  for (size_t i = 0; i < maxLen; i++) {
+    if (i < len) {
+      dst[i] = src[i];
+    } else {
+      dst[i] = 0;
+    }
+  }
 }
 
 void utils_copyStringToWideString(int16_t *dst, uint8_t *src, uint16_t len) {
