@@ -16,7 +16,8 @@ type ILayoutManagerViewModelCommandActiveFlagKey =
   | 'canShowEditLayoutFileInFiler'
   | 'canOpenProjectIoModal'
   | 'canCreateNewLayout'
-  | 'canCreateProfile';
+  | 'canCreateProfile'
+  | 'canSaveToFile';
 
 interface IMenuItemSource {
   text: string;
@@ -35,7 +36,11 @@ const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
   // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
   { separator: true },
   { text: 'load from file...', command: 'loadFromFileWithDialog' },
-  { text: 'save to file...', command: 'saveToFileWithDialog' },
+  {
+    text: 'save to file...',
+    command: 'saveToFileWithDialog',
+    commandActiveFlagKey: 'canSaveToFile',
+  },
   { separator: true },
   {
     text: 'load from project...',

@@ -44,6 +44,7 @@ export interface ILayoutManagerViewModel {
   canSaveToProject: boolean;
   saveToProject(): void;
   loadFromFileWithDialog(): void;
+  canSaveToFile: boolean;
   saveToFileWithDialog(): void;
   canOverwrite: boolean;
   overwriteLayout(): void;
@@ -152,6 +153,8 @@ function useLayoutManagerViewModelImpl(
     uiState.core.profileEditSource.type === 'InternalProfile' ||
     uiState.core.profileEditSource.type === 'ProfileNewlyCreated';
 
+  const canSaveToFile = model.hasLayoutEntities;
+
   return {
     editSourceText: getEditSourceDisplayText(
       model.editSource,
@@ -186,6 +189,7 @@ function useLayoutManagerViewModelImpl(
       setModalState('None');
     },
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
+    canSaveToFile,
     saveToFileWithDialog: () =>
       model.saveToFileWithDialog(UiLayouterCore.emitSavingDesign()),
     canOverwrite:
