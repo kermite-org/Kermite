@@ -2,6 +2,7 @@
 #include "commandDefinitions.h"
 #include "dataStorage.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include "km0/device/system.h"
