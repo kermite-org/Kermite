@@ -19,6 +19,7 @@ export type IDeviceAttributesReadResponseData = {
 
 export type ICustomParametersReadResponseData = {
   numParameters: number;
+  parameterExposedFlags: number;
   parameterValues: number[];
   parameterMaxValues: number[];
 };
@@ -79,12 +80,14 @@ export function receivedBytesDecoder(
 
   if (cmd === RawHidOpcode.ParametersReadAllResponse) {
     const sz = buf[1];
-    const parameterValues = [...buf.slice(2, 2 + sz)];
-    const parameterMaxValues = [...buf.slice(2 + sz, 2 + sz + sz)];
+    const parameterExposedFlags = (buf[2] << 8) | buf[3];
+    const parameterValues = [...buf.slice(4, 4 + sz)];
+    const parameterMaxValues = [...buf.slice(4 + sz, 4 + sz + sz)];
     return {
       type: 'customParametersReadResponse',
       data: {
         numParameters: sz,
+        parameterExposedFlags,
         parameterValues,
         parameterMaxValues,
       },
