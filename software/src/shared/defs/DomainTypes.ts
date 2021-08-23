@@ -136,12 +136,14 @@ export interface IKeyboardDeviceAttributes {
   portName: string;
   mcuName: string;
 }
-export interface IKeyboardDeviceStatus {
-  isConnected: boolean;
-  deviceAttrs?: IKeyboardDeviceAttributes;
-  systemParameterValues?: number[];
-  systemParameterMaxValues?: number[];
-}
+export type IKeyboardDeviceStatus =
+  | {
+      isConnected: true;
+      deviceAttrs: IKeyboardDeviceAttributes;
+      systemParameterValues: number[];
+      systemParameterMaxValues: number[];
+    }
+  | { isConnected: false };
 
 export type IRealtimeKeyboardEvent =
   | {
