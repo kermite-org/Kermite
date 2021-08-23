@@ -23,7 +23,8 @@ const checkValidNewProfileName = async (
   projectId: string,
   newProfileName: string,
 ): Promise<boolean> => {
-  if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
+  // eslint-disable-next-line no-irregular-whitespace
+  if (!newProfileName.match(/^[^/./\\:*?"<>| 　]+$/)) {
     await modalAlert(
       `${newProfileName} is not for valid filename. operation cancelled.`,
     );
