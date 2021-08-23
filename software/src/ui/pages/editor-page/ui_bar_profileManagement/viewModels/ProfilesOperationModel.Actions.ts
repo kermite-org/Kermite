@@ -1,3 +1,4 @@
+import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
@@ -8,11 +9,22 @@ import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 
+async function checkShallLoadData(): Promise<boolean> {
+  if (!editorModel.checkDirty()) {
+    return true;
+  }
+  return await modalConfirm({
+    message: 'Unsaved changes will be lost. Are you OK?',
+    caption: 'Load',
+  });
+}
+
 const checkValidNewProfileName = async (
   projectId: string,
   newProfileName: string,
 ): Promise<boolean> => {
-  if (!newProfileName.match(/^[^/./\\:*?"<>|]+$/)) {
+  // eslint-disable-next-line no-irregular-whitespace
+  if (!newProfileName.match(/^[^/./\\:*?"<>| ][\u3000][\u0e49]+$/)) {
     await modalAlert(
       `${newProfileName} is not for valid filename. operation cancelled.`,
     );
@@ -34,18 +46,19 @@ const checkValidNewProfileName = async (
 };
 
 const createProfile = async () => {
+  if (!(await checkShallLoadData())) {
+    return;
+  }
+  asyncRerender();
   const res = await callProfileSetupModal(undefined);
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-  if (res && res.profileName && res.projectKey && res.layoutKey) {
-    const { profileName, projectKey, layoutKey } = res;
+  if (res && res.projectKey && res.layoutKey) {
+    const { projectKey, layoutKey } = res;
     const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
-    const nameValid = await checkValidNewProfileName(projectId, profileName);
-    if (nameValid) {
-      profilesActions.createProfile(profileName, origin, projectId, {
-        type: 'blank',
-        layoutName: layoutKey,
-      });
-    }
+    profilesActions.createProfileUnnamed(origin, projectId, {
+      type: 'blank',
+      layoutName: layoutKey,
+    });
   }
 };
 
@@ -143,6 +156,9 @@ const onSaveButton = () => {
 };
 
 const handleImportFromFile = async () => {
+  if (!(await checkShallLoadData())) {
+    return;
+  }
   const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
   if (filePath) {
     profilesActions.importFromFile(filePath);

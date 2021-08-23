@@ -3,15 +3,13 @@ import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export const profilesActions = {
-  createProfile: (
-    newProfileName: string,
+  createProfileUnnamed: (
     targetProjectOrigin: IResourceOrigin,
     targetProjectId: string,
     presetSpec: IPresetSpec,
   ) => {
     dispatchCoreAction({
-      profile_createProfile: {
-        newProfileName,
+      profile_createProfileUnnamed: {
         targetProjectOrigin,
         targetProjectId,
         presetSpec,

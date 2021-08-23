@@ -437,6 +437,7 @@ class EditMutations {
       editor.design = design;
     });
     this.resetSitePosition();
+    this.loadDefaultGridSnapSelection();
     editManager.reset();
   }
 
@@ -454,6 +455,12 @@ class EditMutations {
       env.sight.pos.x = cx;
       env.sight.pos.y = cy;
     });
+  }
+
+  loadDefaultGridSnapSelection() {
+    const { isPlacementUnitKpBased } = editReader;
+    const gridSpecKey = isPlacementUnitKpBased ? 'kp_div4' : 'mm_pitch10';
+    this.setGridSpecKey(gridSpecKey);
   }
 
   setCurrentShapeGroupId(groupId: string) {
