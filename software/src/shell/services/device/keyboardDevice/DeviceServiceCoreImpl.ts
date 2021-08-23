@@ -49,9 +49,9 @@ export class KeyboardDeviceServiceCore {
 
   private setParameterValues(newParameterValues: number[]) {
     if (coreState.deviceStatus.isConnected) {
-      const deviceStatus = {
+      const deviceStatus: IKeyboardDeviceStatus = {
         ...coreState.deviceStatus,
-        parameterValues: newParameterValues,
+        systemParameterValues: newParameterValues,
       };
       commitCoreState({ deviceStatus });
     }
