@@ -140,6 +140,7 @@ export type IKeyboardDeviceStatus =
   | {
       isConnected: true;
       deviceAttrs: IKeyboardDeviceAttributes;
+      systemParameterExposedFlags: number;
       systemParameterValues: number[];
       systemParameterMaxValues: number[];
     }

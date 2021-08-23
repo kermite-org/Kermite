@@ -32,6 +32,7 @@ function createConnectedStatus(
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
       mcuName: attrsRes.firmwareMcuName,
     },
+    systemParameterExposedFlags: customParamsRes.parameterExposedFlags,
     systemParameterValues: customParamsRes.parameterValues,
     systemParameterMaxValues: customParamsRes.parameterMaxValues,
   };
