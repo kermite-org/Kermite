@@ -123,7 +123,7 @@ static void emitDeviceAttributesResponse() {
   p[2] = Kermite_ConfigStorageFormatRevision;
   p[3] = Kermite_ProfileBinaryFormatRevision;
   p[4] = Kermite_ConfigParametersRevision;
-  utils_copyBytes(p + 5, (uint8_t *)Kermite_Project_McuCode, 10);
+  utils_copyBytes(p + 5, (uint8_t *)Kermite_Project_McuCode, 3);
   utils_copyBytes(p + 15, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
   p[21] = Kermite_Project_IsResourceOriginOnline;
   p[22] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;

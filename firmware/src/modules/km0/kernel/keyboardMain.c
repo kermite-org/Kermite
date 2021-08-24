@@ -114,7 +114,9 @@ static void debugDumpLocalOutputState() {
 
 static void setupSerialNumberText() {
   uint8_t *serialNumberTextBuf = usbioCore_getSerialNumberTextBufferPointer();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_Project_McuCode, 10);
+  utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_CommonSerialNumberPrefix, 8);
+  //todo: embed mcu code
+  // utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)Kermite_Project_McuCode, 3);
   utils_copyBytes(serialNumberTextBuf + 10, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
   configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
 }
