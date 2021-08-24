@@ -121,7 +121,7 @@ static char *writeTextBytes(char *buf, char *text, int len) {
 //format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<DeviceInstanceCode(8)>
 //example: A152FD2C:M01:7qHDCp:K3e89X:d46d8ab5
 //length: 35bytes (36bytes with null terminator)
-static void setupSerialNumberText() {
+static void setupUsbDeviceAttributes() {
   char *buf = (char *)usbioCore_getSerialNumberTextBufferPointer();
   buf = writeTextBytes(buf, Kermite_CommonSerialNumberPrefix, 8);
   buf = writeTextBytes(buf, ":", 1);
@@ -134,6 +134,8 @@ static void setupSerialNumberText() {
   configuratorServant_readDeviceInstanceCode((uint8_t *)buf);
   buf += 8;
   buf = writeTextBytes(buf, "\0", 1);
+
+  usbIoCore_setProductName(firmwareConfigurationData.keyboardName);
 }
 
 static void resetKeyboardCoreLogic() {
@@ -415,7 +417,7 @@ void keyboardMain_initialize() {
   configManager_initialize();
   resetKeyboardCoreLogic();
   configuratorServant_initialize(ConfiguratorServantEventHandler);
-  setupSerialNumberText();
+  setupUsbDeviceAttributes();
 }
 
 void keyboardMain_udpateKeyScanners() {

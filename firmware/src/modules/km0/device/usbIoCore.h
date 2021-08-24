@@ -10,6 +10,7 @@ bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64);
 bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64);
 bool usbIoCore_isConnectedToHost();
 uint8_t *usbioCore_getSerialNumberTextBufferPointer();
+void usbIoCore_setProductName(char *productName);
 void usbIoCore_processUpdate();
 
 void usbIoCore_deInit();

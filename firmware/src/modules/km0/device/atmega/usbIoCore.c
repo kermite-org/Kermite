@@ -1067,6 +1067,10 @@ uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
   return serialNumberTextBuf;
 }
 
+void usbIoCore_setProductName(char *productName) {
+  //not implemented yet
+}
+
 void usbIoCore_processUpdate() {}
 
 void usbIoCore_deInit() {

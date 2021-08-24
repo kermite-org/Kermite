@@ -20,10 +20,6 @@
 #define KM0_USB__MANUFACTURER_TEXT "Kermite"
 #endif
 
-#ifndef KM0_USB__PRODUCT_TEXT
-#define KM0_USB__PRODUCT_TEXT "Kermite Keyboard Device"
-#endif
-
 enum {
   ITF_KEYBOARD = 0,
   ITF_MOUSE = 1,
@@ -203,15 +199,20 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index) {
 //--------------------------------------------------------------------
 // String Descriptors
 
+
+
+static char altProductNameTextBuf[] = "00000000000000000000000000000000";
+static char altSerialNumberTextBuf[] = "00000000000000000000000000000000000";
+
+
 // array of pointer to string descriptors
 static char const *string_desc_arr[] = {
   (const char[]){ 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   KM0_USB__MANUFACTURER_TEXT,   // 1: Manufacturer
-  KM0_USB__PRODUCT_TEXT,        // 2: Product
-  "00000000000000000000000000000000000",   // 3: Serials, should use chip ID
+  altProductNameTextBuf,        // 2: Product
+  altSerialNumberTextBuf,   // 3: Serials, should use chip ID
 };
 
-static char altSerialNumberTextBuf[] = "00000000000000000000000000000000000";
 
 static uint16_t _desc_str[32];
 
@@ -228,10 +229,6 @@ uint16_t const *tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
       return NULL;
 
     const char *str = string_desc_arr[index];
-
-    if (index == 3) {
-      str = altSerialNumberTextBuf;
-    }
 
     // Cap at max char
     chr_count = strlen(str);
@@ -410,6 +407,10 @@ bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
 
 uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
   return (uint8_t *)altSerialNumberTextBuf;
+}
+
+void usbIoCore_setProductName(char *productName){
+  strcpy(altProductNameTextBuf, productName);
 }
 
 bool usbIoCore_isConnectedToHost() {
