@@ -8,11 +8,11 @@
 #endif
 
 #ifndef KERMITE_KEYBOARD_NAME
-#define KERMITE_KEYBOARD_NAME "unnamed keyboard"
+#error KERMITE_KEYBOARD_NAME is not defined
 #endif
 
 FirmwareConfigurationData firmwareConfigurationData = {
   .firmwareId = KERMITE_FIRMWARE_ID,
-  .projectId = "00000000",
+  .projectId = "000000",
   .keyboardName = KERMITE_KEYBOARD_NAME
 };
