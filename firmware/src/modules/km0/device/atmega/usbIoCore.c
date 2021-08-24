@@ -31,6 +31,7 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <stdio.h>
+#include <string.h>
 #include <util/delay.h>
 
 //#define USBIOCORE_DEBUG
@@ -52,10 +53,6 @@ void dprintf() {
 
 #ifndef KM0_USB__MANUFACTURER_TEXT
 #define KM0_USB__MANUFACTURER_TEXT L"Kermite"
-#endif
-
-#ifndef KM0_USB__PRODUCT_TEXT
-#define KM0_USB__PRODUCT_TEXT L"Kermite Keyboard Device"
 #endif
 
 // #define KEYBOARD_ENDPOINT 3
@@ -129,10 +126,11 @@ void dprintf() {
 
 // You can change these to give your code its own name.
 #define STR_MANUFACTURER KM0_USB__MANUFACTURER_TEXT
-#define STR_PRODUCT KM0_USB__PRODUCT_TEXT
+#define STR_PRODUCT_DUMMY L"00000000000000000000000000000000"
 #define STR_SERIALNUMBER_DUMMY L"00000000000000000000000000000000000"
 
-static uint8_t serialNumberTextBuf[35];
+static char productNameTextBuf[33];
+static char serialNumberTextBuf[36];
 
 // USB devices are supposed to implment a halt feature, which is
 // rarely (if ever) used.  If you comment this line out, the halt
@@ -453,8 +451,8 @@ static struct usb_string_descriptor_struct const PROGMEM string0 = {
 static struct usb_string_descriptor_struct const PROGMEM string1 = {
   sizeof(STR_MANUFACTURER), 3, STR_MANUFACTURER
 };
-static struct usb_string_descriptor_struct const PROGMEM string2 = {
-  sizeof(STR_PRODUCT), 3, STR_PRODUCT
+static struct usb_string_descriptor_struct const PROGMEM string2_dummy = {
+  sizeof(STR_PRODUCT_DUMMY), 3, STR_PRODUCT_DUMMY
 };
 static struct usb_string_descriptor_struct const PROGMEM string3_dummy = {
   sizeof(STR_SERIALNUMBER_DUMMY), 3, STR_SERIALNUMBER_DUMMY
@@ -484,7 +482,7 @@ static struct descriptor_list_struct {
     9 },
   { 0x0300, 0x0000, (const uint8_t *)&string0, 4 },
   { 0x0301, 0x0409, (const uint8_t *)&string1, sizeof(STR_MANUFACTURER) },
-  { 0x0302, 0x0409, (const uint8_t *)&string2, sizeof(STR_PRODUCT) },
+  { 0x0302, 0x0409, (const uint8_t *)&string2_dummy, sizeof(STR_PRODUCT_DUMMY) },
   { 0x0303, 0x0409, (const uint8_t *)&string3_dummy, sizeof(STR_SERIALNUMBER_DUMMY) },
 };
 #define NUM_DESC_LIST \
@@ -761,8 +759,9 @@ ISR(USB_COM_vect) {
         // send IN packet
         n = len < ENDPOINT0_SIZE ? len : ENDPOINT0_SIZE;
 
-        if (wValue == 0x0303) {
-          //serialNumberの読み出しの場合、RAM上のバッファから読み取った文字列で差し替える
+        if (wValue == 0x0303 || wValue == 0x0302) {
+          //productName, serialNumberの読み出しの場合、RAM上のバッファから読み取った文字列で差し替える
+          char *srcBuf = wValue == 0x0302 ? productNameTextBuf : serialNumberTextBuf;
           for (i = n; i; i--) {
             uint8_t offset = desc_addr - desc_addr_0;
             uint8_t value = pgm_read_byte(desc_addr++);
@@ -770,7 +769,7 @@ ISR(USB_COM_vect) {
               //RAM上の文字列で差し替える
               uint8_t j = (offset - 2);
               if ((j & 1) == 0) {
-                value = serialNumberTextBuf[j >> 1];
+                value = srcBuf[j >> 1];
               } else {
                 value = 0;
               }
@@ -1064,11 +1063,11 @@ bool usbIoCore_isConnectedToHost() {
 }
 
 uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
-  return serialNumberTextBuf;
+  return (uint8_t *)serialNumberTextBuf;
 }
 
 void usbIoCore_setProductName(char *productName) {
-  //not implemented yet
+  strcpy(productNameTextBuf, productName);
 }
 
 void usbIoCore_processUpdate() {}
