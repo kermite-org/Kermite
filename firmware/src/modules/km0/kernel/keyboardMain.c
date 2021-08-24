@@ -112,13 +112,28 @@ static void debugDumpLocalOutputState() {
   printf("layers: %02X\n", localLayerFlags);
 }
 
+static char *writeTextBytes(char *buf, char *text, int len) {
+  utils_copyTextBytes(buf, text, len);
+  return buf + len;
+}
+
+//usb serial number
+//format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<DeviceInstanceCode(8)>
+//example: A152FD2C:M01:7qHDCp:K3e89X:d46d8ab5
+//length: 35bytes (36bytes with null terminator)
 static void setupSerialNumberText() {
-  uint8_t *serialNumberTextBuf = usbioCore_getSerialNumberTextBufferPointer();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_CommonSerialNumberPrefix, 8);
-  //todo: embed mcu code
-  // utils_copyBytes(serialNumberTextBuf + 8, (uint8_t *)Kermite_Project_McuCode, 3);
-  utils_copyBytes(serialNumberTextBuf + 10, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
-  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
+  char *buf = (char *)usbioCore_getSerialNumberTextBufferPointer();
+  buf = writeTextBytes(buf, Kermite_CommonSerialNumberPrefix, 8);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, Kermite_Project_McuCode, 3);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, firmwareConfigurationData.firmwareId, 6);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, firmwareConfigurationData.projectId, 6);
+  buf = writeTextBytes(buf, ":", 1);
+  configuratorServant_readDeviceInstanceCode((uint8_t *)buf);
+  buf += 8;
+  buf = writeTextBytes(buf, "\0", 1);
 }
 
 static void resetKeyboardCoreLogic() {

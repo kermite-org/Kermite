@@ -45,14 +45,9 @@ bool utils_compareBytes(uint8_t *arr1, uint8_t *arr2, uint16_t len) {
   return true;
 }
 
-void utils_copyString(char *dst, char *src, uint16_t maxLen) {
-  size_t len = strlen((const char *)src);
-  for (size_t i = 0; i < maxLen; i++) {
-    if (i < len) {
-      dst[i] = src[i];
-    } else {
-      dst[i] = 0;
-    }
+void utils_copyTextBytes(char *dst, char *src, uint16_t len) {
+  for (size_t i = 0; i < len; i++) {
+    dst[i] = src[i];
   }
 }
 

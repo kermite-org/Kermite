@@ -208,10 +208,10 @@ static char const *string_desc_arr[] = {
   (const char[]){ 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   KM0_USB__MANUFACTURER_TEXT,   // 1: Manufacturer
   KM0_USB__PRODUCT_TEXT,        // 2: Product
-  "000000000000000000000000",   // 3: Serials, should use chip ID
+  "00000000000000000000000000000000000",   // 3: Serials, should use chip ID
 };
 
-static char altSerialNumberTextBuf[] = "000000000000000000000000";
+static char altSerialNumberTextBuf[] = "00000000000000000000000000000000000";
 
 static uint16_t _desc_str[32];
 
