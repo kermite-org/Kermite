@@ -122,7 +122,7 @@ static char *writeTextBytes(char *buf, char *text, int len) {
 //example: A152FD2C:M01:7qHDCp:K3e89X:d46d8ab5
 //length: 35bytes (36bytes with null terminator)
 static void setupUsbDeviceAttributes() {
-  char *buf = (char *)usbioCore_getSerialNumberTextBufferPointer();
+  char *buf = usbIoCore_getSerialNumberTextBufferPointer();
   buf = writeTextBytes(buf, Kermite_CommonSerialNumberPrefix, 8);
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, Kermite_Project_McuCode, 3);

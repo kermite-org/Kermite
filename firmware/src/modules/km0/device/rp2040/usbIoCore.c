@@ -405,8 +405,8 @@ bool usbIoCore_genericHid_readDataIfExists(uint8_t *pDataBytes64) {
   return false;
 }
 
-uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
-  return (uint8_t *)altSerialNumberTextBuf;
+char *usbIoCore_getSerialNumberTextBufferPointer() {
+  return altSerialNumberTextBuf;
 }
 
 void usbIoCore_setProductName(char *productName){

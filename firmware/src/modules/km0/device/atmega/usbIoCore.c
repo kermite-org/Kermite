@@ -1062,8 +1062,8 @@ bool usbIoCore_isConnectedToHost() {
   return usb_configuration != 0;
 }
 
-uint8_t *usbioCore_getSerialNumberTextBufferPointer() {
-  return (uint8_t *)serialNumberTextBuf;
+char *usbIoCore_getSerialNumberTextBufferPointer() {
+  return serialNumberTextBuf;
 }
 
 void usbIoCore_setProductName(char *productName) {
