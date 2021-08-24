@@ -1,6 +1,7 @@
 #pragma once
 
 #define KERMITE_FIRMWARE_ID "hxcfM7"
+#define KERMITE_KEYBOARD_NAME "Shiro"
 
 #define KS_NUM_SCAN_SLOTS 15
 
