@@ -127,10 +127,10 @@ void dprintf() {
 // You can change these to give your code its own name.
 #define STR_MANUFACTURER KM0_USB__MANUFACTURER_TEXT
 #define STR_PRODUCT_DUMMY L"00000000000000000000000000000000"
-#define STR_SERIALNUMBER_DUMMY L"00000000000000000000000000000000000"
+#define STR_SERIALNUMBER_DUMMY L"00000000000000000000000000000000000000"
 
 static char productNameTextBuf[33];
-static char serialNumberTextBuf[36];
+static char serialNumberTextBuf[39];
 
 // USB devices are supposed to implment a halt feature, which is
 // rarely (if ever) used.  If you comment this line out, the halt

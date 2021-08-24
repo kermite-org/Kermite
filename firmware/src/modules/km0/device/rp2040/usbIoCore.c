@@ -202,7 +202,7 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index) {
 
 
 static char altProductNameTextBuf[] = "00000000000000000000000000000000";
-static char altSerialNumberTextBuf[] = "00000000000000000000000000000000000";
+static char altSerialNumberTextBuf[] = "00000000000000000000000000000000000000";
 
 
 // array of pointer to string descriptors

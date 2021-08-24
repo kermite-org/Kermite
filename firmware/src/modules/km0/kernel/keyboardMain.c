@@ -118,9 +118,9 @@ static char *writeTextBytes(char *buf, char *text, int len) {
 }
 
 //usb serial number
-//format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<DeviceInstanceCode(8)>
-//example: A152FD2C:M01:7qHDCp:K3e89X:d46d8ab5
-//length: 35bytes (36bytes with null terminator)
+//format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<VariationId(2)>:<DeviceInstanceCode(8)>
+//example: A152FD2C:M01:7qHDCp:K3e89X:01:d46d8ab5
+//length: 38bytes (39bytes with null terminator)
 static void setupUsbDeviceAttributes() {
   char *buf = usbIoCore_getSerialNumberTextBufferPointer();
   buf = writeTextBytes(buf, Kermite_CommonSerialNumberPrefix, 8);
@@ -130,6 +130,8 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, firmwareConfigurationData.firmwareId, 6);
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, firmwareConfigurationData.projectId, 6);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, firmwareConfigurationData.variationId, 2);
   buf = writeTextBytes(buf, ":", 1);
   configuratorServant_readDeviceInstanceCode((uint8_t *)buf);
   buf += 8;

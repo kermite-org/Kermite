@@ -14,5 +14,6 @@
 FirmwareConfigurationData firmwareConfigurationData = {
   .firmwareId = KERMITE_FIRMWARE_ID,
   .projectId = "000000",
-  .keyboardName = KERMITE_KEYBOARD_NAME
+  .variationId = "00",
+  .keyboardName = KERMITE_KEYBOARD_NAME,
 };
