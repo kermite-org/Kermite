@@ -7,7 +7,6 @@ import { applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState } from '~/shell/global';
 import {
   enumerateSupportedDeviceInfos,
-  getDebugDeviceSigFromDevicePath,
   IDeviceSpecificationParams,
 } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
@@ -62,13 +61,17 @@ export class DeviceSelectionManager {
     if (path !== this.status.currentDevicePath) {
       this.closeDevice();
       if (path !== 'none') {
-        if (this.status.allDeviceInfos.some((info) => info.path === path)) {
+        const targetDeviceInfo = this.status.allDeviceInfos.find(
+          (info) => info.path === path,
+        );
+        if (targetDeviceInfo) {
+          const deviceSig = targetDeviceInfo.portName;
           const device = DeviceWrapper.openDeviceByPath(path);
-          const deviceSig = getDebugDeviceSigFromDevicePath(path);
           if (!device) {
             console.log(`failed to open device: ${deviceSig}`);
             return;
           }
+          device.setKeyboardDeviceInfo(targetDeviceInfo);
           device.writeSingleFrame(Packets.connectionOpenedFrame);
           device.writeSingleFrame(
             Packets.makeSimulatorModeSpecFrame(

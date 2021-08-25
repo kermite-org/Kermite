@@ -121,6 +121,18 @@ export interface IKeyboardDeviceInfo {
   manufacturerName: string;
 }
 
+export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {
+  path: '',
+  portName: '',
+  mcuCode: '',
+  firmwareId: '',
+  projectId: '',
+  variationId: '',
+  deviceInstanceCode: '',
+  productName: '',
+  manufacturerName: '',
+};
+
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';

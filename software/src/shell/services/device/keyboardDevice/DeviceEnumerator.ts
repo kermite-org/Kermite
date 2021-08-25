@@ -43,11 +43,6 @@ export function getPortNameFromDevicePath(path: string) {
   return (m && `${m[1]}`) || undefined;
 }
 
-export function getDebugDeviceSigFromDevicePath(path: string) {
-  const portName = getPortNameFromDevicePath(path);
-  return portName ? `device@${portName}` : path;
-}
-
 function makeKeyboardDeviceInfoFromDeviceSpec(
   spec: IEnumeratedDeviceSpec,
   index: number,

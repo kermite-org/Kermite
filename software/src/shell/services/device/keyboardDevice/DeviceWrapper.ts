@@ -1,5 +1,9 @@
 import * as HID from 'node-hid';
-import { delayMs } from '~/shared';
+import {
+  delayMs,
+  fallbackKeyboardDeviceInfo,
+  IKeyboardDeviceInfo,
+} from '~/shared';
 import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
 import {
   getArrayFromBuffer,
@@ -21,6 +25,16 @@ export class DeviceWrapper implements IDeviceWrapper {
   onClosed = makeListenerPort<void>();
 
   connectedDevicePath: string | undefined;
+
+  _keyboardDeviceInfo: IKeyboardDeviceInfo = fallbackKeyboardDeviceInfo;
+
+  get keyboardDeviceInfo() {
+    return this._keyboardDeviceInfo;
+  }
+
+  setKeyboardDeviceInfo(info: IKeyboardDeviceInfo) {
+    this._keyboardDeviceInfo = info;
+  }
 
   static openDeviceByPath(path: string): DeviceWrapper | undefined {
     const instance = new DeviceWrapper();
@@ -62,6 +76,7 @@ export class DeviceWrapper implements IDeviceWrapper {
       this.onClosed.purge();
       this.connectedDevicePath = undefined;
       this.device = undefined;
+      this._keyboardDeviceInfo = fallbackKeyboardDeviceInfo;
     }
   }
 
