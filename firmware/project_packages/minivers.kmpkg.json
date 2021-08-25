@@ -4,10 +4,14 @@
   "keyboardName": "Minivers",
   "firmwares": [
     {
+      "type": "custom",
+      "variationId": "01",
       "variationName": "rev1",
       "customFirmwareId": "FZiVsZ"
     },
     {
+      "type": "custom",
+      "variationId": "02",
       "variationName": "rev2_rp",
       "customFirmwareId": "7zabZ0"
     }

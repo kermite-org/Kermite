@@ -4,6 +4,8 @@
   "keyboardName": "Astelia",
   "firmwares": [
     {
+      "type": "standard",
+      "variationId": "01",
       "variationName": "atmega",
       "standardFirmwareConfig": {
         "baseFirmwareType": "AvrUnified",
@@ -23,6 +25,8 @@
       }
     },
     {
+      "type": "custom",
+      "variationId": "02",
       "variationName": "atmega_custom",
       "customFirmwareId": "dFbA81"
     }
