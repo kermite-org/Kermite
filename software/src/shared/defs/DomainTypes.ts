@@ -55,24 +55,28 @@ export interface IProjectResourceInfo {
   firmwares: IProjectFirmwareInfo[];
 }
 
+export interface IStandardFirmwareEntry {
+  type: 'standard';
+  variationId: string;
+  variationName: string;
+  standardFirmwareConfig: IKermiteStandardKeyboardSpec;
+}
+
+export interface ICustomFirmwareEntry {
+  type: 'custom';
+  variationId: string;
+  variationName: string;
+  customFirmwareId: string;
+}
+
+export type IProjectFirmwareEntry =
+  | IStandardFirmwareEntry
+  | ICustomFirmwareEntry;
 export interface IProjectPackageFileContent {
   formatRevision: 'PKG0';
   projectId: string;
   keyboardName: string;
-  firmwares: (
-    | {
-        type: 'standard';
-        variationId: string;
-        variationName: string;
-        standardFirmwareConfig: IKermiteStandardKeyboardSpec;
-      }
-    | {
-        type: 'custom';
-        variationId: string;
-        variationName: string;
-        customFirmwareId: string;
-      }
-  )[];
+  firmwares: IProjectFirmwareEntry[];
   layouts: {
     layoutName: string;
     data: IPersistKeyboardDesign;
