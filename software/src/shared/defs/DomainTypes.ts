@@ -112,8 +112,13 @@ export interface IProjectCustomDefinition {
 export interface IKeyboardDeviceInfo {
   path: string;
   portName: string;
+  mcuCode: string;
   firmwareId: string;
+  projectId: string;
+  variationId: string;
   deviceInstanceCode: string;
+  productName: string;
+  manufacturerName: string;
 }
 
 export interface IDeviceSelectionStatus {

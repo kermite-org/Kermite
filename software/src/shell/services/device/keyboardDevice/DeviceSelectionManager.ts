@@ -19,13 +19,13 @@ import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // atmega32u4
   {
-    serialNumberFirst10Bytes: 'A152FD2C01',
+    serialNumberFirst12Bytes: 'A152FD2C:M01',
     usagePage: 0xffab,
     usage: 0x0200,
   },
   // rp2040
   {
-    serialNumberFirst10Bytes: 'A152FD2C02',
+    serialNumberFirst12Bytes: 'A152FD2C:M02',
     usagePage: 0xff00,
     usage: 0x0001,
   },

@@ -2,7 +2,7 @@ import * as HID from 'node-hid';
 import { compareString, IKeyboardDeviceInfo } from '~/shared';
 
 export interface IDeviceSpecificationParams {
-  serialNumberFirst10Bytes: string;
+  serialNumberFirst12Bytes: string;
   usagePage: number;
   usage: number;
 }
@@ -10,6 +10,8 @@ export interface IDeviceSpecificationParams {
 interface IEnumeratedDeviceSpec {
   path: string;
   serialNumber: string;
+  productName: string;
+  manufacturerName: string;
 }
 
 export function enumerateSupportedDevicePathsCore(
@@ -20,7 +22,7 @@ export function enumerateSupportedDevicePathsCore(
     .filter((d) =>
       params.some(
         (param) =>
-          d.serialNumber?.slice(0, 10) === param.serialNumberFirst10Bytes &&
+          d.serialNumber?.slice(0, 12) === param.serialNumberFirst12Bytes &&
           d.usagePage === param.usagePage &&
           d.usage === param.usage,
       ),
@@ -29,6 +31,8 @@ export function enumerateSupportedDevicePathsCore(
     .map((info) => ({
       path: info.path!,
       serialNumber: info.serialNumber || '',
+      productName: info.product || '',
+      manufacturerName: info.manufacturer || '',
     }));
 }
 
@@ -48,15 +52,26 @@ function makeKeyboardDeviceInfoFromDeviceSpec(
   spec: IEnumeratedDeviceSpec,
   index: number,
 ): IKeyboardDeviceInfo {
-  const { path, serialNumber } = spec;
+  const { path, serialNumber, productName, manufacturerName } = spec;
   const portName = getPortNameFromDevicePath(path) || index.toString();
-  const firmwareId = serialNumber.slice(10, 16);
-  const deviceInstanceCode = serialNumber.slice(16, 24);
+  const [
+    ,
+    mcuCode,
+    firmwareId,
+    projectId,
+    variationId,
+    deviceInstanceCode,
+  ] = serialNumber.split(':');
   return {
     path,
     portName,
+    mcuCode,
     firmwareId,
+    projectId,
+    variationId,
+    productName,
     deviceInstanceCode,
+    manufacturerName,
   };
 }
 
