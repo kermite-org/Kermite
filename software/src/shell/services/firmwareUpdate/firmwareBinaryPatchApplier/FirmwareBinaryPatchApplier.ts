@@ -4,6 +4,7 @@ import {
   decodeBytesFromHexFileContent,
   encodeBytesToHexFileContent,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryDataConverter';
+import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
 
 function replaceArrayContent(dst: number[], dstOffset: number, src: number[]) {
   for (let i = 0; i < src.length; i++) {
@@ -41,8 +42,9 @@ export function applyStandardFirmwareBinaryPatch(
   buffer: Uint8Array,
   firmwareBinaryFormat: 'hex' | 'uf2',
   targetKeyboardSpec: IKermiteStandardKeyboardSpec,
+  meta: IStandardKeyboardInjectedMetaData,
 ): Uint8Array {
-  const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
+  const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec, meta);
 
   if (firmwareBinaryFormat === 'hex') {
     const hexFileContentText = new TextDecoder().decode(buffer);

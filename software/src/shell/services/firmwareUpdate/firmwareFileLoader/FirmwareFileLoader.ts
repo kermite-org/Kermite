@@ -4,6 +4,7 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
   IStandardBaseFirmwareType,
+  IStandardFirmwareEntry,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
@@ -18,6 +19,7 @@ import {
 import { coreState } from '~/shell/global';
 import { IFirmwareBinaryFileSpec } from '~/shell/modules/project/projectResources';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
+import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
 
 const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
 
@@ -78,6 +80,17 @@ async function fetchCustomFirmware(
   return undefined;
 }
 
+function makeInjectedMetaData(
+  packageInfo: IProjectPackageInfo,
+  firmwareEntry: IStandardFirmwareEntry,
+): IStandardKeyboardInjectedMetaData {
+  return {
+    keyboardName: packageInfo.keyboardName,
+    projectId: packageInfo.projectId,
+    variationId: firmwareEntry.variationId,
+  };
+}
+
 export async function loadFirmwareFileBytes(
   packageInfo: IProjectPackageInfo,
   variationName: string,
@@ -98,13 +111,19 @@ export async function loadFirmwareFileBytes(
 
     const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
 
+    const fileName = `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`;
+
+    const meta = makeInjectedMetaData(packageInfo, firmwareEntry);
+
     const data = applyStandardFirmwareBinaryPatch(
       sourceFirmwareBytes,
       firmwareFormat,
       standardFirmwareConfig,
+      meta,
     );
+
     return {
-      fileName: `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`,
+      fileName,
       data,
       targetDevice,
     };

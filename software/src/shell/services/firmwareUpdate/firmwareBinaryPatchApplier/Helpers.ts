@@ -27,3 +27,11 @@ export function padByteArray(
     .fill(0)
     .map((_, i) => (i < bytes.length ? bytes[i] : fallbackValue));
 }
+
+export function stringToEmbedBytes(text: string, length: number): number[] {
+  return new Array(length).fill(0).map((_, i) => text.charCodeAt(i) || 0);
+}
+
+export function isStringPrintableAscii(text: string) {
+  return /^[\x20-\x7F]*$/.test(text);
+}
