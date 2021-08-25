@@ -43,9 +43,9 @@ KermiteKeyboardDefinitionData defs = {
 };
 
 int main() {
-  utils_copyTextBytes(firmwareConfigurationData.projectId, defs.projectId, 6);
-  utils_copyTextBytes(firmwareConfigurationData.variationId, defs.variationId, 2);
-  utils_copyTextBytes(firmwareConfigurationData.keyboardName, defs.keyboardName, 32);
+  utils_copyTextBytes(firmwareConfigurationData.projectId, defs.projectId, 7);
+  utils_copyTextBytes(firmwareConfigurationData.variationId, defs.variationId, 3);
+  utils_copyTextBytes(firmwareConfigurationData.keyboardName, defs.keyboardName, 33);
 
   if (defs.useBoardLedsProMicroAvr) {
     boardIo_setupLeds_proMicroAvr();
