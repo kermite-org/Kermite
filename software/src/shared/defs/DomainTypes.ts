@@ -145,14 +145,19 @@ export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
 
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
+  portName: string;
+  mcuCode: string;
   firmwareId: string;
+  projectId: string;
+  variationId: string;
+  deviceInstanceCode: string;
+  productName: string;
+  manufacturerName: string;
   firmwareVariationName: string;
   firmwareBuildRevision: number;
-  deviceInstanceCode: string;
   assignStorageCapacity: number;
-  portName: string;
-  mcuName: string;
 }
+
 export type IKeyboardDeviceStatus =
   | {
       isConnected: true;
