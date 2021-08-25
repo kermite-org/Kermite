@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-key */
+import { getMcuNameFromKermiteMcuCode } from '~/shared';
 import { texts } from '~/ui/base';
 import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 
@@ -21,6 +22,7 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
   const firmwareInfo = projectPackagesReader.findFirmwareInfo(
     deviceAttrs?.firmwareId,
   );
+
   const tableData =
     deviceAttrs &&
     ([
@@ -47,7 +49,10 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
         texts.label_device_deviceInfo_fieldName_firmwareVariation,
         deviceAttrs.firmwareVariationName,
       ],
-      [texts.label_device_deviceInfo_fieldName_mcuName, deviceAttrs.mcuName],
+      [
+        texts.label_device_deviceInfo_fieldName_mcuName,
+        getMcuNameFromKermiteMcuCode(deviceAttrs.mcuCode),
+      ],
       [
         texts.label_device_deviceInfo_fieldName_firmwareRevision,
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
