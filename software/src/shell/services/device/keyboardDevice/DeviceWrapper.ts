@@ -16,15 +16,13 @@ export interface IDeviceWrapper {
   onClosed: IListenerPortImpl<void>;
   writeSingleFrame(bytes: number[]): void;
   writeFrames(frames: number[][]): Promise<void>;
-  connectedDevicePath: string | undefined;
+  keyboardDeviceInfo: IKeyboardDeviceInfo;
 }
 export class DeviceWrapper implements IDeviceWrapper {
   private device?: HID.HID | undefined;
 
   onData = makeListenerPort<Uint8Array>();
   onClosed = makeListenerPort<void>();
-
-  connectedDevicePath: string | undefined;
 
   _keyboardDeviceInfo: IKeyboardDeviceInfo = fallbackKeyboardDeviceInfo;
 
@@ -53,7 +51,6 @@ export class DeviceWrapper implements IDeviceWrapper {
     device.on('data', this.handleData);
     device.on('error', this.handleError);
     this.device = device;
-    this.connectedDevicePath = path;
     return true;
   }
 
@@ -74,7 +71,6 @@ export class DeviceWrapper implements IDeviceWrapper {
       this.onClosed.emit();
       this.onData.purge();
       this.onClosed.purge();
-      this.connectedDevicePath = undefined;
       this.device = undefined;
       this._keyboardDeviceInfo = fallbackKeyboardDeviceInfo;
     }

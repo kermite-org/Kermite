@@ -1,8 +1,11 @@
-import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
+import {
+  IKeyboardDeviceInfo,
+  IKeyboardDeviceStatus,
+  IRealtimeKeyboardEvent,
+} from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { commitCoreState, coreState } from '~/shell/global';
-import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
   readDeviceCustomParameters,
@@ -16,7 +19,7 @@ import {
 import { IDeviceWrapper } from './DeviceWrapper';
 
 function createConnectedStatus(
-  devicePath: string,
+  keyboardDeviceInfo: IKeyboardDeviceInfo,
   attrsRes: IDeviceAttributesReadResponseData,
   customParamsRes: ICustomParametersReadResponseData,
 ): IKeyboardDeviceStatus {
@@ -29,7 +32,7 @@ function createConnectedStatus(
       firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
       deviceInstanceCode: attrsRes.deviceInstanceCode,
       assignStorageCapacity: attrsRes.assignStorageCapacity,
-      portName: getPortNameFromDevicePath(devicePath) || devicePath,
+      portName: keyboardDeviceInfo.portName,
       mcuName: attrsRes.firmwareMcuName,
     },
     systemParameterExposedFlags: customParamsRes.parameterExposedFlags,
@@ -77,7 +80,7 @@ export class KeyboardDeviceServiceCore {
     if (setupRes) {
       this.setStatus(
         createConnectedStatus(
-          device.connectedDevicePath!,
+          device.keyboardDeviceInfo,
           setupRes.attrsRes,
           setupRes.customParamsRes,
         ),

@@ -36,7 +36,7 @@ export function enumerateSupportedDevicePathsCore(
     }));
 }
 
-export function getPortNameFromDevicePath(path: string) {
+function getPortNameFromDevicePath(path: string) {
   const m =
     path.match(/AppleUSB20HubPort@(\d+)/) || // Mac
     path.match(/mi_\d+#8&([0-9a-f]+)/); // Windows
