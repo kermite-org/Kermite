@@ -61,10 +61,14 @@ export interface IProjectPackageFileContent {
   keyboardName: string;
   firmwares: (
     | {
+        type: 'standard';
+        variationId: string;
         variationName: string;
         standardFirmwareConfig: IKermiteStandardKeyboardSpec;
       }
     | {
+        type: 'custom';
+        variationId: string;
         variationName: string;
         customFirmwareId: string;
       }
