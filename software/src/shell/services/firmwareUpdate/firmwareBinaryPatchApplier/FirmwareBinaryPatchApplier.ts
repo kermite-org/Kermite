@@ -4,13 +4,9 @@ import {
   decodeBytesFromHexFileContent,
   encodeBytesToHexFileContent,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryDataConverter';
+import { patchUf2FileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryModifierUF2';
+import { replaceArrayContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
-
-function replaceArrayContent(dst: number[], dstOffset: number, src: number[]) {
-  for (let i = 0; i < src.length; i++) {
-    dst[dstOffset + i] = src[i];
-  }
-}
 
 function getBinaryContentMarkerIndex(
   bytes: number[],
@@ -54,10 +50,14 @@ export function applyStandardFirmwareBinaryPatch(
     const modHexFileContentText = encodeBytesToHexFileContent(binaryBytes);
     return new TextEncoder().encode(modHexFileContentText);
   } else {
-    const binaryBytes = [...new Uint8Array(buffer)];
-    const dataLocation = getCustomDataLocation(binaryBytes);
-    // todo: UF2で512バイトのブロック境界をまたぐ場合の考慮が必要
-    replaceArrayContent(binaryBytes, dataLocation, customDataBytes);
-    return new Uint8Array(binaryBytes);
+    const srcUf2FileContentBytes = [...new Uint8Array(buffer)];
+    const modUf2FileContentBytes = patchUf2FileContent(
+      srcUf2FileContentBytes,
+      (binaryBytes) => {
+        const dataLocation = getCustomDataLocation(binaryBytes);
+        replaceArrayContent(binaryBytes, dataLocation, customDataBytes);
+      },
+    );
+    return new Uint8Array(modUf2FileContentBytes);
   }
 }

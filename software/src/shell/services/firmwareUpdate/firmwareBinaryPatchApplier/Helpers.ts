@@ -35,3 +35,13 @@ export function stringToEmbedBytes(text: string, length: number): number[] {
 export function isStringPrintableAscii(text: string) {
   return /^[\x20-\x7F]*$/.test(text);
 }
+
+export function replaceArrayContent(
+  dst: number[],
+  dstOffset: number,
+  src: number[],
+) {
+  for (let i = 0; i < src.length; i++) {
+    dst[dstOffset + i] = src[i];
+  }
+}
