@@ -15,15 +15,17 @@ export const profilesOperationReader = {
     const refProjectId = editorModel.profileData.projectId;
     const allProjectInfos = uiStateReader.allProjectPackageInfos;
     const standardFirmwareIds = ['HCV52K', 'HCV52L'];
-    const deviceFirmwareId = deviceStatus.deviceAttrs?.firmwareId || '';
+    const deviceFirmwareId = deviceStatus.isConnected
+      ? deviceStatus.deviceAttrs.firmwareId
+      : '';
     const isProjectMatched = allProjectInfos.some(
       (info) =>
         info.projectId === refProjectId &&
         info.firmwares.some(
           (firmware) =>
-            ('standardFirmwareConfig' in firmware &&
+            (firmware.type === 'standard' &&
               standardFirmwareIds.includes(deviceFirmwareId)) ||
-            ('customFirmwareId' in firmware &&
+            (firmware.type === 'custom' &&
               firmware.customFirmwareId === deviceFirmwareId),
         ),
     );

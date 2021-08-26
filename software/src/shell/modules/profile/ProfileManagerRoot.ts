@@ -18,7 +18,7 @@ import {
   coreStateManager,
   profilesReader,
 } from '~/shell/global';
-import { profileManagerCore } from '~/shell/services/profile/ProfileManagerCore';
+import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
 const profileEditSourceLoadingDataSchema = vSchemaOneOf([
   vObject({
@@ -151,7 +151,7 @@ function terminate() {
   coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
 }
 
-export const profileManager = {
+export const profileManagerRoot = {
   initializeAsync,
   terminate,
 };

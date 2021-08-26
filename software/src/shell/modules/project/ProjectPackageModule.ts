@@ -1,11 +1,10 @@
 import produce from 'immer';
-import { IActionReceiver, ICoreAction } from '~/shared';
-import { commitCoreState, coreState } from '~/shell/global';
-import { ProjectPackageProvider } from '~/shell/projectPackages/ProjectPackageProvider';
+import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
+import { ProjectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
 const projectPackageProvider = new ProjectPackageProvider();
 
-export const projectPackageModule: IActionReceiver<ICoreAction> = {
+export const projectPackageModule = createCoreModule({
   async project_loadAllProjectPackages() {
     const allProjectPackageInfos = await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
@@ -29,4 +28,4 @@ export const projectPackageModule: IActionReceiver<ICoreAction> = {
     const allCustomFirmwareInfos = await projectPackageProvider.getAllCustomFirmwareInfos();
     commitCoreState({ allCustomFirmwareInfos });
   },
-};
+});

@@ -584,6 +584,7 @@ static void startFixedMode() {
 }
 
 static void startDynamicMode() {
+  configManager_setParameterExposeFlag(SystemParameter_MasterSide);
   keyboardMain_initialize();
   usbIoCore_initialize();
   bool isMaster = detenction_determineMasterSlaveByUsbConnection();

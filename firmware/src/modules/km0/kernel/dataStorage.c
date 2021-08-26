@@ -1,5 +1,6 @@
 #include "dataStorage.h"
 #include "commandDefinitions.h"
+#include "firmwareConfigurationData.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
@@ -7,10 +8,6 @@
 #include "km0/types.h"
 #include "versionDefinitions.h"
 #include <stdio.h>
-
-#ifndef KERMITE_FIRMWARE_ID
-#error KERMITE_FIRMWARE_ID is not defined in config.h
-#endif
 
 #ifndef KM0_STORAGE__USER_STORAGE_SIZE
 #define KM0_STORAGE__USER_STORAGE_SIZE 0
@@ -151,7 +148,8 @@ static bool validateStorageDataFormat() {
   //check project id stored in system data body
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   dataMemory_readBytes(posSystemDataBody, tempDataBuf, 6);
-  bool projectIdValid = utils_compareBytes(tempDataBuf, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
+  bool projectIdValid = utils_compareBytes(
+      tempDataBuf, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
   if (!projectIdValid) {
     return false;
   }
@@ -177,7 +175,7 @@ static void resetDataStorage() {
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
     //write project id
-    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
+    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
     //write default instance number
     dataMemory_writeBytes(posSystemDataBody + 8, (uint8_t *)"00000000", 8);
   }

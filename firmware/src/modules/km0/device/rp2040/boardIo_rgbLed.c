@@ -1,4 +1,6 @@
 #include "km0/device/boardIo.h"
+#include "km0/kernel/commandDefinitions.h"
+#include "km0/kernel/configManager.h"
 #include "neoPixelCore.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
 
@@ -26,6 +28,8 @@ void boardIo_setupLedsRgb(int8_t pin_led, int8_t pin_led_power) {
     gpio_set_dir(pin_led_power, GPIO_OUT);
     gpio_put(pin_led_power, 1);
   }
+  configManager_setParameterExposeFlag(SystemParameter_HeartbeatLed);
+  configManager_setParameterExposeFlag(SystemParameter_KeyHoldIndicatorLed);
 }
 
 void boardIo_setupLeds(int8_t pin1, int8_t pin2, bool invert) {}

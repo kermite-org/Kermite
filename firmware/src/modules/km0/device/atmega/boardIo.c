@@ -1,6 +1,8 @@
 
 #include "km0/device/boardIo.h"
 #include "km0/device/digitalIo.h"
+#include "km0/kernel/commandDefinitions.h"
+#include "km0/kernel/configManager.h"
 
 static int8_t pin_led1 = -1;
 static int8_t pin_led2 = -1;
@@ -18,6 +20,8 @@ void boardIo_setupLeds(int8_t pin1, int8_t pin2, bool invert) {
     digitalIo_setOutput(pin_led2);
     digitalIo_write(pin_led2, invert);
   }
+  configManager_setParameterExposeFlag(SystemParameter_HeartbeatLed);
+  configManager_setParameterExposeFlag(SystemParameter_KeyHoldIndicatorLed);
 }
 
 void boardIo_writeLed1(bool value) {

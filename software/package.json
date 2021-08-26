@@ -37,6 +37,7 @@
     "packaging:mac": "electron-builder --mac --x64",
     "packaging:win": "electron-builder --win --x64",
     "mockview": "cross-env NODE_ENV=development ts-node build2.ts -x-mockview",
+    "web": "cross-env NODE_ENV=development ts-node build2.ts -x-web",
     "clean": "rm -rf dist .cache",
     "typecheck": "tsc",
     "typecheck:full": "tsc -b src/*",
@@ -45,6 +46,7 @@
     "incver": "npm version patch"
   },
   "dependencies": {
+    "@types/w3c-web-hid": "^1.0.2",
     "fast-equals": "^2.0.0",
     "glob": "^7.1.6",
     "immer": "^9.0.1",

@@ -5,6 +5,8 @@
 
   "firmwares": [
     {
+      "type": "standard",
+      "variationId": "01",
       "variationName": "proto0",
       "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
@@ -34,6 +36,8 @@
       }
     },
     {
+      "type": "custom",
+      "variationId": "02",
       "variationName": "proto0_custom",
       "customFirmwareId": "7qHDCp"
     }

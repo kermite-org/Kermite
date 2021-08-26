@@ -1,8 +1,11 @@
-import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
+import {
+  IKeyboardDeviceInfo,
+  IKeyboardDeviceStatus,
+  IRealtimeKeyboardEvent,
+} from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { commitCoreState, coreState } from '~/shell/global';
-import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
   readDeviceCustomParameters,
@@ -16,24 +19,29 @@ import {
 import { IDeviceWrapper } from './DeviceWrapper';
 
 function createConnectedStatus(
-  devicePath: string,
+  keyboardDeviceInfo: IKeyboardDeviceInfo,
   attrsRes: IDeviceAttributesReadResponseData,
-  customParamsRes: ICustomParametersReadResponseData | undefined,
+  customParamsRes: ICustomParametersReadResponseData,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
     deviceAttrs: {
       origin: attrsRes.resourceOrigin,
-      firmwareId: attrsRes.firmwareId,
+      portName: keyboardDeviceInfo.portName,
+      mcuCode: keyboardDeviceInfo.mcuCode,
+      firmwareId: keyboardDeviceInfo.firmwareId,
+      projectId: keyboardDeviceInfo.projectId,
+      variationId: keyboardDeviceInfo.variationId,
+      deviceInstanceCode: attrsRes.deviceInstanceCode,
+      productName: keyboardDeviceInfo.productName,
+      manufacturerName: keyboardDeviceInfo.manufacturerName,
       firmwareVariationName: attrsRes.firmwareVariationName,
       firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
-      deviceInstanceCode: attrsRes.deviceInstanceCode,
       assignStorageCapacity: attrsRes.assignStorageCapacity,
-      portName: getPortNameFromDevicePath(devicePath) || devicePath,
-      mcuName: attrsRes.firmwareMcuName,
     },
-    systemParameterValues: customParamsRes?.parameterValues,
-    systemParameterMaxValues: customParamsRes?.parameterMaxValues,
+    systemParameterExposedFlags: customParamsRes.parameterExposedFlags,
+    systemParameterValues: customParamsRes.parameterValues,
+    systemParameterMaxValues: customParamsRes.parameterMaxValues,
   };
 }
 
@@ -42,9 +50,18 @@ export class KeyboardDeviceServiceCore {
 
   private device: IDeviceWrapper | undefined;
 
-  private setStatus(newStatus: Partial<IKeyboardDeviceStatus>) {
-    const deviceStatus = { ...coreState.deviceStatus, ...newStatus };
+  private setStatus(deviceStatus: IKeyboardDeviceStatus) {
     commitCoreState({ deviceStatus });
+  }
+
+  private setParameterValues(newParameterValues: number[]) {
+    if (coreState.deviceStatus.isConnected) {
+      const deviceStatus: IKeyboardDeviceStatus = {
+        ...coreState.deviceStatus,
+        systemParameterValues: newParameterValues,
+      };
+      commitCoreState({ deviceStatus });
+    }
   }
 
   private onDeviceDataReceived = (buf: Uint8Array) => {
@@ -53,11 +70,11 @@ export class KeyboardDeviceServiceCore {
       this.realtimeEventPort.emit(res.event);
     }
     if (res?.type === 'parameterChangedNotification') {
-      const newValues = coreState.deviceStatus.systemParameterValues!.slice();
-      newValues[res.parameterIndex] = res.value;
-      this.setStatus({
-        systemParameterValues: newValues,
-      });
+      if (coreState.deviceStatus.isConnected) {
+        const newValues = coreState.deviceStatus.systemParameterValues.slice();
+        newValues[res.parameterIndex] = res.value;
+        this.setParameterValues(newValues);
+      }
     }
   };
 
@@ -67,7 +84,7 @@ export class KeyboardDeviceServiceCore {
     if (setupRes) {
       this.setStatus(
         createConnectedStatus(
-          device.connectedDevicePath!,
+          device.keyboardDeviceInfo,
           setupRes.attrsRes,
           setupRes.customParamsRes,
         ),
@@ -76,12 +93,7 @@ export class KeyboardDeviceServiceCore {
   }
 
   private clearDevice = () => {
-    this.setStatus({
-      isConnected: false,
-      deviceAttrs: undefined,
-      systemParameterValues: undefined,
-      systemParameterMaxValues: undefined,
-    });
+    this.setStatus({ isConnected: false });
     this.device = undefined;
   };
 
@@ -96,9 +108,7 @@ export class KeyboardDeviceServiceCore {
       if (this.device) {
         this.device.writeSingleFrame(Packets.customParametersResetRequestFrame);
         const customParamsRes = await readDeviceCustomParameters(this.device);
-        this.setStatus({
-          systemParameterValues: customParamsRes.parameterValues,
-        });
+        this.setParameterValues(customParamsRes.parameterValues);
       }
     });
   }

@@ -1,6 +1,7 @@
 #pragma once
 
 #define KERMITE_FIRMWARE_ID "UMyy5p"
+#define KERMITE_KEYBOARD_NAME "mp2105"
 
 #define KS_NUM_SCAN_SLOTS 14
 

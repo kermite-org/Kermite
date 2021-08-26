@@ -2,7 +2,10 @@ import {
   checkProfileEntryEquality,
   IProfileData,
   IProfileEntry,
+  IProjectPackageInfo,
 } from '~/shared';
+import { appEnv } from '~/shell/base';
+import { pathResolve } from '~/shell/funcs';
 import { coreState } from '~/shell/global/CoreStateAction';
 
 export const profilesReader = {
@@ -36,5 +39,28 @@ export const profilesReader = {
     if (coreState.profileEditSource.type === 'InternalProfile') {
       return coreState.profileEditSource.profileEntry;
     }
+  },
+};
+
+export const projectPackagesReader = {
+  getLocalProjectInfo(projectId: string): IProjectPackageInfo | undefined {
+    const projectInfos = coreState.allProjectPackageInfos;
+    return projectInfos.find(
+      (info) => info.origin === 'local' && info.projectId === projectId,
+    );
+  },
+};
+
+export const globalSettingsReader = {
+  getLocalRepositoryDir(): string | undefined {
+    const settings = coreState.globalSettings;
+    if (settings.developerMode && settings.useLocalResources) {
+      if (appEnv.isDevelopment) {
+        return pathResolve('../');
+      } else {
+        return settings.localProjectRootFolderPath;
+      }
+    }
+    return undefined;
   },
 };

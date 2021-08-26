@@ -14,7 +14,10 @@ type ILayoutManagerViewModelCommandFunctionKey =
 
 type ILayoutManagerViewModelCommandActiveFlagKey =
   | 'canShowEditLayoutFileInFiler'
-  | 'canOpenProjectIoModal';
+  | 'canOpenProjectIoModal'
+  | 'canCreateNewLayout'
+  | 'canCreateProfile'
+  | 'canSaveToFile';
 
 interface IMenuItemSource {
   text: string;
@@ -25,11 +28,19 @@ interface IMenuItemSource {
 type IMenuItemSeparator = { separator: true };
 
 const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
-  { text: 'new design', command: 'createNewLayout' },
+  {
+    text: 'new design',
+    command: 'createNewLayout',
+    commandActiveFlagKey: 'canCreateNewLayout',
+  },
   // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
   { separator: true },
   { text: 'load from file...', command: 'loadFromFileWithDialog' },
-  { text: 'save to file...', command: 'saveToFileWithDialog' },
+  {
+    text: 'save to file...',
+    command: 'saveToFileWithDialog',
+    commandActiveFlagKey: 'canSaveToFile',
+  },
   { separator: true },
   {
     text: 'load from project...',
@@ -42,7 +53,11 @@ const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
     commandActiveFlagKey: 'canOpenProjectIoModal',
   },
   { separator: true },
-  { text: 'create profile', command: 'createNewProfileFromCurrentLayout' },
+  {
+    text: 'create profile',
+    command: 'createNewProfileFromCurrentLayout',
+    commandActiveFlagKey: 'canCreateProfile',
+  },
   {
     text: 'show edit file in folder',
     command: 'showEditLayoutFileInFiler',
