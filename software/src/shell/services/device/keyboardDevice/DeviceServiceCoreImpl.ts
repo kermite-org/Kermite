@@ -18,7 +18,7 @@ import { IDeviceWrapper } from './DeviceWrapper';
 function createConnectedStatus(
   devicePath: string,
   attrsRes: IDeviceAttributesReadResponseData,
-  customParamsRes: ICustomParametersReadResponseData | undefined,
+  customParamsRes: ICustomParametersReadResponseData,
 ): IKeyboardDeviceStatus {
   return {
     isConnected: true,
@@ -32,8 +32,9 @@ function createConnectedStatus(
       portName: getPortNameFromDevicePath(devicePath) || devicePath,
       mcuName: attrsRes.firmwareMcuName,
     },
-    systemParameterValues: customParamsRes?.parameterValues,
-    systemParameterMaxValues: customParamsRes?.parameterMaxValues,
+    systemParameterExposedFlags: customParamsRes.parameterExposedFlags,
+    systemParameterValues: customParamsRes.parameterValues,
+    systemParameterMaxValues: customParamsRes.parameterMaxValues,
   };
 }
 
@@ -42,9 +43,18 @@ export class KeyboardDeviceServiceCore {
 
   private device: IDeviceWrapper | undefined;
 
-  private setStatus(newStatus: Partial<IKeyboardDeviceStatus>) {
-    const deviceStatus = { ...coreState.deviceStatus, ...newStatus };
+  private setStatus(deviceStatus: IKeyboardDeviceStatus) {
     commitCoreState({ deviceStatus });
+  }
+
+  private setParameterValues(newParameterValues: number[]) {
+    if (coreState.deviceStatus.isConnected) {
+      const deviceStatus: IKeyboardDeviceStatus = {
+        ...coreState.deviceStatus,
+        systemParameterValues: newParameterValues,
+      };
+      commitCoreState({ deviceStatus });
+    }
   }
 
   private onDeviceDataReceived = (buf: Uint8Array) => {
@@ -53,11 +63,11 @@ export class KeyboardDeviceServiceCore {
       this.realtimeEventPort.emit(res.event);
     }
     if (res?.type === 'parameterChangedNotification') {
-      const newValues = coreState.deviceStatus.systemParameterValues!.slice();
-      newValues[res.parameterIndex] = res.value;
-      this.setStatus({
-        systemParameterValues: newValues,
-      });
+      if (coreState.deviceStatus.isConnected) {
+        const newValues = coreState.deviceStatus.systemParameterValues.slice();
+        newValues[res.parameterIndex] = res.value;
+        this.setParameterValues(newValues);
+      }
     }
   };
 
@@ -76,12 +86,7 @@ export class KeyboardDeviceServiceCore {
   }
 
   private clearDevice = () => {
-    this.setStatus({
-      isConnected: false,
-      deviceAttrs: undefined,
-      systemParameterValues: undefined,
-      systemParameterMaxValues: undefined,
-    });
+    this.setStatus({ isConnected: false });
     this.device = undefined;
   };
 
@@ -96,9 +101,7 @@ export class KeyboardDeviceServiceCore {
       if (this.device) {
         this.device.writeSingleFrame(Packets.customParametersResetRequestFrame);
         const customParamsRes = await readDeviceCustomParameters(this.device);
-        this.setStatus({
-          systemParameterValues: customParamsRes.parameterValues,
-        });
+        this.setParameterValues(customParamsRes.parameterValues);
       }
     });
   }

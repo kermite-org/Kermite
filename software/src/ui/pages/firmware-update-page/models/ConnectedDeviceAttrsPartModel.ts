@@ -14,7 +14,9 @@ function fixDateTimeText(dateTimeText: string) {
 }
 
 export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartModel {
-  const deviceAttrs = uiStateReader.deviceStatus.deviceAttrs;
+  const { deviceStatus } = uiStateReader;
+  const deviceAttrs =
+    (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
   const isOriginOnline = deviceAttrs?.origin === 'online';
   const firmwareInfo = projectPackagesReader.findFirmwareInfo(
     deviceAttrs?.firmwareId,

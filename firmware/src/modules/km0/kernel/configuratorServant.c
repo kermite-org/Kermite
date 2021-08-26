@@ -141,8 +141,11 @@ static void emitCustomParametersReadResponse() {
   uint8_t *p = rawHidTempBuf;
   p[0] = RawHidOpcode_ParametersReadAllResponse;
   p[1] = num;
-  configManager_readSystemParameterValues(p + 2, num);
-  configManager_readSystemParameterMaxValues(p + 2 + num, num);
+  uint16_t parameterExposeFlags = configManager_getParameterExposeFlags();
+  p[2] = parameterExposeFlags >> 8 & 0xFF;
+  p[3] = parameterExposeFlags & 0xFF;
+  configManager_readSystemParameterValues(p + 4, num);
+  configManager_readSystemParameterMaxValues(p + 4 + num, num);
   emitGenericHidData(rawHidTempBuf);
 }
 

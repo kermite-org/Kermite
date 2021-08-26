@@ -148,7 +148,7 @@ export async function deviceSetupTask(
   device: IDeviceWrapper,
 ): Promise<{
   attrsRes: IDeviceAttributesReadResponseData;
-  customParamsRes: ICustomParametersReadResponseData | undefined;
+  customParamsRes: ICustomParametersReadResponseData;
 }> {
   let attrsRes = await readDeviceAttributes(device);
   checkDeviceRevisions(attrsRes);

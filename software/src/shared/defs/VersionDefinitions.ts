@@ -6,7 +6,8 @@ export const ConfigStorageFormatRevision = 6;
 
 // 210705, 2, メッセージ形式を簡素化
 // 210719, 3, deviceAttributesResponseを整理
-export const RawHidMessageProtocolRevision = 3;
+// 210824, 4, CustomParametersReadResponseにパラメタ公開フラグを追加
+export const RawHidMessageProtocolRevision = 4;
 
 // 210509 1, 初版
 // 210515 2, mappingEntriesを追加

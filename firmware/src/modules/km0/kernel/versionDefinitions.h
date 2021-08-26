@@ -1,7 +1,7 @@
 #pragma once
 
 #define Kermite_ConfigStorageFormatRevision 6
-#define Kermite_RawHidMessageProtocolRevision 3
+#define Kermite_RawHidMessageProtocolRevision 4
 #define Kermite_ProfileBinaryFormatRevision 4
 #define Kermite_ConfigParametersRevision 5
 

@@ -74,7 +74,9 @@ export class InputLogicSimulatorD {
 
   private onCoreStatusChange = (diff: Partial<ICoreState>) => {
     if (diff.deviceStatus) {
-      const values = diff.deviceStatus.systemParameterValues;
+      const values =
+        diff.deviceStatus.isConnected &&
+        diff.deviceStatus.systemParameterValues;
       if (values) {
         const systemLayout = values[SystemParameter.SystemLayout];
         const wiringMode = values[SystemParameter.WiringMode];
