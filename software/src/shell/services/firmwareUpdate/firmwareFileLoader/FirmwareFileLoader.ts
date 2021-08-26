@@ -4,6 +4,7 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
   IStandardBaseFirmwareType,
+  IStandardFirmwareEntry,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
@@ -11,13 +12,23 @@ import {
   fetchBinary,
   fetchJson,
   fsxMkdirpSync,
+  fsxReadBinaryFile,
   fsxWriteFile,
   pathBasename,
   pathDirname,
+  pathResolve,
 } from '~/shell/funcs';
 import { coreState } from '~/shell/global';
 import { IFirmwareBinaryFileSpec } from '~/shell/modules/project/projectResources';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
+import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
+
+const config = {
+  debugLoadLocalFirmware: false,
+};
+if (appEnv.isDevelopment) {
+  config.debugLoadLocalFirmware = true;
+}
 
 const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
 
@@ -45,6 +56,26 @@ async function fetchStandardBaseFirmware(
   const url = `${remoteBaseUrl}/${path}`;
   const fileName = pathBasename(url);
   const data = await cacheRemoteResource(fetchBinary, url);
+  return { fileName, data };
+}
+
+const localStandardFirmwarePaths: {
+  [key in IStandardBaseFirmwareType]?: string;
+} = {
+  AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
+  RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
+};
+
+async function debugloadLocalStandardBaseFirmware(
+  baseFirmwareType: IStandardBaseFirmwareType,
+): Promise<IFirmwareFetchResult> {
+  const filePath = localStandardFirmwarePaths[baseFirmwareType];
+  if (!filePath) {
+    throw new Error(`base firmware ${baseFirmwareType} is not supported yet`);
+  }
+  const fileName = pathBasename(filePath);
+  console.log(`loading local firmware ${filePath}`);
+  const data = await fsxReadBinaryFile(filePath);
   return { fileName, data };
 }
 
@@ -78,6 +109,17 @@ async function fetchCustomFirmware(
   return undefined;
 }
 
+function makeInjectedMetaData(
+  packageInfo: IProjectPackageInfo,
+  firmwareEntry: IStandardFirmwareEntry,
+): IStandardKeyboardInjectedMetaData {
+  return {
+    keyboardName: packageInfo.keyboardName,
+    projectId: packageInfo.projectId,
+    variationId: firmwareEntry.variationId,
+  };
+}
+
 export async function loadFirmwareFileBytes(
   packageInfo: IProjectPackageInfo,
   variationName: string,
@@ -91,20 +133,31 @@ export async function loadFirmwareFileBytes(
     const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
       baseFirmwareType,
     );
+
+    const firmwareLoader = config.debugLoadLocalFirmware
+      ? debugloadLocalStandardBaseFirmware
+      : fetchStandardBaseFirmware;
+
     const {
       fileName: sourceFirmwareFileName,
       data: sourceFirmwareBytes,
-    } = await fetchStandardBaseFirmware(baseFirmwareType);
+    } = await firmwareLoader(baseFirmwareType);
 
     const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
+
+    const fileName = `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`;
+
+    const meta = makeInjectedMetaData(packageInfo, firmwareEntry);
 
     const data = applyStandardFirmwareBinaryPatch(
       sourceFirmwareBytes,
       firmwareFormat,
       standardFirmwareConfig,
+      meta,
     );
+
     return {
-      fileName: `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`,
+      fileName,
       data,
       targetDevice,
     };

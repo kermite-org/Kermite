@@ -4,6 +4,7 @@ import {
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
   IFirmwareTargetDevice,
+  IProjectFirmwareEntry,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
@@ -19,7 +20,7 @@ export type FirmwareUpdatePhase =
   | 'UploadFailure';
 
 function getTargetDeviceFromFirmwareInfo(
-  entry: IProjectPackageInfo['firmwares'][0],
+  entry: IProjectFirmwareEntry,
 ): IFirmwareTargetDevice | undefined {
   if (entry.type === 'standard') {
     return getFirmwareTargetDeviceFromBaseFirmwareType(
