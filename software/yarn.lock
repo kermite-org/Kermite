@@ -278,11 +278,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/live-server@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@types/live-server/-/live-server-1.2.0.tgz#3ae39bfb19fedda17c3aa29d0b7edf9486971462"
-  integrity sha512-XOz2bXwMbTBwM67yNgYnKjgKel8VF9660offh7SnK8GAHrzLjhYf4Rt/XXZUc9YDfi163yW5uV2jwOSgtedLRw==
-
 "@types/minimatch@*":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.4.tgz#f0ec25dbf2f0e4b18647313ac031134ca5b24b21"
