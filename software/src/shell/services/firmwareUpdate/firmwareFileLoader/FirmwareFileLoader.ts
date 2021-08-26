@@ -85,7 +85,7 @@ export async function loadFirmwareFileBytes(
   const firmwareEntry = packageInfo.firmwares.find(
     (it) => it.variationName === variationName,
   );
-  if (firmwareEntry && 'standardFirmwareConfig' in firmwareEntry) {
+  if (firmwareEntry?.type === 'standard') {
     const { standardFirmwareConfig } = firmwareEntry;
     const { baseFirmwareType } = standardFirmwareConfig;
     const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
@@ -109,7 +109,7 @@ export async function loadFirmwareFileBytes(
       targetDevice,
     };
   }
-  if (firmwareEntry && 'customFirmwareId' in firmwareEntry) {
+  if (firmwareEntry?.type === 'custom') {
     return fetchCustomFirmware(firmwareEntry.customFirmwareId);
   }
   return undefined;

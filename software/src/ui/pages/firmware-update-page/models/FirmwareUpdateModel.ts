@@ -21,12 +21,12 @@ export type FirmwareUpdatePhase =
 function getTargetDeviceFromFirmwareInfo(
   entry: IProjectPackageInfo['firmwares'][0],
 ): IFirmwareTargetDevice | undefined {
-  if ('standardFirmwareConfig' in entry) {
+  if (entry.type === 'standard') {
     return getFirmwareTargetDeviceFromBaseFirmwareType(
       entry.standardFirmwareConfig.baseFirmwareType,
     );
   }
-  if ('customFirmwareId' in entry) {
+  if (entry.type === 'custom') {
     const item = uiStateReader.allCustomFirmwareInfos.find(
       (it) => it.firmwareId === entry.customFirmwareId,
     );

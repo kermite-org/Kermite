@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-key */
+import { getMcuNameFromKermiteMcuCode } from '~/shared';
 import { texts } from '~/ui/base';
 import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
 
@@ -21,33 +22,40 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
   const firmwareInfo = projectPackagesReader.findFirmwareInfo(
     deviceAttrs?.firmwareId,
   );
+
   const tableData =
     deviceAttrs &&
     ([
       [texts.label_device_deviceInfo_fieldName_port, deviceAttrs.portName],
+      [
+        texts.label_device_deviceInfo_fieldName_firmwareId,
+        deviceAttrs.firmwareId,
+      ],
+      ['projectId', deviceAttrs.projectId],
+      ['variationId', deviceAttrs.variationId],
+      [
+        texts.label_device_deviceInfo_fieldName_instanceNumber,
+        deviceAttrs.deviceInstanceCode,
+      ],
+      [
+        texts.label_device_deviceInfo_fieldName_keyboardName,
+        deviceAttrs.productName,
+      ],
+      ['manufacturerName', deviceAttrs.manufacturerName],
+      [
+        texts.label_device_deviceInfo_fieldName_firmwareVariation,
+        deviceAttrs.firmwareVariationName,
+      ],
+      [
+        texts.label_device_deviceInfo_fieldName_mcuName,
+        getMcuNameFromKermiteMcuCode(deviceAttrs.mcuCode),
+      ],
       [
         texts.label_device_deviceInfo_fieldName_resourceOrigin,
         isOriginOnline
           ? texts.label_device_deviceInfo_value_resourceOrigin_online
           : texts.label_device_deviceInfo_value_resourceOrigin_local,
       ],
-      [
-        texts.label_device_deviceInfo_fieldName_firmwareId,
-        deviceAttrs.firmwareId,
-      ],
-      firmwareInfo && [
-        texts.label_device_deviceInfo_fieldName_keyboardName,
-        firmwareInfo.firmwareProjectPath,
-      ],
-      [
-        texts.label_device_deviceInfo_fieldName_instanceNumber,
-        deviceAttrs.deviceInstanceCode,
-      ],
-      [
-        texts.label_device_deviceInfo_fieldName_firmwareVariation,
-        deviceAttrs.firmwareVariationName,
-      ],
-      [texts.label_device_deviceInfo_fieldName_mcuName, deviceAttrs.mcuName],
       [
         texts.label_device_deviceInfo_fieldName_firmwareRevision,
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',

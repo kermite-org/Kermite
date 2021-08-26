@@ -4,6 +4,8 @@
   "keyboardName": "KM71A",
   "firmwares": [
     {
+      "type": "standard",
+      "variationId": "01",
       "variationName": "rp",
       "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
@@ -30,6 +32,8 @@
       }
     },
     {
+      "type": "custom",
+      "variationId": "02",
       "variationName": "rp_custom",
       "customFirmwareId": "O1lweX"
     }

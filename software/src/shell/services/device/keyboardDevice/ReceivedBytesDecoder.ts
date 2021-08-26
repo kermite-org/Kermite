@@ -1,5 +1,4 @@
 import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
-import { getMcuNameFromKermiteMcuCode } from '~/shared/funcs/DomainRelatedHelpers';
 import { bytesToString } from '~/shell/services/device/keyboardDevice/Helpers';
 import { RawHidOpcode } from '~/shell/services/device/keyboardDevice/RawHidOpcode';
 
@@ -11,10 +10,8 @@ export type IDeviceAttributesReadResponseData = {
   profileBinaryFormatRevision: number;
   rawHidMessageProtocolRevision: number;
   resourceOrigin: IResourceOrigin;
-  firmwareId: string;
   deviceInstanceCode: string;
   assignStorageCapacity: number;
-  firmwareMcuName: string;
 };
 
 export type ICustomParametersReadResponseData = {
@@ -53,8 +50,8 @@ export function receivedBytesDecoder(
     const configStorageFormatRevision = buf[2];
     const profileBinaryFormatRevision = buf[3];
     const configParametersRevision = buf[4];
-    const kermiteMcuCode = bytesToString([...buf].slice(5, 15));
-    const firmwareId = bytesToString([...buf].slice(15, 21));
+    // const kermiteMcuCode = bytesToString([...buf].slice(5, 15));
+    // const firmwareId = bytesToString([...buf].slice(15, 21));
     const isProjectOriginOnline = !!buf[21];
     const projectReleaseBuildRevision = (buf[22] << 8) | buf[23];
     const firmwareVariationName = bytesToString([...buf].slice(24, 40));
@@ -70,10 +67,8 @@ export function receivedBytesDecoder(
         profileBinaryFormatRevision,
         rawHidMessageProtocolRevision,
         resourceOrigin: isProjectOriginOnline ? 'online' : 'local',
-        firmwareId,
         deviceInstanceCode,
         assignStorageCapacity,
-        firmwareMcuName: getMcuNameFromKermiteMcuCode(kermiteMcuCode),
       },
     };
   }

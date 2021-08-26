@@ -1,6 +1,7 @@
 #pragma once
 
 #define KERMITE_FIRMWARE_ID "FZiVsZ"
+#define KERMITE_KEYBOARD_NAME "Minivers rev1"
 
 #define KS_SNGLEWIRE_PIN D2
 

@@ -9,10 +9,12 @@
 #define Kermite_Project_VariationName EXTR_KERMITE_VARIATION_NAME
 #define Kermite_Project_IsResourceOriginOnline EXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE
 
+#define Kermite_CommonSerialNumberPrefix "A152FD2C"
+
 #if defined KERMITE_TARGET_MCU_ATMEGA
-#define Kermite_Project_McuCode "A152FD2C01"
+#define Kermite_Project_McuCode "M01"
 #elif defined KERMITE_TARGET_MCU_RP2040
-#define Kermite_Project_McuCode "A152FD2C02"
+#define Kermite_Project_McuCode "M02"
 #else
 #error KERMITE_TARGET_MCU_* is not defined
 #endif

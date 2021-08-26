@@ -1,5 +1,6 @@
 #pragma once
 
 #define KERMITE_FIRMWARE_ID "HCV52K"
+#define KERMITE_KEYBOARD_NAME "standard"
 
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 128

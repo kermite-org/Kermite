@@ -11,6 +11,7 @@ MODULE_SRCS += km0/device/rp2040/neoPixelCore.c
 MODULE_PIOASM_SRCS += km0/device/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
+MODULE_SRCS += km0/kernel/firmwareConfigurationData.c
 MODULE_SRCS += km0/kernel/keyMappingDataValidator.c
 MODULE_SRCS += km0/kernel/configuratorServant.c
 MODULE_SRCS += km0/kernel/keyCodeTranslator.c

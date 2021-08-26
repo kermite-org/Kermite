@@ -61,10 +61,14 @@ export interface IProjectPackageFileContent {
   keyboardName: string;
   firmwares: (
     | {
+        type: 'standard';
+        variationId: string;
         variationName: string;
         standardFirmwareConfig: IKermiteStandardKeyboardSpec;
       }
     | {
+        type: 'custom';
+        variationId: string;
         variationName: string;
         customFirmwareId: string;
       }
@@ -112,9 +116,26 @@ export interface IProjectCustomDefinition {
 export interface IKeyboardDeviceInfo {
   path: string;
   portName: string;
+  mcuCode: string;
   firmwareId: string;
+  projectId: string;
+  variationId: string;
   deviceInstanceCode: string;
+  productName: string;
+  manufacturerName: string;
 }
+
+export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {
+  path: '',
+  portName: '',
+  mcuCode: '',
+  firmwareId: '',
+  projectId: '',
+  variationId: '',
+  deviceInstanceCode: '',
+  productName: '',
+  manufacturerName: '',
+};
 
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
@@ -128,14 +149,19 @@ export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
 
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
+  portName: string;
+  mcuCode: string;
   firmwareId: string;
+  projectId: string;
+  variationId: string;
+  deviceInstanceCode: string;
+  productName: string;
+  manufacturerName: string;
   firmwareVariationName: string;
   firmwareBuildRevision: number;
-  deviceInstanceCode: string;
   assignStorageCapacity: number;
-  portName: string;
-  mcuName: string;
 }
+
 export type IKeyboardDeviceStatus =
   | {
       isConnected: true;

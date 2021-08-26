@@ -1,8 +1,11 @@
-import { IKeyboardDeviceStatus, IRealtimeKeyboardEvent } from '~/shared';
+import {
+  IKeyboardDeviceInfo,
+  IKeyboardDeviceStatus,
+  IRealtimeKeyboardEvent,
+} from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { commitCoreState, coreState } from '~/shell/global';
-import { getPortNameFromDevicePath } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
   deviceSetupTask,
   readDeviceCustomParameters,
@@ -16,7 +19,7 @@ import {
 import { IDeviceWrapper } from './DeviceWrapper';
 
 function createConnectedStatus(
-  devicePath: string,
+  keyboardDeviceInfo: IKeyboardDeviceInfo,
   attrsRes: IDeviceAttributesReadResponseData,
   customParamsRes: ICustomParametersReadResponseData,
 ): IKeyboardDeviceStatus {
@@ -24,13 +27,17 @@ function createConnectedStatus(
     isConnected: true,
     deviceAttrs: {
       origin: attrsRes.resourceOrigin,
-      firmwareId: attrsRes.firmwareId,
+      portName: keyboardDeviceInfo.portName,
+      mcuCode: keyboardDeviceInfo.mcuCode,
+      firmwareId: keyboardDeviceInfo.firmwareId,
+      projectId: keyboardDeviceInfo.projectId,
+      variationId: keyboardDeviceInfo.variationId,
+      deviceInstanceCode: attrsRes.deviceInstanceCode,
+      productName: keyboardDeviceInfo.productName,
+      manufacturerName: keyboardDeviceInfo.manufacturerName,
       firmwareVariationName: attrsRes.firmwareVariationName,
       firmwareBuildRevision: attrsRes.projectReleaseBuildRevision,
-      deviceInstanceCode: attrsRes.deviceInstanceCode,
       assignStorageCapacity: attrsRes.assignStorageCapacity,
-      portName: getPortNameFromDevicePath(devicePath) || devicePath,
-      mcuName: attrsRes.firmwareMcuName,
     },
     systemParameterExposedFlags: customParamsRes.parameterExposedFlags,
     systemParameterValues: customParamsRes.parameterValues,
@@ -77,7 +84,7 @@ export class KeyboardDeviceServiceCore {
     if (setupRes) {
       this.setStatus(
         createConnectedStatus(
-          device.connectedDevicePath!,
+          device.keyboardDeviceInfo,
           setupRes.attrsRes,
           setupRes.customParamsRes,
         ),

@@ -4,6 +4,8 @@
   "keyboardName": "mp2105",
   "firmwares": [
     {
+      "type": "standard",
+      "variationId": "01",
       "variationName": "rp",
       "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
@@ -14,10 +16,14 @@
       }
     },
     {
+      "type": "custom",
+      "variationId": "02",
       "variationName": "atmega_custom",
       "customFirmwareId": "feGV0G"
     },
     {
+      "type": "custom",
+      "variationId": "03",
       "variationName": "rp_custom",
       "customFirmwareId": "UMyy5p"
     }

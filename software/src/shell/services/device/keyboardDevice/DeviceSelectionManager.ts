@@ -7,7 +7,6 @@ import { applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState } from '~/shell/global';
 import {
   enumerateSupportedDeviceInfos,
-  getDebugDeviceSigFromDevicePath,
   IDeviceSpecificationParams,
 } from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
 import {
@@ -19,13 +18,13 @@ import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // atmega32u4
   {
-    serialNumberFirst10Bytes: 'A152FD2C01',
+    serialNumberFirst12Bytes: 'A152FD2C:M01',
     usagePage: 0xffab,
     usage: 0x0200,
   },
   // rp2040
   {
-    serialNumberFirst10Bytes: 'A152FD2C02',
+    serialNumberFirst12Bytes: 'A152FD2C:M02',
     usagePage: 0xff00,
     usage: 0x0001,
   },
@@ -62,13 +61,17 @@ export class DeviceSelectionManager {
     if (path !== this.status.currentDevicePath) {
       this.closeDevice();
       if (path !== 'none') {
-        if (this.status.allDeviceInfos.some((info) => info.path === path)) {
+        const targetDeviceInfo = this.status.allDeviceInfos.find(
+          (info) => info.path === path,
+        );
+        if (targetDeviceInfo) {
+          const deviceSig = targetDeviceInfo.portName;
           const device = DeviceWrapper.openDeviceByPath(path);
-          const deviceSig = getDebugDeviceSigFromDevicePath(path);
           if (!device) {
             console.log(`failed to open device: ${deviceSig}`);
             return;
           }
+          device.setKeyboardDeviceInfo(targetDeviceInfo);
           device.writeSingleFrame(Packets.connectionOpenedFrame);
           device.writeSingleFrame(
             Packets.makeSimulatorModeSpecFrame(
