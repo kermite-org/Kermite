@@ -88,5 +88,8 @@
     "source-map-support": "^0.5.19",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
+  },
+  "resolutions": {
+    "tar": "6.1.2"
   }
 }
