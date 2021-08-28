@@ -3,7 +3,9 @@ import produce from 'immer';
 import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  IProfileData,
   IProfileEditSource,
+  IProfileEntry,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
@@ -17,6 +19,31 @@ import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profi
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
 const errorTextInvalidOperation = 'invalid operation';
+
+const profileManagerInternalFuncs = {
+  async saveProfileWithProjectIdChange(
+    profileEntry: IProfileEntry,
+    profileData: IProfileData,
+  ): Promise<void> {
+    if (profileData.projectId !== profileEntry.projectId) {
+      await profileManagerCore.deleteProfile(profileEntry);
+    }
+    const newProfileEntry = {
+      ...profileEntry,
+      projectId: profileData.projectId,
+    };
+    await profileManagerCore.saveProfile(newProfileEntry, profileData);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
+    commitCoreState({
+      allProfileEntries,
+      profileEditSource: {
+        type: 'InternalProfile',
+        profileEntry: newProfileEntry,
+      },
+      loadedProfileData: profileData,
+    });
+  },
+};
 
 export const profileManagerModule = createCoreModule({
   async profile_createProfile({
@@ -73,9 +100,8 @@ export const profileManagerModule = createCoreModule({
     });
   },
   profile_createProfileFromLayout({ projectId, layout }) {
-    const profileData = duplicateObjectByJsonStringifyParse(
-      fallbackProfileData,
-    );
+    const profileData =
+      duplicateObjectByJsonStringifyParse(fallbackProfileData);
     profileData.projectId = projectId;
     profileData.keyboardDesign = layout;
     commitCoreState({
@@ -153,9 +179,8 @@ export const profileManagerModule = createCoreModule({
     }
     await profileManagerCore.deleteProfile(profileEntry);
     const allProfileEntries = await profileManagerCore.listAllProfileEntries();
-    const visibleProfileEntries = profilesReader.getVisibleProfiles(
-      allProfileEntries,
-    );
+    const visibleProfileEntries =
+      profilesReader.getVisibleProfiles(allProfileEntries);
     const newProfileEntry =
       visibleProfileEntries.find(
         (it) => it.projectId === profileEntry.projectId,
@@ -188,10 +213,18 @@ export const profileManagerModule = createCoreModule({
         profileData,
       );
     } else if (editSource.type === 'InternalProfile') {
-      await profileManagerCore.saveProfile(
-        editSource.profileEntry,
-        profileData,
-      );
+      if (editSource.profileEntry.projectId !== profileData.projectId) {
+        await profileManagerInternalFuncs.saveProfileWithProjectIdChange(
+          editSource.profileEntry,
+          profileData,
+        );
+        return;
+      } else {
+        await profileManagerCore.saveProfile(
+          editSource.profileEntry,
+          profileData,
+        );
+      }
     }
     commitCoreState({
       loadedProfileData: profileData,
@@ -230,9 +263,8 @@ export const profileManagerModule = createCoreModule({
       (info) => info.origin === 'local' && info.projectId === projectId,
     );
     if (projectInfo) {
-      const preset = ProfileDataConverter.convertProfileDataToPersist(
-        profileData,
-      );
+      const preset =
+        ProfileDataConverter.convertProfileDataToPersist(profileData);
       const newProjectInfo = produce(projectInfo, (draft) => {
         const profile = draft.presets.find(
           (it) => it.presetName === presetName,
