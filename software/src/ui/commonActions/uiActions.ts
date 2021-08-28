@@ -22,6 +22,9 @@ export const uiActions = {
   navigateTo(pagePath: string) {
     router.navigateTo(pagePath);
   },
+  openOnboardingPanel() {
+    onboardingPanelDisplayStateModel.open();
+  },
   closeOnboardingPanel() {
     onboardingPanelDisplayStateModel.close();
   },

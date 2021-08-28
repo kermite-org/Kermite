@@ -10,6 +10,7 @@ import {
   ProjectEditPage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
+  WelcomePage,
 } from '~/ui/pages';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
@@ -18,7 +19,6 @@ import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
-import { WelcomePage } from '~/ui/pages/welcome-page';
 import {
   NavigationColumn,
   WindowStatusBarSection,

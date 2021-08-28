@@ -1,18 +1,20 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import {
-  onboardingPanelDisplayStateModel,
-  useLanguageSelectionModel,
-  useThemeSelectionModel,
-} from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
+import { useWelcomePageModel } from '~/ui/pages/WelcomePage/WelcomePage.model';
 
 export const WelcomePage: FC = () => {
-  const appVersion = uiState.core.applicationVersionInfo.version;
-  const { currentLanguage, changeLanguage } = useLanguageSelectionModel();
-  const { currentThemeKey, changeTheme } = useThemeSelectionModel();
+  const {
+    appVersion,
+    isLanguageEnglish,
+    setLanguageEnglish,
+    isLanguageJapanese,
+    setLanguageJapanese,
+    openOnboardingPanel,
+    isDarkTheme,
+    setDarkTheme,
+  } = useWelcomePageModel();
   return (
     <div css={style}>
       <h1>Kermite</h1>
@@ -21,38 +23,33 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            active={currentLanguage === 'english'}
-            onClick={() => changeLanguage('english')}
+            active={isLanguageEnglish}
+            onClick={setLanguageEnglish}
           >
             English
           </WelcomePageButton>
           <WelcomePageButton
             className="button"
-            active={currentLanguage === 'japanese'}
-            onClick={() => changeLanguage('japanese')}
+            active={isLanguageJapanese}
+            onClick={setLanguageJapanese}
           >
             日本語
           </WelcomePageButton>
         </div>
         <div className="row">
-          <WelcomePageButton
-            className="button"
-            onClick={onboardingPanelDisplayStateModel.open}
-          >
+          <WelcomePageButton className="button" onClick={openOnboardingPanel}>
             セットアップナビゲーションを表示
           </WelcomePageButton>
         </div>
       </div>
-
       <div className="version-area" qxIf={!!appVersion}>
         version: {appVersion}
       </div>
-
       <div className="theme-config-area">
         <ToggleSwitchLine
           text="dark theme"
-          checked={currentThemeKey === 'dark'}
-          onChange={(ck) => changeTheme(ck ? 'dark' : 'light')}
+          checked={isDarkTheme}
+          onChange={setDarkTheme}
         />
       </div>
     </div>
