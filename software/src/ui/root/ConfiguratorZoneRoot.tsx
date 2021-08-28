@@ -5,10 +5,12 @@ import { siteModel, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboardingFrame } from '~/ui/features';
-import { ProjectSelectionPage } from '~/ui/pages';
-import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
-import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
-import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
+import {
+  ProjectSelectionPage,
+  ProjectEditPage,
+  ProjectLayoutEditPage,
+  ProjectPresetEditPage,
+} from '~/ui/pages';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
