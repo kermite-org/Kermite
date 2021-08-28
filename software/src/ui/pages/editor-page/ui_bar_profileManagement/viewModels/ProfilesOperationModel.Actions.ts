@@ -24,9 +24,10 @@ const checkValidNewProfileName = async (
   newProfileName: string,
 ): Promise<boolean> => {
   // eslint-disable-next-line no-irregular-whitespace
-  if (!newProfileName.match(/^[^/./\\:*?"<>| ][\u3000][\u0e49]+$/)) {
+  // eslint-disable-next-line no-misleading-character-class
+  if (!newProfileName.match(/^[^/./\\:*?"<>| \u3000\u0e49]+$/)) {
     await modalAlert(
-      `${newProfileName} is not for valid filename. operation cancelled.`,
+      `${newProfileName} is not a valid profile name. operation cancelled.`,
     );
     return false;
   }
@@ -113,10 +114,11 @@ const deleteProfile = async () => {
   const profileEntry = profilesReader.currentProfileEntry;
   if (profileEntry) {
     const ok = await modalConfirm({
-      message: texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
-        '{PROFILE_NAME}',
-        profileEntry.profileName,
-      ),
+      message:
+        texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
+          '{PROFILE_NAME}',
+          profileEntry.profileName,
+        ),
       caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
     });
     if (ok) {
