@@ -1,11 +1,7 @@
 import { useMemo } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import {
-  globalSettingsReader,
-  globalSettingsWriter,
-  uiStateReader,
-} from '~/ui/commonStore';
+import { uiActions, uiReaders } from '~/ui/commonActions';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
@@ -14,9 +10,9 @@ type IProjectSelectionPageModel = {
 };
 
 function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
-  const { useLocalResources } = globalSettingsReader.globalSettings;
+  const { useLocalResources } = uiReaders;
   const origin = useLocalResources ? 'local' : 'online';
-  return uiStateReader.allProjectPackageInfos
+  return uiReaders.allProjectPackageInfos
     .filter((info) => info.origin === origin)
     .map((info) => ({
       projectId: info.projectId,
@@ -29,10 +25,8 @@ function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
   const sourceProjectItems = useMemo(createSourceProjectItems, []);
-  const { globalProjectId: projectId } = globalSettingsReader.globalSettings;
-  const setProjectId = (id: string) => {
-    globalSettingsWriter.writeValue('globalProjectId', id);
-  };
+  const { globalProjectId: projectId } = uiReaders;
+  const { setGlobalProjectId: setProjectId } = uiActions;
   return {
     sourceProjectItems,
     projectId,

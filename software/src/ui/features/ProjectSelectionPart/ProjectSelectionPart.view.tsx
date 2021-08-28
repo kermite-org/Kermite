@@ -1,7 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList';
+import { RadioButtonLine, ProjectKeyboardList } from '~/ui/components';
 
 type Props = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];

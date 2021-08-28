@@ -1,7 +1,9 @@
 import { css, FC, jsx, QxNode } from 'qx';
-import { Icon } from '~/ui/components';
-import { OnboardingStepShiftButton } from '~/ui/components/atoms/OnboardingButton';
-import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
+import {
+  Icon,
+  OnboardingStepShiftButton,
+  NavigationStepList,
+} from '~/ui/components';
 import { useOnboardingFrameModel } from '~/ui/features/OnboardingFrame/OnboardingFrame.model';
 
 type Props = {

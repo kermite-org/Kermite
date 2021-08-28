@@ -1,6 +1,6 @@
 import { getObjectKeyByValue, isNumberInRange } from '~/shared';
-import { router } from '~/ui/base';
-import { onboardingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
+import { uiActions, uiReaders } from '~/ui/commonActions';
+import { PagePaths } from '~/ui/commonModels';
 
 interface OnboardingFrameModel {
   allSteps: number[];
@@ -40,17 +40,17 @@ function getStepByPagePath(pagePath: string): number {
 }
 
 export function useOnboardingFrameModel(): OnboardingFrameModel {
-  const pagePath = router.getPagePath();
+  const { pagePath } = uiReaders;
   const currentStep = getStepByPagePath(pagePath);
 
   const setCurrentStep = (newStep: number) => {
     const newPagePath = stepToPagePathMap[newStep];
     if (newPagePath) {
-      router.navigateTo(newPagePath);
+      uiActions.navigateTo(newPagePath);
     }
   };
 
-  const closePanel = onboardingPanelDisplayStateModel.close;
+  const closePanel = uiActions.closeOnboardingPanel;
 
   const currentStepInstruction = stepInstructionMap[currentStep];
 
