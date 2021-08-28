@@ -11,13 +11,13 @@ import {
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
   WelcomePage,
+  SettingsPage,
 } from '~/ui/pages';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
-import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
 import {
   NavigationColumn,
@@ -48,7 +48,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
-      {pagePath === '/settings' && <UiSettingsPage />}
+      {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectEdit' && <ProjectEditPage />}

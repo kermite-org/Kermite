@@ -8,9 +8,9 @@ import {
   Indent,
   RibbonSelector,
 } from '~/ui/components';
-import { useSettingsPageModel } from '~/ui/pages/settings-page/SettingsPageModel';
+import { useSettingsPageModel } from '~/ui/pages/SettingsPage/SettingsPage.model';
 
-export const UiSettingsPage = () => {
+export const SettingsPage = () => {
   const {
     flagDeveloperMode,
     setFlagDeveloperMode,
