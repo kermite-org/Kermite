@@ -105,6 +105,14 @@ export async function fsxReadFile(filePath: string): Promise<string> {
   }
 }
 
+export async function fsxReadBinaryFile(filePath: string): Promise<Uint8Array> {
+  try {
+    return await fs.promises.readFile(filePath);
+  } catch (error) {
+    throw new AppError('CannotReadFile', { filePath }, error);
+  }
+}
+
 export async function fsxReadJsonFile(filePath: string): Promise<any> {
   const text = await fsxReadFile(filePath);
   try {

@@ -2,11 +2,20 @@
 #include "commandDefinitions.h"
 #include "dataStorage.h"
 #include "km0/base/bitOperations.h"
+#include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
 #include "km0/device/system.h"
 #include "km0/kernel/versionDefinitions.h"
 #include <stdio.h>
+
+#ifdef KM0_PARAMETER_EXPOSE_FLAGS_OVERRIDE
+static bool overrideExposeFlags = true;
+static uint16_t parameterExposeFlagsOverride = KM0_PARAMETER_EXPOSE_FLAGS_OVERRIDE;
+#else
+static bool overrideExposeFlags = false;
+static uint16_t parameterExposeFlagsOverride = 0;
+#endif
 
 typedef void (*ParameterChangedListener)(uint8_t eventType, uint8_t parameterIndex, uint8_t value);
 
@@ -20,6 +29,8 @@ static uint16_t parameterChangedFlags = 0;
 static bool allParameterChangedFlag = false;
 
 static bool reqRestToDfu = false;
+
+static uint16_t parameterExposeFlags = 0;
 
 static const T_SystemParametersSet systemParametersDefault = {
   .emitRealtimeEvents = true,
@@ -89,6 +100,17 @@ static void taskLazySave() {
       }
     }
   }
+}
+
+void configManager_setParameterExposeFlag(uint8_t parameterIndex) {
+  parameterExposeFlags |= 1 << parameterIndex;
+}
+
+uint16_t configManager_getParameterExposeFlags() {
+  if (overrideExposeFlags) {
+    return parameterExposeFlagsOverride;
+  }
+  return parameterExposeFlags;
 }
 
 void configManager_addParameterChangeListener(ParameterChangedListener listener) {

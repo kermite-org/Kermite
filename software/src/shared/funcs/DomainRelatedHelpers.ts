@@ -60,8 +60,8 @@ export function checkDeviceInstanceCodeValid(code: string): boolean {
 }
 
 const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
-  A152FD2C01: 'ATmega32U4',
-  A152FD2C02: 'RP2040',
+  M01: 'ATmega32U4',
+  M02: 'RP2040',
 };
 export function getMcuNameFromKermiteMcuCode(code: string) {
   return kermiteMcuCodeToMcuNameMap[code] || 'unknown';

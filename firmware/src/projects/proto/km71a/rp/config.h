@@ -1,6 +1,7 @@
 #pragma once
 
 #define KERMITE_FIRMWARE_ID "O1lweX"
+#define KERMITE_KEYBOARD_NAME "KM71A"
 
 #define KS_NUM_SCAN_SLOTS 75
 

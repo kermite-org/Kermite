@@ -114,8 +114,9 @@ namespace CommunicationDataBinaryFormat {
   type PktCustomParametersBulkReadResponse = PacketDeviceToHost & {
     [0]: { opcode: 0xc1 };
     [1]: { numParameters: u8 };
-    '2__': { values: BytesOf<'numParameters'> };
-    '2+numParameters__': { maxValues: BytesOf<'numParameters'> };
+    [2_3]: { parameterExposeFlags: u16 };
+    '4__': { values: BytesOf<'numParameters'> };
+    '4+numParameters__': { maxValues: BytesOf<'numParameters'> };
   };
 
   type PktCustomParametersBulkWriteOperation = PacketHostToDevice & {

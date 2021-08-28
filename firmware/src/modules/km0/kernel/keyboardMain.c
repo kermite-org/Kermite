@@ -3,6 +3,7 @@
 #include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
+#include "firmwareConfigurationData.h"
 #include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "keyboardMainInternal.h"
@@ -111,11 +112,32 @@ static void debugDumpLocalOutputState() {
   printf("layers: %02X\n", localLayerFlags);
 }
 
-static void setupSerialNumberText() {
-  uint8_t *serialNumberTextBuf = usbioCore_getSerialNumberTextBufferPointer();
-  utils_copyBytes(serialNumberTextBuf, (uint8_t *)Kermite_Project_McuCode, 10);
-  utils_copyBytes(serialNumberTextBuf + 10, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
-  configuratorServant_readDeviceInstanceCode(serialNumberTextBuf + 16);
+static char *writeTextBytes(char *buf, char *text, int len) {
+  utils_copyTextBytes(buf, text, len);
+  return buf + len;
+}
+
+//usb serial number
+//format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<VariationId(2)>:<DeviceInstanceCode(8)>
+//example: A152FD2C:M01:7qHDCp:K3e89X:01:d46d8ab5
+//length: 38bytes (39bytes with null terminator)
+static void setupUsbDeviceAttributes() {
+  char *buf = usbIoCore_getSerialNumberTextBufferPointer();
+  buf = writeTextBytes(buf, Kermite_CommonSerialNumberPrefix, 8);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, Kermite_Project_McuCode, 3);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, firmwareConfigurationData.firmwareId, 6);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, firmwareConfigurationData.projectId, 6);
+  buf = writeTextBytes(buf, ":", 1);
+  buf = writeTextBytes(buf, firmwareConfigurationData.variationId, 2);
+  buf = writeTextBytes(buf, ":", 1);
+  configuratorServant_readDeviceInstanceCode((uint8_t *)buf);
+  buf += 8;
+  buf = writeTextBytes(buf, "\0", 1);
+
+  usbIoCore_setProductName(firmwareConfigurationData.keyboardName);
 }
 
 static void resetKeyboardCoreLogic() {
@@ -388,13 +410,16 @@ uint8_t *keyboardMain_getInputScanSlotFlags() {
 }
 
 void keyboardMain_initialize() {
+  configManager_setParameterExposeFlag(SystemParameter_EmitRealtimeEvents);
+  configManager_setParameterExposeFlag(SystemParameter_SystemLayout);
+  configManager_setParameterExposeFlag(SystemParameter_WiringMode);
   dataMemory_initialize();
   dataStorage_initialize();
   configManager_addParameterChangeListener(parameterValueHandler);
   configManager_initialize();
   resetKeyboardCoreLogic();
   configuratorServant_initialize(ConfiguratorServantEventHandler);
-  setupSerialNumberText();
+  setupUsbDeviceAttributes();
 }
 
 void keyboardMain_udpateKeyScanners() {

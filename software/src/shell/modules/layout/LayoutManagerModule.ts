@@ -83,6 +83,7 @@ export const layoutManagerModule = createCoreModule({
     await LayoutFileLoader.saveLayoutToFile(filePath, design);
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
+      loadedLayoutData: design,
     });
   },
   layout_createProjectLayout({ projectId, layoutName }) {

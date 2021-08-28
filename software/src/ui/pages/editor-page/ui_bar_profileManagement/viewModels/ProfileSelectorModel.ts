@@ -2,6 +2,7 @@ import {
   IProfileEditSource,
   IProfileEntry,
   parseProfileEntry,
+  sortOrderBy,
   stringifyProfileEntry,
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
@@ -64,7 +65,9 @@ function makeProfileSelectionSource(
   profileEditSource: IProfileEditSource,
   loadProfile: (profileEntry: IProfileEntry) => void,
 ): ISelectorSource {
-  const optionsBase = visibleProfileEntries.map(makeProfileNameSelectorOption);
+  const optionsBase = visibleProfileEntries
+    .map(makeProfileNameSelectorOption)
+    .sort(sortOrderBy((it) => `${it.label}`));
 
   const setValue = (text: string) => {
     const profileEntry = parseProfileEntry(text);

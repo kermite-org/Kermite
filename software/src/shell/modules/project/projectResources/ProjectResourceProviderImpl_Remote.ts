@@ -24,11 +24,11 @@ import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
-} from '~/shell/projectResources/Interfaces';
+} from '~/shell/modules/project/projectResources/Interfaces';
 import {
   IProjectFileJson,
   readCustomParameterDefinition,
-} from '~/shell/projectResources/ProjectResourceProviderImpl_Local';
+} from '~/shell/modules/project/projectResources/ProjectResourceProviderImpl_Local';
 
 const remoteBaseUri = 'https://app.kermite.org/krs/resources';
 

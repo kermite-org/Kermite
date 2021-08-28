@@ -5,6 +5,8 @@ import { uiStateReader } from '~/ui/commonStore';
 import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
+const fallbackProjectId = '000000';
+
 function makeTargetProjectSelectOptions(): ISelectorOption[] {
   const projectInfos = uiStateReader.allProjectPackageInfos;
   const options: ISelectorOption[] = uniqueArrayItemsByField(
@@ -14,7 +16,7 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
 
   const originalProjectId = editorModel.loadedProfileData.projectId;
   if (
-    originalProjectId &&
+    originalProjectId !== fallbackProjectId &&
     !options.find((it) => it.value === originalProjectId)
   ) {
     options.push({
@@ -22,7 +24,10 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
       value: originalProjectId,
     });
   }
-  options.push({ label: 'unspecified', value: '' });
+  options.push({
+    label: `unknown(${fallbackProjectId})`,
+    value: fallbackProjectId,
+  });
 
   return options;
 }

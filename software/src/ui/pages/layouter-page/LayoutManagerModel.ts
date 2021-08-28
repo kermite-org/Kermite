@@ -8,6 +8,7 @@ import {
 import { ipcAgent, router } from '~/ui/base';
 import {
   dispatchCoreAction,
+  globalSettingsReader,
   projectPackagesReader,
   uiState,
 } from '~/ui/commonStore';
@@ -150,37 +151,40 @@ const layoutManagerActions = {
     }
   },
 
-  async save(design: IPersistKeyboardDesign) {
+  save(design: IPersistKeyboardDesign) {
     const { editSource } = layoutManagerReader;
     const isProfile = editSource.type === 'CurrentProfile';
-    const ok = await modalConfirm({
-      message: `${isProfile ? 'Profile' : 'File'} overwritten. Are you ok?`,
-      caption: 'Save',
-    });
-    if (ok) {
-      dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
-      if (!isProfile) {
-        UiLayouterCore.rebase();
-      }
+    if (isProfile) {
+      throw new Error('invalid handler invocation');
     }
+    // const ok = await modalConfirm({
+    //   message: `File overwritten. Are you ok?`,
+    //   caption: 'Save',
+    // });
+    dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
+    UiLayouterCore.rebase();
   },
 
   async createNewProfileFromCurrentLayout() {
     if (!(await checkShallLoadDataForProfile())) {
       return;
     }
-    const { editSource } = layoutManagerReader;
+    const { globalProjectId } = globalSettingsReader.globalSettings;
     let projectId = '000000';
-    if (editSource.type === 'ProjectLayout') {
-      projectId = editSource.projectId;
-    }
-    if (editSource.type === 'CurrentProfile') {
-      const profile = await ipcAgent.async.profile_getCurrentProfile();
-      if (!profile) {
-        console.error('current profile unavailable');
-        return;
+    if (globalProjectId) {
+      projectId = globalProjectId;
+    } else {
+      const { editSource } = layoutManagerReader;
+      if (editSource.type === 'ProjectLayout') {
+        projectId = editSource.projectId;
+      } else if (editSource.type === 'CurrentProfile') {
+        const profile = await ipcAgent.async.profile_getCurrentProfile();
+        if (!profile) {
+          console.error('current profile unavailable');
+          return;
+        }
+        projectId = profile.projectId;
       }
-      projectId = profile.projectId;
     }
     const layout = UiLayouterCore.emitSavingDesign();
     dispatchCoreAction({

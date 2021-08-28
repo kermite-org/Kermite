@@ -1,4 +1,4 @@
-import { SystemParameterDefinitions } from '~/shared';
+import { IKeyboardDeviceStatus, SystemParameterDefinitions } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { uiStateReader } from '~/ui/commonStore';
 import {
@@ -13,36 +13,35 @@ interface ICustomParametersPartModel {
   resetParameters: () => void;
 }
 
+function getParameterModels(
+  deviceStatus: IKeyboardDeviceStatus,
+): ICustomParameterModel[] {
+  if (deviceStatus.isConnected) {
+    const {
+      systemParameterExposedFlags,
+      systemParameterValues,
+      systemParameterMaxValues,
+    } = deviceStatus;
+
+    const parameterSpec = SystemParameterDefinitions.filter(
+      (it) => !(it.slotIndex === 4 || it.slotIndex === 5), // SystemLayoutとRoutingChannelを除外
+    ).filter((it) => ((systemParameterExposedFlags >> it.slotIndex) & 1) > 0);
+
+    return parameterSpec.map((spec) =>
+      makeParameterModel(
+        spec,
+        systemParameterValues[spec.slotIndex],
+        systemParameterMaxValues[spec.slotIndex],
+      ),
+    );
+  } else {
+    return [];
+  }
+}
+
 export function useCustomParametersPartModel(): ICustomParametersPartModel {
   const { deviceStatus } = uiStateReader;
-
-  const parameterValues =
-    (deviceStatus.isConnected && deviceStatus.systemParameterValues) ||
-    undefined;
-
-  const parameterMaxValues =
-    (deviceStatus.isConnected && deviceStatus.systemParameterMaxValues) ||
-    undefined;
-
-  // const deviceAttrs =
-  //   (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
-
-  // const customDef = useFetcher2(
-  //   () =>
-  //     deviceAttrs &&
-  //     ipcAgent.async.projects_getProjectCustomDefinition(
-  //       deviceAttrs.origin,
-  //       deviceAttrs.projectId,
-  //       deviceAttrs.firmwareVariationName,
-  //     ),
-  //   [deviceAttrs],
-  // );
-
-  const parameterSpec = SystemParameterDefinitions.filter(
-    (it) => !(it.slotIndex === 4 || it.slotIndex === 5),
-  );
-
-  const isConnected = deviceStatus.isConnected;
+  const { isConnected } = deviceStatus;
 
   const resetParameters = () => {
     if (isConnected) {
@@ -51,18 +50,7 @@ export function useCustomParametersPartModel(): ICustomParametersPartModel {
   };
 
   return {
-    parameterModels:
-      (parameterSpec &&
-        parameterValues &&
-        parameterMaxValues &&
-        parameterSpec.map((spec) =>
-          makeParameterModel(
-            spec,
-            parameterValues[spec.slotIndex],
-            parameterMaxValues[spec.slotIndex],
-          ),
-        )) ||
-      [],
+    parameterModels: getParameterModels(deviceStatus),
     definitionUnavailable: false,
     isConnected,
     resetParameters,

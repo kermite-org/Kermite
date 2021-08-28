@@ -7,7 +7,7 @@ import {
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
 import { coreState, coreStateManager, profilesReader } from '~/shell/global';
-import { layoutManagerModule } from '~/shell/services/layout/LayoutManagerModule';
+import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({
@@ -82,7 +82,7 @@ function terminate() {
   coreStateManager.coreStateEventPort.unsubscribe(onCoreStateChange);
 }
 
-export const layoutManager = {
+export const layoutManagerRoot = {
   initializeAsync,
   terminate,
 };

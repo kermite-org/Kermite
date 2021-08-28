@@ -1,6 +1,6 @@
 import { IKeyboardDeviceInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
-import { projectPackagesReader, uiState } from '~/ui/commonStore';
+import { uiState } from '~/ui/commonStore';
 
 interface IDeviceSelectionPartModel {
   deviceOptions: ISelectorOption[];
@@ -11,12 +11,9 @@ interface IDeviceSelectionPartModel {
 function makeDeviceOptionEntry(
   deviceInfo: IKeyboardDeviceInfo,
 ): ISelectorOption {
-  const { path, portName, firmwareId } = deviceInfo;
-  const firmwareInfo = projectPackagesReader.findFirmwareInfo(firmwareId);
-  const keyboardDisplayName = firmwareInfo?.firmwareProjectPath;
-  const postfix = (keyboardDisplayName && ` (${keyboardDisplayName})`) || '';
+  const { path, portName, productName } = deviceInfo;
   return {
-    label: `device@${portName}${postfix}`,
+    label: `device@${portName}(${productName})`,
     value: path,
   };
 }
