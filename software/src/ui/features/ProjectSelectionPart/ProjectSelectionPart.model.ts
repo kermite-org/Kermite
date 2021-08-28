@@ -1,5 +1,5 @@
 import { useMemo } from 'qx';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
+import { DisplayKeyboardDesignLoader } from '~/shared';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { uiActions, uiReaders } from '~/ui/commonActions';
 

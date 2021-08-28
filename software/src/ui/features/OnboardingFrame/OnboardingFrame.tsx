@@ -4,7 +4,7 @@ import {
   OnboardingStepShiftButton,
   NavigationStepList,
 } from '~/ui/components';
-import { useOnboardingFrameModel } from '~/ui/features/OnboardingFrame/OnboardingFrame.model';
+import { useOnboardingFrameModel } from './OnboardingFrame.model';
 
 type Props = {
   className?: string;

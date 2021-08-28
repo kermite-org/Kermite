@@ -1,12 +1,12 @@
 import {
-  createDictionaryFromKeyValues,
   IAssignEntry,
   IPersistAssignEntry,
   IAssignsDictionary,
   IPersistProfileData,
   IProfileData,
   profileFormatRevisionLatest,
-} from '~/shared';
+} from '~/shared/defs';
+import { createDictionaryFromKeyValues } from '~/shared/funcs';
 
 export namespace ProfileDataConverter {
   export function convertAssignsArrayToDictionary(

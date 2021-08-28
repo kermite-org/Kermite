@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
-import { useProjectSelectionPartModel } from '~/ui/features/ProjectSelectionPart/ProjectSelectionPart.model';
-import { ProjectSelectionPartView } from '~/ui/features/ProjectSelectionPart/ProjectSelectionPart.view';
+import { useProjectSelectionPartModel } from './ProjectSelectionPart.model';
+import { ProjectSelectionPartView } from './ProjectSelectionPart.view';
 
 export const ProjectSelectionPart: FC = () => {
   const { sourceProjectItems, projectId, setProjectId } =
