@@ -73,9 +73,8 @@ export const profileManagerModule = createCoreModule({
     });
   },
   profile_createProfileFromLayout({ projectId, layout }) {
-    const profileData = duplicateObjectByJsonStringifyParse(
-      fallbackProfileData,
-    );
+    const profileData =
+      duplicateObjectByJsonStringifyParse(fallbackProfileData);
     profileData.projectId = projectId;
     profileData.keyboardDesign = layout;
     commitCoreState({
@@ -153,9 +152,8 @@ export const profileManagerModule = createCoreModule({
     }
     await profileManagerCore.deleteProfile(profileEntry);
     const allProfileEntries = await profileManagerCore.listAllProfileEntries();
-    const visibleProfileEntries = profilesReader.getVisibleProfiles(
-      allProfileEntries,
-    );
+    const visibleProfileEntries =
+      profilesReader.getVisibleProfiles(allProfileEntries);
     const newProfileEntry =
       visibleProfileEntries.find(
         (it) => it.projectId === profileEntry.projectId,
@@ -230,9 +228,8 @@ export const profileManagerModule = createCoreModule({
       (info) => info.origin === 'local' && info.projectId === projectId,
     );
     if (projectInfo) {
-      const preset = ProfileDataConverter.convertProfileDataToPersist(
-        profileData,
-      );
+      const preset =
+        ProfileDataConverter.convertProfileDataToPersist(profileData);
       const newProjectInfo = produce(projectInfo, (draft) => {
         const profile = draft.presets.find(
           (it) => it.presetName === presetName,
