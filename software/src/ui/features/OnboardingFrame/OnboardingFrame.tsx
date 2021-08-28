@@ -1,73 +1,40 @@
 import { css, FC, jsx, QxNode } from 'qx';
-import { getObjectKeyByValue, isNumberInRange } from '~/shared';
-import { router } from '~/ui/base';
-import { onboardingPanelDisplayStateModel, PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components';
 import { OnboardingStepShiftButton } from '~/ui/components/atoms/OnboardingButton';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
+import { useOnboardingFrameModel } from '~/ui/features/OnboardingFrame/OnboardingFrame.model';
 
 type Props = {
   className?: string;
   children: QxNode;
 };
 
-const steps = [0, 1, 2, 3, 4];
-
-const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
-  0: '/home',
-  1: '/projectSelection',
-  2: '/firmwareUpdate',
-  3: '/presetBrowser',
-  4: '/editor',
-};
-
-const stepInstructionMap: { [step: number]: string } = {
-  0: 'Step0: ホーム画面です。',
-  1: 'Step1: 使用するキーボードを選択します。',
-  2: 'Step2: デバイスにファームウェアを書き込みます。',
-  3: 'Step3: 使用するプリセットを選び、プロファイルを作成します。',
-  4: 'Step4: プロファイルを保存して、デバイスにキーマッピングを書き込みます。',
-};
-
-function getStepByPagePath(pagePath: string): number {
-  const _step = getObjectKeyByValue(stepToPagePathMap, pagePath);
-  return _step === undefined ? -1 : parseInt(_step);
-}
-
 export const OnboardingFrame: FC<Props> = ({ className, children }) => {
-  const pagePath = router.getPagePath();
-  const currentStep = getStepByPagePath(pagePath);
-
-  const setStep = (newStep: number) => {
-    const newPagePath = stepToPagePathMap[newStep];
-    if (newPagePath) {
-      router.navigateTo(newPagePath);
-    }
-  };
-
-  const closePanel = onboardingPanelDisplayStateModel.close;
-
-  const canShiftStepBack = isNumberInRange(currentStep, 1, 4);
-  const canShiftStepForward = isNumberInRange(currentStep, 0, 3);
-
-  const shiftStepBack = () => setStep(currentStep - 1);
-  const shiftStepForward = () => setStep(currentStep + 1);
-
-  const canCompleteSteps = currentStep === 4;
-  const completeSteps = closePanel;
-
+  const {
+    allSteps,
+    currentStep,
+    setCurrentStep,
+    currentStepInstruction,
+    closePanel,
+    canShiftStepBack,
+    shiftStepBack,
+    canShiftStepForward,
+    shiftStepForward,
+    canCompleteSteps,
+    completeSteps,
+  } = useOnboardingFrameModel();
   return (
     <div css={style} className={className}>
       <div className="top-bar">
         <NavigationStepList
           className="step-list"
-          steps={steps}
+          steps={allSteps}
           currentStep={currentStep}
-          setCurrentStep={setStep}
+          setCurrentStep={setCurrentStep}
         />
         <div className="instruction-part">
           <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
-          <p>{stepInstructionMap[currentStep]}</p>
+          <p>{currentStepInstruction}</p>
         </div>
         <div className="close-button" onClick={closePanel}>
           <Icon spec="fa fa-times" />

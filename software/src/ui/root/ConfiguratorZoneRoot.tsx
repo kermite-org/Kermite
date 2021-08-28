@@ -4,7 +4,7 @@ import { PagePaths, uiStatusModel } from '~/ui/commonModels';
 import { siteModel, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
-import { OnboardingFrame } from '~/ui/features/OnboardingPanel';
+import { OnboardingFrame } from '~/ui/features';
 import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
 import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
 import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
