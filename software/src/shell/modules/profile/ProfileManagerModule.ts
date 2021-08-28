@@ -3,7 +3,9 @@ import produce from 'immer';
 import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  IProfileData,
   IProfileEditSource,
+  IProfileEntry,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
@@ -17,6 +19,31 @@ import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profi
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
 const errorTextInvalidOperation = 'invalid operation';
+
+const profileManagerInternalFuncs = {
+  async saveProfileWithProjectIdChange(
+    profileEntry: IProfileEntry,
+    profileData: IProfileData,
+  ): Promise<void> {
+    if (profileData.projectId !== profileEntry.projectId) {
+      await profileManagerCore.deleteProfile(profileEntry);
+    }
+    const newProfileEntry = {
+      ...profileEntry,
+      projectId: profileData.projectId,
+    };
+    await profileManagerCore.saveProfile(newProfileEntry, profileData);
+    const allProfileEntries = await profileManagerCore.listAllProfileEntries();
+    commitCoreState({
+      allProfileEntries,
+      profileEditSource: {
+        type: 'InternalProfile',
+        profileEntry: newProfileEntry,
+      },
+      loadedProfileData: profileData,
+    });
+  },
+};
 
 export const profileManagerModule = createCoreModule({
   async profile_createProfile({
@@ -186,10 +213,18 @@ export const profileManagerModule = createCoreModule({
         profileData,
       );
     } else if (editSource.type === 'InternalProfile') {
-      await profileManagerCore.saveProfile(
-        editSource.profileEntry,
-        profileData,
-      );
+      if (editSource.profileEntry.projectId !== profileData.projectId) {
+        await profileManagerInternalFuncs.saveProfileWithProjectIdChange(
+          editSource.profileEntry,
+          profileData,
+        );
+        return;
+      } else {
+        await profileManagerCore.saveProfile(
+          editSource.profileEntry,
+          profileData,
+        );
+      }
     }
     commitCoreState({
       loadedProfileData: profileData,
