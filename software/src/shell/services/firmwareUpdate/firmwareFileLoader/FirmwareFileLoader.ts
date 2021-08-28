@@ -130,18 +130,15 @@ export async function loadFirmwareFileBytes(
   if (firmwareEntry?.type === 'standard') {
     const { standardFirmwareConfig } = firmwareEntry;
     const { baseFirmwareType } = standardFirmwareConfig;
-    const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
-      baseFirmwareType,
-    );
+    const targetDevice =
+      getFirmwareTargetDeviceFromBaseFirmwareType(baseFirmwareType);
 
     const firmwareLoader = config.debugLoadLocalFirmware
       ? debugloadLocalStandardBaseFirmware
       : fetchStandardBaseFirmware;
 
-    const {
-      fileName: sourceFirmwareFileName,
-      data: sourceFirmwareBytes,
-    } = await firmwareLoader(baseFirmwareType);
+    const { fileName: sourceFirmwareFileName, data: sourceFirmwareBytes } =
+      await firmwareLoader(baseFirmwareType);
 
     const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
 
@@ -163,7 +160,7 @@ export async function loadFirmwareFileBytes(
     };
   }
   if (firmwareEntry?.type === 'custom') {
-    return fetchCustomFirmware(firmwareEntry.customFirmwareId);
+    return await fetchCustomFirmware(firmwareEntry.customFirmwareId);
   }
   return undefined;
 }
