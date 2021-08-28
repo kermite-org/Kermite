@@ -171,7 +171,8 @@ const handleExportToFile = async () => {
   const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
   if (filePath) {
     const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
-    profilesActions.exportToFile(modFilePath);
+    await profilesActions.exportToFile(modFilePath);
+    modalConfirm({ caption: 'export to file', message: 'file saved.' });
   }
 };
 
