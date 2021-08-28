@@ -61,7 +61,7 @@ export namespace ProfileDataMigrator {
     // profile.assignType を profile.settings.assignTypeに移動
     // アサインを辞書形式から配列形式に変更
     showLog(`PRF03 --> PRF04`);
-    const _profile = (profile as any) as {
+    const _profile = profile as any as {
       formatRevision: string;
       settings: {
         assignType?: 'single' | 'dual';
@@ -100,17 +100,19 @@ export namespace ProfileDataMigrator {
     (profile as any).formatRevision = 'PRF06';
     showLog(`PRF05 --> PRF06`);
     ProfileDataMigratorHelper.patchAllLayers(profile.layers, (la) => {
-      la.attachedModifiers = ProfileDataMigratorHelper.fixAttachedModifiersFormat(
-        la.attachedModifiers,
-      );
+      la.attachedModifiers =
+        ProfileDataMigratorHelper.fixAttachedModifiersFormat(
+          la.attachedModifiers,
+        );
     });
     ProfileDataMigratorHelper.patchAllAssignOperations(
       profile.assigns,
       (op) => {
         if (op.type === 'keyInput') {
-          op.attachedModifiers = ProfileDataMigratorHelper.fixAttachedModifiersFormat(
-            op.attachedModifiers,
-          );
+          op.attachedModifiers =
+            ProfileDataMigratorHelper.fixAttachedModifiersFormat(
+              op.attachedModifiers,
+            );
         }
       },
     );
