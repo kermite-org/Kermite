@@ -139,6 +139,9 @@ export namespace ProfileDataMigrator {
       if (profile.projectId.length > 6) {
         profile.projectId = profile.projectId.slice(0, 6);
       }
+      if (profile.projectId === '') {
+        profile.projectId = '000000';
+      }
     }
     return profile;
   }
