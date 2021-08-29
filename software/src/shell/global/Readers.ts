@@ -20,9 +20,11 @@ export const profilesReader = {
     return coreState.loadedProfileData;
   },
   getVisibleProfiles(allProfiles: IProfileEntry[]): IProfileEntry[] {
-    const { globalProjectId } = coreState.globalSettings;
-    if (globalProjectId) {
-      return allProfiles.filter((it) => it.projectId === globalProjectId);
+    const { globalProjectSpec } = coreState.globalSettings;
+    if (globalProjectSpec) {
+      return allProfiles.filter(
+        (it) => it.projectId === globalProjectSpec.projectId,
+      );
     } else {
       return allProfiles;
     }

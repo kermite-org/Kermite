@@ -1,4 +1,8 @@
-import { IProjectPackageInfo } from '~/shared';
+import {
+  createProjectSig,
+  IGlobalProjectSpec,
+  IProjectPackageInfo,
+} from '~/shared';
 import { router } from '~/ui/base';
 import { onboardingPanelDisplayStateModel } from '~/ui/commonModels';
 import { globalSettingsWriter, uiState } from '~/ui/commonStore';
@@ -7,11 +11,25 @@ export const uiReaders = {
   get pagePath() {
     return router.getPagePath();
   },
-  get globalProjectId() {
-    return uiState.core.globalSettings.globalProjectId;
+  get isGlobalProjectSelected() {
+    return !!uiState.core.globalSettings.globalProjectSpec;
   },
-  get useLocalResources() {
-    return uiState.core.globalSettings.useLocalResources;
+  get globalProjectId() {
+    return uiState.core.globalSettings.globalProjectSpec?.projectId;
+  },
+  get globalProjectOrigin() {
+    return uiState.core.globalSettings.globalProjectSpec?.origin;
+  },
+  get globalProjectKey(): string {
+    const { globalProjectSpec } = uiState.core.globalSettings;
+    return (
+      (globalProjectSpec &&
+        createProjectSig(
+          globalProjectSpec.origin,
+          globalProjectSpec.projectId,
+        )) ||
+      ''
+    );
   },
   get allProjectPackageInfos(): IProjectPackageInfo[] {
     return uiState.core.allProjectPackageInfos;
@@ -28,7 +46,7 @@ export const uiActions = {
   closeOnboardingPanel() {
     onboardingPanelDisplayStateModel.close();
   },
-  setGlobalProjectId(id: string) {
-    globalSettingsWriter.writeValue('globalProjectId', id);
+  setGlobalProjectSpec(spec: IGlobalProjectSpec) {
+    globalSettingsWriter.writeValue('globalProjectSpec', spec);
   },
 };

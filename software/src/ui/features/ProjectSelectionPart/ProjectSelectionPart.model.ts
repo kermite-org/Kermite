@@ -1,17 +1,21 @@
 import { useMemo, useState } from 'qx';
-import { DisplayKeyboardDesignLoader, IResourceOrigin } from '~/shared';
+import {
+  DisplayKeyboardDesignLoader,
+  getProjectOriginAndIdFromSig,
+  IResourceOrigin,
+} from '~/shared';
 import {
   IProjectKeyboardListProjectItem,
   ISelectorSource,
   makePlainSelectorOption,
 } from '~/ui/base';
 import { uiReaders } from '~/ui/commonActions';
-import { globalSettingsReader, globalSettingsWriter } from '~/ui/commonStore';
+import { globalSettingsWriter } from '~/ui/commonStore';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
-  projectId: string;
-  setProjectId(id: string): void;
+  projectKey: string;
+  setProjectKey(projectKey: string): void;
   resourceOriginSelectorSource: ISelectorSource;
 };
 
@@ -22,6 +26,7 @@ function createSourceProjectItems(
     .filter((info) => info.origin === resourceOrigin)
     .map((info) => ({
       projectId: info.projectId,
+      projectKey: info.sig,
       keyboardName: info.keyboardName,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0].data,
@@ -31,19 +36,17 @@ function createSourceProjectItems(
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
   const [resourceOrigin, setResourceOrigin] = useState(
-    globalSettingsReader.settingsResourceOrigin,
+    uiReaders.globalProjectOrigin || 'online',
   );
   const sourceProjectItems = useMemo(
     () => createSourceProjectItems(resourceOrigin),
     [resourceOrigin],
   );
 
-  const setProjectId = (projectId: string) => {
-    globalSettingsWriter.writeValue('globalProjectId', projectId);
-    globalSettingsWriter.writeValue(
-      'useLocalResources',
-      resourceOrigin === 'local',
-    );
+  const setProjectKey = (projectKey: string) => {
+    const obj =
+      (projectKey && getProjectOriginAndIdFromSig(projectKey)) || undefined;
+    globalSettingsWriter.writeValue('globalProjectSpec', obj);
   };
 
   const resourceOriginSelectorSource: ISelectorSource = {
@@ -54,8 +57,8 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
 
   return {
     sourceProjectItems,
-    projectId: uiReaders.globalProjectId,
-    setProjectId,
+    projectKey: uiReaders.globalProjectKey,
+    setProjectKey,
     resourceOriginSelectorSource,
   };
 }

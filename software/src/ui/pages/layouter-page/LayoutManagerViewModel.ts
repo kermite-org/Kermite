@@ -136,7 +136,7 @@ function useLayoutManagerViewModelImpl(
     editTargetProject && local.currentLayoutName
   );
 
-  const { isLocalProjectsAvailable } = globalSettingsReader;
+  const { isLocalProjectSelectedForEdit } = globalSettingsReader;
 
   const editTargetRadioSelection =
     model.editSource.type === 'CurrentProfile'
@@ -203,7 +203,7 @@ function useLayoutManagerViewModelImpl(
       model.editSource.type === 'File' ||
       model.editSource.type === 'ProjectLayout',
     showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
-    canOpenProjectIoModal: isLocalProjectsAvailable,
+    canOpenProjectIoModal: isLocalProjectSelectedForEdit,
     canCreateProfile,
     createNewProfileFromCurrentLayout: () =>
       model.createNewProfileFromCurrentLayout(),

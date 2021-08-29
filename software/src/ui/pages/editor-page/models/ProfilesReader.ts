@@ -1,4 +1,5 @@
 import { IProfileEntry } from '~/shared';
+import { uiReaders } from '~/ui/commonActions';
 import { uiState } from '~/ui/commonStore/base';
 
 export const profilesReader = {
@@ -9,10 +10,8 @@ export const profilesReader = {
     return uiState.core.allProfileEntries;
   },
   get visibleProfileEntries() {
-    const {
-      globalSettings: { globalProjectId },
-      allProfileEntries,
-    } = uiState.core;
+    const { allProfileEntries } = uiState.core;
+    const { globalProjectId } = uiReaders;
     if (globalProjectId) {
       return allProfileEntries.filter((it) => it.projectId === globalProjectId);
     } else {

@@ -94,8 +94,11 @@ export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
   const state = useLocal({ isOpen: false });
-  const { isLocalProjectsAvailable } = globalSettingsReader;
-  const menuItemsSource = createMenuItemSources(vm, isLocalProjectsAvailable);
+  const { isLocalProjectSelectedForEdit } = globalSettingsReader;
+  const menuItemsSource = createMenuItemSources(
+    vm,
+    isLocalProjectSelectedForEdit,
+  );
 
   return {
     get isOpen() {

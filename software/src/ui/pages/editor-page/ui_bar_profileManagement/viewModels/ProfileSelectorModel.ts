@@ -6,7 +6,8 @@ import {
   stringifyProfileEntry,
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
-import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonActions';
+import { projectPackagesReader } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
@@ -18,7 +19,7 @@ export type IProfileSelectorModel = {
 
 function getProfileLabel(profileEntry: IProfileEntry) {
   const { projectId, profileName } = profileEntry;
-  const addProjectPrefix = !uiStateReader.globalSettings.globalProjectId;
+  const addProjectPrefix = !uiReaders.isGlobalProjectSelected;
   if (addProjectPrefix) {
     const projectInfo = projectPackagesReader.findProjectInfo(
       'local',

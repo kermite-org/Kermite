@@ -6,9 +6,9 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent, router } from '~/ui/base';
+import { uiReaders } from '~/ui/commonActions';
 import {
   dispatchCoreAction,
-  globalSettingsReader,
   projectPackagesReader,
   uiState,
 } from '~/ui/commonStore';
@@ -169,7 +169,7 @@ const layoutManagerActions = {
     if (!(await checkShallLoadDataForProfile())) {
       return;
     }
-    const { globalProjectId } = globalSettingsReader.globalSettings;
+    const { globalProjectId } = uiReaders;
     let projectId = '000000';
     if (globalProjectId) {
       projectId = globalProjectId;

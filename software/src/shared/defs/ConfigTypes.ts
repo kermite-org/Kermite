@@ -1,3 +1,4 @@
+import { IResourceOrigin } from '~/shared/defs/DomainTypes';
 import {
   vBoolean,
   vObject,
@@ -19,11 +20,15 @@ export const fallbackKeyboardConfig: IKeyboardConfig = {
   isMuteMode: false,
 };
 
+export interface IGlobalProjectSpec {
+  origin: IResourceOrigin;
+  projectId: string;
+}
 export interface IGlobalSettings {
   useLocalResources: boolean;
   localProjectRootFolderPath: string;
   allowCrossKeyboardKeyMappingWrite: boolean;
-  globalProjectId: string;
+  globalProjectSpec: IGlobalProjectSpec | undefined;
   developerMode: boolean;
 }
 
@@ -31,7 +36,10 @@ export const globalSettingsLoadingSchema = vObject({
   useLocalResources: vBoolean(),
   localProjectRootFolderPath: vString(),
   allowCrossKeyboardKeyMappingWrite: vBoolean().optional,
-  globalProjectId: vString().optional,
+  globalProjectSpec: vObject({
+    origin: vString(),
+    projectId: vString(),
+  }).optional,
   developerMode: vBoolean().optional,
 });
 
@@ -39,7 +47,7 @@ export const globalSettingsDefault: IGlobalSettings = {
   useLocalResources: false,
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
-  globalProjectId: '',
+  globalProjectSpec: undefined,
   developerMode: false,
 };
 
@@ -47,6 +55,6 @@ export const globalSettingsFallbackValue: IGlobalSettings = {
   useLocalResources: false,
   localProjectRootFolderPath: '',
   allowCrossKeyboardKeyMappingWrite: false,
-  globalProjectId: '',
+  globalProjectSpec: undefined,
   developerMode: false,
 };

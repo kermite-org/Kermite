@@ -75,7 +75,7 @@ export type IGeneralMenuItem =
   | { type: 'separator' };
 
 export interface IProjectKeyboardListProjectItem {
-  projectId: string;
+  projectKey: string;
   keyboardName: string;
   design: IDisplayKeyboardDesign;
 }

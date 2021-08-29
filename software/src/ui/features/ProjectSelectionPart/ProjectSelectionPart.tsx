@@ -9,8 +9,8 @@ import { useProjectSelectionPartModel } from './ProjectSelectionPart.model';
 export const ProjectSelectionPart: FC = () => {
   const {
     sourceProjectItems,
-    projectId,
-    setProjectId,
+    projectKey,
+    setProjectKey,
     resourceOriginSelectorSource,
   } = useProjectSelectionPartModel();
   return (
@@ -21,13 +21,13 @@ export const ProjectSelectionPart: FC = () => {
       <ProjectKeyboardList
         className="keyboard-list"
         projectItems={sourceProjectItems}
-        currentProjectId={projectId}
-        setCurrentProjectId={setProjectId}
+        currentProjectKey={projectKey}
+        setCurrentProjectKey={setProjectKey}
       />
       <div className="bottom-row">
         <RadioButtonLine
-          checked={projectId === ''}
-          onClick={() => setProjectId('')}
+          checked={projectKey === ''}
+          onClick={() => setProjectKey('')}
           text="各画面で選択する"
         />
       </div>

@@ -27,14 +27,14 @@ export const globalSettingsModule = createCoreModule({
       ...coreState.globalSettings,
       ...partialConfig,
     };
-    const { globalProjectId } = globalSettings;
-    if (globalProjectId) {
+    const { globalProjectSpec } = globalSettings;
+    if (globalProjectSpec) {
       const projectInfos = coreState.allProjectPackageInfos;
       const isGlobalProjectIncludedInResources = projectInfos.some(
-        (info) => info.projectId === globalProjectId,
+        (info) => info.projectId === globalProjectSpec.projectId,
       );
       if (!isGlobalProjectIncludedInResources) {
-        globalSettings.globalProjectId = '';
+        globalSettings.globalProjectSpec = undefined;
       }
     }
     applicationStorage.writeItem('globalSettings', globalSettings);

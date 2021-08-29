@@ -7,6 +7,7 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
+import { uiReaders } from '~/ui/commonActions';
 import {
   uiStateReader,
   dispatchCoreAction,
@@ -15,18 +16,22 @@ import {
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
-    const { useLocalResources, globalProjectId } = uiStateReader.globalSettings;
-
-    return uiStateReader.allProjectPackageInfos
-      .filter((info) => useLocalResources || info.origin === 'online')
-      .filter(
-        (info) => globalProjectId === '' || info.projectId === globalProjectId,
+    const { globalProjectSpec } = uiState.core.globalSettings;
+    if (globalProjectSpec) {
+      const { projectId, origin } = globalProjectSpec;
+      return uiStateReader.allProjectPackageInfos.filter(
+        (info) =>
+          info.projectId === projectId &&
+          (info.origin === origin || info.origin === 'online'),
       );
+    } else {
+      return uiStateReader.allProjectPackageInfos;
+    }
   },
   getEditTargetProject(): IProjectPackageInfo | undefined {
-    const { globalProjectId } = uiStateReader.globalSettings;
+    const { globalProjectKey } = uiReaders;
     return uiStateReader.allProjectPackageInfos.find(
-      (info) => info.origin === 'local' && info.projectId === globalProjectId,
+      (info) => info.sig === globalProjectKey && info.origin === 'local',
     );
   },
   findProjectInfo(
