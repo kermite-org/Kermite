@@ -1,19 +1,25 @@
-import { useMemo } from 'qx';
-import { DisplayKeyboardDesignLoader } from '~/shared';
-import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { uiActions, uiReaders } from '~/ui/commonActions';
+import { useMemo, useState } from 'qx';
+import { DisplayKeyboardDesignLoader, IResourceOrigin } from '~/shared';
+import {
+  IProjectKeyboardListProjectItem,
+  ISelectorSource,
+  makePlainSelectorOption,
+} from '~/ui/base';
+import { uiReaders } from '~/ui/commonActions';
+import { globalSettingsReader, globalSettingsWriter } from '~/ui/commonStore';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
   projectId: string;
-  setProjectId: (id: string) => void;
+  setProjectId(id: string): void;
+  resourceOriginSelectorSource: ISelectorSource;
 };
 
-function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
-  const { useLocalResources } = uiReaders;
-  const origin = useLocalResources ? 'local' : 'online';
+function createSourceProjectItems(
+  resourceOrigin: IResourceOrigin,
+): IProjectKeyboardListProjectItem[] {
   return uiReaders.allProjectPackageInfos
-    .filter((info) => info.origin === origin)
+    .filter((info) => info.origin === resourceOrigin)
     .map((info) => ({
       projectId: info.projectId,
       keyboardName: info.keyboardName,
@@ -24,12 +30,32 @@ function createSourceProjectItems(): IProjectKeyboardListProjectItem[] {
 }
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
-  const sourceProjectItems = useMemo(createSourceProjectItems, []);
-  const { globalProjectId: projectId } = uiReaders;
-  const { setGlobalProjectId: setProjectId } = uiActions;
+  const [resourceOrigin, setResourceOrigin] = useState(
+    globalSettingsReader.settingsResourceOrigin,
+  );
+  const sourceProjectItems = useMemo(
+    () => createSourceProjectItems(resourceOrigin),
+    [resourceOrigin],
+  );
+
+  const setProjectId = (projectId: string) => {
+    globalSettingsWriter.writeValue('globalProjectId', projectId);
+    globalSettingsWriter.writeValue(
+      'useLocalResources',
+      resourceOrigin === 'local',
+    );
+  };
+
+  const resourceOriginSelectorSource: ISelectorSource = {
+    options: ['local', 'online'].map(makePlainSelectorOption),
+    value: resourceOrigin,
+    setValue: (text: string) => setResourceOrigin(text as IResourceOrigin),
+  };
+
   return {
     sourceProjectItems,
-    projectId,
+    projectId: uiReaders.globalProjectId,
     setProjectId,
+    resourceOriginSelectorSource,
   };
 }
