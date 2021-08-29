@@ -1,4 +1,5 @@
 import { css, jsx } from 'qx';
+import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { texts, uiTheme } from '~/ui/base';
 import {
   CheckBoxLine,
@@ -47,7 +48,7 @@ export const SettingsPage = () => {
               checked={flagUseLocalResources}
               setChecked={setFlagUseLocalResources}
               disabled={!flagDeveloperMode}
-              qxIf={false}
+              qxIf={featureFlags.allowEditLocalProject}
             />
             <div>
               <div

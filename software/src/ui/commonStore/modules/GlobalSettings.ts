@@ -6,41 +6,20 @@ export const globalSettingsReader = {
     return uiState.core.globalSettings;
   },
   get isLocalProjectsAvailable(): boolean {
-    const {
-      developerMode,
-      useLocalResources,
-      localProjectRootFolderPath,
-    } = this.globalSettings;
-    return (
-      (developerMode && useLocalResources && !!localProjectRootFolderPath) ||
-      false
-    );
+    const { developerMode, useLocalResources } = this.globalSettings;
+    return developerMode && useLocalResources;
   },
   get isLocalProjectSelectedForEdit(): boolean {
-    const {
-      developerMode,
-      useLocalResources,
-      localProjectRootFolderPath,
-      globalProjectId,
-    } = this.globalSettings;
-    return (
-      ((developerMode && useLocalResources && !!localProjectRootFolderPath) ||
-        false) &&
-      !!globalProjectId
-    );
+    const { developerMode, useLocalResources, globalProjectId } =
+      this.globalSettings;
+    return developerMode && useLocalResources && !!globalProjectId;
   },
   get isDeveloperMode() {
     return this.globalSettings.developerMode;
   },
   get settingsResourceOrigin(): IResourceOrigin {
-    const {
-      developerMode,
-      useLocalResources,
-      localProjectRootFolderPath,
-    } = this.globalSettings;
-    return developerMode && useLocalResources && !!localProjectRootFolderPath
-      ? 'local'
-      : 'online';
+    const { developerMode, useLocalResources } = this.globalSettings;
+    return developerMode && useLocalResources ? 'local' : 'online';
   },
   get globalProjectKey(): string {
     const { globalProjectId } = this.globalSettings;
