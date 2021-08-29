@@ -4,6 +4,7 @@ import {
   getProjectOriginAndIdFromSig,
   IResourceOrigin,
 } from '~/shared';
+import { featureFlags } from '~/shared/defs/FeatureFlags';
 import {
   IProjectKeyboardListProjectItem,
   ISelectorSource,
@@ -37,8 +38,12 @@ function createSourceProjectItems(
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
   const { isDeveloperMode } = uiReaders;
+  const canSelectResourceOrigin =
+    featureFlags.allowEditLocalProject && isDeveloperMode;
   const [resourceOrigin, setResourceOrigin] = useState(
-    isDeveloperMode ? uiReaders.globalProjectOrigin || 'online' : 'online',
+    canSelectResourceOrigin
+      ? uiReaders.globalProjectOrigin || 'online'
+      : 'online',
   );
   const sourceProjectItems = useMemo(
     () => createSourceProjectItems(resourceOrigin),
@@ -61,7 +66,7 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
     sourceProjectItems,
     projectKey: uiReaders.globalProjectKey,
     setProjectKey,
-    canSelectResourceOrigin: isDeveloperMode,
+    canSelectResourceOrigin,
     resourceOriginSelectorSource,
   };
 }
