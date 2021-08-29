@@ -1,7 +1,4 @@
-import {
-  copyObjectPropsRecursive,
-  duplicateObjectByJsonStringifyParse,
-} from '~/shared';
+import { cloneObject, duplicateObjectByJsonStringifyParse } from '~/shared';
 import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base/AppEnv';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
@@ -47,11 +44,11 @@ class ApplicationStorage {
   ): T {
     const loaded = this.readItem(key);
     const errors = schemaChecker(loaded);
-    const value = duplicateObjectByJsonStringifyParse(defaultValue);
     if (!errors) {
-      copyObjectPropsRecursive(value, loaded);
+      return cloneObject({ ...defaultValue, ...(loaded as any) });
+    } else {
+      return defaultValue;
     }
-    return value;
   }
 
   writeItem<T>(key: string, value: T) {
