@@ -10,7 +10,7 @@ import {
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
-import { LayouterGeneralComponent } from '~/ui/pages/layouter';
+import { LayouterGeneralComponent } from '~/ui/features';
 
 type Props = {
   spec: IPageSpec_ProjectLayoutEdit;
