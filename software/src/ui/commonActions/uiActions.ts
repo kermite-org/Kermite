@@ -31,6 +31,9 @@ export const uiReaders = {
       ''
     );
   },
+  get isDeveloperMode() {
+    return uiState.core.globalSettings.developerMode;
+  },
   get allProjectPackageInfos(): IProjectPackageInfo[] {
     return uiState.core.allProjectPackageInfos;
   },

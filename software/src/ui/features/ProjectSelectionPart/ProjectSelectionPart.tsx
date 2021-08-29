@@ -11,12 +11,16 @@ export const ProjectSelectionPart: FC = () => {
     sourceProjectItems,
     projectKey,
     setProjectKey,
+    canSelectResourceOrigin,
     resourceOriginSelectorSource,
   } = useProjectSelectionPartModel();
   return (
     <div css={style}>
       <div className="top-row">
-        <RibbonSelector {...resourceOriginSelectorSource} />
+        <RibbonSelector
+          {...resourceOriginSelectorSource}
+          qxIf={canSelectResourceOrigin}
+        />
       </div>
       <ProjectKeyboardList
         className="keyboard-list"

@@ -16,6 +16,7 @@ type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
   projectKey: string;
   setProjectKey(projectKey: string): void;
+  canSelectResourceOrigin: boolean;
   resourceOriginSelectorSource: ISelectorSource;
 };
 
@@ -35,8 +36,9 @@ function createSourceProjectItems(
 }
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
+  const { isDeveloperMode } = uiReaders;
   const [resourceOrigin, setResourceOrigin] = useState(
-    uiReaders.globalProjectOrigin || 'online',
+    isDeveloperMode ? uiReaders.globalProjectOrigin || 'online' : 'online',
   );
   const sourceProjectItems = useMemo(
     () => createSourceProjectItems(resourceOrigin),
@@ -59,6 +61,7 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
     sourceProjectItems,
     projectKey: uiReaders.globalProjectKey,
     setProjectKey,
+    canSelectResourceOrigin: isDeveloperMode,
     resourceOriginSelectorSource,
   };
 }
