@@ -1,7 +1,7 @@
 import { jsx, useEffect } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
 import { editMutations, editReader } from '~/ui/features/LayoutEditor/models';
-import { PageRoot } from '~/ui/features/LayoutEditor/views/PageRoot';
+import { LayoutEditorViewRoot } from '~/ui/features/LayoutEditor/views/LayoutEditorViewRoot';
 import {
   KeyboardDesignConverter,
   keyboardOperationHander,
@@ -44,6 +44,6 @@ export namespace UiLayouterCore {
   export function Component() {
     useEffect(windowKeyboardEventEffect(keyboardOperationHander), []);
     useEffect(setupDeviceKeyEventsListener, []);
-    return <PageRoot />;
+    return <LayoutEditorViewRoot />;
   }
 }

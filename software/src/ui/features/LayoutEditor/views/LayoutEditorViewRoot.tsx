@@ -4,7 +4,25 @@ import { EditMenuBar } from '~/ui/features/LayoutEditor/views/editMenuBar/EditMe
 import { EditSvgViewContainer } from '~/ui/features/LayoutEditor/views/editSvgView';
 import { EditorSideColumnContent } from '~/ui/features/LayoutEditor/views/sidePanels';
 
-const cssPageRoot = css`
+export const LayoutEditorViewRoot = () => {
+  return (
+    <div css={style}>
+      <div class="topRow">
+        <EditMenuBar />
+      </div>
+      <div class="mainRow">
+        <div class="mainColumn">
+          <EditSvgViewContainer />
+        </div>
+        <div class="sideColumn">
+          <EditorSideColumnContent />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const style = css`
   color: ${uiTheme.colors.clMainText};
 
   height: 100%;
@@ -43,21 +61,3 @@ const cssPageRoot = css`
     }
   }
 `;
-
-export const PageRoot = () => {
-  return (
-    <div css={cssPageRoot}>
-      <div class="topRow">
-        <EditMenuBar />
-      </div>
-      <div class="mainRow">
-        <div class="mainColumn">
-          <EditSvgViewContainer />
-        </div>
-        <div class="sideColumn">
-          <EditorSideColumnContent />
-        </div>
-      </div>
-    </div>
-  );
-};
