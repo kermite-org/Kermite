@@ -7,7 +7,7 @@ import {
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
-import { AssignerGeneralComponent } from '~/ui/pages/editor-page/EditorGeneralComponent';
+import { AssignerGeneralComponent } from '~/ui/pages/editor-core';
 
 type Props = {
   spec: IPageSpec_ProjectPresetEdit;

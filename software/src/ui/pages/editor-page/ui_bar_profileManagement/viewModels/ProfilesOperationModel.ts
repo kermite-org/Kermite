@@ -1,6 +1,6 @@
 import { useModalDisplayStateModel } from '~/ui/commonModels/GeneralUiStateModels';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
-import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { profilesOperationActions } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Actions';
 import { profilesOperationReader } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Readers';
 
@@ -41,10 +41,8 @@ export function makeProfilesOperationModel(): IProfileManagementPartViewModel {
 
   const currentProfileProjectId = editorModel.loadedProfileData.projectId;
 
-  const {
-    saveProfile,
-    exportProfileAsProjectPreset: saveProfileAsPreset,
-  } = profilesActions;
+  const { saveProfile, exportProfileAsProjectPreset: saveProfileAsPreset } =
+    profilesActions;
 
   const {
     canSaveProfile: canSave,

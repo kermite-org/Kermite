@@ -14,7 +14,7 @@ import {
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
-import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 
 export interface ILayoutManagerModel {
   editSource: ILayoutEditSource;
