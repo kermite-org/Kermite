@@ -4,8 +4,8 @@ import {
   IPresetSpec,
   IProfileData,
   IResourceOrigin,
+  ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import { coreState } from '~/shell/modules/core';
 // import { IPresetProfileLoader } from '~/shell/services/profile/Interfaces';
 

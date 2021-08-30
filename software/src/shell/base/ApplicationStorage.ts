@@ -1,5 +1,8 @@
-import { cloneObject, duplicateObjectByJsonStringifyParse } from '~/shared';
-import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
+import {
+  cloneObject,
+  duplicateObjectByJsonStringifyParse,
+  ICheckerEx,
+} from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 

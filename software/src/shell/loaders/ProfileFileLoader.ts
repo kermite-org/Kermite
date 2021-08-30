@@ -1,5 +1,9 @@
-import { AppError, IPersistProfileData, IProfileData } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
+import {
+  AppError,
+  IPersistProfileData,
+  IProfileData,
+  ProfileDataConverter,
+} from '~/shared';
 import {
   cacheRemoteResource,
   fetchJson,
@@ -51,9 +55,8 @@ export namespace ProfileFileLoader {
     filePath: string,
     profileData: IProfileData,
   ): Promise<void> {
-    const persistProfileData = ProfileDataConverter.convertProfileDataToPersist(
-      profileData,
-    );
+    const persistProfileData =
+      ProfileDataConverter.convertProfileDataToPersist(profileData);
     await fsxWriteJsonFile(filePath, persistProfileData);
   }
 }

@@ -1,10 +1,11 @@
-import { ICoreState, ILayoutEditSource } from '~/shared';
 import {
+  ICoreState,
+  ILayoutEditSource,
   vObject,
   vSchemaOneOf,
   vString,
   vValueEquals,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import {
   coreState,

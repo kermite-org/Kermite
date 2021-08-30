@@ -3,12 +3,10 @@ import {
   IKeyPlacementAnchor,
   rotateCoord,
   translateCoord,
-} from '~/shared';
-import {
   getCoordUnitFromUnitSpec,
   getKeySize,
   ICoordUnit,
-} from '~/shared/modules/PlacementUnitHelper';
+} from '~/shared';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,

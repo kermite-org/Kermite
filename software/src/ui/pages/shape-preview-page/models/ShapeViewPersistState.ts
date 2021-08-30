@@ -1,8 +1,4 @@
-import {
-  vObject,
-  vString,
-  vBoolean,
-} from '~/shared/modules/SchemaValidationHelper';
+import { vObject, vString, vBoolean } from '~/shared';
 
 export interface IShapeViewPersistState {
   shapeViewProjectSig: string;

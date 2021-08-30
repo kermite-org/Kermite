@@ -14,13 +14,13 @@ import {
   rotateCoord,
   translateCoord,
 } from '~/shared/funcs';
-import { getIsoEnterShapePoints } from '~/shared/modules/ExtendedKeyShapes';
+import { getIsoEnterShapePoints } from '~/shared/loaders/ExtendedKeyShapes';
 import {
   getCoordUnitFromUnitSpec,
   getKeySize,
   getStdKeySize,
   ICoordUnit,
-} from '~/shared/modules/PlacementUnitHelper';
+} from '~/shared/loaders/PlacementUnitHelper';
 
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;

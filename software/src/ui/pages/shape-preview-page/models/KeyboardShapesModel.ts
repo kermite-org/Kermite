@@ -1,7 +1,10 @@
 import { useEffect, useLocal } from 'qx';
-import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
+import {
+  IDisplayKeyboardDesign,
+  IProjectPackageInfo,
+  DisplayKeyboardDesignLoader,
+} from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { UiLocalStorage } from '~/ui/base';
 import { projectPackagesReader } from '~/ui/commonStore';
 import {
@@ -67,9 +70,8 @@ class KeyboardShapesModel {
     )?.data;
 
     if (design) {
-      this._loadedDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        design,
-      );
+      this._loadedDesign =
+        DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
     } else {
       this._loadedDesign = undefined;
     }
@@ -93,7 +95,8 @@ class KeyboardShapesModel {
   };
 
   private initialize() {
-    this.projectInfos = projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected();
+    this.projectInfos =
+      projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected();
     if (this.projectInfos.length === 0) {
       this._currentLayoutName = undefined;
       this._currentLayoutName = undefined;

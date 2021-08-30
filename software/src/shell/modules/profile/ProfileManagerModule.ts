@@ -6,8 +6,8 @@ import {
   IProfileData,
   IProfileEditSource,
   IProfileEntry,
+  ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
   commitCoreState,
   coreState,

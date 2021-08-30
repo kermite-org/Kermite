@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
+import { DisplayKeyboardDesignLoader } from '~/shared';
 import { PreviewKeyboardShapeView } from '~/ui/components/keyboard/panels/PreviewKeyboardShapeView';
 import { exampleData_persistKeyboardDesign_astelia } from '~/ui/exampleData';
 

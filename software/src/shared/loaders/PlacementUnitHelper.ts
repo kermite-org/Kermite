@@ -1,4 +1,4 @@
-import { IsoEnterOutlineSizeSpec } from '~/shared/modules/ExtendedKeyShapes';
+import { IsoEnterOutlineSizeSpec } from '~/shared/loaders/ExtendedKeyShapes';
 
 export type ICoordUnit =
   | {

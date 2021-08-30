@@ -1,12 +1,13 @@
 import { app, BrowserWindow, Rectangle } from 'electron';
-import { getObjectKeys, IAppWindowStatus } from '~/shared';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import {
+  getObjectKeys,
+  IAppWindowStatus,
   vObject,
   vNumber,
   vString,
   vBoolean,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/loaders/DisplayKeyboardDesignLoader';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { pathRelative } from '~/shell/funcs';
 import {

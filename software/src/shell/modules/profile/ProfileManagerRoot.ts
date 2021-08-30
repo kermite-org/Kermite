@@ -4,13 +4,11 @@ import {
   ICoreState,
   IProfileData,
   IProfileEditSource,
-} from '~/shared';
-import {
   vObject,
   vSchemaOneOf,
   vString,
   vValueEquals,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import {
   commitCoreState,

@@ -7,8 +7,8 @@ import {
   IPersistAssignEntry,
   IPersistProfileData,
   ModifierVirtualKey,
+  ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
 
 namespace ProfileDataMigratorHelper {

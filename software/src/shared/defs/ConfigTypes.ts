@@ -3,7 +3,7 @@ import {
   vBoolean,
   vObject,
   vString,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared/loaders/SchemaValidationHelper';
 
 export interface IKeyboardConfig {
   isSimulatorMode: boolean;
