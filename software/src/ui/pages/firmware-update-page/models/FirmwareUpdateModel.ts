@@ -8,8 +8,7 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
+import { projectPackagesReader, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdatePhase =
@@ -154,13 +153,13 @@ export class FirmwareUpdateModel {
       );
       if (info) {
         this.phase = 'Uploading';
-        uiStatusModel.setLoading();
+        uiActions.setLoading();
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
           info.projectId,
           variationName,
         );
-        uiStatusModel.clearLoading();
+        uiActions.clearLoading();
         this.firmwareUploadResult = res;
         if (res === 'ok') {
           this.phase = 'UploadSuccess';

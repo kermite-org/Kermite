@@ -1,7 +1,7 @@
 import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
 import { IEditKeyUnitCardViewModel } from '~/ui/base';
-import { IPlayerModel, uiStatusModel } from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
+import { IPlayerModel } from '~/ui/commonModels';
+import { uiActions, uiState } from '~/ui/commonStore';
 import { getAssignEntryTexts } from '~/ui/components/keyboard';
 import { EditorModel } from '~/ui/pages/editor-core/models/EditorModel';
 
@@ -35,7 +35,7 @@ function makeEditKeyUnitCardViewModel(
   const isCurrent = currentKeyUnitId === keyUnitId;
   const setCurrent = () => {
     setCurrentKeyUnitId(keyUnitId);
-    uiStatusModel.stopLiveMode();
+    uiActions.stopLiveMode();
   };
   const assign = getAssignForKeyUnit(keyUnitId, playerModel, editorModel);
   const { primaryText, secondaryText, tertiaryText, isLayerFallback } =

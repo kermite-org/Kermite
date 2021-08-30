@@ -1,5 +1,5 @@
 import { ILayer } from '~/shared';
-import { uiStatusModel } from '~/ui/commonModels';
+import { uiActions } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesReader } from '~/ui/pages/editor-page/models';
 
@@ -20,7 +20,7 @@ function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
   const isCurrent = isLayerCurrent(layerId);
   const setCurrent = () => {
     setCurrentLayerId(layerId);
-    uiStatusModel.stopLiveMode();
+    uiActions.stopLiveMode();
   };
   return {
     layerId,
