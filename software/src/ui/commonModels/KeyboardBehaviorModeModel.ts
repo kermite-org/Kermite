@@ -1,4 +1,5 @@
-import { dispatchCoreAction, uiReaders } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore/UiReaders';
+import { dispatchCoreAction } from '~/ui/commonStore/base';
 
 interface IKeyboardBehaviorModeModel {
   isSimulatorMode: boolean;

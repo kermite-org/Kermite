@@ -41,15 +41,8 @@ export const uiReaders = {
     return uiState.core.globalSettings.globalProjectSpec?.origin;
   },
   get globalProjectKey(): string {
-    const { globalProjectSpec } = uiState.core.globalSettings;
-    return (
-      (globalProjectSpec &&
-        createProjectSig(
-          globalProjectSpec.origin,
-          globalProjectSpec.projectId,
-        )) ||
-      ''
-    );
+    const { globalProjectSpec: spec } = uiState.core.globalSettings;
+    return (spec && createProjectSig(spec.origin, spec.projectId)) || '';
   },
   get isDeveloperMode() {
     return uiState.core.globalSettings.developerMode;

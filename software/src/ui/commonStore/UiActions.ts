@@ -1,12 +1,9 @@
 import { IGlobalProjectSpec } from '~/shared';
 import { router } from '~/ui/base';
-import {
-  IPageSpec,
-  onboardingPanelDisplayStateModel,
-  PagePaths,
-} from '~/ui/commonModels';
+import { IPageSpec, PagePaths } from '~/ui/commonModels/PageTypes';
+import { onboardingPanelDisplayStateModel } from '~/ui/commonModels/UiStatusModel';
+import { globalSettingsWriter } from '~/ui/commonStore/GlobalSettings';
 import { commitUiState } from '~/ui/commonStore/base';
-import { globalSettingsWriter } from '~/ui/commonStore/modules/GlobalSettings';
 
 export const uiActions = {
   navigateTo(pageSpecOrPagePath: IPageSpec | PagePaths) {

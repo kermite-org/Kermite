@@ -7,8 +7,8 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
+import { uiReaders } from '~/ui/commonStore/UiReaders';
 import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
-import { uiReaders } from '~/ui/commonStore/modules/UiReaders';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
