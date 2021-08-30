@@ -22,7 +22,7 @@ import {
   PageSourceWatcher,
   preparePreloadJsFile,
   setupWebContentSourceChecker,
-} from './modules';
+} from './helpers';
 
 // const enableFilesWatcher = true;
 const enableFilesWatcher = appEnv.isDevelopment;
