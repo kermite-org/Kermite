@@ -1,5 +1,6 @@
 import { useState } from 'qx';
 import {
+  createFallbackPersistKeyboardDesign,
   DisplayKeyboardDesignLoader,
   getProjectOriginAndIdFromSig,
   IProjectPackageInfo,
@@ -35,7 +36,7 @@ function createSourceProjectItems(
       projectKey: info.sig,
       keyboardName: info.keyboardName,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        info.layouts[0].data,
+        info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
     }));
 }

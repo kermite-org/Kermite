@@ -1,5 +1,11 @@
 import produce from 'immer';
-import { IProjectPackageInfo, IResourceOrigin } from '~/shared';
+import {
+  createProjectSig,
+  fallbackProjectPackageInfo,
+  generateRandomId,
+  IProjectPackageInfo,
+  IResourceOrigin,
+} from '~/shared';
 import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { ProjectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
@@ -18,6 +24,20 @@ const projectPackageModuleHelper = {
       ...info,
       origin: 'local',
       sig: info.sig.replace('online', 'local'),
+    };
+  },
+  createLocalProject(keyboardName: string): IProjectPackageInfo {
+    // todo: 既存のオンラインプロジェクトのIDのリストと比較して、重複しないIDにする
+    const origin = 'local';
+    const projectId = generateRandomId(6);
+    const sig = createProjectSig(origin, projectId);
+    return {
+      ...fallbackProjectPackageInfo,
+      origin,
+      projectId,
+      sig,
+      packageName: keyboardName.toLowerCase(),
+      keyboardName,
     };
   },
 };
@@ -47,6 +67,10 @@ export const projectPackageModule = createCoreModule({
     const allCustomFirmwareInfos =
       await projectPackageProvider.getAllCustomFirmwareInfos();
     commitCoreState({ allCustomFirmwareInfos });
+  },
+  project_createLocalProject({ keyboardName }) {
+    const project = projectPackageModuleHelper.createLocalProject(keyboardName);
+    projectPackageModule.project_saveLocalProjectPackageInfo(project);
   },
   project_createLocalProjectBasedOnOnlineProject({ projectId }) {
     const onlineProject = projectPackageModuleHelper.findProjectInfo(
