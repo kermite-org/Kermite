@@ -1,15 +1,14 @@
 import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { commitUiState } from '~/ui/commonStore';
+import { uiSettingsPersistence, commitUiState } from '~/ui/commonStore';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 
 function start() {
   console.log('start');
   const appDiv = document.getElementById('app');
 
-  uiStatusModel.initialize();
+  uiSettingsPersistence.initialize();
 
   commitUiState({ initialLoading: true });
   render(() => <SiteRoot />, appDiv);
@@ -17,7 +16,7 @@ function start() {
 
   window.addEventListener('beforeunload', () => {
     render(() => <div />, appDiv);
-    uiStatusModel.finalize();
+    uiSettingsPersistence.finalize();
   });
 }
 

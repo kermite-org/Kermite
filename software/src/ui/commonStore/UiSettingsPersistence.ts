@@ -1,7 +1,7 @@
 import { copyObjectProps } from '~/shared';
 import { commitUiSettings, uiState } from '~/ui/commonStore/base';
 
-export const uiStatusModel = {
+export const uiSettingsPersistence = {
   initialize() {
     const settingsText = localStorage.getItem('uiSettings');
     if (settingsText) {

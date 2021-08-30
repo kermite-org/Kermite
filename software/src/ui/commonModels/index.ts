@@ -7,4 +7,3 @@ export * from './PageTypes';
 export * from './ParameterBasedModeModels';
 export * from './PlayerModel';
 export * from './ThemeSelectionModel';
-export * from './UiStatusModel';
