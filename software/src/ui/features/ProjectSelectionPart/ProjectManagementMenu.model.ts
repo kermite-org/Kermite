@@ -1,9 +1,37 @@
-import { IGeneralMenuItem } from '~/ui/base';
+import { IGeneralMenuItem, ISelectorOption } from '~/ui/base';
+import { uiReaders } from '~/ui/commonActions';
 import { dispatchCoreAction } from '~/ui/commonStore';
-import { modalConfirm, modalTextEdit } from '~/ui/components';
+import {
+  callProjectSelectionModal,
+  modalConfirm,
+  modalTextEdit,
+} from '~/ui/components';
 
 export type ProjectManagementMenuModel = {
   menuItems: IGeneralMenuItem[];
+};
+
+const projectManagementHelpers = {
+  makeLoadableSourceProjectOptions(): ISelectorOption[] {
+    const { allProjectPackageInfos } = uiReaders;
+    const blankOption: ISelectorOption = {
+      label: 'select project',
+      value: '',
+    };
+    const presentOptions = allProjectPackageInfos
+      .filter(
+        (info) =>
+          info.origin === 'online' &&
+          !allProjectPackageInfos.find(
+            (it) => it.origin === 'local' && it.projectId === info.projectId,
+          ),
+      )
+      .map((info) => ({
+        label: info.keyboardName,
+        value: info.projectId,
+      }));
+    return [blankOption, ...presentOptions];
+  },
 };
 
 const projectManagementActions = {
@@ -22,11 +50,19 @@ const projectManagementActions = {
       });
     }
   },
-  handleImportOnlineProject() {
-    const projectId = 'dx5kE9';
-    dispatchCoreAction({
-      project_createLocalProjectBasedOnOnlineProject: { projectId },
+  async handleImportOnlineProject() {
+    const projectOptions =
+      projectManagementHelpers.makeLoadableSourceProjectOptions();
+    const projectId = await callProjectSelectionModal({
+      modalTitle: 'import online project',
+      projectOptions,
+      selectedValue: '',
     });
+    if (projectId) {
+      dispatchCoreAction({
+        project_createLocalProjectBasedOnOnlineProject: { projectId },
+      });
+    }
   },
 };
 
