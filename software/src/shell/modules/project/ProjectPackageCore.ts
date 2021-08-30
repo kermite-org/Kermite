@@ -89,66 +89,66 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   );
 }
 
-async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const projectsFolder = pathJoin(
-    appEnv.userDataFolderPath,
-    'data',
-    'projects',
-  );
-  return await loadProjectPackageFiles(projectsFolder, 'local');
+function getLocalProjectsFolderPath() {
+  return pathJoin(appEnv.userDataFolderPath, 'data', 'projects');
 }
 
-async function saveLocalProjectPackageInfoImpl(info: IProjectPackageInfo) {
-  const filePath = pathJoin(
-    appEnv.userDataFolderPath,
-    'data',
-    'projects',
-    `${info.packageName}.kmpkg.json`,
-  );
-  console.log(`saving ${pathBasename(filePath)}`);
-  await fsxWriteJsonFile(filePath, info);
-}
-
-async function deleteLocalProjectPackageFileImpl(packageName: string) {
-  const filePath = pathJoin(
+function getLocalProjectFilePath(packageName: string) {
+  return pathJoin(
     appEnv.userDataFolderPath,
     'data',
     'projects',
     `${packageName}.kmpkg.json`,
   );
+}
+
+async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+  const projectsFolder = getLocalProjectsFolderPath();
+  return await loadProjectPackageFiles(projectsFolder, 'local');
+}
+
+async function saveLocalProjectPackageInfoImpl(info: IProjectPackageInfo) {
+  const filePath = getLocalProjectFilePath(info.packageName);
+  console.log(`saving ${pathBasename(filePath)}`);
+  await fsxWriteJsonFile(filePath, info);
+}
+
+async function deleteLocalProjectPackageFileImpl(packageName: string) {
+  const filePath = getLocalProjectFilePath(packageName);
   await fsxDeleteFile(filePath);
 }
 
-export class ProjectPackageProvider {
+function mapIndexFirmwareEntryToCustomFirmwareInfo(
+  entry: IIndexFirmwaresContent['firmwares'][0],
+): ICustomFirmwareInfo {
+  return {
+    firmwareId: entry.firmwareId,
+    firmwareProjectPath: entry.firmwareProjectPath,
+    variationName: entry.variationName,
+    targetDevice: entry.targetDevice,
+    buildRevision: entry.releaseBuildRevision,
+    buildTimestamp: entry.buildTimestamp,
+  };
+}
+
+export const projectPackageProvider = {
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
     return [
       ...(await loadRemoteProjectPackageInfos()),
       ...(await loadLocalProjectPackageInfos()),
     ];
-  }
-
+  },
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
     await saveLocalProjectPackageInfoImpl(info);
-  }
-
+  },
   async deleteLocalProjectPackageFile(packageName: string) {
     await deleteLocalProjectPackageFileImpl(packageName);
-  }
-
+  },
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
     const data = (await cacheRemoteResource(
       fetchJson,
       `${remoteBaseUrl}/index.firmwares.json`,
     )) as IIndexFirmwaresContent;
-    return data.firmwares.map((info) => {
-      return {
-        firmwareId: info.firmwareId,
-        firmwareProjectPath: info.firmwareProjectPath,
-        variationName: info.variationName,
-        targetDevice: info.targetDevice,
-        buildRevision: info.releaseBuildRevision,
-        buildTimestamp: info.buildTimestamp,
-      };
-    });
-  }
-}
+    return data.firmwares.map(mapIndexFirmwareEntryToCustomFirmwareInfo);
+  },
+};

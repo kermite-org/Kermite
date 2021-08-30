@@ -8,9 +8,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
-import { ProjectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
-
-const projectPackageProvider = new ProjectPackageProvider();
+import { projectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
 const projectPackageModuleHelper = {
   findProjectInfo(origin: IResourceOrigin, projectId: string) {
