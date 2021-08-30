@@ -105,4 +105,7 @@ export const projectPackageModule = createCoreModule({
       commitCoreState({ allProjectPackageInfos, globalSettings });
     }
   },
+  project_openLocalProjectsFolder() {
+    projectPackageProvider.openLocalProjectsFolder();
+  },
 });

@@ -33,8 +33,7 @@ function createMenuItems(): IGeneralMenuItem[] {
     {
       type: 'menuEntry',
       text: 'open data folder',
-      handler: () => {},
-      disabled: true,
+      handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
     },
   ];
 }

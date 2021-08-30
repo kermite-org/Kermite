@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import {
   ICustomFirmwareInfo,
   IFirmwareTargetDevice,
@@ -150,5 +151,8 @@ export const projectPackageProvider = {
       `${remoteBaseUrl}/index.firmwares.json`,
     )) as IIndexFirmwaresContent;
     return data.firmwares.map(mapIndexFirmwareEntryToCustomFirmwareInfo);
+  },
+  async openLocalProjectsFolder() {
+    await shell.openPath(getLocalProjectsFolderPath());
   },
 };

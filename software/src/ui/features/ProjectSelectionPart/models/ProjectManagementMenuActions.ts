@@ -74,4 +74,7 @@ export const projectManagementMenuActions = {
       }
     }
   },
+  handleOpenLocalProjectsFolder() {
+    dispatchCoreAction({ project_openLocalProjectsFolder: 1 });
+  },
 };
