@@ -8,12 +8,12 @@ import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfos,
   IDeviceSpecificationParams,
-} from '~/shell/services/device/keyboardDevice/DeviceEnumerator';
+} from '~/shell/services/keyboardDevice/DeviceEnumerator';
 import {
   DeviceWrapper,
   IDeviceWrapper,
-} from '~/shell/services/device/keyboardDevice/DeviceWrapper';
-import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
+} from '~/shell/services/keyboardDevice/DeviceWrapper';
+import { Packets } from '~/shell/services/keyboardDevice/Packets';
 
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // atmega32u4

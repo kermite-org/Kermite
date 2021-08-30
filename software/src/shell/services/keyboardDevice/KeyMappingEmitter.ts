@@ -1,7 +1,7 @@
 import { delayMs, IProfileData } from '~/shared';
-import { IDeviceWrapper } from '~/shell/services/device/keyboardDevice/DeviceWrapper';
-import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
-import { makeProfileBinaryData } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/ProfileDataBinaryPacker';
+import { IDeviceWrapper } from '~/shell/services/keyboardDevice/DeviceWrapper';
+import { Packets } from '~/shell/services/keyboardDevice/Packets';
+import { makeProfileBinaryData } from '~/shell/services/keyboardLogic/ProfileDataBinaryPacker';
 import { calcChecksum } from './Helpers';
 
 export namespace KeyMappingEmitter {

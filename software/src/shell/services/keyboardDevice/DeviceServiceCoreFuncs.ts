@@ -10,13 +10,13 @@ import {
   checkDeviceInstanceCodeValid,
   generateRandomDeviceInstanceCode,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
+import { Packets } from '~/shell/services/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
   IReceivedBytesDecodeResult,
   receivedBytesDecoder,
-} from '~/shell/services/device/keyboardDevice/ReceivedBytesDecoder';
+} from '~/shell/services/keyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
 function checkRevisionValue(
@@ -144,9 +144,7 @@ function writeDeviceInstanceCode(device: IDeviceWrapper, code: string) {
 //   );
 // }
 
-export async function deviceSetupTask(
-  device: IDeviceWrapper,
-): Promise<{
+export async function deviceSetupTask(device: IDeviceWrapper): Promise<{
   attrsRes: IDeviceAttributesReadResponseData;
   customParamsRes: ICustomParametersReadResponseData;
 }> {

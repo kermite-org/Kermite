@@ -9,8 +9,8 @@ import {
 } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { coreStateManager } from '~/shell/modules/core';
-import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
-import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
+import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
+import { dataStorage } from '~/shell/services/keyboardLogic/DataStorage';
 import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
 import { makeProfileBinaryData } from './ProfileDataBinaryPacker';
 
@@ -30,7 +30,7 @@ function createTimeIntervalCounter() {
     return elapsedMs;
   };
 }
-export class InputLogicSimulatorD {
+export class InputLogicSimulator {
   private CL = getKeyboardCoreLogicInterface();
   private tickerTimer = new IntervalTimerWrapper();
   private isSimulatorMode: boolean = false;

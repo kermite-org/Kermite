@@ -1,6 +1,6 @@
 import { IRealtimeKeyboardEvent, IResourceOrigin } from '~/shared';
-import { bytesToString } from '~/shell/services/device/keyboardDevice/Helpers';
-import { RawHidOpcode } from '~/shell/services/device/keyboardDevice/RawHidOpcode';
+import { bytesToString } from '~/shell/services/keyboardDevice/Helpers';
+import { RawHidOpcode } from '~/shell/services/keyboardDevice/RawHidOpcode';
 
 export type IDeviceAttributesReadResponseData = {
   firmwareVariationName: string;

@@ -8,7 +8,7 @@ import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
 import {
   getArrayFromBuffer,
   zeros,
-} from '~/shell/services/device/keyboardDevice/Helpers';
+} from '~/shell/services/keyboardDevice/Helpers';
 
 export interface IDeviceWrapper {
   close(): void;

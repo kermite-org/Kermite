@@ -5,11 +5,11 @@ import {
   LogicalKey,
   keyCodeTranslator_mapLogicalKeyToHidKeyCode,
 } from '~/shared';
-import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
+import { dataStorage } from '~/shell/services/keyboardLogic/DataStorage';
 import {
   keyActionRemapper_setupDataReader,
   keyActionRemapper_translateKeyOperation,
-} from '~/shell/services/keyboardLogic/inputLogicSimulatorD/KeyActionRemapper';
+} from '~/shell/services/keyboardLogic/KeyActionRemapper';
 import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------

@@ -23,9 +23,9 @@ import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModu
 import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
-import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
-import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
+import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
+import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
@@ -34,7 +34,7 @@ export class ApplicationRoot {
 
   private deviceService = new KeyboardDeviceService();
 
-  private inputLogicSimulator = new InputLogicSimulatorD(this.deviceService);
+  private inputLogicSimulator = new InputLogicSimulator(this.deviceService);
 
   private windowWrapper = new AppWindowWrapper();
 

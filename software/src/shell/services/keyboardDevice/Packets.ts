@@ -1,6 +1,6 @@
 import { generateNumberSequence } from '~/shared';
-import { bhi, blo } from '~/shell/services/device/keyboardDevice/Helpers';
-import { RawHidOpcode } from '~/shell/services/device/keyboardDevice/RawHidOpcode';
+import { bhi, blo } from '~/shell/services/keyboardDevice/Helpers';
+import { RawHidOpcode } from '~/shell/services/keyboardDevice/RawHidOpcode';
 
 export class Packets {
   static connectionOpenedFrame = [RawHidOpcode.ConnectionOpened];

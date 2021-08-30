@@ -9,13 +9,13 @@ import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   deviceSetupTask,
   readDeviceCustomParameters,
-} from '~/shell/services/device/keyboardDevice/DeviceServiceCoreFuncs';
-import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
+} from '~/shell/services/keyboardDevice/DeviceServiceCoreFuncs';
+import { Packets } from '~/shell/services/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
   receivedBytesDecoder,
-} from '~/shell/services/device/keyboardDevice/ReceivedBytesDecoder';
+} from '~/shell/services/keyboardDevice/ReceivedBytesDecoder';
 import { IDeviceWrapper } from './DeviceWrapper';
 
 function createConnectedStatus(
