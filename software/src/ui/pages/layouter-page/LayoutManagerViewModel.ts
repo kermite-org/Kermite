@@ -4,8 +4,8 @@ import { ISelectorOption } from '~/ui/base';
 import {
   globalSettingsReader,
   projectPackagesReader,
+  uiReaders,
   uiState,
-  uiStateReader,
 } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
 import {
@@ -106,7 +106,7 @@ function useLayoutManagerViewModelImpl(
     local.modalState = modalState;
   };
 
-  const resourceInfos = uiStateReader.allProjectPackageInfos;
+  const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,

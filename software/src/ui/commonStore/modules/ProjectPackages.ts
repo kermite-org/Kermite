@@ -7,30 +7,26 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
-import {
-  dispatchCoreAction,
-  uiState,
-  uiStateReader,
-} from '~/ui/commonStore/base';
-import { uiReaders } from '~/ui/commonStore/modules/UiActions';
+import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
+import { uiReaders } from '~/ui/commonStore/modules/UiReaders';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
     const { globalProjectSpec } = uiState.core.globalSettings;
     if (globalProjectSpec) {
       const { projectId, origin } = globalProjectSpec;
-      return uiStateReader.allProjectPackageInfos.filter(
+      return uiReaders.allProjectPackageInfos.filter(
         (info) =>
           info.projectId === projectId &&
           (info.origin === origin || info.origin === 'online'),
       );
     } else {
-      return uiStateReader.allProjectPackageInfos;
+      return uiReaders.allProjectPackageInfos;
     }
   },
   getEditTargetProject(): IProjectPackageInfo | undefined {
     const { globalProjectKey } = uiReaders;
-    return uiStateReader.allProjectPackageInfos.find(
+    return uiReaders.allProjectPackageInfos.find(
       (info) => info.sig === globalProjectKey && info.origin === 'local',
     );
   },
@@ -38,7 +34,7 @@ export const projectPackagesReader = {
     origin?: IResourceOrigin,
     projectId?: string,
   ): IProjectPackageInfo | undefined {
-    const resourceInfos = uiStateReader.allProjectPackageInfos;
+    const resourceInfos = uiReaders.allProjectPackageInfos;
     return (
       resourceInfos.find(
         (info) => info.origin === origin && info.projectId === projectId,
@@ -94,7 +90,7 @@ export const projectPackagesHooks = {
   useEditTargetProject(): IProjectPackageInfo {
     return (
       useMemo(projectPackagesReader.getEditTargetProject, [
-        uiStateReader.allProjectPackageInfos,
+        uiReaders.allProjectPackageInfos,
       ]) || fallbackProjectPackageInfo
     );
   },

@@ -10,7 +10,6 @@ import {
   globalSettingsReader,
   projectPackagesReader,
   uiReaders,
-  uiStateReader,
 } from '~/ui/commonStore';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
@@ -86,7 +85,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '',
   });
 
-  const { globalSettings } = uiStateReader;
+  const { globalSettings } = uiReaders;
 
   const resourceInfos = useMemo(
     projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected,

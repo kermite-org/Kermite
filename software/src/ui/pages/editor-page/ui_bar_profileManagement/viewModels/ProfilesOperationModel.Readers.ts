@@ -1,22 +1,20 @@
-import { uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesReader } from '~/ui/pages/editor-page/models';
 
 export const profilesOperationReader = {
   get CanWriteKeyMappingToDevice(): boolean {
-    const { deviceStatus } = uiStateReader;
-    const { developerMode, allowCrossKeyboardKeyMappingWrite } =
-      uiStateReader.globalSettings;
+    const { deviceStatus, globalSettings, allProjectPackageInfos } = uiReaders;
+    const { developerMode, allowCrossKeyboardKeyMappingWrite } = globalSettings;
     const { profileEditSource } = profilesReader;
     const isInternalProfile = profileEditSource.type === 'InternalProfile';
     const isDeviceConnected = deviceStatus.isConnected;
     const refProjectId = editorModel.profileData.projectId;
-    const allProjectInfos = uiStateReader.allProjectPackageInfos;
     const standardFirmwareIds = ['HCV52K', 'HCV52L'];
     const deviceFirmwareId = deviceStatus.isConnected
       ? deviceStatus.deviceAttrs.firmwareId
       : '';
-    const isProjectMatched = allProjectInfos.some(
+    const isProjectMatched = allProjectPackageInfos.some(
       (info) =>
         info.projectId === refProjectId &&
         info.firmwares.some(

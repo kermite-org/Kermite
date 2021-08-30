@@ -1,14 +1,14 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { IPlayerModel, uiStatusModel } from '~/ui/commonModels';
-import { uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 
 type Props = {
   playerModel: IPlayerModel;
 };
 
 export const LayerStateView: FC<Props> = ({ playerModel }) => {
-  const { isConnected } = uiStateReader.deviceStatus;
+  const { isConnected } = uiReaders.deviceStatus;
   const visible = uiStatusModel.settings.showLayersDynamic;
   return (
     <div

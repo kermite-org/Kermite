@@ -1,4 +1,4 @@
-import { dispatchCoreAction, uiStateReader } from '~/ui/commonStore';
+import { dispatchCoreAction, uiReaders } from '~/ui/commonStore';
 
 interface IKeyboardBehaviorModeModel {
   isSimulatorMode: boolean;
@@ -8,7 +8,7 @@ interface IKeyboardBehaviorModeModel {
 }
 
 export function useKeyboardBehaviorModeModel(): IKeyboardBehaviorModeModel {
-  const { keyboardConfig } = uiStateReader;
+  const { keyboardConfig } = uiReaders;
 
   const setSimulatorMode = (enabled: boolean) => {
     dispatchCoreAction({
