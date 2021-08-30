@@ -3,6 +3,7 @@ import {
   createProjectSig,
   fallbackProjectPackageInfo,
   generateRandomId,
+  IGlobalSettings,
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
@@ -85,6 +86,25 @@ export const projectPackageModule = createCoreModule({
       projectPackageModule.project_saveLocalProjectPackageInfo(localProject);
     } else {
       throw new Error(`no online project found: ${projectId}`);
+    }
+  },
+  async project_deleteLocalProject({ projectId }) {
+    const project = projectPackageModuleHelper.findProjectInfo(
+      'local',
+      projectId,
+    );
+    if (project) {
+      await projectPackageProvider.deleteLocalProjectPackageFile(
+        project.packageName,
+      );
+      const allProjectPackageInfos = coreState.allProjectPackageInfos.filter(
+        (it) => it !== project,
+      );
+      const globalSettings: IGlobalSettings = {
+        ...coreState.globalSettings,
+        globalProjectSpec: undefined,
+      };
+      commitCoreState({ allProjectPackageInfos, globalSettings });
     }
   },
 });

@@ -1,6 +1,6 @@
 import { ISelectorOption } from '~/ui/base';
 import { uiReaders } from '~/ui/commonActions';
-import { dispatchCoreAction } from '~/ui/commonStore';
+import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
 import {
   callProjectSelectionModal,
   modalConfirm,
@@ -58,6 +58,20 @@ export const projectManagementMenuActions = {
       dispatchCoreAction({
         project_createLocalProjectBasedOnOnlineProject: { projectId },
       });
+    }
+  },
+  async handleDeleteProject() {
+    const project = projectPackagesReader.getEditTargetProject();
+    if (project) {
+      const ok = await modalConfirm({
+        message: `Local project ${project.keyboardName} deleted. Are you sure?`,
+        caption: 'delete project',
+      });
+      if (ok) {
+        dispatchCoreAction({
+          project_deleteLocalProject: { projectId: project.projectId },
+        });
+      }
     }
   },
 };

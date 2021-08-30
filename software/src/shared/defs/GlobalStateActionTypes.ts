@@ -92,8 +92,9 @@ export type ICoreAction = Partial<{
   project_loadAllProjectPackages: 1;
   project_saveLocalProjectPackageInfo: IProjectPackageInfo;
   project_loadAllCustomFirmwareInfos: 1;
-  project_createLocalProjectBasedOnOnlineProject: { projectId: string };
   project_createLocalProject: { keyboardName: string };
+  project_createLocalProjectBasedOnOnlineProject: { projectId: string };
+  project_deleteLocalProject: { projectId: string };
 
   config_loadGlobalSettings: 1;
   config_writeGlobalSettings: Partial<IGlobalSettings>;

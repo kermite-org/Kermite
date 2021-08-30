@@ -9,6 +9,7 @@ import { appEnv } from '~/shell/base';
 import {
   cacheRemoteResource,
   fetchJson,
+  fsxDeleteFile,
   fsxListFileBaseNames,
   fsxReadJsonFile,
   fsxWriteJsonFile,
@@ -16,12 +17,6 @@ import {
   pathJoin,
 } from '~/shell/funcs';
 import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
-
-interface IProjectPackageProvider {
-  getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]>;
-  saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void>;
-  getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]>;
-}
 
 function convertPackageFileContentToPackageInfo(
   data: IProjectPackageFileContent,
@@ -113,7 +108,18 @@ async function saveLocalProjectPackageInfoImpl(info: IProjectPackageInfo) {
   console.log(`saving ${pathBasename(filePath)}`);
   await fsxWriteJsonFile(filePath, info);
 }
-export class ProjectPackageProvider implements IProjectPackageProvider {
+
+async function deleteLocalProjectPackageFileImpl(packageName: string) {
+  const filePath = pathJoin(
+    appEnv.userDataFolderPath,
+    'data',
+    'projects',
+    `${packageName}.kmpkg.json`,
+  );
+  await fsxDeleteFile(filePath);
+}
+
+export class ProjectPackageProvider {
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
     return [
       ...(await loadRemoteProjectPackageInfos()),
@@ -123,6 +129,10 @@ export class ProjectPackageProvider implements IProjectPackageProvider {
 
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
     await saveLocalProjectPackageInfoImpl(info);
+  }
+
+  async deleteLocalProjectPackageFile(packageName: string) {
+    await deleteLocalProjectPackageFileImpl(packageName);
   }
 
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
