@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels/UiStatusModel';
-import { globalSettingsReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
 import { KeyboardProjectSelectionPart } from '~/ui/pages/editor-core/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/pages/editor-core/ui_modal_profileConfiguration/ShiftCancelOptionPart';
@@ -19,8 +19,7 @@ export const ProfileConfigratuionModalLayer: FC = () => {
   }
 
   const showProjectSelectionUi =
-    globalSettingsReader.isDeveloperMode &&
-    !globalSettingsReader.globalSettings.globalProjectSpec;
+    uiReaders.isDeveloperMode && !uiReaders.globalSettings.globalProjectSpec;
 
   return (
     <ClosableOverlay close={closeModal}>

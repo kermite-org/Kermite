@@ -1,11 +1,7 @@
 import { useEffect, useLocal } from 'qx';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
-import {
-  globalSettingsReader,
-  globalSettingsWriter,
-  uiState,
-} from '~/ui/commonStore';
+import { globalSettingsWriter, uiReaders, uiState } from '~/ui/commonStore';
 
 export interface ISettingsPageModel {
   flagDeveloperMode: boolean;
@@ -24,15 +20,9 @@ export interface ISettingsPageModel {
   appVersionInfo: string;
 }
 
-const uiScaleOptions: ISelectorOption[] = [
-  0.7,
-  0.8,
-  0.9,
-  1,
-  1.1,
-  1.2,
-  1.3,
-].map((val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }));
+const uiScaleOptions: ISelectorOption[] = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3].map(
+  (val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }),
+);
 
 export function useSettingsPageModel(): ISettingsPageModel {
   const local = useLocal({
@@ -43,12 +33,13 @@ export function useSettingsPageModel(): ISettingsPageModel {
   useEffect(() => {
     (async () => {
       if (appUi.isDevelopment) {
-        local.fixedProjectRootPath = await ipcAgent.async.config_getProjectRootDirectoryPath();
+        local.fixedProjectRootPath =
+          await ipcAgent.async.config_getProjectRootDirectoryPath();
       }
     })();
   }, []);
 
-  const { globalSettings } = globalSettingsReader;
+  const { globalSettings } = uiReaders;
 
   const onSelectButton = async () => {
     const path = await ipcAgent.async.file_getOpenDirectoryWithDialog();
@@ -93,7 +84,8 @@ export function useSettingsPageModel(): ISettingsPageModel {
     canChangeLocalRepositoryFolderPath: canChangeFolder,
     localRepositoryFolderPathDisplayValue: folderPathDisplayValue,
     handleSelectLocalRepositoryFolder: onSelectButton,
-    isLocalRepositoryFolderPathValid: !local.temporaryInvalidLocalRepositoryFolderPath,
+    isLocalRepositoryFolderPathValid:
+      !local.temporaryInvalidLocalRepositoryFolderPath,
     uiScalingOptions: uiScaleOptions,
     uiScalingSelectionValue: uiStatusModel.settings.siteDpiScale.toString(),
     setUiScalingSelectionValue: (strVal) =>

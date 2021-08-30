@@ -3,7 +3,7 @@ import { fallbackPersistProfileData, IPersistProfileData } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
 import {
-  pageActions,
+  uiActions,
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
@@ -29,7 +29,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   return (
     <div css={style}>
       <div>
-        <button onClick={() => pageActions.navigateTo('/projectEdit')}>
+        <button onClick={() => uiActions.navigateTo('/projectEdit')}>
           &lt;-back
         </button>
         project preset edit page {presetName}

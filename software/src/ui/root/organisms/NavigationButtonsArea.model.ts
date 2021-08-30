@@ -1,7 +1,7 @@
 import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { router, texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
-import { globalSettingsReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -50,7 +50,7 @@ const entrySources: NavigationEntrySource[] = [
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.hint_sideMenu_app_shapePreview,
-    isAvailable: () => globalSettingsReader.isDeveloperMode,
+    isAvailable: () => uiReaders.isDeveloperMode,
   },
   {
     pagePath: '/firmwareUpdate',
@@ -65,7 +65,7 @@ const entrySources: NavigationEntrySource[] = [
     hint: 'project edit',
     isAvailable: () =>
       featureFlags.allowEditLocalProject &&
-      globalSettingsReader.isLocalProjectSelectedForEdit,
+      uiReaders.isLocalProjectSelectedForEdit,
   },
   {
     pagePath: '/projectSelection',

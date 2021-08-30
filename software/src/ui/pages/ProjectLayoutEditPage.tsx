@@ -6,7 +6,7 @@ import {
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
 import {
-  pageActions,
+  uiActions,
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
@@ -32,7 +32,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
   return (
     <div css={style}>
       <div>
-        <button onClick={() => pageActions.navigateTo('/projectEdit')}>
+        <button onClick={() => uiActions.navigateTo('/projectEdit')}>
           &lt;-back
         </button>
         project layout edit page {layoutName}
