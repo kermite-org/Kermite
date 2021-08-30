@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'qx';
+import { useState } from 'qx';
 import {
   DisplayKeyboardDesignLoader,
   getProjectOriginAndIdFromSig,
+  IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
 import { featureFlags } from '~/shared/defs/FeatureFlags';
@@ -12,6 +13,7 @@ import {
 } from '~/ui/base';
 import { uiReaders } from '~/ui/commonActions';
 import { globalSettingsWriter } from '~/ui/commonStore';
+import { useMemoEx } from '~/ui/helpers';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
@@ -23,9 +25,10 @@ type IProjectSelectionPageModel = {
 };
 
 function createSourceProjectItems(
+  allProjectPackageInfos: IProjectPackageInfo[],
   resourceOrigin: IResourceOrigin,
 ): IProjectKeyboardListProjectItem[] {
-  return uiReaders.allProjectPackageInfos
+  return allProjectPackageInfos
     .filter((info) => info.origin === resourceOrigin)
     .map((info) => ({
       projectId: info.projectId,
@@ -41,15 +44,17 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
   const { isDeveloperMode } = uiReaders;
   const canSelectResourceOrigin =
     featureFlags.allowEditLocalProject && isDeveloperMode;
+
   const [resourceOrigin, setResourceOrigin] = useState(
     canSelectResourceOrigin
       ? uiReaders.globalProjectOrigin || 'online'
       : 'online',
   );
-  const sourceProjectItems = useMemo(
-    () => createSourceProjectItems(resourceOrigin),
-    [resourceOrigin],
-  );
+
+  const sourceProjectItems = useMemoEx(createSourceProjectItems, [
+    uiReaders.allProjectPackageInfos,
+    resourceOrigin,
+  ]);
 
   const setProjectKey = (projectKey: string) => {
     const obj =

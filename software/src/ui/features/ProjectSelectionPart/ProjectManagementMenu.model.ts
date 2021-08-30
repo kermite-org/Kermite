@@ -1,7 +1,17 @@
 import { IGeneralMenuItem } from '~/ui/base';
+import { dispatchCoreAction } from '~/ui/commonStore';
 
 export type ProjectManagementMenuModel = {
   menuItems: IGeneralMenuItem[];
+};
+
+const projectManagementActions = {
+  handleImportOnlineProject() {
+    const projectId = 'dx5kE9';
+    dispatchCoreAction({
+      project_createLocalProjectBasedOnOnlineProject: { projectId },
+    });
+  },
 };
 
 const menuItems: IGeneralMenuItem[] = [
@@ -14,7 +24,7 @@ const menuItems: IGeneralMenuItem[] = [
   {
     type: 'menuEntry',
     text: 'copy from online project',
-    handler: () => {},
+    handler: projectManagementActions.handleImportOnlineProject,
   },
   {
     type: 'menuEntry',
