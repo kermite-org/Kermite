@@ -64,7 +64,7 @@ export const projectManagementMenuActions = {
     const project = projectPackagesReader.getEditTargetProject();
     if (project) {
       const ok = await modalConfirm({
-        message: `Local project ${project.keyboardName} deleted. Are you sure?`,
+        message: `Local project ${project.keyboardName} will be deleted. Are you sure?`,
         caption: 'delete project',
       });
       if (ok) {
