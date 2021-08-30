@@ -15,20 +15,22 @@ import {
   projectPackagesReader,
 } from '~/shell/modules/core';
 
-function getCurrentEditLayoutFilePath(): string | undefined {
-  const { layoutEditSource } = coreState;
-  if (layoutEditSource.type === 'ProjectLayout') {
-    const { projectId } = layoutEditSource;
-    const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
-    if (projectInfo) {
-      return appEnv.resolveUserDataFilePath(
-        `data/projects/${projectInfo?.packageName}.kmpkg.json`,
-      );
+const layoutManagerModuleHelper = {
+  getCurrentEditLayoutFilePath(): string | undefined {
+    const { layoutEditSource } = coreState;
+    if (layoutEditSource.type === 'ProjectLayout') {
+      const { projectId } = layoutEditSource;
+      const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
+      if (projectInfo) {
+        return appEnv.resolveUserDataFilePath(
+          `data/projects/${projectInfo?.packageName}.kmpkg.json`,
+        );
+      }
+    } else if (layoutEditSource.type === 'File') {
+      return layoutEditSource.filePath;
     }
-  } else if (layoutEditSource.type === 'File') {
-    return layoutEditSource.filePath;
-  }
-}
+  },
+};
 
 export const layoutManagerModule = createCoreModule({
   layout_createNewLayout() {
@@ -135,7 +137,7 @@ export const layoutManagerModule = createCoreModule({
     }
   },
   layout_showEditLayoutFileInFiler() {
-    const filePath = getCurrentEditLayoutFilePath();
+    const filePath = layoutManagerModuleHelper.getCurrentEditLayoutFilePath();
     if (filePath) {
       shell.showItemInFolder(filePath);
     }
