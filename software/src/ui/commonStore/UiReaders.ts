@@ -7,6 +7,7 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { router } from '~/ui/base';
+import { PagePaths } from '~/ui/commonModels/PageTypes';
 import { uiState } from '~/ui/commonStore/base';
 
 export const uiReaders = {
@@ -29,7 +30,7 @@ export const uiReaders = {
     return uiState.core.keyboardConfig;
   },
   get pagePath() {
-    return router.getPagePath();
+    return router.getPagePath() as PagePaths;
   },
   get isGlobalProjectSelected() {
     return !!uiState.core.globalSettings.globalProjectSpec;

@@ -1,5 +1,4 @@
-import { router } from '~/ui/base';
-import { dispatchCoreAction, siteModel } from '~/ui/commonStore';
+import { dispatchCoreAction, siteModel, uiActions } from '~/ui/commonStore';
 
 export interface IWindowControlButtonsModel {
   showReloadButton: boolean;
@@ -19,7 +18,7 @@ export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
       dispatchCoreAction({ window_restartApplication: 1 });
     },
     onWidgetButton() {
-      router.navigateTo('/widget');
+      uiActions.navigateTo('/widget');
     },
     onMinimizeButton() {
       dispatchCoreAction({ window_minimizeWindow: 1 });

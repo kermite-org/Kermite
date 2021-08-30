@@ -1,7 +1,7 @@
 import { featureFlags } from '~/shared/defs/FeatureFlags';
-import { router, texts } from '~/ui/base';
+import { texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
-import { uiReaders } from '~/ui/commonStore';
+import { uiActions, uiReaders } from '~/ui/commonStore';
 
 export interface NavigationEntryViewModel {
   pagePath: PagePaths;
@@ -109,7 +109,7 @@ export interface INavigationViewModel {
 }
 
 export function makeNavigationViewModel(): INavigationViewModel {
-  const currentPagePath = router.getPagePath();
+  const currentPagePath = uiReaders.pagePath;
   return {
     entries: entrySources
       .filter((it) => (it.isAvailable ? it.isAvailable() : true))
@@ -119,7 +119,7 @@ export function makeNavigationViewModel(): INavigationViewModel {
         iconSpec: it.iconSpec,
         hint: it.hint,
         isCurrent: it.pagePath === currentPagePath,
-        onClick: () => router.navigateTo(it.pagePath),
+        onClick: () => uiActions.navigateTo(it.pagePath),
       })),
   };
 }

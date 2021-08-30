@@ -1,17 +1,16 @@
 import { css, jsx } from 'qx';
-import { appUi, router, uiTheme } from '~/ui/base';
-import { PagePaths } from '~/ui/commonModels';
-import { siteModel, uiState } from '~/ui/commonStore';
+import { appUi, uiTheme } from '~/ui/base';
+import { siteModel, uiReaders, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboardingFrame } from '~/ui/features';
 import {
-  ProjectSelectionPage,
   ProjectEditPage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
-  WelcomePage,
+  ProjectSelectionPage,
   SettingsPage,
+  WelcomePage,
 } from '~/ui/pages';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
@@ -39,7 +38,7 @@ const MainColumnRoutes = () => {
       </div>
     );
   }
-  const pagePath = router.getPagePath() as PagePaths;
+  const { pagePath } = uiReaders;
   return (
     <div css={cssMainColumn}>
       {pagePath === '/editor' && <EditorPage />}

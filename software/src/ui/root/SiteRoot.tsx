@@ -16,6 +16,7 @@ import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
   commitUiState,
   lazyInitializeCoreServices,
+  uiReaders,
   uiState,
   uiStateDriverEffect,
 } from '~/ui/commonStore';
@@ -61,7 +62,7 @@ const cssSiteRoot = css`
 `;
 
 const AppView: FC = () => {
-  const isWidgetMode = router.getPagePath() === '/widget';
+  const isWidgetMode = uiReaders.pagePath === '/widget';
   if (isWidgetMode) {
     return <WidgetZoneRoot />;
   } else {

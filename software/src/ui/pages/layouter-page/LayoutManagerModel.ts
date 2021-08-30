@@ -5,10 +5,11 @@ import {
   ILayoutEditSource,
   IPersistKeyboardDesign,
 } from '~/shared';
-import { ipcAgent, router } from '~/ui/base';
+import { ipcAgent } from '~/ui/base';
 import {
   dispatchCoreAction,
   projectPackagesReader,
+  uiActions,
   uiReaders,
   uiState,
 } from '~/ui/commonStore';
@@ -193,7 +194,7 @@ const layoutManagerActions = {
         layout,
       },
     });
-    router.navigateTo('/editor');
+    uiActions.navigateTo('/editor');
     dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
   showEditLayoutFileInFiler() {
