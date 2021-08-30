@@ -1,44 +1,12 @@
 import { css, FC, jsx } from 'qx';
-import { IGeneralMenuItem } from '~/ui/base';
 import {
-  RibbonSelector,
   ProjectKeyboardList,
   RadioButtonLine,
-  GeneralButtonMenu,
+  RibbonSelector,
 } from '~/ui/components';
+import { ProjectManagementMenu } from '~/ui/features/ProjectSelectionPart/ProjectManagementMenu';
+import { useProjectManagementMenuModel } from '~/ui/features/ProjectSelectionPart/ProjectManagementMenu.model';
 import { useProjectSelectionPartModel } from './ProjectSelectionPart.model';
-
-const menuItems: IGeneralMenuItem[] = [
-  {
-    type: 'menuEntry',
-    text: 'create new',
-    handler: () => {},
-    disabled: true,
-  },
-  {
-    type: 'menuEntry',
-    text: 'copy from online project',
-    handler: () => {},
-  },
-  {
-    type: 'menuEntry',
-    text: 'rename',
-    handler: () => {},
-    disabled: true,
-  },
-  {
-    type: 'menuEntry',
-    text: 'delete',
-    handler: () => {},
-    disabled: true,
-  },
-  {
-    type: 'menuEntry',
-    text: 'open data folder',
-    handler: () => {},
-    disabled: true,
-  },
-];
 
 export const ProjectSelectionPart: FC = () => {
   const {
@@ -49,10 +17,11 @@ export const ProjectSelectionPart: FC = () => {
     resourceOriginSelectorSource,
     isMenuActive,
   } = useProjectSelectionPartModel();
+  const menuModel = useProjectManagementMenuModel();
   return (
     <div css={style}>
       <div className="top-row">
-        <GeneralButtonMenu menuItems={menuItems} qxIf={isMenuActive} />
+        <ProjectManagementMenu model={menuModel} qxIf={isMenuActive} />
         <div qxIf={!isMenuActive} />
         <RibbonSelector
           {...resourceOriginSelectorSource}
