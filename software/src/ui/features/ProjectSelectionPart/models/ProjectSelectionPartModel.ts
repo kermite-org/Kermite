@@ -12,8 +12,7 @@ import {
   ISelectorSource,
   makePlainSelectorOption,
 } from '~/ui/base';
-import { uiReaders } from '~/ui/commonActions';
-import { globalSettingsWriter } from '~/ui/commonStore';
+import { uiReaders, globalSettingsWriter } from '~/ui/commonStore';
 import { useMemoEx } from '~/ui/helpers';
 
 type IProjectSelectionPageModel = {

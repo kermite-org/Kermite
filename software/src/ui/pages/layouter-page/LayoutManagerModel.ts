@@ -6,10 +6,10 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent, router } from '~/ui/base';
-import { uiReaders } from '~/ui/commonActions';
 import {
   dispatchCoreAction,
   projectPackagesReader,
+  uiReaders,
   uiState,
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';

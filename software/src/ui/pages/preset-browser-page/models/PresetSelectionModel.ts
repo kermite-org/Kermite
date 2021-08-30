@@ -6,10 +6,10 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import { uiReaders } from '~/ui/commonActions';
 import {
   globalSettingsReader,
   projectPackagesReader,
+  uiReaders,
   uiStateReader,
 } from '~/ui/commonStore';
 import { fieldSetter } from '~/ui/helpers';

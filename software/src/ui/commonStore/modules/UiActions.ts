@@ -5,7 +5,8 @@ import {
 } from '~/shared';
 import { router } from '~/ui/base';
 import { onboardingPanelDisplayStateModel } from '~/ui/commonModels';
-import { globalSettingsWriter, uiState } from '~/ui/commonStore';
+import { uiState } from '~/ui/commonStore/base';
+import { globalSettingsWriter } from '~/ui/commonStore/modules/GlobalSettings';
 
 export const uiReaders = {
   get pagePath() {
