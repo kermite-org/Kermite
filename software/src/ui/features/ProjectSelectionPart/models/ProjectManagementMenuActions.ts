@@ -1,4 +1,4 @@
-import { IGeneralMenuItem, ISelectorOption } from '~/ui/base';
+import { ISelectorOption } from '~/ui/base';
 import { uiReaders } from '~/ui/commonActions';
 import { dispatchCoreAction } from '~/ui/commonStore';
 import {
@@ -7,11 +7,7 @@ import {
   modalTextEdit,
 } from '~/ui/components';
 
-export type ProjectManagementMenuModel = {
-  menuItems: IGeneralMenuItem[];
-};
-
-const projectManagementHelpers = {
+const projectManagementMenuActionsHelpers = {
   makeLoadableSourceProjectOptions(): ISelectorOption[] {
     const { allProjectPackageInfos } = uiReaders;
     const blankOption: ISelectorOption = {
@@ -34,7 +30,7 @@ const projectManagementHelpers = {
   },
 };
 
-const projectManagementActions = {
+export const projectManagementMenuActions = {
   async handleCreateNewProject() {
     const keyboardName = await modalTextEdit({
       message: 'keyboard name',
@@ -52,7 +48,7 @@ const projectManagementActions = {
   },
   async handleImportOnlineProject() {
     const projectOptions =
-      projectManagementHelpers.makeLoadableSourceProjectOptions();
+      projectManagementMenuActionsHelpers.makeLoadableSourceProjectOptions();
     const projectId = await callProjectSelectionModal({
       modalTitle: 'import online project',
       projectOptions,
@@ -65,40 +61,3 @@ const projectManagementActions = {
     }
   },
 };
-
-const menuItems: IGeneralMenuItem[] = [
-  {
-    type: 'menuEntry',
-    text: 'create new',
-    handler: projectManagementActions.handleCreateNewProject,
-  },
-  {
-    type: 'menuEntry',
-    text: 'copy from online project',
-    handler: projectManagementActions.handleImportOnlineProject,
-  },
-  {
-    type: 'menuEntry',
-    text: 'rename',
-    handler: () => {},
-    disabled: true,
-  },
-  {
-    type: 'menuEntry',
-    text: 'delete',
-    handler: () => {},
-    disabled: true,
-  },
-  {
-    type: 'menuEntry',
-    text: 'open data folder',
-    handler: () => {},
-    disabled: true,
-  },
-];
-
-export function useProjectManagementMenuModel(): ProjectManagementMenuModel {
-  return {
-    menuItems,
-  };
-}

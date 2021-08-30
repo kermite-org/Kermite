@@ -1,12 +1,12 @@
 import { css, FC, jsx } from 'qx';
 import {
+  GeneralButtonMenu,
   ProjectKeyboardList,
   RadioButtonLine,
   RibbonSelector,
 } from '~/ui/components';
-import { ProjectManagementMenu } from '~/ui/features/ProjectSelectionPart/ProjectManagementMenu';
-import { useProjectManagementMenuModel } from '~/ui/features/ProjectSelectionPart/ProjectManagementMenu.model';
-import { useProjectSelectionPartModel } from './ProjectSelectionPart.model';
+import { useProjectManagementMenuModel } from '~/ui/features/ProjectSelectionPart/models/ProjectManagementMenuModel';
+import { useProjectSelectionPartModel } from '~/ui/features/ProjectSelectionPart/models/ProjectSelectionPartModel';
 
 export const ProjectSelectionPart: FC = () => {
   const {
@@ -15,14 +15,14 @@ export const ProjectSelectionPart: FC = () => {
     setProjectKey,
     canSelectResourceOrigin,
     resourceOriginSelectorSource,
-    isMenuActive,
+    isMenuButtonVisible,
   } = useProjectSelectionPartModel();
-  const menuModel = useProjectManagementMenuModel();
+  const { menuItems } = useProjectManagementMenuModel();
   return (
     <div css={style}>
       <div className="top-row">
-        <ProjectManagementMenu model={menuModel} qxIf={isMenuActive} />
-        <div qxIf={!isMenuActive} />
+        <GeneralButtonMenu menuItems={menuItems} qxIf={isMenuButtonVisible} />
+        <div qxIf={!isMenuButtonVisible} />
         <RibbonSelector
           {...resourceOriginSelectorSource}
           qxIf={canSelectResourceOrigin}

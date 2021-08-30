@@ -22,7 +22,7 @@ type IProjectSelectionPageModel = {
   setProjectKey(projectKey: string): void;
   canSelectResourceOrigin: boolean;
   resourceOriginSelectorSource: ISelectorSource;
-  isMenuActive: boolean;
+  isMenuButtonVisible: boolean;
 };
 
 function createSourceProjectItems(
@@ -75,6 +75,6 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
     setProjectKey,
     canSelectResourceOrigin,
     resourceOriginSelectorSource,
-    isMenuActive: resourceOrigin === 'local',
+    isMenuButtonVisible: resourceOrigin === 'local',
   };
 }
