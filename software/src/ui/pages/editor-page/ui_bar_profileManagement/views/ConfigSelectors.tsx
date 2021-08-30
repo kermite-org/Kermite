@@ -1,15 +1,14 @@
 import { FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { useKeyboardBehaviorModeModel } from '~/ui/commonModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
-import { uiReaders } from '~/ui/commonStore';
+import { keyboardBehaviorModeModule, uiReaders } from '~/ui/commonStore';
 import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
 
 export const BehaviorSelector: FC = () => {
-  const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();
+  const { isSimulatorMode, setSimulatorMode } = keyboardBehaviorModeModule;
   const { isDeviceConnected } = uiReaders;
   return (
     <CheckBoxLine
@@ -23,7 +22,7 @@ export const BehaviorSelector: FC = () => {
 };
 
 export const MuteModeSelector: FC = () => {
-  const { isMuteMode, setMuteMode } = useKeyboardBehaviorModeModel();
+  const { isMuteMode, setMuteMode } = keyboardBehaviorModeModule;
   const { isDeviceConnected } = uiReaders;
   return (
     <CheckBoxLine
