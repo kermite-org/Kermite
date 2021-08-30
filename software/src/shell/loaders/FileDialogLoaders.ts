@@ -2,8 +2,8 @@ import { dialog } from 'electron';
 import { appGlobal } from '~/shell/base';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
-export namespace JsonFileServiceStatic {
-  export async function getOpeningDirectoryPathWithDialog() {
+export const fileDialogLoaders = {
+  async getOpeningDirectoryPathWithDialog() {
     const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
       properties: ['openDirectory'],
     });
@@ -11,9 +11,8 @@ export namespace JsonFileServiceStatic {
       return result.filePaths[0];
     }
     return undefined;
-  }
-
-  export async function getOpeningJsonFilePathWithDialog() {
+  },
+  async getOpeningJsonFilePathWithDialog() {
     const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
       properties: ['openFile'],
       filters: [
@@ -27,9 +26,8 @@ export namespace JsonFileServiceStatic {
       return result.filePaths[0];
     }
     return undefined;
-  }
-
-  export async function getSavingJsonFilePathWithDialog() {
+  },
+  async getSavingJsonFilePathWithDialog() {
     const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
       properties: ['showOverwriteConfirmation'],
       filters: [
@@ -40,13 +38,11 @@ export namespace JsonFileServiceStatic {
       ],
     });
     return result.filePath;
-  }
-
-  export async function loadObjectFromJsonWithFileDialog(): Promise<
-    any | undefined
-  > {
+  },
+  async loadObjectFromJsonWithFileDialog(): Promise<any | undefined> {
     try {
-      const filePath = await getOpeningJsonFilePathWithDialog();
+      const filePath =
+        await fileDialogLoaders.getOpeningJsonFilePathWithDialog();
       if (filePath) {
         const obj = await fsxReadJsonFile(filePath);
         return obj;
@@ -55,13 +51,11 @@ export namespace JsonFileServiceStatic {
       console.error(error);
       return undefined;
     }
-  }
-
-  export async function saveObjectToJsonWithFileDialog(
-    obj: any,
-  ): Promise<boolean> {
+  },
+  async saveObjectToJsonWithFileDialog(obj: any): Promise<boolean> {
     try {
-      const filePath = await getSavingJsonFilePathWithDialog();
+      const filePath =
+        await fileDialogLoaders.getSavingJsonFilePathWithDialog();
       if (filePath) {
         await fsxWriteJsonFile(filePath, obj);
         return true;
@@ -71,5 +65,5 @@ export namespace JsonFileServiceStatic {
       console.error(error);
       return false;
     }
-  }
-}
+  },
+};

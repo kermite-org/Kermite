@@ -4,6 +4,7 @@ import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
+import { fileDialogLoaders } from '~/shell/loaders/FileDialogLoaders';
 import {
   keyboardConfigModule,
   layoutManagerRoot,
@@ -23,7 +24,6 @@ import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
-import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
 import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
@@ -88,15 +88,15 @@ export class ApplicationRoot {
       config_checkLocalRepositoryFolderPath: async (path) =>
         checkLocalRepositoryFolder(path),
       file_getOpenJsonFilePathWithDialog:
-        JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
+        fileDialogLoaders.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
-        JsonFileServiceStatic.getSavingJsonFilePathWithDialog,
+        fileDialogLoaders.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
-        JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
+        fileDialogLoaders.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:
-        JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
+        fileDialogLoaders.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
-        JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+        fileDialogLoaders.getOpeningDirectoryPathWithDialog,
 
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_lazyInitializeServices: () => this.lazyInitializeServices(),
