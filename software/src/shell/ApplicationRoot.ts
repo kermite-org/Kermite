@@ -5,6 +5,7 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { fileDialogLoaders } from '~/shell/loaders/FileDialogLoaders';
+import { userPresetHubDataLoader } from '~/shell/loaders/UserPresetHubDataLoader';
 import {
   keyboardConfigModule,
   layoutManagerRoot,
@@ -26,7 +27,6 @@ import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModu
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
-import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
 export class ApplicationRoot {
@@ -37,8 +37,6 @@ export class ApplicationRoot {
   private inputLogicSimulator = new InputLogicSimulator(this.deviceService);
 
   private windowWrapper = new AppWindowWrapper();
-
-  private presetHubService = new UserPresetHubService();
 
   // ------------------------------------------------------------
 
@@ -68,9 +66,9 @@ export class ApplicationRoot {
           variationName,
         ),
       presetHub_getServerProjectIds: () =>
-        this.presetHubService.getServerProjectIds(),
+        userPresetHubDataLoader.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
-        this.presetHubService.getServerProfiles(projectId),
+        userPresetHubDataLoader.getServerProfiles(projectId),
       config_writeKeyMappingToDevice: async () => {
         const profile = profilesReader.getCurrentProfile();
         if (profile) {
