@@ -4,7 +4,7 @@ import {
   IntervalTimerWrapper,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import { commitCoreState, coreState } from '~/shell/global';
+import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfos,
   IDeviceSpecificationParams,
@@ -98,9 +98,8 @@ export class DeviceSelectionManager {
   };
 
   private restoreConnection() {
-    const initialDevicePath = applicationStorage.readItem<string>(
-      'currentDevicePath',
-    );
+    const initialDevicePath =
+      applicationStorage.readItem<string>('currentDevicePath');
     if (initialDevicePath) {
       this.selectTargetDevice(initialDevicePath);
     }

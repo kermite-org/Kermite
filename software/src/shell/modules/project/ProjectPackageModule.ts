@@ -7,7 +7,11 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
-import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
+import {
+  commitCoreState,
+  coreState,
+  createCoreModule,
+} from '~/shell/modules/core';
 import { projectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
 const projectPackageModuleHelper = {

@@ -14,7 +14,7 @@ import {
   createCoreModule,
   dispatchCoreAction,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profile/PresetProfileLoader';
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 

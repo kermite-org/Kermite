@@ -8,7 +8,7 @@ import {
   SystemParameter,
 } from '~/shared';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
-import { coreStateManager } from '~/shell/global';
+import { coreStateManager } from '~/shell/modules/core';
 import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
 import { dataStorage } from '~/shell/services/keyboardLogic/inputLogicSimulatorD/DataStorage';
 import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
@@ -105,7 +105,8 @@ export class InputLogicSimulatorD {
         this.deviceService.writeSimulatorHidReport(report);
         this.hidReportBytes = report.slice(0);
       }
-      const newLayerActiveFlags = this.CL.keyboardCoreLogic_getLayerActiveFlags();
+      const newLayerActiveFlags =
+        this.CL.keyboardCoreLogic_getLayerActiveFlags();
       if (newLayerActiveFlags !== this.layerActiveFlags) {
         this.deviceService.emitRealtimeEventFromSimulator({
           type: 'layerChanged',

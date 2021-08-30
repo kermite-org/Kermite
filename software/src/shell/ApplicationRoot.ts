@@ -5,18 +5,18 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import {
+  keyboardConfigModule,
+  layoutManagerRoot,
+  projectPackageModule,
+} from '~/shell/modules';
+import {
   commitCoreState,
   coreActionDistributor,
   coreState,
   coreStateManager,
   dispatchCoreAction,
   profilesReader,
-} from '~/shell/global';
-import {
-  keyboardConfigModule,
-  projectPackageModule,
-  layoutManagerRoot,
-} from '~/shell/modules';
+} from '~/shell/modules/core';
 import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
 import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModule';
 import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';

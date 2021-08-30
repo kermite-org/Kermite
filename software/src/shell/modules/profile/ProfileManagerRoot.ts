@@ -17,7 +17,7 @@ import {
   coreState,
   coreStateManager,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
 const profileEditSourceLoadingDataSchema = vSchemaOneOf([

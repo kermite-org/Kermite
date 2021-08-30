@@ -6,7 +6,7 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
-import { coreState } from '~/shell/global';
+import { coreState } from '~/shell/modules/core';
 // import { IPresetProfileLoader } from '~/shell/services/profile/Interfaces';
 
 // export class PresetProfileLoader implements IPresetProfileLoader {
@@ -87,9 +87,8 @@ export function presetProfileLoader_loadPresetProfileData(
         (it) => it.layoutName === presetSpec.layoutName,
       )?.data;
       if (layoutData) {
-        const profileData: IProfileData = duplicateObjectByJsonStringifyParse(
-          fallbackProfileData,
-        );
+        const profileData: IProfileData =
+          duplicateObjectByJsonStringifyParse(fallbackProfileData);
         profileData.projectId = projectId;
         profileData.keyboardDesign = layoutData;
         return profileData;

@@ -6,7 +6,11 @@ import {
   vValueEquals,
 } from '~/shared/modules/SchemaValidationHelper';
 import { applicationStorage } from '~/shell/base';
-import { coreState, coreStateManager, profilesReader } from '~/shell/global';
+import {
+  coreState,
+  coreStateManager,
+  profilesReader,
+} from '~/shell/modules/core';
 import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
 
 const layoutEditSourceSchema = vSchemaOneOf([

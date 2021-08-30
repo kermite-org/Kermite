@@ -14,7 +14,7 @@ import {
   coreState,
   createCoreModule,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './Interfaces';
 import {
@@ -252,7 +252,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        this.state.widgetProjectId = profilesReader.getCurrentProfileProjectId();
+        this.state.widgetProjectId =
+          profilesReader.getCurrentProfileProjectId();
         this.state.widgetWindowBounds = bounds;
       } else {
         this.state.mainWindowBounds = bounds;

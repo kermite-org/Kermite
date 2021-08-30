@@ -18,7 +18,7 @@ import {
   pathDirname,
   pathResolve,
 } from '~/shell/funcs';
-import { coreState } from '~/shell/global';
+import { coreState } from '~/shell/modules/core';
 import { IFirmwareBinaryFileSpec } from '~/shell/modules/project/projectResources';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';

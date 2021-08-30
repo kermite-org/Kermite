@@ -5,7 +5,11 @@ import {
 } from '~/shared';
 import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { applicationStorage } from '~/shell/base';
-import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
+import {
+  commitCoreState,
+  coreState,
+  createCoreModule,
+} from '~/shell/modules/core';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 
 const globalSettingsModuleHelpers = {

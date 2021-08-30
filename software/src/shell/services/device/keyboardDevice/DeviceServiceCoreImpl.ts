@@ -5,7 +5,7 @@ import {
 } from '~/shared';
 import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
-import { commitCoreState, coreState } from '~/shell/global';
+import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   deviceSetupTask,
   readDeviceCustomParameters,
