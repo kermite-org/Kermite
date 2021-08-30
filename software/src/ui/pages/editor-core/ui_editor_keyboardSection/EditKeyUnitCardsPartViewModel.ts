@@ -1,6 +1,7 @@
 import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
 import { IEditKeyUnitCardViewModel } from '~/ui/base';
 import { IPlayerModel, uiStatusModel } from '~/ui/commonModels';
+import { uiState } from '~/ui/commonStore';
 import { getAssignEntryTexts } from '~/ui/components/keyboard';
 import { EditorModel } from '~/ui/pages/editor-core/models/EditorModel';
 
@@ -14,7 +15,7 @@ function getAssignForKeyUnit(
   playerModel: IPlayerModel,
   editorModel: EditorModel,
 ): IAssignEntryWithLayerFallback | undefined {
-  const dynamic = uiStatusModel.settings.showLayersDynamic;
+  const dynamic = uiState.settings.showLayersDynamic;
   return dynamic
     ? playerModel.getDynamicKeyAssign(keyUnitId) || {
         type: 'layerFallbackBlock',
@@ -40,7 +41,7 @@ function makeEditKeyUnitCardViewModel(
   const { primaryText, secondaryText, tertiaryText, isLayerFallback } =
     getAssignEntryTexts(assign, editorModel.layers);
 
-  const dynamic = uiStatusModel.settings.showLayersDynamic;
+  const dynamic = uiState.settings.showLayersDynamic;
   const isHold = (dynamic && playerModel.keyStates[ke.keyId]) || false;
   const shiftHold = dynamic && playerModel.shiftHold;
 
@@ -63,7 +64,7 @@ export function makeEditKeyUnitCardsPartViewModel(
   playerModel: IPlayerModel,
   editorModel: EditorModel,
 ): IEditKeyUnitCardPartViewModel {
-  const { showLayerDefaultAssign } = uiStatusModel.settings;
+  const { showLayerDefaultAssign } = uiState.settings;
   return {
     cards: editorModel.displayDesign.keyEntities.map((kp) =>
       makeEditKeyUnitCardViewModel(kp, playerModel, editorModel),

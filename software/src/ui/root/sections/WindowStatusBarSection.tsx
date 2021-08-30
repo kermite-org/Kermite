@@ -1,13 +1,13 @@
 import { jsx, css } from 'qx';
 import { uiTheme, GlobalHintDisplayText } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { commitUiSettings, uiState } from '~/ui/commonStore';
 import { GlobalHintIconButton } from '~/ui/components';
 
 export const WindowStatusBarSection = () => {
-  const { settings } = uiStatusModel;
+  const { settings } = uiState;
   const showHint = settings.showGlobalHint;
   const toggleShowHint = () =>
-    (settings.showGlobalHint = !settings.showGlobalHint);
+    commitUiSettings({ showGlobalHint: !settings.showGlobalHint });
 
   return (
     <div css={style}>

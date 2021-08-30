@@ -3,6 +3,7 @@ import { forceChangeFilePathExtension } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
+import { commitUiState } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
@@ -142,7 +143,7 @@ const handleSaveUnsavedProfile = async () => {
 };
 
 const openConfiguration = () => {
-  uiStatusModel.status.profileConfigModalVisible = true;
+  commitUiState({ profileConfigModalVisible: true });
 };
 
 const onSaveButton = () => {

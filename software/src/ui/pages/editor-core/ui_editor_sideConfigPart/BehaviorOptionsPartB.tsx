@@ -1,19 +1,20 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { commitUiSettings, uiState } from '~/ui/commonStore';
 import { CheckBoxLine } from '~/ui/components';
-import { fieldSetter } from '~/ui/helpers';
 import { profilesReader } from '~/ui/pages/editor-page/models';
 
 export const BehaviorOptionsPartB: FC = () => {
-  const { settings } = uiStatusModel;
+  const { settings } = uiState;
 
   return (
     <div css={style}>
       <CheckBoxLine
         text={texts.label_assigner_configs_showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
-        setChecked={fieldSetter(settings, 'showLayerDefaultAssign')}
+        setChecked={(value) =>
+          commitUiSettings({ showLayerDefaultAssign: value })
+        }
         hint={texts.hint_assigner_configs_showFallbackAssigns}
         disabled={!profilesReader.isEditProfileAvailable}
       />

@@ -1,17 +1,15 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels/UiStatusModel';
-import { uiReaders } from '~/ui/commonStore';
+import { uiReaders, uiState } from '~/ui/commonStore';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
 import { KeyboardProjectSelectionPart } from '~/ui/pages/editor-core/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/pages/editor-core/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 
 export const ProfileConfigratuionModalLayer: FC = () => {
-  const uiStatus = uiStatusModel.status;
-  const visible = uiStatus.profileConfigModalVisible;
+  const visible = uiState.profileConfigModalVisible;
   const closeModal = () => {
-    uiStatus.profileConfigModalVisible = false;
+    uiState.profileConfigModalVisible = false;
   };
 
   if (!visible) {

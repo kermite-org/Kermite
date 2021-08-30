@@ -1,7 +1,11 @@
 import { useEffect, useLocal } from 'qx';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { globalSettingsWriter, uiReaders, uiState } from '~/ui/commonStore';
+import {
+  commitUiSettings,
+  globalSettingsWriter,
+  uiReaders,
+  uiState,
+} from '~/ui/commonStore';
 
 export interface ISettingsPageModel {
   flagDeveloperMode: boolean;
@@ -87,9 +91,9 @@ export function useSettingsPageModel(): ISettingsPageModel {
     isLocalRepositoryFolderPathValid:
       !local.temporaryInvalidLocalRepositoryFolderPath,
     uiScalingOptions: uiScaleOptions,
-    uiScalingSelectionValue: uiStatusModel.settings.siteDpiScale.toString(),
+    uiScalingSelectionValue: uiState.settings.siteDpiScale.toString(),
     setUiScalingSelectionValue: (strVal) =>
-      (uiStatusModel.settings.siteDpiScale = parseFloat(strVal)),
+      commitUiSettings({ siteDpiScale: parseFloat(strVal) }),
     appVersionInfo,
   };
 }

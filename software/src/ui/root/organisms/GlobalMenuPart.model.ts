@@ -1,10 +1,10 @@
 import { useLocal } from 'qx';
 import { texts, appUi } from '~/ui/base';
 import {
-  uiStatusModel,
   useThemeSelectionModel,
   useLanguageSelectionModel,
 } from '~/ui/commonModels';
+import { commitUiSettings, uiState } from '~/ui/commonStore';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -15,7 +15,7 @@ export interface IGlobalMenuItem {
 }
 
 function createMenuItems(): IGlobalMenuItem[] {
-  const { settings } = uiStatusModel;
+  const { settings } = uiState;
   const themeSelectionModel = useThemeSelectionModel();
   const languageSelectionModel = useLanguageSelectionModel();
 
@@ -24,7 +24,7 @@ function createMenuItems(): IGlobalMenuItem[] {
       key: 'miShowInputArea',
       text: texts.label_globalMenu_showTestInputArea,
       handler() {
-        settings.showTestInputArea = !settings.showTestInputArea;
+        commitUiSettings({ showTestInputArea: !settings.showTestInputArea });
       },
       active: settings.showTestInputArea,
       hint: texts.hint_globalMenu_showTestInputArea,

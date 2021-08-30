@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { ISelectorOption, texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { commitUiSettings, uiState } from '~/ui/commonStore';
 import { RibbonSelector } from '~/ui/components';
 import { profilesReader } from '~/ui/pages/editor-page/models';
 
@@ -10,10 +10,10 @@ const options: ISelectorOption[] = [
 ];
 
 export const BehaviorOptionsPartA: FC = () => {
-  const value = uiStatusModel.settings.showLayersDynamic ? 'live' : 'edit';
+  const value = uiState.settings.showLayersDynamic ? 'live' : 'edit';
 
   const setValue = (value: 'edit' | 'live') => {
-    uiStatusModel.settings.showLayersDynamic = value === 'live';
+    commitUiSettings({ showLayersDynamic: value === 'live' });
   };
 
   return (

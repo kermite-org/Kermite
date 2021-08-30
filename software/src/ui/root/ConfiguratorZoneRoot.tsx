@@ -1,6 +1,6 @@
 import { css, jsx } from 'qx';
 import { appUi, router, uiTheme } from '~/ui/base';
-import { PagePaths, uiStatusModel } from '~/ui/commonModels';
+import { PagePaths } from '~/ui/commonModels';
 import { siteModel, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
@@ -63,7 +63,7 @@ const cssMainColumn = css`
 `;
 
 export const ConfiguratorZoneRoot = () => {
-  const showOnboarding = uiStatusModel.settings.showOnboardingPanel;
+  const showOnboarding = uiState.settings.showOnboardingPanel;
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -79,7 +79,7 @@ export const ConfiguratorZoneRoot = () => {
           ) : (
             <MainColumnRoutes />
           )}
-          <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
+          <LoadingOverlay isLoading={uiState.isLoading} />
           <DevToolPullTab
             qxIf={appUi.isDevelopment}
             handler={siteModel.toggleDevToolVisible}

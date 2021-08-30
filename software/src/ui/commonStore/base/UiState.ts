@@ -9,16 +9,40 @@ import {
 import { ipcAgent } from '~/ui/base';
 import { IPageSpec } from '~/ui/commonModels/PageTypes';
 
+export interface IUiSettings {
+  showTestInputArea: boolean;
+  showLayersDynamic: boolean;
+  showLayerDefaultAssign: boolean;
+  siteDpiScale: number;
+  showGlobalHint: boolean;
+  showOnboardingPanel: boolean;
+}
+
+const defaultUiSettings: IUiSettings = {
+  showTestInputArea: false,
+  showLayersDynamic: false,
+  showLayerDefaultAssign: false,
+  siteDpiScale: 1.0,
+  showGlobalHint: true,
+  showOnboardingPanel: false,
+};
+
 export type IUiState = {
   core: ICoreState;
+  settings: IUiSettings;
   pageSpec: IPageSpec | undefined;
   initialLoading: boolean;
+  profileConfigModalVisible: boolean;
+  isLoading: boolean;
 };
 
 export const defaultUiState: IUiState = {
   core: cloneObject(defaultCoreState),
+  settings: defaultUiSettings,
   pageSpec: undefined,
   initialLoading: false,
+  profileConfigModalVisible: false,
+  isLoading: false,
 };
 
 export type IUiAction = Partial<{}>;
@@ -37,6 +61,12 @@ export async function dispatchUiAction(action: IUiAction) {
 
 export function commitUiState(diff: Partial<IUiState>) {
   copyObjectProps(uiState, diff);
+}
+
+export function commitUiSettings(diff: Partial<IUiSettings>) {
+  commitUiState({
+    settings: { ...uiState.settings, ...diff },
+  });
 }
 
 export function commitCoreStateFromUiSide(diff: Partial<ICoreState>) {

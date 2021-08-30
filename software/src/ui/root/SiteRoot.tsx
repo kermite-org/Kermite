@@ -12,7 +12,7 @@ import {
   globalHintMouseMoveHandlerEffect,
   appUi,
 } from '~/ui/base';
-import { uiStatusModel, appErrorNotifierEffect } from '~/ui/commonModels';
+import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
   commitUiState,
   lazyInitializeCoreServices,
@@ -88,7 +88,7 @@ export const SiteRoot: FC = () => {
   router.useRedirect(['', '/'], '/home');
 
   return (
-    <SiteDpiScaler dpiScale={uiStatusModel.settings.siteDpiScale}>
+    <SiteDpiScaler dpiScale={uiState.settings.siteDpiScale}>
       <div css={cssSiteRoot}>
         {uiState.initialLoading ? <InitialLoadingView /> : <AppView />}
         <ForegroundModalLayerRoot />
