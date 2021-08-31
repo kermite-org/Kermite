@@ -123,10 +123,6 @@ export class InputLogicSimulator {
     this.CL.keyboardCoreLogic_initialize();
   }
 
-  postSimulationTargetProfile(profile: IProfileData) {
-    this.loadSimulationProfile(profile);
-  }
-
   initialize() {
     this.deviceService.realtimeEventPort.subscribe(
       this.onRealtimeKeyboardEvent,

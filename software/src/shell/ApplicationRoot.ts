@@ -99,9 +99,6 @@ export class ApplicationRoot {
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_lazyInitializeServices: () => this.lazyInitializeServices(),
 
-      simulator_postSimulationTargetProfile: async (profile) =>
-        this.inputLogicSimulator.postSimulationTargetProfile(profile),
-
       global_dispatchCoreAction: async (action) =>
         await dispatchCoreAction(action),
     });
