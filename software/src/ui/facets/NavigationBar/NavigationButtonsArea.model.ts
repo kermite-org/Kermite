@@ -3,7 +3,7 @@ import { texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/commonStore';
 
-export interface NavigationEntryViewModel {
+export interface NavigationItemModel {
   pagePath: PagePaths;
   pageName: string;
   iconSpec: string;
@@ -12,7 +12,11 @@ export interface NavigationEntryViewModel {
   hint: string;
 }
 
-interface NavigationEntrySource {
+export interface NavigationBarModel {
+  navigationItems: NavigationItemModel[];
+}
+
+interface NavigationItemSource {
   pagePath: PagePaths;
   pageName: string;
   iconSpec: string;
@@ -20,7 +24,7 @@ interface NavigationEntrySource {
   isAvailable?: () => boolean;
 }
 
-const entrySources: NavigationEntrySource[] = [
+const itemsSource: NavigationItemSource[] = [
   {
     pagePath: '/editor',
     pageName: texts.label_sideMenu_app_assigner,
@@ -104,14 +108,10 @@ const entrySources: NavigationEntrySource[] = [
 //   { pagePath: '/settings', pageName: 'Settings', iconSpec: 'settings' },
 // ];
 
-export interface INavigationViewModel {
-  entries: NavigationEntryViewModel[];
-}
-
-export function makeNavigationViewModel(): INavigationViewModel {
+export function useNavigationButtonsAreaModel(): NavigationBarModel {
   const currentPagePath = uiReaders.pagePath;
   return {
-    entries: entrySources
+    navigationItems: itemsSource
       .filter((it) => (it.isAvailable ? it.isAvailable() : true))
       .map((it) => ({
         pagePath: it.pagePath,

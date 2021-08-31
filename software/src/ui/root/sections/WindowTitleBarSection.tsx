@@ -1,16 +1,14 @@
 import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { WindowTitlePart } from '~/ui/components';
-import { WindowControlButtonsPart } from '~/ui/root/organisms';
+import { WindowControlButtonsPart } from '~/ui/facets';
 
-export const WindowTitleBarSection: FC = () => {
-  return (
-    <div css={style}>
-      <WindowTitlePart />
-      <WindowControlButtonsPart />
-    </div>
-  );
-};
+export const WindowTitleBarSection: FC = () => (
+  <div css={style}>
+    <WindowTitlePart />
+    <WindowControlButtonsPart />
+  </div>
+);
 
 const style = css`
   display: flex;

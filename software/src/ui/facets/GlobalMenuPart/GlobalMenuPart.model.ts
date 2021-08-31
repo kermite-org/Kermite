@@ -14,6 +14,13 @@ export interface IGlobalMenuItem {
   hint: string;
 }
 
+export interface IGlobalMenuModel {
+  isOpen: boolean;
+  openMenu(): void;
+  closeMenu(): void;
+  menuItems: IGlobalMenuItem[];
+}
+
 function createMenuItems(): IGlobalMenuItem[] {
   const { settings } = uiState;
   const themeSelectionModel = useThemeSelectionModel();
@@ -75,14 +82,7 @@ function createMenuItems(): IGlobalMenuItem[] {
   }
 }
 
-export interface IGlobalMenuViewModel {
-  isOpen: boolean;
-  openMenu(): void;
-  closeMenu(): void;
-  menuItems: IGlobalMenuItem[];
-}
-
-export function makeGlobalMenuViewModel(): IGlobalMenuViewModel {
+export function useGlobalMenuPartModel(): IGlobalMenuModel {
   const state = useLocal({ isOpen: false });
   return {
     isOpen: state.isOpen,

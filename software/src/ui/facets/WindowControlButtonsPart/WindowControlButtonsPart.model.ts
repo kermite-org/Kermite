@@ -1,6 +1,6 @@
 import { dispatchCoreAction, siteModel, uiActions } from '~/ui/commonStore';
 
-export interface IWindowControlButtonsModel {
+export interface IWindowControlModel {
   showReloadButton: boolean;
   onReloadButton(): void;
   onWidgetButton(): void;
@@ -10,7 +10,7 @@ export interface IWindowControlButtonsModel {
   isWindowMaximized: boolean;
 }
 
-export function makeWindowControlButtonsModel(): IWindowControlButtonsModel {
+export function useWindowControlButtonsPartModel(): IWindowControlModel {
   return {
     // showReloadButton: appUi.isDevelopment,
     showReloadButton: false,
