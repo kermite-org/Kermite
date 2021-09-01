@@ -33,7 +33,7 @@ function useCoreProps(baseVm: IProfileManagementPartViewModel): ICoreProps {
   const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
-    value: info.projectId,
+    value: info.sig,
     label: info.keyboardName,
   }));
 
@@ -91,8 +91,8 @@ function makeProjectAttachmentFileSelectorViewModel_Loading(
     selectorSize: 7,
     canSelectProject: false,
     projectOptions,
-    currentProjectId,
-    setCurrentProjectId: () => {},
+    currentProjectKey: currentProject?.sig || '',
+    setCurrentProjectKey: () => {},
     currentProjectKeyboardName: currentProject?.keyboardName || '',
     attachmentFileTypeHeader:
       texts.label_projectAttachmentFileSelectionModal_preset,
@@ -148,8 +148,8 @@ function makeProjectAttachmentFileSelectorViewModel_Saving(
     selectorSize: 7,
     canSelectProject: false,
     projectOptions,
-    currentProjectId,
-    setCurrentProjectId: () => {},
+    currentProjectKey: currentProject?.sig || '',
+    setCurrentProjectKey: () => {},
     currentProjectKeyboardName: currentProject?.keyboardName || '',
     attachmentFileTypeHeader:
       texts.label_projectAttachmentFileSelectionModal_preset,

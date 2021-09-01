@@ -21,7 +21,7 @@ export interface ILayoutManagerViewModel {
 
   projectOptions: ISelectorOption[];
   // setCurrentProjectId(projectId: string): void;
-  currentProjectId: string;
+  currentProjectKey: string;
   // currentProjectPath: string;
   currentKeyboardName: string;
   targetProjectLayoutFilePath: string;
@@ -104,7 +104,7 @@ function useLayoutManagerViewModelImpl(
   const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
-    value: info.projectId,
+    value: info.sig,
     label: info.keyboardName,
   }));
 
@@ -154,7 +154,7 @@ function useLayoutManagerViewModelImpl(
       editTargetProject,
     ),
     projectOptions,
-    currentProjectId,
+    currentProjectKey: currentProject?.sig || '',
     currentKeyboardName: currentProject?.keyboardName || '',
     layoutOptions,
     currentLayoutName: local.currentLayoutName,
