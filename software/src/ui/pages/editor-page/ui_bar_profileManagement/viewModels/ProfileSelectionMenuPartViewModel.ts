@@ -76,7 +76,7 @@ function createMenuItemSources(
       key: 'saveAsPreset',
       text: texts.label_assigner_menu_saveAsPreset,
       hint: texts.hint_assigner_menu_saveAsPreset,
-      handler: vm.openExportingPresetSelectionModal,
+      handler: vm.openSavingPresetSelectionModal,
       enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
     {

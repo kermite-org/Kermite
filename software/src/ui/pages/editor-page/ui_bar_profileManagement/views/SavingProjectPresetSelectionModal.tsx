@@ -51,7 +51,7 @@ function useProjectAttachmentFileSelectorViewModel(
   return {
     titleText:
       texts.label_projectAttachmentFileSelectionModal_savePreset_modalTitle,
-    closeModal: baseVm.closeExportingPresetSelectionModal,
+    closeModal: baseVm.closeModal,
     selectorSize: 7,
     canSelectProject: false,
     projectOptions,
@@ -85,7 +85,7 @@ function useProjectAttachmentFileSelectorViewModel(
         }
       }
       baseVm.saveProfileAsPreset(currentProjectId, local.currentPresetName);
-      baseVm.closeExportingPresetSelectionModal();
+      baseVm.closeModal();
     },
   };
 }
