@@ -1,7 +1,7 @@
 import { jsx } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList';
+import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList/ProjectKeyboardList';
 import {
   exampleData_persistKeyboardDesign_astelia,
   exampleData_persistKeyboardDesign_miniversRev2,
