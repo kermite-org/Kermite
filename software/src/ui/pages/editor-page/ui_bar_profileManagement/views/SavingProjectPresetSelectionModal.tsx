@@ -39,7 +39,7 @@ function useProjectAttachmentFileSelectorViewModel(
   );
 
   const currentProject = resourceInfos.find(
-    (info) => info.projectId === currentProjectId,
+    (info) => info.origin === 'local' && info.projectId === currentProjectId,
   );
 
   const presetNameOptions =
