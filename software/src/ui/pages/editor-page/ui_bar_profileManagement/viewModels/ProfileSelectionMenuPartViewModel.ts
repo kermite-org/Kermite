@@ -73,6 +73,13 @@ function createMenuItemSources(
       enabled: uiReaders.isDeveloperMode && vm.isEditProfileAvailable,
     },
     {
+      key: 'loadFromPreset',
+      text: 'Load From Project Preset',
+      hint: 'Load From Project Preset',
+      handler: vm.openLoadingPresetSelectionModal,
+      enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
+    },
+    {
       key: 'saveAsPreset',
       text: texts.label_assigner_menu_saveAsPreset,
       hint: texts.hint_assigner_menu_saveAsPreset,
