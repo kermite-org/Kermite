@@ -1,5 +1,6 @@
 import { jsx, useState } from 'qx';
-import { texts } from '~/ui/base';
+import { IProjectPackageInfo } from '~/shared';
+import { ISelectorOption, texts } from '~/ui/base';
 import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import {
   IProjectAttachmentFileSelectorModalModel,
@@ -17,15 +18,16 @@ function getSavingPackageFilePath() {
   return '';
 }
 
-function useProjectAttachmentFileSelectorViewModel(
-  baseVm: IProfileManagementPartViewModel,
-): IProjectAttachmentFileSelectorModalModel {
-  const isLoading = baseVm.modalState === 'LoadFromProject';
+type ICoreProps = {
+  currentPresetName: string;
+  setCurrentPresetName(text: string): void;
+  projectOptions: ISelectorOption[];
+  currentProjectId: string;
+  currentProject: IProjectPackageInfo | undefined;
+  presetNameOptions: ISelectorOption[];
+};
 
-  const titleText = isLoading
-    ? 'Load From Project Preset'
-    : texts.label_projectAttachmentFileSelectionModal_savePreset_modalTitle;
-
+function useCoreProps(baseVm: IProfileManagementPartViewModel): ICoreProps {
   const [currentPresetName, setCurrentPresetName] = useState('');
 
   const resourceInfos = uiReaders.allProjectPackageInfos;
@@ -35,9 +37,9 @@ function useProjectAttachmentFileSelectorViewModel(
     label: info.keyboardName,
   }));
 
-  // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
   const currentProjectId = baseVm.currentProfileProjectId;
 
+  // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
   const currentProject = resourceInfos.find(
     (info) => info.origin === 'local' && info.projectId === currentProjectId,
   );
@@ -48,53 +50,45 @@ function useProjectAttachmentFileSelectorViewModel(
       label: presetName,
     })) || [];
 
-  const selectorSize = 7;
+  return {
+    currentPresetName,
+    setCurrentPresetName,
+    projectOptions,
+    currentProjectId,
+    currentProject,
+    presetNameOptions,
+  };
+}
 
-  const buttonText = isLoading ? 'Load' : 'Save';
+function makeProjectAttachmentFileSelectorViewModel_Loading(
+  baseVm: IProfileManagementPartViewModel,
+  coreProps: ICoreProps,
+): IProjectAttachmentFileSelectorModalModel {
+  const {
+    currentPresetName,
+    setCurrentPresetName,
+    projectOptions,
+    currentProjectId,
+    currentProject,
+    presetNameOptions,
+  } = coreProps;
 
-  let buttonActive = !!(
-    currentProjectId &&
-    currentPresetName &&
-    currentProject
+  const buttonActive = presetNameOptions.some(
+    (it) => it.value === currentPresetName,
   );
 
-  if (
-    isLoading &&
-    !presetNameOptions.some((it) => it.value === currentPresetName)
-  ) {
-    buttonActive = false;
-  }
-
-  const buttonHandler = async () => {
-    if (isLoading) {
-      profilesActions.createProfileUnnamed('local', currentProjectId, {
-        type: 'preset',
-        presetName: currentPresetName,
-      });
-      baseVm.closeModal();
-    } else {
-      const savingName = currentPresetName;
-      const overwriting = presetNameOptions.some(
-        (it) => it.value === savingName,
-      );
-      if (overwriting) {
-        const isOk = await modalConfirm({
-          caption: 'save',
-          message: 'overwrite it?',
-        });
-        if (!isOk) {
-          return;
-        }
-      }
-      baseVm.saveProfileAsPreset(currentProjectId, currentPresetName);
-      baseVm.closeModal();
-    }
+  const buttonHandler = () => {
+    profilesActions.createProfileUnnamed('local', currentProjectId, {
+      type: 'preset',
+      presetName: currentPresetName,
+    });
+    baseVm.closeModal();
   };
 
   return {
-    titleText,
+    titleText: 'Load From Project Preset',
     closeModal: baseVm.closeModal,
-    selectorSize,
+    selectorSize: 7,
     canSelectProject: false,
     projectOptions,
     currentProjectId,
@@ -106,10 +100,82 @@ function useProjectAttachmentFileSelectorViewModel(
     currentAttachmentFileName: currentPresetName,
     setCurrentAttachmentFileName: setCurrentPresetName,
     targetAttachmentFilePath: getSavingPackageFilePath(),
-    buttonText,
+    buttonText: 'Load',
     buttonActive,
     buttonHandler,
   };
+}
+
+function makeProjectAttachmentFileSelectorViewModel_Saving(
+  baseVm: IProfileManagementPartViewModel,
+  coreProps: ICoreProps,
+): IProjectAttachmentFileSelectorModalModel {
+  const {
+    currentPresetName,
+    setCurrentPresetName,
+    projectOptions,
+    currentProjectId,
+    currentProject,
+    presetNameOptions,
+  } = coreProps;
+
+  const buttonActive = !!(
+    currentProjectId &&
+    currentPresetName &&
+    currentProject
+  );
+
+  const buttonHandler = async () => {
+    const savingName = currentPresetName;
+    const overwriting = presetNameOptions.some((it) => it.value === savingName);
+    if (overwriting) {
+      const isOk = await modalConfirm({
+        caption: 'save',
+        message: 'overwrite it?',
+      });
+      if (!isOk) {
+        return;
+      }
+    }
+    baseVm.saveProfileAsPreset(currentProjectId, currentPresetName);
+    baseVm.closeModal();
+  };
+
+  return {
+    titleText:
+      texts.label_projectAttachmentFileSelectionModal_savePreset_modalTitle,
+    closeModal: baseVm.closeModal,
+    selectorSize: 7,
+    canSelectProject: false,
+    projectOptions,
+    currentProjectId,
+    setCurrentProjectId: () => {},
+    currentProjectKeyboardName: currentProject?.keyboardName || '',
+    attachmentFileTypeHeader:
+      texts.label_projectAttachmentFileSelectionModal_preset,
+    attachmentFileNameOptions: presetNameOptions,
+    currentAttachmentFileName: currentPresetName,
+    setCurrentAttachmentFileName: setCurrentPresetName,
+    targetAttachmentFilePath: getSavingPackageFilePath(),
+    buttonText: 'Save',
+    buttonActive,
+    buttonHandler,
+  };
+}
+
+function useProjectAttachmentFileSelectorViewModel(
+  baseVm: IProfileManagementPartViewModel,
+): IProjectAttachmentFileSelectorModalModel {
+  const isLoading = baseVm.modalState === 'LoadFromProject';
+  const coreProps = useCoreProps(baseVm);
+  if (isLoading) {
+    return makeProjectAttachmentFileSelectorViewModel_Loading(
+      baseVm,
+      coreProps,
+    );
+  } else {
+    return makeProjectAttachmentFileSelectorViewModel_Saving(baseVm, coreProps);
+  }
 }
 
 export const SavingProjectPresetSelectionModal = (props: {
