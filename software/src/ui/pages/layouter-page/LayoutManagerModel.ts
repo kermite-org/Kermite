@@ -70,7 +70,7 @@ async function checkShallLoadDataForProfile(): Promise<boolean> {
   });
 }
 
-const layoutManagerActions = {
+export const layoutManagerActions = {
   async createNewLayout() {
     if (!(await checkShallLoadData())) {
       return;
