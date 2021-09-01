@@ -1,7 +1,7 @@
 import { useEffect, useLocal, useMemo } from 'qx';
 import {
   fallbackProfileData,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
   IProfileData,
   IProjectPackageInfo,
   IServerProfileInfo,
@@ -26,7 +26,7 @@ function makeProjectOptions(
   return infos
     .filter((it) => projectIds.includes(it.projectId) && it.origin === 'online')
     .map((it) => ({
-      value: it.sig,
+      value: it.projectKey,
       label: it.keyboardName,
     }));
 }
@@ -90,7 +90,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
 
   useEffect(() => {
     if (modProjectKey) {
-      const { projectId } = getProjectOriginAndIdFromSig(modProjectKey);
+      const { projectId } = getOriginAndProjectIdFromProjectKey(modProjectKey);
       ipcAgent.async
         .presetHub_getServerProfiles(projectId)
         .then((res) => (local.projectProfiles = res || []));

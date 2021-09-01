@@ -1,7 +1,7 @@
 import { vObject, vString, vBoolean } from '~/shared';
 
 export interface IShapeViewPersistState {
-  shapeViewProjectSig: string;
+  shapeViewProjectKey: string;
   shapeViewLayoutName: string;
   shapeViewShowKeyId: boolean;
   shapeViewShowKeyIndex: boolean;
@@ -9,7 +9,7 @@ export interface IShapeViewPersistState {
 }
 
 export const shapeViewPersistStateDefault: IShapeViewPersistState = {
-  shapeViewProjectSig: '',
+  shapeViewProjectKey: '',
   shapeViewLayoutName: '',
   shapeViewShowKeyId: false,
   shapeViewShowKeyIndex: false,
@@ -17,7 +17,7 @@ export const shapeViewPersistStateDefault: IShapeViewPersistState = {
 };
 
 export const shapeViewPersistStateSchema = vObject({
-  shapeViewProjectSig: vString(),
+  shapeViewProjectKey: vString(),
   shapeViewLayoutName: vString(),
   shapeViewShowKeyId: vBoolean(),
   shapeViewShowKeyIndex: vBoolean(),

@@ -8,7 +8,7 @@ import {
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
-import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
+import { createProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   fsExistsSync,
   fsLstatSync,
@@ -251,7 +251,7 @@ export class ProjectResourceProviderImpl_Local
         layoutNames,
       } = it;
       return {
-        sig: createProjectSig(origin, projectId),
+        projectKey: createProjectKey(origin, projectId),
         origin,
         projectId,
         keyboardName,

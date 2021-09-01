@@ -45,7 +45,7 @@ export type IKermiteStandardKeyboardSpec = {
 };
 
 export interface IProjectResourceInfo {
-  sig: string; // ${origin}#${projectId}
+  projectKey: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
   projectId: string;
   keyboardName: string;
@@ -88,13 +88,13 @@ export interface IProjectPackageFileContent {
 }
 
 export type IProjectPackageInfo = {
-  sig: string; // ${origin}#${projectId}
+  projectKey: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
   packageName: string;
 } & IProjectPackageFileContent;
 
 export const fallbackProjectPackageInfo: IProjectPackageInfo = {
-  sig: '',
+  projectKey: '',
   origin: 'online',
   formatRevision: 'PKG0',
   projectId: '',

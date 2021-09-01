@@ -63,7 +63,7 @@ export class FirmwareUpdateModel {
     const projectOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
-          value: `${info.sig}:${firmware.variationName}`,
+          value: `${info.projectKey}:${firmware.variationName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
           } (${firmware.variationName})`,
@@ -114,10 +114,10 @@ export class FirmwareUpdateModel {
 
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
     if (this.deviceDetectionStatus.detected) {
-      const [projectSig, variationName] =
+      const [projectKey, variationName] =
         this.currentProjectFirmwareSpec.split(':');
       const projectInfo = this.projectInfosWithFirmware.find((it) =>
-        it.sig.startsWith(projectSig),
+        it.projectKey.startsWith(projectKey),
       );
       const firmwareInfo = projectInfo?.firmwares.find(
         (f) => f.variationName === variationName,
@@ -146,10 +146,10 @@ export class FirmwareUpdateModel {
       this.phase === 'WaitingUploadOrder' &&
       this.deviceDetectionStatus.detected
     ) {
-      const [projectSig, variationName] =
+      const [projectKey, variationName] =
         this.currentProjectFirmwareSpec.split(':');
       const info = this.projectInfosWithFirmware.find((it) =>
-        it.sig.startsWith(projectSig),
+        it.projectKey.startsWith(projectKey),
       );
       if (info) {
         this.phase = 'Uploading';

@@ -8,7 +8,7 @@ import {
   IKrsRemoteProjectResourceInfoSource,
   IKrsSummaryJsonData,
 } from '~/shared/defs/OnlineResourceTypes';
-import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
+import { createProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { appEnv } from '~/shell/base';
 import {
   cacheRemoteResource,
@@ -43,7 +43,8 @@ async function loadRemoteResourceInfosFromSummaryJson(): Promise<
 }
 
 export class ProjectResourceProviderImpl_Remote
-  implements IProjectResourceProviderImpl {
+  implements IProjectResourceProviderImpl
+{
   private projectInfoSources: IKrsRemoteProjectResourceInfoSource[] = [];
 
   private loaded = false;
@@ -53,7 +54,7 @@ export class ProjectResourceProviderImpl_Remote
       this.loaded = true;
     }
     return this.projectInfoSources.map((it) => ({
-      sig: createProjectSig('online', it.projectId),
+      projectKey: createProjectKey('online', it.projectId),
       origin: 'online',
       projectId: it.projectId,
       keyboardName: it.keyboardName,

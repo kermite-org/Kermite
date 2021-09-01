@@ -18,7 +18,7 @@ export function makeLayoutSelectorModalViewModel(
   const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
-    value: info.sig,
+    value: info.projectKey,
     label: info.keyboardName,
   }));
 
@@ -85,7 +85,7 @@ export function makeLayoutSelectorModalViewModel(
     selectorSize,
     canSelectProject: false,
     projectOptions,
-    currentProjectKey: currentProject?.sig || '',
+    currentProjectKey: currentProject?.projectKey || '',
     setCurrentProjectKey: () => {},
     currentProjectKeyboardName: currentProject?.keyboardName || '',
     attachmentFileTypeHeader,

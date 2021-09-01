@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
 } from '~/shared/funcs/DomainRelatedHelpers';
 
 export function useProfileDataLoaded(
@@ -17,7 +17,8 @@ export function useProfileDataLoaded(
 ): IProfileData {
   return useMemo(() => {
     if (projectKey && presetKey) {
-      const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+      const { origin, projectId } =
+        getOriginAndProjectIdFromProjectKey(projectKey);
       const presetSpec = getPresetSpecFromPresetKey(presetKey);
       const info = resourceInfos.find(
         (info) => info.origin === origin && info.projectId === projectId,
