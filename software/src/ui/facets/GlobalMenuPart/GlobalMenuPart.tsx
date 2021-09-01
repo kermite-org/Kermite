@@ -55,24 +55,24 @@ const style = css`
         background: #8ac;
       }
     }
-  }
 
-  > .menuPopup {
-    min-width: 200px;
-    min-height: 100px;
-    background: #fff;
-    position: absolute;
-    color: #000;
-    z-index: 20;
-    user-select: none;
-    border: solid 1px #248;
+    > .menuPopup {
+      min-width: 200px;
+      min-height: 100px;
+      background: #fff;
+      position: absolute;
+      color: #000;
+      z-index: 20;
+      user-select: none;
+      border: solid 1px #248;
 
-    > div {
-      padding: 4px;
-      font-size: 13px;
-      cursor: pointer;
-      &:hover {
-        background: #c0f0f8;
+      > div {
+        padding: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        &:hover {
+          background: #c0f0f8;
+        }
       }
     }
   }
