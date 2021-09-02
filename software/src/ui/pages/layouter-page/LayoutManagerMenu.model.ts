@@ -1,83 +1,54 @@
 import { IGeneralMenuItem } from '~/ui/base';
 import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
 
-type ILayoutManagerViewModelCommandFunctionKey =
-  | 'createNewLayout'
-  | 'loadCurrentProfileLayout'
-  | 'loadFromFileWithDialog'
-  | 'saveToFileWithDialog'
-  | 'openLoadFromProjectModal'
-  | 'openSaveToProjectModal'
-  | 'overwriteLayout'
-  | 'showEditLayoutFileInFiler'
-  | 'createNewProfileFromCurrentLayout';
-
-type ILayoutManagerViewModelCommandActiveFlagKey =
-  | 'canShowEditLayoutFileInFiler'
-  | 'canOpenProjectIoModal'
-  | 'canCreateNewLayout'
-  | 'canCreateProfile'
-  | 'canSaveToFile';
-
-interface IMenuItemSource {
-  text: string;
-  command: ILayoutManagerViewModelCommandFunctionKey;
-  commandActiveFlagKey?: ILayoutManagerViewModelCommandActiveFlagKey;
+export function createLayoutManagerMenuItems(
+  baseVm: ILayoutManagerViewModel,
+): IGeneralMenuItem[] {
+  return [
+    {
+      type: 'menuEntry',
+      text: 'new design',
+      handler: baseVm.createNewLayout,
+      disabled: !baseVm.canCreateNewLayout,
+    },
+    // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
+    { type: 'separator' },
+    {
+      type: 'menuEntry',
+      text: 'load from file...',
+      handler: baseVm.loadFromFileWithDialog,
+    },
+    {
+      type: 'menuEntry',
+      text: 'save to file...',
+      handler: baseVm.saveToFileWithDialog,
+      disabled: !baseVm.canSaveToFile,
+    },
+    { type: 'separator' },
+    {
+      type: 'menuEntry',
+      text: 'load from project...',
+      handler: baseVm.openLoadFromProjectModal,
+      disabled: !baseVm.canOpenProjectIoModal,
+    },
+    {
+      type: 'menuEntry',
+      text: 'save to project...',
+      handler: baseVm.openSaveToProjectModal,
+      disabled: !baseVm.canOpenProjectIoModal,
+    },
+    { type: 'separator' },
+    {
+      type: 'menuEntry',
+      text: 'create profile',
+      handler: baseVm.createNewProfileFromCurrentLayout,
+      disabled: !baseVm.canCreateProfile,
+    },
+    {
+      type: 'menuEntry',
+      text: 'show edit file in folder',
+      handler: baseVm.showEditLayoutFileInFiler,
+      disabled: !baseVm.canShowEditLayoutFileInFiler,
+    },
+  ];
 }
-
-type IMenuItemSeparator = { separator: true };
-
-const menuItemSources: (IMenuItemSource | IMenuItemSeparator)[] = [
-  {
-    text: 'new design',
-    command: 'createNewLayout',
-    commandActiveFlagKey: 'canCreateNewLayout',
-  },
-  // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
-  { separator: true },
-  { text: 'load from file...', command: 'loadFromFileWithDialog' },
-  {
-    text: 'save to file...',
-    command: 'saveToFileWithDialog',
-    commandActiveFlagKey: 'canSaveToFile',
-  },
-  { separator: true },
-  {
-    text: 'load from project...',
-    command: 'openLoadFromProjectModal',
-    commandActiveFlagKey: 'canOpenProjectIoModal',
-  },
-  {
-    text: 'save to project...',
-    command: 'openSaveToProjectModal',
-    commandActiveFlagKey: 'canOpenProjectIoModal',
-  },
-  { separator: true },
-  {
-    text: 'create profile',
-    command: 'createNewProfileFromCurrentLayout',
-    commandActiveFlagKey: 'canCreateProfile',
-  },
-  {
-    text: 'show edit file in folder',
-    command: 'showEditLayoutFileInFiler',
-    commandActiveFlagKey: 'canShowEditLayoutFileInFiler',
-  },
-];
-
-export const useLayoutManagerMenuModel = (baseVm: ILayoutManagerViewModel) => {
-  const menuItems: IGeneralMenuItem[] = menuItemSources.map((source) =>
-    'separator' in source
-      ? { type: 'separator' }
-      : {
-          type: 'menuEntry',
-          text: source.text,
-          handler: () => baseVm[source.command](),
-          disabled:
-            source.commandActiveFlagKey && !baseVm[source.commandActiveFlagKey],
-        },
-  );
-  return {
-    menuItems,
-  };
-};
