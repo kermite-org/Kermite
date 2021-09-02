@@ -1,7 +1,6 @@
 import {
   compareObjectByJsonStringify,
   forceChangeFilePathExtension,
-  ILayoutEditSource,
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
@@ -15,15 +14,7 @@ import {
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
-
-export const layoutManagerReader = {
-  get editSource(): ILayoutEditSource {
-    return uiState.core.layoutEditSource;
-  },
-  get isModified() {
-    return UiLayouterCore.getIsModified();
-  },
-};
+import { layoutManagerReader } from '~/ui/pages/layouter-page/LayoutManagerBase';
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {

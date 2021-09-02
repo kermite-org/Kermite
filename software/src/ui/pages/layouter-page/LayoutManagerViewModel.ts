@@ -1,16 +1,14 @@
-import { useState } from 'qx';
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
 import {
+  ILayoutManagerModalState,
+  layoutManagerState,
+} from '~/ui/pages/layouter-page/LayoutManagerBase';
+import {
   ILayoutManagerModel,
   useLayoutManagerModel,
 } from '~/ui/pages/layouter-page/LayoutManagerModel';
-
-export type ILayoutManagerModalState =
-  | 'None'
-  | 'LoadFromProject'
-  | 'SaveToProject';
 
 export type ILayoutManagerEditTargetRadioSelection =
   | 'CurrentProfile'
@@ -70,8 +68,10 @@ function getEditSourceDisplayText(
 function useLayoutManagerViewModelImpl(
   model: ILayoutManagerModel,
 ): ILayoutManagerViewModel {
-  const [modalState, setModalState] =
-    useState<ILayoutManagerModalState>('None');
+  const { modalState } = layoutManagerState;
+  const setModalState = (state: ILayoutManagerModalState) => {
+    layoutManagerState.modalState = state;
+  };
 
   const editTargetProject = projectPackagesReader.getEditTargetProject();
 

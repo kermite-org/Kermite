@@ -1,12 +1,6 @@
-import { useEffect } from 'qx';
 import { ILayoutEditSource, IPersistKeyboardDesign } from '~/shared';
-import { uiState } from '~/ui/commonStore';
-import { UiLayouterCore } from '~/ui/features';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
-import {
-  layoutManagerActions,
-  layoutManagerReader,
-} from '~/ui/pages/layouter-page/LayoutManagerActions';
+import { layoutManagerActions } from '~/ui/pages/layouter-page/LayoutManagerActions';
+import { layoutManagerReader } from '~/ui/pages/layouter-page/LayoutManagerBase';
 
 export interface ILayoutManagerModel {
   editSource: ILayoutEditSource;
@@ -28,35 +22,8 @@ export interface ILayoutManagerModel {
   showEditLayoutFileInFiler(): void;
 }
 
-const local = new (class {
-  layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
-})();
-
-export const layoutManagerRootModel = {
-  updateBeforeRender() {
-    const { layoutEditSource, loadedLayoutData } = uiState.core;
-
-    useEffect(() => {
-      if (layoutEditSource !== local.layoutEditSource) {
-        UiLayouterCore.loadEditDesign(loadedLayoutData);
-        local.layoutEditSource = layoutEditSource;
-      }
-    }, [layoutEditSource]);
-
-    useEffect(() => {
-      return () => {
-        const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
-        if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
-          const design = UiLayouterCore.emitSavingDesign();
-          editorModel.replaceKeyboardDesign(design);
-        }
-      };
-    }, []);
-  },
-};
-
 export function useLayoutManagerModel(): ILayoutManagerModel {
-  const { editSource, isModified } = layoutManagerReader;
+  const { editSource, isModified, hasLayoutEntities } = layoutManagerReader;
   const {
     createNewLayout,
     loadCurrentProfileLayout,
@@ -69,13 +36,10 @@ export function useLayoutManagerModel(): ILayoutManagerModel {
     createNewProfileFromCurrentLayout,
     showEditLayoutFileInFiler,
   } = layoutManagerActions;
-
-  layoutManagerRootModel.updateBeforeRender();
-
   return {
     editSource,
     isModified,
-    hasLayoutEntities: UiLayouterCore.hasEditLayoutEntities(),
+    hasLayoutEntities,
     createNewLayout,
     loadCurrentProfileLayout,
     createForProject,

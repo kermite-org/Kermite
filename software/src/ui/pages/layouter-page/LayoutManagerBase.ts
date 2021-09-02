@@ -1,0 +1,53 @@
+import { useEffect } from 'qx';
+import { ILayoutEditSource } from '~/shared';
+import { uiState } from '~/ui/commonStore';
+import { UiLayouterCore } from '~/ui/features';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+
+export type ILayoutManagerModalState =
+  | 'None'
+  | 'LoadFromProject'
+  | 'SaveToProject';
+export const layoutManagerState = new (class {
+  layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
+  modalState: ILayoutManagerModalState = 'None';
+})();
+
+export const layoutManagerReader = {
+  get editSource(): ILayoutEditSource {
+    return uiState.core.layoutEditSource;
+  },
+  get isModified() {
+    return UiLayouterCore.getIsModified();
+  },
+  get hasLayoutEntities() {
+    return UiLayouterCore.hasEditLayoutEntities();
+  },
+};
+
+export const layoutManagerRootModel = {
+  updateBeforeRender() {
+    const { layoutEditSource, loadedLayoutData } = uiState.core;
+
+    useEffect(() => {
+      layoutManagerState.modalState = 'None';
+    }, []);
+
+    useEffect(() => {
+      if (layoutEditSource !== layoutManagerState.layoutEditSource) {
+        UiLayouterCore.loadEditDesign(loadedLayoutData);
+        layoutManagerState.layoutEditSource = layoutEditSource;
+      }
+    }, [layoutEditSource]);
+
+    useEffect(() => {
+      return () => {
+        const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
+        if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
+          const design = UiLayouterCore.emitSavingDesign();
+          editorModel.replaceKeyboardDesign(design);
+        }
+      };
+    }, []);
+  },
+};
