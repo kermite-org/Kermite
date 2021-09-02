@@ -1,8 +1,8 @@
 import { IGeneralMenuItem } from '~/ui/base';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import { ILayoutManagerEditTarget } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
-import { createLayoutManagerMenuItems } from '~/ui/pages/layouter-page/models/LayoutManagerMenuItems';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
+import { createLayoutManagerMenuItems } from '~/ui/pages/layouter-page/templates/LayoutManagerMenuItems';
 
 type LayoutManagerTopBarModel = {
   canEditCurrentProfile: boolean;
