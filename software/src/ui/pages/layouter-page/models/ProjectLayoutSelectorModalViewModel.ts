@@ -2,8 +2,8 @@ import { useState } from 'qx';
 import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
-import { layoutManagerActions } from '~/ui/pages/layouter-page/LayoutManagerActions';
-import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
+import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
+import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
 export function makeLayoutSelectorModalViewModel(
   baseVm: ILayoutManagerViewModel,

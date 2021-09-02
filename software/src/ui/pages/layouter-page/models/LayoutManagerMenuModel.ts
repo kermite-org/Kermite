@@ -1,5 +1,5 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
+import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
 export function createLayoutManagerMenuItems(
   baseVm: ILayoutManagerViewModel,

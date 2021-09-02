@@ -1,12 +1,12 @@
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
-import { layoutManagerActions } from '~/ui/pages/layouter-page/LayoutManagerActions';
+import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import {
   ILayoutManagerModalState,
   layoutManagerReader,
   layoutManagerState,
-} from '~/ui/pages/layouter-page/LayoutManagerBase';
+} from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 
 export type ILayoutManagerEditTargetRadioSelection =
   | 'CurrentProfile'

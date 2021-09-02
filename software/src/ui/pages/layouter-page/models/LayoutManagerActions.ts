@@ -14,7 +14,7 @@ import {
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
-import { layoutManagerReader } from '~/ui/pages/layouter-page/LayoutManagerBase';
+import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {

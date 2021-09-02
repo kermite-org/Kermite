@@ -5,10 +5,10 @@ import {
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { layoutManagerRootModel } from '~/ui/pages/layouter-page/LayoutManagerBase';
 import { LayoutManagerMenu } from '~/ui/pages/layouter-page/LayoutManagerMenu';
-import { useLayoutManagerViewModel } from '~/ui/pages/layouter-page/LayoutManagerViewModel';
-import { makeLayoutSelectorModalViewModel } from '~/ui/pages/layouter-page/ProjectLayoutSelectorModalViewModel';
+import { layoutManagerRootModel } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { useLayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
+import { makeLayoutSelectorModalViewModel } from '~/ui/pages/layouter-page/models/ProjectLayoutSelectorModalViewModel';
 
 export const LayoutManagerTopBar: FC = () => {
   layoutManagerRootModel.updateBeforeRender();
