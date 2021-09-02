@@ -1,24 +1,20 @@
 import { useState } from 'qx';
+import { ISelectorOption } from '~/ui/base';
 import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
+import { ILayoutManagerModalState } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
-export function makeProjectLayoutSelectorModalModel():
-  | IProjectAttachmentFileSelectorModalModel
-  | undefined {
-  const [currentLayoutName, setCurrentLayoutName] = useState('');
+const configs = {
+  selectorSize: 7,
+  canSelectProject: false,
+  attachmentFileTypeHeader: 'Layout',
+};
 
-  const { modalState } = layoutManagerReader;
-  const { closeModal } = layoutManagerActions;
-
-  if (modalState === 'None') {
-    return undefined;
-  }
-  const isLoading = modalState === 'LoadFromProject';
-
+function makeCoreProps() {
   const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
@@ -27,7 +23,6 @@ export function makeProjectLayoutSelectorModalModel():
   }));
 
   const editTargetProject = projectPackagesReader.getEditTargetProject();
-
   // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
   const currentProjectId = editTargetProject?.projectId || '';
 
@@ -41,59 +36,106 @@ export function makeProjectLayoutSelectorModalModel():
       label: layoutName,
     })) || [];
 
-  const titleText = isLoading
+  return {
+    projectOptions,
+    currentProjectId,
+    currentProject,
+    layoutOptions,
+  };
+}
+
+type IOperationMode = 'Load' | 'Save';
+
+function getOperationMode(
+  modalState: ILayoutManagerModalState,
+): IOperationMode {
+  const isLoad = modalState === 'LoadFromProject';
+  return isLoad ? 'Load' : 'Save';
+}
+
+function getTitleText(operationMode: IOperationMode) {
+  return operationMode === 'Load'
     ? 'Load From Project Layout'
     : 'Save To Project Layout';
+}
 
-  const isCustomName =
-    currentLayoutName &&
-    !layoutOptions.some((it) => it.value === currentLayoutName);
+function getCanSubmit(
+  operationMode: IOperationMode,
+  currentProjectId: string,
+  currentLayoutName: string,
+  layoutOptions: ISelectorOption[],
+): boolean {
+  const base = !!(currentProjectId && currentLayoutName);
+  if (operationMode === 'Load') {
+    return (
+      (currentLayoutName &&
+        layoutOptions.some((it) => it.value === currentLayoutName)) ||
+      false
+    );
+  } else {
+    return base;
+  }
+}
 
-  const selectorSize = 7;
-
-  const buttonText = isLoading ? (isCustomName ? 'Create' : 'Load') : 'Save';
-
-  const buttonActive = !!(editTargetProject && currentLayoutName);
-
-  const createForProject = () => {
-    layoutManagerActions.createForProject(currentProjectId, currentLayoutName);
-    closeModal();
-  };
-  const loadFromProject = () => {
+function submit(
+  operationMode: IOperationMode,
+  currentProjectId: string,
+  currentLayoutName: string,
+) {
+  if (operationMode === 'Load') {
     layoutManagerActions.loadFromProject(currentProjectId, currentLayoutName);
-    closeModal();
-  };
-
-  const saveToProject = () => {
+  } else if (operationMode === 'Save') {
     layoutManagerActions.saveToProject(
       currentProjectId,
       currentLayoutName,
       UiLayouterCore.emitSavingDesign(),
     );
-    closeModal();
-  };
+  }
+  layoutManagerActions.closeModal();
+}
 
-  const buttonHandler = isLoading
-    ? isCustomName
-      ? createForProject
-      : loadFromProject
-    : saveToProject;
+export function makeProjectLayoutSelectorModalModel():
+  | IProjectAttachmentFileSelectorModalModel
+  | undefined {
+  const [currentLayoutName, setCurrentLayoutName] = useState('');
+  const { modalState } = layoutManagerReader;
+  if (modalState === 'None') {
+    return undefined;
+  }
 
-  const attachmentFileTypeHeader = 'Layout';
+  const { closeModal } = layoutManagerActions;
+  const { selectorSize, attachmentFileTypeHeader, canSelectProject } = configs;
+  const { projectOptions, currentProjectId, currentProject, layoutOptions } =
+    makeCoreProps();
 
+  const currentProjectKey = currentProject?.projectKey || '';
+  const currentProjectKeyboardName = currentProject?.keyboardName || '';
   const targetProjectLayoutFilePath =
     layoutManagerHelpers.getSavingPackageFilePath();
 
+  const operationMode = getOperationMode(modalState);
+  const titleText = getTitleText(operationMode);
+  const buttonText = operationMode;
+  const buttonActive = getCanSubmit(
+    operationMode,
+    currentProjectId,
+    currentLayoutName,
+    layoutOptions,
+  );
+  const buttonHandler = () => {
+    submit(operationMode, currentProjectId, currentLayoutName);
+  };
+
   return {
+    selectorSize,
+    attachmentFileTypeHeader,
+    canSelectProject,
     titleText,
     closeModal,
-    selectorSize,
-    canSelectProject: false,
     projectOptions,
-    currentProjectKey: currentProject?.projectKey || '',
+    currentProjectKey,
     setCurrentProjectKey: () => {},
-    currentProjectKeyboardName: currentProject?.keyboardName || '',
-    attachmentFileTypeHeader,
+    currentProjectKeyboardName,
     attachmentFileNameOptions: layoutOptions,
     currentAttachmentFileName: currentLayoutName,
     setCurrentAttachmentFileName: setCurrentLayoutName,
