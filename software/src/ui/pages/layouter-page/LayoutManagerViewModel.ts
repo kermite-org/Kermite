@@ -1,14 +1,12 @@
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
+import { layoutManagerActions } from '~/ui/pages/layouter-page/LayoutManagerActions';
 import {
   ILayoutManagerModalState,
+  layoutManagerReader,
   layoutManagerState,
 } from '~/ui/pages/layouter-page/LayoutManagerBase';
-import {
-  ILayoutManagerModel,
-  useLayoutManagerModel,
-} from '~/ui/pages/layouter-page/LayoutManagerModel';
 
 export type ILayoutManagerEditTargetRadioSelection =
   | 'CurrentProfile'
@@ -65,69 +63,65 @@ function getEditSourceDisplayText(
   return '';
 }
 
-function useLayoutManagerViewModelImpl(
-  model: ILayoutManagerModel,
-): ILayoutManagerViewModel {
+function useLayoutManagerViewModelImpl(): ILayoutManagerViewModel {
   const { modalState } = layoutManagerState;
   const setModalState = (state: ILayoutManagerModalState) => {
     layoutManagerState.modalState = state;
   };
 
+  const { editSource, isModified, hasLayoutEntities } = layoutManagerReader;
+
   const editTargetProject = projectPackagesReader.getEditTargetProject();
 
   const editTargetRadioSelection =
-    model.editSource.type === 'CurrentProfile'
-      ? 'CurrentProfile'
-      : 'LayoutFile';
+    editSource.type === 'CurrentProfile' ? 'CurrentProfile' : 'LayoutFile';
 
   const canCreateNewLayout =
-    model.editSource.type === 'LayoutNewlyCreated'
-      ? model.hasLayoutEntities
-      : true;
+    editSource.type === 'LayoutNewlyCreated' ? hasLayoutEntities : true;
 
-  const canCreateProfile = model.hasLayoutEntities;
+  const canCreateProfile = hasLayoutEntities;
   const canEditCurrentProfile =
     uiState.core.profileEditSource.type === 'InternalProfile' ||
     uiState.core.profileEditSource.type === 'ProfileNewlyCreated';
 
-  const canSaveToFile = model.hasLayoutEntities;
+  const canSaveToFile = hasLayoutEntities;
 
   return {
-    editSourceText: getEditSourceDisplayText(
-      model.editSource,
-      editTargetProject,
-    ),
+    editSourceText: getEditSourceDisplayText(editSource, editTargetProject),
     targetProjectLayoutFilePath: getSavingPackageFilePath(),
     canCreateNewLayout,
-    createNewLayout: () => model.createNewLayout(),
-    loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
-    loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
+    createNewLayout: () => layoutManagerActions.createNewLayout(),
+    loadCurrentProfileLayout: () =>
+      layoutManagerActions.loadCurrentProfileLayout(),
+    loadFromFileWithDialog: () => layoutManagerActions.loadFromFileWithDialog(),
     canSaveToFile,
     saveToFileWithDialog: () =>
-      model.saveToFileWithDialog(UiLayouterCore.emitSavingDesign()),
-    canOverwrite:
-      model.editSource.type !== 'LayoutNewlyCreated' && model.isModified,
-    overwriteLayout: () => model.save(UiLayouterCore.emitSavingDesign()),
+      layoutManagerActions.saveToFileWithDialog(
+        UiLayouterCore.emitSavingDesign(),
+      ),
+    canOverwrite: editSource.type !== 'LayoutNewlyCreated' && isModified,
+    overwriteLayout: () =>
+      layoutManagerActions.save(UiLayouterCore.emitSavingDesign()),
     modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),
     openSaveToProjectModal: () => setModalState('SaveToProject'),
     closeModal: () => setModalState('None'),
     canShowEditLayoutFileInFiler:
-      model.editSource.type === 'File' ||
-      model.editSource.type === 'ProjectLayout',
-    showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
+      editSource.type === 'File' || editSource.type === 'ProjectLayout',
+    showEditLayoutFileInFiler: () =>
+      layoutManagerActions.showEditLayoutFileInFiler(),
     canOpenProjectIoModal: uiReaders.isLocalProjectSelectedForEdit,
     canCreateProfile,
     createNewProfileFromCurrentLayout: () =>
-      model.createNewProfileFromCurrentLayout(),
+      layoutManagerActions.createNewProfileFromCurrentLayout(),
     editTargetRadioSelection,
     canEditCurrentProfile,
     setEditTargetRadioSelection: (value) => {
       if (editTargetRadioSelection !== value) {
         if (value === 'CurrentProfile') {
-          model.loadCurrentProfileLayout();
+          layoutManagerActions.loadCurrentProfileLayout();
         } else {
-          model.createNewLayout();
+          layoutManagerActions.createNewLayout();
         }
       }
     },
@@ -135,6 +129,5 @@ function useLayoutManagerViewModelImpl(
 }
 
 export function useLayoutManagerViewModel(): ILayoutManagerViewModel {
-  const model = useLayoutManagerModel();
-  return useLayoutManagerViewModelImpl(model);
+  return useLayoutManagerViewModelImpl();
 }
