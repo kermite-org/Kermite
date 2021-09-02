@@ -1,70 +1,28 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectPackagesReader, uiState } from '~/ui/commonStore';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
-import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
+import { ILayoutManagerEditTarget } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 import { createLayoutManagerMenuItems } from '~/ui/pages/layouter-page/models/LayoutManagerMenuItems';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
-export type ILayoutManagerEditTargetRadioSelection =
-  | 'CurrentProfile'
-  | 'LayoutFile';
-
 type LayoutManagerTopBarModel = {
   canEditCurrentProfile: boolean;
-  editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
-  setEditTargetRadioSelection(
-    value: ILayoutManagerEditTargetRadioSelection,
-  ): void;
+  editTargetRadioSelection: ILayoutManagerEditTarget;
+  setEditTargetRadioSelection(value: ILayoutManagerEditTarget): void;
   menuItems: IGeneralMenuItem[];
   editSourceText: string;
   canOverwrite: boolean;
   overwriteLayout(): void;
 };
 
-const readers = {
-  get canEditCurrentProfile(): boolean {
-    return (
-      uiState.core.profileEditSource.type === 'InternalProfile' ||
-      uiState.core.profileEditSource.type === 'ProfileNewlyCreated'
-    );
-  },
-  get editTargetRadioSelection(): ILayoutManagerEditTargetRadioSelection {
-    const { editSource } = layoutManagerReader;
-    return editSource.type === 'CurrentProfile'
-      ? 'CurrentProfile'
-      : 'LayoutFile';
-  },
-
-  get editSourceText(): string {
-    const { editSource } = layoutManagerReader;
-    const editTargetProject = projectPackagesReader.getEditTargetProject();
-    return layoutManagerHelpers.getEditSourceDisplayText(
-      editSource,
-      editTargetProject,
-    );
-  },
-};
-
-const actions = {
-  setEditTargetRadioSelection(value: ILayoutManagerEditTargetRadioSelection) {
-    const { editTargetRadioSelection } = readers;
-    if (editTargetRadioSelection !== value) {
-      if (value === 'CurrentProfile') {
-        layoutManagerActions.loadCurrentProfileLayout();
-      } else {
-        layoutManagerActions.createNewLayout();
-      }
-    }
-  },
-};
-
 export function useLayoutManagerTopBarModel(): LayoutManagerTopBarModel {
   const menuItems = createLayoutManagerMenuItems();
-  const { canOverwrite } = layoutManagerReader;
-  const { overwriteLayout } = layoutManagerActions;
-  const { canEditCurrentProfile, editTargetRadioSelection, editSourceText } =
-    readers;
-  const { setEditTargetRadioSelection } = actions;
+  const {
+    canEditCurrentProfile,
+    editTargetRadioSelection,
+    editSourceText,
+    canOverwrite,
+  } = layoutManagerReader;
+  const { setEditTargetRadioSelection, overwriteLayout } = layoutManagerActions;
   return {
     canEditCurrentProfile,
     editTargetRadioSelection,

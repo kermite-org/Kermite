@@ -2,15 +2,13 @@ import { css, FC, jsx } from 'qx';
 import { IGeneralMenuItem, uiTheme } from '~/ui/base';
 import { GeneralButtonMenu, OperationButtonWithIcon } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { ILayoutManagerEditTargetRadioSelection } from '~/ui/pages/layouter-page/models/LayoutManagerTopBarModel';
+import { ILayoutManagerEditTarget } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 
 type Props = {
   menuItems: IGeneralMenuItem[];
   canEditCurrentProfile: boolean;
-  editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
-  setEditTargetRadioSelection(
-    value: ILayoutManagerEditTargetRadioSelection,
-  ): void;
+  editTargetRadioSelection: ILayoutManagerEditTarget;
+  setEditTargetRadioSelection(value: ILayoutManagerEditTarget): void;
   editSourceText: string;
   canOverwrite: boolean;
   overwriteLayout(): void;

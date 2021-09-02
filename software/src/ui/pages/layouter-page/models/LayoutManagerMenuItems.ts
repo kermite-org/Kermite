@@ -1,6 +1,5 @@
 import { IGeneralMenuItem } from '~/ui/base';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
-import { layoutManagerModalModel } from '~/ui/pages/layouter-page/models/LayoutManagerModalModel';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
 export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
@@ -28,13 +27,13 @@ export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
     {
       type: 'menuEntry',
       text: 'load from project...',
-      handler: layoutManagerModalModel.openLoadFromProjectModal,
+      handler: layoutManagerActions.openLoadFromProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
     {
       type: 'menuEntry',
       text: 'save to project...',
-      handler: layoutManagerModalModel.openSaveToProjectModal,
+      handler: layoutManagerActions.openSaveToProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
     { type: 'separator' },

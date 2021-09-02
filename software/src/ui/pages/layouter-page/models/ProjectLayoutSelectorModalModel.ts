@@ -4,14 +4,15 @@ import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
-import { layoutManagerModalModel } from '~/ui/pages/layouter-page/models/LayoutManagerModalModel';
+import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
 export function makeProjectLayoutSelectorModalModel():
   | IProjectAttachmentFileSelectorModalModel
   | undefined {
   const [currentLayoutName, setCurrentLayoutName] = useState('');
 
-  const { modalState, closeModal } = layoutManagerModalModel;
+  const { modalState } = layoutManagerReader;
+  const { closeModal } = layoutManagerActions;
 
   if (modalState === 'None') {
     return undefined;

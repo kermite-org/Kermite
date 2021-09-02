@@ -4,6 +4,8 @@ import { uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 
+export type ILayoutManagerEditTarget = 'CurrentProfile' | 'LayoutFile';
+
 export type ILayoutManagerModalState =
   | 'None'
   | 'LoadFromProject'

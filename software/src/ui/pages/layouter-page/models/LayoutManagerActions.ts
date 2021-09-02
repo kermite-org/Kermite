@@ -14,7 +14,16 @@ import {
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import {
+  ILayoutManagerEditTarget,
+  ILayoutManagerModalState,
+  layoutManagerState,
+} from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
+
+function setModalState(state: ILayoutManagerModalState) {
+  layoutManagerState.modalState = state;
+}
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {
@@ -41,6 +50,19 @@ async function checkShallLoadDataForProfile(): Promise<boolean> {
 }
 
 export const layoutManagerActions = {
+  setEditTargetRadioSelection(value: ILayoutManagerEditTarget) {
+    const { editTargetRadioSelection } = layoutManagerReader;
+    if (editTargetRadioSelection !== value) {
+      if (value === 'CurrentProfile') {
+        layoutManagerActions.loadCurrentProfileLayout();
+      } else {
+        layoutManagerActions.createNewLayout();
+      }
+    }
+  },
+  openLoadFromProjectModal: () => setModalState('LoadFromProject'),
+  openSaveToProjectModal: () => setModalState('SaveToProject'),
+  closeModal: () => setModalState('None'),
   async createNewLayout() {
     if (!(await checkShallLoadData())) {
       return;
