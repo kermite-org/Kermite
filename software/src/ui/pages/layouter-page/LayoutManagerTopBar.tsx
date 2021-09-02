@@ -7,6 +7,7 @@ import {
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
 import { LayoutManagerMenu } from '~/ui/pages/layouter-page/LayoutManagerMenu';
 import { layoutManagerRootModel } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { useLayoutManagerTopBarModel } from '~/ui/pages/layouter-page/models/LayoutManagerTopBarModel';
 import { useLayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 import { makeLayoutSelectorModalViewModel } from '~/ui/pages/layouter-page/models/ProjectLayoutSelectorModalViewModel';
 
@@ -15,35 +16,43 @@ export const LayoutManagerTopBar: FC = () => {
   const vm = useLayoutManagerViewModel();
   const modalVm = makeLayoutSelectorModalViewModel(vm);
 
+  const {
+    editTargetRadioSelection,
+    setEditTargetRadioSelection,
+    canEditCurrentProfile,
+    editSourceText,
+    canOverwrite,
+    overwriteLayout,
+  } = useLayoutManagerTopBarModel();
   return (
     <div css={style}>
       <div className="first-row">
         Edit Target
         <RadioButtonLine
           text="Current Profile"
-          checked={vm.editTargetRadioSelection === 'CurrentProfile'}
-          onClick={() => vm.setEditTargetRadioSelection('CurrentProfile')}
+          checked={editTargetRadioSelection === 'CurrentProfile'}
+          onClick={() => setEditTargetRadioSelection('CurrentProfile')}
           radioGroupName="radio_group_edit_target_selection"
-          disabled={!vm.canEditCurrentProfile}
+          disabled={!canEditCurrentProfile}
         />
         <RadioButtonLine
           text="Layout File"
-          checked={vm.editTargetRadioSelection === 'LayoutFile'}
-          onClick={() => vm.setEditTargetRadioSelection('LayoutFile')}
+          checked={editTargetRadioSelection === 'LayoutFile'}
+          onClick={() => setEditTargetRadioSelection('LayoutFile')}
           radioGroupName="radio_group_edit_target_selection"
         />
       </div>
       <div
         className="second-row"
-        qxIf={vm.editTargetRadioSelection === 'LayoutFile'}
+        qxIf={editTargetRadioSelection === 'LayoutFile'}
       >
         <LayoutManagerMenu baseVm={vm} />
-        <div class="targetDisplayArea">{vm.editSourceText}</div>
+        <div class="targetDisplayArea">{editSourceText}</div>
         <OperationButtonWithIcon
           icon="save"
           label="save"
-          disabled={!vm.canOverwrite}
-          onClick={vm.overwriteLayout}
+          disabled={!canOverwrite}
+          onClick={overwriteLayout}
         />
       </div>
       {modalVm && <ProjectAttachmentFileSelectorModal vm={modalVm} />}

@@ -1,5 +1,4 @@
-import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
-import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import {
@@ -12,7 +11,6 @@ export type ILayoutManagerEditTargetRadioSelection =
   | 'CurrentProfile'
   | 'LayoutFile';
 export interface ILayoutManagerViewModel {
-  editSourceText: string;
   targetProjectLayoutFilePath: string;
   canCreateNewLayout: boolean;
   createNewLayout(): void;
@@ -20,8 +18,6 @@ export interface ILayoutManagerViewModel {
   loadFromFileWithDialog(): void;
   canSaveToFile: boolean;
   saveToFileWithDialog(): void;
-  canOverwrite: boolean;
-  overwriteLayout(): void;
   modalState: ILayoutManagerModalState;
   openLoadFromProjectModal(): void;
   openSaveToProjectModal(): void;
@@ -31,11 +27,6 @@ export interface ILayoutManagerViewModel {
   canOpenProjectIoModal: boolean;
   canCreateProfile: boolean;
   createNewProfileFromCurrentLayout(): void;
-  editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
-  canEditCurrentProfile: boolean;
-  setEditTargetRadioSelection(
-    value: ILayoutManagerEditTargetRadioSelection,
-  ): void;
 }
 
 function getSavingPackageFilePath() {
@@ -46,48 +37,22 @@ function getSavingPackageFilePath() {
   return '';
 }
 
-function getEditSourceDisplayText(
-  editSource: ILayoutEditSource,
-  editProjectInfo?: IProjectPackageInfo,
-) {
-  if (editSource.type === 'LayoutNewlyCreated') {
-    return `[NewlyCreated]`;
-  } else if (editSource.type === 'CurrentProfile') {
-    return `[CurrentProfileLayout]`;
-  } else if (editSource.type === 'File') {
-    return `[File]${editSource.filePath}`;
-  } else if (editSource.type === 'ProjectLayout') {
-    const { layoutName } = editSource;
-    return `[ProjectLayout] ${editProjectInfo?.packageName} ${layoutName}`;
-  }
-  return '';
-}
-
 function useLayoutManagerViewModelImpl(): ILayoutManagerViewModel {
   const { modalState } = layoutManagerState;
   const setModalState = (state: ILayoutManagerModalState) => {
     layoutManagerState.modalState = state;
   };
 
-  const { editSource, isModified, hasLayoutEntities } = layoutManagerReader;
-
-  const editTargetProject = projectPackagesReader.getEditTargetProject();
-
-  const editTargetRadioSelection =
-    editSource.type === 'CurrentProfile' ? 'CurrentProfile' : 'LayoutFile';
+  const { editSource, hasLayoutEntities } = layoutManagerReader;
 
   const canCreateNewLayout =
     editSource.type === 'LayoutNewlyCreated' ? hasLayoutEntities : true;
 
   const canCreateProfile = hasLayoutEntities;
-  const canEditCurrentProfile =
-    uiState.core.profileEditSource.type === 'InternalProfile' ||
-    uiState.core.profileEditSource.type === 'ProfileNewlyCreated';
 
   const canSaveToFile = hasLayoutEntities;
 
   return {
-    editSourceText: getEditSourceDisplayText(editSource, editTargetProject),
     targetProjectLayoutFilePath: getSavingPackageFilePath(),
     canCreateNewLayout,
     createNewLayout: () => layoutManagerActions.createNewLayout(),
@@ -99,9 +64,6 @@ function useLayoutManagerViewModelImpl(): ILayoutManagerViewModel {
       layoutManagerActions.saveToFileWithDialog(
         UiLayouterCore.emitSavingDesign(),
       ),
-    canOverwrite: editSource.type !== 'LayoutNewlyCreated' && isModified,
-    overwriteLayout: () =>
-      layoutManagerActions.save(UiLayouterCore.emitSavingDesign()),
     modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),
     openSaveToProjectModal: () => setModalState('SaveToProject'),
@@ -114,17 +76,6 @@ function useLayoutManagerViewModelImpl(): ILayoutManagerViewModel {
     canCreateProfile,
     createNewProfileFromCurrentLayout: () =>
       layoutManagerActions.createNewProfileFromCurrentLayout(),
-    editTargetRadioSelection,
-    canEditCurrentProfile,
-    setEditTargetRadioSelection: (value) => {
-      if (editTargetRadioSelection !== value) {
-        if (value === 'CurrentProfile') {
-          layoutManagerActions.loadCurrentProfileLayout();
-        } else {
-          layoutManagerActions.createNewLayout();
-        }
-      }
-    },
   };
 }
 
