@@ -1,11 +1,9 @@
 import { IGeneralMenuItem } from '~/ui/base';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
+import { layoutManagerModalModel } from '~/ui/pages/layouter-page/models/LayoutManagerModalModel';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
-import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
-export function createLayoutManagerMenuItems(
-  baseVm: ILayoutManagerViewModel,
-): IGeneralMenuItem[] {
+export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
   return [
     {
       type: 'menuEntry',
@@ -30,13 +28,13 @@ export function createLayoutManagerMenuItems(
     {
       type: 'menuEntry',
       text: 'load from project...',
-      handler: baseVm.openLoadFromProjectModal,
+      handler: layoutManagerModalModel.openLoadFromProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
     {
       type: 'menuEntry',
       text: 'save to project...',
-      handler: baseVm.openSaveToProjectModal,
+      handler: layoutManagerModalModel.openSaveToProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
     { type: 'separator' },

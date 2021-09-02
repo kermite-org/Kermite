@@ -4,17 +4,19 @@ import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
-import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
+import { layoutManagerModalModel } from '~/ui/pages/layouter-page/models/LayoutManagerModalModel';
 
-export function makeLayoutSelectorModalViewModel(
-  baseVm: ILayoutManagerViewModel,
-): IProjectAttachmentFileSelectorModalModel | undefined {
+export function makeLayoutSelectorModalViewModel():
+  | IProjectAttachmentFileSelectorModalModel
+  | undefined {
   const [currentLayoutName, setCurrentLayoutName] = useState('');
 
-  if (baseVm.modalState === 'None') {
+  const { modalState, closeModal } = layoutManagerModalModel;
+
+  if (modalState === 'None') {
     return undefined;
   }
-  const isLoading = baseVm.modalState === 'LoadFromProject';
+  const isLoading = modalState === 'LoadFromProject';
 
   const resourceInfos = uiReaders.allProjectPackageInfos;
 
@@ -54,11 +56,11 @@ export function makeLayoutSelectorModalViewModel(
 
   const createForProject = () => {
     layoutManagerActions.createForProject(currentProjectId, currentLayoutName);
-    baseVm.closeModal();
+    closeModal();
   };
   const loadFromProject = () => {
     layoutManagerActions.loadFromProject(currentProjectId, currentLayoutName);
-    baseVm.closeModal();
+    closeModal();
   };
 
   const saveToProject = () => {
@@ -67,7 +69,7 @@ export function makeLayoutSelectorModalViewModel(
       currentLayoutName,
       UiLayouterCore.emitSavingDesign(),
     );
-    baseVm.closeModal();
+    closeModal();
   };
 
   const buttonHandler = isLoading
@@ -78,7 +80,6 @@ export function makeLayoutSelectorModalViewModel(
 
   const attachmentFileTypeHeader = 'Layout';
 
-  const { closeModal } = baseVm;
   const targetProjectLayoutFilePath =
     layoutManagerHelpers.getSavingPackageFilePath();
 
