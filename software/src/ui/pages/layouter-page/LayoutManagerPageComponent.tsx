@@ -1,13 +1,13 @@
-import { jsx, css, FC } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { UiLayouterCore } from '~/ui/features';
-import { LayoutManagerTopBar } from '~/ui/pages/layouter-page/LayoutManagerTopBar';
+import { LayoutManagerTopBarTemplate } from '~/ui/pages/layouter-page/templates/LayoutManagerTopBarTemplate';
 
 export const LayoutManagerPageComponent: FC = () => {
   return (
     <div css={style}>
       <div className="topRow">
-        <LayoutManagerTopBar />
+        <LayoutManagerTopBarTemplate />
       </div>
       <div className="mainRow">
         <UiLayouterCore.Component />

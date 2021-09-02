@@ -1,28 +1,30 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
-import {
-  GeneralButtonMenu,
-  OperationButtonWithIcon,
-  ProjectAttachmentFileSelectorModal,
-} from '~/ui/components';
+import { IGeneralMenuItem, uiTheme } from '~/ui/base';
+import { GeneralButtonMenu, OperationButtonWithIcon } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { layoutManagerRootModel } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
-import { layoutManagerMenuModel } from '~/ui/pages/layouter-page/models/LayoutManagerMenuModel';
-import { useLayoutManagerTopBarModel } from '~/ui/pages/layouter-page/models/LayoutManagerTopBarModel';
-import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/layouter-page/models/ProjectLayoutSelectorModalModel';
+import { ILayoutManagerEditTargetRadioSelection } from '~/ui/pages/layouter-page/models/LayoutManagerTopBarModel';
 
-export const LayoutManagerTopBar: FC = () => {
-  layoutManagerRootModel.updateBeforeRender();
-  const modalModel = makeProjectLayoutSelectorModalModel();
-  const { menuItems } = layoutManagerMenuModel;
-  const {
-    editTargetRadioSelection,
-    setEditTargetRadioSelection,
-    canEditCurrentProfile,
-    editSourceText,
-    canOverwrite,
-    overwriteLayout,
-  } = useLayoutManagerTopBarModel();
+type Props = {
+  menuItems: IGeneralMenuItem[];
+  canEditCurrentProfile: boolean;
+  editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
+  setEditTargetRadioSelection(
+    value: ILayoutManagerEditTargetRadioSelection,
+  ): void;
+  editSourceText: string;
+  canOverwrite: boolean;
+  overwriteLayout(): void;
+};
+
+export const LayoutManagerTopBar: FC<Props> = ({
+  menuItems,
+  canEditCurrentProfile,
+  editTargetRadioSelection,
+  setEditTargetRadioSelection,
+  editSourceText,
+  canOverwrite,
+  overwriteLayout,
+}) => {
   return (
     <div css={style}>
       <div className="first-row">
@@ -54,7 +56,6 @@ export const LayoutManagerTopBar: FC = () => {
           onClick={overwriteLayout}
         />
       </div>
-      {modalModel && <ProjectAttachmentFileSelectorModal vm={modalModel} />}
     </div>
   );
 };
