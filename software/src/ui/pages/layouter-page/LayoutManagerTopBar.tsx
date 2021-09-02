@@ -1,19 +1,20 @@
-import { jsx, css, FC } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
+  GeneralButtonMenu,
   OperationButtonWithIcon,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { LayoutManagerMenu } from '~/ui/pages/layouter-page/LayoutManagerMenu';
 import { layoutManagerRootModel } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { layoutManagerMenuModel } from '~/ui/pages/layouter-page/models/LayoutManagerMenuModel';
 import { useLayoutManagerTopBarModel } from '~/ui/pages/layouter-page/models/LayoutManagerTopBarModel';
 import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/layouter-page/models/ProjectLayoutSelectorModalModel';
 
 export const LayoutManagerTopBar: FC = () => {
   layoutManagerRootModel.updateBeforeRender();
   const modalModel = makeProjectLayoutSelectorModalModel();
-
+  const { menuItems } = layoutManagerMenuModel;
   const {
     editTargetRadioSelection,
     setEditTargetRadioSelection,
@@ -44,7 +45,7 @@ export const LayoutManagerTopBar: FC = () => {
         className="second-row"
         qxIf={editTargetRadioSelection === 'LayoutFile'}
       >
-        <LayoutManagerMenu />
+        <GeneralButtonMenu menuItems={menuItems} />
         <div class="targetDisplayArea">{editSourceText}</div>
         <OperationButtonWithIcon
           icon="save"

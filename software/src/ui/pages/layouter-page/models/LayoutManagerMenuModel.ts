@@ -3,7 +3,7 @@ import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutMana
 import { layoutManagerModalModel } from '~/ui/pages/layouter-page/models/LayoutManagerModalModel';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
-export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
+function createMenuItems(): IGeneralMenuItem[] {
   return [
     {
       type: 'menuEntry',
@@ -52,3 +52,9 @@ export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
     },
   ];
 }
+
+export const layoutManagerMenuModel = {
+  get menuItems(): IGeneralMenuItem[] {
+    return createMenuItems();
+  },
+};
