@@ -2,7 +2,10 @@ import { projectPackagesReader, uiState } from '~/ui/commonStore';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
-import { ILayoutManagerEditTargetRadioSelection } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
+
+export type ILayoutManagerEditTargetRadioSelection =
+  | 'CurrentProfile'
+  | 'LayoutFile';
 
 type LayoutManagerTopBarModel = {
   editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;

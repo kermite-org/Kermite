@@ -3,9 +3,6 @@ import {
   layoutManagerState,
 } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 
-export type ILayoutManagerEditTargetRadioSelection =
-  | 'CurrentProfile'
-  | 'LayoutFile';
 export interface ILayoutManagerViewModel {
   modalState: ILayoutManagerModalState;
   openLoadFromProjectModal(): void;
