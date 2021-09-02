@@ -8,7 +8,7 @@ const setModalState = (state: ILayoutManagerModalState) => {
 };
 
 export const layoutManagerModalModel = {
-  get modalState() {
+  get modalState(): ILayoutManagerModalState {
     return layoutManagerState.modalState;
   },
   openLoadFromProjectModal: () => setModalState('LoadFromProject'),

@@ -5,7 +5,7 @@ export const layoutManagerHelpers = {
   getEditSourceDisplayText(
     editSource: ILayoutEditSource,
     editProjectInfo?: IProjectPackageInfo,
-  ) {
+  ): string {
     if (editSource.type === 'LayoutNewlyCreated') {
       return `[NewlyCreated]`;
     } else if (editSource.type === 'CurrentProfile') {
@@ -18,7 +18,7 @@ export const layoutManagerHelpers = {
     }
     return '';
   },
-  getSavingPackageFilePath() {
+  getSavingPackageFilePath(): string {
     const projectInfo = projectPackagesReader.getEditTargetProject();
     if (projectInfo) {
       return `data/projects/${projectInfo.packageName}.kmpkg.json`;

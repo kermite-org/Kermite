@@ -22,20 +22,20 @@ type LayoutManagerTopBarModel = {
 };
 
 const readers = {
-  get canEditCurrentProfile() {
+  get canEditCurrentProfile(): boolean {
     return (
       uiState.core.profileEditSource.type === 'InternalProfile' ||
       uiState.core.profileEditSource.type === 'ProfileNewlyCreated'
     );
   },
-  get editTargetRadioSelection() {
+  get editTargetRadioSelection(): ILayoutManagerEditTargetRadioSelection {
     const { editSource } = layoutManagerReader;
     return editSource.type === 'CurrentProfile'
       ? 'CurrentProfile'
       : 'LayoutFile';
   },
 
-  get editSourceText() {
+  get editSourceText(): string {
     const { editSource } = layoutManagerReader;
     const editTargetProject = projectPackagesReader.getEditTargetProject();
     return layoutManagerHelpers.getEditSourceDisplayText(

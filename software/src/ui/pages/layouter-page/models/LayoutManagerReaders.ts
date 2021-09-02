@@ -6,30 +6,30 @@ export const layoutManagerReader = {
   get editSource(): ILayoutEditSource {
     return uiState.core.layoutEditSource;
   },
-  get isModified() {
+  get isModified(): boolean {
     return UiLayouterCore.getIsModified();
   },
-  get hasLayoutEntities() {
+  get hasLayoutEntities(): boolean {
     return UiLayouterCore.hasEditLayoutEntities();
   },
-  get canCreateNewLayout() {
+  get canCreateNewLayout(): boolean {
     const { editSource, hasLayoutEntities } = layoutManagerReader;
     return editSource.type === 'LayoutNewlyCreated' ? hasLayoutEntities : true;
   },
-  get canCreateProfileFromCurrentLayout() {
+  get canCreateProfileFromCurrentLayout(): boolean {
     return layoutManagerReader.hasLayoutEntities;
   },
-  get canSaveToFile() {
+  get canSaveToFile(): boolean {
     return layoutManagerReader.hasLayoutEntities;
   },
-  get canOpenProjectIoModal() {
+  get canOpenProjectIoModal(): boolean {
     return uiReaders.isLocalProjectSelectedForEdit;
   },
-  get canShowEditLayoutFileInFiler() {
+  get canShowEditLayoutFileInFiler(): boolean {
     const { editSource } = layoutManagerReader;
     return editSource.type === 'File' || editSource.type === 'ProjectLayout';
   },
-  get canOverwrite() {
+  get canOverwrite(): boolean {
     const { editSource, isModified } = layoutManagerReader;
     return editSource.type !== 'LayoutNewlyCreated' && isModified;
   },
