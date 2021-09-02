@@ -1,8 +1,7 @@
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { projectPackagesReader, uiState } from '~/ui/commonStore';
-import { UiLayouterCore } from '~/ui/features';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
-import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 import { ILayoutManagerEditTargetRadioSelection } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
 type LayoutManagerTopBarModel = {
@@ -51,10 +50,6 @@ const readers = {
     const editTargetProject = projectPackagesReader.getEditTargetProject();
     return getEditSourceDisplayText(editSource, editTargetProject);
   },
-  get canOverwrite() {
-    const { editSource, isModified } = layoutManagerReader;
-    return editSource.type !== 'LayoutNewlyCreated' && isModified;
-  },
 };
 
 const actions = {
@@ -68,11 +63,10 @@ const actions = {
       }
     }
   },
-  overwriteLayout() {
-    layoutManagerActions.save(UiLayouterCore.emitSavingDesign());
-  },
 };
 
 export function useLayoutManagerTopBarModel(): LayoutManagerTopBarModel {
-  return { ...readers, ...actions };
+  const { canOverwrite } = layoutManagerReader;
+  const { overwriteLayout } = layoutManagerActions;
+  return { ...readers, ...actions, canOverwrite, overwriteLayout };
 }

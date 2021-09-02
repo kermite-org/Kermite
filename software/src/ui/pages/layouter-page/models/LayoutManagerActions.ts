@@ -14,7 +14,7 @@ import {
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
-import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {
@@ -167,6 +167,9 @@ export const layoutManagerActions = {
     });
     uiActions.navigateTo('/editor');
     dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
+  },
+  overwriteLayout() {
+    layoutManagerActions.save(UiLayouterCore.emitSavingDesign());
   },
   showEditLayoutFileInFiler() {
     dispatchCoreAction({ layout_showEditLayoutFileInFiler: 1 });

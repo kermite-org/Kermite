@@ -13,18 +13,6 @@ export const layoutManagerState = new (class {
   modalState: ILayoutManagerModalState = 'None';
 })();
 
-export const layoutManagerReader = {
-  get editSource(): ILayoutEditSource {
-    return uiState.core.layoutEditSource;
-  },
-  get isModified() {
-    return UiLayouterCore.getIsModified();
-  },
-  get hasLayoutEntities() {
-    return UiLayouterCore.hasEditLayoutEntities();
-  },
-};
-
 export const layoutManagerRootModel = {
   updateBeforeRender() {
     const { layoutEditSource, loadedLayoutData } = uiState.core;
