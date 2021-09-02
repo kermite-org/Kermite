@@ -3,7 +3,7 @@ import { uiTheme } from '~/ui/base';
 import { UiLayouterCore } from '~/ui/features';
 import { LayoutManagerTopBar } from '~/ui/pages/layouter-page/LayoutManagerTopBar';
 
-export const UiLayouterPageComponent: FC = () => {
+export const LayoutManagerPageComponent: FC = () => {
   return (
     <div css={style}>
       <div className="topRow">

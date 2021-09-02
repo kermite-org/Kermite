@@ -6,7 +6,7 @@ import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutMana
 import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
 import { layoutManagerModalModel } from '~/ui/pages/layouter-page/models/LayoutManagerModalModel';
 
-export function makeLayoutSelectorModalViewModel():
+export function makeProjectLayoutSelectorModalModel():
   | IProjectAttachmentFileSelectorModalModel
   | undefined {
   const [currentLayoutName, setCurrentLayoutName] = useState('');

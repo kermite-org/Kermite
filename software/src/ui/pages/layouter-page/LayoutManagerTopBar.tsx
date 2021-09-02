@@ -8,11 +8,11 @@ import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
 import { LayoutManagerMenu } from '~/ui/pages/layouter-page/LayoutManagerMenu';
 import { layoutManagerRootModel } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 import { useLayoutManagerTopBarModel } from '~/ui/pages/layouter-page/models/LayoutManagerTopBarModel';
-import { makeLayoutSelectorModalViewModel } from '~/ui/pages/layouter-page/models/ProjectLayoutSelectorModalViewModel';
+import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/layouter-page/models/ProjectLayoutSelectorModalModel';
 
 export const LayoutManagerTopBar: FC = () => {
   layoutManagerRootModel.updateBeforeRender();
-  const modalVm = makeLayoutSelectorModalViewModel();
+  const modalModel = makeProjectLayoutSelectorModalModel();
 
   const {
     editTargetRadioSelection,
@@ -53,7 +53,7 @@ export const LayoutManagerTopBar: FC = () => {
           onClick={overwriteLayout}
         />
       </div>
-      {modalVm && <ProjectAttachmentFileSelectorModal vm={modalVm} />}
+      {modalModel && <ProjectAttachmentFileSelectorModal vm={modalModel} />}
     </div>
   );
 };
