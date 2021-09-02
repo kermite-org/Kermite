@@ -3,6 +3,7 @@ import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
+import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
 import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
 export function makeLayoutSelectorModalViewModel(
@@ -77,7 +78,9 @@ export function makeLayoutSelectorModalViewModel(
 
   const attachmentFileTypeHeader = 'Layout';
 
-  const { closeModal, targetProjectLayoutFilePath } = baseVm;
+  const { closeModal } = baseVm;
+  const targetProjectLayoutFilePath =
+    layoutManagerHelpers.getSavingPackageFilePath();
 
   return {
     titleText,

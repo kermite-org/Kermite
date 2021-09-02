@@ -1,4 +1,3 @@
-import { projectPackagesReader } from '~/ui/commonStore';
 import {
   ILayoutManagerModalState,
   layoutManagerState,
@@ -8,19 +7,10 @@ export type ILayoutManagerEditTargetRadioSelection =
   | 'CurrentProfile'
   | 'LayoutFile';
 export interface ILayoutManagerViewModel {
-  targetProjectLayoutFilePath: string;
   modalState: ILayoutManagerModalState;
   openLoadFromProjectModal(): void;
   openSaveToProjectModal(): void;
   closeModal(): void;
-}
-
-function getSavingPackageFilePath() {
-  const projectInfo = projectPackagesReader.getEditTargetProject();
-  if (projectInfo) {
-    return `data/projects/${projectInfo.packageName}.kmpkg.json`;
-  }
-  return '';
 }
 
 function useLayoutManagerViewModelImpl(): ILayoutManagerViewModel {
@@ -30,7 +20,6 @@ function useLayoutManagerViewModelImpl(): ILayoutManagerViewModel {
   };
 
   return {
-    targetProjectLayoutFilePath: getSavingPackageFilePath(),
     modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),
     openSaveToProjectModal: () => setModalState('SaveToProject'),

@@ -1,6 +1,6 @@
-import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { projectPackagesReader, uiState } from '~/ui/commonStore';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
+import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 import { ILayoutManagerEditTargetRadioSelection } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
@@ -14,23 +14,6 @@ type LayoutManagerTopBarModel = {
   ): void;
   overwriteLayout(): void;
 };
-
-function getEditSourceDisplayText(
-  editSource: ILayoutEditSource,
-  editProjectInfo?: IProjectPackageInfo,
-) {
-  if (editSource.type === 'LayoutNewlyCreated') {
-    return `[NewlyCreated]`;
-  } else if (editSource.type === 'CurrentProfile') {
-    return `[CurrentProfileLayout]`;
-  } else if (editSource.type === 'File') {
-    return `[File]${editSource.filePath}`;
-  } else if (editSource.type === 'ProjectLayout') {
-    const { layoutName } = editSource;
-    return `[ProjectLayout] ${editProjectInfo?.packageName} ${layoutName}`;
-  }
-  return '';
-}
 
 const readers = {
   get editTargetRadioSelection() {
@@ -48,7 +31,10 @@ const readers = {
   get editSourceText() {
     const { editSource } = layoutManagerReader;
     const editTargetProject = projectPackagesReader.getEditTargetProject();
-    return getEditSourceDisplayText(editSource, editTargetProject);
+    return layoutManagerHelpers.getEditSourceDisplayText(
+      editSource,
+      editTargetProject,
+    );
   },
 };
 
