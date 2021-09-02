@@ -1,4 +1,5 @@
 import { IGeneralMenuItem } from '~/ui/base';
+import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import { ILayoutManagerViewModel } from '~/ui/pages/layouter-page/models/LayoutManagerViewModel';
 
 export function createLayoutManagerMenuItems(
@@ -8,7 +9,7 @@ export function createLayoutManagerMenuItems(
     {
       type: 'menuEntry',
       text: 'new design',
-      handler: baseVm.createNewLayout,
+      handler: layoutManagerActions.createNewLayout,
       disabled: !baseVm.canCreateNewLayout,
     },
     // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
@@ -16,12 +17,12 @@ export function createLayoutManagerMenuItems(
     {
       type: 'menuEntry',
       text: 'load from file...',
-      handler: baseVm.loadFromFileWithDialog,
+      handler: layoutManagerActions.loadFromFileWithDialog,
     },
     {
       type: 'menuEntry',
       text: 'save to file...',
-      handler: baseVm.saveToFileWithDialog,
+      handler: layoutManagerActions.saveToFileWithDialog,
       disabled: !baseVm.canSaveToFile,
     },
     { type: 'separator' },
@@ -41,13 +42,13 @@ export function createLayoutManagerMenuItems(
     {
       type: 'menuEntry',
       text: 'create profile',
-      handler: baseVm.createNewProfileFromCurrentLayout,
+      handler: layoutManagerActions.createNewProfileFromCurrentLayout,
       disabled: !baseVm.canCreateProfile,
     },
     {
       type: 'menuEntry',
       text: 'show edit file in folder',
-      handler: baseVm.showEditLayoutFileInFiler,
+      handler: layoutManagerActions.showEditLayoutFileInFiler,
       disabled: !baseVm.canShowEditLayoutFileInFiler,
     },
   ];

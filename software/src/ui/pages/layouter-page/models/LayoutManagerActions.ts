@@ -109,7 +109,8 @@ export const layoutManagerActions = {
     }
   },
 
-  async saveToFileWithDialog(design: IPersistKeyboardDesign) {
+  async saveToFileWithDialog() {
+    const design = UiLayouterCore.emitSavingDesign();
     const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
     if (filePath) {
       const modFilePath = forceChangeFilePathExtension(
