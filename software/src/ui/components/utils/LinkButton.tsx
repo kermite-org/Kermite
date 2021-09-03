@@ -13,11 +13,11 @@ export const LinkButton: FC<Props> = ({
   to,
   children,
 }) => (
-  <div
+  <button
     css={extraCss}
     className={className}
     onClick={() => uiActions.navigateTo(to as any)}
   >
     {children}
-  </div>
+  </button>
 );
