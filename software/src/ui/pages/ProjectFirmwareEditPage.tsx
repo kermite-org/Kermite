@@ -1,14 +1,13 @@
 import { css, FC, jsx, useMemo } from 'qx';
-import {
-  fallbackStandardKeyboardSpec,
-  IKermiteStandardKeyboardSpec,
-  IStandardFirmwareEntry,
-} from '~/shared';
+import { fallbackStandardKeyboardSpec, IStandardFirmwareEntry } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectFirmwareEdit } from '~/ui/commonModels';
 import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
-import { StandardFirmwareEditor } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
+import {
+  StandardFirmwareEditor,
+  StandardFirmwareEditor_OutputPropsSupplier,
+} from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
 
 type Props = {
   spec: IPageSpec_ProjectFirmwareEdit;
@@ -37,7 +36,11 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
     return entry?.standardFirmwareConfig || fallbackStandardKeyboardSpec;
   }, []);
 
-  const saveHandler = (newConfig: IKermiteStandardKeyboardSpec) => {
+  const { canSave, emitSavingEditValues } =
+    StandardFirmwareEditor_OutputPropsSupplier;
+
+  const saveHandler = () => {
+    const newConfig = emitSavingEditValues();
     projectPackagesWriter.saveLocalProjectStandardFirmware(
       firmwareName,
       newConfig,
@@ -48,12 +51,14 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
 
   return (
     <div css={style}>
-      <RouteHeaderBar title={pageTitle} backPagePath="/projectEdit" />
+      <RouteHeaderBar
+        title={pageTitle}
+        backPagePath="/projectEdit"
+        canSave={canSave}
+        saveHandler={saveHandler}
+      />
       <div className="content">
-        <StandardFirmwareEditor
-          firmwareConfig={sourceFirmwareConfig}
-          saveHandler={saveHandler}
-        />
+        <StandardFirmwareEditor firmwareConfig={sourceFirmwareConfig} />
       </div>
     </div>
   );

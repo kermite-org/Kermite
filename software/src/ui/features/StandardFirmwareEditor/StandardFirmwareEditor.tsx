@@ -8,7 +8,7 @@ import { firmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/F
 
 export type Props = {
   firmwareConfig: IFirmwareEditValues;
-  saveHandler(firmwareConfig: IFirmwareEditValues): void;
+  saveHandler?(firmwareConfig: IFirmwareEditValues): void;
 };
 
 function arrayToText(arr: string[] | undefined): string {
@@ -35,6 +35,16 @@ function valueChangeHandler<K extends keyof IFirmwareEditValues>(
   };
 }
 
+export const StandardFirmwareEditor_OutputPropsSupplier = {
+  get canSave() {
+    return firmwareEditModel.readers.canSave;
+  },
+  emitSavingEditValues() {
+    const { editValues } = firmwareEditModel.readers;
+    return firmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues);
+  },
+};
+
 export const StandardFirmwareEditor: FC<Props> = ({
   firmwareConfig,
   saveHandler,
@@ -54,7 +64,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
   } = firmwareEditModel;
 
   const onSaveButton = () => {
-    saveHandler(
+    saveHandler?.(
       firmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
     );
   };
@@ -132,7 +142,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
       </table>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
       <div>
-        <button disabled={!canSave} onClick={onSaveButton}>
+        <button disabled={!canSave} onClick={onSaveButton} qxIf={!!saveHandler}>
           save
         </button>
       </div>
