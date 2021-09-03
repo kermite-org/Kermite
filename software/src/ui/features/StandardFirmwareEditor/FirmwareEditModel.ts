@@ -81,6 +81,8 @@ function fixEditValues(diff: Partial<IFirmwareEditValues>) {
   if (diff.useBoardLedsRpiPico) {
     editValues.useBoardLedsProMicroRp = false;
   }
+  // always true for current implementation
+  editValues.useMatrixKeyScanner = true;
 }
 
 const actions = {

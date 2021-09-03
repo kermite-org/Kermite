@@ -2,6 +2,7 @@ import produce from 'immer';
 import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
+  IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesign,
   IPersistProfileData,
   IProjectPackageInfo,
@@ -9,6 +10,7 @@ import {
 } from '~/shared';
 import { uiReaders } from '~/ui/commonStore/UiReaders';
 import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
+import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -48,6 +50,17 @@ export const projectPackagesReader = {
   },
 };
 
+function patchLocalEditProject(
+  produceFn: (draft: IProjectPackageInfo) => void,
+) {
+  const projectInfo = projectPackagesReader.getEditTargetProject();
+  if (!projectInfo) {
+    return;
+  }
+  const newProjectInfo = produce(projectInfo, produceFn);
+  projectPackagesWriter.saveLocalProject(newProjectInfo);
+}
+
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
@@ -55,11 +68,7 @@ export const projectPackagesWriter = {
     });
   },
   saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
-    const projectInfo = projectPackagesReader.getEditTargetProject();
-    if (!projectInfo) {
-      return;
-    }
-    const newProjectInfo = produce(projectInfo, (draft) => {
+    patchLocalEditProject((draft) => {
       const layout = draft.layouts.find((la) => la.layoutName === layoutName);
       if (layout) {
         layout.data = design;
@@ -67,22 +76,40 @@ export const projectPackagesWriter = {
         draft.layouts.push({ layoutName, data: design });
       }
     });
-    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
   saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
-    const projectInfo = projectPackagesReader.getEditTargetProject();
-    if (!projectInfo) {
-      return;
-    }
-    const newProjectInfo = produce(projectInfo, (draft) => {
+    patchLocalEditProject((draft) => {
       const profile = draft.presets.find((la) => la.presetName === presetName);
       if (profile) {
         profile.data = preset;
       } else {
-        draft.presets.push({ presetName: presetName, data: preset });
+        draft.presets.push({ presetName, data: preset });
       }
     });
-    projectPackagesWriter.saveLocalProject(newProjectInfo);
+  },
+  saveLocalProjectStandardFirmware(
+    variationName: string,
+    config: IKermiteStandardKeyboardSpec,
+  ) {
+    patchLocalEditProject((draft) => {
+      const firmware = draft.firmwares.find(
+        (it) => it.variationName === variationName,
+      );
+      if (firmware) {
+        if (firmware.type === 'standard') {
+          firmware.standardFirmwareConfig = config;
+        }
+      } else {
+        const existingIds = draft.firmwares.map((it) => it.variationId);
+        const newVariationId = getNextFirmwareId(existingIds);
+        draft.firmwares.push({
+          type: 'standard',
+          variationName,
+          variationId: newVariationId,
+          standardFirmwareConfig: config,
+        });
+      }
+    });
   },
 };
 

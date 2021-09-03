@@ -2,49 +2,60 @@ import { css, FC, jsx, useMemo } from 'qx';
 import {
   fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
+  IStandardFirmwareEntry,
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectFirmwareEdit } from '~/ui/commonModels';
-import { uiActions, uiReaders } from '~/ui/commonStore';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { StandardFirmwareEditor } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
 
 type Props = {
   spec: IPageSpec_ProjectFirmwareEdit;
 };
 
-export const ProjectFirmwareEditPage: FC<Props> = ({
-  spec: { firmwareName },
-}) => {
-  const firmwareConfig = useMemo(() => {
+const readers = {
+  getEditTargetStandardFirmwareEntry(
+    firmwareName: string,
+  ): IStandardFirmwareEntry | undefined {
     const projectInfo = uiReaders.editTargetProject;
     const entry = projectInfo?.firmwares.find(
       (it) => it.variationName === firmwareName,
     );
     if (entry?.type === 'standard') {
-      return entry.standardFirmwareConfig;
+      return entry;
     }
-    return fallbackStandardKeyboardSpec;
+    return undefined;
+  },
+};
+
+export const ProjectFirmwareEditPage: FC<Props> = ({
+  spec: { firmwareName },
+}) => {
+  const sourceFirmwareConfig = useMemo(() => {
+    const entry = readers.getEditTargetStandardFirmwareEntry(firmwareName);
+    return entry?.standardFirmwareConfig || fallbackStandardKeyboardSpec;
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const saveHandler = (newConfig: IKermiteStandardKeyboardSpec) => {
-    // projectPackagesWriter.saveLocalProjectStandardFirmware(
-    //   firmwareName,
-    //   newConfig,
-    // );
-    console.log('save firmware here');
+    projectPackagesWriter.saveLocalProjectStandardFirmware(
+      firmwareName,
+      newConfig,
+    );
   };
 
   return (
     <div css={style}>
       <div>
-        <button onClick={() => uiActions.navigateTo('/projectEdit')}>
+        <button
+          onClick={() => uiActions.navigateTo('/projectEdit')}
+          className="back-button"
+        >
           &lt;-back
         </button>
         project firmware edit page {firmwareName}
       </div>
       <StandardFirmwareEditor
-        firmwareConfig={firmwareConfig}
+        firmwareConfig={sourceFirmwareConfig}
         saveHandler={saveHandler}
       />
     </div>
@@ -56,4 +67,8 @@ const style = css`
   color: ${uiTheme.colors.clMainText};
   height: 100%;
   padding: 15px;
+
+  .back-button {
+    margin-right: 10px;
+  }
 `;
