@@ -52,4 +52,10 @@ export const uiReaders = {
     const { developerMode, globalProjectSpec } = uiState.core.globalSettings;
     return developerMode && globalProjectSpec?.origin === 'local';
   },
+  get editTargetProject(): IProjectPackageInfo | undefined {
+    const { globalProjectKey, allProjectPackageInfos } = uiReaders;
+    return allProjectPackageInfos.find(
+      (info) => info.projectKey === globalProjectKey && info.origin === 'local',
+    );
+  },
 };

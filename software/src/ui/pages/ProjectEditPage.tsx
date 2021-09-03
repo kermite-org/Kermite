@@ -5,7 +5,6 @@ import {
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
-import { modalConfirm } from '~/ui/components';
 import { reflectValue } from '~/ui/helpers';
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
@@ -65,7 +64,18 @@ export const ProjectEditPage: FC = () => {
     } else if (itemType === 'layout') {
       uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
     } else if (itemType === 'firmware') {
-      modalConfirm({ message: 'unimplemented yet', caption: 'note' });
+      const firmwareInfo = projectInfo.firmwares.find(
+        (it) => it.variationName === itemName,
+      );
+      console.log({ firmwareInfo });
+      if (firmwareInfo?.type === 'standard') {
+        uiActions.navigateTo({
+          type: 'projectFirmwareEdit',
+          firmwareName: itemName,
+        });
+      } else {
+        console.log('not impleted yet');
+      }
     }
   };
 

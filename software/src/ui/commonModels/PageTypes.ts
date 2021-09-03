@@ -22,6 +22,12 @@ export type IPageSpec_ProjectPresetEdit = {
   presetName: string;
 };
 
+export type IPageSpec_ProjectFirmwareEdit = {
+  type: 'projectFirmwareEdit';
+  firmwareName: string;
+};
+
 export type IPageSpec =
   | IPageSpec_ProjectLayoutEdit
-  | IPageSpec_ProjectPresetEdit;
+  | IPageSpec_ProjectPresetEdit
+  | IPageSpec_ProjectFirmwareEdit;
