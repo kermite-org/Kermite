@@ -4,6 +4,7 @@ import {
   IFirmwareEditValues,
   firmwareEditModel,
 } from '~/ui/features/StandardFirmwareEditor/FirmwareEditModel';
+import { firmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/FirmwareEditModel.helpers';
 
 export type Props = {
   firmwareConfig: IFirmwareEditValues;
@@ -47,9 +48,16 @@ export const StandardFirmwareEditor: FC<Props> = ({
       availablePinsText,
       rowPinsValid,
       columnPinsValid,
+      canSave,
     },
     actions: { loadFirmwareConfig },
   } = firmwareEditModel;
+
+  const onSaveButton = () => {
+    saveHandler(
+      firmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
+    );
+  };
 
   useEffect(() => loadFirmwareConfig(firmwareConfig), []);
   return (
@@ -123,6 +131,11 @@ export const StandardFirmwareEditor: FC<Props> = ({
         </tbody>
       </table>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
+      <div>
+        <button disabled={!canSave} onClick={onSaveButton}>
+          save
+        </button>
+      </div>
     </div>
   );
 };
@@ -136,5 +149,10 @@ const style = css`
     td {
       padding: 2px 5px;
     }
+  }
+
+  button {
+    margin-top: 10px;
+    padding: 5px 10px;
   }
 `;
