@@ -40,9 +40,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
         canSave={isModified}
         saveHandler={saveHandler}
       />
-      <div className="content">
-        <LayouterGeneralComponent layout={layout} />
-      </div>
+      <LayouterGeneralComponent layout={layout} />
     </div>
   );
 };
@@ -53,7 +51,4 @@ const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
-  > .content {
-    flex-grow: 1;
-  }
 `;

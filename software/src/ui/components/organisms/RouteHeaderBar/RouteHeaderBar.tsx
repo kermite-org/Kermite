@@ -33,6 +33,7 @@ export const RouteHeaderBar: FC<Props> = ({
 );
 
 const style = css`
+  flex-shrink: 0;
   background: #cde;
 
   width: 100%;
