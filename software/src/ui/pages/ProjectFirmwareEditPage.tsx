@@ -1,5 +1,8 @@
 import { css, FC, jsx, useMemo } from 'qx';
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import {
+  fallbackStandardKeyboardSpec,
+  IKermiteStandardKeyboardSpec,
+} from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectFirmwareEdit } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/commonStore';
@@ -20,7 +23,7 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
     if (entry?.type === 'standard') {
       return entry.standardFirmwareConfig;
     }
-    return undefined;
+    return fallbackStandardKeyboardSpec;
   }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

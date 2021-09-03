@@ -3,7 +3,7 @@ import { uiTheme } from '~/ui/base';
 
 type Props = {
   className?: string;
-  checked: boolean;
+  checked?: boolean;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
 };
