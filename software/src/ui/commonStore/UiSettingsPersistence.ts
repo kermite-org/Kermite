@@ -16,7 +16,7 @@ export const uiSettingsPersistence = {
     }
 
     const pageSpecText = sessionStorage.getItem('pageSpec');
-    if (pageSpecText) {
+    if (pageSpecText && pageSpecText !== 'undefined') {
       const pageSpec = JSON.parse(pageSpecText);
       commitUiState({ pageSpec });
     }
