@@ -32,7 +32,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
         <button onClick={() => uiActions.navigateTo('/projectEdit')}>
           &lt;-back
         </button>
-        project preset edit page {presetName}
+        edit project preset: {presetName}
       </div>
       <AssignerGeneralComponent
         className="editor-frame"

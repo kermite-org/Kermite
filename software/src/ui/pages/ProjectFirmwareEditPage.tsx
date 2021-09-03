@@ -52,7 +52,7 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
         >
           &lt;-back
         </button>
-        project firmware edit page {firmwareName}
+        edit project firmware: {firmwareName}
       </div>
       <StandardFirmwareEditor
         firmwareConfig={sourceFirmwareConfig}

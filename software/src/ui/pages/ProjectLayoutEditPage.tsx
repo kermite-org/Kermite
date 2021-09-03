@@ -35,7 +35,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
         <button onClick={() => uiActions.navigateTo('/projectEdit')}>
           &lt;-back
         </button>
-        project layout edit page {layoutName}
+        edit project layout: {layoutName}
       </div>
 
       <LayouterGeneralComponent layout={layout} saveLayout={saveLayout} />
