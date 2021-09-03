@@ -141,8 +141,6 @@ export const StandardFirmwareEditor: FC<Props> = ({
 };
 
 const style = css`
-  margin-top: 20px;
-
   table {
     margin-top: 10px;
 

@@ -6,7 +6,8 @@ import {
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectFirmwareEdit } from '~/ui/commonModels';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
+import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
+import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import { StandardFirmwareEditor } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
 
 type Props = {
@@ -43,21 +44,17 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
     );
   };
 
+  const pageTitle = `edit project firmware: ${firmwareName}`;
+
   return (
     <div css={style}>
-      <div>
-        <button
-          onClick={() => uiActions.navigateTo('/projectEdit')}
-          className="back-button"
-        >
-          &lt;-back
-        </button>
-        edit project firmware: {firmwareName}
+      <RouteHeaderBar title={pageTitle} backPagePath="/projectEdit" />
+      <div className="content">
+        <StandardFirmwareEditor
+          firmwareConfig={sourceFirmwareConfig}
+          saveHandler={saveHandler}
+        />
       </div>
-      <StandardFirmwareEditor
-        firmwareConfig={sourceFirmwareConfig}
-        saveHandler={saveHandler}
-      />
     </div>
   );
 };
@@ -66,9 +63,7 @@ const style = css`
   background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   height: 100%;
-  padding: 15px;
-
-  .back-button {
-    margin-right: 10px;
+  > .content {
+    padding: 15px;
   }
 `;

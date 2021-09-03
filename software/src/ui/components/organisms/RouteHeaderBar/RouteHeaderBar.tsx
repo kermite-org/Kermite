@@ -33,15 +33,15 @@ export const RouteHeaderBar: FC<Props> = ({
 );
 
 const style = css`
-  background: #fa4;
+  background: #abc;
 
   width: 100%;
-  height: 24px;
+  height: 28px;
   display: flex;
   align-items: center;
 
   > .back-button {
-    margin-left: 2px;
+    margin-left: 4px;
     border-radius: 3px;
     background: #fff;
     padding: 0 2px;
@@ -64,7 +64,7 @@ const style = css`
   }
 
   > .title {
-    margin-left: 5px;
+    margin-left: 8px;
     color: #008;
   }
 
