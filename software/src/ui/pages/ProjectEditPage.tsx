@@ -67,7 +67,6 @@ export const ProjectEditPage: FC = () => {
       const firmwareInfo = projectInfo.firmwares.find(
         (it) => it.variationName === itemName,
       );
-      console.log({ firmwareInfo });
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
           type: 'projectFirmwareEdit',
@@ -79,12 +78,22 @@ export const ProjectEditPage: FC = () => {
     }
   };
 
+  const createStandardFirmware = () => {
+    uiActions.navigateTo({ type: 'projectFirmwareEdit', firmwareName: '' });
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const deleteResourceItem = (itemKey: string) => {};
 
   return (
     <div css={style}>
       <div>project resource edit page</div>
+
+      <div>
+        <button onClick={createStandardFirmware}>
+          Create Standard Firmware
+        </button>
+      </div>
       <div>
         <label>
           <span>keyboard name</span>
