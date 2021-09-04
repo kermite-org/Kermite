@@ -122,10 +122,10 @@ export const projectPackagesWriter = {
       }
     });
   },
-  saveLocalProjectFirmware(variationId: string, entry: IProjectFirmwareEntry) {
+  saveLocalProjectFirmware(entry: IProjectFirmwareEntry) {
     patchLocalEditProject((draft) => {
       const index = draft.firmwares.findIndex(
-        (it) => it.variationId === variationId,
+        (it) => it.variationId === entry.variationId,
       );
       if (index >= 0) {
         draft.firmwares.splice(index, 1, entry);

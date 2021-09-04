@@ -1,61 +1,26 @@
-import { css, FC, jsx, useMemo } from 'qx';
-import { ICustomFirmwareEntry } from '~/shared';
-import { projectPackagesReader } from '~/ui/commonStore';
+import { css, FC, jsx } from 'qx';
 import { ClosableOverlay } from '~/ui/components';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
-import {
-  CustomFirmwareEditor,
-  CustomFirmwareEditor_OutputPropsSupplier,
-} from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
+import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
+import { useProjectCustomFirmwareSetupModalModel } from '~/ui/pages/ProjectCustomFirmwareSetupModal.model';
 
 type Props = {
-  firmwareVariationId: string;
+  variationId: string;
   close(): void;
 };
 
-function createSourceEditValues(entry: ICustomFirmwareEntry | undefined) {
-  if (entry) {
-    const { variationName, customFirmwareId } = entry;
-    return { variationName, customFirmwareId };
-  } else {
-    return { variationName: '', customFirmwareId: '' };
-  }
-}
-
-function getSourceFirmwareProps(variationId: string) {
-  const entry = projectPackagesReader.getEditTargetFirmwareEntry(
-    'custom',
-    variationId,
-  );
-  const editValues = createSourceEditValues(entry);
-  return { editValues };
-}
-
 export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
-  firmwareVariationId,
+  variationId,
   close,
 }) => {
-  const { editValues: sourceEditValues } = useMemo(
-    () => getSourceFirmwareProps(firmwareVariationId),
-    [],
-  );
-
-  const { canSave, emitSavingEditValues } =
-    CustomFirmwareEditor_OutputPropsSupplier;
-
-  const saveHandler = () => {
-    const newEditValues = emitSavingEditValues();
-    console.log(JSON.stringify(newEditValues));
-    close();
-  };
-
-  const modalTitle = `edit custom firmware :${sourceEditValues.variationName}`;
-
+  const { sourceEditValues, canSave, saveHandler } =
+    useProjectCustomFirmwareSetupModalModel(variationId, close);
+  const { variationName } = sourceEditValues;
   return (
     <ClosableOverlay close={close}>
       <div css={style}>
         <RouteHeaderBar
-          title={modalTitle}
+          title={`edit custom firmware :${variationName}`}
           canSave={canSave}
           saveHandler={saveHandler}
         />

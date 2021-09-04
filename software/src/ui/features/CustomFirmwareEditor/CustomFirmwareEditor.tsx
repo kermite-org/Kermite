@@ -62,7 +62,7 @@ const style = css`
     }
 
     > :nth-child(2) {
-      width: 150px;
+      width: 200px;
     }
   }
 `;

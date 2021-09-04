@@ -1,5 +1,6 @@
 import { useInlineEffect } from 'qx';
 import {
+  fallbackStandardFirmwareEntry,
   fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
@@ -57,13 +58,6 @@ async function inputSavingFirmwareName(): Promise<string | undefined> {
   return undefined;
 }
 
-const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {
-  type: 'standard',
-  variationId: '',
-  variationName: '',
-  standardFirmwareConfig: fallbackStandardKeyboardSpec,
-};
-
 const store = new (class {
   sourceEntry: IStandardFirmwareEntry = fallbackStandardFirmwareEntry;
 })();
@@ -111,10 +105,7 @@ const actions = {
       ...store.sourceEntry,
       standardFirmwareConfig: emitSavingEditValues(),
     };
-    projectPackagesWriter.saveLocalProjectFirmware(
-      store.sourceEntry.variationId,
-      newFirmwareEntry,
-    );
+    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
   },
 };
 

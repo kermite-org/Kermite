@@ -131,7 +131,7 @@ export const ProjectEditPage: FC = () => {
       </div>
       {editCustomFirmwareVariationId !== undefined && (
         <ProjectCustomFirmwareSetupModal
-          firmwareVariationId={editCustomFirmwareVariationId}
+          variationId={editCustomFirmwareVariationId}
           close={closeCustomFirmwareModal}
         />
       )}
