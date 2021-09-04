@@ -35,7 +35,7 @@ function cleanupSavingFirmwareConfig(
   return data;
 }
 
-export const firmwareEditModelHelpers = {
+export const standardFirmwareEditModelHelpers = {
   validatePins,
   cleanupSavingFirmwareConfig,
 };

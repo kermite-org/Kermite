@@ -1,14 +1,14 @@
 import { css, FC, jsx, useEffect } from 'qx';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
 import {
-  IFirmwareEditValues,
-  firmwareEditModel,
-} from '~/ui/features/StandardFirmwareEditor/FirmwareEditModel';
-import { firmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/FirmwareEditModel.helpers';
+  IStandardFirmwareEditValues,
+  standardFirmwareEditModel,
+} from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel';
+import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
 
 export type Props = {
-  firmwareConfig: IFirmwareEditValues;
-  saveHandler?(firmwareConfig: IFirmwareEditValues): void;
+  firmwareConfig: IStandardFirmwareEditValues;
+  saveHandler?(firmwareConfig: IStandardFirmwareEditValues): void;
 };
 
 function arrayToText(arr: string[] | undefined): string {
@@ -23,25 +23,29 @@ function validationStatusToText(status: boolean): string {
   return status ? 'ok' : 'ng';
 }
 
-function valueChangeHandler<K extends keyof IFirmwareEditValues>(
+function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
   key: K,
   converter?: (
-    value: Extract<IFirmwareEditValues[K], string | boolean>,
-  ) => IFirmwareEditValues[K],
+    value: Extract<IStandardFirmwareEditValues[K], string | boolean>,
+  ) => IStandardFirmwareEditValues[K],
 ) {
-  return (rawValue: Extract<IFirmwareEditValues[K], string | boolean>) => {
+  return (
+    rawValue: Extract<IStandardFirmwareEditValues[K], string | boolean>,
+  ) => {
     const value = converter ? converter(rawValue) : rawValue;
-    firmwareEditModel.actions.commitValue(key, value);
+    standardFirmwareEditModel.actions.commitValue(key, value);
   };
 }
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
   get canSave() {
-    return firmwareEditModel.readers.canSave;
+    return standardFirmwareEditModel.readers.canSave;
   },
   emitSavingEditValues() {
-    const { editValues } = firmwareEditModel.readers;
-    return firmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues);
+    const { editValues } = standardFirmwareEditModel.readers;
+    return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
+      editValues,
+    );
   },
 };
 
@@ -61,11 +65,11 @@ export const StandardFirmwareEditor: FC<Props> = ({
       canSave,
     },
     actions: { loadFirmwareConfig },
-  } = firmwareEditModel;
+  } = standardFirmwareEditModel;
 
   const onSaveButton = () => {
     saveHandler?.(
-      firmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
+      standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
     );
   };
 

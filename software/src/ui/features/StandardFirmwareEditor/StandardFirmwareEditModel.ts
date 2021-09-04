@@ -4,9 +4,9 @@ import {
   IKermiteStandardKeyboardSpec,
 } from '~/shared';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
-import { firmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/FirmwareEditModel.helpers';
+import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
 
-export type IFirmwareEditValues = IKermiteStandardKeyboardSpec;
+export type IStandardFirmwareEditValues = IKermiteStandardKeyboardSpec;
 
 const baseFirmwareTypeOptions: ISelectorOption[] = [
   'AvrUnified',
@@ -25,7 +25,7 @@ const store = {
 };
 
 const readers = {
-  get editValues(): IFirmwareEditValues {
+  get editValues(): IStandardFirmwareEditValues {
     return store.editValues;
   },
   get isAvr(): boolean {
@@ -44,14 +44,14 @@ const readers = {
   },
   get rowPinsValid(): boolean {
     const { editValues, mcuType } = readers;
-    return firmwareEditModelHelpers.validatePins(
+    return standardFirmwareEditModelHelpers.validatePins(
       editValues.matrixRowPins,
       mcuType,
     );
   },
   get columnPinsValid(): boolean {
     const { editValues, mcuType } = readers;
-    return firmwareEditModelHelpers.validatePins(
+    return standardFirmwareEditModelHelpers.validatePins(
       editValues.matrixColumnPins,
       mcuType,
     );
@@ -62,7 +62,7 @@ const readers = {
   },
 };
 
-function fixEditValues(diff: Partial<IFirmwareEditValues>) {
+function fixEditValues(diff: Partial<IStandardFirmwareEditValues>) {
   const { editValues } = store;
   if (readers.isAvr) {
     editValues.useBoardLedsProMicroRp = false;
@@ -86,19 +86,19 @@ function fixEditValues(diff: Partial<IFirmwareEditValues>) {
 }
 
 const actions = {
-  loadFirmwareConfig(firmwareConfig: IFirmwareEditValues) {
+  loadFirmwareConfig(firmwareConfig: IStandardFirmwareEditValues) {
     store.editValues = duplicateObjectByJsonStringifyParse(firmwareConfig);
   },
-  commitValue<K extends keyof IFirmwareEditValues>(
+  commitValue<K extends keyof IStandardFirmwareEditValues>(
     key: K,
-    value: IFirmwareEditValues[K],
+    value: IStandardFirmwareEditValues[K],
   ) {
     store.editValues[key] = value;
     fixEditValues({ [key]: value });
   },
 };
 
-export const firmwareEditModel = {
+export const standardFirmwareEditModel = {
   constants,
   readers,
   actions,
