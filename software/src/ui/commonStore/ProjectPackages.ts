@@ -2,6 +2,8 @@ import produce from 'immer';
 import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
+  getNextFirmwareId,
+  getNextProjectResourceId,
   ICustomFirmwareEntry,
   IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesign,
@@ -13,7 +15,6 @@ import {
 } from '~/shared';
 import { uiReaders } from '~/ui/commonStore/UiReaders';
 import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
-import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -108,7 +109,9 @@ export const projectPackagesWriter = {
       if (layout) {
         layout.data = design;
       } else {
-        draft.layouts.push({ layoutName, data: design });
+        const existingIds = draft.layouts.map((it) => it.resourceId);
+        const resourceId = getNextProjectResourceId('lt', existingIds);
+        draft.layouts.push({ resourceId, layoutName, data: design });
       }
     });
   },
@@ -118,7 +121,9 @@ export const projectPackagesWriter = {
       if (profile) {
         profile.data = preset;
       } else {
-        draft.presets.push({ presetName, data: preset });
+        const existingIds = draft.presets.map((it) => it.resourceId);
+        const resourceId = getNextProjectResourceId('pr', existingIds);
+        draft.presets.push({ resourceId, presetName, data: preset });
       }
     });
   },
@@ -150,8 +155,10 @@ export const projectPackagesWriter = {
       } else {
         const existingIds = draft.firmwares.map((it) => it.variationId);
         const newVariationId = getNextFirmwareId(existingIds);
+        const resourceId = `fw${newVariationId}`;
         draft.firmwares.push({
           type: 'standard',
+          resourceId,
           variationName,
           variationId: newVariationId,
           standardFirmwareConfig: config,

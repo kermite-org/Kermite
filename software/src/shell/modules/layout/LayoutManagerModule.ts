@@ -3,6 +3,7 @@ import produce from 'immer';
 import {
   createFallbackPersistKeyboardDesign,
   duplicateObjectByJsonStringifyParse,
+  getNextProjectResourceId,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
@@ -128,7 +129,9 @@ export const layoutManagerModule = createCoreModule({
         if (layout) {
           layout.data = design;
         } else {
-          draft.layouts.push({ layoutName, data: design });
+          const existingIds = draft.layouts.map((it) => it.resourceId);
+          const resourceId = getNextProjectResourceId('lt', existingIds);
+          draft.layouts.push({ resourceId, layoutName, data: design });
         }
       });
       dispatchCoreAction({
