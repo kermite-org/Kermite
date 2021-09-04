@@ -13,7 +13,7 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
   variationId,
   close,
 }) => {
-  const { editTargetVariationName, canSave, saveHandler } =
+  const { editTargetVariationName, sourceEditValues, canSave, saveHandler } =
     useProjectCustomFirmwareSetupModalModel(variationId, close);
   return (
     <ClosableOverlay close={close}>
@@ -24,7 +24,7 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
           saveHandler={saveHandler}
         />
         <div className="content">
-          <CustomFirmwareEditor.render />
+          <CustomFirmwareEditor sourceEditValues={sourceEditValues} />
         </div>
       </div>
     </ClosableOverlay>

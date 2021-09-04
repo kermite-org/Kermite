@@ -1,26 +1,66 @@
-import { jsx } from 'qx';
-import { cloneObject } from '~/shared';
-import { IFeatureEditor } from '~/ui/base';
+import { css, FC, jsx, useInlineEffect } from 'qx';
+import { GeneralInput, GeneralSelector } from '~/ui/components';
 import {
   customFirmwareEditorModel,
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
-import { CustomFirmwareEditorView } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.view';
 
-export const CustomFirmwareEditor: IFeatureEditor<ICustomFirmwareEditValues> = {
-  load(sourceEditValues: ICustomFirmwareEditValues) {
-    const { loadEditValues } = customFirmwareEditorModel.actions;
-    loadEditValues(cloneObject(sourceEditValues));
-  },
+type Props = {
+  sourceEditValues: ICustomFirmwareEditValues;
+};
+
+export const CustomFirmwareEditor_OutputPropsSupplier = {
   get canSave(): boolean {
     const { variationName, customFirmwareId } =
       customFirmwareEditorModel.readers.editValues;
     return !!variationName && !!customFirmwareId;
   },
-  save(): ICustomFirmwareEditValues {
+  emitSavingEditValues(): ICustomFirmwareEditValues {
     return customFirmwareEditorModel.readers.editValues;
   },
-  render() {
-    return <CustomFirmwareEditorView />;
-  },
 };
+
+export const CustomFirmwareEditor: FC<Props> = ({ sourceEditValues }) => {
+  const {
+    actions: { setVariationName, setCustomFirmwareId, loadEditValues },
+  } = customFirmwareEditorModel;
+  useInlineEffect(() => loadEditValues(sourceEditValues), [sourceEditValues]);
+  const {
+    readers: { editValues, allFirmwareOptions },
+  } = customFirmwareEditorModel;
+  return (
+    <div css={style}>
+      <div className="row">
+        <div>variation name</div>
+        <GeneralInput
+          value={editValues.variationName}
+          setValue={setVariationName}
+        />
+      </div>
+      <div className="row">
+        <div>firmware</div>
+        <GeneralSelector
+          options={allFirmwareOptions}
+          value={editValues.customFirmwareId}
+          setValue={setCustomFirmwareId}
+        />
+      </div>
+    </div>
+  );
+};
+
+const style = css`
+  > .row {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+
+    > :nth-child(1) {
+      width: 150px;
+    }
+
+    > :nth-child(2) {
+      width: 200px;
+    }
+  }
+`;

@@ -6,11 +6,13 @@ export type ICustomFirmwareEditValues = {
   customFirmwareId: string;
 };
 
+export const fallbackCustomFirmwareEditValues: ICustomFirmwareEditValues = {
+  variationName: '',
+  customFirmwareId: '',
+};
+
 const store = new (class {
-  editValues: ICustomFirmwareEditValues = {
-    variationName: '',
-    customFirmwareId: '',
-  };
+  editValues: ICustomFirmwareEditValues = fallbackCustomFirmwareEditValues;
 })();
 
 const readers = {

@@ -5,8 +5,11 @@ import {
   projectPackagesWriter,
   uiReaders,
 } from '~/ui/commonStore';
-import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
-import { ICustomFirmwareEditValues } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
+import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
+import {
+  fallbackCustomFirmwareEditValues,
+  ICustomFirmwareEditValues,
+} from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
 import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 const helpers = {
@@ -44,30 +47,35 @@ const helpers = {
 
 const state = new (class {
   sourceEntry: ICustomFirmwareEntry = fallbackCustomFirmwareEntry;
+  sourceEditValues: ICustomFirmwareEditValues =
+    fallbackCustomFirmwareEditValues;
 })();
 
 const readers = {
   get sourceEntry(): ICustomFirmwareEntry {
     return state.sourceEntry;
   },
+  get sourceEditValues(): ICustomFirmwareEditValues {
+    return state.sourceEditValues;
+  },
   get editTargetVariationName(): string {
     return state.sourceEntry.variationName || '(new)';
   },
   get canSave(): boolean {
-    return CustomFirmwareEditor.canSave;
+    return CustomFirmwareEditor_OutputPropsSupplier.canSave;
   },
 };
 
 const actions = {
   loadEditValues(variationId: string) {
-    const sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationId);
-    const sourceEditValues =
-      helpers.makeEditValuesFromFirmwareEntry(sourceEntry);
-    state.sourceEntry = sourceEntry;
-    CustomFirmwareEditor.load(sourceEditValues);
+    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationId);
+    state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
+      state.sourceEntry,
+    );
   },
   saveHandler() {
-    const { variationName, customFirmwareId } = CustomFirmwareEditor.save();
+    const { variationName, customFirmwareId } =
+      CustomFirmwareEditor_OutputPropsSupplier.emitSavingEditValues();
     const newFirmwareEntry = {
       ...readers.sourceEntry,
       variationName,
@@ -82,13 +90,14 @@ export function useProjectCustomFirmwareSetupModalModel(
   close: () => void,
 ) {
   useInlineEffect(() => actions.loadEditValues(variationId), [variationId]);
-  const { canSave, editTargetVariationName } = readers;
+  const { sourceEditValues, canSave, editTargetVariationName } = readers;
   const saveHandler = () => {
     actions.saveHandler();
     close();
   };
   return {
     editTargetVariationName,
+    sourceEditValues,
     canSave,
     saveHandler,
   };
