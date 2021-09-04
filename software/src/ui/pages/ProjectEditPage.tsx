@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, useState } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
   uiActions,
@@ -6,6 +6,7 @@ import {
   projectPackagesWriter,
 } from '~/ui/commonStore';
 import { reflectValue } from '~/ui/helpers';
+import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal';
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
 type IProjectResourceItem = {
@@ -30,6 +31,13 @@ function decodeProjectResourceItemKey(key: string): {
 }
 
 export const ProjectEditPage: FC = () => {
+  const [editCustomFirmwareName, setEditCustomFirmwareName] = useState<
+    string | undefined
+  >(undefined);
+
+  const openCustomFirmwareModal = setEditCustomFirmwareName;
+  const closeCustomFirmwareModal = () => setEditCustomFirmwareName(undefined);
+
   const projectInfo = projectPackagesHooks.useEditTargetProject();
 
   const keyboardName = projectInfo.keyboardName;
@@ -72,8 +80,8 @@ export const ProjectEditPage: FC = () => {
           type: 'projectFirmwareEdit',
           firmwareName: itemName,
         });
-      } else {
-        console.log('not impleted yet');
+      } else if (firmwareInfo?.type === 'custom') {
+        openCustomFirmwareModal(firmwareInfo.variationName);
       }
     }
   };
@@ -120,6 +128,12 @@ export const ProjectEditPage: FC = () => {
           </div>
         ))}
       </div>
+      {editCustomFirmwareName !== undefined && (
+        <ProjectCustomFirmwareSetupModal
+          firmwareName={editCustomFirmwareName}
+          close={closeCustomFirmwareModal}
+        />
+      )}
     </div>
   );
 };
