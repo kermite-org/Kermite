@@ -1,4 +1,6 @@
-import { FC, jsx, useEffect } from 'qx';
+import { css, FC, jsx, useEffect } from 'qx';
+import { cloneObject } from '~/shared';
+import { GeneralInput, GeneralSelector } from '~/ui/components';
 import {
   CustomFirmwareEditorModel,
   ICustomFirmwareSetupModalEditValues,
@@ -6,7 +8,6 @@ import {
 
 export type Props = {
   editValues: ICustomFirmwareSetupModalEditValues;
-  existingFirmwareNames: string[];
 };
 
 export const CustomFirmwareEditor_OutputPropsSupplier = {
@@ -20,17 +21,48 @@ export const CustomFirmwareEditor_OutputPropsSupplier = {
 
 export const CustomFirmwareEditor: FC<Props> = ({
   editValues: sourceEditValues,
-  existingFirmwareNames,
 }) => {
   const {
-    actions: { loadEditValues },
-    readers: { editValues },
+    actions: { loadEditValues, setVariationName, setCustomFirmwareId },
+    readers: { editValues, allFirmwareOptions },
   } = CustomFirmwareEditorModel;
-  useEffect(() => loadEditValues(sourceEditValues), [sourceEditValues]);
+  useEffect(() => {
+    loadEditValues(cloneObject(sourceEditValues));
+  }, [sourceEditValues]);
+
   return (
-    <div>
-      custom firmware editor
-      {JSON.stringify({ editValues, existingFirmwareNames }, null, ' ')}
+    <div css={style}>
+      <div className="row">
+        <div>variation name</div>
+        <GeneralInput
+          value={editValues.variationName}
+          setValue={setVariationName}
+        />
+      </div>
+      <div className="row">
+        <div>firmware</div>
+        <GeneralSelector
+          options={allFirmwareOptions}
+          value={editValues.customFirmwareId}
+          setValue={setCustomFirmwareId}
+        />
+      </div>
     </div>
   );
 };
+
+const style = css`
+  > .row {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+
+    > :nth-child(1) {
+      width: 150px;
+    }
+
+    > :nth-child(2) {
+      width: 150px;
+    }
+  }
+`;

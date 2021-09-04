@@ -1,7 +1,8 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { ICustomFirmwareEntry } from '~/shared';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
+import { projectPackagesReader } from '~/ui/commonStore';
 import { ClosableOverlay } from '~/ui/components';
+import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
   CustomFirmwareEditor,
   CustomFirmwareEditor_OutputPropsSupplier,
@@ -27,17 +28,14 @@ function getSourceFirmwareProps(variationName: string) {
     variationName,
   );
   const editValues = createSourceEditValues(entry);
-  const existingFirmwareNames =
-    uiReaders.editTargetProject?.firmwares.map((it) => it.variationName) || [];
-
-  return { editValues, existingFirmwareNames };
+  return { editValues };
 }
 
 export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
   firmwareName,
   close,
 }) => {
-  const { editValues, existingFirmwareNames } = useMemo(
+  const { editValues } = useMemo(
     () => getSourceFirmwareProps(firmwareName),
     [],
   );
@@ -51,17 +49,19 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
     close();
   };
 
+  const modalTitle = `edit custom firmware :${firmwareName}`;
+
   return (
     <ClosableOverlay close={close}>
       <div css={style}>
-        custom firmware setup modal {firmwareName}
-        <CustomFirmwareEditor
-          editValues={editValues}
-          existingFirmwareNames={existingFirmwareNames}
+        <RouteHeaderBar
+          title={modalTitle}
+          canSave={canSave}
+          saveHandler={saveHandler}
         />
-        <button onClick={saveHandler} disabled={!canSave}>
-          save
-        </button>
+        <div className="content">
+          <CustomFirmwareEditor editValues={editValues} />
+        </div>
       </div>
     </ClosableOverlay>
   );
@@ -69,6 +69,10 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
 
 const style = css`
   background: #fff;
-  padding: 10px;
-  width: 400px;
+  width: 450px;
+  min-height: 150px;
+
+  > .content {
+    padding: 10px;
+  }
 `;

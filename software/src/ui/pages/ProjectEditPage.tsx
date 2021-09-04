@@ -106,6 +106,7 @@ export const ProjectEditPage: FC = () => {
         <label>
           <span>keyboard name</span>
           <input
+            className="keyboard-name-input"
             type="text"
             value={keyboardName}
             onChange={reflectValue(handleKeyboardNameChange)}
@@ -163,7 +164,7 @@ const style = css`
     }
   }
 
-  input {
+  .keyboard-name-input {
     margin-left: 10px;
   }
 
