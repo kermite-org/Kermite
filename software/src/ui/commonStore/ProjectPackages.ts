@@ -2,11 +2,13 @@ import produce from 'immer';
 import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
+  ICustomFirmwareEntry,
   IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesign,
   IPersistProfileData,
   IProjectPackageInfo,
   IResourceOrigin,
+  IStandardFirmwareEntry,
 } from '~/shared';
 import { uiReaders } from '~/ui/commonStore/UiReaders';
 import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
@@ -47,6 +49,21 @@ export const projectPackagesReader = {
     return uiState.core.allCustomFirmwareInfos.find(
       (info) => info.firmwareId === firmwareId,
     );
+  },
+  getEditTargetFirmwareEntry<K extends 'standard' | 'custom'>(
+    type: K,
+    variationName: string,
+  ):
+    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
+    | undefined {
+    const projectInfo = uiReaders.editTargetProject;
+    const entry = projectInfo?.firmwares.find(
+      (it) => it.variationName === variationName,
+    );
+    if (entry?.type === type) {
+      return entry as any;
+    }
+    return undefined;
   },
 };
 

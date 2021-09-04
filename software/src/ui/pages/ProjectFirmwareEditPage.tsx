@@ -1,8 +1,12 @@
 import { css, FC, jsx, useMemo, useState } from 'qx';
-import { fallbackStandardKeyboardSpec, IStandardFirmwareEntry } from '~/shared';
+import { fallbackStandardKeyboardSpec } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectFirmwareEdit } from '~/ui/commonModels';
-import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
+import {
+  projectPackagesReader,
+  projectPackagesWriter,
+  uiReaders,
+} from '~/ui/commonStore';
 import { modalAlert, modalTextEdit } from '~/ui/components';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
@@ -12,21 +16,6 @@ import {
 
 type Props = {
   spec: IPageSpec_ProjectFirmwareEdit;
-};
-
-const readers = {
-  getEditTargetStandardFirmwareEntry(
-    firmwareName: string,
-  ): IStandardFirmwareEntry | undefined {
-    const projectInfo = uiReaders.editTargetProject;
-    const entry = projectInfo?.firmwares.find(
-      (it) => it.variationName === firmwareName,
-    );
-    if (entry?.type === 'standard') {
-      return entry;
-    }
-    return undefined;
-  },
 };
 
 const checkValidFirmwareVariationName = async (
@@ -72,7 +61,10 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
   const [firmwareName, setFirmwareName] = useState(sourceFirmwareName);
 
   const sourceFirmwareConfig = useMemo(() => {
-    const entry = readers.getEditTargetStandardFirmwareEntry(firmwareName);
+    const entry = projectPackagesReader.getEditTargetFirmwareEntry(
+      'standard',
+      firmwareName,
+    );
     return entry?.standardFirmwareConfig || fallbackStandardKeyboardSpec;
   }, []);
 
