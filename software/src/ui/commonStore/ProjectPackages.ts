@@ -52,6 +52,23 @@ export const projectPackagesReader = {
   },
   getEditTargetFirmwareEntry<K extends 'standard' | 'custom'>(
     type: K,
+    variationId: string,
+  ):
+    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
+    | undefined {
+    const projectInfo = uiReaders.editTargetProject;
+    const entry = projectInfo?.firmwares.find(
+      (it) => it.variationId === variationId,
+    );
+    if (entry?.type === type) {
+      return entry as any;
+    }
+    return undefined;
+  },
+  getEditTargetFirmwareEntryByVariationName_deprecated<
+    K extends 'standard' | 'custom',
+  >(
+    type: K,
     variationName: string,
   ):
     | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)

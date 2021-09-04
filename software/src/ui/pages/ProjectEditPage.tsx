@@ -31,12 +31,12 @@ function decodeProjectResourceItemKey(key: string): {
 }
 
 export const ProjectEditPage: FC = () => {
-  const [editCustomFirmwareName, setEditCustomFirmwareName] = useState<
-    string | undefined
-  >(undefined);
+  const [editCustomFirmwareVariationId, setEditCustomFirmwareVariationId] =
+    useState<string | undefined>(undefined);
 
-  const openCustomFirmwareModal = setEditCustomFirmwareName;
-  const closeCustomFirmwareModal = () => setEditCustomFirmwareName(undefined);
+  const openCustomFirmwareModal = setEditCustomFirmwareVariationId;
+  const closeCustomFirmwareModal = () =>
+    setEditCustomFirmwareVariationId(undefined);
 
   const projectInfo = projectPackagesHooks.useEditTargetProject();
 
@@ -81,7 +81,7 @@ export const ProjectEditPage: FC = () => {
           firmwareName: itemName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        openCustomFirmwareModal(firmwareInfo.variationName);
+        openCustomFirmwareModal(firmwareInfo.variationId);
       }
     }
   };
@@ -129,9 +129,9 @@ export const ProjectEditPage: FC = () => {
           </div>
         ))}
       </div>
-      {editCustomFirmwareName !== undefined && (
+      {editCustomFirmwareVariationId !== undefined && (
         <ProjectCustomFirmwareSetupModal
-          firmwareName={editCustomFirmwareName}
+          firmwareVariationId={editCustomFirmwareVariationId}
           close={closeCustomFirmwareModal}
         />
       )}

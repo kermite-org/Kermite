@@ -61,10 +61,11 @@ export const ProjectFirmwareEditPage: FC<Props> = ({
   const [firmwareName, setFirmwareName] = useState(sourceFirmwareName);
 
   const sourceFirmwareConfig = useMemo(() => {
-    const entry = projectPackagesReader.getEditTargetFirmwareEntry(
-      'standard',
-      firmwareName,
-    );
+    const entry =
+      projectPackagesReader.getEditTargetFirmwareEntryByVariationName_deprecated(
+        'standard',
+        firmwareName,
+      );
     return entry?.standardFirmwareConfig || fallbackStandardKeyboardSpec;
   }, []);
 

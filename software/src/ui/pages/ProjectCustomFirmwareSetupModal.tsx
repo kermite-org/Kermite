@@ -9,7 +9,7 @@ import {
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
 
 type Props = {
-  firmwareName: string;
+  firmwareVariationId: string;
   close(): void;
 };
 
@@ -22,21 +22,21 @@ function createSourceEditValues(entry: ICustomFirmwareEntry | undefined) {
   }
 }
 
-function getSourceFirmwareProps(variationName: string) {
+function getSourceFirmwareProps(variationId: string) {
   const entry = projectPackagesReader.getEditTargetFirmwareEntry(
     'custom',
-    variationName,
+    variationId,
   );
   const editValues = createSourceEditValues(entry);
   return { editValues };
 }
 
 export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
-  firmwareName,
+  firmwareVariationId,
   close,
 }) => {
-  const { editValues } = useMemo(
-    () => getSourceFirmwareProps(firmwareName),
+  const { editValues: sourceEditValues } = useMemo(
+    () => getSourceFirmwareProps(firmwareVariationId),
     [],
   );
 
@@ -49,7 +49,7 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
     close();
   };
 
-  const modalTitle = `edit custom firmware :${firmwareName}`;
+  const modalTitle = `edit custom firmware :${sourceEditValues.variationName}`;
 
   return (
     <ClosableOverlay close={close}>
@@ -60,7 +60,7 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
           saveHandler={saveHandler}
         />
         <div className="content">
-          <CustomFirmwareEditor editValues={editValues} />
+          <CustomFirmwareEditor editValues={sourceEditValues} />
         </div>
       </div>
     </ClosableOverlay>
