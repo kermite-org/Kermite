@@ -2,6 +2,7 @@ import { useInlineEffect } from 'qx';
 import {
   fallbackStandardFirmwareEntry,
   fallbackStandardKeyboardSpec,
+  getNextFirmwareId,
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
@@ -11,7 +12,6 @@ import {
   uiReaders,
 } from '~/ui/commonStore';
 import { modalAlert, modalTextEdit } from '~/ui/components';
-import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
 
 export interface IProjectStandardFirmwareEditPageModel {
@@ -84,8 +84,10 @@ const actions = {
       )!;
     } else {
       const newVariationId = getNextFirmwareId(readers.existingVariationIds);
+      const newResourceId = `fw${newVariationId}`;
       store.sourceEntry = {
         type: 'standard',
+        resourceId: newResourceId,
         variationId: newVariationId,
         variationName: '',
         standardFirmwareConfig: fallbackStandardKeyboardSpec,

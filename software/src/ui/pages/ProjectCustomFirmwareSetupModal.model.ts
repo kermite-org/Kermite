@@ -1,5 +1,9 @@
 import { useInlineEffect } from 'qx';
-import { fallbackCustomFirmwareEntry, ICustomFirmwareEntry } from '~/shared';
+import {
+  fallbackCustomFirmwareEntry,
+  getNextFirmwareId,
+  ICustomFirmwareEntry,
+} from '~/shared';
 import {
   projectPackagesReader,
   projectPackagesWriter,
@@ -10,7 +14,6 @@ import {
   fallbackCustomFirmwareEditValues,
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
-import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 const helpers = {
   getExistingVariationIds(): string[] {
@@ -27,8 +30,10 @@ const helpers = {
       const newVariationId = getNextFirmwareId(
         helpers.getExistingVariationIds(),
       );
+      const newResourceId = `fw${newVariationId}`;
       return {
         type: 'custom',
+        resourceId: newResourceId,
         variationId: newVariationId,
         variationName: '',
         customFirmwareId: '',
