@@ -11,10 +11,12 @@ export type Props = {
 };
 
 export const CustomFirmwareEditor_OutputPropsSupplier = {
-  get canSave() {
-    return true;
+  get canSave(): boolean {
+    const { variationName, customFirmwareId } =
+      CustomFirmwareEditorModel.readers.editValues;
+    return !!variationName && !!customFirmwareId;
   },
-  emitSavingEditValues() {
+  emitSavingEditValues(): ICustomFirmwareSetupModalEditValues {
     return CustomFirmwareEditorModel.readers.editValues;
   },
 };

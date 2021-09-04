@@ -90,6 +90,10 @@ export const ProjectEditPage: FC = () => {
     uiActions.navigateTo({ type: 'projectFirmwareEdit', variationId: '' });
   };
 
+  const createCustomFirmware = () => {
+    openCustomFirmwareModal('');
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const deleteResourceItem = (itemKey: string) => {};
 
@@ -98,9 +102,14 @@ export const ProjectEditPage: FC = () => {
       <div>project resource edit page</div>
 
       <div>
-        <button onClick={createStandardFirmware}>
-          Create Standard Firmware
-        </button>
+        <div>
+          <button onClick={createStandardFirmware}>
+            Create Standard Firmware
+          </button>
+        </div>
+        <div>
+          <button onClick={createCustomFirmware}>Create Custom Firmware</button>
+        </div>
       </div>
       <div>
         <label>
