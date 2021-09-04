@@ -13,19 +13,18 @@ export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
   variationId,
   close,
 }) => {
-  const { sourceEditValues, canSave, saveHandler } =
+  const { editTargetVariationName, canSave, saveHandler } =
     useProjectCustomFirmwareSetupModalModel(variationId, close);
-  const { variationName } = sourceEditValues;
   return (
     <ClosableOverlay close={close}>
       <div css={style}>
         <RouteHeaderBar
-          title={`edit custom firmware :${variationName}`}
+          title={`edit custom firmware :${editTargetVariationName}`}
           canSave={canSave}
           saveHandler={saveHandler}
         />
         <div className="content">
-          <CustomFirmwareEditor editValues={sourceEditValues} />
+          <CustomFirmwareEditor.render />
         </div>
       </div>
     </ClosableOverlay>

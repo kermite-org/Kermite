@@ -1,20 +1,20 @@
 import { ISelectorOption } from '~/ui/base';
 import { uiReaders } from '~/ui/commonStore';
 
-export type ICustomFirmwareSetupModalEditValues = {
+export type ICustomFirmwareEditValues = {
   variationName: string;
   customFirmwareId: string;
 };
 
 const store = new (class {
-  editValues: ICustomFirmwareSetupModalEditValues = {
+  editValues: ICustomFirmwareEditValues = {
     variationName: '',
     customFirmwareId: '',
   };
 })();
 
 const readers = {
-  get editValues(): ICustomFirmwareSetupModalEditValues {
+  get editValues(): ICustomFirmwareEditValues {
     return store.editValues;
   },
   get allFirmwareOptions(): ISelectorOption[] {
@@ -28,7 +28,7 @@ const readers = {
 };
 
 const actions = {
-  loadEditValues(editValues: ICustomFirmwareSetupModalEditValues) {
+  loadEditValues(editValues: ICustomFirmwareEditValues) {
     store.editValues = editValues;
   },
   setVariationName(variationName: string) {
@@ -39,7 +39,7 @@ const actions = {
   },
 };
 
-export const CustomFirmwareEditorModel = {
+export const customFirmwareEditorModel = {
   readers,
   actions,
 };

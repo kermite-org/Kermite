@@ -1,40 +1,30 @@
-import { useInlineEffect, useMemo } from 'qx';
+import { useInlineEffect } from 'qx';
 import { fallbackCustomFirmwareEntry, ICustomFirmwareEntry } from '~/shared';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiReaders,
 } from '~/ui/commonStore';
-import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
+import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
+import { ICustomFirmwareEditValues } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
 import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
-const store = new (class {
-  sourceEntry: ICustomFirmwareEntry = fallbackCustomFirmwareEntry;
-})();
-
-const readers = {
-  get sourceEntry(): ICustomFirmwareEntry {
-    return store.sourceEntry;
-  },
-  get canSave() {
-    return CustomFirmwareEditor_OutputPropsSupplier.canSave;
-  },
-  get existingVariationIds(): string[] {
+const helpers = {
+  getExistingVariationIds(): string[] {
     const projectInfo = uiReaders.editTargetProject;
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
-};
-
-const actions = {
-  loadSourceFirmwareEntry(variationId: string) {
+  getSourceFirmwareEntryOrCreate(variationId: string): ICustomFirmwareEntry {
     if (variationId) {
-      store.sourceEntry = projectPackagesReader.getEditTargetFirmwareEntry(
+      return projectPackagesReader.getEditTargetFirmwareEntry(
         'custom',
         variationId,
       )!;
     } else {
-      const newVariationId = getNextFirmwareId(readers.existingVariationIds);
-      store.sourceEntry = {
+      const newVariationId = getNextFirmwareId(
+        helpers.getExistingVariationIds(),
+      );
+      return {
         type: 'custom',
         variationId: newVariationId,
         variationName: '',
@@ -42,9 +32,42 @@ const actions = {
       };
     }
   },
+  makeEditValuesFromFirmwareEntry(
+    sourceEntry: ICustomFirmwareEntry,
+  ): ICustomFirmwareEditValues {
+    return {
+      variationName: sourceEntry.variationName,
+      customFirmwareId: sourceEntry.customFirmwareId,
+    };
+  },
+};
+
+const state = new (class {
+  sourceEntry: ICustomFirmwareEntry = fallbackCustomFirmwareEntry;
+})();
+
+const readers = {
+  get sourceEntry(): ICustomFirmwareEntry {
+    return state.sourceEntry;
+  },
+  get editTargetVariationName(): string {
+    return state.sourceEntry.variationName || '(new)';
+  },
+  get canSave(): boolean {
+    return CustomFirmwareEditor.canSave;
+  },
+};
+
+const actions = {
+  loadEditValues(variationId: string) {
+    const sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationId);
+    const sourceEditValues =
+      helpers.makeEditValuesFromFirmwareEntry(sourceEntry);
+    state.sourceEntry = sourceEntry;
+    CustomFirmwareEditor.load(sourceEditValues);
+  },
   saveHandler() {
-    const { emitSavingEditValues } = CustomFirmwareEditor_OutputPropsSupplier;
-    const { variationName, customFirmwareId } = emitSavingEditValues();
+    const { variationName, customFirmwareId } = CustomFirmwareEditor.save();
     const newFirmwareEntry = {
       ...readers.sourceEntry,
       variationName,
@@ -58,27 +81,14 @@ export function useProjectCustomFirmwareSetupModalModel(
   variationId: string,
   close: () => void,
 ) {
-  useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(variationId),
-    [variationId],
-  );
-  const { canSave, sourceEntry } = readers;
-
-  const sourceEditValues = useMemo(
-    () => ({
-      variationName: sourceEntry.variationName,
-      customFirmwareId: sourceEntry.customFirmwareId,
-    }),
-    [sourceEntry],
-  );
-
+  useInlineEffect(() => actions.loadEditValues(variationId), [variationId]);
+  const { canSave, editTargetVariationName } = readers;
   const saveHandler = () => {
     actions.saveHandler();
     close();
   };
-
   return {
-    sourceEditValues,
+    editTargetVariationName,
     canSave,
     saveHandler,
   };
