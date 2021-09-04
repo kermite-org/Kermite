@@ -78,7 +78,7 @@ export const ProjectEditPage: FC = () => {
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
           type: 'projectFirmwareEdit',
-          firmwareName: itemName,
+          variationId: firmwareInfo.variationId,
         });
       } else if (firmwareInfo?.type === 'custom') {
         openCustomFirmwareModal(firmwareInfo.variationId);
@@ -87,7 +87,7 @@ export const ProjectEditPage: FC = () => {
   };
 
   const createStandardFirmware = () => {
-    uiActions.navigateTo({ type: 'projectFirmwareEdit', firmwareName: '' });
+    uiActions.navigateTo({ type: 'projectFirmwareEdit', variationId: '' });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

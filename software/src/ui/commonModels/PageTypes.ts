@@ -24,7 +24,7 @@ export type IPageSpec_ProjectPresetEdit = {
 
 export type IPageSpec_ProjectFirmwareEdit = {
   type: 'projectFirmwareEdit';
-  firmwareName: string;
+  variationId: string;
 };
 
 export type IPageSpec =

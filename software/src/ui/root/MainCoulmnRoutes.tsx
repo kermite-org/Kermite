@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { uiReaders, uiState } from '~/ui/commonStore';
 import {
   ProjectEditPage,
-  ProjectFirmwareEditPage,
+  ProjectStandardFirmwareEditPage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
   ProjectSelectionPage,
@@ -28,7 +28,7 @@ export const MainColumnRoutes: FC = () => {
           <ProjectPresetEditPage spec={pageSpec} />
         )}
         {pageSpec.type === 'projectFirmwareEdit' && (
-          <ProjectFirmwareEditPage spec={pageSpec} />
+          <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
       </div>
     );

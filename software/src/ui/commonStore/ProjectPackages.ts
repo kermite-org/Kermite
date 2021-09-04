@@ -6,6 +6,7 @@ import {
   IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesign,
   IPersistProfileData,
+  IProjectFirmwareEntry,
   IProjectPackageInfo,
   IResourceOrigin,
   IStandardFirmwareEntry,
@@ -121,13 +122,26 @@ export const projectPackagesWriter = {
       }
     });
   },
-  saveLocalProjectStandardFirmware(
+  saveLocalProjectFirmware(variationId: string, entry: IProjectFirmwareEntry) {
+    patchLocalEditProject((draft) => {
+      const index = draft.firmwares.findIndex(
+        (it) => it.variationId === variationId,
+      );
+      if (index >= 0) {
+        draft.firmwares.splice(index, 1, entry);
+      } else {
+        draft.firmwares.push(entry);
+      }
+    });
+  },
+  saveLocalProjectStandardFirmware_deprecated(
+    variationId: string,
     variationName: string,
     config: IKermiteStandardKeyboardSpec,
   ) {
     patchLocalEditProject((draft) => {
       const firmware = draft.firmwares.find(
-        (it) => it.variationName === variationName,
+        (it) => it.variationId === variationId,
       );
       if (firmware) {
         if (firmware.type === 'standard') {
