@@ -1,5 +1,5 @@
 import { useLocal, useState, useEffect, useMemo } from 'qx';
-import { copyObjectProps } from '~/shared';
+import { cloneObject, copyObjectProps } from '~/shared';
 import { UiLocalStorage } from '~/ui/base';
 
 export function useFetcher<T>(func: () => Promise<T>, defaultValue: T): T {
@@ -59,4 +59,8 @@ export function useEventSource<T extends {}>(
     });
   }, []);
   return value;
+}
+
+export function useCloned(obj: any) {
+  return useMemo(() => cloneObject(obj), [obj]);
 }

@@ -2,10 +2,10 @@
   "formatRevision": "PKG0",
   "projectId": "K3e89X",
   "keyboardName": "km60",
-
   "firmwares": [
     {
       "type": "standard",
+      "resourceId": "fw01",
       "variationId": "01",
       "variationName": "proto0",
       "standardFirmwareConfig": {
@@ -37,6 +37,7 @@
     },
     {
       "type": "custom",
+      "resourceId": "fw02",
       "variationId": "02",
       "variationName": "proto0_custom",
       "customFirmwareId": "7qHDCp"
@@ -44,6 +45,7 @@
   ],
   "layouts": [
     {
+      "resourceId": "lt01",
       "layoutName": "proto0_space275div3",
       "data": {
         "formatRevision": "LA01",
@@ -484,6 +486,7 @@
       }
     },
     {
+      "resourceId": "lt02",
       "layoutName": "proto0_us_default",
       "data": {
         "formatRevision": "LA01",

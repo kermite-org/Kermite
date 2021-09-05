@@ -1,15 +1,13 @@
 import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/root/organisms';
+import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/facets';
 
-export const NavigationColumn: FC = () => {
-  return (
-    <div css={style}>
-      <GlobalMenuPart />
-      <NavigationButtonsArea />
-    </div>
-  );
-};
+export const NavigationColumn: FC = () => (
+  <div css={style}>
+    <GlobalMenuPart />
+    <NavigationButtonsArea />
+  </div>
+);
 
 const style = css`
   width: 50px;

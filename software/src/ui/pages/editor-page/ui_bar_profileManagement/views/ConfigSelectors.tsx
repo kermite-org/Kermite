@@ -1,21 +1,20 @@
 import { FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { useKeyboardBehaviorModeModel } from '~/ui/commonModels/KeyboardBehaviorModeModel';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
-import { uiStateReader } from '~/ui/commonStore';
+import { keyboardBehaviorModeModule, uiReaders } from '~/ui/commonStore';
 import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
 
 export const BehaviorSelector: FC = () => {
-  const { isSimulatorMode, setSimulatorMode } = useKeyboardBehaviorModeModel();
-  const { isConnected } = uiStateReader.deviceStatus;
+  const { isSimulatorMode, setSimulatorMode } = keyboardBehaviorModeModule;
+  const { isDeviceConnected } = uiReaders;
   return (
     <CheckBoxLine
       checked={isSimulatorMode}
       setChecked={setSimulatorMode}
-      disabled={!isConnected}
+      disabled={!isDeviceConnected}
       text="Simulator"
       hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
     />
@@ -23,13 +22,13 @@ export const BehaviorSelector: FC = () => {
 };
 
 export const MuteModeSelector: FC = () => {
-  const { isMuteMode, setMuteMode } = useKeyboardBehaviorModeModel();
-  const { isConnected } = uiStateReader.deviceStatus;
+  const { isMuteMode, setMuteMode } = keyboardBehaviorModeModule;
+  const { isDeviceConnected } = uiReaders;
   return (
     <CheckBoxLine
       checked={isMuteMode}
       setChecked={setMuteMode}
-      disabled={!isConnected}
+      disabled={!isDeviceConnected}
       text="Mute"
     />
   );
@@ -42,14 +41,14 @@ export const LayoutStandardSelector: FC = () => {
     0: 'US',
     1: 'JIS',
   };
-  const { isConnected } = uiStateReader.deviceStatus;
+  const { isDeviceConnected } = uiReaders;
   return (
     <DualItemsHoverSelector
       items={layoutIndices}
       currentItem={systemLayoutIndex}
       setCurrentItem={setSystemLayoutIndex}
       textDictionary={textDictionary}
-      disabled={!isConnected}
+      disabled={!isDeviceConnected}
       hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
     />
   );
@@ -62,14 +61,14 @@ export const RoutingChannelSelector: FC = () => {
     0: 'Main',
     1: 'Alter',
   };
-  const { isConnected } = uiStateReader.deviceStatus;
+  const { isDeviceConnected } = uiReaders;
   return (
     <DualItemsHoverSelector
       items={channelValues}
       currentItem={routingChannel}
       setCurrentItem={setRoutingChannel}
       textDictionary={textDictionary}
-      disabled={!isConnected}
+      disabled={!isDeviceConnected}
       hint={texts.hint_assigner_topBar_routingChannelSelector}
     />
   );

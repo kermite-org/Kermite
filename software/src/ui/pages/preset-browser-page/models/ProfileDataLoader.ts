@@ -3,12 +3,12 @@ import {
   fallbackProfileData,
   IProfileData,
   IProjectPackageInfo,
+  ProfileDataConverter,
 } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 
 export function useProfileDataLoaded(
   projectKey: string,
@@ -17,7 +17,8 @@ export function useProfileDataLoaded(
 ): IProfileData {
   return useMemo(() => {
     if (projectKey && presetKey) {
-      const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+      const { origin, projectId } =
+        getOriginAndProjectIdFromProjectKey(projectKey);
       const presetSpec = getPresetSpecFromPresetKey(presetKey);
       const info = resourceInfos.find(
         (info) => info.origin === origin && info.projectId === projectId,

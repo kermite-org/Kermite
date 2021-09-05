@@ -1,6 +1,6 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { globalSettingsReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 import { IProfileManagementPartViewModel } from './ProfilesOperationModel';
 
 interface IMenuItem {
@@ -63,21 +63,27 @@ function createMenuItemSources(
       text: texts.label_assigner_menu_importFromFile,
       hint: texts.hint_assigner_menu_importFromFile,
       handler: vm.handleImportFromFile,
-      enabled: globalSettingsReader.isDeveloperMode,
+      enabled: uiReaders.isDeveloperMode,
     },
     {
       key: 'exportToFile',
       text: texts.label_assigner_menu_exportToFile,
       hint: texts.hint_assigner_menu_exportToFile,
       handler: vm.handleExportToFile,
-      enabled:
-        globalSettingsReader.isDeveloperMode && vm.isEditProfileAvailable,
+      enabled: uiReaders.isDeveloperMode && vm.isEditProfileAvailable,
+    },
+    {
+      key: 'loadFromPreset',
+      text: 'Load From Project Preset',
+      hint: 'Load From Project Preset',
+      handler: vm.openLoadingPresetSelectionModal,
+      enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
     {
       key: 'saveAsPreset',
       text: texts.label_assigner_menu_saveAsPreset,
       hint: texts.hint_assigner_menu_saveAsPreset,
-      handler: vm.openExportingPresetSelectionModal,
+      handler: vm.openSavingPresetSelectionModal,
       enabled: isLocalProjectsAvailable && !!vm.currentProfileProjectId,
     },
     {
@@ -94,8 +100,10 @@ export function makeProfileSelectionMenuPartViewModel(
   vm: IProfileManagementPartViewModel,
 ) {
   const state = useLocal({ isOpen: false });
-  const { isLocalProjectsAvailable } = globalSettingsReader;
-  const menuItemsSource = createMenuItemSources(vm, isLocalProjectsAvailable);
+  const menuItemsSource = createMenuItemSources(
+    vm,
+    uiReaders.isLocalProjectSelectedForEdit,
+  );
 
   return {
     get isOpen() {

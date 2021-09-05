@@ -5,6 +5,7 @@
   "firmwares": [
     {
       "type": "standard",
+      "resourceId": "fw01",
       "variationId": "01",
       "variationName": "atmega",
       "standardFirmwareConfig": {
@@ -17,6 +18,7 @@
     },
     {
       "type": "custom",
+      "resourceId": "fw02",
       "variationId": "02",
       "variationName": "atmega_custom",
       "customFirmwareId": "hxcfM7"
@@ -24,6 +26,7 @@
   ],
   "layouts": [
     {
+      "resourceId": "lt01",
       "layoutName": "default",
       "data": {
         "formatRevision": "LA00",

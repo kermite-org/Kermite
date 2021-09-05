@@ -6,11 +6,7 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import {
-  globalSettingsReader,
-  projectPackagesReader,
-  uiStateReader,
-} from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
@@ -26,8 +22,7 @@ export interface IPresetSelectionModel {
 }
 
 function getProjectSelectionLabel(info: IProjectPackageInfo): string {
-  const { isDeveloperMode } = globalSettingsReader;
-  if (isDeveloperMode) {
+  if (uiReaders.isDeveloperMode) {
     const prefix = info.origin === 'local' ? '(local) ' : '';
     return `${prefix}${info.keyboardName}`;
   } else {
@@ -37,7 +32,7 @@ function getProjectSelectionLabel(info: IProjectPackageInfo): string {
 
 function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
   return infos.map((info) => ({
-    value: info.sig,
+    value: info.projectKey,
     label: getProjectSelectionLabel(info),
   }));
 }
@@ -48,9 +43,11 @@ type IPresetSelectorOption = ISelectorOption & {
 
 function makePresetOptions(
   resourceInfos: IProjectPackageInfo[],
-  projectSig: string,
+  projectKey: string,
 ): IPresetSelectorOption[] {
-  const projectInfo = resourceInfos.find((info) => info.sig === projectSig);
+  const projectInfo = resourceInfos.find(
+    (info) => info.projectKey === projectKey,
+  );
   if (!projectInfo) {
     return [];
   }
@@ -85,8 +82,6 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
     presetKey: '',
   });
 
-  const { globalSettings } = uiStateReader;
-
   const resourceInfos = useMemo(
     projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected,
     [],
@@ -105,8 +100,8 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
 
   useEffect(() => {
     sel.projectKey =
-      globalSettingsReader.globalProjectKey || projectOptions[0]?.value || '';
-  }, [globalSettings]);
+      uiReaders.globalProjectKey || projectOptions[0]?.value || '';
+  }, [uiReaders.globalSettings]);
 
   const loadedProfileData = useProfileDataLoaded(
     modProjectKey,

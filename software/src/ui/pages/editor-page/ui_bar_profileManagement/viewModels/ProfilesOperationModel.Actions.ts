@@ -1,11 +1,11 @@
 import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
-import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
+import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { commitUiState, uiActions } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
-import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 
@@ -55,7 +55,8 @@ const createProfile = async () => {
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (res && res.projectKey && res.layoutKey) {
     const { projectKey, layoutKey } = res;
-    const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+    const { origin, projectId } =
+      getOriginAndProjectIdFromProjectKey(projectKey);
     profilesActions.createProfileUnnamed(origin, projectId, {
       type: 'blank',
       layoutName: layoutKey,
@@ -73,7 +74,7 @@ const inputNewProfileName = async (
     defaultText,
     caption,
   });
-  if (newProfileName) {
+  if (newProfileName !== undefined) {
     const nameValid = await checkValidNewProfileName(projectId, newProfileName);
     if (nameValid) {
       return newProfileName;
@@ -135,14 +136,14 @@ const handleSaveUnsavedProfile = async () => {
       projectId,
       '',
     );
-    if (newProfileName) {
+    if (newProfileName !== undefined) {
       profilesActions.saveUnsavedProfileAs(newProfileName);
     }
   }
 };
 
 const openConfiguration = () => {
-  uiStatusModel.status.profileConfigModalVisible = true;
+  commitUiState({ profileConfigModalVisible: true });
 };
 
 const onSaveButton = () => {
@@ -171,7 +172,8 @@ const handleExportToFile = async () => {
   const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
   if (filePath) {
     const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
-    profilesActions.exportToFile(modFilePath);
+    await profilesActions.exportToFile(modFilePath);
+    modalConfirm({ caption: 'export to file', message: 'file saved.' });
   }
 };
 
@@ -181,9 +183,9 @@ const openUserProfilesFolder = () => {
 
 const onWriteButton = async () => {
   await profilesActions.saveProfile();
-  uiStatusModel.setLoading();
+  uiActions.setLoading();
   const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-  uiStatusModel.clearLoading();
+  uiActions.clearLoading();
   // todo: トーストにする?
   if (done) {
     await modalAlert('write succeeded.');

@@ -4,20 +4,18 @@ import {
   ICoreState,
   IProfileData,
   IProfileEditSource,
-} from '~/shared';
-import {
   vObject,
   vSchemaOneOf,
   vString,
   vValueEquals,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import {
   commitCoreState,
   coreState,
   coreStateManager,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
 const profileEditSourceLoadingDataSchema = vSchemaOneOf([
@@ -68,9 +66,12 @@ function fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
   if (editSource.type === 'ProfileNewlyCreated') {
     const {
       loadedProfileData,
-      globalSettings: { globalProjectId },
+      globalSettings: { globalProjectSpec },
     } = coreState;
-    if (globalProjectId && loadedProfileData.projectId !== globalProjectId) {
+    if (
+      globalProjectSpec &&
+      loadedProfileData.projectId !== globalProjectSpec.projectId
+    ) {
       return createInternalProfileEditSourceOrFallback();
     }
   }
@@ -109,16 +110,18 @@ async function patchStatusOnGlobalProjectIdChange() {
   }
 }
 
-const local = { globalProjectId: '' };
+const local: { globalProjectId: string | undefined } = {
+  globalProjectId: undefined,
+};
 
 function onCoreStateChange(partialState: Partial<ICoreState>) {
   if (partialState.globalSettings) {
     const {
-      globalSettings: { globalProjectId },
+      globalSettings: { globalProjectSpec },
     } = partialState;
-    if (globalProjectId !== local.globalProjectId) {
+    if (globalProjectSpec?.projectId !== local.globalProjectId) {
       patchStatusOnGlobalProjectIdChange();
-      local.globalProjectId = globalProjectId;
+      local.globalProjectId = globalProjectSpec?.projectId;
     }
   }
   if (partialState.profileEditSource) {
@@ -133,7 +136,7 @@ function onCoreStateChange(partialState: Partial<ICoreState>) {
 }
 
 async function initializeAsync() {
-  local.globalProjectId = coreState.globalSettings.globalProjectId;
+  local.globalProjectId = coreState.globalSettings.globalProjectSpec?.projectId;
   await profileManagerCore.ensureProfilesDirectoryExists();
   const allProfileEntries = await profileManagerCore.listAllProfileEntries();
   commitCoreState({ allProfileEntries });

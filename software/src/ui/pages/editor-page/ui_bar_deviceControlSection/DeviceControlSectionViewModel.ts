@@ -1,7 +1,7 @@
-import { uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 
 export function makeDeviceControlSectionViewModel() {
-  const { deviceStatus } = uiStateReader;
+  const { deviceStatus } = uiReaders;
   if (deviceStatus.isConnected) {
     return {
       isDeviceConnected: true,

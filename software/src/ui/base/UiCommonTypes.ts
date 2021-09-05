@@ -49,3 +49,10 @@ export interface ICommonSelectorViewModel {
 }
 
 export type FcWithClassName = FC<{ className?: string }>;
+
+export type IFeatureEditor<T> = {
+  load(value: T): void;
+  canSave: boolean;
+  save(): T;
+  render(): JSX.Element;
+};

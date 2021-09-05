@@ -1,5 +1,4 @@
-import { duplicateObjectByJsonStringifyParse } from '~/shared';
-import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
+import { duplicateObjectByJsonStringifyParse, ICheckerEx } from '~/shared';
 
 export namespace UiLocalStorage {
   export function writeItem<T>(key: string, value: T) {

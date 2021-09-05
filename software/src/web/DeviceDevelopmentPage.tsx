@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { Packets } from '~/shell/services/device/keyboardDevice/Packets';
+import { Packets } from '~/shell/services/keyboardDevice/Packets';
 
 async function setupDevice() {
   const devices = await navigator.hid.requestDevice({

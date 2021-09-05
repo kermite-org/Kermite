@@ -8,8 +8,7 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
+import { projectPackagesReader, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalAlert } from '~/ui/components';
 
 export type FirmwareUpdatePhase =
@@ -28,7 +27,7 @@ function getTargetDeviceFromFirmwareInfo(
     );
   }
   if (entry.type === 'custom') {
-    const item = uiStateReader.allCustomFirmwareInfos.find(
+    const item = uiReaders.allCustomFirmwareInfos.find(
       (it) => it.firmwareId === entry.customFirmwareId,
     );
     return item?.targetDevice as IFirmwareTargetDevice;
@@ -64,7 +63,7 @@ export class FirmwareUpdateModel {
     const projectOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
-          value: `${info.sig}:${firmware.variationName}`,
+          value: `${info.projectKey}:${firmware.variationName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
           } (${firmware.variationName})`,
@@ -115,11 +114,10 @@ export class FirmwareUpdateModel {
 
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
     if (this.deviceDetectionStatus.detected) {
-      const [projectSig, variationName] = this.currentProjectFirmwareSpec.split(
-        ':',
-      );
+      const [projectKey, variationName] =
+        this.currentProjectFirmwareSpec.split(':');
       const projectInfo = this.projectInfosWithFirmware.find((it) =>
-        it.sig.startsWith(projectSig),
+        it.projectKey.startsWith(projectKey),
       );
       const firmwareInfo = projectInfo?.firmwares.find(
         (f) => f.variationName === variationName,
@@ -148,21 +146,20 @@ export class FirmwareUpdateModel {
       this.phase === 'WaitingUploadOrder' &&
       this.deviceDetectionStatus.detected
     ) {
-      const [projectSig, variationName] = this.currentProjectFirmwareSpec.split(
-        ':',
-      );
+      const [projectKey, variationName] =
+        this.currentProjectFirmwareSpec.split(':');
       const info = this.projectInfosWithFirmware.find((it) =>
-        it.sig.startsWith(projectSig),
+        it.projectKey.startsWith(projectKey),
       );
       if (info) {
         this.phase = 'Uploading';
-        uiStatusModel.setLoading();
+        uiActions.setLoading();
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
           info.projectId,
           variationName,
         );
-        uiStatusModel.clearLoading();
+        uiActions.clearLoading();
         this.firmwareUploadResult = res;
         if (res === 'ok') {
           this.phase = 'UploadSuccess';

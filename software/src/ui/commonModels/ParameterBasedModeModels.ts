@@ -4,7 +4,7 @@ import {
   IRoutingChannelModel,
   ISystemLayoutModel,
 } from '~/ui/commonModels/Interfaces';
-import { uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore/UiReaders';
 
 interface ISystemParameterModel {
   value: number;
@@ -15,7 +15,7 @@ function useSystemParameterModel(
   parameterIndex: number,
   defaultValue: number,
 ): ISystemParameterModel {
-  const { deviceStatus } = uiStateReader;
+  const { deviceStatus } = uiReaders;
   const _value =
     deviceStatus.isConnected &&
     deviceStatus.systemParameterValues[parameterIndex];

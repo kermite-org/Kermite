@@ -1,12 +1,13 @@
 import { app, BrowserWindow, Rectangle } from 'electron';
-import { getObjectKeys, IAppWindowStatus } from '~/shared';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import {
+  getObjectKeys,
+  IAppWindowStatus,
   vObject,
   vNumber,
   vString,
   vBoolean,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
+import { DisplayKeyboardDesignLoader } from '~/shared/loaders/DisplayKeyboardDesignLoader';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { pathRelative } from '~/shell/funcs';
 import {
@@ -14,14 +15,14 @@ import {
   coreState,
   createCoreModule,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { MenuManager } from '~/shell/services/window/MenuManager';
 import { IAppWindowWrapper } from './Interfaces';
 import {
   PageSourceWatcher,
   preparePreloadJsFile,
   setupWebContentSourceChecker,
-} from './modules';
+} from './helpers';
 
 // const enableFilesWatcher = true;
 const enableFilesWatcher = appEnv.isDevelopment;
@@ -252,7 +253,8 @@ export class AppWindowWrapper implements IAppWindowWrapper {
     if (this.mainWindow) {
       const bounds = this.mainWindow.getBounds();
       if (this.isWidgetMode) {
-        this.state.widgetProjectId = profilesReader.getCurrentProfileProjectId();
+        this.state.widgetProjectId =
+          profilesReader.getCurrentProfileProjectId();
         this.state.widgetWindowBounds = bounds;
       } else {
         this.state.mainWindowBounds = bounds;

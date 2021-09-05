@@ -4,6 +4,13 @@ import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
+import { fileDialogLoaders } from '~/shell/loaders/FileDialogLoaders';
+import { userPresetHubDataLoader } from '~/shell/loaders/UserPresetHubDataLoader';
+import {
+  keyboardConfigModule,
+  layoutManagerRoot,
+  projectPackageModule,
+} from '~/shell/modules';
 import {
   commitCoreState,
   coreActionDistributor,
@@ -11,22 +18,15 @@ import {
   coreStateManager,
   dispatchCoreAction,
   profilesReader,
-} from '~/shell/global';
-import {
-  keyboardConfigModule,
-  projectPackageModule,
-  layoutManagerRoot,
-} from '~/shell/modules';
+} from '~/shell/modules/core';
 import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
 import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModule';
 import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
-import { KeyboardDeviceService } from '~/shell/services/device/keyboardDevice';
-import { JsonFileServiceStatic } from '~/shell/services/file/JsonFileServiceStatic';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
-import { InputLogicSimulatorD } from '~/shell/services/keyboardLogic/inputLogicSimulatorD';
-import { UserPresetHubService } from '~/shell/services/userPresetHub/UserPresetHubService';
+import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
+import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
 import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
 export class ApplicationRoot {
@@ -34,11 +34,9 @@ export class ApplicationRoot {
 
   private deviceService = new KeyboardDeviceService();
 
-  private inputLogicSimulator = new InputLogicSimulatorD(this.deviceService);
+  private inputLogicSimulator = new InputLogicSimulator(this.deviceService);
 
   private windowWrapper = new AppWindowWrapper();
-
-  private presetHubService = new UserPresetHubService();
 
   // ------------------------------------------------------------
 
@@ -68,9 +66,9 @@ export class ApplicationRoot {
           variationName,
         ),
       presetHub_getServerProjectIds: () =>
-        this.presetHubService.getServerProjectIds(),
+        userPresetHubDataLoader.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>
-        this.presetHubService.getServerProfiles(projectId),
+        userPresetHubDataLoader.getServerProfiles(projectId),
       config_writeKeyMappingToDevice: async () => {
         const profile = profilesReader.getCurrentProfile();
         if (profile) {
@@ -88,21 +86,18 @@ export class ApplicationRoot {
       config_checkLocalRepositoryFolderPath: async (path) =>
         checkLocalRepositoryFolder(path),
       file_getOpenJsonFilePathWithDialog:
-        JsonFileServiceStatic.getOpeningJsonFilePathWithDialog,
+        fileDialogLoaders.getOpeningJsonFilePathWithDialog,
       file_getSaveJsonFilePathWithDialog:
-        JsonFileServiceStatic.getSavingJsonFilePathWithDialog,
+        fileDialogLoaders.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
-        JsonFileServiceStatic.loadObjectFromJsonWithFileDialog,
+        fileDialogLoaders.loadObjectFromJsonWithFileDialog,
       file_saveObjectToJsonWithFileDialog:
-        JsonFileServiceStatic.saveObjectToJsonWithFileDialog,
+        fileDialogLoaders.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
-        JsonFileServiceStatic.getOpeningDirectoryPathWithDialog,
+        fileDialogLoaders.getOpeningDirectoryPathWithDialog,
 
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_lazyInitializeServices: () => this.lazyInitializeServices(),
-
-      simulator_postSimulationTargetProfile: async (profile) =>
-        this.inputLogicSimulator.postSimulationTargetProfile(profile),
 
       global_dispatchCoreAction: async (action) =>
         await dispatchCoreAction(action),

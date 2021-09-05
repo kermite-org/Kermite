@@ -8,7 +8,7 @@ import {
   IProjectResourceInfo,
   IResourceOrigin,
 } from '~/shared';
-import { createProjectSig } from '~/shared/funcs/DomainRelatedHelpers';
+import { createProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import {
   fsExistsSync,
   fsLstatSync,
@@ -21,9 +21,9 @@ import {
   pathJoin,
   pathRelative,
 } from '~/shell/funcs';
-import { globalSettingsReader } from '~/shell/global';
 import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
+import { globalSettingsReader } from '~/shell/modules/core';
 import {
   IFirmwareBinaryFileSpec,
   IProjectResourceProviderImpl,
@@ -216,7 +216,8 @@ export function readCustomParameterDefinition(
 }
 
 export class ProjectResourceProviderImpl_Local
-  implements IProjectResourceProviderImpl {
+  implements IProjectResourceProviderImpl
+{
   private projectInfoSources: IProjectResourceInfoSource[] = [];
 
   private loadedLocalRepositoryDir: string | undefined;
@@ -232,9 +233,10 @@ export class ProjectResourceProviderImpl_Local
       return [];
     }
     if (localRepositoryDir !== this.loadedLocalRepositoryDir) {
-      this.projectInfoSources = await ProjectResourceInfoSourceLoader.loadLocalResources(
-        localRepositoryDir,
-      );
+      this.projectInfoSources =
+        await ProjectResourceInfoSourceLoader.loadLocalResources(
+          localRepositoryDir,
+        );
       this.loadedLocalRepositoryDir = localRepositoryDir;
     }
 
@@ -249,7 +251,7 @@ export class ProjectResourceProviderImpl_Local
         layoutNames,
       } = it;
       return {
-        sig: createProjectSig(origin, projectId),
+        projectKey: createProjectKey(origin, projectId),
         origin,
         projectId,
         keyboardName,

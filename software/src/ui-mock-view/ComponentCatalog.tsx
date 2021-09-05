@@ -13,6 +13,7 @@ import {
   ToggleSwitchLineExamples,
   ProjectKeyboardListExamples,
 } from '~/ui/components';
+import { RouterHeaderBarExamples } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar.visor';
 import { fieldSetter } from '~/ui/helpers';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;
@@ -29,6 +30,7 @@ const visualSource: Record<string, IVisualEntry> = {
   OnboardingPullTabExamples,
   ToggleSwitchExamples,
   ToggleSwitchLineExamples,
+  RouterHeaderBarExamples,
 };
 
 type VisualKey = keyof typeof visualSource;

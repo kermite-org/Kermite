@@ -3,18 +3,19 @@ import produce from 'immer';
 import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  getNextProjectResourceId,
   IProfileData,
   IProfileEditSource,
   IProfileEntry,
+  ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
   commitCoreState,
   coreState,
   createCoreModule,
   dispatchCoreAction,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profile/PresetProfileLoader';
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
@@ -272,7 +273,13 @@ export const profileManagerModule = createCoreModule({
         if (profile) {
           profile.data = preset;
         } else {
-          draft.presets.push({ presetName: presetName, data: preset });
+          const existingIds = draft.presets.map((it) => it.resourceId);
+          const resourceId = getNextProjectResourceId('pr', existingIds);
+          draft.presets.push({
+            resourceId,
+            presetName: presetName,
+            data: preset,
+          });
         }
       });
       dispatchCoreAction({

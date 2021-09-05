@@ -40,13 +40,13 @@ export function useShapePreviewPageModel(): IShapePreviewPageModel {
     holdKeyIndices: holdKeyIndices,
     projectSelectorSource: {
       options: shapesModel.projectInfos.map((info) => ({
-        value: info.sig,
+        value: info.projectKey,
         label: `${info.origin === 'local' ? '(local) ' : ''} ${
           info.keyboardName
         }`,
       })),
-      value: shapesModel.currentProjectSig,
-      setValue: shapesModel.setCurrentProjectSig,
+      value: shapesModel.currentProjectKey,
+      setValue: shapesModel.setCurrentProjectKey,
     },
     layoutSelectorSource: {
       options: shapesModel.optionLayoutNames.map((layoutName) => ({

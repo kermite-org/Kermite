@@ -85,16 +85,16 @@ interface IProfileSetupModalViewModel {
 
 function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
   return infos.map((info) => ({
-    value: info.sig,
+    value: info.projectKey,
     label: `${info.origin === 'local' ? '(local) ' : ''}${info.keyboardName}`,
   }));
 }
 
 function makeLayoutOptions(
   resourceInfos: IProjectPackageInfo[],
-  projectSig: string,
+  projectKey: string,
 ): ISelectorOption[] {
-  const info = resourceInfos.find((info) => info.sig === projectSig);
+  const info = resourceInfos.find((info) => info.projectKey === projectKey);
   return (
     info?.layouts.map((it) => ({
       value: it.layoutName,

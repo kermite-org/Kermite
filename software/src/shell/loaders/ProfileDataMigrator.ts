@@ -7,8 +7,8 @@ import {
   IPersistAssignEntry,
   IPersistProfileData,
   ModifierVirtualKey,
+  ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
 
 namespace ProfileDataMigratorHelper {
@@ -61,7 +61,7 @@ export namespace ProfileDataMigrator {
     // profile.assignType を profile.settings.assignTypeに移動
     // アサインを辞書形式から配列形式に変更
     showLog(`PRF03 --> PRF04`);
-    const _profile = (profile as any) as {
+    const _profile = profile as any as {
       formatRevision: string;
       settings: {
         assignType?: 'single' | 'dual';
@@ -100,17 +100,19 @@ export namespace ProfileDataMigrator {
     (profile as any).formatRevision = 'PRF06';
     showLog(`PRF05 --> PRF06`);
     ProfileDataMigratorHelper.patchAllLayers(profile.layers, (la) => {
-      la.attachedModifiers = ProfileDataMigratorHelper.fixAttachedModifiersFormat(
-        la.attachedModifiers,
-      );
+      la.attachedModifiers =
+        ProfileDataMigratorHelper.fixAttachedModifiersFormat(
+          la.attachedModifiers,
+        );
     });
     ProfileDataMigratorHelper.patchAllAssignOperations(
       profile.assigns,
       (op) => {
         if (op.type === 'keyInput') {
-          op.attachedModifiers = ProfileDataMigratorHelper.fixAttachedModifiersFormat(
-            op.attachedModifiers,
-          );
+          op.attachedModifiers =
+            ProfileDataMigratorHelper.fixAttachedModifiersFormat(
+              op.attachedModifiers,
+            );
         }
       },
     );
@@ -136,6 +138,9 @@ export namespace ProfileDataMigrator {
     if (profile.formatRevision === <string>'PRF06') {
       if (profile.projectId.length > 6) {
         profile.projectId = profile.projectId.slice(0, 6);
+      }
+      if (profile.projectId === '') {
+        profile.projectId = '000000';
       }
     }
     return profile;

@@ -13,8 +13,8 @@ import {
   removeArrayItems,
   routerConstants,
   VirtualKey,
+  DisplayKeyboardDesignLoader,
 } from '~/shared';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { ipcAgent } from '~/ui/base';
 import { ILayerStackItem, IPlayerModel } from '~/ui/commonModels/Interfaces';
 import { useRoutingChannelModel } from '~/ui/commonModels/ParameterBasedModeModels';
