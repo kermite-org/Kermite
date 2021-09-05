@@ -1,3 +1,4 @@
+import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { router, texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { globalSettingsReader } from '~/ui/commonStore';
@@ -62,8 +63,9 @@ const entrySources: NavigationEntrySource[] = [
     pageName: 'project',
     iconSpec: 'fa fa-globe',
     hint: 'project edit',
-    // isAvailable: () => globalSettingsModel.isLocalProjectSelectedForEdit,
-    isAvailable: () => false,
+    isAvailable: () =>
+      featureFlags.allowEditLocalProject &&
+      globalSettingsReader.isLocalProjectSelectedForEdit,
   },
   {
     pagePath: '/projectSelection',

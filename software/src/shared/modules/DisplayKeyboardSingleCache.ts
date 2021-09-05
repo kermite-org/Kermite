@@ -1,4 +1,4 @@
-import { IDisplayKeyboardDesign, IPersistKeyboardDesign } from '~/shared';
+import { IDisplayKeyboardDesign, IPersistKeyboardDesign } from '~/shared/defs';
 import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 
 const state = new (class {

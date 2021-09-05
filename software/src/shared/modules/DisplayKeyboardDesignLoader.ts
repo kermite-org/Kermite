@@ -1,7 +1,4 @@
 import {
-  convertUndefinedToDefaultValue,
-  degToRad,
-  flattenArray,
   IDisplayKeyboardDesign,
   IDisplayKeyEntity,
   IDisplayKeyShape,
@@ -9,9 +6,14 @@ import {
   IPersistKeyboardDesign,
   IPersistKeyboardDesignMirrorKeyEntity,
   IPersistKeyboardDesignRealKeyEntity,
+} from '~/shared/defs';
+import {
+  convertUndefinedToDefaultValue,
+  degToRad,
+  flattenArray,
   rotateCoord,
   translateCoord,
-} from '~/shared';
+} from '~/shared/funcs';
 import { getIsoEnterShapePoints } from '~/shared/modules/ExtendedKeyShapes';
 import {
   getCoordUnitFromUnitSpec,

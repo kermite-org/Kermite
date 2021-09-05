@@ -4,19 +4,21 @@ import { PagePaths, uiStatusModel } from '~/ui/commonModels';
 import { siteModel, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
-import { OnboardingFrame } from '~/ui/features/OnboardingPanel';
-import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
-import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
-import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
+import { OnboardingFrame } from '~/ui/features';
+import {
+  ProjectSelectionPage,
+  ProjectEditPage,
+  ProjectLayoutEditPage,
+  ProjectPresetEditPage,
+  WelcomePage,
+  SettingsPage,
+} from '~/ui/pages';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
-import { ProjectSelectionPage } from '~/ui/pages/project-selection-page';
-import { UiSettingsPage } from '~/ui/pages/settings-page';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
-import { WelcomePage } from '~/ui/pages/welcome-page';
 import {
   NavigationColumn,
   WindowStatusBarSection,
@@ -46,7 +48,7 @@ const MainColumnRoutes = () => {
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
-      {pagePath === '/settings' && <UiSettingsPage />}
+      {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectEdit' && <ProjectEditPage />}

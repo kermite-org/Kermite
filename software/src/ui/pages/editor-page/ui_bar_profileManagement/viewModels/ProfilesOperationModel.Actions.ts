@@ -4,8 +4,8 @@ import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelper
 import { ipcAgent, texts } from '~/ui/base';
 import { uiStatusModel } from '~/ui/commonModels';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
-import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 

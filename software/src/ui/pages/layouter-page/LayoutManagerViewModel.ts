@@ -7,7 +7,7 @@ import {
   uiState,
   uiStateReader,
 } from '~/ui/commonStore';
-import { UiLayouterCore } from '~/ui/pages/layouter';
+import { UiLayouterCore } from '~/ui/features';
 import {
   ILayoutManagerModel,
   useLayoutManagerModel,

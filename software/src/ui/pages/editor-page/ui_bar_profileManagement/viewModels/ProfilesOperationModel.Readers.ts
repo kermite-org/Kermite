@@ -1,14 +1,12 @@
 import { uiStateReader } from '~/ui/commonStore';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesReader } from '~/ui/pages/editor-page/models';
-import { editorModel } from '~/ui/pages/editor-page/models/EditorModel';
 
 export const profilesOperationReader = {
   get CanWriteKeyMappingToDevice(): boolean {
     const { deviceStatus } = uiStateReader;
-    const {
-      developerMode,
-      allowCrossKeyboardKeyMappingWrite,
-    } = uiStateReader.globalSettings;
+    const { developerMode, allowCrossKeyboardKeyMappingWrite } =
+      uiStateReader.globalSettings;
     const { profileEditSource } = profilesReader;
     const isInternalProfile = profileEditSource.type === 'InternalProfile';
     const isDeviceConnected = deviceStatus.isConnected;

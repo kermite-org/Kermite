@@ -1,4 +1,4 @@
-import { IKeyPlacementAnchor } from '~/shared';
+import { IKeyPlacementAnchor } from '~/shared/defs';
 
 type IPoint = { x: number; y: number };
 

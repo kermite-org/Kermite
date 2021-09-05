@@ -1,4 +1,5 @@
 import { globalSettingsDefault, globalSettingsLoadingSchema } from '~/shared';
+import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
 import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
@@ -16,7 +17,9 @@ export const globalSettingsModule = createCoreModule({
         settings.localProjectRootFolderPath = '';
       }
     }
-    settings.useLocalResources = false;
+    if (!featureFlags.allowEditLocalProject) {
+      settings.useLocalResources = false;
+    }
     commitCoreState({ globalSettings: settings });
   },
   config_writeGlobalSettings(partialConfig) {
