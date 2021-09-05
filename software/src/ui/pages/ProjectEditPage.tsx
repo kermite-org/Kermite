@@ -14,6 +14,7 @@ type IProjectResourceItem = {
   itemType: IProjectResourceItemType;
   itemName: string;
   resourceId: string;
+  additionalInfoText?: string;
 };
 
 function encodeProjectResourceItemKey(
@@ -54,6 +55,7 @@ export const ProjectEditPage: FC = () => {
       itemType: 'firmware' as const,
       itemName: it.variationName,
       resourceId: it.resourceId,
+      additionalInfoText: `(${it.type})`,
     })),
     ...projectInfo.layouts.map((it) => ({
       itemKey: encodeProjectResourceItemKey('layout', it.layoutName),
@@ -130,7 +132,8 @@ export const ProjectEditPage: FC = () => {
         {resourceItems.map((item) => (
           <div key={item.itemKey}>
             <span>
-              [{item.itemType}]({item.resourceId}) {item.itemName}
+              [{item.itemType}]({item.resourceId}){item.additionalInfoText}{' '}
+              {item.itemName}
             </span>
             <button onClick={() => editResourceItem(item.itemKey)}>edit</button>
             <button
