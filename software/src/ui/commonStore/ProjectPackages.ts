@@ -2,14 +2,11 @@ import produce from 'immer';
 import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
-  getNextFirmwareId,
-  getNextProjectResourceId,
   ICustomFirmwareEntry,
-  IKermiteStandardKeyboardSpec,
-  IPersistKeyboardDesign,
-  IPersistProfileData,
   IProjectFirmwareEntry,
+  IProjectLayoutEntry,
   IProjectPackageInfo,
+  IProjectPresetEntry,
   IResourceOrigin,
   IStandardFirmwareEntry,
 } from '~/shared';
@@ -54,30 +51,13 @@ export const projectPackagesReader = {
   },
   getEditTargetFirmwareEntry<K extends 'standard' | 'custom'>(
     type: K,
-    variationId: string,
+    resourceId: string,
   ):
     | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
     | undefined {
     const projectInfo = uiReaders.editTargetProject;
     const entry = projectInfo?.firmwares.find(
-      (it) => it.variationId === variationId,
-    );
-    if (entry?.type === type) {
-      return entry as any;
-    }
-    return undefined;
-  },
-  getEditTargetFirmwareEntryByVariationName_deprecated<
-    K extends 'standard' | 'custom',
-  >(
-    type: K,
-    variationName: string,
-  ):
-    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
-    | undefined {
-    const projectInfo = uiReaders.editTargetProject;
-    const entry = projectInfo?.firmwares.find(
-      (it) => it.variationName === variationName,
+      (it) => it.resourceId === resourceId,
     );
     if (entry?.type === type) {
       return entry as any;
@@ -97,74 +77,36 @@ function patchLocalEditProject(
   projectPackagesWriter.saveLocalProject(newProjectInfo);
 }
 
+function patchLocalProjectResourceItem<
+  K extends 'presets' | 'layouts' | 'firmwares',
+>(target: K, entry: IProjectPackageInfo[K][0]) {
+  patchLocalEditProject((draft) => {
+    const resourceItems = draft[target];
+    const index = resourceItems.findIndex(
+      (it) => it.resourceId === entry.resourceId,
+    );
+    if (index >= 0) {
+      resourceItems.splice(index, 1, entry as any);
+    } else {
+      resourceItems.push(entry as any);
+    }
+  });
+}
+
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
-  saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
-    patchLocalEditProject((draft) => {
-      const layout = draft.layouts.find((la) => la.layoutName === layoutName);
-      if (layout) {
-        layout.data = design;
-      } else {
-        const existingIds = draft.layouts.map((it) => it.resourceId);
-        const resourceId = getNextProjectResourceId('lt', existingIds);
-        draft.layouts.push({ resourceId, layoutName, data: design });
-      }
-    });
+  saveLocalProjectLayout(entry: IProjectLayoutEntry) {
+    patchLocalProjectResourceItem('layouts', entry);
   },
-  saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
-    patchLocalEditProject((draft) => {
-      const profile = draft.presets.find((la) => la.presetName === presetName);
-      if (profile) {
-        profile.data = preset;
-      } else {
-        const existingIds = draft.presets.map((it) => it.resourceId);
-        const resourceId = getNextProjectResourceId('pr', existingIds);
-        draft.presets.push({ resourceId, presetName, data: preset });
-      }
-    });
+  saveLocalProjectPreset(entry: IProjectPresetEntry) {
+    patchLocalProjectResourceItem('presets', entry);
   },
   saveLocalProjectFirmware(entry: IProjectFirmwareEntry) {
-    patchLocalEditProject((draft) => {
-      const index = draft.firmwares.findIndex(
-        (it) => it.variationId === entry.variationId,
-      );
-      if (index >= 0) {
-        draft.firmwares.splice(index, 1, entry);
-      } else {
-        draft.firmwares.push(entry);
-      }
-    });
-  },
-  saveLocalProjectStandardFirmware_deprecated(
-    variationId: string,
-    variationName: string,
-    config: IKermiteStandardKeyboardSpec,
-  ) {
-    patchLocalEditProject((draft) => {
-      const firmware = draft.firmwares.find(
-        (it) => it.variationId === variationId,
-      );
-      if (firmware) {
-        if (firmware.type === 'standard') {
-          firmware.standardFirmwareConfig = config;
-        }
-      } else {
-        const existingIds = draft.firmwares.map((it) => it.variationId);
-        const newVariationId = getNextFirmwareId(existingIds);
-        const resourceId = `fw${newVariationId}`;
-        draft.firmwares.push({
-          type: 'standard',
-          resourceId,
-          variationName,
-          variationId: newVariationId,
-          standardFirmwareConfig: config,
-        });
-      }
-    });
+    patchLocalProjectResourceItem('firmwares', entry);
   },
 };
 

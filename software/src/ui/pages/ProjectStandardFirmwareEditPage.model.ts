@@ -76,11 +76,11 @@ const readers = {
 };
 
 const actions = {
-  loadSourceFirmwareEntry(variationId: string) {
-    if (variationId) {
+  loadSourceFirmwareEntry(resourceId: string) {
+    if (resourceId) {
       store.sourceEntry = projectPackagesReader.getEditTargetFirmwareEntry(
         'standard',
-        variationId,
+        resourceId,
       )!;
     } else {
       const newVariationId = getNextFirmwareId(readers.existingVariationIds);
@@ -112,11 +112,11 @@ const actions = {
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  variationId: string,
+  resourceId: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(variationId),
-    [variationId],
+    () => actions.loadSourceFirmwareEntry(resourceId),
+    [resourceId],
   );
   const {
     sourceEntry: { variationName, standardFirmwareConfig },

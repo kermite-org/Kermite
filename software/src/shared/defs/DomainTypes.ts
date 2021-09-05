@@ -74,21 +74,25 @@ export interface ICustomFirmwareEntry {
 export type IProjectFirmwareEntry =
   | IStandardFirmwareEntry
   | ICustomFirmwareEntry;
+
+export interface IProjectLayoutEntry {
+  resourceId: string;
+  layoutName: string;
+  data: IPersistKeyboardDesign;
+}
+
+export interface IProjectPresetEntry {
+  resourceId: string;
+  presetName: string;
+  data: IPersistProfileData;
+}
 export interface IProjectPackageFileContent {
   formatRevision: 'PKG0';
   projectId: string;
   keyboardName: string;
   firmwares: IProjectFirmwareEntry[];
-  layouts: {
-    resourceId: string;
-    layoutName: string;
-    data: IPersistKeyboardDesign;
-  }[];
-  presets: {
-    resourceId: string;
-    presetName: string;
-    data: IPersistProfileData;
-  }[];
+  layouts: IProjectLayoutEntry[];
+  presets: IProjectPresetEntry[];
 }
 
 export type IProjectPackageInfo = {

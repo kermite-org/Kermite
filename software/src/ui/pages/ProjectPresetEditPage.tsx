@@ -1,9 +1,10 @@
-import { css, FC, jsx, useMemo } from 'qx';
-import { fallbackPersistProfileData } from '~/shared';
+import { css, FC, jsx } from 'qx';
+import { fallbackProjectPresetEntry, IProjectPresetEntry } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
-import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
+import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
+import { useMemoEx } from '~/ui/helpers';
 import {
   AssignerGeneralComponent,
   AssignerGeneralComponent_OutputPropsSupplier,
@@ -13,32 +14,41 @@ type Props = {
   spec: IPageSpec_ProjectPresetEdit;
 };
 
-export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
-  const projectInfo = projectPackagesHooks.useEditTargetProject();
-  const originalProfile = useMemo(() => {
-    const entry = projectInfo.presets.find(
-      (it) => it.presetName === presetName,
+const readers = {
+  getSourcePresetEntry(resourceId: string): IProjectPresetEntry {
+    const projectInfo = uiReaders.editTargetProject;
+    const presetEntry = projectInfo?.presets.find(
+      (it) => it.resourceId === resourceId,
     );
-    return entry?.data || fallbackPersistProfileData;
-  }, [projectInfo]);
+    return presetEntry || fallbackProjectPresetEntry;
+  },
+};
 
+export const ProjectPresetEditPage: FC<Props> = ({
+  spec: { presetResourceId },
+}) => {
+  const sourcePresetEntry = useMemoEx(readers.getSourcePresetEntry, [
+    presetResourceId,
+  ]);
   const { isModified, emitSavingDesign } =
     AssignerGeneralComponent_OutputPropsSupplier;
 
   const saveHandler = () => {
-    const newProfile = emitSavingDesign();
-    projectPackagesWriter.saveLocalProjectPreset(presetName, newProfile);
+    projectPackagesWriter.saveLocalProjectPreset({
+      ...sourcePresetEntry,
+      data: emitSavingDesign(),
+    });
   };
 
   return (
     <div css={style}>
       <RouteHeaderBar
-        title={`edit project preset: ${presetName}`}
+        title={`edit project preset: ${sourcePresetEntry.presetName}`}
         backPagePath="/projectEdit"
         canSave={isModified}
         saveHandler={saveHandler}
       />
-      <AssignerGeneralComponent originalProfile={originalProfile} />
+      <AssignerGeneralComponent originalProfile={sourcePresetEntry.data} />
     </div>
   );
 };

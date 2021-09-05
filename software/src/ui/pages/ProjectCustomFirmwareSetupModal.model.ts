@@ -20,11 +20,11 @@ const helpers = {
     const projectInfo = uiReaders.editTargetProject;
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
-  getSourceFirmwareEntryOrCreate(variationId: string): ICustomFirmwareEntry {
-    if (variationId) {
+  getSourceFirmwareEntryOrCreate(resourceId: string): ICustomFirmwareEntry {
+    if (resourceId) {
       return projectPackagesReader.getEditTargetFirmwareEntry(
         'custom',
-        variationId,
+        resourceId,
       )!;
     } else {
       const newVariationId = getNextFirmwareId(
@@ -72,8 +72,8 @@ const readers = {
 };
 
 const actions = {
-  loadEditValues(variationId: string) {
-    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationId);
+  loadEditValues(resourceId: string) {
+    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(resourceId);
     state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
       state.sourceEntry,
     );
@@ -91,10 +91,10 @@ const actions = {
 };
 
 export function useProjectCustomFirmwareSetupModalModel(
-  variationId: string,
+  resourceId: string,
   close: () => void,
 ) {
-  useInlineEffect(() => actions.loadEditValues(variationId), [variationId]);
+  useInlineEffect(() => actions.loadEditValues(resourceId), [resourceId]);
   const { sourceEditValues, canSave, editTargetVariationName } = readers;
   const saveHandler = () => {
     actions.saveHandler();

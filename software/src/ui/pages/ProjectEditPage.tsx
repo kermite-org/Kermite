@@ -10,35 +10,19 @@ import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwar
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
 type IProjectResourceItem = {
-  itemKey: string;
+  resourceId: string;
   itemType: IProjectResourceItemType;
   itemName: string;
-  resourceId: string;
   additionalInfoText?: string;
 };
 
-function encodeProjectResourceItemKey(
-  itemType: IProjectResourceItemType,
-  itemName: string,
-): string {
-  return `${itemType}#${itemName}`;
-}
-
-function decodeProjectResourceItemKey(key: string): {
-  itemType: IProjectResourceItemType;
-  itemName: string;
-} {
-  const [itemType, itemName] = key.split('#');
-  return { itemType: itemType as IProjectResourceItemType, itemName };
-}
-
 export const ProjectEditPage: FC = () => {
-  const [editCustomFirmwareVariationId, setEditCustomFirmwareVariationId] =
+  const [editCustomFirmwareResourceId, setEditCustomFirmwareResourceId] =
     useState<string | undefined>(undefined);
 
-  const openCustomFirmwareModal = setEditCustomFirmwareVariationId;
+  const openCustomFirmwareModal = setEditCustomFirmwareResourceId;
   const closeCustomFirmwareModal = () =>
-    setEditCustomFirmwareVariationId(undefined);
+    setEditCustomFirmwareResourceId(undefined);
 
   const projectInfo = projectPackagesHooks.useEditTargetProject();
 
@@ -51,49 +35,56 @@ export const ProjectEditPage: FC = () => {
 
   const resourceItems: IProjectResourceItem[] = [
     ...projectInfo.firmwares.map((it) => ({
-      itemKey: encodeProjectResourceItemKey('firmware', it.variationName),
       itemType: 'firmware' as const,
       itemName: it.variationName,
       resourceId: it.resourceId,
       additionalInfoText: `(${it.type})`,
     })),
     ...projectInfo.layouts.map((it) => ({
-      itemKey: encodeProjectResourceItemKey('layout', it.layoutName),
       itemType: 'layout' as const,
       itemName: it.layoutName,
       resourceId: it.resourceId,
     })),
     ...projectInfo.presets.map((it) => ({
-      itemKey: encodeProjectResourceItemKey('preset', it.presetName),
       itemType: 'preset' as const,
       itemName: it.presetName,
       resourceId: it.resourceId,
     })),
   ];
 
-  const editResourceItem = (itemKey: string) => {
-    const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
+  const editResourceItem = (resourceId: string) => {
+    const item = resourceItems.find((it) => it.resourceId === resourceId)!;
+    const { itemType } = item;
     if (itemType === 'preset') {
-      uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
+      uiActions.navigateTo({
+        type: 'projectPresetEdit',
+        presetResourceId: resourceId,
+      });
     } else if (itemType === 'layout') {
-      uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
+      uiActions.navigateTo({
+        type: 'projectLayoutEdit',
+        layoutResourceId: resourceId,
+      });
     } else if (itemType === 'firmware') {
       const firmwareInfo = projectInfo.firmwares.find(
-        (it) => it.variationName === itemName,
+        (it) => it.resourceId === resourceId,
       );
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
           type: 'projectFirmwareEdit',
-          variationId: firmwareInfo.variationId,
+          firmwareResourceId: resourceId,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        openCustomFirmwareModal(firmwareInfo.variationId);
+        openCustomFirmwareModal(resourceId);
       }
     }
   };
 
   const createStandardFirmware = () => {
-    uiActions.navigateTo({ type: 'projectFirmwareEdit', variationId: '' });
+    uiActions.navigateTo({
+      type: 'projectFirmwareEdit',
+      firmwareResourceId: '',
+    });
   };
 
   const createCustomFirmware = () => {
@@ -101,7 +92,7 @@ export const ProjectEditPage: FC = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const deleteResourceItem = (itemKey: string) => {};
+  const deleteResourceItem = (resourceId: string) => {};
 
   return (
     <div css={style}>
@@ -130,14 +121,16 @@ export const ProjectEditPage: FC = () => {
       </div>
       <div className="items-box">
         {resourceItems.map((item) => (
-          <div key={item.itemKey}>
+          <div key={item.resourceId}>
             <span>
               [{item.itemType}]({item.resourceId}){item.additionalInfoText}{' '}
               {item.itemName}
             </span>
-            <button onClick={() => editResourceItem(item.itemKey)}>edit</button>
+            <button onClick={() => editResourceItem(item.resourceId)}>
+              edit
+            </button>
             <button
-              onClick={() => deleteResourceItem(item.itemKey)}
+              onClick={() => deleteResourceItem(item.resourceId)}
               qxIf={false}
             >
               delete
@@ -145,9 +138,9 @@ export const ProjectEditPage: FC = () => {
           </div>
         ))}
       </div>
-      {editCustomFirmwareVariationId !== undefined && (
+      {editCustomFirmwareResourceId !== undefined && (
         <ProjectCustomFirmwareSetupModal
-          variationId={editCustomFirmwareVariationId}
+          resourceId={editCustomFirmwareResourceId}
           close={closeCustomFirmwareModal}
         />
       )}

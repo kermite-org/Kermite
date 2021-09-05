@@ -5,16 +5,16 @@ import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomF
 import { useProjectCustomFirmwareSetupModalModel } from '~/ui/pages/ProjectCustomFirmwareSetupModal.model';
 
 type Props = {
-  variationId: string;
+  resourceId: string;
   close(): void;
 };
 
 export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
-  variationId,
+  resourceId,
   close,
 }) => {
   const { editTargetVariationName, sourceEditValues, canSave, saveHandler } =
-    useProjectCustomFirmwareSetupModalModel(variationId, close);
+    useProjectCustomFirmwareSetupModalModel(resourceId, close);
   return (
     <ClosableOverlay close={close}>
       <div css={style}>
