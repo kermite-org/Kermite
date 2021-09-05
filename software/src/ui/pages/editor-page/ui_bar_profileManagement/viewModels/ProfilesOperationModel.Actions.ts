@@ -73,7 +73,7 @@ const inputNewProfileName = async (
     defaultText,
     caption,
   });
-  if (newProfileName) {
+  if (newProfileName !== undefined) {
     const nameValid = await checkValidNewProfileName(projectId, newProfileName);
     if (nameValid) {
       return newProfileName;
@@ -135,7 +135,7 @@ const handleSaveUnsavedProfile = async () => {
       projectId,
       '',
     );
-    if (newProfileName) {
+    if (newProfileName !== undefined) {
       profilesActions.saveUnsavedProfileAs(newProfileName);
     }
   }
@@ -171,7 +171,8 @@ const handleExportToFile = async () => {
   const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
   if (filePath) {
     const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
-    profilesActions.exportToFile(modFilePath);
+    await profilesActions.exportToFile(modFilePath);
+    modalConfirm({ caption: 'export to file', message: 'file saved.' });
   }
 };
 

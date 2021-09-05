@@ -52,8 +52,8 @@ export const profilesActions = {
     dispatchCoreAction({ profile_importFromFile: { filePath } });
   },
 
-  exportToFile: (filePath: string) => {
-    dispatchCoreAction({
+  exportToFile: async (filePath: string) => {
+    await dispatchCoreAction({
       profile_exportToFile: { filePath, profileData: editorModel.profileData },
     });
   },

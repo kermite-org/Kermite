@@ -18,6 +18,10 @@ export const ProfileConfigratuionModalLayer: FC = () => {
     return null;
   }
 
+  const showProjectSelectionUi =
+    globalSettingsReader.isDeveloperMode &&
+    !globalSettingsReader.globalSettings.globalProjectId;
+
   return (
     <ClosableOverlay close={closeModal}>
       <CommonDialogFrame
@@ -25,9 +29,7 @@ export const ProfileConfigratuionModalLayer: FC = () => {
         close={closeModal}
       >
         <div css={cssDialogContent}>
-          <KeyboardProjectSelectionPart
-            qxIf={globalSettingsReader.isDeveloperMode}
-          />
+          <KeyboardProjectSelectionPart qxIf={showProjectSelectionUi} />
           <AssignTypeSelectionPart />
           {/* Dualモードの挙動オプションUI, ロジックでのオプション変更への対応が未実装のため非表示 */}
           {/* <DualModeSettingsPart /> */}
