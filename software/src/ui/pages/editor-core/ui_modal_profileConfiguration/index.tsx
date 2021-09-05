@@ -20,7 +20,7 @@ export const ProfileConfigratuionModalLayer: FC = () => {
 
   const showProjectSelectionUi =
     globalSettingsReader.isDeveloperMode &&
-    !globalSettingsReader.globalSettings.globalProjectId;
+    !globalSettingsReader.globalSettings.globalProjectSpec;
 
   return (
     <ClosableOverlay close={closeModal}>

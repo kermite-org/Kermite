@@ -6,6 +6,7 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
+import { uiReaders } from '~/ui/commonActions';
 import {
   globalSettingsReader,
   projectPackagesReader,
@@ -105,7 +106,7 @@ export function usePresetSelectionModel(): IPresetSelectionModel {
 
   useEffect(() => {
     sel.projectKey =
-      globalSettingsReader.globalProjectKey || projectOptions[0]?.value || '';
+      uiReaders.globalProjectKey || projectOptions[0]?.value || '';
   }, [globalSettings]);
 
   const loadedProfileData = useProfileDataLoaded(

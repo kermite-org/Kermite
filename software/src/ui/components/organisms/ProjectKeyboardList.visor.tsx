@@ -12,30 +12,30 @@ const convertDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign;
 
 const projectItems: IProjectKeyboardListProjectItem[] = [
   {
-    projectId: 'proj0',
+    projectKey: 'proj0',
     keyboardName: 'Astelia',
     design: convertDesign(exampleData_persistKeyboardDesign_astelia),
   },
   {
-    projectId: 'proj1',
+    projectKey: 'proj1',
     keyboardName: 'Shiro',
     design: convertDesign(exampleData_persistKeyboardDesign_shiro),
   },
   {
-    projectId: 'proj2',
+    projectKey: 'proj2',
     keyboardName: 'Minivers',
     design: convertDesign(exampleData_persistKeyboardDesign_miniversRev2),
   },
 ];
 
-let curProjectId = 'proj0';
+let curProjectKey = 'proj0';
 
 export const ProjectKeyboardListExamples = {
   default: () => (
     <ProjectKeyboardList
       projectItems={projectItems}
-      currentProjectId={curProjectId}
-      setCurrentProjectId={(id) => (curProjectId = id)}
+      currentProjectKey={curProjectKey}
+      setCurrentProjectKey={(key) => (curProjectKey = key)}
     />
   ),
 };

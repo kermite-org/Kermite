@@ -5,24 +5,24 @@ import { ProjectKeyboardListCard } from '~/ui/components/organisms/ProjectKeyboa
 type Props = {
   className?: string;
   projectItems: IProjectKeyboardListProjectItem[];
-  currentProjectId: string;
-  setCurrentProjectId: (id: string) => void;
+  currentProjectKey: string;
+  setCurrentProjectKey: (key: string) => void;
 };
 
 export const ProjectKeyboardList: FC<Props> = ({
   className,
   projectItems,
-  currentProjectId,
-  setCurrentProjectId,
+  currentProjectKey,
+  setCurrentProjectKey,
 }) => {
   return (
     <div css={style} className={className}>
       {projectItems.map((item) => (
         <ProjectKeyboardListCard
-          key={item.projectId}
+          key={item.projectKey}
           project={item}
-          isCurrent={item.projectId === currentProjectId}
-          setCurrent={() => setCurrentProjectId(item.projectId)}
+          isCurrent={item.projectKey === currentProjectKey}
+          setCurrent={() => setCurrentProjectKey(item.projectKey)}
         />
       ))}
     </div>
