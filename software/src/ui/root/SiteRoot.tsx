@@ -54,6 +54,11 @@ const cssGlobal = css`
   select {
     outline: none;
   }
+
+  button {
+    cursor: pointer;
+    outline: none;
+  }
 `;
 applyGlobalStyle(cssGlobal);
 

@@ -59,7 +59,7 @@ export function removeArrayItemsMatched<T>(
 
 export function createGroupedArrayByKey<
   T extends { [key in K]: any },
-  K extends keyof T
+  K extends keyof T,
 >(arr: T[], keyPropName: K): T[][] {
   const bins: { [key: string]: T[] } = {} as any;
   for (const obj of arr) {
@@ -133,7 +133,7 @@ export function clonePlainOldObject(src: any): any {
   }
 }
 
-export const cloneObject = clonePlainOldObject;
+export const cloneObject = duplicateObjectByJsonStringifyParse;
 
 export function compareString(a: string, b: string) {
   if (a > b) {

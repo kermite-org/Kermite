@@ -2,13 +2,18 @@ import produce from 'immer';
 import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
+  ICustomFirmwareEntry,
+  IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesign,
   IPersistProfileData,
+  IProjectFirmwareEntry,
   IProjectPackageInfo,
   IResourceOrigin,
+  IStandardFirmwareEntry,
 } from '~/shared';
 import { uiReaders } from '~/ui/commonStore/UiReaders';
 import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
+import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -46,7 +51,50 @@ export const projectPackagesReader = {
       (info) => info.firmwareId === firmwareId,
     );
   },
+  getEditTargetFirmwareEntry<K extends 'standard' | 'custom'>(
+    type: K,
+    variationId: string,
+  ):
+    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
+    | undefined {
+    const projectInfo = uiReaders.editTargetProject;
+    const entry = projectInfo?.firmwares.find(
+      (it) => it.variationId === variationId,
+    );
+    if (entry?.type === type) {
+      return entry as any;
+    }
+    return undefined;
+  },
+  getEditTargetFirmwareEntryByVariationName_deprecated<
+    K extends 'standard' | 'custom',
+  >(
+    type: K,
+    variationName: string,
+  ):
+    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
+    | undefined {
+    const projectInfo = uiReaders.editTargetProject;
+    const entry = projectInfo?.firmwares.find(
+      (it) => it.variationName === variationName,
+    );
+    if (entry?.type === type) {
+      return entry as any;
+    }
+    return undefined;
+  },
 };
+
+function patchLocalEditProject(
+  produceFn: (draft: IProjectPackageInfo) => void,
+) {
+  const projectInfo = projectPackagesReader.getEditTargetProject();
+  if (!projectInfo) {
+    return;
+  }
+  const newProjectInfo = produce(projectInfo, produceFn);
+  projectPackagesWriter.saveLocalProject(newProjectInfo);
+}
 
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
@@ -55,11 +103,7 @@ export const projectPackagesWriter = {
     });
   },
   saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
-    const projectInfo = projectPackagesReader.getEditTargetProject();
-    if (!projectInfo) {
-      return;
-    }
-    const newProjectInfo = produce(projectInfo, (draft) => {
+    patchLocalEditProject((draft) => {
       const layout = draft.layouts.find((la) => la.layoutName === layoutName);
       if (layout) {
         layout.data = design;
@@ -67,22 +111,53 @@ export const projectPackagesWriter = {
         draft.layouts.push({ layoutName, data: design });
       }
     });
-    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
   saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
-    const projectInfo = projectPackagesReader.getEditTargetProject();
-    if (!projectInfo) {
-      return;
-    }
-    const newProjectInfo = produce(projectInfo, (draft) => {
+    patchLocalEditProject((draft) => {
       const profile = draft.presets.find((la) => la.presetName === presetName);
       if (profile) {
         profile.data = preset;
       } else {
-        draft.presets.push({ presetName: presetName, data: preset });
+        draft.presets.push({ presetName, data: preset });
       }
     });
-    projectPackagesWriter.saveLocalProject(newProjectInfo);
+  },
+  saveLocalProjectFirmware(entry: IProjectFirmwareEntry) {
+    patchLocalEditProject((draft) => {
+      const index = draft.firmwares.findIndex(
+        (it) => it.variationId === entry.variationId,
+      );
+      if (index >= 0) {
+        draft.firmwares.splice(index, 1, entry);
+      } else {
+        draft.firmwares.push(entry);
+      }
+    });
+  },
+  saveLocalProjectStandardFirmware_deprecated(
+    variationId: string,
+    variationName: string,
+    config: IKermiteStandardKeyboardSpec,
+  ) {
+    patchLocalEditProject((draft) => {
+      const firmware = draft.firmwares.find(
+        (it) => it.variationId === variationId,
+      );
+      if (firmware) {
+        if (firmware.type === 'standard') {
+          firmware.standardFirmwareConfig = config;
+        }
+      } else {
+        const existingIds = draft.firmwares.map((it) => it.variationId);
+        const newVariationId = getNextFirmwareId(existingIds);
+        draft.firmwares.push({
+          type: 'standard',
+          variationName,
+          variationId: newVariationId,
+          standardFirmwareConfig: config,
+        });
+      }
+    });
   },
 };
 

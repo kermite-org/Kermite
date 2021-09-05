@@ -1,13 +1,13 @@
 import { css, FC, jsx, useMemo } from 'qx';
-import { fallbackPersistProfileData, IPersistProfileData } from '~/shared';
+import { fallbackPersistProfileData } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
+import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
+import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
-  uiActions,
-  projectPackagesHooks,
-  projectPackagesWriter,
-} from '~/ui/commonStore';
-import { AssignerGeneralComponent } from '~/ui/pages/editor-core';
+  AssignerGeneralComponent,
+  AssignerGeneralComponent_OutputPropsSupplier,
+} from '~/ui/pages/editor-core';
 
 type Props = {
   spec: IPageSpec_ProjectPresetEdit;
@@ -22,23 +22,23 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
     return entry?.data || fallbackPersistProfileData;
   }, [projectInfo]);
 
-  const saveProfile = (newProfile: IPersistProfileData) => {
+  const { isModified, emitSavingDesign } =
+    AssignerGeneralComponent_OutputPropsSupplier;
+
+  const saveHandler = () => {
+    const newProfile = emitSavingDesign();
     projectPackagesWriter.saveLocalProjectPreset(presetName, newProfile);
   };
 
   return (
     <div css={style}>
-      <div>
-        <button onClick={() => uiActions.navigateTo('/projectEdit')}>
-          &lt;-back
-        </button>
-        project preset edit page {presetName}
-      </div>
-      <AssignerGeneralComponent
-        className="editor-frame"
-        originalProfile={originalProfile}
-        saveProfile={saveProfile}
+      <RouteHeaderBar
+        title={`edit project preset: ${presetName}`}
+        backPagePath="/projectEdit"
+        canSave={isModified}
+        saveHandler={saveHandler}
       />
+      <AssignerGeneralComponent originalProfile={originalProfile} />
     </div>
   );
 };
@@ -47,8 +47,6 @@ const style = css`
   background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   height: 100%;
-  padding: 15px;
-
   display: flex;
   flex-direction: column;
 `;

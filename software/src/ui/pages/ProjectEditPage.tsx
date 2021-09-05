@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, useState } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
   uiActions,
@@ -6,8 +6,38 @@ import {
   projectPackagesWriter,
 } from '~/ui/commonStore';
 import { reflectValue } from '~/ui/helpers';
+import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal';
+
+type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
+type IProjectResourceItem = {
+  itemKey: string;
+  itemType: IProjectResourceItemType;
+  itemName: string;
+};
+
+function encodeProjectResourceItemKey(
+  itemType: IProjectResourceItemType,
+  itemName: string,
+): string {
+  return `${itemType}#${itemName}`;
+}
+
+function decodeProjectResourceItemKey(key: string): {
+  itemType: IProjectResourceItemType;
+  itemName: string;
+} {
+  const [itemType, itemName] = key.split('#');
+  return { itemType: itemType as IProjectResourceItemType, itemName };
+}
 
 export const ProjectEditPage: FC = () => {
+  const [editCustomFirmwareVariationId, setEditCustomFirmwareVariationId] =
+    useState<string | undefined>(undefined);
+
+  const openCustomFirmwareModal = setEditCustomFirmwareVariationId;
+  const closeCustomFirmwareModal = () =>
+    setEditCustomFirmwareVariationId(undefined);
+
   const projectInfo = projectPackagesHooks.useEditTargetProject();
 
   const keyboardName = projectInfo.keyboardName;
@@ -17,44 +47,103 @@ export const ProjectEditPage: FC = () => {
     projectPackagesWriter.saveLocalProject(newProjectInfo);
   };
 
-  const resourceData = {
-    firmwares: projectInfo.firmwares.map((it) => it.variationName),
-    layouts: projectInfo.layouts.map((it) => it.layoutName),
-    preset: projectInfo.presets.map((it) => it.presetName),
+  const resourceItems: IProjectResourceItem[] = [
+    ...projectInfo.firmwares.map((it) => ({
+      itemKey: encodeProjectResourceItemKey('firmware', it.variationName),
+      itemType: 'firmware' as const,
+      itemName: it.variationName,
+    })),
+    ...projectInfo.layouts.map((it) => ({
+      itemKey: encodeProjectResourceItemKey('layout', it.layoutName),
+      itemType: 'layout' as const,
+      itemName: it.layoutName,
+    })),
+    ...projectInfo.presets.map((it) => ({
+      itemKey: encodeProjectResourceItemKey('preset', it.presetName),
+      itemType: 'preset' as const,
+      itemName: it.presetName,
+    })),
+  ];
+
+  const editResourceItem = (itemKey: string) => {
+    const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
+    if (itemType === 'preset') {
+      uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
+    } else if (itemType === 'layout') {
+      uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
+    } else if (itemType === 'firmware') {
+      const firmwareInfo = projectInfo.firmwares.find(
+        (it) => it.variationName === itemName,
+      );
+      if (firmwareInfo?.type === 'standard') {
+        uiActions.navigateTo({
+          type: 'projectFirmwareEdit',
+          variationId: firmwareInfo.variationId,
+        });
+      } else if (firmwareInfo?.type === 'custom') {
+        openCustomFirmwareModal(firmwareInfo.variationId);
+      }
+    }
   };
 
-  const onLayoutEditButton = () => {
-    uiActions.navigateTo({
-      type: 'projectLayoutEdit',
-      layoutName: projectInfo.layouts[0].layoutName,
-    });
+  const createStandardFirmware = () => {
+    uiActions.navigateTo({ type: 'projectFirmwareEdit', variationId: '' });
   };
 
-  const onPresetEditButton = () => {
-    uiActions.navigateTo({
-      type: 'projectPresetEdit',
-      presetName: projectInfo.presets[0].presetName,
-    });
+  const createCustomFirmware = () => {
+    openCustomFirmwareModal('');
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const deleteResourceItem = (itemKey: string) => {};
 
   return (
     <div css={style}>
-      <div>project edit page</div>
+      <div>project resource edit page</div>
+
+      <div>
+        <div>
+          <button onClick={createStandardFirmware}>
+            Create Standard Firmware
+          </button>
+        </div>
+        <div>
+          <button onClick={createCustomFirmware}>Create Custom Firmware</button>
+        </div>
+      </div>
       <div>
         <label>
           <span>keyboard name</span>
           <input
+            className="keyboard-name-input"
             type="text"
             value={keyboardName}
             onChange={reflectValue(handleKeyboardNameChange)}
           />
         </label>
       </div>
-      <pre>{JSON.stringify(resourceData, null, ' ')}</pre>
-      <div>
-        <button onClick={onLayoutEditButton}>edit layout</button>
-        <button onClick={onPresetEditButton}>edit preset</button>
+      <div className="items-box">
+        {resourceItems.map((item) => (
+          <div key={item.itemKey}>
+            <span>
+              [{item.itemType}] {item.itemName}
+            </span>
+            <button onClick={() => editResourceItem(item.itemKey)}>edit</button>
+            <button
+              onClick={() => deleteResourceItem(item.itemKey)}
+              qxIf={false}
+            >
+              delete
+            </button>
+          </div>
+        ))}
       </div>
+      {editCustomFirmwareVariationId !== undefined && (
+        <ProjectCustomFirmwareSetupModal
+          variationId={editCustomFirmwareVariationId}
+          close={closeCustomFirmwareModal}
+        />
+      )}
     </div>
   );
 };
@@ -69,7 +158,22 @@ const style = css`
     margin-top: 10px;
   }
 
-  input {
+  .items-box {
+    display: inline-block;
+    border: solid 1px #888;
+    color: ${uiTheme.colors.clAltText};
+    padding: 10px;
+
+    > * + * {
+      margin-top: 5px;
+    }
+
+    button {
+      margin-left: 5px;
+    }
+  }
+
+  .keyboard-name-input {
     margin-left: 10px;
   }
 

@@ -1,54 +1,29 @@
-import { css, FC, jsx, useEffect } from 'qx';
+import { FC, jsx, useEffect } from 'qx';
 import { IPersistProfileData, ProfileDataConverter } from '~/shared';
-import { uiTheme } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/pages/editor-core/KeyAssignEditView';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 
 type Props = {
-  className?: string;
   originalProfile: IPersistProfileData;
-  saveProfile: (value: IPersistProfileData) => void;
 };
 
-export const AssignerGeneralComponent: FC<Props> = ({
-  className,
-  originalProfile,
-  saveProfile,
-}) => {
+export const AssignerGeneralComponent_OutputPropsSupplier = {
+  get isModified() {
+    return editorModel.checkDirty();
+  },
+  emitSavingDesign() {
+    return ProfileDataConverter.convertProfileDataToPersist(
+      editorModel.profileData,
+    );
+  },
+};
+
+export const AssignerGeneralComponent: FC<Props> = ({ originalProfile }) => {
   useEffect(() => {
     const profileData =
       ProfileDataConverter.convertProfileDataFromPersist(originalProfile);
     editorModel.loadProfileData(profileData);
   }, [originalProfile]);
 
-  const isModified = editorModel.checkDirty();
-
-  const onSaveButton = () => {
-    const savingData = ProfileDataConverter.convertProfileDataToPersist(
-      editorModel.profileData,
-    );
-    saveProfile(savingData);
-  };
-
-  return (
-    <div css={style} className={className}>
-      <div className="topRow">
-        <button onClick={onSaveButton} disabled={!isModified}>
-          save
-        </button>
-      </div>
-      <KeyAssignEditView forceHideTestInputArea={true} />
-    </div>
-  );
+  return <KeyAssignEditView forceHideTestInputArea={true} />;
 };
-
-const style = css`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: ${uiTheme.colors.clBackground};
-
-  > .topRow {
-    flex-shrink: 0;
-  }
-`;
