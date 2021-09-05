@@ -1,5 +1,9 @@
 import { useInlineEffect } from 'qx';
-import { fallbackCustomFirmwareEntry, ICustomFirmwareEntry } from '~/shared';
+import {
+  fallbackCustomFirmwareEntry,
+  getNextFirmwareId,
+  ICustomFirmwareEntry,
+} from '~/shared';
 import {
   projectPackagesReader,
   projectPackagesWriter,
@@ -10,25 +14,26 @@ import {
   fallbackCustomFirmwareEditValues,
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
-import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 const helpers = {
   getExistingVariationIds(): string[] {
     const projectInfo = uiReaders.editTargetProject;
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
-  getSourceFirmwareEntryOrCreate(variationId: string): ICustomFirmwareEntry {
-    if (variationId) {
+  getSourceFirmwareEntryOrCreate(resourceId: string): ICustomFirmwareEntry {
+    if (resourceId) {
       return projectPackagesReader.getEditTargetFirmwareEntry(
         'custom',
-        variationId,
+        resourceId,
       )!;
     } else {
       const newVariationId = getNextFirmwareId(
         helpers.getExistingVariationIds(),
       );
+      const newResourceId = `fw${newVariationId}`;
       return {
         type: 'custom',
+        resourceId: newResourceId,
         variationId: newVariationId,
         variationName: '',
         customFirmwareId: '',
@@ -67,8 +72,8 @@ const readers = {
 };
 
 const actions = {
-  loadEditValues(variationId: string) {
-    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationId);
+  loadEditValues(resourceId: string) {
+    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(resourceId);
     state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
       state.sourceEntry,
     );
@@ -86,10 +91,10 @@ const actions = {
 };
 
 export function useProjectCustomFirmwareSetupModalModel(
-  variationId: string,
+  resourceId: string,
   close: () => void,
 ) {
-  useInlineEffect(() => actions.loadEditValues(variationId), [variationId]);
+  useInlineEffect(() => actions.loadEditValues(resourceId), [resourceId]);
   const { sourceEditValues, canSave, editTargetVariationName } = readers;
   const saveHandler = () => {
     actions.saveHandler();

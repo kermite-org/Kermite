@@ -17,8 +17,16 @@ import {
   fsxWriteJsonFile,
   pathBasename,
   pathJoin,
+  pathResolve,
 } from '~/shell/funcs';
 import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
+
+const configs = {
+  debugUseLocalRepositoryPackages: false,
+};
+if (appEnv.isDevelopment) {
+  configs.debugUseLocalRepositoryPackages = true;
+}
 
 function convertPackageFileContentToPackageInfo(
   data: IProjectPackageFileContent,
@@ -91,11 +99,18 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   );
 }
 
-function getLocalProjectsFolderPath() {
+async function loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(): Promise<
+  IProjectPackageInfo[]
+> {
+  const projectPackagesFolderPath = pathResolve('../firmware/project_packages');
+  return await loadProjectPackageFiles(projectPackagesFolderPath, 'online');
+}
+
+function getUserProjectsFolderPath() {
   return pathJoin(appEnv.userDataFolderPath, 'data', 'projects');
 }
 
-function getLocalProjectFilePath(packageName: string) {
+function getUserProjectFilePath(packageName: string) {
   return pathJoin(
     appEnv.userDataFolderPath,
     'data',
@@ -104,19 +119,19 @@ function getLocalProjectFilePath(packageName: string) {
   );
 }
 
-async function loadLocalProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  const projectsFolder = getLocalProjectsFolderPath();
+async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+  const projectsFolder = getUserProjectsFolderPath();
   return await loadProjectPackageFiles(projectsFolder, 'local');
 }
 
-async function saveLocalProjectPackageInfoImpl(info: IProjectPackageInfo) {
-  const filePath = getLocalProjectFilePath(info.packageName);
+async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
+  const filePath = getUserProjectFilePath(info.packageName);
   console.log(`saving ${pathBasename(filePath)}`);
   await fsxWriteJsonFile(filePath, info);
 }
 
-async function deleteLocalProjectPackageFileImpl(packageName: string) {
-  const filePath = getLocalProjectFilePath(packageName);
+async function deleteUserProjectPackageFileImpl(packageName: string) {
+  const filePath = getUserProjectFilePath(packageName);
   await fsxDeleteFile(filePath);
 }
 
@@ -135,16 +150,23 @@ function mapIndexFirmwareEntryToCustomFirmwareInfo(
 
 export const projectPackageProvider = {
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-    return [
-      ...(await loadRemoteProjectPackageInfos()),
-      ...(await loadLocalProjectPackageInfos()),
-    ];
+    if (configs.debugUseLocalRepositoryPackages) {
+      return [
+        ...(await loadRemoteProjectPackageInfos_debugLoadFromLocalRepository()),
+        ...(await loadUserProjectPackageInfos()),
+      ];
+    } else {
+      return [
+        ...(await loadRemoteProjectPackageInfos()),
+        ...(await loadUserProjectPackageInfos()),
+      ];
+    }
   },
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
-    await saveLocalProjectPackageInfoImpl(info);
+    await saveUserProjectPackageInfoImpl(info);
   },
   async deleteLocalProjectPackageFile(packageName: string) {
-    await deleteLocalProjectPackageFileImpl(packageName);
+    await deleteUserProjectPackageFileImpl(packageName);
   },
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
     const data = (await cacheRemoteResource(
@@ -154,6 +176,6 @@ export const projectPackageProvider = {
     return data.firmwares.map(mapIndexFirmwareEntryToCustomFirmwareInfo);
   },
   async openLocalProjectsFolder() {
-    await shell.openPath(getLocalProjectsFolderPath());
+    await shell.openPath(getUserProjectsFolderPath());
   },
 };

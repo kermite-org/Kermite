@@ -3,17 +3,15 @@ import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
   ICustomFirmwareEntry,
-  IKermiteStandardKeyboardSpec,
-  IPersistKeyboardDesign,
-  IPersistProfileData,
   IProjectFirmwareEntry,
+  IProjectLayoutEntry,
   IProjectPackageInfo,
+  IProjectPresetEntry,
   IResourceOrigin,
   IStandardFirmwareEntry,
 } from '~/shared';
 import { uiReaders } from '~/ui/commonStore/UiReaders';
 import { dispatchCoreAction, uiState } from '~/ui/commonStore/base';
-import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -53,30 +51,13 @@ export const projectPackagesReader = {
   },
   getEditTargetFirmwareEntry<K extends 'standard' | 'custom'>(
     type: K,
-    variationId: string,
+    resourceId: string,
   ):
     | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
     | undefined {
     const projectInfo = uiReaders.editTargetProject;
     const entry = projectInfo?.firmwares.find(
-      (it) => it.variationId === variationId,
-    );
-    if (entry?.type === type) {
-      return entry as any;
-    }
-    return undefined;
-  },
-  getEditTargetFirmwareEntryByVariationName_deprecated<
-    K extends 'standard' | 'custom',
-  >(
-    type: K,
-    variationName: string,
-  ):
-    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
-    | undefined {
-    const projectInfo = uiReaders.editTargetProject;
-    const entry = projectInfo?.firmwares.find(
-      (it) => it.variationName === variationName,
+      (it) => it.resourceId === resourceId,
     );
     if (entry?.type === type) {
       return entry as any;
@@ -96,67 +77,52 @@ function patchLocalEditProject(
   projectPackagesWriter.saveLocalProject(newProjectInfo);
 }
 
+function patchLocalProjectResourceItem<
+  K extends 'presets' | 'layouts' | 'firmwares',
+>(target: K, entry: IProjectPackageInfo[K][0]) {
+  patchLocalEditProject((draft) => {
+    const resourceItems = draft[target];
+    const index = resourceItems.findIndex(
+      (it) => it.resourceId === entry.resourceId,
+    );
+    if (index >= 0) {
+      resourceItems.splice(index, 1, entry as any);
+    } else {
+      resourceItems.push(entry as any);
+    }
+  });
+}
+
+function removeProjectResourceItemWithId<T extends { resourceId: string }>(
+  items: T[],
+  resourceId: string,
+) {
+  const index = items.findIndex((it) => it.resourceId === resourceId);
+  if (index >= 0) {
+    items.splice(index, 1);
+  }
+}
+
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
-  saveLocalProjectLayout(layoutName: string, design: IPersistKeyboardDesign) {
-    patchLocalEditProject((draft) => {
-      const layout = draft.layouts.find((la) => la.layoutName === layoutName);
-      if (layout) {
-        layout.data = design;
-      } else {
-        draft.layouts.push({ layoutName, data: design });
-      }
-    });
+  saveLocalProjectPreset(entry: IProjectPresetEntry) {
+    patchLocalProjectResourceItem('presets', entry);
   },
-  saveLocalProjectPreset(presetName: string, preset: IPersistProfileData) {
-    patchLocalEditProject((draft) => {
-      const profile = draft.presets.find((la) => la.presetName === presetName);
-      if (profile) {
-        profile.data = preset;
-      } else {
-        draft.presets.push({ presetName, data: preset });
-      }
-    });
+  saveLocalProjectLayout(entry: IProjectLayoutEntry) {
+    patchLocalProjectResourceItem('layouts', entry);
   },
   saveLocalProjectFirmware(entry: IProjectFirmwareEntry) {
-    patchLocalEditProject((draft) => {
-      const index = draft.firmwares.findIndex(
-        (it) => it.variationId === entry.variationId,
-      );
-      if (index >= 0) {
-        draft.firmwares.splice(index, 1, entry);
-      } else {
-        draft.firmwares.push(entry);
-      }
-    });
+    patchLocalProjectResourceItem('firmwares', entry);
   },
-  saveLocalProjectStandardFirmware_deprecated(
-    variationId: string,
-    variationName: string,
-    config: IKermiteStandardKeyboardSpec,
-  ) {
+  deleteProjectResourceItem(resourceId: string) {
     patchLocalEditProject((draft) => {
-      const firmware = draft.firmwares.find(
-        (it) => it.variationId === variationId,
-      );
-      if (firmware) {
-        if (firmware.type === 'standard') {
-          firmware.standardFirmwareConfig = config;
-        }
-      } else {
-        const existingIds = draft.firmwares.map((it) => it.variationId);
-        const newVariationId = getNextFirmwareId(existingIds);
-        draft.firmwares.push({
-          type: 'standard',
-          variationName,
-          variationId: newVariationId,
-          standardFirmwareConfig: config,
-        });
-      }
+      removeProjectResourceItemWithId(draft.presets, resourceId);
+      removeProjectResourceItemWithId(draft.layouts, resourceId);
+      removeProjectResourceItemWithId(draft.firmwares, resourceId);
     });
   },
 };

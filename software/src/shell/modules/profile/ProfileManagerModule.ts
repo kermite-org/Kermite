@@ -3,6 +3,7 @@ import produce from 'immer';
 import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  getNextProjectResourceId,
   IProfileData,
   IProfileEditSource,
   IProfileEntry,
@@ -272,7 +273,13 @@ export const profileManagerModule = createCoreModule({
         if (profile) {
           profile.data = preset;
         } else {
-          draft.presets.push({ presetName: presetName, data: preset });
+          const existingIds = draft.presets.map((it) => it.resourceId);
+          const resourceId = getNextProjectResourceId('pr', existingIds);
+          draft.presets.push({
+            resourceId,
+            presetName: presetName,
+            data: preset,
+          });
         }
       });
       dispatchCoreAction({

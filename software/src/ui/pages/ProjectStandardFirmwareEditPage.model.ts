@@ -2,6 +2,7 @@ import { useInlineEffect } from 'qx';
 import {
   fallbackStandardFirmwareEntry,
   fallbackStandardKeyboardSpec,
+  getNextFirmwareId,
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
@@ -11,7 +12,6 @@ import {
   uiReaders,
 } from '~/ui/commonStore';
 import { modalAlert, modalTextEdit } from '~/ui/components';
-import { getNextFirmwareId } from '~/ui/features/LayoutEditor/models/DomainRelatedHelpers';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
 
 export interface IProjectStandardFirmwareEditPageModel {
@@ -76,16 +76,18 @@ const readers = {
 };
 
 const actions = {
-  loadSourceFirmwareEntry(variationId: string) {
-    if (variationId) {
+  loadSourceFirmwareEntry(resourceId: string) {
+    if (resourceId) {
       store.sourceEntry = projectPackagesReader.getEditTargetFirmwareEntry(
         'standard',
-        variationId,
+        resourceId,
       )!;
     } else {
       const newVariationId = getNextFirmwareId(readers.existingVariationIds);
+      const newResourceId = `fw${newVariationId}`;
       store.sourceEntry = {
         type: 'standard',
+        resourceId: newResourceId,
         variationId: newVariationId,
         variationName: '',
         standardFirmwareConfig: fallbackStandardKeyboardSpec,
@@ -110,11 +112,11 @@ const actions = {
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  variationId: string,
+  resourceId: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(variationId),
-    [variationId],
+    () => actions.loadSourceFirmwareEntry(resourceId),
+    [resourceId],
   );
   const {
     sourceEntry: { variationName, standardFirmwareConfig },

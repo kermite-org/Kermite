@@ -1,46 +1,53 @@
-import { css, FC, jsx, useMemo } from 'qx';
-import { createFallbackPersistKeyboardDesign } from '~/shared';
+import { css, FC, jsx } from 'qx';
+import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
-import { projectPackagesHooks, projectPackagesWriter } from '~/ui/commonStore';
+import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
   LayouterGeneralComponent,
   LayouterGeneralComponent_OutputPropsSupplier,
 } from '~/ui/features';
+import { useMemoEx } from '~/ui/helpers';
 
 type Props = {
   spec: IPageSpec_ProjectLayoutEdit;
 };
 
-export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
-  const projectInfo = projectPackagesHooks.useEditTargetProject();
-  const layout = useMemo(() => {
-    const entry = projectInfo.layouts.find(
-      (it) => it.layoutName === layoutName,
+const readers = {
+  getSourceLayoutEntryOrCreate(resourceId: string): IProjectLayoutEntry {
+    const projectInfo = uiReaders.editTargetProject;
+    const layoutEntry = projectInfo?.layouts.find(
+      (it) => it.resourceId === resourceId,
     );
-    return entry?.data || createFallbackPersistKeyboardDesign();
-  }, [projectInfo]);
+    return layoutEntry || fallbackProjectLayoutEntry;
+  },
+};
 
+export const ProjectLayoutEditPage: FC<Props> = ({
+  spec: { layoutResourceId },
+}) => {
+  const sourceLayoutEntry = useMemoEx(readers.getSourceLayoutEntryOrCreate, [
+    layoutResourceId,
+  ]);
   const { isModified, emitSavingDesign } =
     LayouterGeneralComponent_OutputPropsSupplier;
 
   const saveHandler = () => {
-    projectPackagesWriter.saveLocalProjectLayout(
-      layoutName,
-      emitSavingDesign(),
-    );
+    projectPackagesWriter.saveLocalProjectLayout({
+      ...sourceLayoutEntry,
+      data: emitSavingDesign(),
+    });
   };
-
   return (
     <div css={style}>
       <RouteHeaderBar
-        title={`edit project layout: ${layoutName}`}
+        title={`edit project layout: ${sourceLayoutEntry.layoutName}`}
         backPagePath="/projectEdit"
         canSave={isModified}
         saveHandler={saveHandler}
       />
-      <LayouterGeneralComponent layout={layout} />
+      <LayouterGeneralComponent layout={sourceLayoutEntry.data} />
     </div>
   );
 };

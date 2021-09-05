@@ -26,12 +26,3 @@ export function getNextEntityInstanceId<T extends { id: string }>(
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   return `${prefix}!${newNumber}`;
 }
-
-export function getNextFirmwareId(existingIds: string[]): string {
-  const allNumbers = existingIds.map((id) => parseInt(id));
-  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
-  if (newNumber >= 100) {
-    throw new Error('firmware id reaches to 100');
-  }
-  return `00${newNumber.toString()}`.slice(-2);
-}
