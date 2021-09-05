@@ -125,7 +125,7 @@ export function getNextProjectResourceId(
   existingIds: string[],
 ): string {
   const allNumbers = existingIds.map((id) => parseInt(id.replace(prefix, '')));
-  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
+  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 1;
   if (newNumber >= 100) {
     throw new Error('resource id reaches to 100');
   }
