@@ -27,7 +27,7 @@ export const projectPackagesReader = {
   getEditTargetProject(): IProjectPackageInfo | undefined {
     const { globalProjectKey } = uiReaders;
     return uiReaders.allProjectPackageInfos.find(
-      (info) => info.sig === globalProjectKey && info.origin === 'local',
+      (info) => info.projectKey === globalProjectKey && info.origin === 'local',
     );
   },
   findProjectInfo(

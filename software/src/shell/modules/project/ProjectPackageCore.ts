@@ -1,5 +1,6 @@
 import { shell } from 'electron';
 import {
+  createProjectKey,
   ICustomFirmwareInfo,
   IFirmwareTargetDevice,
   IProjectPackageFileContent,
@@ -25,7 +26,7 @@ function convertPackageFileContentToPackageInfo(
   packageName: string,
 ): IProjectPackageInfo {
   return {
-    sig: `${origin}#${data.projectId}`,
+    projectKey: createProjectKey(origin, data.projectId),
     origin,
     packageName,
     ...data,

@@ -1,7 +1,7 @@
 import { IPresetSpec, IResourceOrigin } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
 } from '~/shared/funcs/DomainRelatedHelpers';
 import { dispatchCoreAction, uiActions } from '~/ui/commonStore';
 
@@ -47,7 +47,7 @@ export function editSelectedProjectPreset(
   if (!(projectKey && presetKey)) {
     return;
   }
-  const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+  const { origin, projectId } = getOriginAndProjectIdFromProjectKey(projectKey);
   const presetSpec = getPresetSpecFromPresetKey(presetKey);
   createProfile(origin, projectId, presetSpec);
   uiActions.navigateTo('/editor');

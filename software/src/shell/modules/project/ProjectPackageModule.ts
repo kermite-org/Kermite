@@ -1,6 +1,6 @@
 import produce from 'immer';
 import {
-  createProjectSig,
+  createProjectKey,
   fallbackProjectPackageInfo,
   generateRandomId,
   IGlobalSettings,
@@ -26,19 +26,19 @@ const projectPackageModuleHelper = {
     return {
       ...info,
       origin: 'local',
-      sig: info.sig.replace('online', 'local'),
+      projectKey: info.projectKey.replace('online', 'local'),
     };
   },
   createLocalProject(keyboardName: string): IProjectPackageInfo {
     // todo: 既存のオンラインプロジェクトのIDのリストと比較して、重複しないIDにする
     const origin = 'local';
     const projectId = generateRandomId(6);
-    const sig = createProjectSig(origin, projectId);
+    const projectKey = createProjectKey(origin, projectId);
     return {
       ...fallbackProjectPackageInfo,
       origin,
       projectId,
-      sig,
+      projectKey,
       packageName: keyboardName.toLowerCase(),
       keyboardName,
     };
@@ -56,7 +56,9 @@ export const projectPackageModule = createCoreModule({
     const allProjectPackageInfos = produce(
       coreState.allProjectPackageInfos,
       (draft) => {
-        const index = draft.findIndex((it) => it.sig === projectInfo.sig);
+        const index = draft.findIndex(
+          (it) => it.projectKey === projectInfo.projectKey,
+        );
         if (index >= 0) {
           draft.splice(index, 1, projectInfo);
         } else {

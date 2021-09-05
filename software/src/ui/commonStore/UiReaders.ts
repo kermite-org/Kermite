@@ -1,5 +1,5 @@
 import {
-  createProjectSig,
+  createProjectKey,
   ICustomFirmwareInfo,
   IGlobalSettings,
   IKeyboardConfig,
@@ -43,7 +43,7 @@ export const uiReaders = {
   },
   get globalProjectKey(): string {
     const { globalProjectSpec: spec } = uiState.core.globalSettings;
-    return (spec && createProjectSig(spec.origin, spec.projectId)) || '';
+    return (spec && createProjectKey(spec.origin, spec.projectId)) || '';
   },
   get isDeveloperMode() {
     return uiState.core.globalSettings.developerMode;

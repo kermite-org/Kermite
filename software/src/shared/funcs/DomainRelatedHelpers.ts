@@ -11,14 +11,15 @@ import {
 import { generateNumberSequence } from '~/shared/funcs/Utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
-export function createProjectSig(origin: IResourceOrigin, projectId: string) {
+export function createProjectKey(origin: IResourceOrigin, projectId: string) {
   return `${origin}#${projectId}`;
 }
 
-export function getProjectOriginAndIdFromSig(
-  projectSig: string,
-): { origin: IResourceOrigin; projectId: string } {
-  const [origin, projectId] = projectSig.split('#');
+export function getOriginAndProjectIdFromProjectKey(projectKey: string): {
+  origin: IResourceOrigin;
+  projectId: string;
+} {
+  const [origin, projectId] = projectKey.split('#');
   return { origin: origin as IResourceOrigin, projectId };
 }
 

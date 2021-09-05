@@ -32,7 +32,7 @@ function getProjectSelectionLabel(info: IProjectPackageInfo): string {
 
 function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
   return infos.map((info) => ({
-    value: info.sig,
+    value: info.projectKey,
     label: getProjectSelectionLabel(info),
   }));
 }
@@ -43,9 +43,11 @@ type IPresetSelectorOption = ISelectorOption & {
 
 function makePresetOptions(
   resourceInfos: IProjectPackageInfo[],
-  projectSig: string,
+  projectKey: string,
 ): IPresetSelectorOption[] {
-  const projectInfo = resourceInfos.find((info) => info.sig === projectSig);
+  const projectInfo = resourceInfos.find(
+    (info) => info.projectKey === projectKey,
+  );
   if (!projectInfo) {
     return [];
   }

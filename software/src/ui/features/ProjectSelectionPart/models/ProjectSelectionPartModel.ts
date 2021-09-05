@@ -2,7 +2,7 @@ import { useState } from 'qx';
 import {
   createFallbackPersistKeyboardDesign,
   DisplayKeyboardDesignLoader,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
@@ -32,7 +32,7 @@ function createSourceProjectItems(
     .filter((info) => info.origin === resourceOrigin)
     .map((info) => ({
       projectId: info.projectId,
-      projectKey: info.sig,
+      projectKey: info.projectKey,
       keyboardName: info.keyboardName,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
@@ -57,9 +57,10 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
   ]);
 
   const setProjectKey = (projectKey: string) => {
-    const obj =
-      (projectKey && getProjectOriginAndIdFromSig(projectKey)) || undefined;
-    globalSettingsWriter.writeValue('globalProjectSpec', obj);
+    const projectSpec =
+      (projectKey && getOriginAndProjectIdFromProjectKey(projectKey)) ||
+      undefined;
+    globalSettingsWriter.writeValue('globalProjectSpec', projectSpec);
   };
 
   const resourceOriginSelectorSource: ISelectorSource = {

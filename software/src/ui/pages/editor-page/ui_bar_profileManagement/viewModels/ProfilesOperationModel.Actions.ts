@@ -1,6 +1,6 @@
 import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
-import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
+import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { commitUiState, uiActions } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
@@ -55,7 +55,8 @@ const createProfile = async () => {
   // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
   if (res && res.projectKey && res.layoutKey) {
     const { projectKey, layoutKey } = res;
-    const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+    const { origin, projectId } =
+      getOriginAndProjectIdFromProjectKey(projectKey);
     profilesActions.createProfileUnnamed(origin, projectId, {
       type: 'blank',
       layoutName: layoutKey,

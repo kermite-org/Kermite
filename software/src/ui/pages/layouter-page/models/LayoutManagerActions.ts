@@ -1,8 +1,6 @@
-import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   forceChangeFilePathExtension,
-  ILayoutEditSource,
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
@@ -16,35 +14,16 @@ import {
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import {
+  ILayoutManagerEditTarget,
+  ILayoutManagerModalState,
+  layoutManagerState,
+} from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
-export interface ILayoutManagerModel {
-  editSource: ILayoutEditSource;
-  isModified: boolean;
-  hasLayoutEntities: boolean;
-  createNewLayout(): void;
-  loadCurrentProfileLayout(): void;
-  createForProject(projectId: string, layoutName: string): void;
-  loadFromProject(projectId: string, layoutName: string): void;
-  saveToProject(
-    projectId: string,
-    layoutName: string,
-    design: IPersistKeyboardDesign,
-  ): void;
-  loadFromFileWithDialog(): void;
-  saveToFileWithDialog(design: IPersistKeyboardDesign): void;
-  save(design: IPersistKeyboardDesign): void;
-  createNewProfileFromCurrentLayout(): void;
-  showEditLayoutFileInFiler(): void;
+function setModalState(state: ILayoutManagerModalState) {
+  layoutManagerState.modalState = state;
 }
-
-export const layoutManagerReader = {
-  get editSource(): ILayoutEditSource {
-    return uiState.core.layoutEditSource;
-  },
-  get isModified() {
-    return UiLayouterCore.getIsModified();
-  },
-};
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!layoutManagerReader.isModified) {
@@ -71,6 +50,19 @@ async function checkShallLoadDataForProfile(): Promise<boolean> {
 }
 
 export const layoutManagerActions = {
+  setEditTargetRadioSelection(value: ILayoutManagerEditTarget) {
+    const { editTargetRadioSelection } = layoutManagerReader;
+    if (editTargetRadioSelection !== value) {
+      if (value === 'CurrentProfile') {
+        layoutManagerActions.loadCurrentProfileLayout();
+      } else {
+        layoutManagerActions.createNewLayout();
+      }
+    }
+  },
+  openLoadFromProjectModal: () => setModalState('LoadFromProject'),
+  openSaveToProjectModal: () => setModalState('SaveToProject'),
+  closeModal: () => setModalState('None'),
   async createNewLayout() {
     if (!(await checkShallLoadData())) {
       return;
@@ -139,7 +131,8 @@ export const layoutManagerActions = {
     }
   },
 
-  async saveToFileWithDialog(design: IPersistKeyboardDesign) {
+  async saveToFileWithDialog() {
+    const design = UiLayouterCore.emitSavingDesign();
     const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
     if (filePath) {
       const modFilePath = forceChangeFilePathExtension(
@@ -197,68 +190,10 @@ export const layoutManagerActions = {
     uiActions.navigateTo('/editor');
     dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
+  overwriteLayout() {
+    layoutManagerActions.save(UiLayouterCore.emitSavingDesign());
+  },
   showEditLayoutFileInFiler() {
     dispatchCoreAction({ layout_showEditLayoutFileInFiler: 1 });
   },
 };
-
-const local = new (class {
-  layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
-})();
-
-export const layoutManagerRootModel = {
-  updateBeforeRender() {
-    const { layoutEditSource, loadedLayoutData } = uiState.core;
-
-    useEffect(() => {
-      if (layoutEditSource !== local.layoutEditSource) {
-        UiLayouterCore.loadEditDesign(loadedLayoutData);
-        local.layoutEditSource = layoutEditSource;
-      }
-    }, [layoutEditSource]);
-
-    useEffect(() => {
-      return () => {
-        const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
-        if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
-          const design = UiLayouterCore.emitSavingDesign();
-          editorModel.replaceKeyboardDesign(design);
-        }
-      };
-    }, []);
-  },
-};
-
-export function useLayoutManagerModel(): ILayoutManagerModel {
-  const { editSource, isModified } = layoutManagerReader;
-  const {
-    createNewLayout,
-    loadCurrentProfileLayout,
-    createForProject,
-    loadFromProject,
-    saveToProject,
-    loadFromFileWithDialog,
-    saveToFileWithDialog,
-    save,
-    createNewProfileFromCurrentLayout,
-    showEditLayoutFileInFiler,
-  } = layoutManagerActions;
-
-  layoutManagerRootModel.updateBeforeRender();
-
-  return {
-    editSource,
-    isModified,
-    hasLayoutEntities: UiLayouterCore.hasEditLayoutEntities(),
-    createNewLayout,
-    loadCurrentProfileLayout,
-    createForProject,
-    loadFromProject,
-    saveToProject,
-    loadFromFileWithDialog,
-    saveToFileWithDialog,
-    save,
-    createNewProfileFromCurrentLayout,
-    showEditLayoutFileInFiler,
-  };
-}
