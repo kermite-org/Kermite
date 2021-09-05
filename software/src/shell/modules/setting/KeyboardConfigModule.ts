@@ -3,7 +3,11 @@ import {
   keyboardConfigLoadingDataSchema,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import { commitCoreState, coreState, createCoreModule } from '~/shell/global';
+import {
+  commitCoreState,
+  coreState,
+  createCoreModule,
+} from '~/shell/modules/core';
 
 export const keyboardConfigModule = createCoreModule({
   config_loadKeyboardConfig() {

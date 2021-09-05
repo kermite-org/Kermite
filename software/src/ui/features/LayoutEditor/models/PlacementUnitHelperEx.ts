@@ -1,8 +1,8 @@
-import { mapObjectValues } from '~/shared';
 import {
+  mapObjectValues,
   ICoordUnit,
   getCoordUnitFromUnitSpec,
-} from '~/shared/modules/PlacementUnitHelper';
+} from '~/shared';
 import { IEditKeyboardDesign } from '~/ui/features/LayoutEditor/models/DataSchema';
 
 export function unitValueToMm(x: number, y: number, coordUnit: ICoordUnit) {

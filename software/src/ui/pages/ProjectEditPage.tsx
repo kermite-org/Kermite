@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
-  pageActions,
+  uiActions,
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
@@ -24,14 +24,14 @@ export const ProjectEditPage: FC = () => {
   };
 
   const onLayoutEditButton = () => {
-    pageActions.navigateTo({
+    uiActions.navigateTo({
       type: 'projectLayoutEdit',
       layoutName: projectInfo.layouts[0].layoutName,
     });
   };
 
   const onPresetEditButton = () => {
-    pageActions.navigateTo({
+    uiActions.navigateTo({
       type: 'projectPresetEdit',
       presetName: projectInfo.presets[0].presetName,
     });

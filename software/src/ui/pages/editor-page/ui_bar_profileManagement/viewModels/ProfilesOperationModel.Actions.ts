@@ -2,7 +2,7 @@ import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
 import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { commitUiState, uiActions } from '~/ui/commonStore';
 import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
@@ -142,7 +142,7 @@ const handleSaveUnsavedProfile = async () => {
 };
 
 const openConfiguration = () => {
-  uiStatusModel.status.profileConfigModalVisible = true;
+  commitUiState({ profileConfigModalVisible: true });
 };
 
 const onSaveButton = () => {
@@ -182,9 +182,9 @@ const openUserProfilesFolder = () => {
 
 const onWriteButton = async () => {
   await profilesActions.saveProfile();
-  uiStatusModel.setLoading();
+  uiActions.setLoading();
   const done = await ipcAgent.async.config_writeKeyMappingToDevice();
-  uiStatusModel.clearLoading();
+  uiActions.clearLoading();
   // todo: トーストにする?
   if (done) {
     await modalAlert('write succeeded.');

@@ -1,5 +1,5 @@
-import { profileFormatRevisionLatest } from '~/shared';
 import {
+  profileFormatRevisionLatest,
   vArray,
   vBoolean,
   vNumber,
@@ -9,7 +9,7 @@ import {
   vString,
   vValueEquals,
   vValueOneOf,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
 import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/LayoutFileSchemaChecker';
 
 const vAssignOperation = () =>

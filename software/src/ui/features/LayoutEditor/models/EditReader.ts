@@ -1,7 +1,4 @@
-import {
-  getCoordUnitFromUnitSpec,
-  ICoordUnit,
-} from '~/shared/modules/PlacementUnitHelper';
+import { getCoordUnitFromUnitSpec, ICoordUnit } from '~/shared';
 import {
   decodeGridSpec,
   IGridSpecKey,

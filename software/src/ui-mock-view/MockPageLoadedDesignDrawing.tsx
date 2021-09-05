@@ -2,8 +2,8 @@ import { jsx, css, useEffect } from 'qx';
 import {
   createFallbackDisplayKeyboardDesign,
   IDisplayKeyboardDesign,
+  DisplayKeyboardDesignLoader,
 } from '~/shared';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
 import { loadLocalStorageKeyboardDesignOrDefault } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
 
 const state = new (class {
@@ -27,9 +27,8 @@ const cssText = css`
 export const MockPageLoadedDesignDrawing = () => {
   useEffect(() => {
     const persistDesign = loadLocalStorageKeyboardDesignOrDefault();
-    const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-      persistDesign,
-    );
+    const design =
+      DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(persistDesign);
     console.log({ design });
     state.design = design;
   }, []);

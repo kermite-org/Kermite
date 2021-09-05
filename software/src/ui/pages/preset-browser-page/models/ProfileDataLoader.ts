@@ -3,12 +3,12 @@ import {
   fallbackProfileData,
   IProfileData,
   IProjectPackageInfo,
+  ProfileDataConverter,
 } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
   getProjectOriginAndIdFromSig,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 
 export function useProfileDataLoaded(
   projectKey: string,

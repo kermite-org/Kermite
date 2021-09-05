@@ -1,6 +1,9 @@
 import { ISelectorOption } from '~/ui/base';
-import { uiReaders } from '~/ui/commonActions';
-import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
+import {
+  uiReaders,
+  dispatchCoreAction,
+  projectPackagesReader,
+} from '~/ui/commonStore';
 import {
   callProjectSelectionModal,
   modalConfirm,

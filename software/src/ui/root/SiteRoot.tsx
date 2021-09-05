@@ -12,10 +12,11 @@ import {
   globalHintMouseMoveHandlerEffect,
   appUi,
 } from '~/ui/base';
-import { uiStatusModel, appErrorNotifierEffect } from '~/ui/commonModels';
+import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
   commitUiState,
   lazyInitializeCoreServices,
+  uiReaders,
   uiState,
   uiStateDriverEffect,
 } from '~/ui/commonStore';
@@ -61,7 +62,7 @@ const cssSiteRoot = css`
 `;
 
 const AppView: FC = () => {
-  const isWidgetMode = router.getPagePath() === '/widget';
+  const isWidgetMode = uiReaders.pagePath === '/widget';
   if (isWidgetMode) {
     return <WidgetZoneRoot />;
   } else {
@@ -88,7 +89,7 @@ export const SiteRoot: FC = () => {
   router.useRedirect(['', '/'], '/home');
 
   return (
-    <SiteDpiScaler dpiScale={uiStatusModel.settings.siteDpiScale}>
+    <SiteDpiScaler dpiScale={uiState.settings.siteDpiScale}>
       <div css={cssSiteRoot}>
         {uiState.initialLoading ? <InitialLoadingView /> : <AppView />}
         <ForegroundModalLayerRoot />

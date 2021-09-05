@@ -4,20 +4,18 @@ import {
   ICoreState,
   IProfileData,
   IProfileEditSource,
-} from '~/shared';
-import {
   vObject,
   vSchemaOneOf,
   vString,
   vValueEquals,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import {
   commitCoreState,
   coreState,
   coreStateManager,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 
 const profileEditSourceLoadingDataSchema = vSchemaOneOf([

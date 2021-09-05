@@ -5,25 +5,44 @@ import {
   defaultCoreState,
   ICoreAction,
   ICoreState,
-  ICustomFirmwareInfo,
-  IGlobalSettings,
-  IKeyboardConfig,
-  IKeyboardDeviceStatus,
-  IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { IPageSpec } from '~/ui/commonModels/PageTypes';
 
+export interface IUiSettings {
+  showTestInputArea: boolean;
+  showLayersDynamic: boolean;
+  showLayerDefaultAssign: boolean;
+  siteDpiScale: number;
+  showGlobalHint: boolean;
+  showOnboardingPanel: boolean;
+}
+
+const defaultUiSettings: IUiSettings = {
+  showTestInputArea: false,
+  showLayersDynamic: false,
+  showLayerDefaultAssign: false,
+  siteDpiScale: 1.0,
+  showGlobalHint: true,
+  showOnboardingPanel: false,
+};
+
 export type IUiState = {
   core: ICoreState;
+  settings: IUiSettings;
   pageSpec: IPageSpec | undefined;
   initialLoading: boolean;
+  profileConfigModalVisible: boolean;
+  isLoading: boolean;
 };
 
 export const defaultUiState: IUiState = {
   core: cloneObject(defaultCoreState),
+  settings: defaultUiSettings,
   pageSpec: undefined,
   initialLoading: false,
+  profileConfigModalVisible: false,
+  isLoading: false,
 };
 
 export type IUiAction = Partial<{}>;
@@ -44,6 +63,12 @@ export function commitUiState(diff: Partial<IUiState>) {
   copyObjectProps(uiState, diff);
 }
 
+export function commitUiSettings(diff: Partial<IUiSettings>) {
+  commitUiState({
+    settings: { ...uiState.settings, ...diff },
+  });
+}
+
 export function commitCoreStateFromUiSide(diff: Partial<ICoreState>) {
   commitUiState({ core: { ...uiState.core, ...diff } });
 }
@@ -60,21 +85,3 @@ export const uiStateDriverEffect = () => {
 export async function lazyInitializeCoreServices() {
   await ipcAgent.async.global_lazyInitializeServices();
 }
-
-export const uiStateReader = {
-  get globalSettings(): IGlobalSettings {
-    return uiState.core.globalSettings;
-  },
-  get allProjectPackageInfos(): IProjectPackageInfo[] {
-    return uiState.core.allProjectPackageInfos;
-  },
-  get allCustomFirmwareInfos(): ICustomFirmwareInfo[] {
-    return uiState.core.allCustomFirmwareInfos;
-  },
-  get deviceStatus(): IKeyboardDeviceStatus {
-    return uiState.core.deviceStatus;
-  },
-  get keyboardConfig(): IKeyboardConfig {
-    return uiState.core.keyboardConfig;
-  },
-};

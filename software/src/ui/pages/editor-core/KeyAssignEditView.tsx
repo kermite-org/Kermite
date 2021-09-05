@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
+import { uiState } from '~/ui/commonStore';
 import { TestInputArea } from '~/ui/pages/editor-core/ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from '~/ui/pages/editor-core/ui_editor_assignsSection';
 import { KeyboardSection } from '~/ui/pages/editor-core/ui_editor_keyboardSection/KeyboardSection';
@@ -19,9 +19,7 @@ export const KeyAssignEditView: FC<Props> = ({ forceHideTestInputArea }) => {
     <div css={cssKeyAssignEditView}>
       <div
         css={cssEditTopBarBox}
-        qxIf={
-          !forceHideTestInputArea && uiStatusModel.settings.showTestInputArea
-        }
+        qxIf={!forceHideTestInputArea && uiState.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>

@@ -1,6 +1,5 @@
 import { css, FC, jsx, useEffect } from 'qx';
-import { IPersistProfileData } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
+import { IPersistProfileData, ProfileDataConverter } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/pages/editor-core/KeyAssignEditView';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';

@@ -1,9 +1,8 @@
-import { uiActions } from '~/ui/commonActions';
 import {
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
-import { uiState } from '~/ui/commonStore';
+import { uiActions, uiState } from '~/ui/commonStore';
 
 interface WelcomePageModel {
   appVersion: string;

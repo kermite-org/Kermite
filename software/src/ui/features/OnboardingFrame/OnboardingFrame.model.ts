@@ -1,6 +1,6 @@
 import { getObjectKeyByValue, isNumberInRange } from '~/shared';
-import { uiActions, uiReaders } from '~/ui/commonActions';
 import { PagePaths } from '~/ui/commonModels';
+import { uiActions, uiReaders } from '~/ui/commonStore';
 
 interface OnboardingFrameModel {
   allSteps: number[];

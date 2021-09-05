@@ -6,8 +6,7 @@ import {
   stringifyProfileEntry,
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
-import { uiReaders } from '~/ui/commonActions';
-import { projectPackagesReader } from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { getFileNameFromPath } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';

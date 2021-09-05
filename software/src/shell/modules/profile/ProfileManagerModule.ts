@@ -6,15 +6,15 @@ import {
   IProfileData,
   IProfileEditSource,
   IProfileEntry,
+  ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataConverter } from '~/shared/modules/ProfileDataConverter';
 import {
   commitCoreState,
   coreState,
   createCoreModule,
   dispatchCoreAction,
   profilesReader,
-} from '~/shell/global';
+} from '~/shell/modules/core';
 import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profile/PresetProfileLoader';
 import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
 

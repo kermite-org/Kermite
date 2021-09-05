@@ -1,6 +1,6 @@
 import { jsx, useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
@@ -24,7 +24,7 @@ function useProjectAttachmentFileSelectorViewModel(
     currentPresetName: '',
   });
 
-  const resourceInfos = uiStateReader.allProjectPackageInfos;
+  const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,

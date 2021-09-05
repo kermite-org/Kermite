@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
+import { DisplayKeyboardDesignLoader } from '~/shared';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList';
 import {

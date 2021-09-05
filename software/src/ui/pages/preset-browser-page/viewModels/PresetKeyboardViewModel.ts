@@ -1,5 +1,9 @@
-import { IDisplayArea, IDisplayOutlineShape, IProfileData } from '~/shared';
-import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
+import {
+  IDisplayArea,
+  IDisplayOutlineShape,
+  IProfileData,
+  getDisplayKeyboardDesignSingleCached,
+} from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
 import { makePresetKeyUnitViewModels } from '~/ui/components/keyboard';
 

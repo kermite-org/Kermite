@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 import { getMcuNameFromKermiteMcuCode } from '~/shared';
 import { texts } from '~/ui/base';
-import { projectPackagesReader, uiStateReader } from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 
 interface IConnectedDevicesAttrsPartModel {
   tableData: [string, string][] | undefined;
@@ -15,7 +15,7 @@ function fixDateTimeText(dateTimeText: string) {
 }
 
 export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartModel {
-  const { deviceStatus } = uiStateReader;
+  const { deviceStatus } = uiReaders;
   const deviceAttrs =
     (deviceStatus.isConnected && deviceStatus.deviceAttrs) || undefined;
   const isOriginOnline = deviceAttrs?.origin === 'online';

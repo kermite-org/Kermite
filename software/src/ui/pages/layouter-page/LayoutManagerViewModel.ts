@@ -1,12 +1,7 @@
 import { useLocal } from 'qx';
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import {
-  globalSettingsReader,
-  projectPackagesReader,
-  uiState,
-  uiStateReader,
-} from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
 import {
   ILayoutManagerModel,
@@ -106,7 +101,7 @@ function useLayoutManagerViewModelImpl(
     local.modalState = modalState;
   };
 
-  const resourceInfos = uiStateReader.allProjectPackageInfos;
+  const resourceInfos = uiReaders.allProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectId,
@@ -135,8 +130,6 @@ function useLayoutManagerViewModelImpl(
   const isProjectLayoutSourceSpecified = !!(
     editTargetProject && local.currentLayoutName
   );
-
-  const { isLocalProjectSelectedForEdit } = globalSettingsReader;
 
   const editTargetRadioSelection =
     model.editSource.type === 'CurrentProfile'
@@ -203,7 +196,7 @@ function useLayoutManagerViewModelImpl(
       model.editSource.type === 'File' ||
       model.editSource.type === 'ProjectLayout',
     showEditLayoutFileInFiler: () => model.showEditLayoutFileInFiler(),
-    canOpenProjectIoModal: isLocalProjectSelectedForEdit,
+    canOpenProjectIoModal: uiReaders.isLocalProjectSelectedForEdit,
     canCreateProfile,
     createNewProfileFromCurrentLayout: () =>
       model.createNewProfileFromCurrentLayout(),

@@ -1,6 +1,6 @@
 import { IKeyboardDeviceStatus, SystemParameterDefinitions } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 import {
   ICustomParameterModel,
   makeParameterModel,
@@ -40,7 +40,7 @@ function getParameterModels(
 }
 
 export function useCustomParametersPartModel(): ICustomParametersPartModel {
-  const { deviceStatus } = uiStateReader;
+  const { deviceStatus } = uiReaders;
   const { isConnected } = deviceStatus;
 
   const resetParameters = () => {

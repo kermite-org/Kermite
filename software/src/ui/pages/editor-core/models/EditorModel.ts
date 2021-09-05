@@ -8,8 +8,8 @@ import {
   IPersistKeyboardDesign,
   IProfileAssignType,
   IProfileData,
+  getDisplayKeyboardDesignSingleCached,
 } from '~/shared';
-import { getDisplayKeyboardDesignSingleCached } from '~/shared/modules/DisplayKeyboardSingleCache';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,

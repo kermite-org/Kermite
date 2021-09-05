@@ -1,7 +1,5 @@
 import { jsx, css } from 'qx';
-import { degToRad } from '~/shared';
-import { getIsoEnterSvgPathSpecText } from '~/shared/modules/ExtendedKeyShapes';
-import { getKeySize } from '~/shared/modules/PlacementUnitHelper';
+import { degToRad, getIsoEnterSvgPathSpecText, getKeySize } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPosition, startDragSession } from '~/ui/features/LayoutEditor/common';
 import {
