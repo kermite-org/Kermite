@@ -1,6 +1,5 @@
-import { useLocal } from 'qx';
+import { useState } from 'qx';
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
-import { ISelectorOption } from '~/ui/base';
 import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
 import {
@@ -18,26 +17,10 @@ export type ILayoutManagerEditTargetRadioSelection =
   | 'LayoutFile';
 export interface ILayoutManagerViewModel {
   editSourceText: string;
-
-  projectOptions: ISelectorOption[];
-  // setCurrentProjectId(projectId: string): void;
-  currentProjectId: string;
-  // currentProjectPath: string;
-  currentKeyboardName: string;
   targetProjectLayoutFilePath: string;
-
-  layoutOptions: ISelectorOption[];
-  currentLayoutName: string;
-  setCurrentLayoutName(text: string): void;
-
   canCreateNewLayout: boolean;
   createNewLayout(): void;
   loadCurrentProfileLayout(): void;
-  createForProject(): void;
-  canLoadFromProject: boolean;
-  loadFromProject(): void;
-  canSaveToProject: boolean;
-  saveToProject(): void;
   loadFromFileWithDialog(): void;
   canSaveToFile: boolean;
   saveToFileWithDialog(): void;
@@ -54,9 +37,9 @@ export interface ILayoutManagerViewModel {
   createNewProfileFromCurrentLayout(): void;
   editTargetRadioSelection: ILayoutManagerEditTargetRadioSelection;
   canEditCurrentProfile: boolean;
-  setEditTargetRadioSelection: (
+  setEditTargetRadioSelection(
     value: ILayoutManagerEditTargetRadioSelection,
-  ) => void;
+  ): void;
 }
 
 function getSavingPackageFilePath() {
@@ -87,49 +70,10 @@ function getEditSourceDisplayText(
 function useLayoutManagerViewModelImpl(
   model: ILayoutManagerModel,
 ): ILayoutManagerViewModel {
-  const local = useLocal({
-    currentLayoutName: '',
-    modalState: 'None' as ILayoutManagerModalState,
-    // modalState: 'LoadFromProject' as ILayoutManagerModalState,
-  });
-
-  const setCurrentLayoutName = (projectName: string) => {
-    local.currentLayoutName = projectName;
-  };
-
-  const setModalState = (modalState: ILayoutManagerModalState) => {
-    local.modalState = modalState;
-  };
-
-  const resourceInfos = uiReaders.allProjectPackageInfos;
-
-  const projectOptions = resourceInfos.map((info) => ({
-    value: info.projectId,
-    label: info.keyboardName,
-  }));
+  const [modalState, setModalState] =
+    useState<ILayoutManagerModalState>('None');
 
   const editTargetProject = projectPackagesReader.getEditTargetProject();
-
-  // 編集しているプロファイルのプロジェクトを規定で選び、変更させない
-  const currentProjectId = editTargetProject?.projectId || '';
-
-  // const includedInResources = resourceInfos.find(
-  //   (info) => info.origin === 'local' && info.projectId === currentProjectId,
-  // );
-
-  const currentProject = resourceInfos.find(
-    (info) => info.origin === 'local' && info.projectId === currentProjectId,
-  );
-
-  const layoutOptions =
-    currentProject?.layouts.map(({ layoutName }) => ({
-      value: layoutName,
-      label: layoutName,
-    })) || [];
-
-  const isProjectLayoutSourceSpecified = !!(
-    editTargetProject && local.currentLayoutName
-  );
 
   const editTargetRadioSelection =
     model.editSource.type === 'CurrentProfile'
@@ -153,34 +97,10 @@ function useLayoutManagerViewModelImpl(
       model.editSource,
       editTargetProject,
     ),
-    projectOptions,
-    currentProjectId,
-    currentKeyboardName: currentProject?.keyboardName || '',
-    layoutOptions,
-    currentLayoutName: local.currentLayoutName,
-    setCurrentLayoutName,
     targetProjectLayoutFilePath: getSavingPackageFilePath(),
     canCreateNewLayout,
     createNewLayout: () => model.createNewLayout(),
     loadCurrentProfileLayout: () => model.loadCurrentProfileLayout(),
-    canLoadFromProject: isProjectLayoutSourceSpecified,
-    createForProject: () => {
-      model.createForProject(currentProjectId, local.currentLayoutName);
-      setModalState('None');
-    },
-    loadFromProject: () => {
-      model.loadFromProject(currentProjectId, local.currentLayoutName);
-      setModalState('None');
-    },
-    canSaveToProject: isProjectLayoutSourceSpecified,
-    saveToProject: () => {
-      model.saveToProject(
-        currentProjectId,
-        local.currentLayoutName,
-        UiLayouterCore.emitSavingDesign(),
-      );
-      setModalState('None');
-    },
     loadFromFileWithDialog: () => model.loadFromFileWithDialog(),
     canSaveToFile,
     saveToFileWithDialog: () =>
@@ -188,7 +108,7 @@ function useLayoutManagerViewModelImpl(
     canOverwrite:
       model.editSource.type !== 'LayoutNewlyCreated' && model.isModified,
     overwriteLayout: () => model.save(UiLayouterCore.emitSavingDesign()),
-    modalState: local.modalState,
+    modalState,
     openLoadFromProjectModal: () => setModalState('LoadFromProject'),
     openSaveToProjectModal: () => setModalState('SaveToProject'),
     closeModal: () => setModalState('None'),

@@ -67,7 +67,6 @@ export const profilesActions = {
       },
     });
   },
-
   openUserProfilesFolder: () => {
     dispatchCoreAction({ profile_openUserProfilesFolder: 1 });
   },

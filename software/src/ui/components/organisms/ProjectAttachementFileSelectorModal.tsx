@@ -11,8 +11,8 @@ export interface IProjectAttachmentFileSelectorModalModel {
 
   canSelectProject: boolean;
   projectOptions: ISelectorOption[];
-  currentProjectId: string;
-  setCurrentProjectId(projectId: string): void;
+  currentProjectKey: string;
+  setCurrentProjectKey(projectKey: string): void;
   currentProjectKeyboardName: string;
 
   attachmentFileTypeHeader: string;
@@ -35,8 +35,8 @@ export const ProjectAttachmentFileSelectorModal = (props: {
     selectorSize,
     canSelectProject,
     projectOptions,
-    currentProjectId,
-    setCurrentProjectId,
+    currentProjectKey,
+    setCurrentProjectKey,
     currentProjectKeyboardName,
     attachmentFileTypeHeader,
     attachmentFileNameOptions,
@@ -66,8 +66,8 @@ export const ProjectAttachmentFileSelectorModal = (props: {
                 </div>
                 <FlatListSelector
                   options={projectOptions}
-                  value={currentProjectId}
-                  setValue={setCurrentProjectId}
+                  value={currentProjectKey}
+                  setValue={setCurrentProjectKey}
                   size={selectorSize}
                   disabled={!canSelectProject}
                 />

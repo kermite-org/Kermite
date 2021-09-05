@@ -69,7 +69,7 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
         />
       </div>
 
-      {baseVm.isExportingPresetSelectionModalOpen && (
+      {baseVm.modalState !== 'None' && (
         <SavingProjectPresetSelectionModal baseVm={baseVm} />
       )}
     </div>
