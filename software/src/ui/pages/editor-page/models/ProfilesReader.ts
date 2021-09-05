@@ -1,5 +1,5 @@
 import { IProfileEntry } from '~/shared';
-import { uiState } from '~/ui/commonStore/base';
+import { uiReaders, uiState } from '~/ui/commonStore';
 
 export const profilesReader = {
   get profileEditSource() {
@@ -9,10 +9,8 @@ export const profilesReader = {
     return uiState.core.allProfileEntries;
   },
   get visibleProfileEntries() {
-    const {
-      globalSettings: { globalProjectId },
-      allProfileEntries,
-    } = uiState.core;
+    const { allProfileEntries } = uiState.core;
+    const { globalProjectId } = uiReaders;
     if (globalProjectId) {
       return allProfileEntries.filter((it) => it.projectId === globalProjectId);
     } else {

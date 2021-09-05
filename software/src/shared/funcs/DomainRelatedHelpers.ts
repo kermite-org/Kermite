@@ -11,14 +11,15 @@ import {
 import { generateNumberSequence } from '~/shared/funcs/Utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
-export function createProjectSig(origin: IResourceOrigin, projectId: string) {
+export function createProjectKey(origin: IResourceOrigin, projectId: string) {
   return `${origin}#${projectId}`;
 }
 
-export function getProjectOriginAndIdFromSig(
-  projectSig: string,
-): { origin: IResourceOrigin; projectId: string } {
-  const [origin, projectId] = projectSig.split('#');
+export function getOriginAndProjectIdFromProjectKey(projectKey: string): {
+  origin: IResourceOrigin;
+  projectId: string;
+} {
+  const [origin, projectId] = projectKey.split('#');
   return { origin: origin as IResourceOrigin, projectId };
 }
 
@@ -108,4 +109,25 @@ export function stringifyProfileEntry(profileEntry: IProfileEntry): string {
 export function parseProfileEntry(profileKey: string): IProfileEntry {
   const [projectId, profileName] = profileKey.split(':');
   return { projectId, profileName };
+}
+
+export function getNextFirmwareId(existingIds: string[]): string {
+  const allNumbers = existingIds.map((id) => parseInt(id));
+  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
+  if (newNumber >= 100) {
+    throw new Error('firmware id reaches to 100');
+  }
+  return `00${newNumber.toString()}`.slice(-2);
+}
+
+export function getNextProjectResourceId(
+  prefix: 'pr' | 'lt' | 'fw',
+  existingIds: string[],
+): string {
+  const allNumbers = existingIds.map((id) => parseInt(id.replace(prefix, '')));
+  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 1;
+  if (newNumber >= 100) {
+    throw new Error('resource id reaches to 100');
+  }
+  return prefix + ('00' + newNumber.toString()).slice(-2);
 }

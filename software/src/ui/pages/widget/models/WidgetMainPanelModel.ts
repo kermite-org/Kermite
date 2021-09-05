@@ -1,8 +1,8 @@
 import { useEffect } from 'qx';
 import { fallbackProfileData, IDisplayKeyboardDesign } from '~/shared';
-import { ipcAgent, IWidgetKeyUnitCardViewModel, router } from '~/ui/base';
+import { ipcAgent, IWidgetKeyUnitCardViewModel } from '~/ui/base';
 import { usePlayerModel } from '~/ui/commonModels';
-import { dispatchCoreAction, siteModel } from '~/ui/commonStore';
+import { dispatchCoreAction, siteModel, uiActions } from '~/ui/commonStore';
 import { useWidgetKeyUnitCardViewModel } from '~/ui/pages/widget/models/WidgetKeyUnitCardViewModel';
 
 export interface IWidgetMainPanelModel {
@@ -40,7 +40,7 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
       ),
     },
     backToConfiguratorView() {
-      router.navigateTo('/editor');
+      uiActions.navigateTo('/editor');
     },
     isWidgetAlwaysOnTop,
     toggleWidgetAlwaysOnTop,

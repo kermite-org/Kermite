@@ -1,30 +1,15 @@
-import { jsx, css } from 'qx';
-import { uiTheme, GlobalHintDisplayText } from '~/ui/base';
-import { uiStatusModel } from '~/ui/commonModels';
-import { GlobalHintIconButton } from '~/ui/components';
+import { css, FC, jsx } from 'qx';
+import { GlobalHintDisplay } from '~/ui/facets';
 
-export const WindowStatusBarSection = () => {
-  const { settings } = uiStatusModel;
-  const showHint = settings.showGlobalHint;
-  const toggleShowHint = () =>
-    (settings.showGlobalHint = !settings.showGlobalHint);
-
-  return (
-    <div css={style}>
-      <GlobalHintIconButton isActive={showHint} onClick={toggleShowHint} />
-      <GlobalHintDisplayText qxIf={showHint} />
-    </div>
-  );
-};
+export const WindowStatusBarSection: FC = () => (
+  <div css={style}>
+    <GlobalHintDisplay />
+  </div>
+);
 
 const style = css`
-  font-size: 14px;
-  color: ${uiTheme.colors.clDecal};
+  height: 100%;
   display: flex;
   align-items: center;
-  height: 100%;
-  margin-left: 4px;
-  > :nth-child(2) {
-    margin-left: 2px;
-  }
+  padding-left: 4px;
 `;

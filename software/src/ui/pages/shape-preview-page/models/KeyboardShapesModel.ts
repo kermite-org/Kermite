@@ -1,7 +1,10 @@
 import { useEffect, useLocal } from 'qx';
-import { IDisplayKeyboardDesign, IProjectPackageInfo } from '~/shared';
-import { getProjectOriginAndIdFromSig } from '~/shared/funcs/DomainRelatedHelpers';
-import { DisplayKeyboardDesignLoader } from '~/shared/modules/DisplayKeyboardDesignLoader';
+import {
+  IDisplayKeyboardDesign,
+  IProjectPackageInfo,
+  DisplayKeyboardDesignLoader,
+} from '~/shared';
+import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { UiLocalStorage } from '~/ui/base';
 import { projectPackagesReader } from '~/ui/commonStore';
 import {
@@ -14,10 +17,10 @@ export interface IKeyboardShapesModel {
   settings: IShapeViewPersistState;
   loadedDesign: IDisplayKeyboardDesign | undefined;
   projectInfos: IProjectPackageInfo[];
-  currentProjectSig: string;
+  currentProjectKey: string;
   currentLayoutName: string;
   optionLayoutNames: string[];
-  setCurrentProjectSig(sig: string): void;
+  setCurrentProjectKey(projectKey: string): void;
   setCurrentLayoutName(layoutName: string): void;
   startPageSession(): void;
 }
@@ -25,7 +28,7 @@ export interface IKeyboardShapesModel {
 class KeyboardShapesModel {
   projectInfos: IProjectPackageInfo[] = [];
 
-  private _currentProjectSig: string | undefined;
+  private _currentProjectKey: string | undefined;
   private _loadedDesign: IDisplayKeyboardDesign | undefined;
   private _currentLayoutName: string | undefined;
 
@@ -33,8 +36,8 @@ class KeyboardShapesModel {
     ...shapeViewPersistStateDefault,
   };
 
-  get currentProjectSig() {
-    return this._currentProjectSig || '';
+  get currentProjectKey() {
+    return this._currentProjectKey || '';
   }
 
   get currentLayoutName() {
@@ -47,17 +50,17 @@ class KeyboardShapesModel {
 
   get optionLayoutNames() {
     const info = this.projectInfos.find(
-      (info) => info.sig === this._currentProjectSig,
+      (info) => info.projectKey === this._currentProjectKey,
     );
     return info?.layouts.map((la) => la.layoutName) || [];
   }
 
   private loadCurrentProjectLayout() {
-    if (!(this._currentProjectSig && this._currentLayoutName)) {
+    if (!(this._currentProjectKey && this._currentLayoutName)) {
       return;
     }
-    const { origin, projectId } = getProjectOriginAndIdFromSig(
-      this._currentProjectSig,
+    const { origin, projectId } = getOriginAndProjectIdFromProjectKey(
+      this._currentProjectKey,
     );
 
     const info = projectPackagesReader.findProjectInfo(origin, projectId);
@@ -67,18 +70,17 @@ class KeyboardShapesModel {
     )?.data;
 
     if (design) {
-      this._loadedDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        design,
-      );
+      this._loadedDesign =
+        DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
     } else {
       this._loadedDesign = undefined;
     }
   }
 
-  setCurrentProjectSig = (sig: string) => {
-    if (sig !== this._currentProjectSig) {
-      this._currentProjectSig = sig;
-      this.settings.shapeViewProjectSig = sig;
+  setCurrentProjectKey = (projectKey: string) => {
+    if (projectKey !== this._currentProjectKey) {
+      this._currentProjectKey = projectKey;
+      this.settings.shapeViewProjectKey = projectKey;
       this._currentLayoutName = this.optionLayoutNames[0];
       this.loadCurrentProjectLayout();
     }
@@ -93,7 +95,8 @@ class KeyboardShapesModel {
   };
 
   private initialize() {
-    this.projectInfos = projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected();
+    this.projectInfos =
+      projectPackagesReader.getProjectInfosGlobalProjectSelectionAffected();
     if (this.projectInfos.length === 0) {
       this._currentLayoutName = undefined;
       this._currentLayoutName = undefined;
@@ -101,8 +104,8 @@ class KeyboardShapesModel {
       return;
     }
 
-    this._currentProjectSig =
-      this.settings.shapeViewProjectSig || this.projectInfos[0].sig;
+    this._currentProjectKey =
+      this.settings.shapeViewProjectKey || this.projectInfos[0].projectKey;
 
     this._currentLayoutName =
       this.settings.shapeViewLayoutName ||

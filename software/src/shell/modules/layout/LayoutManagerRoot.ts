@@ -1,12 +1,17 @@
-import { ICoreState, ILayoutEditSource } from '~/shared';
 import {
+  ICoreState,
+  ILayoutEditSource,
   vObject,
   vSchemaOneOf,
   vString,
   vValueEquals,
-} from '~/shared/modules/SchemaValidationHelper';
+} from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import { coreState, coreStateManager, profilesReader } from '~/shell/global';
+import {
+  coreState,
+  coreStateManager,
+  profilesReader,
+} from '~/shell/modules/core';
 import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
 
 const layoutEditSourceSchema = vSchemaOneOf([

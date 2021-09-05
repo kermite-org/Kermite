@@ -1,10 +1,16 @@
 import {
-  copyObjectPropsRecursive,
+  cloneObject,
   duplicateObjectByJsonStringifyParse,
+  ICheckerEx,
 } from '~/shared';
-import { ICheckerEx } from '~/shared/modules/SchemaValidationHelper';
 import { appEnv } from '~/shell/base/AppEnv';
-import { fsExistsSync, fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
+import {
+  fsExistsSync,
+  fsxEnsureFolderExists,
+  fsxReadJsonFile,
+  fsxWriteJsonFile,
+  pathDirname,
+} from '~/shell/funcs';
 
 class ApplicationStorage {
   private configFilePath = appEnv.resolveUserDataFilePath('data/config.json');
@@ -47,11 +53,11 @@ class ApplicationStorage {
   ): T {
     const loaded = this.readItem(key);
     const errors = schemaChecker(loaded);
-    const value = duplicateObjectByJsonStringifyParse(defaultValue);
     if (!errors) {
-      copyObjectPropsRecursive(value, loaded);
+      return cloneObject({ ...defaultValue, ...(loaded as any) });
+    } else {
+      return defaultValue;
     }
-    return value;
   }
 
   writeItem<T>(key: string, value: T) {
@@ -61,6 +67,7 @@ class ApplicationStorage {
   async initializeAsync() {
     if (!fsExistsSync(this.configFilePath)) {
       console.log('config file not found!, create it');
+      await fsxEnsureFolderExists(pathDirname(this.configFilePath));
       await fsxWriteJsonFile(this.configFilePath, {});
     }
     const obj = await fsxReadJsonFile(this.configFilePath);

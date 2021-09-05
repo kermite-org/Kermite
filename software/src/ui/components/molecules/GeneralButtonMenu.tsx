@@ -4,6 +4,7 @@ import { GeneralButtonMenuButton } from '~/ui/components/molecules/GeneralButton
 
 type Props = {
   menuItems: IGeneralMenuItem[];
+  disabled?: boolean;
 };
 
 const useMenuStateModel = () => {
@@ -13,13 +14,17 @@ const useMenuStateModel = () => {
   return { isOpen: state.isOpen, openMenu, closeMenu };
 };
 
-export const GeneralButtonMenu: FC<Props> = ({ menuItems }) => {
+export const GeneralButtonMenu: FC<Props> = ({ menuItems, disabled }) => {
   const { isOpen, openMenu, closeMenu } = useMenuStateModel();
   return (
     <div>
       <div css={cssMenuOverlay} onClick={closeMenu} qxIf={isOpen} />
       <div css={cssMenuBase}>
-        <GeneralButtonMenuButton handler={openMenu} active={isOpen}>
+        <GeneralButtonMenuButton
+          handler={openMenu}
+          active={isOpen}
+          disabled={disabled}
+        >
           <i class="fa fa-bars" />
         </GeneralButtonMenuButton>
         <div css={cssMenuPanel} qxIf={isOpen}>

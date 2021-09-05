@@ -1,10 +1,9 @@
 import { IPresetSpec, IResourceOrigin } from '~/shared';
 import {
   getPresetSpecFromPresetKey,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { router } from '~/ui/base';
-import { dispatchCoreAction } from '~/ui/commonStore';
+import { dispatchCoreAction, uiActions } from '~/ui/commonStore';
 
 /*
 function getNewProfileNameBase(
@@ -48,10 +47,10 @@ export function editSelectedProjectPreset(
   if (!(projectKey && presetKey)) {
     return;
   }
-  const { origin, projectId } = getProjectOriginAndIdFromSig(projectKey);
+  const { origin, projectId } = getOriginAndProjectIdFromProjectKey(projectKey);
   const presetSpec = getPresetSpecFromPresetKey(presetKey);
   createProfile(origin, projectId, presetSpec);
-  router.navigateTo('/editor');
+  uiActions.navigateTo('/editor');
 
   /*
   const allProfileNames = await ipcAgent.async.profile_getAllProfileNames();

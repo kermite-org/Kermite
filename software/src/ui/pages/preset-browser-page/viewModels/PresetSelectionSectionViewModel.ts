@@ -1,6 +1,6 @@
 import { getProjectKeyFromDeviceAttributes } from '~/shared/funcs/DomainRelatedHelpers';
 import { ISelectorSource } from '~/ui/base';
-import { uiStateReader } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/commonStore';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
 export interface IPresetSelectionSectionViewModel {
@@ -14,7 +14,7 @@ export interface IPresetSelectionSectionViewModel {
 export function usePresetSelectionSectionViewModel(
   model: IPresetSelectionModel,
 ): IPresetSelectionSectionViewModel {
-  const { deviceStatus } = uiStateReader;
+  const { deviceStatus } = uiReaders;
   const connectedDeviceProjectKey =
     (deviceStatus.isConnected &&
       deviceStatus.deviceAttrs &&

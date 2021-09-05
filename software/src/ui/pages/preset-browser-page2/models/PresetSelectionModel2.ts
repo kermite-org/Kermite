@@ -1,7 +1,7 @@
 import { useEffect, useLocal, useMemo } from 'qx';
 import {
   fallbackProfileData,
-  getProjectOriginAndIdFromSig,
+  getOriginAndProjectIdFromProjectKey,
   IProfileData,
   IProjectPackageInfo,
   IServerProfileInfo,
@@ -10,9 +10,12 @@ import {
   getSelectionValueCorrected,
   ipcAgent,
   ISelectorOption,
-  router,
 } from '~/ui/base';
-import { dispatchCoreAction, projectPackagesReader } from '~/ui/commonStore';
+import {
+  dispatchCoreAction,
+  projectPackagesReader,
+  uiActions,
+} from '~/ui/commonStore';
 import { fieldSetter, useFetcher, usePersistState } from '~/ui/helpers';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 
@@ -23,7 +26,7 @@ function makeProjectOptions(
   return infos
     .filter((it) => projectIds.includes(it.projectId) && it.origin === 'online')
     .map((it) => ({
-      value: it.sig,
+      value: it.projectKey,
       label: it.keyboardName,
     }));
 }
@@ -81,13 +84,13 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
   const editSelectedProjectPreset = async () => {
     if (loadedProfileData) {
       await sendCreateProfileCommand(loadedProfileData);
-      router.navigateTo('/editor');
+      uiActions.navigateTo('/editor');
     }
   };
 
   useEffect(() => {
     if (modProjectKey) {
-      const { projectId } = getProjectOriginAndIdFromSig(modProjectKey);
+      const { projectId } = getOriginAndProjectIdFromProjectKey(modProjectKey);
       ipcAgent.async
         .presetHub_getServerProfiles(projectId)
         .then((res) => (local.projectProfiles = res || []));

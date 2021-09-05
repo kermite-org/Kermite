@@ -1,67 +1,18 @@
-import { css, jsx } from 'qx';
-import { appUi, router, uiTheme } from '~/ui/base';
-import { PagePaths, uiStatusModel } from '~/ui/commonModels';
+import { css, FC, jsx } from 'qx';
+import { appUi, uiTheme } from '~/ui/base';
 import { siteModel, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
-import { OnboardingFrame } from '~/ui/features/OnboardingPanel';
-import { ProjectEditPage } from '~/ui/pages/ProjectEditPage';
-import { ProjectLayoutEditPage } from '~/ui/pages/ProjectLayoutEditPage';
-import { ProjectPresetEditPage } from '~/ui/pages/ProjectPresetEditPage';
-import { EditorPage } from '~/ui/pages/editor-page';
-import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
-import { UiLayouterPageComponent } from '~/ui/pages/layouter-page';
-import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
-import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
-import { ProjectSelectionPage } from '~/ui/pages/project-selection-page';
-import { UiSettingsPage } from '~/ui/pages/settings-page';
-import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
-import { WelcomePage } from '~/ui/pages/welcome-page';
+import { OnboardingFrame } from '~/ui/features';
+import { MainColumnRoutes } from '~/ui/root/MainCoulmnRoutes';
 import {
   NavigationColumn,
   WindowStatusBarSection,
   WindowTitleBarSection,
 } from '~/ui/root/sections';
 
-const MainColumnRoutes = () => {
-  const { pageSpec } = uiState;
-  if (pageSpec) {
-    return (
-      <div css={cssMainColumn}>
-        {pageSpec.type === 'projectLayoutEdit' && (
-          <ProjectLayoutEditPage spec={pageSpec} />
-        )}
-        {pageSpec.type === 'projectPresetEdit' && (
-          <ProjectPresetEditPage spec={pageSpec} />
-        )}
-      </div>
-    );
-  }
-  const pagePath = router.getPagePath() as PagePaths;
-  return (
-    <div css={cssMainColumn}>
-      {pagePath === '/editor' && <EditorPage />}
-      {pagePath === '/layouter' && <UiLayouterPageComponent />}
-      {pagePath === '/shapePreview' && <ShapePreviewPage />}
-      {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
-      {pagePath === '/presetBrowser' && <PresetBrowserPage />}
-      {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
-      {pagePath === '/settings' && <UiSettingsPage />}
-      {pagePath === '/projectSelection' && <ProjectSelectionPage />}
-      {pagePath === '/home' && <WelcomePage />}
-      {pagePath === '/projectEdit' && <ProjectEditPage />}
-    </div>
-  );
-};
-
-const cssMainColumn = css`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;
-
-export const ConfiguratorZoneRoot = () => {
-  const showOnboarding = uiStatusModel.settings.showOnboardingPanel;
+export const ConfiguratorZoneRoot: FC = () => {
+  const showOnboarding = uiState.settings.showOnboardingPanel;
   return (
     <CustomWindowFrame
       renderTitleBar={WindowTitleBarSection}
@@ -77,7 +28,7 @@ export const ConfiguratorZoneRoot = () => {
           ) : (
             <MainColumnRoutes />
           )}
-          <LoadingOverlay isLoading={uiStatusModel.status.isLoading} />
+          <LoadingOverlay isLoading={uiState.isLoading} />
           <DevToolPullTab
             qxIf={appUi.isDevelopment}
             handler={siteModel.toggleDevToolVisible}
