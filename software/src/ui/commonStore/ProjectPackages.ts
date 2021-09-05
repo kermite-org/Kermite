@@ -93,20 +93,37 @@ function patchLocalProjectResourceItem<
   });
 }
 
+function removeProjectResourceItemWithId<T extends { resourceId: string }>(
+  items: T[],
+  resourceId: string,
+) {
+  const index = items.findIndex((it) => it.resourceId === resourceId);
+  if (index >= 0) {
+    items.splice(index, 1);
+  }
+}
+
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
-  saveLocalProjectLayout(entry: IProjectLayoutEntry) {
-    patchLocalProjectResourceItem('layouts', entry);
-  },
   saveLocalProjectPreset(entry: IProjectPresetEntry) {
     patchLocalProjectResourceItem('presets', entry);
   },
+  saveLocalProjectLayout(entry: IProjectLayoutEntry) {
+    patchLocalProjectResourceItem('layouts', entry);
+  },
   saveLocalProjectFirmware(entry: IProjectFirmwareEntry) {
     patchLocalProjectResourceItem('firmwares', entry);
+  },
+  deleteProjectResourceItem(resourceId: string) {
+    patchLocalEditProject((draft) => {
+      removeProjectResourceItemWithId(draft.presets, resourceId);
+      removeProjectResourceItemWithId(draft.layouts, resourceId);
+      removeProjectResourceItemWithId(draft.firmwares, resourceId);
+    });
   },
 };
 

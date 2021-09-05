@@ -5,6 +5,7 @@ import {
   projectPackagesHooks,
   projectPackagesWriter,
 } from '~/ui/commonStore';
+import { modalConfirm } from '~/ui/components';
 import { reflectValue } from '~/ui/helpers';
 import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal';
 
@@ -91,8 +92,15 @@ export const ProjectEditPage: FC = () => {
     openCustomFirmwareModal('');
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const deleteResourceItem = (resourceId: string) => {};
+  const deleteResourceItem = async (resourceId: string) => {
+    const ok = await modalConfirm({
+      caption: 'delete item',
+      message: 'Resource item delete. Are you sure?',
+    });
+    if (ok) {
+      projectPackagesWriter.deleteProjectResourceItem(resourceId);
+    }
+  };
 
   return (
     <div css={style}>
@@ -129,10 +137,7 @@ export const ProjectEditPage: FC = () => {
             <button onClick={() => editResourceItem(item.resourceId)}>
               edit
             </button>
-            <button
-              onClick={() => deleteResourceItem(item.resourceId)}
-              qxIf={false}
-            >
+            <button onClick={() => deleteResourceItem(item.resourceId)}>
               delete
             </button>
           </div>
