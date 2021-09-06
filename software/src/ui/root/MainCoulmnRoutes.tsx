@@ -2,10 +2,10 @@ import { css, FC, jsx } from 'qx';
 import { uiReaders, uiState } from '~/ui/commonStore';
 import {
   ProjectEditPage,
-  ProjectStandardFirmwareEditPage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
   ProjectSelectionPage,
+  ProjectStandardFirmwareEditPage,
   SettingsPage,
   WelcomePage,
 } from '~/ui/pages';

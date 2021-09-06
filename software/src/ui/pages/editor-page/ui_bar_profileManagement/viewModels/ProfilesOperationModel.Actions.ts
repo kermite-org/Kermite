@@ -3,7 +3,8 @@ import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { commitUiState, uiActions } from '~/ui/commonStore';
-import { modalAlert, modalConfirm, modalTextEdit } from '~/ui/components';
+import { modalAlert, modalConfirm } from '~/ui/components';
+import { resourceManagementUtils } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
 import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
@@ -18,33 +19,6 @@ async function checkShallLoadData(): Promise<boolean> {
     caption: 'Load',
   });
 }
-
-const checkValidNewProfileName = async (
-  projectId: string,
-  newProfileName: string,
-): Promise<boolean> => {
-  // eslint-disable-next-line no-irregular-whitespace
-  // eslint-disable-next-line no-misleading-character-class
-  if (!newProfileName.match(/^[^/./\\:*?"<>| \u3000\u0e49]+$/)) {
-    await modalAlert(
-      `${newProfileName} is not a valid profile name. operation cancelled.`,
-    );
-    return false;
-  }
-
-  const isExist = profilesReader.allProfileEntries.some(
-    (it) =>
-      it.projectId === projectId &&
-      it.profileName.toLowerCase() === newProfileName.toLowerCase(),
-  );
-  if (isExist) {
-    await modalAlert(
-      `${newProfileName} is already exists. operation cancelled.`,
-    );
-    return false;
-  }
-  return true;
-};
 
 const createProfile = async () => {
   if (!(await checkShallLoadData())) {
@@ -65,22 +39,20 @@ const createProfile = async () => {
 };
 
 const inputNewProfileName = async (
-  caption: string,
+  modalTitle: string,
   projectId: string,
   defaultText: string,
 ): Promise<string | undefined> => {
-  const newProfileName = await modalTextEdit({
-    message: texts.label_assigner_profileNameEditModal_newProfileName,
+  const existingProfileNames = profilesReader.allProfileEntries
+    .filter((it) => it.projectId === projectId)
+    .map((it) => it.profileName);
+  return await resourceManagementUtils.inputSavingResourceName({
+    modalTitle,
+    modalMessage: texts.label_assigner_profileNameEditModal_newProfileName,
+    resourceTypeNameText: 'profile name',
     defaultText,
-    caption,
+    existingResourceNames: existingProfileNames,
   });
-  if (newProfileName !== undefined) {
-    const nameValid = await checkValidNewProfileName(projectId, newProfileName);
-    if (nameValid) {
-      return newProfileName;
-    }
-  }
-  return undefined;
 };
 
 const renameProfile = async () => {

@@ -51,13 +51,28 @@ export const projectPackagesReader = {
   },
   getEditTargetFirmwareEntry<K extends 'standard' | 'custom'>(
     type: K,
-    resourceId: string,
+    variationId: string,
   ):
     | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
     | undefined {
     const projectInfo = uiReaders.editTargetProject;
     const entry = projectInfo?.firmwares.find(
-      (it) => it.resourceId === resourceId,
+      (it) => it.variationId === variationId,
+    );
+    if (entry?.type === type) {
+      return entry as any;
+    }
+    return undefined;
+  },
+  getEditTargetFirmwareEntryByVariationName<K extends 'standard' | 'custom'>(
+    type: K,
+    variationName: string,
+  ):
+    | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
+    | undefined {
+    const projectInfo = uiReaders.editTargetProject;
+    const entry = projectInfo?.firmwares.find(
+      (it) => it.variationName === variationName,
     );
     if (entry?.type === type) {
       return entry as any;
@@ -77,29 +92,41 @@ function patchLocalEditProject(
   projectPackagesWriter.saveLocalProject(newProjectInfo);
 }
 
-function patchLocalProjectResourceItem<
-  K extends 'presets' | 'layouts' | 'firmwares',
->(target: K, entry: IProjectPackageInfo[K][0]) {
-  patchLocalEditProject((draft) => {
-    const resourceItems = draft[target];
-    const index = resourceItems.findIndex(
-      (it) => it.resourceId === entry.resourceId,
-    );
-    if (index >= 0) {
-      resourceItems.splice(index, 1, entry as any);
-    } else {
-      resourceItems.push(entry as any);
-    }
-  });
+function insertItemToArray<T, K extends keyof T>(
+  items: T[],
+  keyPropName: K,
+  newItem: T,
+) {
+  const index = items.findIndex(
+    (it) => it[keyPropName] === newItem[keyPropName],
+  );
+  if (index >= 0) {
+    items.splice(index, 1, newItem);
+  } else {
+    items.push(newItem);
+  }
 }
 
-function removeProjectResourceItemWithId<T extends { resourceId: string }>(
+function removeItemFromArray<T, K extends keyof T>(
   items: T[],
-  resourceId: string,
+  keyPropName: K,
+  key: Extract<T[K], string>,
 ) {
-  const index = items.findIndex((it) => it.resourceId === resourceId);
+  const index = items.findIndex((it) => it[keyPropName] === key);
   if (index >= 0) {
     items.splice(index, 1);
+  }
+}
+
+function renameItemInArray<T, K extends keyof T>(
+  items: T[],
+  nameFiled: K,
+  oldName: Extract<T[K], string>,
+  newName: Extract<T[K], string>,
+) {
+  const item = items.find((it) => it[nameFiled] === oldName);
+  if (item) {
+    item[nameFiled] = newName;
   }
 }
 
@@ -109,20 +136,49 @@ export const projectPackagesWriter = {
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
-  saveLocalProjectPreset(entry: IProjectPresetEntry) {
-    patchLocalProjectResourceItem('presets', entry);
+  saveLocalProjectPreset(item: IProjectPresetEntry) {
+    patchLocalEditProject((draft) =>
+      insertItemToArray(draft.presets, 'presetName', item),
+    );
   },
-  saveLocalProjectLayout(entry: IProjectLayoutEntry) {
-    patchLocalProjectResourceItem('layouts', entry);
+  saveLocalProjectLayout(item: IProjectLayoutEntry) {
+    patchLocalEditProject((draft) =>
+      insertItemToArray(draft.layouts, 'layoutName', item),
+    );
   },
-  saveLocalProjectFirmware(entry: IProjectFirmwareEntry) {
-    patchLocalProjectResourceItem('firmwares', entry);
+  saveLocalProjectFirmware(item: IProjectFirmwareEntry) {
+    patchLocalEditProject((draft) =>
+      insertItemToArray(draft.firmwares, 'variationName', item),
+    );
   },
-  deleteProjectResourceItem(resourceId: string) {
+  deleteLocalProjectPreset(presetName: string) {
+    patchLocalEditProject((draft) =>
+      removeItemFromArray(draft.presets, 'presetName', presetName),
+    );
+  },
+  deleteLocalProjectLayout(layoutName: string) {
+    patchLocalEditProject((draft) =>
+      removeItemFromArray(draft.layouts, 'layoutName', layoutName),
+    );
+  },
+  deleteLocalProjectFirmware(variationName: string) {
+    patchLocalEditProject((draft) =>
+      removeItemFromArray(draft.firmwares, 'variationName', variationName),
+    );
+  },
+  renameLocalProjectPreset(oldName: string, newName: string) {
     patchLocalEditProject((draft) => {
-      removeProjectResourceItemWithId(draft.presets, resourceId);
-      removeProjectResourceItemWithId(draft.layouts, resourceId);
-      removeProjectResourceItemWithId(draft.firmwares, resourceId);
+      renameItemInArray(draft.presets, 'presetName', oldName, newName);
+    });
+  },
+  renameLocalProjectLayout(oldName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      renameItemInArray(draft.layouts, 'layoutName', oldName, newName);
+    });
+  },
+  renameLocalProjectFirmware(oldName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      renameItemInArray(draft.firmwares, 'variationName', oldName, newName);
     });
   },
 };

@@ -20,20 +20,18 @@ const helpers = {
     const projectInfo = uiReaders.editTargetProject;
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
-  getSourceFirmwareEntryOrCreate(resourceId: string): ICustomFirmwareEntry {
-    if (resourceId) {
-      return projectPackagesReader.getEditTargetFirmwareEntry(
+  getSourceFirmwareEntryOrCreate(variationName: string): ICustomFirmwareEntry {
+    if (variationName) {
+      return projectPackagesReader.getEditTargetFirmwareEntryByVariationName(
         'custom',
-        resourceId,
+        variationName,
       )!;
     } else {
       const newVariationId = getNextFirmwareId(
         helpers.getExistingVariationIds(),
       );
-      const newResourceId = `fw${newVariationId}`;
       return {
         type: 'custom',
-        resourceId: newResourceId,
         variationId: newVariationId,
         variationName: '',
         customFirmwareId: '',
@@ -63,17 +61,14 @@ const readers = {
   get sourceEditValues(): ICustomFirmwareEditValues {
     return state.sourceEditValues;
   },
-  get editTargetVariationName(): string {
-    return state.sourceEntry.variationName || '(new)';
-  },
   get canSave(): boolean {
     return CustomFirmwareEditor_OutputPropsSupplier.canSave;
   },
 };
 
 const actions = {
-  loadEditValues(resourceId: string) {
-    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(resourceId);
+  loadEditValues(variationName: string) {
+    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationName);
     state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
       state.sourceEntry,
     );
@@ -91,17 +86,16 @@ const actions = {
 };
 
 export function useProjectCustomFirmwareSetupModalModel(
-  resourceId: string,
+  variationName: string,
   close: () => void,
 ) {
-  useInlineEffect(() => actions.loadEditValues(resourceId), [resourceId]);
-  const { sourceEditValues, canSave, editTargetVariationName } = readers;
+  useInlineEffect(() => actions.loadEditValues(variationName), [variationName]);
+  const { sourceEditValues, canSave } = readers;
   const saveHandler = () => {
     actions.saveHandler();
     close();
   };
   return {
-    editTargetVariationName,
     sourceEditValues,
     canSave,
     saveHandler,
