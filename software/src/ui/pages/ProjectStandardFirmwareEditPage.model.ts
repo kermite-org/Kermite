@@ -11,8 +11,8 @@ import {
   projectPackagesWriter,
   uiReaders,
 } from '~/ui/commonStore';
-import { modalAlert, modalTextEdit } from '~/ui/components';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
+import { inputSavingResourceName } from '~/ui/helpers';
 
 export interface IProjectStandardFirmwareEditPageModel {
   variationName: string;
@@ -21,41 +21,14 @@ export interface IProjectStandardFirmwareEditPageModel {
   saveHandler(): void;
 }
 
-const checkValidFirmwareVariationName = async (
-  newFirmwareName: string,
-): Promise<boolean> => {
-  // eslint-disable-next-line no-irregular-whitespace
-  // eslint-disable-next-line no-misleading-character-class
-  if (!newFirmwareName.match(/^[^/./\\:*?"<>| \u3000\u0e49]+$/)) {
-    await modalAlert(
-      `${newFirmwareName} is not a valid firmware name. operation cancelled.`,
-    );
-    return false;
-  }
-  const projectInfo = uiReaders.editTargetProject;
-  const isExist = projectInfo?.firmwares.some(
-    (it) => it.variationName === newFirmwareName,
-  );
-  if (isExist) {
-    await modalAlert(
-      `${newFirmwareName} is already exists. operation cancelled.`,
-    );
-    return false;
-  }
-  return true;
-};
-
 async function inputSavingFirmwareName(): Promise<string | undefined> {
-  const firmwareName = await modalTextEdit({
-    message: 'firmware variation name',
-    caption: 'save project firmware',
+  const allVariationNames =
+    uiReaders.editTargetProject?.firmwares.map((it) => it.variationName) || [];
+  return await inputSavingResourceName({
+    modalTitle: 'save project firmware',
+    resourceTypeNameText: 'firmware variation name',
+    existingResourceNames: allVariationNames,
   });
-  if (firmwareName !== undefined) {
-    if (await checkValidFirmwareVariationName(firmwareName)) {
-      return firmwareName;
-    }
-  }
-  return undefined;
 }
 
 const store = new (class {
