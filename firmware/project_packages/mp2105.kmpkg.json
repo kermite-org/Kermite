@@ -5,7 +5,6 @@
   "firmwares": [
     {
       "type": "standard",
-      "resourceId": "fw01",
       "variationId": "01",
       "variationName": "rp",
       "standardFirmwareConfig": {
@@ -18,14 +17,12 @@
     },
     {
       "type": "custom",
-      "resourceId": "fw02",
       "variationId": "02",
       "variationName": "atmega_custom",
       "customFirmwareId": "feGV0G"
     },
     {
       "type": "custom",
-      "resourceId": "fw03",
       "variationId": "03",
       "variationName": "rp_custom",
       "customFirmwareId": "UMyy5p"
@@ -33,7 +30,6 @@
   ],
   "layouts": [
     {
-      "resourceId": "lt01",
       "layoutName": "default",
       "data": {
         "formatRevision": "LA01",

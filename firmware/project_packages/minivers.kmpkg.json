@@ -5,14 +5,12 @@
   "firmwares": [
     {
       "type": "custom",
-      "resourceId": "fw01",
       "variationId": "01",
       "variationName": "rev1",
       "customFirmwareId": "FZiVsZ"
     },
     {
       "type": "custom",
-      "resourceId": "fw02",
       "variationId": "02",
       "variationName": "rev2_rp",
       "customFirmwareId": "7zabZ0"
@@ -20,7 +18,6 @@
   ],
   "layouts": [
     {
-      "resourceId": "lt01",
       "layoutName": "rev1",
       "data": {
         "formatRevision": "LA01",
@@ -533,7 +530,6 @@
       }
     },
     {
-      "resourceId": "lt02",
       "layoutName": "rev2",
       "data": {
         "formatRevision": "LA00",

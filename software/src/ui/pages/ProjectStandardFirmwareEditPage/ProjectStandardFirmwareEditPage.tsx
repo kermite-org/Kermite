@@ -3,17 +3,17 @@ import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectFirmwareEdit } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import { StandardFirmwareEditor } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/ProjectStandardFirmwareEditPage.model';
+import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 
 type Props = {
   spec: IPageSpec_ProjectFirmwareEdit;
 };
 
 export const ProjectStandardFirmwareEditPage: FC<Props> = ({
-  spec: { firmwareResourceId },
+  spec: { variationName },
 }) => {
-  const { variationName, standardFirmwareConfig, canSave, saveHandler } =
-    useProjectStandardFirmwareEditPageModel(firmwareResourceId);
+  const { standardFirmwareConfig, canSave, saveHandler } =
+    useProjectStandardFirmwareEditPageModel(variationName);
   return (
     <div css={style}>
       <RouteHeaderBar

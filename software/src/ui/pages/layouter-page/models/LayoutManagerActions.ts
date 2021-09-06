@@ -187,7 +187,7 @@ export const layoutManagerActions = {
         layout,
       },
     });
-    uiActions.navigateTo('/editor');
+    uiActions.navigateTo('/assigner');
     dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
   overwriteLayout() {

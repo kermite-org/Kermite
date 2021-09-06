@@ -23,7 +23,7 @@ const stepToPagePathMap: { [step: number]: PagePaths | undefined } = {
   1: '/projectSelection',
   2: '/firmwareUpdate',
   3: '/presetBrowser',
-  4: '/editor',
+  4: '/assigner',
 };
 
 const stepInstructionMap: { [step: number]: string } = {

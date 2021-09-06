@@ -40,7 +40,7 @@ export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
       ),
     },
     backToConfiguratorView() {
-      uiActions.navigateTo('/editor');
+      uiActions.navigateTo('/assigner');
     },
     isWidgetAlwaysOnTop,
     toggleWidgetAlwaysOnTop,
