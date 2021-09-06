@@ -29,7 +29,7 @@ export const uiReaders = {
   get keyboardConfig(): IKeyboardConfig {
     return uiState.core.keyboardConfig;
   },
-  get pagePath() {
+  get pagePath(): PagePaths {
     return router.getPagePath() as PagePaths;
   },
   get isGlobalProjectSelected() {

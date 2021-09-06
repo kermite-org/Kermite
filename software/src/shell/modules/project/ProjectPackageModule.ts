@@ -73,11 +73,11 @@ export const projectPackageModule = createCoreModule({
       await projectPackageProvider.getAllCustomFirmwareInfos();
     commitCoreState({ allCustomFirmwareInfos });
   },
-  project_createLocalProject({ keyboardName }) {
+  async project_createLocalProject({ keyboardName }) {
     const project = projectPackageModuleHelper.createLocalProject(keyboardName);
-    projectPackageModule.project_saveLocalProjectPackageInfo(project);
+    await projectPackageModule.project_saveLocalProjectPackageInfo(project);
   },
-  project_createLocalProjectBasedOnOnlineProject({ projectId }) {
+  async project_createLocalProjectBasedOnOnlineProject({ projectId }) {
     const onlineProject = projectPackageModuleHelper.findProjectInfo(
       'online',
       projectId,
@@ -87,7 +87,9 @@ export const projectPackageModule = createCoreModule({
         projectPackageModuleHelper.createLocalProjectFromOnlineProject(
           onlineProject,
         );
-      projectPackageModule.project_saveLocalProjectPackageInfo(localProject);
+      await projectPackageModule.project_saveLocalProjectPackageInfo(
+        localProject,
+      );
     } else {
       throw new Error(`no online project found: ${projectId}`);
     }
@@ -111,7 +113,7 @@ export const projectPackageModule = createCoreModule({
       commitCoreState({ allProjectPackageInfos, globalSettings });
     }
   },
-  project_openLocalProjectsFolder() {
-    projectPackageProvider.openLocalProjectsFolder();
+  async project_openLocalProjectsFolder() {
+    await projectPackageProvider.openLocalProjectsFolder();
   },
 });
