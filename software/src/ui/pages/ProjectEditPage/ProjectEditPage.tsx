@@ -6,7 +6,7 @@ import {
   projectPackagesWriter,
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
-import { reflectValue } from '~/ui/helpers';
+import { reflectValue, resourceManagementUtils } from '~/ui/helpers';
 import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal';
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
@@ -115,6 +115,47 @@ export const ProjectEditPage: FC = () => {
     }
   };
 
+  const renameResourceItem = async (itemKey: string) => {
+    const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
+    if (itemType === 'preset') {
+      const allItemNames = projectInfo.presets.map((it) => it.presetName);
+      const newName = await resourceManagementUtils.inputSavingResourceName({
+        modalTitle: 'rename preset',
+        modalMessage: 'new preset name',
+        resourceTypeNameText: 'preset name',
+        defaultText: itemName,
+        existingResourceNames: allItemNames,
+      });
+      if (newName && newName !== itemName) {
+        projectPackagesWriter.renameLocalProjectPreset(itemName, newName);
+      }
+    } else if (itemType === 'layout') {
+      const allItemNames = projectInfo.layouts.map((it) => it.layoutName);
+      const newName = await resourceManagementUtils.inputSavingResourceName({
+        modalTitle: 'rename layout',
+        modalMessage: 'new layout name',
+        resourceTypeNameText: 'layout name',
+        defaultText: itemName,
+        existingResourceNames: allItemNames,
+      });
+      if (newName && newName !== itemName) {
+        projectPackagesWriter.renameLocalProjectLayout(itemName, newName);
+      }
+    } else if (itemType === 'firmware') {
+      const allItemNames = projectInfo.firmwares.map((it) => it.variationName);
+      const newName = await resourceManagementUtils.inputSavingResourceName({
+        modalTitle: 'rename firmware',
+        modalMessage: 'new firmware name',
+        resourceTypeNameText: 'firmware name',
+        defaultText: itemName,
+        existingResourceNames: allItemNames,
+      });
+      if (newName && newName !== itemName) {
+        projectPackagesWriter.renameLocalProjectFirmware(itemName, newName);
+      }
+    }
+  };
+
   return (
     <div css={style}>
       <div>project resource edit page</div>
@@ -149,6 +190,9 @@ export const ProjectEditPage: FC = () => {
             <button onClick={() => editResourceItem(item.itemKey)}>edit</button>
             <button onClick={() => deleteResourceItem(item.itemKey)}>
               delete
+            </button>
+            <button onClick={() => renameResourceItem(item.itemKey)}>
+              rename
             </button>
           </div>
         ))}

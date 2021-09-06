@@ -118,6 +118,18 @@ function removeItemFromArray<T, K extends keyof T>(
   }
 }
 
+function renameItemInArray<T, K extends keyof T>(
+  items: T[],
+  nameFiled: K,
+  oldName: Extract<T[K], string>,
+  newName: Extract<T[K], string>,
+) {
+  const item = items.find((it) => it[nameFiled] === oldName);
+  if (item) {
+    item[nameFiled] = newName;
+  }
+}
+
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
@@ -144,17 +156,30 @@ export const projectPackagesWriter = {
       removeItemFromArray(draft.presets, 'presetName', presetName),
     );
   },
-
   deleteLocalProjectLayout(layoutName: string) {
     patchLocalEditProject((draft) =>
       removeItemFromArray(draft.layouts, 'layoutName', layoutName),
     );
   },
-
   deleteLocalProjectFirmware(variationName: string) {
     patchLocalEditProject((draft) =>
       removeItemFromArray(draft.firmwares, 'variationName', variationName),
     );
+  },
+  renameLocalProjectPreset(oldName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      renameItemInArray(draft.presets, 'presetName', oldName, newName);
+    });
+  },
+  renameLocalProjectLayout(oldName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      renameItemInArray(draft.layouts, 'layoutName', oldName, newName);
+    });
+  },
+  renameLocalProjectFirmware(oldName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      renameItemInArray(draft.firmwares, 'variationName', oldName, newName);
+    });
   },
 };
 
