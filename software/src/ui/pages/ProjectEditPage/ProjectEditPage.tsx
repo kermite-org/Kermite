@@ -1,13 +1,12 @@
-import { css, FC, jsx, useState } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
-  uiActions,
   projectPackagesHooks,
   projectPackagesWriter,
+  uiActions,
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { reflectValue, resourceManagementUtils } from '~/ui/helpers';
-import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal';
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
 type IProjectResourceItem = {
@@ -33,15 +32,7 @@ function decodeProjectResourceItemKey(key: string): {
 }
 
 export const ProjectEditPage: FC = () => {
-  const [editCustomFirmwareVariationName, setEditCustomFirmwareVariationName] =
-    useState<string | undefined>(undefined);
-
-  const openCustomFirmwareModal = setEditCustomFirmwareVariationName;
-  const closeCustomFirmwareModal = () =>
-    setEditCustomFirmwareVariationName(undefined);
-
   const projectInfo = projectPackagesHooks.useEditTargetProject();
-
   const keyboardName = projectInfo.keyboardName;
 
   const handleKeyboardNameChange = (value: string) => {
@@ -85,7 +76,10 @@ export const ProjectEditPage: FC = () => {
           variationName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        openCustomFirmwareModal(variationName);
+        uiActions.openPageModal({
+          type: 'projectCustomFirmwareSetup',
+          variationName,
+        });
       }
     }
   };
@@ -98,7 +92,10 @@ export const ProjectEditPage: FC = () => {
   };
 
   const createCustomFirmware = () => {
-    openCustomFirmwareModal('');
+    uiActions.openPageModal({
+      type: 'projectCustomFirmwareSetup',
+      variationName: '',
+    });
   };
 
   const deleteResourceItem = async (itemKey: string) => {
@@ -205,13 +202,6 @@ export const ProjectEditPage: FC = () => {
           ))}
         </div>
       </div>
-
-      {editCustomFirmwareVariationName !== undefined && (
-        <ProjectCustomFirmwareSetupModal
-          variationName={editCustomFirmwareVariationName}
-          close={closeCustomFirmwareModal}
-        />
-      )}
     </div>
   );
 };

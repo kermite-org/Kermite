@@ -27,7 +27,14 @@ export type IPageSpec_ProjectStandardFirmwareEdit = {
   variationName: string;
 };
 
+export type IPageModalSpec_ProjectCustomFirmwareSetup = {
+  type: 'projectCustomFirmwareSetup';
+  variationName: string;
+};
+
 export type IPageSpec =
   | IPageSpec_ProjectLayoutEdit
   | IPageSpec_ProjectPresetEdit
   | IPageSpec_ProjectStandardFirmwareEdit;
+
+export type IPageModelSpec = IPageModalSpec_ProjectCustomFirmwareSetup;
