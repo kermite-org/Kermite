@@ -81,7 +81,7 @@ export const ProjectEditPage: FC = () => {
       );
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
-          type: 'projectFirmwareEdit',
+          type: 'projectStandardFirmwareEdit',
           variationName,
         });
       } else if (firmwareInfo?.type === 'custom') {
@@ -91,7 +91,10 @@ export const ProjectEditPage: FC = () => {
   };
 
   const createStandardFirmware = () => {
-    uiActions.navigateTo({ type: 'projectFirmwareEdit', variationName: '' });
+    uiActions.navigateTo({
+      type: 'projectStandardFirmwareEdit',
+      variationName: '',
+    });
   };
 
   const createCustomFirmware = () => {
@@ -160,7 +163,6 @@ export const ProjectEditPage: FC = () => {
     <div css={style}>
       <div className="content">
         <div>project resource edit page</div>
-
         <div>
           <div>
             <button onClick={createStandardFirmware}>
