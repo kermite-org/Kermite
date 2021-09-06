@@ -7,7 +7,7 @@ import {
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { reflectValue } from '~/ui/helpers';
-import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal';
+import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal';
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
 type IProjectResourceItem = {
