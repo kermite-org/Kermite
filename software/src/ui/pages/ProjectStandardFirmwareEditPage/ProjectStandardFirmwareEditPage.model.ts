@@ -15,7 +15,6 @@ import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/Standa
 import { resourceManagementUtils } from '~/ui/helpers';
 
 export interface IProjectStandardFirmwareEditPageModel {
-  variationName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
   canSave: boolean;
   saveHandler(): void;
@@ -50,18 +49,17 @@ const readers = {
 };
 
 const actions = {
-  loadSourceFirmwareEntry(resourceId: string) {
-    if (resourceId) {
-      store.sourceEntry = projectPackagesReader.getEditTargetFirmwareEntry(
-        'standard',
-        resourceId,
-      )!;
+  loadSourceFirmwareEntry(variationName: string) {
+    if (variationName) {
+      store.sourceEntry =
+        projectPackagesReader.getEditTargetFirmwareEntryByVariationName(
+          'standard',
+          variationName,
+        )!;
     } else {
       const newVariationId = getNextFirmwareId(readers.existingVariationIds);
-      const newResourceId = `fw${newVariationId}`;
       store.sourceEntry = {
         type: 'standard',
-        resourceId: newResourceId,
         variationId: newVariationId,
         variationName: '',
         standardFirmwareConfig: fallbackStandardKeyboardSpec,
@@ -86,16 +84,16 @@ const actions = {
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  resourceId: string,
+  variationName: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(resourceId),
-    [resourceId],
+    () => actions.loadSourceFirmwareEntry(variationName),
+    [variationName],
   );
   const {
-    sourceEntry: { variationName, standardFirmwareConfig },
+    sourceEntry: { standardFirmwareConfig },
     canSave,
   } = readers;
   const { saveHandler } = actions;
-  return { variationName, standardFirmwareConfig, canSave, saveHandler };
+  return { standardFirmwareConfig, canSave, saveHandler };
 }

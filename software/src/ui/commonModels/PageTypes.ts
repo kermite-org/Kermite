@@ -14,17 +14,17 @@ export type PagePaths =
 
 export type IPageSpec_ProjectLayoutEdit = {
   type: 'projectLayoutEdit';
-  layoutResourceId: string;
+  layoutName: string;
 };
 
 export type IPageSpec_ProjectPresetEdit = {
   type: 'projectPresetEdit';
-  presetResourceId: string;
+  presetName: string;
 };
 
 export type IPageSpec_ProjectFirmwareEdit = {
   type: 'projectFirmwareEdit';
-  firmwareResourceId: string;
+  variationName: string;
 };
 
 export type IPageSpec =

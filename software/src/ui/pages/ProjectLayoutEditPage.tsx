@@ -15,20 +15,18 @@ type Props = {
 };
 
 const readers = {
-  getSourceLayoutEntryOrCreate(resourceId: string): IProjectLayoutEntry {
+  getSourceLayoutEntryOrCreate(layoutName: string): IProjectLayoutEntry {
     const projectInfo = uiReaders.editTargetProject;
     const layoutEntry = projectInfo?.layouts.find(
-      (it) => it.resourceId === resourceId,
+      (it) => it.layoutName === layoutName,
     );
     return layoutEntry || fallbackProjectLayoutEntry;
   },
 };
 
-export const ProjectLayoutEditPage: FC<Props> = ({
-  spec: { layoutResourceId },
-}) => {
+export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
   const sourceLayoutEntry = useMemoEx(readers.getSourceLayoutEntryOrCreate, [
-    layoutResourceId,
+    layoutName,
   ]);
   const { isModified, emitSavingDesign } =
     LayouterGeneralComponent_OutputPropsSupplier;

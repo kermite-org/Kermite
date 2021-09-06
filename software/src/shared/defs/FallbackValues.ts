@@ -14,7 +14,6 @@ export const fallbackStandardKeyboardSpec: IKermiteStandardKeyboardSpec = {
 
 export const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {
   type: 'standard',
-  resourceId: '',
   variationId: '',
   variationName: '',
   standardFirmwareConfig: fallbackStandardKeyboardSpec,
@@ -22,20 +21,17 @@ export const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {
 
 export const fallbackCustomFirmwareEntry: ICustomFirmwareEntry = {
   type: 'custom',
-  resourceId: '',
   variationId: '',
   variationName: '',
   customFirmwareId: '',
 };
 
 export const fallbackProjectLayoutEntry: IProjectLayoutEntry = {
-  resourceId: '',
   layoutName: '',
   data: createFallbackPersistKeyboardDesign(),
 };
 
 export const fallbackProjectPresetEntry: IProjectPresetEntry = {
-  resourceId: '',
   presetName: '',
   data: fallbackPersistProfileData,
 };

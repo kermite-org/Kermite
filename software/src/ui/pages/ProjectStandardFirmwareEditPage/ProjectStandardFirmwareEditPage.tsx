@@ -10,10 +10,10 @@ type Props = {
 };
 
 export const ProjectStandardFirmwareEditPage: FC<Props> = ({
-  spec: { firmwareResourceId },
+  spec: { variationName },
 }) => {
-  const { variationName, standardFirmwareConfig, canSave, saveHandler } =
-    useProjectStandardFirmwareEditPageModel(firmwareResourceId);
+  const { standardFirmwareConfig, canSave, saveHandler } =
+    useProjectStandardFirmwareEditPageModel(variationName);
   return (
     <div css={style}>
       <RouteHeaderBar

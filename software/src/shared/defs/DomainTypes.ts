@@ -57,7 +57,6 @@ export interface IProjectResourceInfo {
 
 export interface IStandardFirmwareEntry {
   type: 'standard';
-  resourceId: string;
   variationId: string;
   variationName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
@@ -65,7 +64,6 @@ export interface IStandardFirmwareEntry {
 
 export interface ICustomFirmwareEntry {
   type: 'custom';
-  resourceId: string;
   variationId: string;
   variationName: string;
   customFirmwareId: string;
@@ -76,13 +74,11 @@ export type IProjectFirmwareEntry =
   | ICustomFirmwareEntry;
 
 export interface IProjectLayoutEntry {
-  resourceId: string;
   layoutName: string;
   data: IPersistKeyboardDesign;
 }
 
 export interface IProjectPresetEntry {
-  resourceId: string;
   presetName: string;
   data: IPersistProfileData;
 }
