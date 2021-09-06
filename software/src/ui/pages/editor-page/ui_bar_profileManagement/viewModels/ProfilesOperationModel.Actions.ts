@@ -52,7 +52,6 @@ const inputNewProfileName = async (
     resourceTypeNameText: 'profile name',
     defaultText,
     existingResourceNames: existingProfileNames,
-    checkCaseInsensitive: true,
   });
 };
 

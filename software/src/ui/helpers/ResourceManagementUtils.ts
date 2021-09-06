@@ -4,7 +4,7 @@ export async function checkValidResourceName(
   resourceName: string,
   existingResourceNames: string[],
   resourceTypeNameText: string,
-  checkCaseInsensitive?: boolean,
+  checkCaseSensitive?: boolean,
 ): Promise<boolean> {
   // eslint-disable-next-line no-irregular-whitespace
   // eslint-disable-next-line no-misleading-character-class
@@ -14,11 +14,12 @@ export async function checkValidResourceName(
     );
     return false;
   }
-  const existingName = checkCaseInsensitive
-    ? existingResourceNames.find(
+  const existingName = checkCaseSensitive
+    ? existingResourceNames.find((it) => it === resourceName)
+    : existingResourceNames.find(
         (it) => it.toLowerCase() === resourceName.toLowerCase(),
-      )
-    : existingResourceNames.find((it) => it === resourceName);
+      );
+
   if (existingName) {
     await modalAlert(`${existingName} is already exists. operation cancelled.`);
     return false;
@@ -32,7 +33,7 @@ export async function inputSavingResourceName(args: {
   resourceTypeNameText: string;
   existingResourceNames: string[];
   defaultText?: string;
-  checkCaseInsensitive?: boolean;
+  checkCaseSensitive?: boolean;
 }): Promise<string | undefined> {
   const {
     modalTitle,
@@ -40,7 +41,7 @@ export async function inputSavingResourceName(args: {
     resourceTypeNameText,
     existingResourceNames,
     defaultText,
-    checkCaseInsensitive,
+    checkCaseSensitive,
   } = args;
   const resourceName = await modalTextEdit({
     caption: modalTitle,
@@ -53,7 +54,7 @@ export async function inputSavingResourceName(args: {
         resourceName,
         existingResourceNames,
         resourceTypeNameText,
-        checkCaseInsensitive,
+        checkCaseSensitive,
       )
     ) {
       return resourceName;
