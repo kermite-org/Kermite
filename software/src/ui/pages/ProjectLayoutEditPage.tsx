@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
-import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
   LayouterGeneralComponent,
@@ -36,6 +36,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
       ...sourceLayoutEntry,
       data: emitSavingDesign(),
     });
+    uiActions.closeSubPage();
   };
   return (
     <div css={style}>

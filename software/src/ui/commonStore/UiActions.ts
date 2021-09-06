@@ -19,6 +19,9 @@ export const uiActions = {
       commitUiState({ pageSpec });
     }
   },
+  closeSubPage() {
+    commitUiState({ pageSpec: undefined });
+  },
   openPageModal(pageModalSpec: IPageModelSpec) {
     commitUiState({ pageModalSpec });
   },
