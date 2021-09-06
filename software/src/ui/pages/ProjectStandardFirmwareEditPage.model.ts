@@ -12,7 +12,7 @@ import {
   uiReaders,
 } from '~/ui/commonStore';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { inputSavingResourceName } from '~/ui/helpers';
+import { resourceManagementUtils } from '~/ui/helpers';
 
 export interface IProjectStandardFirmwareEditPageModel {
   variationName: string;
@@ -24,7 +24,7 @@ export interface IProjectStandardFirmwareEditPageModel {
 async function inputSavingFirmwareName(): Promise<string | undefined> {
   const allVariationNames =
     uiReaders.editTargetProject?.firmwares.map((it) => it.variationName) || [];
-  return await inputSavingResourceName({
+  return await resourceManagementUtils.inputSavingResourceName({
     modalTitle: 'save project firmware',
     modalMessage: 'firmware variation name',
     resourceTypeNameText: 'firmware variation name',
