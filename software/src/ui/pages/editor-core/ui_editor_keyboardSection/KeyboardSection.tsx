@@ -25,7 +25,7 @@ export const KeyboardSection: FC = () => {
   );
 
   if (
-    uiReaders.pagePath === '/editor' &&
+    uiReaders.pagePath === '/assigner' &&
     !profilesReader.isEditProfileAvailable
   ) {
     // Profileが存在しない場合、presetBrowserへの導線を表示

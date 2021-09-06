@@ -1,6 +1,6 @@
 export type PagePaths =
   | '/'
-  | '/editor'
+  | '/assigner'
   | '/layouter'
   | '/shapePreview'
   | '/firmwareUpdate'

@@ -36,7 +36,7 @@ export const MainColumnRoutes: FC = () => {
   const { pagePath } = uiReaders;
   return (
     <div css={style}>
-      {pagePath === '/editor' && <EditorPage />}
+      {pagePath === '/assigner' && <EditorPage />}
       {pagePath === '/layouter' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}

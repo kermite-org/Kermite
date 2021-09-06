@@ -84,7 +84,7 @@ export function usePresetSelectionModel2(): IPresetSelectionModel {
   const editSelectedProjectPreset = async () => {
     if (loadedProfileData) {
       await sendCreateProfileCommand(loadedProfileData);
-      uiActions.navigateTo('/editor');
+      uiActions.navigateTo('/assigner');
     }
   };
 
