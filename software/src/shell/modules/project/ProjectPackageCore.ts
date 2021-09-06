@@ -12,10 +12,12 @@ import {
   cacheRemoteResource,
   fetchJson,
   fsxDeleteFile,
+  fsxEnsureFolderExists,
   fsxListFileBaseNames,
   fsxReadJsonFile,
   fsxWriteJsonFile,
   pathBasename,
+  pathDirname,
   pathJoin,
   pathResolve,
 } from '~/shell/funcs';
@@ -127,6 +129,7 @@ async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
 async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
   const filePath = getUserProjectFilePath(info.packageName);
   console.log(`saving ${pathBasename(filePath)}`);
+  await fsxEnsureFolderExists(pathDirname(filePath));
   await fsxWriteJsonFile(filePath, info);
 }
 

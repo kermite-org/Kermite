@@ -15,20 +15,18 @@ type Props = {
 };
 
 const readers = {
-  getSourcePresetEntry(resourceId: string): IProjectPresetEntry {
+  getSourcePresetEntry(presetName: string): IProjectPresetEntry {
     const projectInfo = uiReaders.editTargetProject;
     const presetEntry = projectInfo?.presets.find(
-      (it) => it.resourceId === resourceId,
+      (it) => it.presetName === presetName,
     );
     return presetEntry || fallbackProjectPresetEntry;
   },
 };
 
-export const ProjectPresetEditPage: FC<Props> = ({
-  spec: { presetResourceId },
-}) => {
+export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   const sourcePresetEntry = useMemoEx(readers.getSourcePresetEntry, [
-    presetResourceId,
+    presetName,
   ]);
   const { isModified, emitSavingDesign } =
     AssignerGeneralComponent_OutputPropsSupplier;

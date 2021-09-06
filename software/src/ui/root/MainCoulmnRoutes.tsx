@@ -2,10 +2,10 @@ import { css, FC, jsx } from 'qx';
 import { uiReaders, uiState } from '~/ui/commonStore';
 import {
   ProjectEditPage,
-  ProjectStandardFirmwareEditPage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
   ProjectSelectionPage,
+  ProjectStandardFirmwareEditPage,
   SettingsPage,
   WelcomePage,
 } from '~/ui/pages';
@@ -36,7 +36,7 @@ export const MainColumnRoutes: FC = () => {
   const { pagePath } = uiReaders;
   return (
     <div css={style}>
-      {pagePath === '/editor' && <EditorPage />}
+      {pagePath === '/assigner' && <EditorPage />}
       {pagePath === '/layouter' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}

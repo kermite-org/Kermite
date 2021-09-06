@@ -50,7 +50,7 @@ export function editSelectedProjectPreset(
   const { origin, projectId } = getOriginAndProjectIdFromProjectKey(projectKey);
   const presetSpec = getPresetSpecFromPresetKey(presetKey);
   createProfile(origin, projectId, presetSpec);
-  uiActions.navigateTo('/editor');
+  uiActions.navigateTo('/assigner');
 
   /*
   const allProfileNames = await ipcAgent.async.profile_getAllProfileNames();

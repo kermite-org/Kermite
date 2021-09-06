@@ -5,7 +5,6 @@
   "firmwares": [
     {
       "type": "standard",
-      "resourceId": "fw01",
       "variationId": "01",
       "variationName": "atmega",
       "standardFirmwareConfig": {
@@ -27,7 +26,6 @@
     },
     {
       "type": "custom",
-      "resourceId": "fw02",
       "variationId": "02",
       "variationName": "atmega_custom",
       "customFirmwareId": "dFbA81"
@@ -35,7 +33,6 @@
   ],
   "layouts": [
     {
-      "resourceId": "lt01",
       "layoutName": "default",
       "data": {
         "formatRevision": "LA00",
@@ -383,7 +380,6 @@
   ],
   "presets": [
     {
-      "resourceId": "pr01",
       "presetName": "default",
       "data": {
         "formatRevision": "PRF03",

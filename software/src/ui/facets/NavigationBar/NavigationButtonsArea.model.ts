@@ -26,7 +26,7 @@ interface NavigationItemSource {
 
 const itemsSource: NavigationItemSource[] = [
   {
-    pagePath: '/editor',
+    pagePath: '/assigner',
     pageName: texts.label_sideMenu_app_assigner,
     iconSpec: 'fa fa-keyboard',
     hint: texts.hint_sideMenu_app_assigner,
@@ -92,7 +92,7 @@ const itemsSource: NavigationItemSource[] = [
 ];
 
 // const entrySources: NavigationEntrySource[] = [
-//   { pagePath: '/editor', pageName: 'Assigner', iconSpec: 'keyboard' },
+//   { pagePath: '/assigner', pageName: 'Assigner', iconSpec: 'keyboard' },
 //   {
 //     pagePath: '/layouter',
 //     pageName: 'Drafter',
