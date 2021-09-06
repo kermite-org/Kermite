@@ -26,6 +26,7 @@ async function inputSavingFirmwareName(): Promise<string | undefined> {
     uiReaders.editTargetProject?.firmwares.map((it) => it.variationName) || [];
   return await inputSavingResourceName({
     modalTitle: 'save project firmware',
+    modalMessage: 'firmware variation name',
     resourceTypeNameText: 'firmware variation name',
     existingResourceNames: allVariationNames,
   });
