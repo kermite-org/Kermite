@@ -90,7 +90,7 @@
     "typescript": "^4.3.5"
   },
   "resolutions": {
-    "tar": "^6.1.2",
+    "tar": "^6.1.9",
     "path-parse": "^1.0.7"
   }
 }
