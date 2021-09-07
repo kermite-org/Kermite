@@ -12,6 +12,9 @@ export const ProjectResourcePage: FC = () => {
     createStandardFirmware,
     createCustomFirmware,
     clearSelection,
+    editSelectedResourceItem,
+    renameSelectedResourceItem,
+    deleteSelectedResourceItem,
   } = useProjectResourcePageModel();
   return (
     <div css={style}>
@@ -48,7 +51,11 @@ export const ProjectResourcePage: FC = () => {
               clearSelection={clearSelection}
             />
           </div>
-          <div className="right-column"></div>
+          <div className="right-column">
+            <button onClick={() => editSelectedResourceItem()}>edit</button>
+            <button onClick={() => deleteSelectedResourceItem()}>delete</button>
+            <button onClick={() => renameSelectedResourceItem()}>rename</button>
+          </div>
         </div>
       </div>
     </div>
@@ -76,6 +83,7 @@ const style = css`
       > .right-column {
         flex-grow: 1;
         border: solid 1px #888;
+        padding: 10px;
       }
     }
 

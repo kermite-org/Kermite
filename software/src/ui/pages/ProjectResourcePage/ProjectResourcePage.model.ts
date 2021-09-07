@@ -14,25 +14,30 @@ const state = new (class {
   selectedItemKey: string = '';
 })();
 
-function createProjectResourceItem(
-  itemType: IProjectResourceItemType,
-  itemName: string,
-  selectedItemKey: string,
-  setSelectedItemKey: (itemKey: string) => void,
-): IProjectResourceListItem {
-  const itemKey = encodeProjectResourceItemKey(itemType, itemName);
-  const selected = itemKey === selectedItemKey;
-  const setSelected = () => setSelectedItemKey(itemKey);
-  return {
-    itemKey,
-    itemType,
-    itemName,
-    selected,
-    setSelected,
-  };
-}
+const helpers = {
+  createProjectResourceListItem(
+    itemType: IProjectResourceItemType,
+    itemName: string,
+    selectedItemKey: string,
+    setSelectedItemKey: (itemKey: string) => void,
+  ): IProjectResourceListItem {
+    const itemKey = encodeProjectResourceItemKey(itemType, itemName);
+    const selected = itemKey === selectedItemKey;
+    const setSelected = () => setSelectedItemKey(itemKey);
+    return {
+      itemKey,
+      itemType,
+      itemName,
+      selected,
+      setSelected,
+    };
+  },
+};
 
 const readers = {
+  get selectedItemKey(): string {
+    return state.selectedItemKey;
+  },
   get projectInfo(): IProjectPackageInfo {
     return uiReaders.editTargetProject!;
   },
@@ -48,7 +53,7 @@ const readers = {
     };
     return [
       ...projectInfo.firmwares.map((it) =>
-        createProjectResourceItem(
+        helpers.createProjectResourceListItem(
           'firmware',
           it.variationName,
           selectedItemKey,
@@ -56,7 +61,7 @@ const readers = {
         ),
       ),
       ...projectInfo.layouts.map((it) =>
-        createProjectResourceItem(
+        helpers.createProjectResourceListItem(
           'layout',
           it.layoutName,
           selectedItemKey,
@@ -64,7 +69,7 @@ const readers = {
         ),
       ),
       ...projectInfo.presets.map((it) =>
-        createProjectResourceItem(
+        helpers.createProjectResourceListItem(
           'preset',
           it.presetName,
           selectedItemKey,
@@ -78,7 +83,9 @@ const readers = {
 const actions = {
   resetState() {
     if (
-      !readers.resourceItems.some((it) => it.itemKey === state.selectedItemKey)
+      !readers.resourceItems.some(
+        (it) => it.itemKey === readers.selectedItemKey,
+      )
     ) {
       state.selectedItemKey = '';
     }
@@ -91,10 +98,22 @@ const actions = {
     const newProjectInfo = { ...projectInfo, keyboardName: value };
     projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
-
-  editResourceItem(itemKey: string) {
-    const { projectInfo } = readers;
-    const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
+  createStandardFirmware() {
+    uiActions.navigateTo({
+      type: 'projectStandardFirmwareEdit',
+      variationName: '',
+    });
+  },
+  createCustomFirmware() {
+    uiActions.openPageModal({
+      type: 'projectCustomFirmwareSetup',
+      variationName: '',
+    });
+  },
+  editSelectedResourceItem() {
+    const { selectedItemKey, projectInfo } = readers;
+    const { itemType, itemName } =
+      decodeProjectResourceItemKey(selectedItemKey);
     if (itemType === 'preset') {
       uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
     } else if (itemType === 'layout') {
@@ -117,26 +136,15 @@ const actions = {
       }
     }
   },
-  createStandardFirmware() {
-    uiActions.navigateTo({
-      type: 'projectStandardFirmwareEdit',
-      variationName: '',
-    });
-  },
-  createCustomFirmware() {
-    uiActions.openPageModal({
-      type: 'projectCustomFirmwareSetup',
-      variationName: '',
-    });
-  },
-
-  async deleteResourceItem(itemKey: string) {
+  async deleteSelectedResourceItem() {
+    const { selectedItemKey } = readers;
+    const { itemType, itemName } =
+      decodeProjectResourceItemKey(selectedItemKey);
     const ok = await modalConfirm({
       caption: 'delete item',
       message: 'Resource item delete. Are you sure?',
     });
     if (ok) {
-      const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
       if (itemType === 'preset') {
         projectPackagesWriter.deleteLocalProjectPreset(itemName);
       } else if (itemType === 'layout') {
@@ -146,9 +154,10 @@ const actions = {
       }
     }
   },
-  async renameResourceItem(itemKey: string) {
-    const { projectInfo } = readers;
-    const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
+  async renameSelectedResourceItem() {
+    const { selectedItemKey, projectInfo } = readers;
+    const { itemType, itemName } =
+      decodeProjectResourceItemKey(selectedItemKey);
     if (itemType === 'preset') {
       const allItemNames = projectInfo.presets.map((it) => it.presetName);
       const newName = await resourceManagementUtils.inputSavingResourceName({
