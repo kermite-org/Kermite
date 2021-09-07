@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
 import { reflectValue } from '~/ui/helpers';
 import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/ProjectResourcePage.model';
 
@@ -8,11 +9,8 @@ export const ProjectResourcePage: FC = () => {
     keyboardName,
     handleKeyboardNameChange,
     resourceItems,
-    editResourceItem,
     createStandardFirmware,
     createCustomFirmware,
-    deleteResourceItem,
-    renameResourceItem,
   } = useProjectResourcePageModel();
   return (
     <div css={style}>
@@ -41,24 +39,11 @@ export const ProjectResourcePage: FC = () => {
             />
           </label>
         </div>
-        <div className="items-box">
-          {resourceItems.map((item) => (
-            <div key={item.itemKey}>
-              <span>
-                [{item.itemType}]{item.additionalInfoText} {item.itemName}
-              </span>
-              <button onClick={() => editResourceItem(item.itemKey)}>
-                edit
-              </button>
-              <button onClick={() => deleteResourceItem(item.itemKey)}>
-                delete
-              </button>
-              <button onClick={() => renameResourceItem(item.itemKey)}>
-                rename
-              </button>
-            </div>
-          ))}
-        </div>
+        <ProjectResourceList
+          className="items-box"
+          resourceItems={resourceItems}
+          selectedItemKey=""
+        />
       </div>
     </div>
   );

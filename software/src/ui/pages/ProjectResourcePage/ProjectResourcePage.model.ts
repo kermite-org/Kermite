@@ -2,18 +2,11 @@ import {
   decodeProjectResourceItemKey,
   encodeProjectResourceItemKey,
   IProjectPackageInfo,
-  IProjectResourceItemType,
 } from '~/shared';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
+import { IProjectResourceItem } from '~/ui/components/organisms/ProjectResourceList';
 import { resourceManagementUtils } from '~/ui/helpers';
-
-type IProjectResourceItem = {
-  itemKey: string;
-  itemType: IProjectResourceItemType;
-  itemName: string;
-  additionalInfoText?: string;
-};
 
 const readers = {
   get projectInfo(): IProjectPackageInfo {
