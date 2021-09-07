@@ -39,11 +39,16 @@ export const ProjectResourcePage: FC = () => {
             />
           </label>
         </div>
-        <ProjectResourceList
-          className="items-box"
-          resourceItems={resourceItems}
-          selectedItemKey=""
-        />
+        <div className="main-row">
+          <div className="left-column">
+            <ProjectResourceList
+              className="items-box"
+              resourceItems={resourceItems}
+              selectedItemKey=""
+            />
+          </div>
+          <div className="right-column"></div>
+        </div>
       </div>
     </div>
   );
@@ -60,31 +65,21 @@ const style = css`
       margin-top: 10px;
     }
 
-    .items-box {
-      display: inline-block;
-      border: solid 1px #888;
-      color: ${uiTheme.colors.clAltText};
-      padding: 10px;
-
-      > * + * {
-        margin-top: 5px;
+    > .main-row {
+      display: flex;
+      min-height: 400px;
+      gap: 10px;
+      > .left-column {
+        width: 250px;
       }
-
-      button {
-        margin-left: 5px;
+      > .right-column {
+        flex-grow: 1;
+        border: solid 1px #888;
       }
     }
 
     .keyboard-name-input {
       margin-left: 10px;
-    }
-
-    pre {
-      border: solid 1px #888;
-      color: #222;
-      padding: 10px;
-      width: 300px;
-      font-size: 14px;
     }
   }
 `;
