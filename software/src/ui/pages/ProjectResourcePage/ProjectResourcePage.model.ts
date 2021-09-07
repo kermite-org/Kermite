@@ -1,30 +1,19 @@
-import { IProjectPackageInfo } from '~/shared';
+import {
+  decodeProjectResourceItemKey,
+  encodeProjectResourceItemKey,
+  IProjectPackageInfo,
+  IProjectResourceItemType,
+} from '~/shared';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { resourceManagementUtils } from '~/ui/helpers';
 
-type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
 type IProjectResourceItem = {
   itemKey: string;
   itemType: IProjectResourceItemType;
   itemName: string;
   additionalInfoText?: string;
 };
-
-function encodeProjectResourceItemKey(
-  itemType: IProjectResourceItemType,
-  itemName: string,
-): string {
-  return `${itemType}#${itemName}`;
-}
-
-function decodeProjectResourceItemKey(key: string): {
-  itemType: IProjectResourceItemType;
-  itemName: string;
-} {
-  const [itemType, itemName] = key.split('#');
-  return { itemType: itemType as IProjectResourceItemType, itemName };
-}
 
 const readers = {
   get projectInfo(): IProjectPackageInfo {

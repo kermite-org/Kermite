@@ -307,3 +307,5 @@ export type IBootloaderDeviceDetectionStatus =
       bootloaderType: IBootloaderType;
       targetDeviceSig: string;
     };
+
+export type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
