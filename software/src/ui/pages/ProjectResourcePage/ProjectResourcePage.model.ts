@@ -1,8 +1,5 @@
-import {
-  projectPackagesHooks,
-  projectPackagesWriter,
-  uiActions,
-} from '~/ui/commonStore';
+import { IProjectPackageInfo } from '~/shared';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { resourceManagementUtils } from '~/ui/helpers';
 
@@ -29,35 +26,46 @@ function decodeProjectResourceItemKey(key: string): {
   return { itemType: itemType as IProjectResourceItemType, itemName };
 }
 
-export function useProjectResourcePageModel() {
-  const projectInfo = projectPackagesHooks.useEditTargetProject();
-  const keyboardName = projectInfo.keyboardName;
+const readers = {
+  get projectInfo(): IProjectPackageInfo {
+    return uiReaders.editTargetProject!;
+  },
+  get keyboardName(): string {
+    const { projectInfo } = readers;
+    return projectInfo.keyboardName;
+  },
+  get resourceItems(): IProjectResourceItem[] {
+    const { projectInfo } = readers;
+    return [
+      ...projectInfo.firmwares.map((it) => ({
+        itemKey: encodeProjectResourceItemKey('firmware', it.variationName),
+        itemType: 'firmware' as const,
+        itemName: it.variationName,
+        additionalInfoText: `(${it.type})`,
+      })),
+      ...projectInfo.layouts.map((it) => ({
+        itemKey: encodeProjectResourceItemKey('layout', it.layoutName),
+        itemType: 'layout' as const,
+        itemName: it.layoutName,
+      })),
+      ...projectInfo.presets.map((it) => ({
+        itemKey: encodeProjectResourceItemKey('preset', it.presetName),
+        itemType: 'preset' as const,
+        itemName: it.presetName,
+      })),
+    ];
+  },
+};
 
-  const handleKeyboardNameChange = (value: string) => {
+const actions = {
+  handleKeyboardNameChange(value: string) {
+    const { projectInfo } = readers;
     const newProjectInfo = { ...projectInfo, keyboardName: value };
     projectPackagesWriter.saveLocalProject(newProjectInfo);
-  };
+  },
 
-  const resourceItems: IProjectResourceItem[] = [
-    ...projectInfo.firmwares.map((it) => ({
-      itemKey: encodeProjectResourceItemKey('firmware', it.variationName),
-      itemType: 'firmware' as const,
-      itemName: it.variationName,
-      additionalInfoText: `(${it.type})`,
-    })),
-    ...projectInfo.layouts.map((it) => ({
-      itemKey: encodeProjectResourceItemKey('layout', it.layoutName),
-      itemType: 'layout' as const,
-      itemName: it.layoutName,
-    })),
-    ...projectInfo.presets.map((it) => ({
-      itemKey: encodeProjectResourceItemKey('preset', it.presetName),
-      itemType: 'preset' as const,
-      itemName: it.presetName,
-    })),
-  ];
-
-  const editResourceItem = (itemKey: string) => {
+  editResourceItem(itemKey: string) {
+    const { projectInfo } = readers;
     const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
     if (itemType === 'preset') {
       uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
@@ -80,23 +88,21 @@ export function useProjectResourcePageModel() {
         });
       }
     }
-  };
-
-  const createStandardFirmware = () => {
+  },
+  createStandardFirmware() {
     uiActions.navigateTo({
       type: 'projectStandardFirmwareEdit',
       variationName: '',
     });
-  };
-
-  const createCustomFirmware = () => {
+  },
+  createCustomFirmware() {
     uiActions.openPageModal({
       type: 'projectCustomFirmwareSetup',
       variationName: '',
     });
-  };
+  },
 
-  const deleteResourceItem = async (itemKey: string) => {
+  async deleteResourceItem(itemKey: string) {
     const ok = await modalConfirm({
       caption: 'delete item',
       message: 'Resource item delete. Are you sure?',
@@ -111,9 +117,9 @@ export function useProjectResourcePageModel() {
         projectPackagesWriter.deleteLocalProjectFirmware(itemName);
       }
     }
-  };
-
-  const renameResourceItem = async (itemKey: string) => {
+  },
+  async renameResourceItem(itemKey: string) {
+    const { projectInfo } = readers;
     const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
     if (itemType === 'preset') {
       const allItemNames = projectInfo.presets.map((it) => it.presetName);
@@ -152,16 +158,12 @@ export function useProjectResourcePageModel() {
         projectPackagesWriter.renameLocalProjectFirmware(itemName, newName);
       }
     }
-  };
+  },
+};
 
+export function useProjectResourcePageModel() {
   return {
-    keyboardName,
-    handleKeyboardNameChange,
-    resourceItems,
-    editResourceItem,
-    createStandardFirmware,
-    createCustomFirmware,
-    deleteResourceItem,
-    renameResourceItem,
+    ...readers,
+    ...actions,
   };
 }
