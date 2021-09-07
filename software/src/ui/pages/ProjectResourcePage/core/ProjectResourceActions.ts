@@ -5,7 +5,7 @@ import { resourceManagementUtils } from '~/ui/helpers';
 import {
   projectResourceReaders,
   projectResourceState,
-} from '~/ui/pages/ProjectResourcePage/ProjectResourceState';
+} from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
 
 const helpers = {
   async renameProjectResourceListItem(

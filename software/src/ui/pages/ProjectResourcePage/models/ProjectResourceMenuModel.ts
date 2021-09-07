@@ -1,6 +1,6 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/ProjectResourceActions';
-import { projectResourceReaders } from '~/ui/pages/ProjectResourcePage/ProjectResourceState';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceActions';
+import { projectResourceReaders } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
 
 export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
   return [

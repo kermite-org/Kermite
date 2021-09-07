@@ -3,8 +3,7 @@ import { uiTheme } from '~/ui/base';
 import { GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
 import { reflectValue } from '~/ui/helpers';
-import { createProjectResourceMenuItems } from '~/ui/pages/ProjectResourcePage/ProjectResourceMenuModel';
-import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/ProjectResourcePage.model';
+import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/models/ProjectResourcePageModel';
 
 export const ProjectResourcePage: FC = () => {
   const {
@@ -13,13 +12,14 @@ export const ProjectResourcePage: FC = () => {
     resourceItems,
     clearSelection,
     editSelectedResourceItem,
+    menuItems,
   } = useProjectResourcePageModel();
   return (
     <div css={style}>
       <div className="content">
         <div>project resource edit page</div>
         <div className="top-row">
-          <GeneralButtonMenu menuItems={createProjectResourceMenuItems()} />
+          <GeneralButtonMenu menuItems={menuItems} />
           <div className="keyboard-name-part">{keyboardName}</div>
         </div>
         <div qxIf={false}>
