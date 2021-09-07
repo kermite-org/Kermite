@@ -32,6 +32,23 @@ const helpers = {
       setSelected,
     };
   },
+  async renameProjectResourceListItem(
+    target: string,
+    itemName: string,
+    allItemNames: string[],
+    destinationFunction: (oldName: string, newName: string) => void,
+  ) {
+    const newName = await resourceManagementUtils.inputSavingResourceName({
+      modalTitle: `rename ${target}`,
+      modalMessage: `new ${target} name`,
+      resourceTypeNameText: `${target} name`,
+      defaultText: itemName,
+      existingResourceNames: allItemNames,
+    });
+    if (newName && newName !== itemName) {
+      destinationFunction(itemName, newName);
+    }
+  },
 };
 
 const readers = {
@@ -154,46 +171,34 @@ const actions = {
       }
     }
   },
-  async renameSelectedResourceItem() {
+  renameSelectedResourceItem() {
     const { selectedItemKey, projectInfo } = readers;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
     if (itemType === 'preset') {
       const allItemNames = projectInfo.presets.map((it) => it.presetName);
-      const newName = await resourceManagementUtils.inputSavingResourceName({
-        modalTitle: 'rename preset',
-        modalMessage: 'new preset name',
-        resourceTypeNameText: 'preset name',
-        defaultText: itemName,
-        existingResourceNames: allItemNames,
-      });
-      if (newName && newName !== itemName) {
-        projectPackagesWriter.renameLocalProjectPreset(itemName, newName);
-      }
+      helpers.renameProjectResourceListItem(
+        'preset',
+        itemName,
+        allItemNames,
+        projectPackagesWriter.renameLocalProjectPreset,
+      );
     } else if (itemType === 'layout') {
       const allItemNames = projectInfo.layouts.map((it) => it.layoutName);
-      const newName = await resourceManagementUtils.inputSavingResourceName({
-        modalTitle: 'rename layout',
-        modalMessage: 'new layout name',
-        resourceTypeNameText: 'layout name',
-        defaultText: itemName,
-        existingResourceNames: allItemNames,
-      });
-      if (newName && newName !== itemName) {
-        projectPackagesWriter.renameLocalProjectLayout(itemName, newName);
-      }
+      helpers.renameProjectResourceListItem(
+        'layout',
+        itemName,
+        allItemNames,
+        projectPackagesWriter.renameLocalProjectLayout,
+      );
     } else if (itemType === 'firmware') {
       const allItemNames = projectInfo.firmwares.map((it) => it.variationName);
-      const newName = await resourceManagementUtils.inputSavingResourceName({
-        modalTitle: 'rename firmware',
-        modalMessage: 'new firmware name',
-        resourceTypeNameText: 'firmware name',
-        defaultText: itemName,
-        existingResourceNames: allItemNames,
-      });
-      if (newName && newName !== itemName) {
-        projectPackagesWriter.renameLocalProjectFirmware(itemName, newName);
-      }
+      helpers.renameProjectResourceListItem(
+        'firmware',
+        itemName,
+        allItemNames,
+        projectPackagesWriter.renameLocalProjectFirmware,
+      );
     }
   },
 };
