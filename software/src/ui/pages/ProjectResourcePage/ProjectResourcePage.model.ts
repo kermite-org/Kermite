@@ -1,12 +1,36 @@
+import { useEffect } from 'qx';
 import {
   decodeProjectResourceItemKey,
   encodeProjectResourceItemKey,
   IProjectPackageInfo,
+  IProjectResourceItemType,
 } from '~/shared';
+import { IProjectResourceListItem } from '~/ui/base';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
-import { IProjectResourceItem } from '~/ui/components/organisms/ProjectResourceList';
 import { resourceManagementUtils } from '~/ui/helpers';
+
+const state = new (class {
+  selectedItemKey: string = '';
+})();
+
+function createProjectResourceItem(
+  itemType: IProjectResourceItemType,
+  itemName: string,
+  selectedItemKey: string,
+  setSelectedItemKey: (itemKey: string) => void,
+): IProjectResourceListItem {
+  const itemKey = encodeProjectResourceItemKey(itemType, itemName);
+  const selected = itemKey === selectedItemKey;
+  const setSelected = () => setSelectedItemKey(itemKey);
+  return {
+    itemKey,
+    itemType,
+    itemName,
+    selected,
+    setSelected,
+  };
+}
 
 const readers = {
   get projectInfo(): IProjectPackageInfo {
@@ -16,30 +40,52 @@ const readers = {
     const { projectInfo } = readers;
     return projectInfo.keyboardName;
   },
-  get resourceItems(): IProjectResourceItem[] {
+  get resourceItems(): IProjectResourceListItem[] {
+    const { selectedItemKey } = state;
     const { projectInfo } = readers;
+    const setSelectedItemKey = (key: string) => {
+      state.selectedItemKey = key;
+    };
     return [
-      ...projectInfo.firmwares.map((it) => ({
-        itemKey: encodeProjectResourceItemKey('firmware', it.variationName),
-        itemType: 'firmware' as const,
-        itemName: it.variationName,
-        additionalInfoText: `(${it.type})`,
-      })),
-      ...projectInfo.layouts.map((it) => ({
-        itemKey: encodeProjectResourceItemKey('layout', it.layoutName),
-        itemType: 'layout' as const,
-        itemName: it.layoutName,
-      })),
-      ...projectInfo.presets.map((it) => ({
-        itemKey: encodeProjectResourceItemKey('preset', it.presetName),
-        itemType: 'preset' as const,
-        itemName: it.presetName,
-      })),
+      ...projectInfo.firmwares.map((it) =>
+        createProjectResourceItem(
+          'firmware',
+          it.variationName,
+          selectedItemKey,
+          setSelectedItemKey,
+        ),
+      ),
+      ...projectInfo.layouts.map((it) =>
+        createProjectResourceItem(
+          'layout',
+          it.layoutName,
+          selectedItemKey,
+          setSelectedItemKey,
+        ),
+      ),
+      ...projectInfo.presets.map((it) =>
+        createProjectResourceItem(
+          'preset',
+          it.presetName,
+          selectedItemKey,
+          setSelectedItemKey,
+        ),
+      ),
     ];
   },
 };
 
 const actions = {
+  resetState() {
+    if (
+      !readers.resourceItems.some((it) => it.itemKey === state.selectedItemKey)
+    ) {
+      state.selectedItemKey = '';
+    }
+  },
+  clearSelection() {
+    state.selectedItemKey = '';
+  },
   handleKeyboardNameChange(value: string) {
     const { projectInfo } = readers;
     const newProjectInfo = { ...projectInfo, keyboardName: value };
@@ -144,6 +190,7 @@ const actions = {
 };
 
 export function useProjectResourcePageModel() {
+  useEffect(() => actions.resetState, []);
   return {
     ...readers,
     ...actions,

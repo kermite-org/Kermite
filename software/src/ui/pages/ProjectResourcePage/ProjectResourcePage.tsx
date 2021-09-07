@@ -11,6 +11,7 @@ export const ProjectResourcePage: FC = () => {
     resourceItems,
     createStandardFirmware,
     createCustomFirmware,
+    clearSelection,
   } = useProjectResourcePageModel();
   return (
     <div css={style}>
@@ -44,7 +45,7 @@ export const ProjectResourcePage: FC = () => {
             <ProjectResourceList
               className="items-box"
               resourceItems={resourceItems}
-              selectedItemKey=""
+              clearSelection={clearSelection}
             />
           </div>
           <div className="right-column"></div>

@@ -1,29 +1,23 @@
 import { css, FC, jsx } from 'qx';
-import { IProjectResourceItemType } from '~/shared';
-import { uiTheme } from '~/ui/base';
-
-export type IProjectResourceItem = {
-  itemKey: string;
-  itemType: IProjectResourceItemType;
-  itemName: string;
-  additionalInfoText?: string;
-};
+import { IProjectResourceListItem, uiTheme } from '~/ui/base';
+import { withStopPropagation } from '~/ui/helpers';
 
 type Props = {
   className?: string;
-  resourceItems: IProjectResourceItem[];
-  selectedItemKey: string;
+  resourceItems: IProjectResourceListItem[];
+  clearSelection(): void;
 };
 
 export const ProjectResourceList: FC<Props> = ({
   className,
   resourceItems,
+  clearSelection,
 }) => {
   const presets = resourceItems.filter((it) => it.itemType === 'preset');
   const layouts = resourceItems.filter((it) => it.itemType === 'layout');
   const firmwares = resourceItems.filter((it) => it.itemType === 'firmware');
   return (
-    <div css={style} className={className}>
+    <div css={style} className={className} onClick={clearSelection}>
       <ResourceItemsBlock groupName="presets" items={presets} />
       <ResourceItemsBlock groupName="layouts" items={layouts} />
       <ResourceItemsBlock groupName="firmwares" items={firmwares} />
@@ -33,7 +27,7 @@ export const ProjectResourceList: FC<Props> = ({
 
 const ResourceItemsBlock = (props: {
   groupName: string;
-  items: IProjectResourceItem[];
+  items: IProjectResourceListItem[];
 }) => {
   const { groupName, items } = props;
   return (
@@ -41,10 +35,12 @@ const ResourceItemsBlock = (props: {
       <div className="header">📁{groupName}</div>
       <div className="items">
         {items.map((item) => (
-          <div key={item.itemKey}>
-            <span>
-              {item.additionalInfoText} {item.itemName}
-            </span>
+          <div
+            key={item.itemKey}
+            classNames={['item', item.selected && '--selected']}
+            onClick={withStopPropagation(item.setSelected)}
+          >
+            {item.additionalInfoText} {item.itemName}
           </div>
         ))}
       </div>
@@ -63,6 +59,18 @@ const style = css`
     }
     > .items {
       padding-left: 15px;
+
+      > .item {
+        padding: 2px 5px;
+        cursor: pointer;
+
+        &:hover {
+          background: #0bd2;
+        }
+        &.--selected {
+          background: ${uiTheme.colors.clSelectHighlight};
+        }
+      }
     }
   }
   > * + * {
