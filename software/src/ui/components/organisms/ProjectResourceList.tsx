@@ -32,7 +32,7 @@ const ResourceItemsBlock = (props: {
   const { groupName, items } = props;
   return (
     <div className="block">
-      <div className="header">📁{groupName}</div>
+      <div className="header">{groupName}</div>
       <div className="items">
         {items.map((item) => (
           <div
@@ -56,9 +56,13 @@ const style = css`
 
   > .block {
     > .header {
+      &:before {
+        content: '📁';
+        margin-right: 2px;
+      }
     }
     > .items {
-      padding-left: 15px;
+      padding-left: 17px;
 
       > .item {
         padding: 2px 5px;
