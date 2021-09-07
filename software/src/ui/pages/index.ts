@@ -1,4 +1,4 @@
-export * from './ProjectEditPage/ProjectEditPage';
+export * from './ProjectResourcePage/ProjectResourcePage';
 export * from './ProjectLayoutEditPage';
 export * from './ProjectPresetEditPage';
 export * from './ProjectSelectionPage';

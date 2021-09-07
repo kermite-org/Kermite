@@ -31,7 +31,7 @@ function decodeProjectResourceItemKey(key: string): {
   return { itemType: itemType as IProjectResourceItemType, itemName };
 }
 
-export const ProjectEditPage: FC = () => {
+export const ProjectResourcePage: FC = () => {
   const projectInfo = projectPackagesHooks.useEditTargetProject();
   const keyboardName = projectInfo.keyboardName;
 
