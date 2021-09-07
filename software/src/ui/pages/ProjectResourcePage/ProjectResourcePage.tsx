@@ -1,7 +1,9 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
 import { reflectValue } from '~/ui/helpers';
+import { createProjectResourceMenuItems } from '~/ui/pages/ProjectResourcePage/ProjectResourceMenuModel';
 import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/ProjectResourcePage.model';
 
 export const ProjectResourcePage: FC = () => {
@@ -9,30 +11,18 @@ export const ProjectResourcePage: FC = () => {
     keyboardName,
     handleKeyboardNameChange,
     resourceItems,
-    createStandardFirmware,
-    createCustomFirmware,
     clearSelection,
     editSelectedResourceItem,
-    renameSelectedResourceItem,
-    deleteSelectedResourceItem,
   } = useProjectResourcePageModel();
   return (
     <div css={style}>
       <div className="content">
         <div>project resource edit page</div>
-        <div>
-          <div>
-            <button onClick={createStandardFirmware}>
-              Create Standard Firmware
-            </button>
-          </div>
-          <div>
-            <button onClick={createCustomFirmware}>
-              Create Custom Firmware
-            </button>
-          </div>
+        <div className="top-row">
+          <GeneralButtonMenu menuItems={createProjectResourceMenuItems()} />
+          <div className="keyboard-name-part">{keyboardName}</div>
         </div>
-        <div>
+        <div qxIf={false}>
           <label>
             <span>keyboard name</span>
             <input
@@ -53,8 +43,6 @@ export const ProjectResourcePage: FC = () => {
           </div>
           <div className="right-column">
             <button onClick={() => editSelectedResourceItem()}>edit</button>
-            <button onClick={() => deleteSelectedResourceItem()}>delete</button>
-            <button onClick={() => renameSelectedResourceItem()}>rename</button>
           </div>
         </div>
       </div>
@@ -69,6 +57,15 @@ const style = css`
   padding: 15px;
 
   > .content {
+    > .top-row {
+      display: flex;
+      align-items: center;
+
+      > .keyboard-name-part {
+        margin-left: 10px;
+      }
+    }
+
     > * + * {
       margin-top: 10px;
     }

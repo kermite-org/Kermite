@@ -1,18 +1,13 @@
 import { useEffect } from 'qx';
 import {
-  decodeProjectResourceItemKey,
   encodeProjectResourceItemKey,
   IProjectPackageInfo,
   IProjectResourceItemType,
 } from '~/shared';
 import { IProjectResourceListItem } from '~/ui/base';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
-import { modalConfirm } from '~/ui/components';
-import { resourceManagementUtils } from '~/ui/helpers';
-
-const state = new (class {
-  selectedItemKey: string = '';
-})();
+import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/ProjectResourceActions';
+import { projectResourceReaders } from '~/ui/pages/ProjectResourcePage/ProjectResourceState';
 
 const helpers = {
   createProjectResourceListItem(
@@ -32,42 +27,11 @@ const helpers = {
       setSelected,
     };
   },
-  async renameProjectResourceListItem(
-    target: string,
-    itemName: string,
-    allItemNames: string[],
-    destinationFunction: (oldName: string, newName: string) => void,
+  createProjectResourceListItems(
+    projectInfo: IProjectPackageInfo,
+    selectedItemKey: string,
+    setSelectedItemKey: (key: string) => void,
   ) {
-    const newName = await resourceManagementUtils.inputSavingResourceName({
-      modalTitle: `rename ${target}`,
-      modalMessage: `new ${target} name`,
-      resourceTypeNameText: `${target} name`,
-      defaultText: itemName,
-      existingResourceNames: allItemNames,
-    });
-    if (newName && newName !== itemName) {
-      destinationFunction(itemName, newName);
-    }
-  },
-};
-
-const readers = {
-  get selectedItemKey(): string {
-    return state.selectedItemKey;
-  },
-  get projectInfo(): IProjectPackageInfo {
-    return uiReaders.editTargetProject!;
-  },
-  get keyboardName(): string {
-    const { projectInfo } = readers;
-    return projectInfo.keyboardName;
-  },
-  get resourceItems(): IProjectResourceListItem[] {
-    const { selectedItemKey } = state;
-    const { projectInfo } = readers;
-    const setSelectedItemKey = (key: string) => {
-      state.selectedItemKey = key;
-    };
     return [
       ...projectInfo.firmwares.map((it) =>
         helpers.createProjectResourceListItem(
@@ -97,116 +61,48 @@ const readers = {
   },
 };
 
+const readers = {
+  get keyboardName(): string {
+    const projectInfo = uiReaders.editTargetProject!;
+    return projectInfo.keyboardName;
+  },
+  get resourceItems(): IProjectResourceListItem[] {
+    const projectInfo = uiReaders.editTargetProject!;
+    const { selectedItemKey } = projectResourceReaders;
+    const { setSelectedItemKey } = projectResourceActions;
+    return helpers.createProjectResourceListItems(
+      projectInfo,
+      selectedItemKey,
+      setSelectedItemKey,
+    );
+  },
+  get isSelectedItemKeyIncludedInList() {
+    const { selectedItemKey } = projectResourceReaders;
+    const { resourceItems } = readers;
+    return resourceItems.some((it) => it.itemKey === selectedItemKey);
+  },
+};
+
 const actions = {
   resetState() {
-    if (
-      !readers.resourceItems.some(
-        (it) => it.itemKey === readers.selectedItemKey,
-      )
-    ) {
-      state.selectedItemKey = '';
+    if (!readers.isSelectedItemKeyIncludedInList) {
+      projectResourceActions.clearSelection();
     }
-  },
-  clearSelection() {
-    state.selectedItemKey = '';
   },
   handleKeyboardNameChange(value: string) {
-    const { projectInfo } = readers;
+    const projectInfo = uiReaders.editTargetProject!;
     const newProjectInfo = { ...projectInfo, keyboardName: value };
     projectPackagesWriter.saveLocalProject(newProjectInfo);
-  },
-  createStandardFirmware() {
-    uiActions.navigateTo({
-      type: 'projectStandardFirmwareEdit',
-      variationName: '',
-    });
-  },
-  createCustomFirmware() {
-    uiActions.openPageModal({
-      type: 'projectCustomFirmwareSetup',
-      variationName: '',
-    });
-  },
-  editSelectedResourceItem() {
-    const { selectedItemKey, projectInfo } = readers;
-    const { itemType, itemName } =
-      decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'preset') {
-      uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
-    } else if (itemType === 'layout') {
-      uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
-    } else if (itemType === 'firmware') {
-      const variationName = itemName;
-      const firmwareInfo = projectInfo.firmwares.find(
-        (it) => it.variationName === variationName,
-      );
-      if (firmwareInfo?.type === 'standard') {
-        uiActions.navigateTo({
-          type: 'projectStandardFirmwareEdit',
-          variationName,
-        });
-      } else if (firmwareInfo?.type === 'custom') {
-        uiActions.openPageModal({
-          type: 'projectCustomFirmwareSetup',
-          variationName,
-        });
-      }
-    }
-  },
-  async deleteSelectedResourceItem() {
-    const { selectedItemKey } = readers;
-    const { itemType, itemName } =
-      decodeProjectResourceItemKey(selectedItemKey);
-    const ok = await modalConfirm({
-      caption: 'delete item',
-      message: 'Resource item delete. Are you sure?',
-    });
-    if (ok) {
-      if (itemType === 'preset') {
-        projectPackagesWriter.deleteLocalProjectPreset(itemName);
-      } else if (itemType === 'layout') {
-        projectPackagesWriter.deleteLocalProjectLayout(itemName);
-      } else if (itemType === 'firmware') {
-        projectPackagesWriter.deleteLocalProjectFirmware(itemName);
-      }
-    }
-  },
-  renameSelectedResourceItem() {
-    const { selectedItemKey, projectInfo } = readers;
-    const { itemType, itemName } =
-      decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'preset') {
-      const allItemNames = projectInfo.presets.map((it) => it.presetName);
-      helpers.renameProjectResourceListItem(
-        'preset',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.renameLocalProjectPreset,
-      );
-    } else if (itemType === 'layout') {
-      const allItemNames = projectInfo.layouts.map((it) => it.layoutName);
-      helpers.renameProjectResourceListItem(
-        'layout',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.renameLocalProjectLayout,
-      );
-    } else if (itemType === 'firmware') {
-      const allItemNames = projectInfo.firmwares.map((it) => it.variationName);
-      helpers.renameProjectResourceListItem(
-        'firmware',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.renameLocalProjectFirmware,
-      );
-    }
   },
 };
 
 export function useProjectResourcePageModel() {
   useEffect(() => actions.resetState, []);
+  const { editSelectedResourceItem, clearSelection } = projectResourceActions;
   return {
     ...readers,
     ...actions,
+    clearSelection,
+    editSelectedResourceItem,
   };
 }
