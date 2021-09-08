@@ -1,5 +1,5 @@
+import produce from 'immer';
 import {
-  duplicateObjectByJsonStringifyParse,
   fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
 } from '~/shared';
@@ -20,11 +20,15 @@ const constants = {
   baseFirmwareTypeOptions,
 };
 
-const store = {
-  editValues: fallbackStandardKeyboardSpec,
-};
+const store = new (class {
+  originalValues: IStandardFirmwareEditValues = fallbackStandardKeyboardSpec;
+  editValues: IStandardFirmwareEditValues = fallbackStandardKeyboardSpec;
+})();
 
 const readers = {
+  get originalValues(): IStandardFirmwareEditValues {
+    return store.originalValues;
+  },
   get editValues(): IStandardFirmwareEditValues {
     return store.editValues;
   },
@@ -56,45 +60,31 @@ const readers = {
       mcuType,
     );
   },
-  get canSave() {
-    const { rowPinsValid, columnPinsValid } = readers;
-    return rowPinsValid && columnPinsValid;
+  get isModified(): boolean {
+    const { originalValues, editValues } = readers;
+    return editValues !== originalValues;
+  },
+  get canSave(): boolean {
+    const { isModified, rowPinsValid, columnPinsValid } = readers;
+    return isModified && rowPinsValid && columnPinsValid;
   },
 };
 
-function fixEditValues(diff: Partial<IStandardFirmwareEditValues>) {
-  const { editValues } = store;
-  if (readers.isAvr) {
-    editValues.useBoardLedsProMicroRp = false;
-    editValues.useBoardLedsRpiPico = false;
-  }
-  if (readers.isRp) {
-    editValues.useBoardLedsProMicroAvr = false;
-  }
-  if (diff.baseFirmwareType) {
-    editValues.matrixRowPins = undefined;
-    editValues.matrixColumnPins = undefined;
-  }
-  if (diff.useBoardLedsProMicroRp) {
-    editValues.useBoardLedsRpiPico = false;
-  }
-  if (diff.useBoardLedsRpiPico) {
-    editValues.useBoardLedsProMicroRp = false;
-  }
-  // always true for current implementation
-  editValues.useMatrixKeyScanner = true;
-}
-
 const actions = {
   loadFirmwareConfig(firmwareConfig: IStandardFirmwareEditValues) {
-    store.editValues = duplicateObjectByJsonStringifyParse(firmwareConfig);
+    store.originalValues = firmwareConfig;
+    store.editValues = firmwareConfig;
   },
   commitValue<K extends keyof IStandardFirmwareEditValues>(
     key: K,
     value: IStandardFirmwareEditValues[K],
   ) {
-    store.editValues[key] = value;
-    fixEditValues({ [key]: value });
+    store.editValues = produce(store.editValues, (draft) => {
+      draft[key] = value;
+      standardFirmwareEditModelHelpers.fixEditValuesOnModify(draft, {
+        [key]: value,
+      });
+    });
   },
 };
 
