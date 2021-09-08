@@ -3,8 +3,8 @@ import { uiTheme } from '~/ui/base';
 import { GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
 import { reflectValue } from '~/ui/helpers';
-import { ResourceItemDetailView } from '~/ui/pages/ProjectResourcePage/ResourceItemDetailView';
 import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/models/ProjectResourcePageModel';
+import { ResourceItemDetailView } from '~/ui/pages/ProjectResourcePage/organisms/ResourceItemDetailView';
 
 export const ProjectResourcePage: FC = () => {
   const {
