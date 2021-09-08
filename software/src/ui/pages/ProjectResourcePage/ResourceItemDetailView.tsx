@@ -3,13 +3,18 @@ import { IProjectResourceListItem } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceActions';
 
-type Props = {
+export const ResourceItemDetailView: FC<{
   className?: string;
   item: IProjectResourceListItem;
-};
-
-export const ResourceItemDetailView: FC<Props> = ({ item }) => {
+}> = ({ item }) => {
   const { editSelectedResourceItem } = projectResourceActions;
+  const style = css`
+    padding: 10px;
+    > .header {
+      display: flex;
+      justify-content: space-between;
+    }
+  `;
   return (
     <div css={style}>
       <div className="header">
@@ -23,11 +28,3 @@ export const ResourceItemDetailView: FC<Props> = ({ item }) => {
     </div>
   );
 };
-
-const style = css`
-  padding: 10px;
-  > .header {
-    display: flex;
-    justify-content: space-between;
-  }
-`;

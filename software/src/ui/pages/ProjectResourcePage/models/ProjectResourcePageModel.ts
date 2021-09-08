@@ -1,6 +1,7 @@
 import { useEffect } from 'qx';
 import { IGeneralMenuItem, IProjectResourceListItem } from '~/ui/base';
 import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
+import { createSimpleSelector2 } from '~/ui/helpers';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceActions';
 import { projectResourceReaders } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
 import { createProjectResourceListItems } from '~/ui/pages/ProjectResourcePage/models/ProjectResourceListModel';
@@ -15,20 +16,24 @@ interface IProjectResourcePageModel {
   editSelectedResourceItem(): void;
   menuItems: IGeneralMenuItem[];
 }
+
+const resourceItemsSelector = createSimpleSelector2(
+  createProjectResourceListItems,
+  () =>
+    [
+      uiReaders.editTargetProject!,
+      projectResourceReaders.selectedItemKey,
+      projectResourceActions.setSelectedItemKey,
+    ] as Parameters<typeof createProjectResourceListItems>,
+);
+
 const readers = {
   get keyboardName(): string {
     const projectInfo = uiReaders.editTargetProject!;
     return projectInfo.keyboardName;
   },
   get resourceItems(): IProjectResourceListItem[] {
-    const projectInfo = uiReaders.editTargetProject!;
-    const { selectedItemKey } = projectResourceReaders;
-    const { setSelectedItemKey } = projectResourceActions;
-    return createProjectResourceListItems(
-      projectInfo,
-      selectedItemKey,
-      setSelectedItemKey,
-    );
+    return resourceItemsSelector();
   },
   get selectedResourceItem() {
     const { selectedItemKey } = projectResourceReaders;

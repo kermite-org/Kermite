@@ -27,7 +27,7 @@ export function createProjectResourceListItems(
   projectInfo: IProjectPackageInfo,
   selectedItemKey: string,
   setSelectedItemKey: (key: string) => void,
-) {
+): IProjectResourceListItem[] {
   return [
     ...projectInfo.firmwares.map((it) =>
       createProjectResourceListItem(
