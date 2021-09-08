@@ -5,21 +5,21 @@ import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomF
 import { useProjectCustomFirmwareSetupModalModel } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal.model';
 
 type Props = {
-  variationName: string;
+  firmwareName: string;
   close(): void;
 };
 
 export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
-  variationName,
+  firmwareName,
   close,
 }) => {
   const { sourceEditValues, canSave, saveHandler } =
-    useProjectCustomFirmwareSetupModalModel(variationName, close);
+    useProjectCustomFirmwareSetupModalModel(firmwareName, close);
   return (
     <ClosableOverlay close={close}>
       <div css={style}>
         <RouteHeaderBar
-          title={`edit custom firmware: ${variationName || '(new)'}`}
+          title={`edit custom firmware: ${firmwareName || '(new)'}`}
           canSave={canSave}
           saveHandler={saveHandler}
         />

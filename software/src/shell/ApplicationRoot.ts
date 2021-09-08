@@ -59,11 +59,11 @@ export class ApplicationRoot {
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
       device_resetParameters: async () => this.deviceService.resetParameters(),
-      firmup_uploadFirmware: (origin, projectId, variationName) =>
+      firmup_uploadFirmware: (origin, projectId, firmwareName) =>
         this.firmwareUpdateService.writeFirmware(
           origin,
           projectId,
-          variationName,
+          firmwareName,
         ),
       presetHub_getServerProjectIds: () =>
         userPresetHubDataLoader.getServerProjectIds(),

@@ -5,6 +5,7 @@ import {
   IPresetSpec,
   IPresetType,
   IProfileEntry,
+  IProjectResourceItemType,
   IResourceOrigin,
   IStandardBaseFirmwareType,
 } from '~/shared/defs';
@@ -130,4 +131,19 @@ export function getNextProjectResourceId(
     throw new Error('resource id reaches to 100');
   }
   return prefix + ('00' + newNumber.toString()).slice(-2);
+}
+
+export function encodeProjectResourceItemKey(
+  itemType: IProjectResourceItemType,
+  itemName: string,
+): string {
+  return `${itemType}#${itemName}`;
+}
+
+export function decodeProjectResourceItemKey(key: string): {
+  itemType: IProjectResourceItemType;
+  itemName: string;
+} {
+  const [itemType, itemName] = key.split('#');
+  return { itemType: itemType as IProjectResourceItemType, itemName };
 }

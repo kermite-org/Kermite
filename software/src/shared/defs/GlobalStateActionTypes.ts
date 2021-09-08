@@ -5,7 +5,6 @@ import {
   IKeyboardConfig,
 } from '~/shared/defs/ConfigTypes';
 import {
-  fallbackDeviceSelectionStatus,
   IApplicationVersionInfo,
   IAppWindowStatus,
   ICustomFirmwareInfo,
@@ -18,6 +17,7 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared/defs/DomainTypes';
+import { fallbackDeviceSelectionStatus } from '~/shared/defs/FallbackValues';
 import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,

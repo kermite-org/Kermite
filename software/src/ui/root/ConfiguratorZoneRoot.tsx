@@ -1,10 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { appUi, uiTheme } from '~/ui/base';
-import { siteModel, uiState } from '~/ui/commonStore';
+import { siteModel, uiReaders, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboardingFrame } from '~/ui/features';
 import { MainColumnRoutes } from '~/ui/root/MainCoulmnRoutes';
+import { PageModals } from '~/ui/root/PageModals';
 import {
   NavigationColumn,
   WindowStatusBarSection,
@@ -20,7 +21,7 @@ export const ConfiguratorZoneRoot: FC = () => {
     >
       <div css={cssWindowContent}>
         <div className="main-row">
-          <NavigationColumn />
+          <NavigationColumn disabled={uiReaders.subPageVisible} />
           {showOnboarding ? (
             <OnboardingFrame>
               <MainColumnRoutes />
@@ -28,6 +29,7 @@ export const ConfiguratorZoneRoot: FC = () => {
           ) : (
             <MainColumnRoutes />
           )}
+          <PageModals />
           <LoadingOverlay isLoading={uiState.isLoading} />
           <DevToolPullTab
             qxIf={appUi.isDevelopment}

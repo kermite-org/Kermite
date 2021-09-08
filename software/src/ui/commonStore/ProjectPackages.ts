@@ -64,15 +64,15 @@ export const projectPackagesReader = {
     }
     return undefined;
   },
-  getEditTargetFirmwareEntryByVariationName<K extends 'standard' | 'custom'>(
+  getEditTargetFirmwareEntryByFirmwareName<K extends 'standard' | 'custom'>(
     type: K,
-    variationName: string,
+    firmwareName: string,
   ):
     | (K extends 'standard' ? IStandardFirmwareEntry : ICustomFirmwareEntry)
     | undefined {
     const projectInfo = uiReaders.editTargetProject;
     const entry = projectInfo?.firmwares.find(
-      (it) => it.variationName === variationName,
+      (it) => it.firmwareName === firmwareName,
     );
     if (entry?.type === type) {
       return entry as any;
@@ -148,8 +148,17 @@ export const projectPackagesWriter = {
   },
   saveLocalProjectFirmware(item: IProjectFirmwareEntry) {
     patchLocalEditProject((draft) =>
-      insertItemToArray(draft.firmwares, 'variationName', item),
+      insertItemToArray(draft.firmwares, 'firmwareName', item),
     );
+  },
+  saveLocalProjectFirmwareWithRename(
+    item: IProjectFirmwareEntry,
+    oldName: string,
+  ) {
+    patchLocalEditProject((draft) => {
+      removeItemFromArray(draft.firmwares, 'firmwareName', oldName);
+      insertItemToArray(draft.firmwares, 'firmwareName', item);
+    });
   },
   deleteLocalProjectPreset(presetName: string) {
     patchLocalEditProject((draft) =>
@@ -161,9 +170,9 @@ export const projectPackagesWriter = {
       removeItemFromArray(draft.layouts, 'layoutName', layoutName),
     );
   },
-  deleteLocalProjectFirmware(variationName: string) {
+  deleteLocalProjectFirmware(firmwareName: string) {
     patchLocalEditProject((draft) =>
-      removeItemFromArray(draft.firmwares, 'variationName', variationName),
+      removeItemFromArray(draft.firmwares, 'firmwareName', firmwareName),
     );
   },
   renameLocalProjectPreset(oldName: string, newName: string) {
@@ -178,7 +187,7 @@ export const projectPackagesWriter = {
   },
   renameLocalProjectFirmware(oldName: string, newName: string) {
     patchLocalEditProject((draft) => {
-      renameItemInArray(draft.firmwares, 'variationName', oldName, newName);
+      renameItemInArray(draft.firmwares, 'firmwareName', oldName, newName);
     });
   },
 };

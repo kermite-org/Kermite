@@ -7,7 +7,7 @@ import {
   ICoreState,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { IPageSpec } from '~/ui/commonModels/PageTypes';
+import { IPageModelSpec, IPageSpec } from '~/ui/commonModels/PageTypes';
 
 export interface IUiSettings {
   showTestInputArea: boolean;
@@ -31,6 +31,7 @@ export type IUiState = {
   core: ICoreState;
   settings: IUiSettings;
   pageSpec: IPageSpec | undefined;
+  pageModalSpec: IPageModelSpec | undefined;
   initialLoading: boolean;
   profileConfigModalVisible: boolean;
   isLoading: boolean;
@@ -40,6 +41,7 @@ export const defaultUiState: IUiState = {
   core: cloneObject(defaultCoreState),
   settings: defaultUiSettings,
   pageSpec: undefined,
+  pageModalSpec: undefined,
   initialLoading: false,
   profileConfigModalVisible: false,
   isLoading: false,

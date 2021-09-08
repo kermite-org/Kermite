@@ -10,7 +10,7 @@ export type PagePaths =
   | '/widget'
   | '/projectSelection'
   | '/home'
-  | '/projectEdit';
+  | '/projectResource';
 
 export type IPageSpec_ProjectLayoutEdit = {
   type: 'projectLayoutEdit';
@@ -22,12 +22,19 @@ export type IPageSpec_ProjectPresetEdit = {
   presetName: string;
 };
 
-export type IPageSpec_ProjectFirmwareEdit = {
-  type: 'projectFirmwareEdit';
-  variationName: string;
+export type IPageSpec_ProjectStandardFirmwareEdit = {
+  type: 'projectStandardFirmwareEdit';
+  firmwareName: string;
+};
+
+export type IPageModalSpec_ProjectCustomFirmwareSetup = {
+  type: 'projectCustomFirmwareSetup';
+  firmwareName: string;
 };
 
 export type IPageSpec =
   | IPageSpec_ProjectLayoutEdit
   | IPageSpec_ProjectPresetEdit
-  | IPageSpec_ProjectFirmwareEdit;
+  | IPageSpec_ProjectStandardFirmwareEdit;
+
+export type IPageModelSpec = IPageModalSpec_ProjectCustomFirmwareSetup;
