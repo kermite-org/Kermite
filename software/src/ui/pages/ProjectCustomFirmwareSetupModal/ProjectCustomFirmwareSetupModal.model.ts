@@ -1,5 +1,6 @@
 import { useInlineEffect } from 'qx';
 import {
+  encodeProjectResourceItemKey,
   fallbackCustomFirmwareEntry,
   getNextFirmwareId,
   ICustomFirmwareEntry,
@@ -14,6 +15,7 @@ import {
   fallbackCustomFirmwareEditValues,
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 
 const helpers = {
   getExistingVariationIds(): string[] {
@@ -76,12 +78,25 @@ const actions = {
   saveHandler() {
     const { variationName, customFirmwareId } =
       CustomFirmwareEditor_OutputPropsSupplier.emitSavingEditValues();
+    const { sourceEntry } = readers;
+    const originalName = sourceEntry.variationName;
     const newFirmwareEntry = {
-      ...readers.sourceEntry,
+      ...sourceEntry,
       variationName,
       customFirmwareId,
     };
-    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    const nameChanged = !!originalName && variationName !== originalName;
+    if (nameChanged) {
+      projectPackagesWriter.saveLocalProjectFirmwareWithRename(
+        newFirmwareEntry,
+        originalName,
+      );
+    } else {
+      projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    }
+    projectResourceActions.setSelectedItemKey(
+      encodeProjectResourceItemKey('firmware', variationName),
+    );
   },
 };
 

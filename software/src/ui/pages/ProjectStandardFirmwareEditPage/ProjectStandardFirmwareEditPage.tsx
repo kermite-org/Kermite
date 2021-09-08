@@ -18,7 +18,7 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
     <div css={style}>
       <RouteHeaderBar
         title={`edit project firmware: ${variationName || '(new)'}`}
-        backPagePath="/projectEdit"
+        backPagePath="/projectResource"
         canSave={canSave}
         saveHandler={saveHandler}
       />

@@ -29,7 +29,7 @@ const style = css`
   background: #fff;
   padding: 0 8px;
   height: 28px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   cursor: pointer;
 

@@ -1,5 +1,6 @@
 import { useInlineEffect } from 'qx';
 import {
+  encodeProjectResourceItemKey,
   fallbackStandardFirmwareEntry,
   fallbackStandardKeyboardSpec,
   getNextFirmwareId,
@@ -14,6 +15,7 @@ import {
 } from '~/ui/commonStore';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
 import { resourceManagementUtils } from '~/ui/helpers';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 
 export interface IProjectStandardFirmwareEditPageModel {
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
@@ -81,6 +83,10 @@ const actions = {
       standardFirmwareConfig: emitSavingEditValues(),
     };
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+
+    projectResourceActions.setSelectedItemKey(
+      encodeProjectResourceItemKey('firmware', store.sourceEntry.variationName),
+    );
     uiActions.closeSubPage();
   },
 };

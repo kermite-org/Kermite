@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiReaders, uiState } from '~/ui/commonStore';
 import {
-  ProjectEditPage,
+  ProjectResourcePage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
   ProjectSelectionPage,
@@ -45,7 +45,7 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
-      {pagePath === '/projectEdit' && <ProjectEditPage />}
+      {pagePath === '/projectResource' && <ProjectResourcePage />}
     </div>
   );
 };

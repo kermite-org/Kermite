@@ -151,6 +151,15 @@ export const projectPackagesWriter = {
       insertItemToArray(draft.firmwares, 'variationName', item),
     );
   },
+  saveLocalProjectFirmwareWithRename(
+    item: IProjectFirmwareEntry,
+    oldName: string,
+  ) {
+    patchLocalEditProject((draft) => {
+      removeItemFromArray(draft.firmwares, 'variationName', oldName);
+      insertItemToArray(draft.firmwares, 'variationName', item);
+    });
+  },
   deleteLocalProjectPreset(presetName: string) {
     patchLocalEditProject((draft) =>
       removeItemFromArray(draft.presets, 'presetName', presetName),

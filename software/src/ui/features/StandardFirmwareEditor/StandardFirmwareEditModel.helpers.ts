@@ -35,7 +35,36 @@ function cleanupSavingFirmwareConfig(
   return data;
 }
 
+function fixEditValuesOnModify(
+  editValues: IKermiteStandardKeyboardSpec,
+  diff: Partial<IKermiteStandardKeyboardSpec>,
+) {
+  const { baseFirmwareType: fw } = editValues;
+  const isAvr = fw === 'AvrSplit' || fw === 'AvrUnified';
+  const isRp = fw === 'RpUnified' || fw === 'RpSplit';
+  if (isAvr) {
+    editValues.useBoardLedsProMicroRp = false;
+    editValues.useBoardLedsRpiPico = false;
+  }
+  if (isRp) {
+    editValues.useBoardLedsProMicroAvr = false;
+  }
+  if (diff.baseFirmwareType) {
+    editValues.matrixRowPins = undefined;
+    editValues.matrixColumnPins = undefined;
+  }
+  if (diff.useBoardLedsProMicroRp) {
+    editValues.useBoardLedsRpiPico = false;
+  }
+  if (diff.useBoardLedsRpiPico) {
+    editValues.useBoardLedsProMicroRp = false;
+  }
+  // always true for current implementation
+  editValues.useMatrixKeyScanner = true;
+}
+
 export const standardFirmwareEditModelHelpers = {
   validatePins,
   cleanupSavingFirmwareConfig,
+  fixEditValuesOnModify,
 };

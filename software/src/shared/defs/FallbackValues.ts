@@ -1,7 +1,10 @@
 import {
   ICustomFirmwareEntry,
+  IDeviceSelectionStatus,
   IKermiteStandardKeyboardSpec,
+  IKeyboardDeviceInfo,
   IProjectLayoutEntry,
+  IProjectPackageInfo,
   IProjectPresetEntry,
   IStandardFirmwareEntry,
 } from '~/shared/defs/DomainTypes';
@@ -34,4 +37,33 @@ export const fallbackProjectLayoutEntry: IProjectLayoutEntry = {
 export const fallbackProjectPresetEntry: IProjectPresetEntry = {
   presetName: '',
   data: fallbackPersistProfileData,
+};
+
+export const fallbackProjectPackageInfo: IProjectPackageInfo = {
+  projectKey: '',
+  origin: 'online',
+  formatRevision: 'PKG0',
+  projectId: '',
+  packageName: '',
+  keyboardName: '',
+  firmwares: [],
+  layouts: [],
+  presets: [],
+};
+
+export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {
+  path: '',
+  portName: '',
+  mcuCode: '',
+  firmwareId: '',
+  projectId: '',
+  variationId: '',
+  deviceInstanceCode: '',
+  productName: '',
+  manufacturerName: '',
+};
+
+export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
+  allDeviceInfos: [],
+  currentDevicePath: 'none',
 };

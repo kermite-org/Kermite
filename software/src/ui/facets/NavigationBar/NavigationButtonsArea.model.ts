@@ -63,7 +63,7 @@ const itemsSource: NavigationItemSource[] = [
     hint: texts.hint_sideMenu_app_firmwareUpdate,
   },
   {
-    pagePath: '/projectEdit',
+    pagePath: '/projectResource',
     pageName: 'project',
     iconSpec: 'fa fa-globe',
     hint: 'project edit',

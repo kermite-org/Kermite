@@ -43,7 +43,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
     <div css={style}>
       <RouteHeaderBar
         title={`edit project preset: ${sourcePresetEntry.presetName}`}
-        backPagePath="/projectEdit"
+        backPagePath="/projectResource"
         canSave={isModified}
         saveHandler={saveHandler}
       />

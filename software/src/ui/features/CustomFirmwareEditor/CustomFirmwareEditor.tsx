@@ -11,9 +11,7 @@ type Props = {
 
 export const CustomFirmwareEditor_OutputPropsSupplier = {
   get canSave(): boolean {
-    const { variationName, customFirmwareId } =
-      customFirmwareEditorModel.readers.editValues;
-    return !!variationName && !!customFirmwareId;
+    return customFirmwareEditorModel.readers.canSave;
   },
   emitSavingEditValues(): ICustomFirmwareEditValues {
     return customFirmwareEditorModel.readers.editValues;
