@@ -6,7 +6,7 @@
     {
       "type": "standard",
       "variationId": "01",
-      "variationName": "rp",
+      "firmwareName": "rp",
       "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
         "useBoardLedsProMicroRp": true,
@@ -18,13 +18,13 @@
     {
       "type": "custom",
       "variationId": "02",
-      "variationName": "atmega_custom",
+      "firmwareName": "atmega_custom",
       "customFirmwareId": "feGV0G"
     },
     {
       "type": "custom",
       "variationId": "03",
-      "variationName": "rp_custom",
+      "firmwareName": "rp_custom",
       "customFirmwareId": "UMyy5p"
     }
   ],

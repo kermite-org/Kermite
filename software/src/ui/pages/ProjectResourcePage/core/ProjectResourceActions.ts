@@ -47,13 +47,13 @@ export const projectResourceActions = {
   createStandardFirmware() {
     uiActions.navigateTo({
       type: 'projectStandardFirmwareEdit',
-      variationName: '',
+      firmwareName: '',
     });
   },
   createCustomFirmware() {
     uiActions.openPageModal({
       type: 'projectCustomFirmwareSetup',
-      variationName: '',
+      firmwareName: '',
     });
   },
   editSelectedResourceItem() {
@@ -66,19 +66,19 @@ export const projectResourceActions = {
     } else if (itemType === 'layout') {
       uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
     } else if (itemType === 'firmware') {
-      const variationName = itemName;
+      const firmwareName = itemName;
       const firmwareInfo = projectInfo.firmwares.find(
-        (it) => it.variationName === variationName,
+        (it) => it.firmwareName === firmwareName,
       );
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
           type: 'projectStandardFirmwareEdit',
-          variationName,
+          firmwareName,
         });
       } else if (firmwareInfo?.type === 'custom') {
         uiActions.openPageModal({
           type: 'projectCustomFirmwareSetup',
-          variationName,
+          firmwareName,
         });
       }
     }
@@ -124,7 +124,7 @@ export const projectResourceActions = {
         projectPackagesWriter.renameLocalProjectLayout,
       );
     } else if (itemType === 'firmware') {
-      const allItemNames = projectInfo.firmwares.map((it) => it.variationName);
+      const allItemNames = projectInfo.firmwares.map((it) => it.firmwareName);
       helpers.renameProjectResourceListItem(
         'firmware',
         itemName,

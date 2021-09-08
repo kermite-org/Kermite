@@ -25,7 +25,7 @@ export interface IProjectStandardFirmwareEditPageModel {
 
 async function inputSavingFirmwareName(): Promise<string | undefined> {
   const allVariationNames =
-    uiReaders.editTargetProject?.firmwares.map((it) => it.variationName) || [];
+    uiReaders.editTargetProject?.firmwares.map((it) => it.firmwareName) || [];
   return await resourceManagementUtils.inputSavingResourceName({
     modalTitle: 'save project firmware',
     modalMessage: 'firmware variation name',
@@ -52,30 +52,30 @@ const readers = {
 };
 
 const actions = {
-  loadSourceFirmwareEntry(variationName: string) {
-    if (variationName) {
+  loadSourceFirmwareEntry(firmwareName: string) {
+    if (firmwareName) {
       store.sourceEntry =
-        projectPackagesReader.getEditTargetFirmwareEntryByVariationName(
+        projectPackagesReader.getEditTargetFirmwareEntryByFirmwareName(
           'standard',
-          variationName,
+          firmwareName,
         )!;
     } else {
       const newVariationId = getNextFirmwareId(readers.existingVariationIds);
       store.sourceEntry = {
         type: 'standard',
         variationId: newVariationId,
-        variationName: '',
+        firmwareName: '',
         standardFirmwareConfig: fallbackStandardKeyboardSpec,
       };
     }
   },
   async saveHandler() {
-    if (!store.sourceEntry.variationName) {
+    if (!store.sourceEntry.firmwareName) {
       const newVariationName = await inputSavingFirmwareName();
       if (!newVariationName) {
         return;
       }
-      store.sourceEntry.variationName = newVariationName;
+      store.sourceEntry.firmwareName = newVariationName;
     }
     const { emitSavingEditValues } = StandardFirmwareEditor_OutputPropsSupplier;
     const newFirmwareEntry = {
@@ -85,18 +85,18 @@ const actions = {
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
 
     projectResourceActions.setSelectedItemKey(
-      encodeProjectResourceItemKey('firmware', store.sourceEntry.variationName),
+      encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
     uiActions.closeSubPage();
   },
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  variationName: string,
+  firmwareName: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(variationName),
-    [variationName],
+    () => actions.loadSourceFirmwareEntry(firmwareName),
+    [firmwareName],
   );
   const {
     sourceEntry: { standardFirmwareConfig },

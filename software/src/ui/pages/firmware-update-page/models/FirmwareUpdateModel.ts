@@ -63,10 +63,10 @@ export class FirmwareUpdateModel {
     const projectOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
-          value: `${info.projectKey}:${firmware.variationName}`,
+          value: `${info.projectKey}:${firmware.firmwareName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
             info.keyboardName
-          } (${firmware.variationName})`,
+          } (${firmware.firmwareName})`,
         })),
       ),
     );
@@ -114,13 +114,13 @@ export class FirmwareUpdateModel {
 
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
     if (this.deviceDetectionStatus.detected) {
-      const [projectKey, variationName] =
+      const [projectKey, firmwareName] =
         this.currentProjectFirmwareSpec.split(':');
       const projectInfo = this.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
       const firmwareInfo = projectInfo?.firmwares.find(
-        (f) => f.variationName === variationName,
+        (f) => f.firmwareName === firmwareName,
       );
       if (firmwareInfo) {
         const targetDevice = getTargetDeviceFromFirmwareInfo(firmwareInfo);
@@ -146,7 +146,7 @@ export class FirmwareUpdateModel {
       this.phase === 'WaitingUploadOrder' &&
       this.deviceDetectionStatus.detected
     ) {
-      const [projectKey, variationName] =
+      const [projectKey, firmwareName] =
         this.currentProjectFirmwareSpec.split(':');
       const info = this.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
@@ -157,7 +157,7 @@ export class FirmwareUpdateModel {
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
           info.projectId,
-          variationName,
+          firmwareName,
         );
         uiActions.clearLoading();
         this.firmwareUploadResult = res;

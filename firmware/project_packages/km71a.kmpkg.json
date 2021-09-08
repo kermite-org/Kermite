@@ -6,7 +6,7 @@
     {
       "type": "standard",
       "variationId": "01",
-      "variationName": "rp",
+      "firmwareName": "rp",
       "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
         "useBoardLedsProMicroRp": true,
@@ -34,7 +34,7 @@
     {
       "type": "custom",
       "variationId": "02",
-      "variationName": "rp_custom",
+      "firmwareName": "rp_custom",
       "customFirmwareId": "O1lweX"
     }
   ],

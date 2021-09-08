@@ -7,7 +7,7 @@
     {
       "type": "standard",
       "variationId": "01",
-      "variationName": "proto0",
+      "firmwareName": "proto0",
       "standardFirmwareConfig": {
         "baseFirmwareType": "RpUnified",
         "useBoardLedsProMicroRp": true,
@@ -38,7 +38,7 @@
     {
       "type": "custom",
       "variationId": "02",
-      "variationName": "proto0_custom",
+      "firmwareName": "proto0_custom",
       "customFirmwareId": "7qHDCp"
     }
   ],
