@@ -23,7 +23,7 @@ export const projectResourceHelpers = {
         encodeProjectResourceItemKey('layout', it.layoutName),
       ),
       ...projectInfo.firmwares.map((it) =>
-        encodeProjectResourceItemKey('firmware', it.variationName),
+        encodeProjectResourceItemKey('firmware', it.firmwareName),
       ),
     ];
   },
@@ -39,7 +39,7 @@ export const projectResourceHelpers = {
   },
   getFirmwareEntry(firmwareName: string): IProjectFirmwareEntry | undefined {
     return uiReaders.editTargetProject?.firmwares.find(
-      (it) => it.variationName === firmwareName,
+      (it) => it.firmwareName === firmwareName,
     );
   },
   loadProfileData(presetName: string): IProfileData {

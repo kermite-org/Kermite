@@ -24,12 +24,12 @@ export type IPageSpec_ProjectPresetEdit = {
 
 export type IPageSpec_ProjectStandardFirmwareEdit = {
   type: 'projectStandardFirmwareEdit';
-  variationName: string;
+  firmwareName: string;
 };
 
 export type IPageModalSpec_ProjectCustomFirmwareSetup = {
   type: 'projectCustomFirmwareSetup';
-  variationName: string;
+  firmwareName: string;
 };
 
 export type IPageSpec =

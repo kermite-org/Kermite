@@ -58,14 +58,14 @@ export interface IProjectResourceInfo {
 export interface IStandardFirmwareEntry {
   type: 'standard';
   variationId: string;
-  variationName: string;
+  firmwareName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
 }
 
 export interface ICustomFirmwareEntry {
   type: 'custom';
   variationId: string;
-  variationName: string;
+  firmwareName: string;
   customFirmwareId: string;
 }
 

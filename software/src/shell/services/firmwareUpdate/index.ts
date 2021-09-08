@@ -51,17 +51,20 @@ export class FirmwareUpdateService {
   }
 
   private updateDetection = async () => {
-    const pluggedAvrCaterinaComPortName = await this.schemeAtMegaCaterina.updateDeviceDetection();
+    const pluggedAvrCaterinaComPortName =
+      await this.schemeAtMegaCaterina.updateDeviceDetection();
     if (this.pluggedAvrCaterinaComPortName !== pluggedAvrCaterinaComPortName) {
       this.pluggedAvrCaterinaComPortName = pluggedAvrCaterinaComPortName;
       this.emitDetectionEvent('avrCaterina', pluggedAvrCaterinaComPortName);
     }
-    const pluggedRp2040Uf2DriveName = await this.schemeRp.updateDeviceDetection();
+    const pluggedRp2040Uf2DriveName =
+      await this.schemeRp.updateDeviceDetection();
     if (this.pluggedRp2040Uf2DriveName !== pluggedRp2040Uf2DriveName) {
       this.pluggedRp2040Uf2DriveName = pluggedRp2040Uf2DriveName;
       this.emitDetectionEvent('rp2040uf2', pluggedRp2040Uf2DriveName);
     }
-    const pluggedAvrDfuDeviceName = await this.schemeAtMegaDfu.updateDeviceDetection();
+    const pluggedAvrDfuDeviceName =
+      await this.schemeAtMegaDfu.updateDeviceDetection();
     if (this.pluggedAvrDfuDeviceName !== pluggedAvrDfuDeviceName) {
       this.pluggedAvrDfuDeviceName = pluggedAvrDfuDeviceName;
       this.emitDetectionEvent('avrDfu', pluggedAvrDfuDeviceName);
@@ -88,12 +91,12 @@ export class FirmwareUpdateService {
   async writeFirmware(
     origin: IResourceOrigin,
     projectId: string,
-    variationName: string,
+    firmwareName: string,
   ): Promise<'ok' | string> {
     const binarySpec = await firmwareFileLoader_loadFirmwareFile(
       origin,
       projectId,
-      variationName,
+      firmwareName,
     );
 
     if (!binarySpec) {

@@ -9,7 +9,7 @@ export const PageModals: FC = () => {
     if (modalSpec.type === 'projectCustomFirmwareSetup') {
       return (
         <ProjectCustomFirmwareSetupModal
-          variationName={modalSpec.variationName}
+          firmwareName={modalSpec.firmwareName}
           close={close}
         />
       );

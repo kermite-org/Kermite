@@ -18,14 +18,14 @@ export const fallbackStandardKeyboardSpec: IKermiteStandardKeyboardSpec = {
 export const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {
   type: 'standard',
   variationId: '',
-  variationName: '',
+  firmwareName: '',
   standardFirmwareConfig: fallbackStandardKeyboardSpec,
 };
 
 export const fallbackCustomFirmwareEntry: ICustomFirmwareEntry = {
   type: 'custom',
   variationId: '',
-  variationName: '',
+  firmwareName: '',
   customFirmwareId: '',
 };
 

@@ -4,12 +4,12 @@ import { uiReaders } from '~/ui/commonStore';
 import { resourceManagementUtils } from '~/ui/helpers';
 
 export type ICustomFirmwareEditValues = {
-  variationName: string;
+  firmwareName: string;
   customFirmwareId: string;
 };
 
 export const fallbackCustomFirmwareEditValues: ICustomFirmwareEditValues = {
-  variationName: '',
+  firmwareName: '',
   customFirmwareId: '',
 };
 
@@ -23,7 +23,7 @@ const helpers = {
     const projectInfo = uiReaders.editTargetProject;
     return (
       projectInfo?.firmwares
-        .map((it) => it.variationName)
+        .map((it) => it.firmwareName)
         .filter((it) => it !== excludeName) || []
     );
   },
@@ -45,18 +45,18 @@ const readers = {
   },
   get canSave(): boolean {
     const { editValues, originalValues } = customFirmwareEditorModel.readers;
-    const { variationName, customFirmwareId } = editValues;
+    const { firmwareName, customFirmwareId } = editValues;
     const existingFirmwareNames = helpers.getExistingFirmwareNames(
-      originalValues.variationName,
+      originalValues.firmwareName,
     );
     const modified = !compareObjectByJsonStringify(editValues, originalValues);
     const valid =
       resourceManagementUtils.checkValidResourceName(
-        variationName,
+        firmwareName,
         existingFirmwareNames,
         'firmware',
       ) === 'ok';
-    return modified && !!variationName && !!customFirmwareId && valid;
+    return modified && !!firmwareName && !!customFirmwareId && valid;
   },
 };
 
@@ -65,8 +65,8 @@ const actions = {
     store.originalValues = editValues;
     store.editValues = editValues;
   },
-  setVariationName(variationName: string) {
-    store.editValues = { ...store.editValues, variationName };
+  setFirmwareName(firmwareName: string) {
+    store.editValues = { ...store.editValues, firmwareName };
   },
   setCustomFirmwareId(customFirmwareId: string) {
     store.editValues = { ...store.editValues, customFirmwareId };
