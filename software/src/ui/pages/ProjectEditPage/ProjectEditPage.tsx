@@ -1,13 +1,12 @@
-import { css, FC, jsx, useState } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import {
-  uiActions,
   projectPackagesHooks,
   projectPackagesWriter,
+  uiActions,
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { reflectValue, resourceManagementUtils } from '~/ui/helpers';
-import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal';
 
 type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
 type IProjectResourceItem = {
@@ -33,15 +32,7 @@ function decodeProjectResourceItemKey(key: string): {
 }
 
 export const ProjectEditPage: FC = () => {
-  const [editCustomFirmwareVariationName, setEditCustomFirmwareVariationName] =
-    useState<string | undefined>(undefined);
-
-  const openCustomFirmwareModal = setEditCustomFirmwareVariationName;
-  const closeCustomFirmwareModal = () =>
-    setEditCustomFirmwareVariationName(undefined);
-
   const projectInfo = projectPackagesHooks.useEditTargetProject();
-
   const keyboardName = projectInfo.keyboardName;
 
   const handleKeyboardNameChange = (value: string) => {
@@ -81,21 +72,30 @@ export const ProjectEditPage: FC = () => {
       );
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
-          type: 'projectFirmwareEdit',
+          type: 'projectStandardFirmwareEdit',
           variationName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        openCustomFirmwareModal(variationName);
+        uiActions.openPageModal({
+          type: 'projectCustomFirmwareSetup',
+          variationName,
+        });
       }
     }
   };
 
   const createStandardFirmware = () => {
-    uiActions.navigateTo({ type: 'projectFirmwareEdit', variationName: '' });
+    uiActions.navigateTo({
+      type: 'projectStandardFirmwareEdit',
+      variationName: '',
+    });
   };
 
   const createCustomFirmware = () => {
-    openCustomFirmwareModal('');
+    uiActions.openPageModal({
+      type: 'projectCustomFirmwareSetup',
+      variationName: '',
+    });
   };
 
   const deleteResourceItem = async (itemKey: string) => {
@@ -158,51 +158,50 @@ export const ProjectEditPage: FC = () => {
 
   return (
     <div css={style}>
-      <div>project resource edit page</div>
-
-      <div>
+      <div className="content">
+        <div>project resource edit page</div>
         <div>
-          <button onClick={createStandardFirmware}>
-            Create Standard Firmware
-          </button>
-        </div>
-        <div>
-          <button onClick={createCustomFirmware}>Create Custom Firmware</button>
-        </div>
-      </div>
-      <div>
-        <label>
-          <span>keyboard name</span>
-          <input
-            className="keyboard-name-input"
-            type="text"
-            value={keyboardName}
-            onChange={reflectValue(handleKeyboardNameChange)}
-          />
-        </label>
-      </div>
-      <div className="items-box">
-        {resourceItems.map((item) => (
-          <div key={item.itemKey}>
-            <span>
-              [{item.itemType}]{item.additionalInfoText} {item.itemName}
-            </span>
-            <button onClick={() => editResourceItem(item.itemKey)}>edit</button>
-            <button onClick={() => deleteResourceItem(item.itemKey)}>
-              delete
-            </button>
-            <button onClick={() => renameResourceItem(item.itemKey)}>
-              rename
+          <div>
+            <button onClick={createStandardFirmware}>
+              Create Standard Firmware
             </button>
           </div>
-        ))}
+          <div>
+            <button onClick={createCustomFirmware}>
+              Create Custom Firmware
+            </button>
+          </div>
+        </div>
+        <div>
+          <label>
+            <span>keyboard name</span>
+            <input
+              className="keyboard-name-input"
+              type="text"
+              value={keyboardName}
+              onChange={reflectValue(handleKeyboardNameChange)}
+            />
+          </label>
+        </div>
+        <div className="items-box">
+          {resourceItems.map((item) => (
+            <div key={item.itemKey}>
+              <span>
+                [{item.itemType}]{item.additionalInfoText} {item.itemName}
+              </span>
+              <button onClick={() => editResourceItem(item.itemKey)}>
+                edit
+              </button>
+              <button onClick={() => deleteResourceItem(item.itemKey)}>
+                delete
+              </button>
+              <button onClick={() => renameResourceItem(item.itemKey)}>
+                rename
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
-      {editCustomFirmwareVariationName !== undefined && (
-        <ProjectCustomFirmwareSetupModal
-          variationName={editCustomFirmwareVariationName}
-          close={closeCustomFirmwareModal}
-        />
-      )}
     </div>
   );
 };
@@ -213,34 +212,36 @@ const style = css`
   height: 100%;
   padding: 15px;
 
-  > * + * {
-    margin-top: 10px;
-  }
-
-  .items-box {
-    display: inline-block;
-    border: solid 1px #888;
-    color: ${uiTheme.colors.clAltText};
-    padding: 10px;
-
+  > .content {
     > * + * {
-      margin-top: 5px;
+      margin-top: 10px;
     }
 
-    button {
-      margin-left: 5px;
+    .items-box {
+      display: inline-block;
+      border: solid 1px #888;
+      color: ${uiTheme.colors.clAltText};
+      padding: 10px;
+
+      > * + * {
+        margin-top: 5px;
+      }
+
+      button {
+        margin-left: 5px;
+      }
     }
-  }
 
-  .keyboard-name-input {
-    margin-left: 10px;
-  }
+    .keyboard-name-input {
+      margin-left: 10px;
+    }
 
-  pre {
-    border: solid 1px #888;
-    color: #222;
-    padding: 10px;
-    width: 300px;
-    font-size: 14px;
+    pre {
+      border: solid 1px #888;
+      color: #222;
+      padding: 10px;
+      width: 300px;
+      font-size: 14px;
+    }
   }
 `;

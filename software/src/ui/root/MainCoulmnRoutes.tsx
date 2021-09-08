@@ -27,7 +27,7 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectPresetEdit' && (
           <ProjectPresetEditPage spec={pageSpec} />
         )}
-        {pageSpec.type === 'projectFirmwareEdit' && (
+        {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
       </div>

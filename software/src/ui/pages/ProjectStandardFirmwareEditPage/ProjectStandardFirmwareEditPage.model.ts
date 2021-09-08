@@ -9,6 +9,7 @@ import {
 import {
   projectPackagesReader,
   projectPackagesWriter,
+  uiActions,
   uiReaders,
 } from '~/ui/commonStore';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
@@ -80,6 +81,7 @@ const actions = {
       standardFirmwareConfig: emitSavingEditValues(),
     };
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    uiActions.closeSubPage();
   },
 };
 
