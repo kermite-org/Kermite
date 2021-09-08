@@ -6,7 +6,7 @@
     {
       "type": "standard",
       "variationId": "01",
-      "variationName": "atmega",
+      "firmwareName": "atmega",
       "standardFirmwareConfig": {
         "baseFirmwareType": "AvrUnified",
         "useBoardLedsProMicroAvr": true,
@@ -27,7 +27,7 @@
     {
       "type": "custom",
       "variationId": "02",
-      "variationName": "atmega_custom",
+      "firmwareName": "atmega_custom",
       "customFirmwareId": "dFbA81"
     }
   ],
