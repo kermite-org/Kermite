@@ -99,6 +99,7 @@ export const projectResourceActions = {
       } else if (itemType === 'firmware') {
         projectPackagesWriter.deleteLocalProjectFirmware(itemName);
       }
+      projectResourceActions.clearSelection();
     }
   },
   renameSelectedResourceItem() {
