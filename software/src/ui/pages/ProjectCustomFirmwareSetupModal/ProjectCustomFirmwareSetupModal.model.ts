@@ -76,12 +76,22 @@ const actions = {
   saveHandler() {
     const { variationName, customFirmwareId } =
       CustomFirmwareEditor_OutputPropsSupplier.emitSavingEditValues();
+    const { sourceEntry } = readers;
+    const originalName = sourceEntry.variationName;
     const newFirmwareEntry = {
-      ...readers.sourceEntry,
+      ...sourceEntry,
       variationName,
       customFirmwareId,
     };
-    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    const nameChanged = !!originalName && variationName !== originalName;
+    if (nameChanged) {
+      projectPackagesWriter.saveLocalProjectFirmwareWithRename(
+        newFirmwareEntry,
+        originalName,
+      );
+    } else {
+      projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    }
   },
 };
 
