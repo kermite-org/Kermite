@@ -7,6 +7,7 @@ import {
   fallbackProfileData,
   IProfileData,
   ProfileDataConverter,
+  IProjectFirmwareEntry,
 } from '~/shared';
 import { uiReaders } from '~/ui/commonStore';
 
@@ -26,28 +27,35 @@ export const projectResourceHelpers = {
       ),
     ];
   },
-  getPresetEntry(presetName: string): IProjectPresetEntry {
-    const projectInfo = uiReaders.editTargetProject!;
-    return projectInfo.presets.find((it) => it.presetName === presetName)!;
+  getPresetEntry(presetName: string): IProjectPresetEntry | undefined {
+    return uiReaders.editTargetProject?.presets.find(
+      (it) => it.presetName === presetName,
+    );
   },
-  getLayoutEntry(layoutName: string): IProjectLayoutEntry {
-    const projectInfo = uiReaders.editTargetProject!;
-    return projectInfo.layouts.find((it) => it.layoutName === layoutName)!;
+  getLayoutEntry(layoutName: string): IProjectLayoutEntry | undefined {
+    return uiReaders.editTargetProject?.layouts.find(
+      (it) => it.layoutName === layoutName,
+    );
   },
-  getFirmwareEntry(firmwareName: string) {
-    const projectInfo = uiReaders.editTargetProject!;
-    return projectInfo.firmwares.find(
+  getFirmwareEntry(firmwareName: string): IProjectFirmwareEntry | undefined {
+    return uiReaders.editTargetProject?.firmwares.find(
       (it) => it.variationName === firmwareName,
     );
   },
   loadProfileData(presetName: string): IProfileData {
     const presetEntry = projectResourceHelpers.getPresetEntry(presetName);
-    return ProfileDataConverter.convertProfileDataFromPersist(presetEntry.data);
+    return (
+      (presetEntry &&
+        ProfileDataConverter.convertProfileDataFromPersist(presetEntry.data)) ||
+      fallbackProfileData
+    );
   },
   loadLayoutProfileData(layoutName: string): IProfileData {
     const layoutEntry = projectResourceHelpers.getLayoutEntry(layoutName);
     const profileData = cloneObject(fallbackProfileData);
-    profileData.keyboardDesign = layoutEntry.data;
+    if (layoutEntry) {
+      profileData.keyboardDesign = layoutEntry.data;
+    }
     return profileData;
   },
 };

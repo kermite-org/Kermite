@@ -1,7 +1,6 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, useMemo } from 'qx';
 import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { uiReaders } from '~/ui/commonStore';
-import { useMemoEx } from '~/ui/helpers';
 import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core';
 
 type Props = {
@@ -9,17 +8,18 @@ type Props = {
 };
 
 export const FirmwareDetailView: FC<Props> = ({ firmwareName }) => {
-  const firmwareEntry = useMemoEx(projectResourceHelpers.getFirmwareEntry, [
-    firmwareName,
-  ])!;
+  const firmwareEntry = useMemo(
+    () => projectResourceHelpers.getFirmwareEntry(firmwareName),
+    [firmwareName, uiReaders.allProjectPackageInfos],
+  );
   return (
     <div css={style}>
-      {firmwareEntry.type === 'standard' && (
+      {firmwareEntry?.type === 'standard' && (
         <StandardFirmwareDetailView
           config={firmwareEntry.standardFirmwareConfig}
         />
       )}
-      {firmwareEntry.type === 'custom' && (
+      {firmwareEntry?.type === 'custom' && (
         <CustomFirmwareDetailView
           customFirmwareId={firmwareEntry.customFirmwareId}
         />

@@ -1,6 +1,6 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, useMemo } from 'qx';
+import { uiReaders } from '~/ui/commonStore';
 import { PresetKeyboardView } from '~/ui/components';
-import { useMemoEx } from '~/ui/helpers';
 import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core';
 import { usePresetKeyboardViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 
@@ -9,9 +9,10 @@ type Props = {
 };
 
 export const PresetDetailView: FC<Props> = ({ presetName }) => {
-  const profileData = useMemoEx(projectResourceHelpers.loadProfileData, [
-    presetName,
-  ]);
+  const profileData = useMemo(
+    () => projectResourceHelpers.loadProfileData(presetName),
+    [presetName, uiReaders.allProjectPackageInfos],
+  );
   const viewModel = usePresetKeyboardViewModel(profileData, '');
   return (
     <div css={style}>
