@@ -3,6 +3,7 @@ import { uiTheme } from '~/ui/base';
 import { GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
 import { reflectValue } from '~/ui/helpers';
+import { ResourceItemDetailView } from '~/ui/pages/ProjectResourcePage/ResourceItemDetailView';
 import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/models/ProjectResourcePageModel';
 
 export const ProjectResourcePage: FC = () => {
@@ -10,8 +11,8 @@ export const ProjectResourcePage: FC = () => {
     keyboardName,
     handleKeyboardNameChange,
     resourceItems,
+    selectedResourceItem,
     clearSelection,
-    editSelectedResourceItem,
     menuItems,
   } = useProjectResourcePageModel();
   return (
@@ -42,7 +43,10 @@ export const ProjectResourcePage: FC = () => {
             />
           </div>
           <div className="right-column">
-            <button onClick={() => editSelectedResourceItem()}>edit</button>
+            <ResourceItemDetailView
+              item={selectedResourceItem!}
+              qxIf={!!selectedResourceItem}
+            />
           </div>
         </div>
       </div>
@@ -80,7 +84,6 @@ const style = css`
       > .right-column {
         flex-grow: 1;
         border: solid 1px #888;
-        padding: 10px;
       }
     }
 

@@ -10,6 +10,7 @@ interface IProjectResourcePageModel {
   keyboardName: string;
   handleKeyboardNameChange(value: string): void;
   resourceItems: IProjectResourceListItem[];
+  selectedResourceItem: IProjectResourceListItem | undefined;
   clearSelection(): void;
   editSelectedResourceItem(): void;
   menuItems: IGeneralMenuItem[];
@@ -28,6 +29,10 @@ const readers = {
       selectedItemKey,
       setSelectedItemKey,
     );
+  },
+  get selectedResourceItem() {
+    const { selectedItemKey } = projectResourceReaders;
+    return readers.resourceItems.find((it) => it.itemKey === selectedItemKey);
   },
   get isSelectedItemKeyIncludedInList() {
     const { selectedItemKey } = projectResourceReaders;
@@ -53,12 +58,13 @@ export function useProjectResourcePageModel(): IProjectResourcePageModel {
   useEffect(() => actions.resetState, []);
   const { editSelectedResourceItem, clearSelection } = projectResourceActions;
   const menuItems = createProjectResourceMenuItems();
-  const { keyboardName, resourceItems } = readers;
+  const { keyboardName, resourceItems, selectedResourceItem } = readers;
   const { handleKeyboardNameChange } = actions;
   return {
     keyboardName,
     handleKeyboardNameChange,
     resourceItems,
+    selectedResourceItem,
     clearSelection,
     menuItems,
     editSelectedResourceItem,
