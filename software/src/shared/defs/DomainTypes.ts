@@ -97,18 +97,6 @@ export type IProjectPackageInfo = {
   packageName: string;
 } & IProjectPackageFileContent;
 
-export const fallbackProjectPackageInfo: IProjectPackageInfo = {
-  projectKey: '',
-  origin: 'online',
-  formatRevision: 'PKG0',
-  projectId: '',
-  packageName: '',
-  keyboardName: '',
-  firmwares: [],
-  layouts: [],
-  presets: [],
-};
-
 export type ICustomFirmwareInfo = {
   firmwareId: string;
   firmwareProjectPath: string;
@@ -133,27 +121,10 @@ export interface IKeyboardDeviceInfo {
   manufacturerName: string;
 }
 
-export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {
-  path: '',
-  portName: '',
-  mcuCode: '',
-  firmwareId: '',
-  projectId: '',
-  variationId: '',
-  deviceInstanceCode: '',
-  productName: '',
-  manufacturerName: '',
-};
-
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';
 }
-
-export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
-  allDeviceInfos: [],
-  currentDevicePath: 'none',
-};
 
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
