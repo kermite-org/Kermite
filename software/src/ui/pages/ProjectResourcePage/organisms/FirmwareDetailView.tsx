@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { uiReaders } from '~/ui/commonStore';
 import { useMemoEx } from '~/ui/helpers';
-import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceHelpers';
+import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core';
 
 type Props = {
   firmwareName: string;
@@ -12,7 +12,6 @@ export const FirmwareDetailView: FC<Props> = ({ firmwareName }) => {
   const firmwareEntry = useMemoEx(projectResourceHelpers.getFirmwareEntry, [
     firmwareName,
   ])!;
-
   return (
     <div css={style}>
       {firmwareEntry.type === 'standard' && (

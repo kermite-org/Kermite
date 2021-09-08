@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { decodeProjectResourceItemKey } from '~/shared';
 import { GeneralButton } from '~/ui/components';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceActions';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import { FirmwareDetailView } from '~/ui/pages/ProjectResourcePage/organisms/FirmwareDetailView';
 import { LayoutDetailView } from '~/ui/pages/ProjectResourcePage/organisms/LayoutDetailView';
 import { PresetDetailView } from '~/ui/pages/ProjectResourcePage/organisms/PresetDetailView';

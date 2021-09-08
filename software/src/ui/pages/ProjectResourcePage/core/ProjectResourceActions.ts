@@ -2,10 +2,8 @@ import { decodeProjectResourceItemKey } from '~/shared';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { resourceManagementUtils } from '~/ui/helpers';
-import {
-  projectResourceReaders,
-  projectResourceState,
-} from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
+import { projectResourceReaders } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceReaders';
+import { projectResourceState } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
 
 const helpers = {
   async renameProjectResourceListItem(
@@ -30,11 +28,21 @@ const helpers = {
 };
 
 export const projectResourceActions = {
+  resetState() {
+    if (!projectResourceReaders.isSelectedItemKeyIncludedInList) {
+      projectResourceActions.clearSelection();
+    }
+  },
   setSelectedItemKey(key: string) {
     projectResourceState.selectedItemKey = key;
   },
   clearSelection() {
     projectResourceState.selectedItemKey = '';
+  },
+  handleKeyboardNameChange(value: string) {
+    const projectInfo = uiReaders.editTargetProject!;
+    const newProjectInfo = { ...projectInfo, keyboardName: value };
+    projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
   createStandardFirmware() {
     uiActions.navigateTo({

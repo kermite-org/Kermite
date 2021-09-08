@@ -1,21 +1,17 @@
 import { css, FC, jsx } from 'qx';
-import { IProfileData, ProfileDataConverter } from '~/shared';
 import { PresetKeyboardView } from '~/ui/components';
 import { useMemoEx } from '~/ui/helpers';
-import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceHelpers';
+import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core';
 import { usePresetKeyboardViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 
 type Props = {
   presetName: string;
 };
 
-function loadProfileData(presetName: string): IProfileData {
-  const presetEntry = projectResourceHelpers.getPresetEntry(presetName);
-  return ProfileDataConverter.convertProfileDataFromPersist(presetEntry.data);
-}
-
 export const PresetDetailView: FC<Props> = ({ presetName }) => {
-  const profileData = useMemoEx(loadProfileData, [presetName]);
+  const profileData = useMemoEx(projectResourceHelpers.loadProfileData, [
+    presetName,
+  ]);
   const viewModel = usePresetKeyboardViewModel(profileData, '');
   return (
     <div css={style}>
