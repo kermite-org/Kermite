@@ -23,6 +23,8 @@ const helpers = {
     });
     if (newName && newName !== itemName) {
       destinationFunction(itemName, newName);
+      projectResourceState.selectedItemKey =
+        projectResourceState.selectedItemKey.replace(itemName, newName);
     }
   },
 };

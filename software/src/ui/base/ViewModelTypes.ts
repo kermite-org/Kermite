@@ -1,8 +1,4 @@
-import {
-  IDisplayKeyboardDesign,
-  IDisplayKeyShape,
-  IProjectResourceItemType,
-} from '~/shared';
+import { IDisplayKeyboardDesign, IDisplayKeyShape } from '~/shared';
 
 export interface ICustomKeyUnitViewModelBase {
   keyUnitId: string;
@@ -83,12 +79,3 @@ export interface IProjectKeyboardListProjectItem {
   keyboardName: string;
   design: IDisplayKeyboardDesign;
 }
-
-export type IProjectResourceListItem = {
-  itemKey: string;
-  itemType: IProjectResourceItemType;
-  itemName: string;
-  additionalInfoText?: string;
-  selected: boolean;
-  setSelected(): void;
-};

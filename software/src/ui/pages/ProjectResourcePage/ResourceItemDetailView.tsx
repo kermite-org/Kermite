@@ -1,12 +1,13 @@
 import { css, FC, jsx } from 'qx';
-import { IProjectResourceListItem } from '~/ui/base';
+import { decodeProjectResourceItemKey } from '~/shared';
 import { GeneralButton } from '~/ui/components';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceActions';
 
 export const ResourceItemDetailView: FC<{
   className?: string;
-  item: IProjectResourceListItem;
-}> = ({ item }) => {
+  selectedItemKey: string;
+}> = ({ selectedItemKey }) => {
+  const { itemType, itemName } = decodeProjectResourceItemKey(selectedItemKey);
   const { editSelectedResourceItem } = projectResourceActions;
   const style = css`
     padding: 10px;
@@ -19,7 +20,7 @@ export const ResourceItemDetailView: FC<{
     <div css={style}>
       <div className="header">
         <div>
-          {item.itemType} {item.itemName}
+          {itemType} {itemName}
         </div>
         <GeneralButton onClick={() => editSelectedResourceItem()}>
           edit

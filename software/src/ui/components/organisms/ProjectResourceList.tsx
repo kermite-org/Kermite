@@ -1,21 +1,70 @@
 import { css, FC, jsx } from 'qx';
-import { IProjectResourceListItem, uiTheme } from '~/ui/base';
+import {
+  decodeProjectResourceItemKey,
+  IProjectResourceItemType,
+} from '~/shared';
+import { uiTheme } from '~/ui/base';
 import { withStopPropagation } from '~/ui/helpers';
 
 type Props = {
   className?: string;
-  resourceItems: IProjectResourceListItem[];
+  resourceItemKeys: string[];
+  selectedItemKey: string;
+  setSelectedItemKey(itemKey: string): void;
   clearSelection(): void;
 };
 
-export const ProjectResourceList: FC<Props> = ({
-  className,
-  resourceItems,
-  clearSelection,
-}) => {
+type IProjectResourceListItem = {
+  itemKey: string;
+  itemType: IProjectResourceItemType;
+  itemName: string;
+  selected: boolean;
+  setSelected(): void;
+};
+
+function createResourceItems(
+  resourceItemKeys: string[],
+  selectedItemKey: string,
+  setSelectedItemKey: (key: string) => void,
+): {
+  presets: IProjectResourceListItem[];
+  layouts: IProjectResourceListItem[];
+  firmwares: IProjectResourceListItem[];
+} {
+  const resourceItems = resourceItemKeys.map((itemKey) => {
+    const { itemType, itemName } = decodeProjectResourceItemKey(itemKey);
+    return {
+      itemKey,
+      itemType,
+      itemName,
+      selected: itemKey === selectedItemKey,
+      setSelected() {
+        setSelectedItemKey(itemKey);
+      },
+    };
+  });
   const presets = resourceItems.filter((it) => it.itemType === 'preset');
   const layouts = resourceItems.filter((it) => it.itemType === 'layout');
   const firmwares = resourceItems.filter((it) => it.itemType === 'firmware');
+  return {
+    presets,
+    layouts,
+    firmwares,
+  };
+}
+
+export const ProjectResourceList: FC<Props> = ({
+  className,
+  resourceItemKeys,
+  selectedItemKey,
+  setSelectedItemKey,
+  clearSelection,
+}) => {
+  const { presets, layouts, firmwares } = createResourceItems(
+    resourceItemKeys,
+    selectedItemKey,
+    setSelectedItemKey,
+  );
   return (
     <div css={style} className={className} onClick={clearSelection}>
       <ResourceItemsBlock groupName="presets" items={presets} />
@@ -40,7 +89,7 @@ const ResourceItemsBlock = (props: {
             classNames={['item', item.selected && '--selected']}
             onClick={withStopPropagation(item.setSelected)}
           >
-            {item.additionalInfoText} {item.itemName}
+            {item.itemName}
           </div>
         ))}
       </div>

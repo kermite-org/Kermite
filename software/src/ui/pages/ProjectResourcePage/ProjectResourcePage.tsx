@@ -10,8 +10,9 @@ export const ProjectResourcePage: FC = () => {
   const {
     keyboardName,
     handleKeyboardNameChange,
-    resourceItems,
-    selectedResourceItem,
+    resourceItemKeys,
+    selectedItemKey,
+    setSelectedItemKey,
     clearSelection,
     menuItems,
   } = useProjectResourcePageModel();
@@ -38,14 +39,16 @@ export const ProjectResourcePage: FC = () => {
           <div className="left-column">
             <ProjectResourceList
               className="items-box"
-              resourceItems={resourceItems}
+              resourceItemKeys={resourceItemKeys}
+              selectedItemKey={selectedItemKey}
+              setSelectedItemKey={setSelectedItemKey}
               clearSelection={clearSelection}
             />
           </div>
           <div className="right-column">
             <ResourceItemDetailView
-              item={selectedResourceItem!}
-              qxIf={!!selectedResourceItem}
+              selectedItemKey={selectedItemKey}
+              qxIf={!!selectedItemKey}
             />
           </div>
         </div>
