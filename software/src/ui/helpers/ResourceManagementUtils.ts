@@ -18,7 +18,7 @@ export const resourceManagementUtils = {
           (it) => it.toLowerCase() === resourceName.toLowerCase(),
         );
     if (existingName) {
-      return `${existingName} is already exists.`;
+      return `${existingName} already exists.`;
     }
     return 'ok';
   },
