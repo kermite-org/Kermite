@@ -31,7 +31,12 @@ export const FirmwareDetailView: FC<Props> = ({ firmwareName }) => {
 const StandardFirmwareDetailView: FC<{
   config: IKermiteStandardKeyboardSpec;
 }> = ({ config }) => {
-  return <div>base firmware type: {config.baseFirmwareType}</div>;
+  return (
+    <div>
+      <div>firmware type: standard</div>
+      <div> base firmware: {config.baseFirmwareType}</div>
+    </div>
+  );
 };
 
 const CustomFirmwareDetailView: FC<{
@@ -42,6 +47,7 @@ const CustomFirmwareDetailView: FC<{
   )!;
   return (
     <div>
+      <div>firmware type: custom</div>
       <div>firmware id: {firmwareInfo.firmwareId}</div>
       <div>project path: {firmwareInfo.firmwareProjectPath}</div>
       <div>variation name: {firmwareInfo.variationName}</div>
