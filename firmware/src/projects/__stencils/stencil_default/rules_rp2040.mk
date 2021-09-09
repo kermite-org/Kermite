@@ -45,16 +45,18 @@ REQ_NEOPIXEL_CORE =
 #board leds
 ifneq ($(KL_USE_BOARD_LEDS_PROMICRO_RP),)
 	REQ_NEOPIXEL_CORE = 1
-	MODULE_SRCS += km0/device/rp2040/boardIo_rgbLed.c
+	MODULE_SRCS += km0/device/boardIo.c
+	MODULE_SRCS += km0/device/rp2040/boardIoImpl_rgbLed.c
 	DEFINES += KS_USE_BOARD_LEDS
 	DEFINES += KS_USE_BOARD_LEDS_PROMICRO_RP
 else
 	ifneq ($(KL_USE_BOARD_LEDS_RPI_PICO),)
-		MODULE_SRCS += km0/device/rp2040/boardIo.c
+		MODULE_SRCS += km0/device/boardIo.c
+		MODULE_SRCS += km0/device/rp2040/boardIoImpl.c
 		DEFINES += KS_USE_BOARD_LEDS
 		DEFINES += KS_USE_BOARD_LEDS_RPI_PICO
 	else
-		MODULE_SRCS += km0/device/boardIo_dummy.c
+		MODULE_SRCS += km0/device/boardIo.c
 		DEFINES += KS_USE_BOARD_LEDS
 	endif
 endif
