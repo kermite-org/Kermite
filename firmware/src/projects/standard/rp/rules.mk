@@ -13,6 +13,7 @@ MODULE_PIOASM_SRCS += km0/device/rp2040/neoPixelCore.pio
 MODULE_SRCS += km0/device/rp2040/neoPixelCore.c
 MODULE_SRCS += km0/device/rp2040/serialLed.c
 MODULE_SRCS += km0/device/rp2040/pinObserver.c
+MODULE_SRCS += km0/device/rp2040/boardI2c.c
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
 MODULE_SRCS += km0/kernel/firmwareConfigurationData.c
@@ -26,6 +27,8 @@ MODULE_SRCS += km0/scanner/keyScanner_basicMatrix.c
 MODULE_SRCS += km0/scanner/keyScanner_directWired.c
 MODULE_SRCS += km0/scanner/keyScanner_encoders.c
 MODULE_SRCS += km0/visualizer/rgbLighting.c
+MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledCoreEx.c
+MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledDisplayEx_default.c
 MODULE_SRCS += km0/wrapper/generalKeyboard.c
 
 PROJECT_SRCS += ../common/main.c

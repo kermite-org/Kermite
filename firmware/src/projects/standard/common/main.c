@@ -8,6 +8,7 @@
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_directWired.h"
 #include "km0/scanner/keyScanner_encoders.h"
+#include "km0/visualizer/oledDisplay.h"
 #include "km0/visualizer/rgbLighting.h"
 #include "km0/wrapper/generalKeyboard.h"
 typedef struct {
@@ -24,6 +25,7 @@ typedef struct {
   bool useDirectWiredKeyScanner;
   bool useEncoder;
   bool useRgbLighting;
+  bool useOledDisplay;
   uint8_t numMatrixColumns;
   uint8_t numMatrixRows;
   uint8_t numDirectWiredKeys;
@@ -45,6 +47,7 @@ KermiteKeyboardDefinitionData defs = {
   .useMatrixKeyScanner = false,
   .useDirectWiredKeyScanner = false,
   .useRgbLighting = false,
+  .useOledDisplay = false,
   .numMatrixColumns = 0,
   .numMatrixRows = 0,
   .numDirectWiredKeys = 0,
@@ -77,6 +80,10 @@ int main() {
   }
   if (defs.useRgbLighting) {
     rgbLighting_initialize(defs.rgbLightingPin, defs.rgbLightingNumLeds, defs.rgbLightingNumLeds);
+  }
+  if (defs.useOledDisplay) {
+    oledDisplay_initialize();
+    keyboardMain_useOledDisplayModule(oledDisplay_update);
   }
   uint pinsOffset = 0;
   uint8_t scanIndexBase = 0;
