@@ -1,5 +1,6 @@
 #include "km0/base/utils.h"
 #include "km0/device/boardIo.h"
+#include "km0/device/boardIoImpl.h"
 #include "km0/device/debugUart.h"
 #include "km0/device/system.h"
 #include "km0/kernel/firmwareConfigurationData.h"
@@ -48,13 +49,13 @@ int main() {
   utils_copyTextBytes(firmwareConfigurationData.keyboardName, defs.keyboardName, 33);
 
   if (defs.useBoardLedsProMicroAvr) {
-    boardIo_setupLeds_proMicroAvr();
+    boardIoImpl_setupLeds_proMicroAvr();
   }
   if (defs.useBoardLedsProMicroRp) {
-    boardIo_setupLeds_proMicroRp();
+    boardIoImpl_setupLeds_proMicroRp();
   }
   if (defs.useBoardLedsRpiPico) {
-    boardIo_setupLeds_rpiPico();
+    boardIoImpl_setupLeds_rpiPico();
   }
   if (defs.useDebugUart) {
     debugUart_initialize(38400);
