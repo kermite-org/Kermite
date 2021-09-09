@@ -109,10 +109,6 @@ static void emitSingleParameterChangedNotification(uint8_t parameterIndex, uint8
   emitGenericHidData(rawHidTempBuf);
 }
 
-static void copyStorageBytesToBuffer(uint8_t *dstBuffer, int dstOffset, uint16_t srcStorageAddr, uint16_t len) {
-  dataMemory_readBytes(srcStorageAddr, dstBuffer + dstOffset, len);
-}
-
 static void emitDeviceAttributesResponse() {
   uint8_t *p = rawHidTempBuf;
   p[0] = RawHidOpcode_DeviceAttributesResponse;
