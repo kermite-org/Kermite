@@ -7,11 +7,6 @@ export class Packets {
   static connectionClosingFrame = [RawHidOpcode.ConnectionClosing];
   static deviceAttributesRequestFrame = [RawHidOpcode.DeviceAttributesRequest];
 
-  static makeDeviceInstanceCodeWriteOperationFrame(code: string) {
-    const bytes = generateNumberSequence(8).map((i) => code.charCodeAt(i) || 0);
-    return [RawHidOpcode.DeviceInstanceCodeWrite, ...bytes];
-  }
-
   // ------------------------------------------------------------
 
   static memoryWriteTransactionStartFrame = [

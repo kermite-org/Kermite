@@ -53,6 +53,7 @@ export function serializeCustomKeyboardSpec(
   return convertArrayElementsToBytes([
     ...stringToEmbedBytes(meta.projectId, 7),
     ...stringToEmbedBytes(meta.variationId, 3),
+    ...stringToEmbedBytes(meta.deviceInstanceCode, 9),
     ...stringToEmbedBytes(meta.keyboardName, 33),
     spec.useBoardLedsProMicroAvr,
     spec.useBoardLedsProMicroRp,
