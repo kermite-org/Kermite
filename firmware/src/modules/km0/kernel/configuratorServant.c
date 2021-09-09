@@ -17,7 +17,6 @@ enum {
   RawHidOpcode_ConnectionClosing = 0xf1,
   RawHidOpcode_DeviceAttributesRequest = 0xf2,
   RawHidOpcode_DeviceAttributesResponse = 0xf3,
-  RawHidOpcode_DeviceInstanceCodeWrite = 0xf4,
 
   RawHidOpcode_RealtimeKeyStateEvent = 0xa0,
   RawHidOpcode_RealtimeLayerStateEvent = 0xa1,
@@ -54,12 +53,10 @@ static void emitStateNotification(uint8_t state) {
 //---------------------------------------------
 //storage data addresses
 
-static uint16_t storageAddr_DeviceInstanceCode;
 static uint16_t storageAddr_profileData;
 static uint16_t keyMappingDataCapacity;
 
 static void initializeDataAddresses() {
-  storageAddr_DeviceInstanceCode = dataStorage_getDataAddress_deviceInstanceCode();
   storageAddr_profileData = dataStorage_getDataAddress_profileData();
   keyMappingDataCapacity = dataStorage_getKeyMappingDataCapacity();
 }
@@ -131,7 +128,7 @@ static void emitDeviceAttributesResponse() {
   utils_fillBytes(p + 24, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 24, (uint8_t *)Kermite_Project_VariationName, slen);
-  copyStorageBytesToBuffer(p, 40, storageAddr_DeviceInstanceCode, 8);
+  utils_copyBytes(p + 40, (uint8_t *)firmwareConfigurationData.deviceInstanceCode, 8);
   p[48] = keyMappingDataCapacity >> 8 & 0xFF;
   p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);
@@ -171,12 +168,6 @@ static void processReadGenericHidData() {
     // printf("device attributes requested\n");
     emitDeviceAttributesResponse();
     rawHidFirstConnectDone = true;
-  }
-
-  if (cmd == RawHidOpcode_DeviceInstanceCodeWrite) {
-    // printf("write device instance code\n");
-    uint8_t *src = p + 1;
-    dataMemory_writeBytes(storageAddr_DeviceInstanceCode, src, 8);
   }
 
   if (cmd == RawHidOpcode_MemoryWriteTransactionStart) {
@@ -287,8 +278,4 @@ void configuratorServant_emitRealtimeKeyEvent(uint8_t keyIndex, bool isDown) {
 
 void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags) {
   emitRealtimeLayerStateEvent(layerFlags);
-}
-
-void configuratorServant_readDeviceInstanceCode(uint8_t *buffer) {
-  copyStorageBytesToBuffer(buffer, 0, storageAddr_DeviceInstanceCode, 8);
 }
