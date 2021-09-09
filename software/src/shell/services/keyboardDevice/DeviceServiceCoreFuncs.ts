@@ -6,10 +6,6 @@ import {
   RawHidMessageProtocolRevision,
 } from '~/shared';
 import { NumSystemParameters } from '~/shared/defs/CommandDefinitions';
-import {
-  checkDeviceInstanceCodeValid,
-  generateRandomDeviceInstanceCode,
-} from '~/shared/funcs/DomainRelatedHelpers';
 import { Packets } from '~/shell/services/keyboardDevice/Packets';
 import {
   ICustomParametersReadResponseData,
@@ -129,12 +125,6 @@ export async function readDeviceCustomParameters(
   );
 }
 
-function writeDeviceInstanceCode(device: IDeviceWrapper, code: string) {
-  device.writeSingleFrame(
-    Packets.makeDeviceInstanceCodeWriteOperationFrame(code),
-  );
-}
-
 // function writeDeviceCustomParameters(
 //   device: IDeviceWrapper,
 //   initialParameters: number[],
@@ -148,17 +138,8 @@ export async function deviceSetupTask(device: IDeviceWrapper): Promise<{
   attrsRes: IDeviceAttributesReadResponseData;
   customParamsRes: ICustomParametersReadResponseData;
 }> {
-  let attrsRes = await readDeviceAttributes(device);
+  const attrsRes = await readDeviceAttributes(device);
   checkDeviceRevisions(attrsRes);
-  if (!checkDeviceInstanceCodeValid(attrsRes.deviceInstanceCode)) {
-    console.log('write device instance code');
-    const code = generateRandomDeviceInstanceCode();
-    writeDeviceInstanceCode(device, code);
-    attrsRes = await readDeviceAttributes(device);
-    if (!attrsRes.deviceInstanceCode) {
-      throw new Error('failed to write device instance code');
-    }
-  }
   const customParamsRes = await readDeviceCustomParameters(device);
   if (customParamsRes.numParameters !== NumSystemParameters) {
     throw new Error('system parameters count mismatch');

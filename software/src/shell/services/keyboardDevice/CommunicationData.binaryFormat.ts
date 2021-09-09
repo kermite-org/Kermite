@@ -49,11 +49,6 @@ namespace CommunicationDataBinaryFormat {
     [48_49]: { assignStorageCapacity: u16 };
   };
 
-  type PktDeviceInstanceCodeWriteOperation = PacketHostToDevice & {
-    [0]: { opcode: 0xf4 };
-    [1_8]: { data: Bytes<8> };
-  };
-
   // --------------------
   // realtime event
 

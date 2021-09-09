@@ -3,7 +3,6 @@ export const RawHidOpcode = {
   ConnectionClosing: 0xf1,
   DeviceAttributesRequest: 0xf2,
   DeviceAttributesResponse: 0xf3,
-  DeviceInstanceCodeWrite: 0xf4,
 
   RealtimeKeyStateEvent: 0xa0,
   RealtimeLayerStateEvent: 0xa1,
