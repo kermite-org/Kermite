@@ -29,7 +29,43 @@ export const standardFirmwareEditModelHelpers = {
         delete data[key];
       }
     });
-    return data;
+    const {
+      baseFirmwareType,
+      useBoardLedsProMicroAvr,
+      useBoardLedsProMicroRp,
+      useBoardLedsRpiPico,
+      useDebugUart,
+      useMatrixKeyScanner,
+      useDirectWiredKeyScanner,
+      useEncoder,
+      matrixColumnPins,
+      matrixRowPins,
+      directWiredPins,
+      encoderPins,
+      useLighting,
+      lightingPin,
+      lightingNumLeds,
+      useLcd,
+    } = data;
+    return {
+      baseFirmwareType,
+      useBoardLedsProMicroAvr,
+      useBoardLedsProMicroRp,
+      useBoardLedsRpiPico,
+      useDebugUart,
+      useMatrixKeyScanner,
+      useDirectWiredKeyScanner,
+      useEncoder,
+      useLighting,
+      useLcd,
+      matrixRowPins: (useMatrixKeyScanner && matrixRowPins) || undefined,
+      matrixColumnPins: (useMatrixKeyScanner && matrixColumnPins) || undefined,
+      directWiredPins:
+        (useDirectWiredKeyScanner && directWiredPins) || undefined,
+      encoderPins: (useEncoder && encoderPins) || undefined,
+      lightingPin: (useLighting && lightingPin) || undefined,
+      lightingNumLeds: useLighting ? lightingNumLeds : undefined,
+    };
   },
   fixEditValuesOnModify(
     editValues: IKermiteStandardKeyboardSpec,
