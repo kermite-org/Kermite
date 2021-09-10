@@ -8,8 +8,8 @@ import {
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
 
-function mapPinNameToPinNumber(pinName: string): number {
-  const pinNumber = PinNameToPinNumberMap[pinName];
+function mapPinNameToPinNumber(pinName: string | undefined): number {
+  const pinNumber = PinNameToPinNumberMap[pinName || ''];
   return isFinite(pinNumber) ? pinNumber : -1;
 }
 
@@ -61,9 +61,14 @@ export function serializeCustomKeyboardSpec(
     spec.useDebugUart,
     spec.useMatrixKeyScanner,
     spec.useDirectWiredKeyScanner,
+    spec.useEncoder,
+    spec.useLighting,
+    spec.useLcd,
     numMatrixColumns,
     numMatrixRows,
     numDirectWiredKeys,
+    mapPinNameToPinNumber(spec.lightingPin),
+    spec.lightingNumLeds,
     ...pinDefinitionsBytes,
   ]);
 }

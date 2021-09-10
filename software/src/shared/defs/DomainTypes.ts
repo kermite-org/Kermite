@@ -42,6 +42,12 @@ export type IKermiteStandardKeyboardSpec = {
   matrixRowPins?: string[];
   useDirectWiredKeyScanner?: boolean;
   directWiredPins?: string[];
+  useEncoder?: boolean;
+  encoderPins?: string[];
+  useLighting?: boolean;
+  lightingPin?: string;
+  lightingNumLeds?: number;
+  useLcd?: boolean;
 };
 
 export interface IProjectResourceInfo {
