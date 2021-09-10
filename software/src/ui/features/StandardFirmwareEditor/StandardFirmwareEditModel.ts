@@ -60,6 +60,37 @@ const readers = {
       mcuType,
     );
   },
+  get directWiredPinsValid(): boolean {
+    const { editValues, mcuType } = readers;
+    return standardFirmwareEditModelHelpers.validatePins(
+      editValues.directWiredPins,
+      mcuType,
+    );
+  },
+  get encoderPinsValid(): boolean {
+    const { editValues, mcuType } = readers;
+    return (
+      standardFirmwareEditModelHelpers.validatePins(
+        editValues.encoderPins,
+        mcuType,
+      ) && editValues.encoderPins?.length === 2
+    );
+  },
+  get lightingPinValid(): boolean {
+    const { editValues, mcuType } = readers;
+    return standardFirmwareEditModelHelpers.validatePins(
+      [editValues.lightingPin || ''],
+      mcuType,
+    );
+  },
+  get lightingNumLedsValid(): boolean {
+    const {
+      editValues: { lightingNumLeds },
+    } = readers;
+    return lightingNumLeds
+      ? 0 <= lightingNumLeds && lightingNumLeds < 256
+      : false;
+  },
   get isModified(): boolean {
     const { originalValues, editValues } = readers;
     return editValues !== originalValues;

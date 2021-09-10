@@ -50,8 +50,8 @@ function fixEditValuesOnModify(
     editValues.useBoardLedsProMicroAvr = false;
   }
   if (diff.baseFirmwareType) {
-    editValues.matrixRowPins = undefined;
-    editValues.matrixColumnPins = undefined;
+    // editValues.matrixRowPins = undefined;
+    // editValues.matrixColumnPins = undefined;
   }
   if (diff.useBoardLedsProMicroRp) {
     editValues.useBoardLedsRpiPico = false;
@@ -59,8 +59,6 @@ function fixEditValuesOnModify(
   if (diff.useBoardLedsRpiPico) {
     editValues.useBoardLedsProMicroRp = false;
   }
-  // always true for current implementation
-  editValues.useMatrixKeyScanner = true;
 }
 
 export const standardFirmwareEditModelHelpers = {
