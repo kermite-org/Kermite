@@ -1,4 +1,4 @@
-import { css, FC, jsx, useEffect } from 'qx';
+import { css, FC, jsx, QxChildren, QxNode, useEffect } from 'qx';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
 import {
   IStandardFirmwareEditValues,
@@ -49,6 +49,25 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
   },
 };
 
+const FieldItem: FC<{ title: string; children: QxChildren }> = ({
+  title,
+  children,
+}) => {
+  const styleChildren = css`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  `;
+  return (
+    <tr>
+      <td>{title}</td>
+      <td>
+        <div css={styleChildren}>{children}</div>
+      </td>
+    </tr>
+  );
+};
+
 export const StandardFirmwareEditor: FC<Props> = ({
   firmwareConfig,
   saveHandler,
@@ -79,69 +98,49 @@ export const StandardFirmwareEditor: FC<Props> = ({
       <div>standard firmware configuration</div>
       <table>
         <tbody>
-          <tr>
-            <td> base firmware type</td>
-            <td>
-              <GeneralSelector
-                options={baseFirmwareTypeOptions}
-                value={editValues.baseFirmwareType}
-                setValue={valueChangeHandler('baseFirmwareType')}
-              />
-            </td>
-          </tr>
-          <tr qxIf={isAvr}>
-            <td>use board leds ProMicro</td>
-            <td>
-              <ToggleSwitch
-                checked={editValues.useBoardLedsProMicroAvr}
-                onChange={valueChangeHandler('useBoardLedsProMicroAvr')}
-              />
-            </td>
-          </tr>
-          <tr qxIf={isRp}>
-            <td>use board leds ProMicro RP2040</td>
-            <td>
-              <ToggleSwitch
-                checked={editValues.useBoardLedsProMicroRp}
-                onChange={valueChangeHandler('useBoardLedsProMicroRp')}
-              />
-            </td>
-          </tr>
-          <tr qxIf={isRp}>
-            <td>use board leds RPi Pico</td>
-            <td>
-              <ToggleSwitch
-                checked={editValues.useBoardLedsRpiPico}
-                onChange={valueChangeHandler('useBoardLedsRpiPico')}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>row pins</td>
-            <td>
-              <GeneralInput
-                value={arrayToText(editValues.matrixRowPins)}
-                setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
-                width={400}
-              />
-            </td>
-            <td>{validationStatusToText(rowPinsValid)}</td>
-          </tr>
-          <tr>
-            <td>column pins</td>
-            <td>
-              <GeneralInput
-                value={arrayToText(editValues.matrixColumnPins)}
-                setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
-                width={400}
-              />
-            </td>
-            <td>{validationStatusToText(columnPinsValid)}</td>
-          </tr>
-          <tr>
-            <td>available pins</td>
-            <td>{availablePinsText}</td>
-          </tr>
+          <FieldItem title="base firmware type">
+            <GeneralSelector
+              options={baseFirmwareTypeOptions}
+              value={editValues.baseFirmwareType}
+              setValue={valueChangeHandler('baseFirmwareType')}
+            />
+          </FieldItem>
+          <FieldItem title="use board leds ProMicro" qxIf={isAvr}>
+            <ToggleSwitch
+              checked={editValues.useBoardLedsProMicroAvr}
+              onChange={valueChangeHandler('useBoardLedsProMicroAvr')}
+            />
+          </FieldItem>
+          <FieldItem title="use board leds ProMicro RP2040" qxIf={isRp}>
+            <ToggleSwitch
+              checked={editValues.useBoardLedsProMicroRp}
+              onChange={valueChangeHandler('useBoardLedsProMicroRp')}
+            />
+          </FieldItem>
+          <FieldItem title="use board leds RPi Pico" qxIf={isRp}>
+            <ToggleSwitch
+              checked={editValues.useBoardLedsRpiPico}
+              onChange={valueChangeHandler('useBoardLedsRpiPico')}
+            />
+          </FieldItem>
+          <FieldItem title="row pins">
+            <GeneralInput
+              value={arrayToText(editValues.matrixRowPins)}
+              setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
+              width={400}
+            />
+            <div>{validationStatusToText(rowPinsValid)}</div>
+          </FieldItem>
+
+          <FieldItem title="column pins">
+            <GeneralInput
+              value={arrayToText(editValues.matrixColumnPins)}
+              setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
+              width={400}
+            />
+            <div>{validationStatusToText(columnPinsValid)}</div>
+          </FieldItem>
+          <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
@@ -159,7 +158,7 @@ const style = css`
     margin-top: 10px;
 
     td {
-      padding: 2px 5px;
+      padding: 4px 5px;
     }
   }
 
