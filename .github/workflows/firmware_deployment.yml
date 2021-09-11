@@ -9,7 +9,7 @@ on:
       - "firmware/Makefile"
       - "firmware/workers/*.mk"
       - "firmware/src/**"
-
+      - "firmware/project_packages/**"
 jobs:
   build:
     runs-on: ubuntu-latest
