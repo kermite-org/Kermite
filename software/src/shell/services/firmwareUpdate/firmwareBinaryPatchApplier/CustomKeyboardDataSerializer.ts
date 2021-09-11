@@ -142,8 +142,8 @@ export function serializeCustomKeyboardSpec(
     numMatrixRows,
     numMatrixColumns,
     numDirectWiredKeys,
+    ...pinDefinitionsBytes,
     spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : -1,
     spec.lightingNumLeds,
-    ...pinDefinitionsBytes,
   ]);
 }
