@@ -1,10 +1,8 @@
 import { css, FC, jsx, QxChildren, useEffect } from 'qx';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
-import {
-  IStandardFirmwareEditValues,
-  standardFirmwareEditModel,
-} from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel';
+import { standardFirmwareEditModel } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel';
 import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
+import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;

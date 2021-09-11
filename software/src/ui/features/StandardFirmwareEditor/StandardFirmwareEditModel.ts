@@ -1,12 +1,8 @@
 import produce from 'immer';
-import {
-  fallbackStandardKeyboardSpec,
-  IKermiteStandardKeyboardSpec,
-} from '~/shared';
+import { fallbackStandardKeyboardSpec } from '~/shared';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
 import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
-
-export type IStandardFirmwareEditValues = IKermiteStandardKeyboardSpec;
+import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
 
 const baseFirmwareTypeOptions: ISelectorOption[] = [
   'AvrUnified',
