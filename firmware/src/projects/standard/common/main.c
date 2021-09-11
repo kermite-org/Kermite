@@ -79,7 +79,10 @@ int main() {
     system_setupFallbackStdout();
   }
   if (defs.useRgbLighting) {
+    rgbLighting_preConfigure();
     rgbLighting_initialize(defs.rgbLightingPin, defs.rgbLightingNumLeds, defs.rgbLightingNumLeds);
+    rgbLighting_setBoardSide(0);
+    keyboardMain_useRgbLightingModule(rgbLighting_update);
   }
   if (defs.useOledDisplay) {
     oledDisplay_initialize();
