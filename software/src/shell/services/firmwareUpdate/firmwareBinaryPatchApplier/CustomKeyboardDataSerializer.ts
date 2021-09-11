@@ -105,6 +105,9 @@ export function serializeCustomKeyboardSpec(
     numDirectWiredKeys = spec.directWiredPins.length;
     keyScannerPins.push(...spec.directWiredPins);
   }
+  if (spec.useEncoder && !!spec.encoderPins) {
+    keyScannerPins.push(...spec.encoderPins);
+  }
 
   const pinDefinitionsBytes = padByteArray(
     keyScannerPins.map(mapPinNameToPinNumber),
