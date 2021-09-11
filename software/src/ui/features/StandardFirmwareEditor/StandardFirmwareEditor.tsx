@@ -1,7 +1,11 @@
-import { css, FC, jsx, QxChildren, useEffect } from 'qx';
+import { css, FC, jsx, QxChildren } from 'qx';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
-import { standardFirmwareEditModel } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel';
-import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
+import {
+  standardFirmwareEditActions,
+  standardFirmwareEditStore,
+} from '~/ui/features/StandardFirmwareEditor/core';
+import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/helpers';
+import { useStandardFirmwareEditModel } from '~/ui/features/StandardFirmwareEditor/model';
 import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
 
 export type Props = {
@@ -15,10 +19,6 @@ function arrayToText(arr: string[] | undefined): string {
 
 function arrayFromText(text: string): string[] | undefined {
   return text.split(',').map((a) => a.trim()) || '';
-}
-
-function validationStatusToText(status: boolean): string {
-  return status ? 'ok' : 'ng';
 }
 
 function integerFromText(text: string): number | undefined {
@@ -36,16 +36,21 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     rawValue: Extract<IStandardFirmwareEditValues[K], string | boolean>,
   ) => {
     const value = converter ? converter(rawValue) : rawValue;
-    standardFirmwareEditModel.actions.commitValue(key, value);
+    standardFirmwareEditActions.commitValue(key, value);
   };
 }
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
   get canSave() {
-    return standardFirmwareEditModel.readers.canSave;
+    const { originalValues, editValues } = standardFirmwareEditStore;
+    const isModified = editValues !== originalValues;
+    const errors =
+      standardFirmwareEditModelHelpers.validateEditValues(editValues);
+    const hasError = Object.values(errors).some((a) => !!a);
+    return isModified && !hasError;
   },
   emitSavingEditValues() {
-    const { editValues } = standardFirmwareEditModel.readers;
+    const { editValues } = standardFirmwareEditStore;
     return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
       editValues,
     );
@@ -76,29 +81,16 @@ export const StandardFirmwareEditor: FC<Props> = ({
   saveHandler,
 }) => {
   const {
-    constants: { baseFirmwareTypeOptions },
-    readers: {
-      editValues,
-      isAvr,
-      isRp,
-      availablePinsText,
-      rowPinsValid,
-      columnPinsValid,
-      directWiredPinsValid,
-      encoderPinsValid,
-      lightingPinValid,
-      canSave,
-    },
-    actions: { loadFirmwareConfig },
-  } = standardFirmwareEditModel;
+    baseFirmwareTypeOptions,
+    editValues,
+    isAvr,
+    isRp,
+    availablePinsText,
+    errors,
+    canSave,
+    onSaveButton,
+  } = useStandardFirmwareEditModel(firmwareConfig, saveHandler);
 
-  const onSaveButton = () => {
-    saveHandler?.(
-      standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
-    );
-  };
-
-  useEffect(() => loadFirmwareConfig(firmwareConfig), []);
   return (
     <div css={style}>
       <div>standard firmware configuration</div>
@@ -142,7 +134,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
             />
-            <div>{validationStatusToText(rowPinsValid)}</div>
+            <div>{errors.matrixRowPins}</div>
           </FieldItem>
           <FieldItem title="column pins">
             <GeneralInput
@@ -151,7 +143,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
             />
-            <div>{validationStatusToText(columnPinsValid)}</div>
+            <div>{errors.matrixColumnPins}</div>
           </FieldItem>
 
           <FieldItem title="use direct wired key scanner">
@@ -167,7 +159,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               width={400}
               disabled={!editValues.useDirectWiredKeyScanner}
             />
-            <div>{validationStatusToText(directWiredPinsValid)}</div>
+            <div>{errors.directWiredPins}</div>
           </FieldItem>
 
           <FieldItem title="use encoder">
@@ -183,7 +175,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               width={100}
               disabled={!editValues.useEncoder}
             />
-            <div>{validationStatusToText(encoderPinsValid)}</div>
+            <div>{errors.encoderPins}</div>
           </FieldItem>
 
           <FieldItem title="use lighting">
@@ -199,7 +191,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               width={100}
               disabled={!editValues.useLighting}
             />
-            <div>{validationStatusToText(lightingPinValid)}</div>
+            <div>{errors.lightingPin}</div>
           </FieldItem>
 
           <FieldItem title="lighting num LEDs">
@@ -212,7 +204,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               width={100}
               disabled={!editValues.useLighting}
             />
-            <div>{validationStatusToText(rowPinsValid)}</div>
+            <div>{errors.lightingNumLeds}</div>
           </FieldItem>
 
           <FieldItem title="use LCD">
