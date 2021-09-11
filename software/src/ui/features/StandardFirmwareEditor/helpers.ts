@@ -18,7 +18,7 @@ const availablePinsAvr = flattenArray(
     [0, 1, 2, 3, 4, 5, 6, 7].map((idx) => port + idx),
   ),
 );
-const availablePinsRp = generateNumberSequence(29).map((i) => 'GP' + i);
+const availablePinsRp = generateNumberSequence(30).map((i) => 'GP' + i);
 
 const subHelpers = {
   validatePin(pin: string, mcuType: 'avr' | 'rp'): string | undefined {
