@@ -1,4 +1,5 @@
 import {
+  generateRandomDeviceInstanceCode,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IFirmwareTargetDevice,
   IProjectPackageInfo,
@@ -116,6 +117,7 @@ function makeInjectedMetaData(
   return {
     keyboardName: packageInfo.keyboardName,
     projectId: packageInfo.projectId,
+    deviceInstanceCode: generateRandomDeviceInstanceCode(),
     variationId: firmwareEntry.variationId,
   };
 }

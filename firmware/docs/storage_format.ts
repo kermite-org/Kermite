@@ -20,8 +20,8 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
     userData?: Chunk<0xaa10, "KM0_STORAGE__USER_STORAGE_SIZE">;
     systemData: Chunk<0xaa20, 18> & {
       projectId: Bytes<6>;
-      __reserved: Bytes<2>;
-      deviceInstanceCode: Bytes<8>;
+      __reserved1: Bytes<2>;
+      __reserved2: Bytes<8>;
       storageSystemParametersRevision: U8;
       softwareStorageFomartRevision: U8;
     };

@@ -18,6 +18,7 @@
 
 #ifdef KS_USE_BOARD_LEDS
 #include "km0/device/boardIo.h"
+#include "km0/device/boardIoImpl.h"
 #endif
 
 #ifdef KS_USE_DEBUG_UART
@@ -47,15 +48,15 @@ extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
 int main() {
 
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
-  boardIo_setupLeds_proMicroAvr();
+  boardIoImpl_setupLeds_proMicroAvr();
 #endif
 
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_RP
-  boardIo_setupLeds_proMicroRp();
+  boardIoImpl_setupLeds_proMicroRp();
 #endif
 
 #ifdef KS_USE_BOARD_LEDS_RPI_PICO
-  boardIo_setupLeds_rpiPico();
+  boardIoImpl_setupLeds_rpiPico();
 #endif
 
 #ifdef KS_USE_DEBUG_UART
@@ -70,8 +71,12 @@ int main() {
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
+#ifndef KS_NUM_RGBLEDS_RIGHT
+#define KS_NUM_RGBLEDS_RIGHT KS_NUM_RGBLEDS
+#endif
   rgbLighting_preConfigure();
-  rgbLighting_initialize();
+  rgbLighting_initialize(KS_RGBLED_PIN, KS_NUM_RGBLEDS, KS_NUM_RGBLEDS_RIGHT);
+  rgbLighting_setBoardSide(0);
   keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif
 

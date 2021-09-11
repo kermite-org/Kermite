@@ -42,11 +42,12 @@ endif
 
 #board leds
 ifneq ($(KL_USE_BOARD_LEDS_PROMICRO_AVR),)
-MODULE_SRCS += km0/device/atmega/boardIo.c
+MODULE_SRCS += km0/device/boardIo.c
+MODULE_SRCS += km0/device/atmega/boardIoImpl.c
 DEFINES += KS_USE_BOARD_LEDS
 DEFINES += KS_USE_BOARD_LEDS_PROMICRO_AVR
 else
-MODULE_SRCS += km0/device/boardIo_dummy.c
+MODULE_SRCS += km0/device/boardIo.c
 DEFINES += KS_USE_BOARD_LEDS
 endif
 

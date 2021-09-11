@@ -20,8 +20,8 @@ const uint16_t UserStorageDataSize = KM0_STORAGE__USER_STORAGE_SIZE;
 const uint16_t CustomParametersDataSize = KM0_KEYBOARD__NUM_CUSTOM_PARAMETERS;
 typedef struct {
   uint8_t projectId[6];
-  uint8_t __reserved[2];
-  uint8_t deviceInstanceCode[8];
+  uint8_t __reserved1[2];
+  uint8_t __reserved2[8];
   uint8_t parametersDataInitializationFlag;
   uint8_t softwareStorageFomartRevision;
 } T_SystemData;
@@ -196,11 +196,6 @@ void dataStorage_initialize() {
 
 uint16_t dataStorage_getKeyMappingDataCapacity() {
   return getKeyMappingDataBodyLengthMax();
-}
-
-uint16_t dataStorage_getDataAddress_deviceInstanceCode() {
-  uint16_t base = getChunkBodyAddress(ChunkSig_SystemData);
-  return base + 8;
 }
 
 uint16_t dataStorage_getDataAddress_storageSystemParametersRevision() {

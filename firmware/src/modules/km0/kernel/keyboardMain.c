@@ -133,8 +133,7 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, firmwareConfigurationData.variationId, 2);
   buf = writeTextBytes(buf, ":", 1);
-  configuratorServant_readDeviceInstanceCode((uint8_t *)buf);
-  buf += 8;
+  buf = writeTextBytes(buf, firmwareConfigurationData.deviceInstanceCode, 8);
   buf = writeTextBytes(buf, "\0", 1);
 
   usbIoCore_setProductName(firmwareConfigurationData.keyboardName);
