@@ -17,8 +17,6 @@ export interface IStandardFirmwareEditModel {
   isAvr: boolean;
   isRp: boolean;
   errors: IStandardFirmwareEditErrors;
-  canSave: boolean;
-  onSaveButton(): void;
 }
 
 const constants = {
@@ -31,14 +29,13 @@ const constants = {
 
 export function useStandardFirmwareEditModel(
   firmwareConfig: IStandardFirmwareEditValues,
-  saveHandler?: (firmwareConfig: IStandardFirmwareEditValues) => void,
 ): IStandardFirmwareEditModel {
   useEffect(
     () => standardFirmwareEditActions.loadFirmwareConfig(firmwareConfig),
     [],
   );
 
-  const { originalValues, editValues } = standardFirmwareEditStore;
+  const { editValues } = standardFirmwareEditStore;
   const { availablePinsTextAvr, availablePinsTextRp, baseFirmwareTypeOptions } =
     constants;
   const mcuType = standardFirmwareEditModelHelpers.getMcuType(
@@ -48,17 +45,8 @@ export function useStandardFirmwareEditModel(
     mcuType === 'avr' ? availablePinsTextAvr : availablePinsTextRp;
   const isAvr = mcuType === 'avr';
   const isRp = mcuType === 'rp';
-  const isModified = editValues !== originalValues;
   const errors =
     standardFirmwareEditModelHelpers.validateEditValues(editValues);
-  const hasError = Object.values(errors).some((a) => !!a);
-  const canSave = isModified && !hasError;
-
-  const onSaveButton = () => {
-    saveHandler?.(
-      standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
-    );
-  };
 
   return {
     editValues,
@@ -67,7 +55,5 @@ export function useStandardFirmwareEditModel(
     isAvr,
     isRp,
     errors,
-    canSave,
-    onSaveButton,
   };
 }

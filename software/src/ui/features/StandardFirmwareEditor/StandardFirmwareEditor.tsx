@@ -10,7 +10,6 @@ import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEdito
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
-  saveHandler?(firmwareConfig: IStandardFirmwareEditValues): void;
 };
 
 function arrayToText(arr: string[] | undefined): string {
@@ -18,7 +17,10 @@ function arrayToText(arr: string[] | undefined): string {
 }
 
 function arrayFromText(text: string): string[] | undefined {
-  return text.split(',').map((a) => a.trim()) || '';
+  if (text === '') {
+    return undefined;
+  }
+  return text.split(',').map((a) => a.trim());
 }
 
 function integerFromText(text: string): number | undefined {
@@ -47,7 +49,9 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
     const errors =
       standardFirmwareEditModelHelpers.validateEditValues(editValues);
     const hasError = Object.values(errors).some((a) => !!a);
-    return isModified && !hasError;
+    const validForSaving =
+      standardFirmwareEditModelHelpers.validateForSave(editValues);
+    return isModified && !hasError && validForSaving;
   },
   emitSavingEditValues() {
     const { editValues } = standardFirmwareEditStore;
@@ -76,10 +80,7 @@ const FieldItem: FC<{ title: string; children: QxChildren }> = ({
   );
 };
 
-export const StandardFirmwareEditor: FC<Props> = ({
-  firmwareConfig,
-  saveHandler,
-}) => {
+export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
   const {
     baseFirmwareTypeOptions,
     editValues,
@@ -87,9 +88,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
     isRp,
     availablePinsText,
     errors,
-    canSave,
-    onSaveButton,
-  } = useStandardFirmwareEditModel(firmwareConfig, saveHandler);
+  } = useStandardFirmwareEditModel(firmwareConfig);
 
   return (
     <div css={style}>
@@ -133,6 +132,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
+              invalid={!!errors.matrixRowPins}
             />
             <div>{errors.matrixRowPins}</div>
           </FieldItem>
@@ -142,6 +142,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
+              invalid={!!errors.matrixColumnPins}
             />
             <div>{errors.matrixColumnPins}</div>
           </FieldItem>
@@ -158,6 +159,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('directWiredPins', arrayFromText)}
               width={400}
               disabled={!editValues.useDirectWiredKeyScanner}
+              invalid={!!errors.directWiredPins}
             />
             <div>{errors.directWiredPins}</div>
           </FieldItem>
@@ -174,6 +176,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('encoderPins', arrayFromText)}
               width={100}
               disabled={!editValues.useEncoder}
+              invalid={!!errors.encoderPins}
             />
             <div>{errors.encoderPins}</div>
           </FieldItem>
@@ -190,19 +193,22 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('lightingPin')}
               width={100}
               disabled={!editValues.useLighting}
+              invalid={!!errors.lightingPin}
             />
             <div>{errors.lightingPin}</div>
           </FieldItem>
 
           <FieldItem title="lighting num LEDs">
             <GeneralInput
+              type="number"
               value={editValues.lightingNumLeds?.toString() || ''}
               setValue={valueChangeHandler(
-                'lightingPin',
+                'lightingNumLeds',
                 integerFromText as any,
               )}
               width={100}
               disabled={!editValues.useLighting}
+              invalid={!!errors.lightingNumLeds}
             />
             <div>{errors.lightingNumLeds}</div>
           </FieldItem>
@@ -217,11 +223,6 @@ export const StandardFirmwareEditor: FC<Props> = ({
         </tbody>
       </table>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
-      <div>
-        <button disabled={!canSave} onClick={onSaveButton} qxIf={!!saveHandler}>
-          save
-        </button>
-      </div>
     </div>
   );
 };

@@ -173,4 +173,31 @@ export const standardFirmwareEditModelHelpers = {
         undefined,
     };
   },
+  validateForSave(editValues: IStandardFirmwareEditValues): boolean {
+    const {
+      useMatrixKeyScanner,
+      matrixRowPins,
+      matrixColumnPins,
+      useDirectWiredKeyScanner,
+      directWiredPins,
+      useEncoder,
+      encoderPins,
+      useLighting,
+      lightingPin,
+      lightingNumLeds,
+    } = editValues;
+    if (useMatrixKeyScanner && !(matrixRowPins && matrixColumnPins)) {
+      return false;
+    }
+    if (useDirectWiredKeyScanner && !directWiredPins) {
+      return false;
+    }
+    if (useEncoder && !encoderPins) {
+      return false;
+    }
+    if (useLighting && !(lightingPin && lightingNumLeds !== undefined)) {
+      return false;
+    }
+    return true;
+  },
 };
