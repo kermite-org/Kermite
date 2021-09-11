@@ -109,6 +109,10 @@ export function serializeCustomKeyboardSpec(
     keyScannerPins.push(...spec.encoderPins);
   }
 
+  if (keyScannerPins.length > 32) {
+    throw new Error(`maximum number of key scanner pins (32) exceeded`);
+  }
+
   const pinDefinitionsBytes = padByteArray(
     keyScannerPins.map(mapPinNameToPinNumber),
     32,
