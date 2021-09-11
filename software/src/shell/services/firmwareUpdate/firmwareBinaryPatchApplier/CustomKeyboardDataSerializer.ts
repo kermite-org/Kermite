@@ -17,16 +17,20 @@ export function serializeCustomKeyboardSpec(
   spec: IKermiteStandardKeyboardSpec,
   meta: IStandardKeyboardInjectedMetaData,
 ): number[] {
-  let numMatrixColumns = 0;
   let numMatrixRows = 0;
+  let numMatrixColumns = 0;
   let numDirectWiredKeys = 0;
   const keyScannerPins: string[] = [];
-  if (spec.useMatrixKeyScanner) {
-    numMatrixColumns = spec.matrixColumnPins?.length || 0;
-    numMatrixRows = spec.matrixRowPins?.length || 0;
+  if (
+    spec.useMatrixKeyScanner &&
+    !!spec.matrixRowPins &&
+    !!spec.matrixColumnPins
+  ) {
+    numMatrixRows = spec.matrixRowPins.length;
+    numMatrixColumns = spec.matrixColumnPins.length;
     keyScannerPins.push(
-      ...(spec.matrixColumnPins || []),
       ...(spec.matrixRowPins || []),
+      ...(spec.matrixColumnPins || []),
     );
   }
   if (spec.useDirectWiredKeyScanner) {
@@ -64,8 +68,8 @@ export function serializeCustomKeyboardSpec(
     spec.useEncoder,
     spec.useLighting,
     spec.useLcd,
-    numMatrixColumns,
     numMatrixRows,
+    numMatrixColumns,
     numDirectWiredKeys,
     mapPinNameToPinNumber(spec.lightingPin),
     spec.lightingNumLeds,

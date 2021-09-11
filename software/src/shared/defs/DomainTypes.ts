@@ -38,8 +38,8 @@ export type IKermiteStandardKeyboardSpec = {
   useBoardLedsRpiPico?: boolean;
   useDebugUart?: boolean;
   useMatrixKeyScanner?: boolean;
-  matrixColumnPins?: string[];
   matrixRowPins?: string[];
+  matrixColumnPins?: string[];
   useDirectWiredKeyScanner?: boolean;
   directWiredPins?: string[];
   useEncoder?: boolean;

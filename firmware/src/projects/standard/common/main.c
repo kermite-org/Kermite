@@ -26,8 +26,8 @@ typedef struct {
   bool useEncoder;
   bool useRgbLighting;
   bool useOledDisplay;
-  uint8_t numMatrixColumns;
   uint8_t numMatrixRows;
+  uint8_t numMatrixColumns;
   uint8_t numDirectWiredKeys;
   uint8_t keyScannerPins[32];
   uint8_t rgbLightingPin;
@@ -48,8 +48,8 @@ KermiteKeyboardDefinitionData defs = {
   .useDirectWiredKeyScanner = false,
   .useRgbLighting = false,
   .useOledDisplay = false,
-  .numMatrixColumns = 0,
   .numMatrixRows = 0,
+  .numMatrixColumns = 0,
   .numDirectWiredKeys = 0,
   .keyScannerPins = { 0 },
   .rgbLightingPin = 0,
@@ -88,14 +88,14 @@ int main() {
   uint pinsOffset = 0;
   uint8_t scanIndexBase = 0;
   if (defs.useMatrixKeyScanner) {
-    uint8_t numColumns = defs.numMatrixColumns;
     uint8_t numRows = defs.numMatrixRows;
-    uint8_t *columnPins = defs.keyScannerPins;
-    uint8_t *rowPins = defs.keyScannerPins + defs.numMatrixColumns;
+    uint8_t numColumns = defs.numMatrixColumns;
+    uint8_t *rowPins = defs.keyScannerPins;
+    uint8_t *columnPins = defs.keyScannerPins + defs.numMatrixRows;
     keyScanner_basicMatrix_initialize(numRows, numColumns, rowPins, columnPins, scanIndexBase);
     keyboardMain_useKeyScanner(keyScanner_basicMatrix_update);
-    pinsOffset += numColumns + numRows;
-    scanIndexBase += numColumns * numRows;
+    pinsOffset += numRows + numColumns;
+    scanIndexBase += numRows * numColumns;
   }
   if (defs.useDirectWiredKeyScanner) {
     uint8_t numKeys = defs.numDirectWiredKeys;
