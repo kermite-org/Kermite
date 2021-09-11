@@ -4,7 +4,9 @@ import {
   generateNumberSequence,
   getObjectKeys,
   IKermiteStandardKeyboardSpec,
+  IStandardBaseFirmwareType,
 } from '~/shared';
+import { IStandardFirmwareMcuType } from '~/ui/features/StandardFirmwareEditor/types';
 
 const availablePinsAvr = flattenArray(
   ['B', 'C', 'D', 'E', 'F', 'PB', 'PC', 'PD', 'PE', 'PF'].map((port) =>
@@ -14,6 +16,19 @@ const availablePinsAvr = flattenArray(
 const availablePinsRp = generateNumberSequence(29).map((i) => 'GP' + i);
 
 export const standardFirmwareEditModelHelpers = {
+  getMcuType(
+    baseFirmwareType: IStandardBaseFirmwareType,
+  ): IStandardFirmwareMcuType {
+    if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+      return 'avr';
+    } else if (
+      baseFirmwareType === 'RpUnified' ||
+      baseFirmwareType === 'RpSplit'
+    ) {
+      return 'rp';
+    }
+    throw new Error(`invalid baseFirmwareType ${baseFirmwareType}`);
+  },
   validatePins(pins: string[] | undefined, mcuType: 'avr' | 'rp'): boolean {
     const availablePins =
       mcuType === 'avr' ? availablePinsAvr : availablePinsRp;

@@ -2,7 +2,10 @@ import produce from 'immer';
 import { fallbackStandardKeyboardSpec } from '~/shared';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
 import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
-import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
+import {
+  IStandardFirmwareEditValues,
+  IStandardFirmwareMcuType,
+} from '~/ui/features/StandardFirmwareEditor/types';
 
 const baseFirmwareTypeOptions: ISelectorOption[] = [
   'AvrUnified',
@@ -28,19 +31,21 @@ const readers = {
   get editValues(): IStandardFirmwareEditValues {
     return store.editValues;
   },
-  get isAvr(): boolean {
-    const { baseFirmwareType } = store.editValues;
-    return baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit';
-  },
-  get isRp(): boolean {
-    const { baseFirmwareType } = store.editValues;
-    return baseFirmwareType === 'RpUnified' || baseFirmwareType === 'RpSplit';
+  get mcuType(): IStandardFirmwareMcuType {
+    return standardFirmwareEditModelHelpers.getMcuType(
+      readers.editValues.baseFirmwareType,
+    );
   },
   get availablePinsText(): string {
-    return readers.isAvr ? availablePinsTextAvr : availablePinsTextRp;
+    return readers.mcuType === 'avr'
+      ? availablePinsTextAvr
+      : availablePinsTextRp;
   },
-  get mcuType() {
-    return readers.isAvr ? 'avr' : 'rp';
+  get isAvr(): boolean {
+    return readers.mcuType === 'avr';
+  },
+  get isRp(): boolean {
+    return readers.mcuType === 'rp';
   },
   get rowPinsValid(): boolean {
     const { editValues, mcuType } = readers;
