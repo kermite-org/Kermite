@@ -18,6 +18,7 @@
 
 #ifdef KS_USE_BOARD_LEDS
 #include "km0/device/boardIo.h"
+#include "km0/device/boardIoImpl.h"
 #endif
 
 #ifdef KS_USE_DEBUG_UART
@@ -160,15 +161,15 @@ static void setupBoard(int8_t side) {
 int main() {
 
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
-  boardIo_setupLeds_proMicroAvr();
+  boardIoImpl_setupLeds_proMicroAvr();
 #endif
 
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_RP
-  boardIo_setupLeds_proMicroRp();
+  boardIoImpl_setupLeds_proMicroRp();
 #endif
 
 #ifdef KS_USE_BOARD_LEDS_RPI_PICO
-  boardIo_setupLeds_rpiPico();
+  boardIoImpl_setupLeds_rpiPico();
 #endif
 
 #ifdef KS_USE_DEBUG_UART
