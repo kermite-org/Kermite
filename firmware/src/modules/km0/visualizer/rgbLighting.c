@@ -7,20 +7,12 @@
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
 
-#ifndef KM0_RGB_LIGHTING__NUM_LEDS
-#error KM0_RGB_LIGHTING__NUM_LEDS is not defined
-#endif
-
-#ifndef KM0_RGB_LIGHTING__NUM_LEDS_RIGHT
-#define KM0_RGB_LIGHTING__NUM_LEDS_RIGHT KM0_RGB_LIGHTING__NUM_LEDS
-#endif
-
-static const int NumLedsDefault = KM0_RGB_LIGHTING__NUM_LEDS;
-static const int NumLedsRight = KM0_RGB_LIGHTING__NUM_LEDS_RIGHT;
+static int numLedsLeftDefault = 0;
+static int numLedsRight = 0;
 
 //----------------------------------------------------------------------
 
-static int numLeds = NumLedsDefault;
+static int numLeds = 0;
 
 static bool glowEnabled = false;
 static uint8_t glowColor = 0;
@@ -232,7 +224,7 @@ static void updateFrame() {
   if (!glowEnabled) {
     scene_fallbackBlank_updateFrame();
   } else {
-    if (glowPattern < NumSceneFuncs) {
+    if (glowPattern < NumSceneFuncs && numLeds > 0) {
       sceneFuncs[glowPattern]();
     }
   }
@@ -247,16 +239,18 @@ void rgbLighting_preConfigure() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
 }
 
-void rgbLighting_initialize() {
+void rgbLighting_initialize(int8_t pin, uint8_t _numLeds, uint8_t _numLedsRight) {
+  numLedsLeftDefault = _numLeds;
+  numLedsRight = _numLedsRight;
   configManager_addParameterChangeListener(parameterChangeHandler);
-  serialLed_initialize();
+  serialLed_initialize(pin);
 }
 
 void rgbLighting_setBoardSide(int8_t side) {
   if (side == 0) {
-    numLeds = NumLedsDefault;
+    numLeds = numLedsLeftDefault;
   } else {
-    numLeds = NumLedsRight;
+    numLeds = numLedsRight;
   }
 }
 

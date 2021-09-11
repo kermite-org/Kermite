@@ -71,8 +71,12 @@ int main() {
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
+#ifndef KS_NUM_RGBLEDS_RIGHT
+#define KS_NUM_RGBLEDS_RIGHT KS_NUM_RGBLEDS
+#endif
   rgbLighting_preConfigure();
-  rgbLighting_initialize();
+  rgbLighting_initialize(KS_RGBLED_PIN, KS_NUM_RGBLEDS, KS_NUM_RGBLEDS_RIGHT);
+  rgbLighting_setBoardSide(0);
   keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif
 

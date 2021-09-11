@@ -7,8 +7,8 @@
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_directWired.h"
+#include "km0/visualizer/rgbLighting.h"
 #include "km0/wrapper/generalKeyboard.h"
-
 typedef struct {
   uint8_t dataHeader[4];
   char projectId[7];
@@ -21,10 +21,13 @@ typedef struct {
   bool useDebugUart;
   bool useMatrixKeyScanner;
   bool useDirectWiredKeyScanner;
+  bool useRgbLighting;
   uint8_t numMatrixColumns;
   uint8_t numMatrixRows;
   uint8_t numDirectWiredKeys;
   uint8_t keyScannerPins[32];
+  int8_t rgbLightingPin;
+  uint8_t rgbLightingNumLeds;
 } KermiteKeyboardDefinitionData;
 
 KermiteKeyboardDefinitionData defs = {
@@ -39,10 +42,13 @@ KermiteKeyboardDefinitionData defs = {
   .useDebugUart = false,
   .useMatrixKeyScanner = false,
   .useDirectWiredKeyScanner = false,
+  .useRgbLighting = false,
   .numMatrixColumns = 0,
   .numMatrixRows = 0,
   .numDirectWiredKeys = 0,
   .keyScannerPins = { 0 },
+  .rgbLightingPin = -1,
+  .rgbLightingNumLeds = 0,
 };
 
 int main() {
@@ -64,6 +70,9 @@ int main() {
     debugUart_initialize(38400);
   } else {
     system_setupFallbackStdout();
+  }
+  if (defs.useRgbLighting) {
+    rgbLighting_initialize(defs.rgbLightingPin, defs.rgbLightingNumLeds, defs.rgbLightingNumLeds);
   }
   if (defs.useMatrixKeyScanner) {
     uint8_t numColumns = defs.numMatrixColumns;
