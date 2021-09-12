@@ -34,6 +34,13 @@ function getCustomDataLocation(binaryBytes: number[]): number {
   return markerPosition + 4;
 }
 
+function checkCustomDataBytes(bytes: number[]) {
+  const valid = bytes.every((it) => isFinite(it) && 0 <= it && it <= 0xff);
+  if (!valid) {
+    throw new Error('invalid custom data bytes');
+  }
+}
+
 export function applyStandardFirmwareBinaryPatch(
   buffer: Uint8Array,
   firmwareBinaryFormat: 'hex' | 'uf2',
@@ -41,6 +48,7 @@ export function applyStandardFirmwareBinaryPatch(
   meta: IStandardKeyboardInjectedMetaData,
 ): Uint8Array {
   const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec, meta);
+  checkCustomDataBytes(customDataBytes);
 
   if (firmwareBinaryFormat === 'hex') {
     const hexFileContentText = new TextDecoder().decode(buffer);

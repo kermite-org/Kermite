@@ -192,7 +192,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               value={editValues.lightingPin || ''}
               setValue={valueChangeHandler('lightingPin')}
               width={100}
-              disabled={!editValues.useLighting}
+              disabled={!(editValues.useLighting && isRp)}
               invalid={!!errors.lightingPin}
             />
             <div>{errors.lightingPin}</div>

@@ -140,6 +140,9 @@ export const standardFirmwareEditModelHelpers = {
     if (diff.useBoardLedsRpiPico) {
       editValues.useBoardLedsProMicroRp = false;
     }
+    if (isAvr && editValues.useLighting) {
+      editValues.lightingPin = 'PD3';
+    }
   },
   validateEditValues(
     editValues: IStandardFirmwareEditValues,
