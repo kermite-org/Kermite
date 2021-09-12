@@ -1,6 +1,10 @@
 import { IGlobalProjectSpec } from '~/shared';
 import { router } from '~/ui/base';
-import { IPageSpec, PagePaths } from '~/ui/commonModels/PageTypes';
+import {
+  IPageModelSpec,
+  IPageSpec,
+  PagePaths,
+} from '~/ui/commonModels/PageTypes';
 import { globalSettingsWriter } from '~/ui/commonStore/GlobalSettings';
 import { commitUiSettings, commitUiState } from '~/ui/commonStore/base';
 
@@ -14,6 +18,15 @@ export const uiActions = {
       const pageSpec = pageSpecOrPagePath;
       commitUiState({ pageSpec });
     }
+  },
+  closeSubPage() {
+    commitUiState({ pageSpec: undefined });
+  },
+  openPageModal(pageModalSpec: IPageModelSpec) {
+    commitUiState({ pageModalSpec });
+  },
+  closePageModal() {
+    commitUiState({ pageModalSpec: undefined });
   },
   openOnboardingPanel() {
     commitUiSettings({ showOnboardingPanel: true });

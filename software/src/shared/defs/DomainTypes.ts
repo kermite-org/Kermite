@@ -38,10 +38,16 @@ export type IKermiteStandardKeyboardSpec = {
   useBoardLedsRpiPico?: boolean;
   useDebugUart?: boolean;
   useMatrixKeyScanner?: boolean;
-  matrixColumnPins?: string[];
   matrixRowPins?: string[];
+  matrixColumnPins?: string[];
   useDirectWiredKeyScanner?: boolean;
   directWiredPins?: string[];
+  useEncoder?: boolean;
+  encoderPins?: string[];
+  useLighting?: boolean;
+  lightingPin?: string;
+  lightingNumLeds?: number;
+  useLcd?: boolean;
 };
 
 export interface IProjectResourceInfo {
@@ -58,14 +64,14 @@ export interface IProjectResourceInfo {
 export interface IStandardFirmwareEntry {
   type: 'standard';
   variationId: string;
-  variationName: string;
+  firmwareName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
 }
 
 export interface ICustomFirmwareEntry {
   type: 'custom';
   variationId: string;
-  variationName: string;
+  firmwareName: string;
   customFirmwareId: string;
 }
 
@@ -97,18 +103,6 @@ export type IProjectPackageInfo = {
   packageName: string;
 } & IProjectPackageFileContent;
 
-export const fallbackProjectPackageInfo: IProjectPackageInfo = {
-  projectKey: '',
-  origin: 'online',
-  formatRevision: 'PKG0',
-  projectId: '',
-  packageName: '',
-  keyboardName: '',
-  firmwares: [],
-  layouts: [],
-  presets: [],
-};
-
 export type ICustomFirmwareInfo = {
   firmwareId: string;
   firmwareProjectPath: string;
@@ -133,27 +127,10 @@ export interface IKeyboardDeviceInfo {
   manufacturerName: string;
 }
 
-export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {
-  path: '',
-  portName: '',
-  mcuCode: '',
-  firmwareId: '',
-  projectId: '',
-  variationId: '',
-  deviceInstanceCode: '',
-  productName: '',
-  manufacturerName: '',
-};
-
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';
 }
-
-export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
-  allDeviceInfos: [],
-  currentDevicePath: 'none',
-};
 
 export interface IKeyboardDeviceAttributes {
   origin: IResourceOrigin;
@@ -307,3 +284,5 @@ export type IBootloaderDeviceDetectionStatus =
       bootloaderType: IBootloaderType;
       targetDeviceSig: string;
     };
+
+export type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';

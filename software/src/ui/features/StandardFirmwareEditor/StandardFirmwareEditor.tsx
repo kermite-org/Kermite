@@ -1,14 +1,15 @@
-import { css, FC, jsx, useEffect } from 'qx';
+import { css, FC, jsx, QxChildren } from 'qx';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
 import {
-  IStandardFirmwareEditValues,
-  standardFirmwareEditModel,
-} from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel';
-import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditModel.helpers';
+  standardFirmwareEditActions,
+  standardFirmwareEditStore,
+} from '~/ui/features/StandardFirmwareEditor/core';
+import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/helpers';
+import { useStandardFirmwareEditModel } from '~/ui/features/StandardFirmwareEditor/model';
+import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
-  saveHandler?(firmwareConfig: IStandardFirmwareEditValues): void;
 };
 
 function arrayToText(arr: string[] | undefined): string {
@@ -16,11 +17,15 @@ function arrayToText(arr: string[] | undefined): string {
 }
 
 function arrayFromText(text: string): string[] | undefined {
-  return text.split(',').map((a) => a.trim()) || '';
+  if (text === '') {
+    return undefined;
+  }
+  return text.split(',').map((a) => a.trim());
 }
 
-function validationStatusToText(status: boolean): string {
-  return status ? 'ok' : 'ng';
+function integerFromText(text: string): number | undefined {
+  const value = parseInt(text);
+  return isFinite(value) ? value : undefined;
 }
 
 function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
@@ -33,123 +38,191 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     rawValue: Extract<IStandardFirmwareEditValues[K], string | boolean>,
   ) => {
     const value = converter ? converter(rawValue) : rawValue;
-    standardFirmwareEditModel.actions.commitValue(key, value);
+    standardFirmwareEditActions.commitValue(key, value);
   };
 }
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
   get canSave() {
-    return standardFirmwareEditModel.readers.canSave;
+    const { originalValues, editValues } = standardFirmwareEditStore;
+    const isModified = editValues !== originalValues;
+    const errors =
+      standardFirmwareEditModelHelpers.validateEditValues(editValues);
+    const hasError = Object.values(errors).some((a) => !!a);
+    const validForSaving =
+      standardFirmwareEditModelHelpers.validateForSave(editValues);
+    return isModified && !hasError && validForSaving;
   },
   emitSavingEditValues() {
-    const { editValues } = standardFirmwareEditModel.readers;
+    const { editValues } = standardFirmwareEditStore;
     return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
       editValues,
     );
   },
 };
 
-export const StandardFirmwareEditor: FC<Props> = ({
-  firmwareConfig,
-  saveHandler,
+const FieldItem: FC<{ title: string; children: QxChildren }> = ({
+  title,
+  children,
 }) => {
+  const styleChildren = css`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  `;
+  return (
+    <tr>
+      <td>{title}</td>
+      <td>
+        <div css={styleChildren}>{children}</div>
+      </td>
+    </tr>
+  );
+};
+
+export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
   const {
-    constants: { baseFirmwareTypeOptions },
-    readers: {
-      editValues,
-      isAvr,
-      isRp,
-      availablePinsText,
-      rowPinsValid,
-      columnPinsValid,
-      canSave,
-    },
-    actions: { loadFirmwareConfig },
-  } = standardFirmwareEditModel;
+    baseFirmwareTypeOptions,
+    editValues,
+    isAvr,
+    isRp,
+    availablePinsText,
+    errors,
+  } = useStandardFirmwareEditModel(firmwareConfig);
 
-  const onSaveButton = () => {
-    saveHandler?.(
-      standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(editValues),
-    );
-  };
-
-  useEffect(() => loadFirmwareConfig(firmwareConfig), []);
   return (
     <div css={style}>
       <div>standard firmware configuration</div>
       <table>
         <tbody>
-          <tr>
-            <td> base firmware type</td>
-            <td>
-              <GeneralSelector
-                options={baseFirmwareTypeOptions}
-                value={editValues.baseFirmwareType}
-                setValue={valueChangeHandler('baseFirmwareType')}
-              />
-            </td>
-          </tr>
-          <tr qxIf={isAvr}>
-            <td>use board leds ProMicro</td>
-            <td>
-              <ToggleSwitch
-                checked={editValues.useBoardLedsProMicroAvr}
-                onChange={valueChangeHandler('useBoardLedsProMicroAvr')}
-              />
-            </td>
-          </tr>
-          <tr qxIf={isRp}>
-            <td>use board leds ProMicro RP2040</td>
-            <td>
-              <ToggleSwitch
-                checked={editValues.useBoardLedsProMicroRp}
-                onChange={valueChangeHandler('useBoardLedsProMicroRp')}
-              />
-            </td>
-          </tr>
-          <tr qxIf={isRp}>
-            <td>use board leds RPi Pico</td>
-            <td>
-              <ToggleSwitch
-                checked={editValues.useBoardLedsRpiPico}
-                onChange={valueChangeHandler('useBoardLedsRpiPico')}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>row pins</td>
-            <td>
-              <GeneralInput
-                value={arrayToText(editValues.matrixRowPins)}
-                setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
-                width={400}
-              />
-            </td>
-            <td>{validationStatusToText(rowPinsValid)}</td>
-          </tr>
-          <tr>
-            <td>column pins</td>
-            <td>
-              <GeneralInput
-                value={arrayToText(editValues.matrixColumnPins)}
-                setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
-                width={400}
-              />
-            </td>
-            <td>{validationStatusToText(columnPinsValid)}</td>
-          </tr>
-          <tr>
-            <td>available pins</td>
-            <td>{availablePinsText}</td>
-          </tr>
+          <FieldItem title="base firmware type">
+            <GeneralSelector
+              options={baseFirmwareTypeOptions}
+              value={editValues.baseFirmwareType}
+              setValue={valueChangeHandler('baseFirmwareType')}
+            />
+          </FieldItem>
+          <FieldItem title="use board LEDs ProMicro" qxIf={isAvr}>
+            <ToggleSwitch
+              checked={editValues.useBoardLedsProMicroAvr}
+              onChange={valueChangeHandler('useBoardLedsProMicroAvr')}
+            />
+          </FieldItem>
+          <FieldItem title="use board LEDs ProMicro RP2040" qxIf={isRp}>
+            <ToggleSwitch
+              checked={editValues.useBoardLedsProMicroRp}
+              onChange={valueChangeHandler('useBoardLedsProMicroRp')}
+            />
+          </FieldItem>
+          <FieldItem title="use board LEDs RPi Pico" qxIf={isRp}>
+            <ToggleSwitch
+              checked={editValues.useBoardLedsRpiPico}
+              onChange={valueChangeHandler('useBoardLedsRpiPico')}
+            />
+          </FieldItem>
+          <FieldItem title="use matrix key scanner">
+            <ToggleSwitch
+              checked={editValues.useMatrixKeyScanner}
+              onChange={valueChangeHandler('useMatrixKeyScanner')}
+            />
+          </FieldItem>
+          <FieldItem title="row pins">
+            <GeneralInput
+              value={arrayToText(editValues.matrixRowPins)}
+              setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
+              width={400}
+              disabled={!editValues.useMatrixKeyScanner}
+              invalid={!!errors.matrixRowPins}
+            />
+            <div>{errors.matrixRowPins}</div>
+          </FieldItem>
+          <FieldItem title="column pins">
+            <GeneralInput
+              value={arrayToText(editValues.matrixColumnPins)}
+              setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
+              width={400}
+              disabled={!editValues.useMatrixKeyScanner}
+              invalid={!!errors.matrixColumnPins}
+            />
+            <div>{errors.matrixColumnPins}</div>
+          </FieldItem>
+
+          <FieldItem title="use direct wired key scanner">
+            <ToggleSwitch
+              checked={editValues.useDirectWiredKeyScanner}
+              onChange={valueChangeHandler('useDirectWiredKeyScanner')}
+            />
+          </FieldItem>
+          <FieldItem title="direct wired pins">
+            <GeneralInput
+              value={arrayToText(editValues.directWiredPins)}
+              setValue={valueChangeHandler('directWiredPins', arrayFromText)}
+              width={400}
+              disabled={!editValues.useDirectWiredKeyScanner}
+              invalid={!!errors.directWiredPins}
+            />
+            <div>{errors.directWiredPins}</div>
+          </FieldItem>
+
+          <FieldItem title="use encoder">
+            <ToggleSwitch
+              checked={editValues.useEncoder}
+              onChange={valueChangeHandler('useEncoder')}
+            />
+          </FieldItem>
+          <FieldItem title="encoder pins">
+            <GeneralInput
+              value={arrayToText(editValues.encoderPins)}
+              setValue={valueChangeHandler('encoderPins', arrayFromText)}
+              width={100}
+              disabled={!editValues.useEncoder}
+              invalid={!!errors.encoderPins}
+            />
+            <div>{errors.encoderPins}</div>
+          </FieldItem>
+
+          <FieldItem title="use lighting">
+            <ToggleSwitch
+              checked={editValues.useLighting}
+              onChange={valueChangeHandler('useLighting')}
+            />
+          </FieldItem>
+          <FieldItem title="lighting pin">
+            <GeneralInput
+              value={editValues.lightingPin || ''}
+              setValue={valueChangeHandler('lightingPin')}
+              width={100}
+              disabled={!(editValues.useLighting && isRp)}
+              invalid={!!errors.lightingPin}
+            />
+            <div>{errors.lightingPin}</div>
+          </FieldItem>
+
+          <FieldItem title="lighting num LEDs">
+            <GeneralInput
+              type="number"
+              value={editValues.lightingNumLeds?.toString() || ''}
+              setValue={valueChangeHandler(
+                'lightingNumLeds',
+                integerFromText as any,
+              )}
+              width={100}
+              disabled={!editValues.useLighting}
+              invalid={!!errors.lightingNumLeds}
+            />
+            <div>{errors.lightingNumLeds}</div>
+          </FieldItem>
+
+          <FieldItem title="use LCD">
+            <ToggleSwitch
+              checked={editValues.useLcd}
+              onChange={valueChangeHandler('useLcd')}
+            />
+          </FieldItem>
+          <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
-      <div>
-        <button disabled={!canSave} onClick={onSaveButton} qxIf={!!saveHandler}>
-          save
-        </button>
-      </div>
     </div>
   );
 };
@@ -159,7 +232,7 @@ const style = css`
     margin-top: 10px;
 
     td {
-      padding: 2px 5px;
+      padding: 4px 5px;
     }
   }
 

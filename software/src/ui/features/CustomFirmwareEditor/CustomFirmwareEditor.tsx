@@ -11,9 +11,7 @@ type Props = {
 
 export const CustomFirmwareEditor_OutputPropsSupplier = {
   get canSave(): boolean {
-    const { variationName, customFirmwareId } =
-      customFirmwareEditorModel.readers.editValues;
-    return !!variationName && !!customFirmwareId;
+    return customFirmwareEditorModel.readers.canSave;
   },
   emitSavingEditValues(): ICustomFirmwareEditValues {
     return customFirmwareEditorModel.readers.editValues;
@@ -22,7 +20,11 @@ export const CustomFirmwareEditor_OutputPropsSupplier = {
 
 export const CustomFirmwareEditor: FC<Props> = ({ sourceEditValues }) => {
   const {
-    actions: { setVariationName, setCustomFirmwareId, loadEditValues },
+    actions: {
+      setFirmwareName: setVariationName,
+      setCustomFirmwareId,
+      loadEditValues,
+    },
   } = customFirmwareEditorModel;
   useInlineEffect(() => loadEditValues(sourceEditValues), [sourceEditValues]);
   const {
@@ -33,7 +35,7 @@ export const CustomFirmwareEditor: FC<Props> = ({ sourceEditValues }) => {
       <div className="row">
         <div>variation name</div>
         <GeneralInput
-          value={editValues.variationName}
+          value={editValues.firmwareName}
           setValue={setVariationName}
         />
       </div>

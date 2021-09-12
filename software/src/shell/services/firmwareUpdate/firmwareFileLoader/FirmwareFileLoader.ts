@@ -1,4 +1,5 @@
 import {
+  generateRandomDeviceInstanceCode,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IFirmwareTargetDevice,
   IProjectPackageInfo,
@@ -116,16 +117,17 @@ function makeInjectedMetaData(
   return {
     keyboardName: packageInfo.keyboardName,
     projectId: packageInfo.projectId,
+    deviceInstanceCode: generateRandomDeviceInstanceCode(),
     variationId: firmwareEntry.variationId,
   };
 }
 
 export async function loadFirmwareFileBytes(
   packageInfo: IProjectPackageInfo,
-  variationName: string,
+  firmwareName: string,
 ): Promise<IFirmwareFetchResultWithTargetDevice | undefined> {
   const firmwareEntry = packageInfo.firmwares.find(
-    (it) => it.variationName === variationName,
+    (it) => it.firmwareName === firmwareName,
   );
   if (firmwareEntry?.type === 'standard') {
     const { standardFirmwareConfig } = firmwareEntry;
@@ -168,7 +170,7 @@ export async function loadFirmwareFileBytes(
 export async function firmwareFileLoader_loadFirmwareFile(
   origin: IResourceOrigin,
   projectId: string,
-  variationName: string,
+  firmwareName: string,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
   const packageInfos = coreState.allProjectPackageInfos;
   const packageInfo = packageInfos.find(
@@ -177,7 +179,7 @@ export async function firmwareFileLoader_loadFirmwareFile(
   if (!packageInfo) {
     return undefined;
   }
-  const loadResult = await loadFirmwareFileBytes(packageInfo, variationName);
+  const loadResult = await loadFirmwareFileBytes(packageInfo, firmwareName);
   if (!loadResult) {
     return undefined;
   }

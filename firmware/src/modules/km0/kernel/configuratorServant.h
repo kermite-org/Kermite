@@ -18,5 +18,3 @@ void configuratorServant_initialize(
 void configuratorServant_processUpdate();
 void configuratorServant_emitRealtimeKeyEvent(uint8_t keyIndex, bool isDown);
 void configuratorServant_emitRelatimeLayerEvent(uint16_t layerFlags);
-
-void configuratorServant_readDeviceInstanceCode(uint8_t *buffer);

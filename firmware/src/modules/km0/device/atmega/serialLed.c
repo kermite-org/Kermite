@@ -3,7 +3,9 @@
 #include "neoPixelCore.h"
 #include <avr/interrupt.h>
 
-void serialLed_initialize() {
+void serialLed_initialize(int8_t pin) {
+  //pin argument is not used in avr implementation
+  //pin definition is provided via preprocessor
   neoPixelCore_initialize();
 }
 

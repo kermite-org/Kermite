@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { fallbackProjectPresetEntry, IProjectPresetEntry } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
-import { projectPackagesWriter, uiReaders } from '~/ui/commonStore';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import { useMemoEx } from '~/ui/helpers';
 import {
@@ -36,13 +36,14 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
       ...sourcePresetEntry,
       data: emitSavingDesign(),
     });
+    uiActions.closeSubPage();
   };
 
   return (
     <div css={style}>
       <RouteHeaderBar
         title={`edit project preset: ${sourcePresetEntry.presetName}`}
-        backPagePath="/projectEdit"
+        backPagePath="/projectResource"
         canSave={isModified}
         saveHandler={saveHandler}
       />

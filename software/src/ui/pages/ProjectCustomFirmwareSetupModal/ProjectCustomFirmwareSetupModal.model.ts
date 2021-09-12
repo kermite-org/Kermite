@@ -1,5 +1,6 @@
 import { useInlineEffect } from 'qx';
 import {
+  encodeProjectResourceItemKey,
   fallbackCustomFirmwareEntry,
   getNextFirmwareId,
   ICustomFirmwareEntry,
@@ -14,17 +15,18 @@ import {
   fallbackCustomFirmwareEditValues,
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 
 const helpers = {
   getExistingVariationIds(): string[] {
     const projectInfo = uiReaders.editTargetProject;
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
-  getSourceFirmwareEntryOrCreate(variationName: string): ICustomFirmwareEntry {
-    if (variationName) {
-      return projectPackagesReader.getEditTargetFirmwareEntryByVariationName(
+  getSourceFirmwareEntryOrCreate(firmwareName: string): ICustomFirmwareEntry {
+    if (firmwareName) {
+      return projectPackagesReader.getEditTargetFirmwareEntryByFirmwareName(
         'custom',
-        variationName,
+        firmwareName,
       )!;
     } else {
       const newVariationId = getNextFirmwareId(
@@ -33,7 +35,7 @@ const helpers = {
       return {
         type: 'custom',
         variationId: newVariationId,
-        variationName: '',
+        firmwareName: '',
         customFirmwareId: '',
       };
     }
@@ -42,7 +44,7 @@ const helpers = {
     sourceEntry: ICustomFirmwareEntry,
   ): ICustomFirmwareEditValues {
     return {
-      variationName: sourceEntry.variationName,
+      firmwareName: sourceEntry.firmwareName,
       customFirmwareId: sourceEntry.customFirmwareId,
     };
   },
@@ -67,29 +69,42 @@ const readers = {
 };
 
 const actions = {
-  loadEditValues(variationName: string) {
-    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(variationName);
+  loadEditValues(firmwareName: string) {
+    state.sourceEntry = helpers.getSourceFirmwareEntryOrCreate(firmwareName);
     state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
       state.sourceEntry,
     );
   },
   saveHandler() {
-    const { variationName, customFirmwareId } =
+    const { firmwareName, customFirmwareId } =
       CustomFirmwareEditor_OutputPropsSupplier.emitSavingEditValues();
+    const { sourceEntry } = readers;
+    const originalName = sourceEntry.firmwareName;
     const newFirmwareEntry = {
-      ...readers.sourceEntry,
-      variationName,
+      ...sourceEntry,
+      firmwareName,
       customFirmwareId,
     };
-    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    const nameChanged = !!originalName && firmwareName !== originalName;
+    if (nameChanged) {
+      projectPackagesWriter.saveLocalProjectFirmwareWithRename(
+        newFirmwareEntry,
+        originalName,
+      );
+    } else {
+      projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    }
+    projectResourceActions.setSelectedItemKey(
+      encodeProjectResourceItemKey('firmware', firmwareName),
+    );
   },
 };
 
 export function useProjectCustomFirmwareSetupModalModel(
-  variationName: string,
+  firmwareName: string,
   close: () => void,
 ) {
-  useInlineEffect(() => actions.loadEditValues(variationName), [variationName]);
+  useInlineEffect(() => actions.loadEditValues(firmwareName), [firmwareName]);
   const { sourceEditValues, canSave } = readers;
   const saveHandler = () => {
     actions.saveHandler();
