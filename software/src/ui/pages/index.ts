@@ -5,3 +5,4 @@ export * from './ProjectSelectionPage';
 export * from './WelcomePage/WelcomePage';
 export * from './SettingsPage/SettingsPage';
 export * from './ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage';
+export * from './ProjectCustomFirmwareEditPage/ProjectCustomFirmwareEditPage';

@@ -100,7 +100,7 @@ const actions = {
   },
 };
 
-export function useProjectCustomFirmwareSetupModalModel(
+export function useProjectCustomFirmwareEditPageModel(
   firmwareName: string,
   close: () => void,
 ) {

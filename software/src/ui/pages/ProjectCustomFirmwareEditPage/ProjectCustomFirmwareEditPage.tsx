@@ -2,19 +2,19 @@ import { css, FC, jsx } from 'qx';
 import { ClosableOverlay } from '~/ui/components';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
-import { useProjectCustomFirmwareSetupModalModel } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal.model';
+import { useProjectCustomFirmwareEditPageModel } from '~/ui/pages/ProjectCustomFirmwareEditPage/ProjectCustomFirmwareEditPage.model';
 
 type Props = {
   firmwareName: string;
   close(): void;
 };
 
-export const ProjectCustomFirmwareSetupModal: FC<Props> = ({
+export const ProjectCustomFirmwareEditPage: FC<Props> = ({
   firmwareName,
   close,
 }) => {
   const { sourceEditValues, canSave, saveHandler } =
-    useProjectCustomFirmwareSetupModalModel(firmwareName, close);
+    useProjectCustomFirmwareEditPageModel(firmwareName, close);
   return (
     <ClosableOverlay close={close}>
       <div css={style}>

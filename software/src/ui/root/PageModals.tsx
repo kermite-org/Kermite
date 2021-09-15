@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
 import { uiActions, uiState } from '~/ui/commonStore';
-import { ProjectCustomFirmwareSetupModal } from '~/ui/pages/ProjectCustomFirmwareSetupModal/ProjectCustomFirmwareSetupModal';
+import { ProjectCustomFirmwareEditPage } from '~/ui/pages';
 
 export const PageModals: FC = () => {
   const { pageModalSpec: modalSpec } = uiState;
@@ -8,7 +8,7 @@ export const PageModals: FC = () => {
   if (modalSpec) {
     if (modalSpec.type === 'projectCustomFirmwareSetup') {
       return (
-        <ProjectCustomFirmwareSetupModal
+        <ProjectCustomFirmwareEditPage
           firmwareName={modalSpec.firmwareName}
           close={close}
         />
