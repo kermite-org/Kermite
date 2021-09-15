@@ -61,10 +61,11 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
   },
 };
 
-const FieldItem: FC<{ title: string; children: QxChildren }> = ({
-  title,
-  children,
-}) => {
+const FieldItem: FC<{
+  title: string;
+  children: QxChildren;
+  indent?: boolean;
+}> = ({ title, children, indent }) => {
   const styleChildren = css`
     display: flex;
     align-items: center;
@@ -72,7 +73,7 @@ const FieldItem: FC<{ title: string; children: QxChildren }> = ({
   `;
   return (
     <tr>
-      <td>{title}</td>
+      <td style={(indent && 'padding-left:15px') || ''}>{title}</td>
       <td>
         <div css={styleChildren}>{children}</div>
       </td>
@@ -126,7 +127,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useMatrixKeyScanner')}
             />
           </FieldItem>
-          <FieldItem title="row pins">
+          <FieldItem title="row pins" indent>
             <GeneralInput
               value={arrayToText(editValues.matrixRowPins)}
               setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
@@ -136,7 +137,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
             />
             <div>{errors.matrixRowPins}</div>
           </FieldItem>
-          <FieldItem title="column pins">
+          <FieldItem title="column pins" indent>
             <GeneralInput
               value={arrayToText(editValues.matrixColumnPins)}
               setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
@@ -153,7 +154,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useDirectWiredKeyScanner')}
             />
           </FieldItem>
-          <FieldItem title="direct wired pins">
+          <FieldItem title="direct wired pins" indent>
             <GeneralInput
               value={arrayToText(editValues.directWiredPins)}
               setValue={valueChangeHandler('directWiredPins', arrayFromText)}
@@ -170,7 +171,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useEncoder')}
             />
           </FieldItem>
-          <FieldItem title="encoder pins">
+          <FieldItem title="encoder pins" indent>
             <GeneralInput
               value={arrayToText(editValues.encoderPins)}
               setValue={valueChangeHandler('encoderPins', arrayFromText)}
@@ -187,7 +188,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useLighting')}
             />
           </FieldItem>
-          <FieldItem title="lighting pin">
+          <FieldItem title="lighting pin" indent>
             <GeneralInput
               value={editValues.lightingPin || ''}
               setValue={valueChangeHandler('lightingPin')}
@@ -198,7 +199,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
             <div>{errors.lightingPin}</div>
           </FieldItem>
 
-          <FieldItem title="lighting num LEDs">
+          <FieldItem title="lighting num LEDs" indent>
             <GeneralInput
               type="number"
               value={editValues.lightingNumLeds?.toString() || ''}
