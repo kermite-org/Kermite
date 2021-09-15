@@ -100,16 +100,10 @@ const actions = {
   },
 };
 
-export function useProjectCustomFirmwareEditPageModel(
-  firmwareName: string,
-  close: () => void,
-) {
+export function useProjectCustomFirmwareEditPageModel(firmwareName: string) {
   useInlineEffect(() => actions.loadEditValues(firmwareName), [firmwareName]);
   const { sourceEditValues, canSave } = readers;
-  const saveHandler = () => {
-    actions.saveHandler();
-    close();
-  };
+  const { saveHandler } = actions;
   return {
     sourceEditValues,
     canSave,

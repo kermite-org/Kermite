@@ -1,19 +1,10 @@
 import { FC, jsx } from 'qx';
-import { uiActions, uiState } from '~/ui/commonStore';
-import { ProjectCustomFirmwareEditPage } from '~/ui/pages';
+import { uiState } from '~/ui/commonStore';
 
 export const PageModals: FC = () => {
   const { pageModalSpec: modalSpec } = uiState;
-  const close = uiActions.closePageModal;
   if (modalSpec) {
-    if (modalSpec.type === 'projectCustomFirmwareSetup') {
-      return (
-        <ProjectCustomFirmwareEditPage
-          firmwareName={modalSpec.firmwareName}
-          close={close}
-        />
-      );
-    }
+    return <div></div>;
   }
   return null;
 };

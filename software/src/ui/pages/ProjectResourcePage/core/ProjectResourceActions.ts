@@ -51,7 +51,7 @@ export const projectResourceActions = {
     });
   },
   createCustomFirmware() {
-    uiActions.openPageModal({
+    uiActions.navigateTo({
       type: 'projectCustomFirmwareSetup',
       firmwareName: '',
     });
@@ -76,7 +76,7 @@ export const projectResourceActions = {
           firmwareName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        uiActions.openPageModal({
+        uiActions.navigateTo({
           type: 'projectCustomFirmwareSetup',
           firmwareName,
         });
