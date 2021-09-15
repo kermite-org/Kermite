@@ -23,12 +23,18 @@ const readers = {
     return store.editValues;
   },
   get allFirmwareOptions(): ISelectorOption[] {
-    return uiReaders.allCustomFirmwareInfos
-      .filter((info) => info.firmwareProjectPath !== 'standard')
-      .map((info) => ({
-        value: info.firmwareId,
-        label: `${info.firmwareProjectPath}/${info.variationName}`,
-      }));
+    return [
+      {
+        value: '',
+        label: 'select firmware',
+      },
+      ...uiReaders.allCustomFirmwareInfos
+        .filter((info) => info.firmwareProjectPath !== 'standard')
+        .map((info) => ({
+          value: info.firmwareId,
+          label: `${info.firmwareProjectPath}/${info.variationName}`,
+        })),
+    ];
   },
   get canSave(): boolean {
     const { editValues, originalValues } = customFirmwareEditorModel.readers;
