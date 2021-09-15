@@ -98,7 +98,6 @@ export const modalTextEdit = createModal(
         font-size: 14px;
         padding-left: 4px;
       `;
-
       return (
         <ClosableOverlay close={close}>
           <CommonDialogFrame caption={caption} close={close}>
@@ -109,13 +108,15 @@ export const modalTextEdit = createModal(
                   type="text"
                   css={cssCommonTextInput}
                   value={editValues.text}
-                  onChange={reflectFieldValue(editValues, 'text')}
+                  onInput={reflectFieldValue(editValues, 'text')}
                   spellcheck={'false' as any}
                 />
               </div>
             </DialogContentRow>
             <DialogButtonsRow>
-              <DialogButton onClick={submit}>OK</DialogButton>
+              <DialogButton onClick={submit} disabled={!editValues.text}>
+                OK
+              </DialogButton>
             </DialogButtonsRow>
           </CommonDialogFrame>
         </ClosableOverlay>

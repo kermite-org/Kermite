@@ -146,6 +146,7 @@ export const DialogButton = (props: {
 
     &:disabled {
       opacity: 0.4;
+      cursor: default;
     }
   `;
   return (
