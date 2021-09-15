@@ -4,8 +4,11 @@ import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core/Proj
 import { projectResourceState } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
 
 const resourceItemsSelector = createSimpleSelector(
-  () => uiReaders.editTargetProject!,
-  projectResourceHelpers.createProjectResourceListItemKeys,
+  () => uiReaders.editTargetProject,
+  (project) =>
+    (project &&
+      projectResourceHelpers.createProjectResourceListItemKeys(project)) ||
+    [],
 );
 
 export const projectResourceReaders = {
@@ -16,8 +19,8 @@ export const projectResourceReaders = {
     return !!projectResourceState.selectedItemKey;
   },
   get keyboardName(): string {
-    const projectInfo = uiReaders.editTargetProject!;
-    return projectInfo.keyboardName;
+    const projectInfo = uiReaders.editTargetProject;
+    return projectInfo?.keyboardName || '';
   },
   get resourceItemKeys(): string[] {
     return resourceItemsSelector();
