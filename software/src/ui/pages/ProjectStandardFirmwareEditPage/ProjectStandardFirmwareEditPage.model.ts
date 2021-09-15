@@ -23,7 +23,7 @@ export interface IProjectStandardFirmwareEditPageModel {
   saveHandler(): void;
 }
 
-async function inputSavingFirmwareName(): Promise<string | undefined> {
+export async function inputSavingFirmwareName(): Promise<string | undefined> {
   const allVariationNames =
     uiReaders.editTargetProject?.firmwares.map((it) => it.firmwareName) || [];
   return await resourceManagementUtils.inputSavingResourceName({

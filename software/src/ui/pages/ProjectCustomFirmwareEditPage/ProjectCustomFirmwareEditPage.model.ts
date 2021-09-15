@@ -8,6 +8,7 @@ import {
 import {
   projectPackagesReader,
   projectPackagesWriter,
+  uiActions,
   uiReaders,
 } from '~/ui/commonStore';
 import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
@@ -16,6 +17,7 @@ import {
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
+import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 
 const helpers = {
   getExistingVariationIds(): string[] {
@@ -44,7 +46,6 @@ const helpers = {
     sourceEntry: ICustomFirmwareEntry,
   ): ICustomFirmwareEditValues {
     return {
-      firmwareName: sourceEntry.firmwareName,
       customFirmwareId: sourceEntry.customFirmwareId,
     };
   },
@@ -75,28 +76,26 @@ const actions = {
       state.sourceEntry,
     );
   },
-  saveHandler() {
-    const { firmwareName, customFirmwareId } =
+  async saveHandler() {
+    if (!state.sourceEntry.firmwareName) {
+      const newVariationName = await inputSavingFirmwareName();
+      if (!newVariationName) {
+        return;
+      }
+      state.sourceEntry.firmwareName = newVariationName;
+    }
+    const { customFirmwareId } =
       CustomFirmwareEditor_OutputPropsSupplier.emitSavingEditValues();
     const { sourceEntry } = readers;
-    const originalName = sourceEntry.firmwareName;
     const newFirmwareEntry = {
       ...sourceEntry,
-      firmwareName,
       customFirmwareId,
     };
-    const nameChanged = !!originalName && firmwareName !== originalName;
-    if (nameChanged) {
-      projectPackagesWriter.saveLocalProjectFirmwareWithRename(
-        newFirmwareEntry,
-        originalName,
-      );
-    } else {
-      projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
-    }
+    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
     projectResourceActions.setSelectedItemKey(
-      encodeProjectResourceItemKey('firmware', firmwareName),
+      encodeProjectResourceItemKey('firmware', state.sourceEntry.firmwareName),
     );
+    uiActions.closeSubPage();
   },
 };
 
