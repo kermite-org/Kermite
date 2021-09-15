@@ -98,6 +98,8 @@ export const modalTextEdit = createModal(
         font-size: 14px;
         padding-left: 4px;
       `;
+
+      const isValid = !!editValues.text && editValues.text !== defaultText;
       return (
         <ClosableOverlay close={close}>
           <CommonDialogFrame caption={caption} close={close}>
@@ -114,7 +116,7 @@ export const modalTextEdit = createModal(
               </div>
             </DialogContentRow>
             <DialogButtonsRow>
-              <DialogButton onClick={submit} disabled={!editValues.text}>
+              <DialogButton onClick={submit} disabled={!isValid}>
                 OK
               </DialogButton>
             </DialogButtonsRow>
