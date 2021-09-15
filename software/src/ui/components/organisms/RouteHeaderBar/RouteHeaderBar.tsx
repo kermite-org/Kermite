@@ -94,6 +94,7 @@ const style = css`
 
     &:disabled {
       opacity: 0.5;
+      cursor: default;
     }
   }
 `;
