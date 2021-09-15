@@ -109,6 +109,7 @@ export const DialogContentRow = (props: { children: QxChildren }) => {
     white-space: pre-wrap;
     overflow-y: auto;
     max-height: 600px;
+    user-select: text;
   `;
   return <div css={cssBody}>{props.children}</div>;
 };

@@ -49,6 +49,7 @@ const cssGlobal = css`
 
   body {
     overflow: hidden;
+    user-select: none;
   }
 
   select {
