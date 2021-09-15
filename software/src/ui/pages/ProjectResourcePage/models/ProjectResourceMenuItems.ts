@@ -1,4 +1,5 @@
 import { IGeneralMenuItem } from '~/ui/base';
+import { uiReaders } from '~/ui/commonStore';
 import {
   projectResourceActions,
   projectResourceReaders,
@@ -10,11 +11,13 @@ export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
       type: 'menuEntry',
       text: 'create standard firmware',
       handler: projectResourceActions.createStandardFirmware,
+      disabled: !uiReaders.editTargetProject,
     },
     {
       type: 'menuEntry',
       text: 'create custom firmware',
       handler: projectResourceActions.createCustomFirmware,
+      disabled: !uiReaders.editTargetProject,
     },
     { type: 'separator' },
     {
