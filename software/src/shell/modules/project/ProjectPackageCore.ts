@@ -179,6 +179,8 @@ export const projectPackageProvider = {
     return data.firmwares.map(mapIndexFirmwareEntryToCustomFirmwareInfo);
   },
   async openLocalProjectsFolder() {
-    await shell.openPath(getUserProjectsFolderPath());
+    const folderPath = getUserProjectsFolderPath();
+    await fsxEnsureFolderExists(folderPath);
+    await shell.openPath(folderPath);
   },
 };
