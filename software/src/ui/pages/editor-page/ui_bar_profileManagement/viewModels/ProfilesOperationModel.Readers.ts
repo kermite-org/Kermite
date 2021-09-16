@@ -9,22 +9,27 @@ export const profilesOperationReader = {
     const { profileEditSource } = profilesReader;
     const isInternalProfile = profileEditSource.type === 'InternalProfile';
     const isDeviceConnected = deviceStatus.isConnected;
+
     const refProjectId = editorModel.profileData.projectId;
     const standardFirmwareIds = ['HCV52K', 'HCV52L'];
     const deviceFirmwareId = deviceStatus.isConnected
       ? deviceStatus.deviceAttrs.firmwareId
       : '';
-    const isProjectMatched = allProjectPackageInfos.some(
-      (info) =>
-        info.projectId === refProjectId &&
-        info.firmwares.some(
-          (firmware) =>
-            (firmware.type === 'standard' &&
-              standardFirmwareIds.includes(deviceFirmwareId)) ||
-            (firmware.type === 'custom' &&
-              firmware.customFirmwareId === deviceFirmwareId),
-        ),
-    );
+    const deviceProjectId = deviceStatus.isConnected
+      ? deviceStatus.deviceAttrs.projectId
+      : '';
+    const isProjectMatched =
+      (standardFirmwareIds.includes(deviceFirmwareId) &&
+        deviceProjectId === refProjectId) ||
+      allProjectPackageInfos.some(
+        (info) =>
+          info.projectId === refProjectId &&
+          info.firmwares.some(
+            (firmware) =>
+              firmware.type === 'custom' &&
+              firmware.customFirmwareId === deviceFirmwareId,
+          ),
+      );
 
     if (developerMode && allowCrossKeyboardKeyMappingWrite) {
       return isInternalProfile && isDeviceConnected;
