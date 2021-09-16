@@ -130,6 +130,20 @@ function renameItemInArray<T, K extends keyof T>(
   }
 }
 
+function copyItemInArray<T, K extends keyof T>(
+  items: T[],
+  nameFiled: K,
+  srcName: Extract<T[K], string>,
+  newName: Extract<T[K], string>,
+) {
+  const index = items.findIndex((it) => it[nameFiled] === srcName);
+  if (index >= 0) {
+    const item = items[index];
+    const copied = { ...item, [nameFiled]: newName };
+    items.splice(index + 1, 0, copied);
+  }
+}
+
 export const projectPackagesWriter = {
   saveLocalProject(projectInfo: IProjectPackageInfo) {
     dispatchCoreAction({
@@ -179,6 +193,21 @@ export const projectPackagesWriter = {
   renameLocalProjectFirmware(oldName: string, newName: string) {
     patchLocalEditProject((draft) => {
       renameItemInArray(draft.firmwares, 'firmwareName', oldName, newName);
+    });
+  },
+  copyLocalProjectPreset(srcName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      copyItemInArray(draft.presets, 'presetName', srcName, newName);
+    });
+  },
+  copyLocalProjectLayout(srcName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      copyItemInArray(draft.layouts, 'layoutName', srcName, newName);
+    });
+  },
+  copyLocalProjectFirmware(srcName: string, newName: string) {
+    patchLocalEditProject((draft) => {
+      copyItemInArray(draft.firmwares, 'firmwareName', srcName, newName);
     });
   },
 };

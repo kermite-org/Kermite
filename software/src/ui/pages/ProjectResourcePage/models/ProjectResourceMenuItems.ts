@@ -28,6 +28,12 @@ export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
     },
     {
       type: 'menuEntry',
+      text: 'copy item',
+      handler: projectResourceActions.copySelectedResourceItem,
+      disabled: !projectResourceReaders.isItemSelected,
+    },
+    {
+      type: 'menuEntry',
       text: 'delete item',
       handler: projectResourceActions.deleteSelectedResourceItem,
       disabled: !projectResourceReaders.isItemSelected,
