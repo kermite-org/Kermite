@@ -376,6 +376,10 @@ export function uniqueArrayItemsByField<T>(items: T[], fieldKey: keyof T): T[] {
   );
 }
 
+export function checkArrayItemsUnique<T>(arr: T[]): boolean {
+  return arr.every((a, idx) => arr.indexOf(a) === idx);
+}
+
 export function bumpObjectProps<T extends {}>(obj: T, source: T) {
   getObjectKeys(obj).forEach((key) => obj[key]);
   getObjectKeys(source).forEach((key) => (obj[key] = source[key]));

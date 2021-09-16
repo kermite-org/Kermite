@@ -1,4 +1,5 @@
 import {
+  checkArrayItemsUnique,
   duplicateObjectByJsonStringifyParse,
   flattenArray,
   generateNumberSequence,
@@ -220,6 +221,16 @@ export const standardFirmwareEditModelHelpers = {
       return false;
     }
     if (useLighting && !(lightingPin && lightingNumLeds !== undefined)) {
+      return false;
+    }
+    const allPins = [
+      ...((useMatrixKeyScanner && matrixRowPins) || []),
+      ...((useMatrixKeyScanner && matrixColumnPins) || []),
+      ...((useDirectWiredKeyScanner && directWiredPins) || []),
+      ...((useEncoder && encoderPins) || []),
+      ...((useLighting && lightingPin && [lightingPin]) || []),
+    ];
+    if (!checkArrayItemsUnique(allPins)) {
       return false;
     }
     return true;
