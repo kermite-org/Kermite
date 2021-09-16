@@ -49,9 +49,9 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
     const errors =
       standardFirmwareEditModelHelpers.validateEditValues(editValues);
     const hasError = Object.values(errors).some((a) => !!a);
-    const validForSaving =
-      standardFirmwareEditModelHelpers.validateForSave(editValues);
-    return isModified && !hasError && validForSaving;
+    const totalError =
+      standardFirmwareEditModelHelpers.getTotalValidationError(editValues);
+    return isModified && !hasError && !totalError;
   },
   emitSavingEditValues() {
     const { editValues } = standardFirmwareEditStore;
@@ -89,12 +89,13 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
     isRp,
     availablePinsText,
     errors,
+    totalError,
   } = useStandardFirmwareEditModel(firmwareConfig);
 
   return (
     <div css={style}>
       <div>standard firmware configuration</div>
-      <table>
+      <table className="config-table">
         <tbody>
           <FieldItem title="base firmware type">
             <GeneralSelector
@@ -223,13 +224,16 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
+      <div className="total-error" qxIf={!!totalError}>
+        note: {totalError}
+      </div>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
     </div>
   );
 };
 
 const style = css`
-  table {
+  > .config-table {
     margin-top: 10px;
 
     td {
@@ -237,8 +241,9 @@ const style = css`
     }
   }
 
-  button {
+  > .total-error {
+    margin-left: 5px;
     margin-top: 10px;
-    padding: 5px 10px;
+    color: #888;
   }
 `;

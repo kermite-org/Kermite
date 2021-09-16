@@ -198,7 +198,7 @@ export const standardFirmwareEditModelHelpers = {
         undefined,
     };
   },
-  validateForSave(editValues: IStandardFirmwareEditValues): boolean {
+  getTotalValidationError(editValues: IStandardFirmwareEditValues): string {
     const {
       useMatrixKeyScanner,
       matrixRowPins,
@@ -212,16 +212,16 @@ export const standardFirmwareEditModelHelpers = {
       lightingNumLeds,
     } = editValues;
     if (useMatrixKeyScanner && !(matrixRowPins && matrixColumnPins)) {
-      return false;
+      return 'matrix pins should be specified';
     }
     if (useDirectWiredKeyScanner && !directWiredPins) {
-      return false;
+      return 'direct wired pins should be specified';
     }
     if (useEncoder && !encoderPins) {
-      return false;
+      return 'encoder pins should be specified';
     }
     if (useLighting && !(lightingPin && lightingNumLeds !== undefined)) {
-      return false;
+      return 'lighting pin and num LEDs should be specified';
     }
     const allPins = [
       ...((useMatrixKeyScanner && matrixRowPins) || []),
@@ -231,8 +231,8 @@ export const standardFirmwareEditModelHelpers = {
       ...((useLighting && lightingPin && [lightingPin]) || []),
     ];
     if (!checkArrayItemsUnique(allPins)) {
-      return false;
+      return 'pin duplication detected';
     }
-    return true;
+    return '';
   },
 };

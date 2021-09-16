@@ -17,6 +17,7 @@ export interface IStandardFirmwareEditModel {
   isAvr: boolean;
   isRp: boolean;
   errors: IStandardFirmwareEditErrors;
+  totalError: string;
 }
 
 const constants = {
@@ -47,7 +48,8 @@ export function useStandardFirmwareEditModel(
   const isRp = mcuType === 'rp';
   const errors =
     standardFirmwareEditModelHelpers.validateEditValues(editValues);
-
+  const totalError =
+    standardFirmwareEditModelHelpers.getTotalValidationError(editValues);
   return {
     editValues,
     baseFirmwareTypeOptions,
@@ -55,5 +57,6 @@ export function useStandardFirmwareEditModel(
     isAvr,
     isRp,
     errors,
+    totalError,
   };
 }
