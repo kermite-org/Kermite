@@ -18,8 +18,12 @@ export const profilesReader = {
     }
   },
   get isEditProfileAvailable() {
-    const { profileEditSource } = uiState.core;
-    return profileEditSource.type !== 'NoEditProfileAvailable';
+    if (uiReaders.pagePath === '/assigner') {
+      const { profileEditSource } = uiState.core;
+      return profileEditSource.type !== 'NoEditProfileAvailable';
+    } else {
+      return true;
+    }
   },
   get currentProfileEntry(): IProfileEntry | undefined {
     const { profileEditSource } = uiState.core;
