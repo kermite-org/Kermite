@@ -3,7 +3,7 @@ import { appUi, uiTheme } from '~/ui/base';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboardingFrame } from '~/ui/features';
-import { MainColumnRoutes } from '~/ui/root/MainCoulmnRoutes';
+import { MainColumnRoutes } from '~/ui/root/MainColumnRoutes';
 import { PageModals } from '~/ui/root/PageModals';
 import {
   NavigationColumn,
