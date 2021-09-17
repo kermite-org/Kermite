@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
 import { appUi, uiTheme } from '~/ui/base';
-import { siteModel, uiReaders, uiState } from '~/ui/commonStore';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { OnboardingFrame } from '~/ui/features';
@@ -11,6 +10,7 @@ import {
   WindowStatusBarSection,
   WindowTitleBarSection,
 } from '~/ui/root/sections';
+import { siteModel, uiReaders, uiState } from '~/ui/store';
 
 export const ConfiguratorZoneRoot: FC = () => {
   const showOnboarding = uiState.settings.showOnboardingPanel;

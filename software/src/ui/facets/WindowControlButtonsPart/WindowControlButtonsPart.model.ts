@@ -1,4 +1,4 @@
-import { dispatchCoreAction, siteModel, uiActions } from '~/ui/commonStore';
+import { dispatchCoreAction, siteModel, uiActions } from '~/ui/store';
 
 export interface IWindowControlModel {
   showReloadButton: boolean;

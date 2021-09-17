@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { ISelectorOption, texts } from '~/ui/base';
-import { commitUiSettings, uiState } from '~/ui/commonStore';
 import { RibbonSelector } from '~/ui/components';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
+import { commitUiSettings, uiState } from '~/ui/store';
 
 const options: ISelectorOption[] = [
   { label: 'EDIT', value: 'edit' },

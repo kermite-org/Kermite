@@ -1,7 +1,7 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { IKermiteStandardKeyboardSpec } from '~/shared';
-import { uiReaders } from '~/ui/commonStore';
 import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core';
+import { uiReaders } from '~/ui/store';
 
 type Props = {
   firmwareName: string;

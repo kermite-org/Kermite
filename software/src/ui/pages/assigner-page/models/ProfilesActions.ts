@@ -1,6 +1,6 @@
 import { IPresetSpec, IProfileEntry, IResourceOrigin } from '~/shared';
-import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { dispatchCoreAction } from '~/ui/store';
 
 export const profilesActions = {
   createProfileUnnamed: (

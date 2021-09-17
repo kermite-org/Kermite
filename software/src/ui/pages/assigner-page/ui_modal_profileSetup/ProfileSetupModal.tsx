@@ -1,7 +1,6 @@
 import { jsx, useInlineEffect, useLocal, useMemo } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonStore';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -12,7 +11,8 @@ import {
   DialogContentRow,
   GeneralSelector,
 } from '~/ui/components';
-import { fieldSetter, useMemoEx } from '~/ui/helpers';
+import { projectPackagesReader } from '~/ui/store';
+import { fieldSetter, useMemoEx } from '~/ui/utils';
 
 interface ICreateProfileDialogEditValues {
   projectKey: string;

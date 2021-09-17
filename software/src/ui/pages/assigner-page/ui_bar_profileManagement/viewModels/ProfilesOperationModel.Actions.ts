@@ -2,15 +2,15 @@ import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
-import { commitUiState, uiActions, uiState } from '~/ui/commonStore';
 import { modalAlert, modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { resourceManagementUtils } from '~/ui/helpers';
+import { resourceManagementUtils } from '~/ui/utils';
 import {
   profilesActions,
   profilesReader,
 } from '~/ui/pages/assigner-page/models';
 import { callProfileSetupModal } from '~/ui/pages/assigner-page/ui_modal_profileSetup/ProfileSetupModal';
+import { commitUiState, uiActions, uiState } from '~/ui/store';
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!editorModel.checkDirty()) {

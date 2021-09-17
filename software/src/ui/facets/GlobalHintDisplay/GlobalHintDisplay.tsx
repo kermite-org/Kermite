@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { GlobalHintDisplayText, uiTheme } from '~/ui/base';
-import { commitUiSettings, uiState } from '~/ui/commonStore';
 import { GlobalHintIconButton } from '~/ui/components';
+import { commitUiSettings, uiState } from '~/ui/store';
 
 export const GlobalHintDisplay: FC = () => {
   const { settings } = uiState;

@@ -1,6 +1,6 @@
 import { FC, jsx, css } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { reflectValue } from '~/ui/helpers';
+import { reflectValue } from '~/ui/utils';
 
 interface Props {
   className?: string;

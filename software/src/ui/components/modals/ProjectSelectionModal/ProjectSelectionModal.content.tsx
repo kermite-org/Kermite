@@ -8,7 +8,7 @@ import {
   DialogButtonsRow,
   DialogContentRow,
 } from '~/ui/components/modals/CommonDialogParts';
-import { fieldSetter } from '~/ui/helpers';
+import { fieldSetter } from '~/ui/utils';
 
 type ModalEditValues = {
   projectId: string;

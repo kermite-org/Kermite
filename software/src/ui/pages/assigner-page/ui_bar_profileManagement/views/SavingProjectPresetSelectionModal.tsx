@@ -1,7 +1,6 @@
 import { jsx, useState } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
@@ -9,6 +8,7 @@ import {
 } from '~/ui/components';
 import { profilesActions } from '~/ui/pages/assigner-page/models';
 import { IProfileManagementPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
+import { projectPackagesReader, uiReaders } from '~/ui/store';
 
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();

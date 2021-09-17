@@ -1,15 +1,15 @@
 import { ISelectorOption } from '~/ui/base';
 import {
-  uiReaders,
-  dispatchCoreAction,
-  projectPackagesReader,
-} from '~/ui/commonStore';
-import {
   callProjectSelectionModal,
   modalConfirm,
   modalTextEdit,
 } from '~/ui/components';
-import { resourceManagementUtils } from '~/ui/helpers';
+import {
+  uiReaders,
+  dispatchCoreAction,
+  projectPackagesReader,
+} from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 const projectManagementMenuActionsHelpers = {
   makeLoadableSourceProjectOptions(): ISelectorOption[] {

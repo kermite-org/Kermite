@@ -1,5 +1,5 @@
 import { IGlobalSettings } from '~/shared';
-import { dispatchCoreAction } from '~/ui/commonStore/base';
+import { dispatchCoreAction } from '~/ui/store/base';
 
 export const globalSettingsWriter = {
   writeValue<K extends keyof IGlobalSettings>(

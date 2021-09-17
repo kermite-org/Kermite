@@ -4,13 +4,6 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import {
-  dispatchCoreAction,
-  projectPackagesReader,
-  uiActions,
-  uiReaders,
-  uiState,
-} from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { LayoutEditorCore } from '~/ui/features';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
@@ -20,6 +13,13 @@ import {
   layoutManagerState,
 } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { layoutManagerReader } from '~/ui/pages/layout-editor-page/models/LayoutManagerReaders';
+import {
+  dispatchCoreAction,
+  projectPackagesReader,
+  uiActions,
+  uiReaders,
+  uiState,
+} from '~/ui/store';
 
 function setModalState(state: ILayoutManagerModalState) {
   layoutManagerState.modalState = state;

@@ -5,8 +5,8 @@ import {
   IPageSpec,
   PagePaths,
 } from '~/ui/commonModels/PageTypes';
-import { globalSettingsWriter } from '~/ui/commonStore/GlobalSettings';
-import { commitUiSettings, commitUiState } from '~/ui/commonStore/base';
+import { globalSettingsWriter } from '~/ui/store/GlobalSettings';
+import { commitUiSettings, commitUiState } from '~/ui/store/base';
 
 export const uiActions = {
   navigateTo(pageSpecOrPagePath: IPageSpec | PagePaths) {

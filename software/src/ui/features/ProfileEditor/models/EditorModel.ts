@@ -10,7 +10,7 @@ import {
   IProfileAssignType,
   IProfileData,
 } from '~/shared';
-import { uiReaders } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/store';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,

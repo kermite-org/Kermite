@@ -4,7 +4,7 @@ import {
   useThemeSelectionModel,
   useLanguageSelectionModel,
 } from '~/ui/commonModels';
-import { commitUiSettings, uiState } from '~/ui/commonStore';
+import { commitUiSettings, uiState } from '~/ui/store';
 
 export interface IGlobalMenuItem {
   key: string;

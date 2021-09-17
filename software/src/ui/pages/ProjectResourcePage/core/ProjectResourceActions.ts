@@ -1,9 +1,9 @@
 import { decodeProjectResourceItemKey } from '~/shared';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
-import { resourceManagementUtils } from '~/ui/helpers';
 import { projectResourceReaders } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceReaders';
 import { projectResourceState } from '~/ui/pages/ProjectResourcePage/core/ProjectResourceState';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {
   async renameProjectResourceListItem(

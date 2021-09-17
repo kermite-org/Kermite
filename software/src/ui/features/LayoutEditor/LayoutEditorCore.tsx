@@ -7,7 +7,7 @@ import {
   keyboardOperationHandler,
   setupDeviceKeyEventsListener,
 } from '~/ui/features/LayoutEditor/wrapper';
-import { windowKeyboardEventEffect } from '~/ui/helpers';
+import { windowKeyboardEventEffect } from '~/ui/utils';
 
 export namespace LayoutEditorCore {
   export function loadEditDesign(persistDesign: IPersistKeyboardDesign) {

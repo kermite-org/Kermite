@@ -1,7 +1,7 @@
 import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
-import { uiActions, uiReaders } from '~/ui/commonStore';
+import { uiActions, uiReaders } from '~/ui/store';
 
 export interface NavigationItemModel {
   pagePath: PagePaths;

@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { uiState } from '~/ui/commonStore';
+import { uiState } from '~/ui/store';
 
 export const PageModals: FC = () => {
   const { pageModalSpec: modalSpec } = uiState;

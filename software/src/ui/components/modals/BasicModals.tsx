@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { createModal } from '~/ui/components/overlay';
-import { reflectFieldValue } from '~/ui/helpers';
+import { reflectFieldValue } from '~/ui/utils';
 import {
   CommonDialogFrame,
   ClosableOverlay,

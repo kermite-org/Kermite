@@ -1,11 +1,11 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import {
   reflectFieldValue,
   reflectValue,
   reflectFieldChecked,
-} from '~/ui/helpers';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+} from '~/ui/utils';
 
 export const DualModeSettingsPart: FC = () => {
   if (editorModel.profileData.settings.assignType === 'single') {

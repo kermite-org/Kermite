@@ -6,10 +6,10 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
-import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
+import { projectPackagesReader, uiReaders } from '~/ui/store';
+import { fieldSetter } from '~/ui/utils';
 
 export interface IPresetSelectionModel {
   projectSelectorSource: ISelectorSource;

@@ -1,7 +1,7 @@
 import { FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { reflectFieldChecked } from '~/ui/helpers';
+import { reflectFieldChecked } from '~/ui/utils';
 
 export const ShiftCancelOptionPart: FC = () => {
   const { settings } = editorModel.profileData;

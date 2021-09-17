@@ -1,4 +1,4 @@
-import { uiReaders } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/store';
 
 export function makeDeviceControlSectionViewModel() {
   const { deviceStatus } = uiReaders;

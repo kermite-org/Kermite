@@ -1,8 +1,8 @@
 import { jsx, css, FC } from 'qx';
 import { IProfileAssignType } from '~/shared';
 import { texts } from '~/ui/base';
-import { reflectValue } from '~/ui/helpers';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { reflectValue } from '~/ui/utils';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];

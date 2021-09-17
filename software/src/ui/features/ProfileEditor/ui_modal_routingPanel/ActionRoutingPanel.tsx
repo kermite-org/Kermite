@@ -1,7 +1,6 @@
 import { css, jsx } from 'qx';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { FcWithClassName, uiTheme } from '~/ui/base';
-import { commitUiState } from '~/ui/commonStore';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
 import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
@@ -10,7 +9,8 @@ import {
   getRoutingTargetKeyOptions,
   getRoutingTargetModifierOptions,
 } from '~/ui/features/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanelModel';
-import { fieldSetter } from '~/ui/helpers';
+import { commitUiState } from '~/ui/store';
+import { fieldSetter } from '~/ui/utils';
 
 export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
   const { mappingEntries } = editorModel.profileData;

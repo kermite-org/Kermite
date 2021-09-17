@@ -22,7 +22,7 @@ import {
   reflectChecked,
   reflectValue,
   reflectFieldChecked,
-} from '~/ui/helpers';
+} from '~/ui/utils';
 
 export interface ILayerConfigurationModelEditValues {
   layerName: string;

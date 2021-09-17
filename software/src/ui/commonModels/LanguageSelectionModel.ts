@@ -1,6 +1,6 @@
 import { useMemo } from 'qx';
 import { ILanguageKey, uiTextConfigLoader } from '~/ui/base';
-import { dispatchCoreAction } from '~/ui/commonStore/base';
+import { dispatchCoreAction } from '~/ui/store/base';
 
 export interface ILanguageSelectionModel {
   currentLanguage: ILanguageKey;

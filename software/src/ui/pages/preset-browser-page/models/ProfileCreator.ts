@@ -3,7 +3,7 @@ import {
   getPresetSpecFromPresetKey,
   getOriginAndProjectIdFromProjectKey,
 } from '~/shared/funcs/DomainRelatedHelpers';
-import { dispatchCoreAction, uiActions } from '~/ui/commonStore';
+import { dispatchCoreAction, uiActions } from '~/ui/store';
 
 /*
 function getNewProfileNameBase(

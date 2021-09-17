@@ -1,7 +1,7 @@
 import { ILayer } from '~/shared';
-import { uiActions } from '~/ui/commonStore';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
+import { uiActions } from '~/ui/store';
 
 export interface ILayerListViewModel {
   layerId: string;

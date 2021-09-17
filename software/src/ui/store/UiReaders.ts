@@ -8,7 +8,7 @@ import {
 } from '~/shared';
 import { router } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels/PageTypes';
-import { uiState } from '~/ui/commonStore/base';
+import { uiState } from '~/ui/store/base';
 
 export const uiReaders = {
   get globalSettings(): IGlobalSettings {

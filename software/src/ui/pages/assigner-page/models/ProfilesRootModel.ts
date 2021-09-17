@@ -1,9 +1,9 @@
 import { useEffect } from 'qx';
 import { fallbackProfileData } from '~/shared';
-import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { removeInvalidProfileAssigns } from '~/ui/features/ProfileEditor/models/ProfileDataHelper';
 import { profilesReader } from '~/ui/pages/assigner-page/models/ProfilesReader';
+import { dispatchCoreAction } from '~/ui/store';
 
 function affectStoreLoadedProfileDataToModelProfileData() {
   const { loadedProfileData } = profilesReader;

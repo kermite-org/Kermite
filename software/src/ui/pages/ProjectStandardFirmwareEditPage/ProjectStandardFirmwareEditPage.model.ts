@@ -8,15 +8,15 @@ import {
   IStandardFirmwareEntry,
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
+import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
+import { resourceManagementUtils } from '~/ui/utils';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
-} from '~/ui/commonStore';
-import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { resourceManagementUtils } from '~/ui/helpers';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
+} from '~/ui/store';
 
 export interface IProjectStandardFirmwareEditPageModel {
   editFirmwareName: string;

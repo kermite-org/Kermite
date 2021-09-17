@@ -4,8 +4,8 @@ import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
-import { keyboardBehaviorModeModule, uiReaders } from '~/ui/commonStore';
 import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
+import { keyboardBehaviorModeModule, uiReaders } from '~/ui/store';
 
 export const BehaviorSelector: FC = () => {
   const { isSimulatorMode, setSimulatorMode } = keyboardBehaviorModeModule;

@@ -1,5 +1,4 @@
 import { ILayoutEditSource } from '~/shared';
-import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
 import { LayoutEditorCore } from '~/ui/features';
 import {
   ILayoutManagerEditTarget,
@@ -7,6 +6,7 @@ import {
   layoutManagerState,
 } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';
+import { projectPackagesReader, uiReaders, uiState } from '~/ui/store';
 
 export const layoutManagerReader = {
   get editSource(): ILayoutEditSource {

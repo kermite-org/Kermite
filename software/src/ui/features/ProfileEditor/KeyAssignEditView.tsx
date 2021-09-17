@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { uiState } from '~/ui/commonStore';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { TestInputArea } from '~/ui/features/ProfileEditor/ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from '~/ui/features/ProfileEditor/ui_editor_assignsSection';
@@ -10,6 +9,7 @@ import { BehaviorOptionsPartA } from '~/ui/features/ProfileEditor/ui_editor_side
 import { BehaviorOptionsPartB } from '~/ui/features/ProfileEditor/ui_editor_sideConfigPart/BehaviorOptionsPartB';
 import { ProfileConfigurationPart } from '~/ui/features/ProfileEditor/ui_editor_sideConfigPart/ProfileConfigurationPart';
 import { ActionRoutingPanel } from '~/ui/features/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanel';
+import { uiState } from '~/ui/store';
 
 export const KeyAssignEditView: FC = () => {
   const { isUserProfileEditorView } = editorModel;

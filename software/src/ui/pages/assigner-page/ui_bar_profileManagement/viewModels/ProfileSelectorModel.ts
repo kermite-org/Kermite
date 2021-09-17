@@ -6,14 +6,14 @@ import {
   stringifyProfileEntry,
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { getFileNameFromPath } from '~/ui/helpers';
 import {
   profilesActions,
   profilesReader,
 } from '~/ui/pages/assigner-page/models';
+import { projectPackagesReader, uiReaders } from '~/ui/store';
+import { getFileNameFromPath } from '~/ui/utils';
 
 export type IProfileSelectorModel = {
   profileSelectorSource: ISelectorSource;

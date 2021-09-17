@@ -1,5 +1,5 @@
-import { uiReaders } from '~/ui/commonStore/UiReaders';
-import { dispatchCoreAction } from '~/ui/commonStore/base';
+import { uiReaders } from '~/ui/store/UiReaders';
+import { dispatchCoreAction } from '~/ui/store/base';
 
 export const keyboardBehaviorModeModule = {
   get isSimulatorMode() {

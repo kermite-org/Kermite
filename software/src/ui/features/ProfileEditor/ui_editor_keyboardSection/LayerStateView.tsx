@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { IPlayerModel } from '~/ui/commonModels';
-import { uiReaders, uiState } from '~/ui/commonStore';
+import { uiReaders, uiState } from '~/ui/store';
 
 type Props = {
   playerModel: IPlayerModel;

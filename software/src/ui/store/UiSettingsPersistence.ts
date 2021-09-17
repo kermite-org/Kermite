@@ -1,9 +1,5 @@
 import { copyObjectProps } from '~/shared';
-import {
-  commitUiSettings,
-  commitUiState,
-  uiState,
-} from '~/ui/commonStore/base';
+import { commitUiSettings, commitUiState, uiState } from '~/ui/store/base';
 
 export const uiSettingsPersistence = {
   initialize() {

@@ -1,5 +1,4 @@
 import { css, FC, jsx } from 'qx';
-import { uiReaders, uiState } from '~/ui/commonStore';
 import {
   ProjectResourcePage,
   ProjectLayoutEditPage,
@@ -16,6 +15,7 @@ import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
+import { uiReaders, uiState } from '~/ui/store';
 
 export const MainColumnRoutes: FC = () => {
   const { pageSpec } = uiState;

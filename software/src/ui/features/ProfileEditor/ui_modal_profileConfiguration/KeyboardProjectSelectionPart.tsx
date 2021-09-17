@@ -1,9 +1,9 @@
 import { css, FC, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
-import { uiReaders } from '~/ui/commonStore';
 import { GeneralSelector } from '~/ui/components';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { uiReaders } from '~/ui/store';
 
 const fallbackProjectId = '000000';
 

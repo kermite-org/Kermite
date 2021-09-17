@@ -1,8 +1,8 @@
 import { jsx, render } from 'qx';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui/base';
-import { uiSettingsPersistence, commitUiState } from '~/ui/commonStore';
 import { SiteRoot } from '~/ui/root/SiteRoot';
+import { uiSettingsPersistence, commitUiState } from '~/ui/store';
 
 function start() {
   console.log('start');

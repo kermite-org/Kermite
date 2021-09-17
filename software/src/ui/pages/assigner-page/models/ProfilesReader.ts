@@ -1,5 +1,5 @@
 import { IProfileEntry } from '~/shared';
-import { uiReaders, uiState } from '~/ui/commonStore';
+import { uiReaders, uiState } from '~/ui/store';
 
 export const profilesReader = {
   get profileEditSource() {

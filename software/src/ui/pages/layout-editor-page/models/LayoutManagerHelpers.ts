@@ -1,5 +1,5 @@
 import { ILayoutEditSource, IProjectPackageInfo } from '~/shared';
-import { projectPackagesReader } from '~/ui/commonStore';
+import { projectPackagesReader } from '~/ui/store';
 
 export const layoutManagerHelpers = {
   getEditSourceDisplayText(

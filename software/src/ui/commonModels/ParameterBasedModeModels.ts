@@ -4,7 +4,7 @@ import {
   IRoutingChannelModel,
   ISystemLayoutModel,
 } from '~/ui/commonModels/Interfaces';
-import { uiReaders } from '~/ui/commonStore/UiReaders';
+import { uiReaders } from '~/ui/store/UiReaders';
 
 interface ISystemParameterModel {
   value: number;

@@ -1,6 +1,6 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { uiReaders } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/store';
 import { IProfileManagementPartViewModel } from './ProfilesOperationModel';
 
 interface IMenuItem {
