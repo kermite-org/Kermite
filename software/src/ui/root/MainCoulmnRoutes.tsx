@@ -10,7 +10,7 @@ import {
   WelcomePage,
   ProjectCustomFirmwareEditPage,
 } from '~/ui/pages';
-import { EditorPage } from '~/ui/pages/editor-page';
+import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { LayoutManagerPageComponent } from '~/ui/pages/layouter-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
@@ -41,7 +41,7 @@ export const MainColumnRoutes: FC = () => {
   const { pagePath } = uiReaders;
   return (
     <div css={style}>
-      {pagePath === '/assigner' && <EditorPage />}
+      {pagePath === '/assigner' && <AssignerPage />}
       {pagePath === '/layouter' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}

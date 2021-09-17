@@ -4,10 +4,13 @@ import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelate
 import { ipcAgent, texts } from '~/ui/base';
 import { commitUiState, uiActions, uiState } from '~/ui/commonStore';
 import { modalAlert, modalConfirm } from '~/ui/components';
-import { resourceManagementUtils } from '~/ui/helpers';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
-import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
+import { resourceManagementUtils } from '~/ui/helpers';
+import {
+  profilesActions,
+  profilesReader,
+} from '~/ui/pages/assigner-page/models';
+import { callProfileSetupModal } from '~/ui/pages/assigner-page/ui_modal_profileSetup/ProfileSetupModal';
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!editorModel.checkDirty()) {

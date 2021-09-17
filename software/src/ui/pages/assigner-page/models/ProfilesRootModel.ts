@@ -3,7 +3,7 @@ import { fallbackProfileData } from '~/shared';
 import { dispatchCoreAction } from '~/ui/commonStore';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { removeInvalidProfileAssigns } from '~/ui/features/ProfileEditor/models/ProfileDataHelper';
-import { profilesReader } from '~/ui/pages/editor-page/models/ProfilesReader';
+import { profilesReader } from '~/ui/pages/assigner-page/models/ProfilesReader';
 
 function affectStoreLoadedProfileDataToModelProfileData() {
   const { loadedProfileData } = profilesReader;

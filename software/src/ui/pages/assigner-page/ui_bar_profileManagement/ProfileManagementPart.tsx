@@ -5,17 +5,17 @@ import {
   OperationButtonWithIcon,
   ConfigurationButton,
 } from '~/ui/components';
-import { updateProfileDataSourceHandling } from '~/ui/pages/editor-page/models';
-import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
-import { useProfileSelectorModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
-import { makeProfilesOperationModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
+import { updateProfileDataSourceHandling } from '~/ui/pages/assigner-page/models';
+import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
+import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
+import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import {
   BehaviorSelector,
   LayoutStandardSelector,
   MuteModeSelector,
   RoutingChannelSelector,
-} from '~/ui/pages/editor-page/ui_bar_profileManagement/views/ConfigSelectors';
-import { SavingProjectPresetSelectionModal } from '~/ui/pages/editor-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
+} from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/ConfigSelectors';
+import { SavingProjectPresetSelectionModal } from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
 import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
 export const ProfileManagementPart: FcWithClassName = ({ className }) => {

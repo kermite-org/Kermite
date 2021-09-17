@@ -5,7 +5,7 @@ import {
   WindowRestartButton,
 } from '~/ui/components/window';
 import { useWindowControlButtonsPartModel } from '~/ui/facets/WindowControlButtonsPart/WindowControlButtonsPart.model';
-import { profilesReader } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/assigner-page/models';
 
 export const WindowControlButtonsPart: FC = () => {
   const {

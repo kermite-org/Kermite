@@ -10,7 +10,10 @@ import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { getFileNameFromPath } from '~/ui/helpers';
-import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
+import {
+  profilesActions,
+  profilesReader,
+} from '~/ui/pages/assigner-page/models';
 
 export type IProfileSelectorModel = {
   profileSelectorSource: ISelectorSource;

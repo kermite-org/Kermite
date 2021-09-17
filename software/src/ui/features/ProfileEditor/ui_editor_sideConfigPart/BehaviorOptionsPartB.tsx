@@ -3,7 +3,7 @@ import { texts } from '~/ui/base';
 import { commitUiSettings, commitUiState, uiState } from '~/ui/commonStore';
 import { CheckBoxLine, ConfigurationButton } from '~/ui/components';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { profilesReader } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/assigner-page/models';
 
 export const BehaviorOptionsPartB: FC = () => {
   const { settings } = uiState;

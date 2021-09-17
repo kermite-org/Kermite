@@ -5,7 +5,7 @@ import { ProfileConfigratuionModalLayer } from '~/ui/features/ProfileEditor/ui_m
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 
-export const EditorPage: FC = () => {
+export const AssignerPage: FC = () => {
   return (
     <div css={style}>
       <div className="topRow">

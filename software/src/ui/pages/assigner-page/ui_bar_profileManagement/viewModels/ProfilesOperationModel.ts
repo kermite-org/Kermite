@@ -1,8 +1,11 @@
 import { useState } from 'qx';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
-import { profilesOperationActions } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Actions';
-import { profilesOperationReader } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Readers';
+import {
+  profilesActions,
+  profilesReader,
+} from '~/ui/pages/assigner-page/models';
+import { profilesOperationActions } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Actions';
+import { profilesOperationReader } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Readers';
 
 export type IProfileManagerModalState =
   | 'None'

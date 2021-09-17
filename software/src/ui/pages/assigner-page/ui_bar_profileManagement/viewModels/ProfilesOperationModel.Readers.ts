@@ -1,6 +1,6 @@
 import { uiReaders } from '~/ui/commonStore';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { profilesReader } from '~/ui/pages/editor-page/models';
+import { profilesReader } from '~/ui/pages/assigner-page/models';
 
 export const profilesOperationReader = {
   get CanWriteKeyMappingToDevice(): boolean {

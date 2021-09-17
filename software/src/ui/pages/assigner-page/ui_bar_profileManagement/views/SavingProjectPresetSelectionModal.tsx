@@ -7,8 +7,8 @@ import {
   modalConfirm,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/components';
-import { profilesActions } from '~/ui/pages/editor-page/models';
-import { IProfileManagementPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
+import { profilesActions } from '~/ui/pages/assigner-page/models';
+import { IProfileManagementPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();

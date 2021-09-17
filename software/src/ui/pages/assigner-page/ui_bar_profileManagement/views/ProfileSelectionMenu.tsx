@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
-import { IProfileSelectionMenuPartViewModel } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
+import { IProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 type Props = {
   vm: IProfileSelectionMenuPartViewModel;
