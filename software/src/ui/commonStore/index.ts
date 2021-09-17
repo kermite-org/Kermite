@@ -1,4 +1,3 @@
-export * from './CommonStore';
 export * from './GlobalSettings';
 export * from './KeyboardBehaviorModeModule';
 export * from './ProjectPackages';
