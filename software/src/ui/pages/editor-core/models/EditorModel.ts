@@ -2,14 +2,15 @@ import {
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  getDisplayKeyboardDesignSingleCached,
   IAssignEntry,
   IAssignEntryWithLayerFallback,
   IAssignOperation,
   IPersistKeyboardDesign,
   IProfileAssignType,
   IProfileData,
-  getDisplayKeyboardDesignSingleCached,
 } from '~/shared';
+import { uiReaders } from '~/ui/commonStore';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,
@@ -39,6 +40,10 @@ export class EditorModel {
   private preModifiedDesign?: IPersistKeyboardDesign;
 
   // getters
+
+  get isUserProfileEditorView() {
+    return uiReaders.pagePath === '/assigner';
+  }
 
   private get profileAssignType(): IProfileAssignType {
     return this.profileData.settings.assignType;

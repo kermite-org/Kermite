@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { uiState } from '~/ui/commonStore';
+import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { TestInputArea } from '~/ui/pages/editor-core/ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from '~/ui/pages/editor-core/ui_editor_assignsSection';
 import { KeyboardSection } from '~/ui/pages/editor-core/ui_editor_keyboardSection/KeyboardSection';
@@ -9,17 +10,14 @@ import { BehaviorOptionsPartA } from '~/ui/pages/editor-core/ui_editor_sideConfi
 import { BehaviorOptionsPartB } from '~/ui/pages/editor-core/ui_editor_sideConfigPart/BehaviorOptionsPartB';
 import { ProfileConfigurationPart } from '~/ui/pages/editor-core/ui_editor_sideConfigPart/ProfileConfigurationPart';
 import { ActionRoutingPanel } from '~/ui/pages/editor-core/ui_modal_routingPanel/ActionRoutingPanel';
-import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 
-type Props = {
-  forceHideTestInputArea?: boolean;
-};
-export const KeyAssignEditView: FC<Props> = ({ forceHideTestInputArea }) => {
+export const KeyAssignEditView: FC = () => {
+  const { isUserProfileEditorView } = editorModel;
   return (
     <div css={cssKeyAssignEditView}>
       <div
         css={cssEditTopBarBox}
-        qxIf={!forceHideTestInputArea && uiState.settings.showTestInputArea}
+        qxIf={isUserProfileEditorView && uiState.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>
@@ -31,12 +29,14 @@ export const KeyAssignEditView: FC<Props> = ({ forceHideTestInputArea }) => {
           <div class="assignPartBox">
             <AssignEditSection />
           </div>
-          {editorPageModel.routingPanelVisible && <ActionRoutingPanel />}
+          {uiState.profileRoutingPanelVisible && <ActionRoutingPanel />}
         </div>
         <div css={cssEditSideBarColumn}>
-          <div class="topPartBox">
-            <BehaviorOptionsPartA />
-          </div>
+          {isUserProfileEditorView && (
+            <div class="topPartBox">
+              <BehaviorOptionsPartA />
+            </div>
+          )}
           <div class="layersPartBox">
             <LayersSection />
           </div>

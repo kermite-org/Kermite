@@ -58,7 +58,7 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
+  background: ${uiTheme.colors.clPageBackground};
   color: ${uiTheme.colors.clMainText};
   height: 100%;
   display: flex;
