@@ -10,7 +10,6 @@ import {
 import {
   projectPackagesReader,
   projectPackagesWriter,
-  uiActions,
   uiReaders,
 } from '~/ui/commonStore';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
@@ -18,6 +17,7 @@ import { resourceManagementUtils } from '~/ui/helpers';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 
 export interface IProjectStandardFirmwareEditPageModel {
+  editFirmwareName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
   canSave: boolean;
   saveHandler(): void;
@@ -87,21 +87,21 @@ const actions = {
     projectResourceActions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
-    uiActions.closeSubPage();
+    store.sourceEntry = newFirmwareEntry;
   },
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  firmwareName: string,
+  sourceFirmwareName: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(firmwareName),
-    [firmwareName],
+    () => actions.loadSourceFirmwareEntry(sourceFirmwareName),
+    [sourceFirmwareName],
   );
   const {
-    sourceEntry: { standardFirmwareConfig },
+    sourceEntry: { standardFirmwareConfig, firmwareName: editFirmwareName },
     canSave,
   } = readers;
   const { saveHandler } = actions;
-  return { standardFirmwareConfig, canSave, saveHandler };
+  return { editFirmwareName, standardFirmwareConfig, canSave, saveHandler };
 }

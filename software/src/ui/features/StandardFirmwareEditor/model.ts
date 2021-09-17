@@ -33,7 +33,7 @@ export function useStandardFirmwareEditModel(
 ): IStandardFirmwareEditModel {
   useEffect(
     () => standardFirmwareEditActions.loadFirmwareConfig(firmwareConfig),
-    [],
+    [firmwareConfig],
   );
 
   const { editValues } = standardFirmwareEditStore;
