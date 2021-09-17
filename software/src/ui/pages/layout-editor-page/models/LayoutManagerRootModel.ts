@@ -1,8 +1,8 @@
 import { useEffect } from 'qx';
 import { uiState } from '~/ui/commonStore';
-import { UiLayouterCore } from '~/ui/features';
+import { LayoutEditorCore } from '~/ui/features';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { layoutManagerState } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { layoutManagerState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 
 export const layoutManagerRootModel = {
   updateBeforeRender() {
@@ -14,7 +14,7 @@ export const layoutManagerRootModel = {
 
     useEffect(() => {
       if (layoutEditSource !== layoutManagerState.layoutEditSource) {
-        UiLayouterCore.loadEditDesign(loadedLayoutData);
+        LayoutEditorCore.loadEditDesign(loadedLayoutData);
         layoutManagerState.layoutEditSource = layoutEditSource;
       }
     }, [layoutEditSource]);
@@ -23,7 +23,7 @@ export const layoutManagerRootModel = {
       return () => {
         const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
         if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
-          const design = UiLayouterCore.emitSavingDesign();
+          const design = LayoutEditorCore.emitSavingDesign();
           editorModel.replaceKeyboardDesign(design);
         }
       };

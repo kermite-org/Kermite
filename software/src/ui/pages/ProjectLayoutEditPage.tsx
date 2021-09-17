@@ -5,9 +5,9 @@ import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
-  LayouterGeneralComponent,
-  LayouterGeneralComponent_OutputPropsSupplier,
-  UiLayouterCore,
+  LayoutEditorGeneralComponent,
+  LayoutEditorGeneralComponent_OutputPropsSupplier,
+  LayoutEditorCore,
 } from '~/ui/features';
 import { useMemoEx } from '~/ui/helpers';
 
@@ -30,7 +30,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
     layoutName,
   ]);
   const { isModified, emitSavingDesign } =
-    LayouterGeneralComponent_OutputPropsSupplier;
+    LayoutEditorGeneralComponent_OutputPropsSupplier;
 
   const saveHandler = () => {
     const newLayoutEntry: IProjectLayoutEntry = {
@@ -39,7 +39,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
     };
     projectPackagesWriter.saveLocalProjectLayout(newLayoutEntry);
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
-      UiLayouterCore.rebase();
+      LayoutEditorCore.rebase();
     } else {
       uiActions.closeSubPage();
     }
@@ -52,7 +52,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
         canSave={isModified}
         saveHandler={saveHandler}
       />
-      <LayouterGeneralComponent layout={sourceLayoutEntry.data} />
+      <LayoutEditorGeneralComponent layout={sourceLayoutEntry.data} />
     </div>
   );
 };

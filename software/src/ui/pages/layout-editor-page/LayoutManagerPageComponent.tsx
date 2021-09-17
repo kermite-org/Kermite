@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { UiLayouterCore } from '~/ui/features';
-import { LayoutManagerTopBarTemplate } from '~/ui/pages/layouter-page/templates/LayoutManagerTopBarTemplate';
+import { LayoutEditorCore } from '~/ui/features';
+import { LayoutManagerTopBarTemplate } from '~/ui/pages/layout-editor-page/templates/LayoutManagerTopBarTemplate';
 
 export const LayoutManagerPageComponent: FC = () => {
   return (
@@ -10,7 +10,7 @@ export const LayoutManagerPageComponent: FC = () => {
         <LayoutManagerTopBarTemplate />
       </div>
       <div className="mainRow">
-        <UiLayouterCore.Component />
+        <LayoutEditorCore.Component />
       </div>
     </div>
   );

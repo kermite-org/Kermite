@@ -1,22 +1,22 @@
 import { ILayoutEditSource } from '~/shared';
 import { projectPackagesReader, uiReaders, uiState } from '~/ui/commonStore';
-import { UiLayouterCore } from '~/ui/features';
+import { LayoutEditorCore } from '~/ui/features';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
   layoutManagerState,
-} from '~/ui/pages/layouter-page/models/LayoutManagerBase';
-import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
+} from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
+import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';
 
 export const layoutManagerReader = {
   get editSource(): ILayoutEditSource {
     return uiState.core.layoutEditSource;
   },
   get isModified(): boolean {
-    return UiLayouterCore.getIsModified();
+    return LayoutEditorCore.getIsModified();
   },
   get hasLayoutEntities(): boolean {
-    return UiLayouterCore.hasEditLayoutEntities();
+    return LayoutEditorCore.hasEditLayoutEntities();
   },
   get modalState(): ILayoutManagerModalState {
     return layoutManagerState.modalState;

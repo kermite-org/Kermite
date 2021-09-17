@@ -12,7 +12,7 @@ import {
 } from '~/ui/pages';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
-import { LayoutManagerPageComponent } from '~/ui/pages/layouter-page';
+import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
 import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
 import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
@@ -42,7 +42,7 @@ export const MainColumnRoutes: FC = () => {
   return (
     <div css={style}>
       {pagePath === '/assigner' && <AssignerPage />}
-      {pagePath === '/layouter' && <LayoutManagerPageComponent />}
+      {pagePath === '/layoutEditor' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}

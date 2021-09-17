@@ -4,12 +4,12 @@ import { editMutations, editReader } from '~/ui/features/LayoutEditor/models';
 import { LayoutEditorViewRoot } from '~/ui/features/LayoutEditor/views/LayoutEditorViewRoot';
 import {
   KeyboardDesignConverter,
-  keyboardOperationHander,
+  keyboardOperationHandler,
   setupDeviceKeyEventsListener,
 } from '~/ui/features/LayoutEditor/wrapper';
 import { windowKeyboardEventEffect } from '~/ui/helpers';
 
-export namespace UiLayouterCore {
+export namespace LayoutEditorCore {
   export function loadEditDesign(persistDesign: IPersistKeyboardDesign) {
     try {
       const design =
@@ -42,7 +42,7 @@ export namespace UiLayouterCore {
   }
 
   export function Component() {
-    useEffect(windowKeyboardEventEffect(keyboardOperationHander), []);
+    useEffect(windowKeyboardEventEffect(keyboardOperationHandler), []);
     useEffect(setupDeviceKeyEventsListener, []);
     return <LayoutEditorViewRoot />;
   }

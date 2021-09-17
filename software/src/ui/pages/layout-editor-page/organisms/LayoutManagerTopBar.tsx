@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { IGeneralMenuItem, uiTheme } from '~/ui/base';
 import { GeneralButtonMenu, OperationButtonWithIcon } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { ILayoutManagerEditTarget } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
+import { ILayoutManagerEditTarget } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 
 type Props = {
   menuItems: IGeneralMenuItem[];

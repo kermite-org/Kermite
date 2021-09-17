@@ -2,11 +2,11 @@ import { useState } from 'qx';
 import { ISelectorOption } from '~/ui/base';
 import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
-import { UiLayouterCore } from '~/ui/features';
-import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
-import { ILayoutManagerModalState } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
-import { layoutManagerHelpers } from '~/ui/pages/layouter-page/models/LayoutManagerHelpers';
-import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
+import { LayoutEditorCore } from '~/ui/features';
+import { layoutManagerActions } from '~/ui/pages/layout-editor-page/models/LayoutManagerActions';
+import { ILayoutManagerModalState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
+import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';
+import { layoutManagerReader } from '~/ui/pages/layout-editor-page/models/LayoutManagerReaders';
 
 const configs = {
   selectorSize: 7,
@@ -88,7 +88,7 @@ function submit(
     layoutManagerActions.saveToProject(
       currentProjectId,
       currentLayoutName,
-      UiLayouterCore.emitSavingDesign(),
+      LayoutEditorCore.emitSavingDesign(),
     );
   }
   layoutManagerActions.closeModal();

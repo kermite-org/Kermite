@@ -32,10 +32,10 @@ const itemsSource: NavigationItemSource[] = [
     hint: texts.hint_sideMenu_app_assigner,
   },
   {
-    pagePath: '/layouter',
-    pageName: texts.label_sideMenu_app_layouter,
+    pagePath: '/layoutEditor',
+    pageName: texts.label_sideMenu_app_layoutEditor,
     iconSpec: 'fa fa-drafting-compass',
-    hint: texts.hint_sideMenu_app_layouter,
+    hint: texts.hint_sideMenu_app_layoutEditor,
   },
   {
     pagePath: '/presetBrowser',
@@ -94,7 +94,7 @@ const itemsSource: NavigationItemSource[] = [
 // const entrySources: NavigationEntrySource[] = [
 //   { pagePath: '/assigner', pageName: 'Assigner', iconSpec: 'keyboard' },
 //   {
-//     pagePath: '/layouter',
+//     pagePath: '/layoutEditor',
 //     pageName: 'Drafter',
 //     iconSpec: 'architecture',
 //   },

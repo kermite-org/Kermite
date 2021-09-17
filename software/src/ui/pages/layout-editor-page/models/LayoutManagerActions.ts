@@ -12,14 +12,14 @@ import {
   uiState,
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
-import { UiLayouterCore } from '~/ui/features';
+import { LayoutEditorCore } from '~/ui/features';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
   layoutManagerState,
-} from '~/ui/pages/layouter-page/models/LayoutManagerBase';
-import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
+} from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
+import { layoutManagerReader } from '~/ui/pages/layout-editor-page/models/LayoutManagerReaders';
 
 function setModalState(state: ILayoutManagerModalState) {
   layoutManagerState.modalState = state;
@@ -132,7 +132,7 @@ export const layoutManagerActions = {
   },
 
   async saveToFileWithDialog() {
-    const design = UiLayouterCore.emitSavingDesign();
+    const design = LayoutEditorCore.emitSavingDesign();
     const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
     if (filePath) {
       const modFilePath = forceChangeFilePathExtension(
@@ -156,7 +156,7 @@ export const layoutManagerActions = {
     //   caption: 'Save',
     // });
     dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
-    UiLayouterCore.rebase();
+    LayoutEditorCore.rebase();
   },
 
   async createNewProfileFromCurrentLayout() {
@@ -180,7 +180,7 @@ export const layoutManagerActions = {
         projectId = profile.projectId;
       }
     }
-    const layout = UiLayouterCore.emitSavingDesign();
+    const layout = LayoutEditorCore.emitSavingDesign();
     dispatchCoreAction({
       profile_createProfileFromLayout: {
         projectId,
@@ -191,7 +191,7 @@ export const layoutManagerActions = {
     dispatchCoreAction({ layout_loadCurrentProfileLayout: 1 });
   },
   overwriteLayout() {
-    layoutManagerActions.save(UiLayouterCore.emitSavingDesign());
+    layoutManagerActions.save(LayoutEditorCore.emitSavingDesign());
   },
   showEditLayoutFileInFiler() {
     dispatchCoreAction({ layout_showEditLayoutFileInFiler: 1 });
