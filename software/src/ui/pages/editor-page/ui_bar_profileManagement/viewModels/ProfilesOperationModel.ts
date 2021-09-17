@@ -1,5 +1,5 @@
 import { useState } from 'qx';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
 import { profilesOperationActions } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Actions';
 import { profilesOperationReader } from '~/ui/pages/editor-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Readers';

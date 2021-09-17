@@ -8,8 +8,8 @@ import {
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { getFileNameFromPath } from '~/ui/helpers';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
 
 export type IProfileSelectorModel = {

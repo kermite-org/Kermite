@@ -5,7 +5,7 @@ import { ipcAgent, texts } from '~/ui/base';
 import { commitUiState, uiActions, uiState } from '~/ui/commonStore';
 import { modalAlert, modalConfirm } from '~/ui/components';
 import { resourceManagementUtils } from '~/ui/helpers';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 

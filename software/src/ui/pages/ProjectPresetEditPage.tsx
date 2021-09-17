@@ -7,7 +7,7 @@ import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHe
 import {
   AssignerGeneralComponent,
   AssignerGeneralComponent_OutputPropsSupplier,
-} from '~/ui/pages/editor-core';
+} from '~/ui/features/ProfileEditor';
 
 type Props = {
   spec: IPageSpec_ProjectPresetEdit;

@@ -1,7 +1,7 @@
 import { useEffect } from 'qx';
 import { uiState } from '~/ui/commonStore';
 import { UiLayouterCore } from '~/ui/features';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { layoutManagerState } from '~/ui/pages/layouter-page/models/LayoutManagerBase';
 
 export const layoutManagerRootModel = {

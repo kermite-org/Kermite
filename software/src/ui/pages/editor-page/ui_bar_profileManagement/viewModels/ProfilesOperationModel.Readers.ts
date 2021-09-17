@@ -1,5 +1,5 @@
 import { uiReaders } from '~/ui/commonStore';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import { profilesReader } from '~/ui/pages/editor-page/models';
 
 export const profilesOperationReader = {

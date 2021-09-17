@@ -13,7 +13,7 @@ import {
 } from '~/ui/commonStore';
 import { modalConfirm } from '~/ui/components';
 import { UiLayouterCore } from '~/ui/features';
-import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
+import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
