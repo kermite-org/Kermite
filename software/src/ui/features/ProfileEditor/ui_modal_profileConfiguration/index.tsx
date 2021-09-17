@@ -6,7 +6,7 @@ import { KeyboardProjectSelectionPart } from '~/ui/features/ProfileEditor/ui_mod
 import { ShiftCancelOptionPart } from '~/ui/features/ProfileEditor/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 
-export const ProfileConfigratuionModalLayer: FC = () => {
+export const ProfileConfigurationModalLayer: FC = () => {
   const visible = uiState.profileConfigModalVisible;
   const closeModal = () => {
     uiState.profileConfigModalVisible = false;

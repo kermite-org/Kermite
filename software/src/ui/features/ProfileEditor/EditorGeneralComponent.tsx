@@ -2,7 +2,7 @@ import { css, FC, jsx, useEffect } from 'qx';
 import { IPersistProfileData, ProfileDataConverter } from '~/shared';
 import { KeyAssignEditView } from '~/ui/features/ProfileEditor/KeyAssignEditView';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { ProfileConfigratuionModalLayer } from '~/ui/features/ProfileEditor/ui_modal_profileConfiguration';
+import { ProfileConfigurationModalLayer } from '~/ui/features/ProfileEditor/ui_modal_profileConfiguration';
 
 type Props = {
   originalProfile: IPersistProfileData;
@@ -29,7 +29,7 @@ export const AssignerGeneralComponent: FC<Props> = ({ originalProfile }) => {
   return (
     <div css={style}>
       <KeyAssignEditView />
-      <ProfileConfigratuionModalLayer />
+      <ProfileConfigurationModalLayer />
     </div>
   );
 };

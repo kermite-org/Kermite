@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/features/ProfileEditor';
-import { ProfileConfigratuionModalLayer } from '~/ui/features/ProfileEditor/ui_modal_profileConfiguration';
+import { ProfileConfigurationModalLayer } from '~/ui/features/ProfileEditor/ui_modal_profileConfiguration';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 
@@ -15,7 +15,7 @@ export const AssignerPage: FC = () => {
       <div className="mainRow">
         <KeyAssignEditView />
       </div>
-      <ProfileConfigratuionModalLayer />
+      <ProfileConfigurationModalLayer />
     </div>
   );
 };
