@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
-import { useGlobalMenuPartModel } from '~/ui/facets/GlobalMenuPart/GlobalMenuPart.model';
+import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/GlobalMenuPart.model';
 
 export const GlobalMenuPart: FC = () => {
   const { isOpen, openMenu, closeMenu, menuItems } = useGlobalMenuPartModel();
