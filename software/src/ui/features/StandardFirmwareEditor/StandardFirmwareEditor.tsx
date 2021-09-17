@@ -1,32 +1,21 @@
-import { css, FC, jsx, QxChildren } from 'qx';
+import { css, FC, jsx } from 'qx';
+import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
+import { FieldItem } from '~/ui/features/StandardFirmwareEditor/FieldItem';
 import {
-  standardFirmwareEditActions,
-  standardFirmwareEditStore,
-} from '~/ui/features/StandardFirmwareEditor/core';
-import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/helpers';
-import { useStandardFirmwareEditModel } from '~/ui/features/StandardFirmwareEditor/model';
+  standardFirmwareEditModelHelpers,
+  standardFirmwareEditor_fieldValueConverters,
+} from '~/ui/features/StandardFirmwareEditor/helpers';
+import { useStandardFirmwareEditPresenter } from '~/ui/features/StandardFirmwareEditor/presenter';
+import { standardFirmwareEditStore } from '~/ui/features/StandardFirmwareEditor/store';
 import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
 };
 
-function arrayToText(arr: string[] | undefined): string {
-  return arr?.join(', ') || '';
-}
-
-function arrayFromText(text: string): string[] | undefined {
-  if (text === '') {
-    return undefined;
-  }
-  return text.split(',').map((a) => a.trim());
-}
-
-function integerFromText(text: string): number | undefined {
-  const value = parseInt(text);
-  return isFinite(value) ? value : undefined;
-}
+const { arrayFromText, arrayToText, integerFromText, integerToText } =
+  standardFirmwareEditor_fieldValueConverters;
 
 function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
   key: K,
@@ -38,47 +27,19 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     rawValue: Extract<IStandardFirmwareEditValues[K], string | boolean>,
   ) => {
     const value = converter ? converter(rawValue) : rawValue;
-    standardFirmwareEditActions.commitValue(key, value);
+    standardFirmwareEditStore.actions.commitValue(key, value);
   };
 }
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
-  get canSave() {
-    const { originalValues, editValues } = standardFirmwareEditStore;
-    const isModified = editValues !== originalValues;
-    const errors =
-      standardFirmwareEditModelHelpers.validateEditValues(editValues);
-    const hasError = Object.values(errors).some((a) => !!a);
-    const totalError =
-      standardFirmwareEditModelHelpers.getTotalValidationError(editValues);
-    return isModified && !hasError && !totalError;
+  get canSave(): boolean {
+    return standardFirmwareEditStore.readers.canSave;
   },
-  emitSavingEditValues() {
-    const { editValues } = standardFirmwareEditStore;
+  emitSavingEditValues(): IKermiteStandardKeyboardSpec {
     return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
-      editValues,
+      standardFirmwareEditStore.state.editValues,
     );
   },
-};
-
-const FieldItem: FC<{
-  title: string;
-  children: QxChildren;
-  indent?: boolean;
-}> = ({ title, children, indent }) => {
-  const styleChildren = css`
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  `;
-  return (
-    <tr>
-      <td style={(indent && 'padding-left:15px') || ''}>{title}</td>
-      <td>
-        <div css={styleChildren}>{children}</div>
-      </td>
-    </tr>
-  );
 };
 
 export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
@@ -88,9 +49,9 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
     isAvr,
     isRp,
     availablePinsText,
-    errors,
+    fieldErrors,
     totalError,
-  } = useStandardFirmwareEditModel(firmwareConfig);
+  } = useStandardFirmwareEditPresenter(firmwareConfig);
 
   return (
     <div css={style}>
@@ -134,9 +95,9 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
-              invalid={!!errors.matrixRowPins}
+              invalid={!!fieldErrors.matrixRowPins}
             />
-            <div>{errors.matrixRowPins}</div>
+            <div>{fieldErrors.matrixRowPins}</div>
           </FieldItem>
           <FieldItem title="column pins" indent>
             <GeneralInput
@@ -144,9 +105,9 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
-              invalid={!!errors.matrixColumnPins}
+              invalid={!!fieldErrors.matrixColumnPins}
             />
-            <div>{errors.matrixColumnPins}</div>
+            <div>{fieldErrors.matrixColumnPins}</div>
           </FieldItem>
 
           <FieldItem title="use direct wired key scanner">
@@ -161,9 +122,9 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               setValue={valueChangeHandler('directWiredPins', arrayFromText)}
               width={400}
               disabled={!editValues.useDirectWiredKeyScanner}
-              invalid={!!errors.directWiredPins}
+              invalid={!!fieldErrors.directWiredPins}
             />
-            <div>{errors.directWiredPins}</div>
+            <div>{fieldErrors.directWiredPins}</div>
           </FieldItem>
 
           <FieldItem title="use encoder">
@@ -178,9 +139,9 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               setValue={valueChangeHandler('encoderPins', arrayFromText)}
               width={100}
               disabled={!editValues.useEncoder}
-              invalid={!!errors.encoderPins}
+              invalid={!!fieldErrors.encoderPins}
             />
-            <div>{errors.encoderPins}</div>
+            <div>{fieldErrors.encoderPins}</div>
           </FieldItem>
 
           <FieldItem title="use lighting">
@@ -195,24 +156,24 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               setValue={valueChangeHandler('lightingPin')}
               width={100}
               disabled={!(editValues.useLighting && isRp)}
-              invalid={!!errors.lightingPin}
+              invalid={!!fieldErrors.lightingPin}
             />
-            <div>{errors.lightingPin}</div>
+            <div>{fieldErrors.lightingPin}</div>
           </FieldItem>
 
           <FieldItem title="lighting num LEDs" indent>
             <GeneralInput
               type="number"
-              value={editValues.lightingNumLeds?.toString() || ''}
+              value={integerToText(editValues.lightingNumLeds)}
               setValue={valueChangeHandler(
                 'lightingNumLeds',
                 integerFromText as any,
               )}
               width={100}
               disabled={!editValues.useLighting}
-              invalid={!!errors.lightingNumLeds}
+              invalid={!!fieldErrors.lightingNumLeds}
             />
-            <div>{errors.lightingNumLeds}</div>
+            <div>{fieldErrors.lightingNumLeds}</div>
           </FieldItem>
 
           <FieldItem title="use LCD">

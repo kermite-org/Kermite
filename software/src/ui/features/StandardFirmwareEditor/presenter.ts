@@ -1,22 +1,18 @@
 import { useEffect } from 'qx';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
-import {
-  standardFirmwareEditActions,
-  standardFirmwareEditStore,
-} from '~/ui/features/StandardFirmwareEditor/core';
-import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/helpers';
+import { standardFirmwareEditStore } from '~/ui/features/StandardFirmwareEditor/store';
 import {
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
 } from '~/ui/features/StandardFirmwareEditor/types';
 
-export interface IStandardFirmwareEditModel {
+export interface IStandardFirmwareEditPresenter {
   editValues: IStandardFirmwareEditValues;
   baseFirmwareTypeOptions: ISelectorOption[];
   availablePinsText: string;
   isAvr: boolean;
   isRp: boolean;
-  errors: IStandardFirmwareEditErrors;
+  fieldErrors: IStandardFirmwareEditErrors;
   totalError: string;
 }
 
@@ -28,35 +24,31 @@ const constants = {
   availablePinsTextRp: 'GP0~GP29',
 } as const;
 
-export function useStandardFirmwareEditModel(
+export function useStandardFirmwareEditPresenter(
   firmwareConfig: IStandardFirmwareEditValues,
-): IStandardFirmwareEditModel {
-  useEffect(
-    () => standardFirmwareEditActions.loadFirmwareConfig(firmwareConfig),
-    [firmwareConfig],
-  );
+): IStandardFirmwareEditPresenter {
+  const {
+    state: { editValues },
+    readers: { mcuType, fieldErrors, totalError },
+    actions: { loadFirmwareConfig },
+  } = standardFirmwareEditStore;
 
-  const { editValues } = standardFirmwareEditStore;
+  useEffect(() => loadFirmwareConfig(firmwareConfig), [firmwareConfig]);
+
   const { availablePinsTextAvr, availablePinsTextRp, baseFirmwareTypeOptions } =
     constants;
-  const mcuType = standardFirmwareEditModelHelpers.getMcuType(
-    editValues.baseFirmwareType,
-  );
   const availablePinsText =
     mcuType === 'avr' ? availablePinsTextAvr : availablePinsTextRp;
   const isAvr = mcuType === 'avr';
   const isRp = mcuType === 'rp';
-  const errors =
-    standardFirmwareEditModelHelpers.validateEditValues(editValues);
-  const totalError =
-    standardFirmwareEditModelHelpers.getTotalValidationError(editValues);
+
   return {
     editValues,
     baseFirmwareTypeOptions,
     availablePinsText,
     isAvr,
     isRp,
-    errors,
+    fieldErrors,
     totalError,
   };
 }

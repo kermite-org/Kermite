@@ -236,3 +236,22 @@ export const standardFirmwareEditModelHelpers = {
     return '';
   },
 };
+
+export const standardFirmwareEditor_fieldValueConverters = {
+  arrayToText(arr: string[] | undefined): string {
+    return arr?.join(', ') || '';
+  },
+  arrayFromText(text: string): string[] | undefined {
+    if (text === '') {
+      return undefined;
+    }
+    return text.split(',').map((a) => a.trim());
+  },
+  integerToText(value: number | undefined): string {
+    return value?.toString() || '';
+  },
+  integerFromText(text: string): number | undefined {
+    const value = parseInt(text);
+    return isFinite(value) ? value : undefined;
+  },
+};
