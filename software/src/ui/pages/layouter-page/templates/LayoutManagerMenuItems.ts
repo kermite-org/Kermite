@@ -2,7 +2,7 @@ import { IGeneralMenuItem } from '~/ui/base';
 import { layoutManagerActions } from '~/ui/pages/layouter-page/models/LayoutManagerActions';
 import { layoutManagerReader } from '~/ui/pages/layouter-page/models/LayoutManagerReaders';
 
-export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
+function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
   return [
     {
       type: 'menuEntry',
@@ -50,4 +50,30 @@ export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
       disabled: !layoutManagerReader.canShowEditLayoutFileInFiler,
     },
   ];
+}
+
+function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuItem[] {
+  return [
+    {
+      type: 'menuEntry',
+      text: 'save to file...',
+      handler: layoutManagerActions.saveToFileWithDialog,
+      disabled: !layoutManagerReader.canSaveToFile,
+    },
+    {
+      type: 'menuEntry',
+      text: 'save to project...',
+      handler: layoutManagerActions.openSaveToProjectModal,
+      disabled: !layoutManagerReader.canOpenProjectIoModal,
+    },
+  ];
+}
+
+export function createLayoutManagerMenuItems(): IGeneralMenuItem[] {
+  const { editSource } = layoutManagerReader;
+  if (editSource.type === 'CurrentProfile') {
+    return createLayoutManagerMenuItems_editCurrentProfileLayout();
+  } else {
+    return createLayoutManagerMenuItems_editLayoutFile();
+  }
 }
