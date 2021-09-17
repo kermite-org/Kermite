@@ -5,9 +5,11 @@ import {
   getNextFirmwareId,
   ICustomFirmwareEntry,
 } from '~/shared';
+import { uiConfiguration } from '~/ui/base';
 import {
   projectPackagesReader,
   projectPackagesWriter,
+  uiActions,
   uiReaders,
 } from '~/ui/commonStore';
 import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
@@ -94,11 +96,14 @@ const actions = {
     projectResourceActions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', state.sourceEntry.firmwareName),
     );
-    // uiActions.closeSubPage();
-    state.sourceEntry = newFirmwareEntry;
-    state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
-      state.sourceEntry,
-    );
+    if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
+      state.sourceEntry = newFirmwareEntry;
+      state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
+        state.sourceEntry,
+      );
+    } else {
+      uiActions.closeSubPage();
+    }
   },
 };
 

@@ -7,9 +7,11 @@ import {
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { uiConfiguration } from '~/ui/base';
 import {
   projectPackagesReader,
   projectPackagesWriter,
+  uiActions,
   uiReaders,
 } from '~/ui/commonStore';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
@@ -87,7 +89,11 @@ const actions = {
     projectResourceActions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
-    store.sourceEntry = newFirmwareEntry;
+    if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
+      store.sourceEntry = newFirmwareEntry;
+    } else {
+      uiActions.closeSubPage();
+    }
   },
 };
 
