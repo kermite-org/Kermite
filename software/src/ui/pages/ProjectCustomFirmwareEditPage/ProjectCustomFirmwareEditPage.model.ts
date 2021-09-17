@@ -8,7 +8,6 @@ import {
 import {
   projectPackagesReader,
   projectPackagesWriter,
-  uiActions,
   uiReaders,
 } from '~/ui/commonStore';
 import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
@@ -95,15 +94,25 @@ const actions = {
     projectResourceActions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', state.sourceEntry.firmwareName),
     );
-    uiActions.closeSubPage();
+    // uiActions.closeSubPage();
+    state.sourceEntry = newFirmwareEntry;
+    state.sourceEditValues = helpers.makeEditValuesFromFirmwareEntry(
+      state.sourceEntry,
+    );
   },
 };
 
-export function useProjectCustomFirmwareEditPageModel(firmwareName: string) {
-  useInlineEffect(() => actions.loadEditValues(firmwareName), [firmwareName]);
+export function useProjectCustomFirmwareEditPageModel(
+  sourceFirmwareName: string,
+) {
+  useInlineEffect(
+    () => actions.loadEditValues(sourceFirmwareName),
+    [sourceFirmwareName],
+  );
   const { sourceEditValues, canSave } = readers;
   const { saveHandler } = actions;
   return {
+    editFirmwareName: state.sourceEntry.firmwareName,
     sourceEditValues,
     canSave,
     saveHandler,
