@@ -42,4 +42,8 @@ const style = css`
   padding: 5px;
   font-size: 15px;
   outline: none;
+
+  > option {
+    cursor: pointer;
+  }
 `;
