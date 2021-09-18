@@ -74,6 +74,8 @@ const style = (buttonWidth: number) => css`
     &:hover {
       opacity: 0.7;
     }
+
+    transition: ${uiTheme.commonTransitionSpec};
   }
 
   &[data-disabled] {

@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { texts } from '~/ui/base';
+import { texts, uiTheme } from '~/ui/base';
 import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/GlobalMenuPart.model';
 
 export const GlobalMenuPart: FC = () => {
@@ -54,6 +54,7 @@ const style = css`
       &:hover {
         background: #8ac;
       }
+      transition: ${uiTheme.commonTransitionSpec};
     }
 
     > .menuPopup {
@@ -73,6 +74,7 @@ const style = css`
         &:hover {
           background: #c0f0f8;
         }
+        transition: ${uiTheme.commonTransitionSpec};
       }
     }
   }

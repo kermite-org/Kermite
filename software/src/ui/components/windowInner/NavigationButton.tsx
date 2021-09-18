@@ -1,4 +1,5 @@
 import { jsx, css, FC } from 'qx';
+import { uiTheme } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components/atoms';
 
@@ -47,4 +48,6 @@ const style = css`
   &:hover {
     color: #fff;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;

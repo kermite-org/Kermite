@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { texts } from '~/ui/base';
+import { texts, uiTheme } from '~/ui/base';
 import { IProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 
 type Props = {
@@ -64,6 +64,7 @@ const cssMenuButton = css`
   &:hover {
     background: #8ac;
   }
+  transition: ${uiTheme.commonTransitionSpec};
 `;
 
 const cssMenuPopup = css`
@@ -82,5 +83,6 @@ const cssMenuPopup = css`
     &:hover {
       background: #c0f0f8;
     }
+    transition: ${uiTheme.commonTransitionSpec};
   }
 `;
