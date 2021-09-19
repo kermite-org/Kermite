@@ -2,12 +2,11 @@ import { asyncRerender } from 'qx';
 import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
-import { commitUiState, uiActions } from '~/ui/commonStore';
+import { commitUiState, uiActions, uiState } from '~/ui/commonStore';
 import { modalAlert, modalConfirm } from '~/ui/components';
 import { resourceManagementUtils } from '~/ui/helpers';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { profilesActions, profilesReader } from '~/ui/pages/editor-page/models';
-import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 import { callProfileSetupModal } from '~/ui/pages/editor-page/ui_modal_profileSetup/ProfileSetupModal';
 
 async function checkShallLoadData(): Promise<boolean> {
@@ -167,7 +166,9 @@ const onWriteButton = async () => {
 };
 
 const toggleRoutingPanel = () => {
-  editorPageModel.routingPanelVisible = !editorPageModel.routingPanelVisible;
+  commitUiState({
+    profileRoutingPanelVisible: !uiState.profileRoutingPanelVisible,
+  });
 };
 
 export const profilesOperationActions = {

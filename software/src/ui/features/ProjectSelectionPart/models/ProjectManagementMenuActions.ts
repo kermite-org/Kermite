@@ -9,6 +9,7 @@ import {
   modalConfirm,
   modalTextEdit,
 } from '~/ui/components';
+import { resourceManagementUtils } from '~/ui/helpers';
 
 const projectManagementMenuActionsHelpers = {
   makeLoadableSourceProjectOptions(): ISelectorOption[] {
@@ -40,13 +41,23 @@ export const projectManagementMenuActions = {
       caption: 'create new project',
     });
     if (keyboardName) {
-      // todo: 既存のプロジェクトとの名前の重複チェックが必要
-      dispatchCoreAction({ project_createLocalProject: { keyboardName } });
-    } else {
-      modalConfirm({
-        message: 'invalid keyboard name. operation cancelled.',
-        caption: 'create new project',
-      });
+      const allProjectNames = uiReaders.allProjectPackageInfos
+        .filter((info) => info.origin === 'local')
+        .map((info) => info.packageName);
+      const res = resourceManagementUtils.checkValidResourceName(
+        keyboardName,
+        allProjectNames,
+        'project package',
+        true,
+      );
+      if (res === 'ok') {
+        dispatchCoreAction({ project_createLocalProject: { keyboardName } });
+      } else {
+        modalConfirm({
+          message: res,
+          caption: 'error',
+        });
+      }
     }
   },
   async handleImportOnlineProject() {

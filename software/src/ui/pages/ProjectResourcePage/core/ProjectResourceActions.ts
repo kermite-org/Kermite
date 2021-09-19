@@ -51,7 +51,7 @@ export const projectResourceActions = {
     });
   },
   createCustomFirmware() {
-    uiActions.openPageModal({
+    uiActions.navigateTo({
       type: 'projectCustomFirmwareSetup',
       firmwareName: '',
     });
@@ -76,7 +76,7 @@ export const projectResourceActions = {
           firmwareName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        uiActions.openPageModal({
+        uiActions.navigateTo({
           type: 'projectCustomFirmwareSetup',
           firmwareName,
         });
@@ -130,6 +130,37 @@ export const projectResourceActions = {
         itemName,
         allItemNames,
         projectPackagesWriter.renameLocalProjectFirmware,
+      );
+    }
+  },
+  copySelectedResourceItem() {
+    const projectInfo = uiReaders.editTargetProject!;
+    const { selectedItemKey } = projectResourceReaders;
+    const { itemType, itemName } =
+      decodeProjectResourceItemKey(selectedItemKey);
+    if (itemType === 'preset') {
+      const allItemNames = projectInfo.presets.map((it) => it.presetName);
+      helpers.renameProjectResourceListItem(
+        'preset',
+        itemName,
+        allItemNames,
+        projectPackagesWriter.copyLocalProjectPreset,
+      );
+    } else if (itemType === 'layout') {
+      const allItemNames = projectInfo.layouts.map((it) => it.layoutName);
+      helpers.renameProjectResourceListItem(
+        'layout',
+        itemName,
+        allItemNames,
+        projectPackagesWriter.copyLocalProjectLayout,
+      );
+    } else if (itemType === 'firmware') {
+      const allItemNames = projectInfo.firmwares.map((it) => it.firmwareName);
+      helpers.renameProjectResourceListItem(
+        'firmware',
+        itemName,
+        allItemNames,
+        projectPackagesWriter.copyLocalProjectFirmware,
       );
     }
   },

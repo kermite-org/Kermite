@@ -1,4 +1,5 @@
 import {
+  checkArrayItemsUnique,
   duplicateObjectByJsonStringifyParse,
   flattenArray,
   generateNumberSequence,
@@ -18,10 +19,16 @@ const availablePinsAvr = flattenArray(
     [0, 1, 2, 3, 4, 5, 6, 7].map((idx) => port + idx),
   ),
 );
+const acceptableAvrEncoderPrimaryPins = flattenArray(
+  ['B', 'PB'].map((port) => [0, 1, 2, 3, 4, 5, 6, 7].map((idx) => port + idx)),
+);
 const availablePinsRp = generateNumberSequence(30).map((i) => 'GP' + i);
 
 const subHelpers = {
-  validatePin(pin: string, mcuType: 'avr' | 'rp'): string | undefined {
+  validatePin(
+    pin: string,
+    mcuType: IStandardFirmwareMcuType,
+  ): string | undefined {
     const availablePins =
       mcuType === 'avr' ? availablePinsAvr : availablePinsRp;
     const valid = availablePins.includes(pin);
@@ -29,12 +36,26 @@ const subHelpers = {
       return `invalid pin specification`;
     }
   },
-  validatePins(pins: string[], mcuType: 'avr' | 'rp'): string | undefined {
+  validatePins(
+    pins: string[],
+    mcuType: IStandardFirmwareMcuType,
+  ): string | undefined {
     const availablePins =
       mcuType === 'avr' ? availablePinsAvr : availablePinsRp;
     const valid = pins.every((pin) => availablePins.includes(pin)) || false;
     if (!valid) {
       return `invalid pins specification`;
+    }
+  },
+  validateAvrEncoderPrimaryPin(
+    pin: string,
+    mcuType: IStandardFirmwareMcuType,
+  ): string | undefined {
+    if (mcuType === 'avr') {
+      const valid = acceptableAvrEncoderPrimaryPins.includes(pin);
+      if (!valid) {
+        return `primary pin for encoder must be PB0~PB7`;
+      }
     }
   },
   checkPinsCount(pins: string[], expectedLength: number): string | undefined {
@@ -168,7 +189,8 @@ export const standardFirmwareEditModelHelpers = {
       encoderPins:
         encoderPins &&
         (subHelpers.validatePins(encoderPins, mcuType) ||
-          subHelpers.checkPinsCount(encoderPins, 2)),
+          subHelpers.checkPinsCount(encoderPins, 2) ||
+          subHelpers.validateAvrEncoderPrimaryPin(encoderPins[0], mcuType)),
       lightingPin: lightingPin && subHelpers.validatePin(lightingPin, mcuType),
       lightingNumLeds:
         (lightingNumLeds !== undefined &&
@@ -176,7 +198,7 @@ export const standardFirmwareEditModelHelpers = {
         undefined,
     };
   },
-  validateForSave(editValues: IStandardFirmwareEditValues): boolean {
+  getTotalValidationError(editValues: IStandardFirmwareEditValues): string {
     const {
       useMatrixKeyScanner,
       matrixRowPins,
@@ -190,17 +212,46 @@ export const standardFirmwareEditModelHelpers = {
       lightingNumLeds,
     } = editValues;
     if (useMatrixKeyScanner && !(matrixRowPins && matrixColumnPins)) {
-      return false;
+      return 'matrix pins should be specified';
     }
     if (useDirectWiredKeyScanner && !directWiredPins) {
-      return false;
+      return 'direct wired pins should be specified';
     }
     if (useEncoder && !encoderPins) {
-      return false;
+      return 'encoder pins should be specified';
     }
     if (useLighting && !(lightingPin && lightingNumLeds !== undefined)) {
-      return false;
+      return 'lighting pin and num LEDs should be specified';
     }
-    return true;
+    const allPins = [
+      ...((useMatrixKeyScanner && matrixRowPins) || []),
+      ...((useMatrixKeyScanner && matrixColumnPins) || []),
+      ...((useDirectWiredKeyScanner && directWiredPins) || []),
+      ...((useEncoder && encoderPins) || []),
+      ...((useLighting && lightingPin && [lightingPin]) || []),
+    ];
+    if (!checkArrayItemsUnique(allPins)) {
+      return 'pin duplication detected';
+    }
+    return '';
+  },
+};
+
+export const standardFirmwareEditor_fieldValueConverters = {
+  arrayToText(arr: string[] | undefined): string {
+    return arr?.join(', ') || '';
+  },
+  arrayFromText(text: string): string[] | undefined {
+    if (text === '') {
+      return undefined;
+    }
+    return text.split(',').map((a) => a.trim());
+  },
+  integerToText(value: number | undefined): string {
+    return value?.toString() || '';
+  },
+  integerFromText(text: string): number | undefined {
+    const value = parseInt(text);
+    return isFinite(value) ? value : undefined;
   },
 };

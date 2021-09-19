@@ -27,7 +27,7 @@ export type IPageSpec_ProjectStandardFirmwareEdit = {
   firmwareName: string;
 };
 
-export type IPageModalSpec_ProjectCustomFirmwareSetup = {
+export type IPageSpec_ProjectCustomFirmwareEdit = {
   type: 'projectCustomFirmwareSetup';
   firmwareName: string;
 };
@@ -35,6 +35,7 @@ export type IPageModalSpec_ProjectCustomFirmwareSetup = {
 export type IPageSpec =
   | IPageSpec_ProjectLayoutEdit
   | IPageSpec_ProjectPresetEdit
-  | IPageSpec_ProjectStandardFirmwareEdit;
+  | IPageSpec_ProjectStandardFirmwareEdit
+  | IPageSpec_ProjectCustomFirmwareEdit;
 
-export type IPageModelSpec = IPageModalSpec_ProjectCustomFirmwareSetup;
+export type IPageModelSpec = never;

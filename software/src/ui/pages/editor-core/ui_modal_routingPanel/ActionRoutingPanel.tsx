@@ -1,6 +1,7 @@
 import { css, jsx } from 'qx';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { FcWithClassName, uiTheme } from '~/ui/base';
+import { commitUiState } from '~/ui/commonStore';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
 import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
 import { fieldSetter } from '~/ui/helpers';
@@ -10,7 +11,6 @@ import {
   getRoutingTargetKeyOptions,
   getRoutingTargetModifierOptions,
 } from '~/ui/pages/editor-core/ui_modal_routingPanel/ActionRoutingPanelModel';
-import { editorPageModel } from '~/ui/pages/editor-page/models/editorPageModel';
 
 export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
   const { mappingEntries } = editorModel.profileData;
@@ -37,7 +37,7 @@ export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
   };
 
   const handleClose = () => {
-    editorPageModel.routingPanelVisible = false;
+    commitUiState({ profileRoutingPanelVisible: false });
   };
 
   return (

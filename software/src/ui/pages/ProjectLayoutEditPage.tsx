@@ -1,12 +1,13 @@
 import { css, FC, jsx } from 'qx';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { uiConfiguration, uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
   LayouterGeneralComponent,
   LayouterGeneralComponent_OutputPropsSupplier,
+  UiLayouterCore,
 } from '~/ui/features';
 import { useMemoEx } from '~/ui/helpers';
 
@@ -14,7 +15,7 @@ type Props = {
   spec: IPageSpec_ProjectLayoutEdit;
 };
 
-const readers = {
+const helpers = {
   getSourceLayoutEntryOrCreate(layoutName: string): IProjectLayoutEntry {
     const projectInfo = uiReaders.editTargetProject;
     const layoutEntry = projectInfo?.layouts.find(
@@ -25,18 +26,23 @@ const readers = {
 };
 
 export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
-  const sourceLayoutEntry = useMemoEx(readers.getSourceLayoutEntryOrCreate, [
+  const sourceLayoutEntry = useMemoEx(helpers.getSourceLayoutEntryOrCreate, [
     layoutName,
   ]);
   const { isModified, emitSavingDesign } =
     LayouterGeneralComponent_OutputPropsSupplier;
 
   const saveHandler = () => {
-    projectPackagesWriter.saveLocalProjectLayout({
+    const newLayoutEntry: IProjectLayoutEntry = {
       ...sourceLayoutEntry,
       data: emitSavingDesign(),
-    });
-    uiActions.closeSubPage();
+    };
+    projectPackagesWriter.saveLocalProjectLayout(newLayoutEntry);
+    if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
+      UiLayouterCore.rebase();
+    } else {
+      uiActions.closeSubPage();
+    }
   };
   return (
     <div css={style}>

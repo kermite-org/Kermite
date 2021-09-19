@@ -41,10 +41,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
           radioGroupName="radio_group_edit_target_selection"
         />
       </div>
-      <div
-        className="second-row"
-        qxIf={editTargetRadioSelection === 'LayoutFile'}
-      >
+      <div className="second-row">
         <GeneralButtonMenu menuItems={menuItems} />
         <div class="targetDisplayArea">{editSourceText}</div>
         <OperationButtonWithIcon

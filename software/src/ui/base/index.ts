@@ -11,3 +11,4 @@ export * from './UiText';
 export * from './UiTextData';
 export * from './UiTheme';
 export * from './ViewModelTypes';
+export * from './UiConfiguration';

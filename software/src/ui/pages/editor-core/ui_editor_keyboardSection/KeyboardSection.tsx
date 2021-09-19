@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
 import { usePlayerModel } from '~/ui/commonModels';
-import { uiReaders } from '~/ui/commonStore';
 import { EditorKeyboardView } from '~/ui/components/keyboard';
 import { editorModel } from '~/ui/pages/editor-core/models/EditorModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/pages/editor-core/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
@@ -24,10 +23,7 @@ export const KeyboardSection: FC = () => {
     editorModel,
   );
 
-  if (
-    uiReaders.pagePath === '/assigner' &&
-    !profilesReader.isEditProfileAvailable
-  ) {
+  if (!profilesReader.isEditProfileAvailable) {
     // Profileが存在しない場合、presetBrowserへの導線を表示
     return <ProfileSetupNavigationCardView />;
   }

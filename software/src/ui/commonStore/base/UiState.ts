@@ -34,6 +34,7 @@ export type IUiState = {
   pageModalSpec: IPageModelSpec | undefined;
   initialLoading: boolean;
   profileConfigModalVisible: boolean;
+  profileRoutingPanelVisible: boolean;
   isLoading: boolean;
 };
 
@@ -44,6 +45,7 @@ export const defaultUiState: IUiState = {
   pageModalSpec: undefined,
   initialLoading: false,
   profileConfigModalVisible: false,
+  profileRoutingPanelVisible: false,
   isLoading: false,
 };
 

@@ -67,7 +67,7 @@ export const ProjectResourceList: FC<Props> = ({
   );
   return (
     <div css={style} className={className} onClick={clearSelection}>
-      <ResourceItemsBlock groupName="presets" items={presets} />
+      <ResourceItemsBlock groupName="profiles" items={presets} />
       <ResourceItemsBlock groupName="layouts" items={layouts} />
       <ResourceItemsBlock groupName="firmwares" items={firmwares} />
     </div>

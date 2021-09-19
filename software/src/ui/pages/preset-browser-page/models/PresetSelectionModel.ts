@@ -54,7 +54,7 @@ function makePresetOptions(
   return [
     ...projectInfo.layouts.map(({ layoutName }) => ({
       value: createPresetKey('blank', layoutName),
-      label: `[blank]${layoutName}`,
+      label: `(layout)${layoutName}`,
       spec: {
         type: 'blank' as const,
         layoutName,
@@ -62,7 +62,7 @@ function makePresetOptions(
     })),
     ...projectInfo.presets.map(({ presetName }) => ({
       value: createPresetKey('preset', presetName),
-      label: `[preset]${presetName}`,
+      label: `(profile)${presetName}`,
       spec: {
         type: 'preset' as const,
         presetName,

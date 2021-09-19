@@ -8,6 +8,7 @@ import {
   ProjectStandardFirmwareEditPage,
   SettingsPage,
   WelcomePage,
+  ProjectCustomFirmwareEditPage,
 } from '~/ui/pages';
 import { EditorPage } from '~/ui/pages/editor-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
@@ -30,9 +31,13 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
+        {pageSpec.type === 'projectCustomFirmwareSetup' && (
+          <ProjectCustomFirmwareEditPage spec={pageSpec} />
+        )}
       </div>
     );
   }
+
   const { pagePath } = uiReaders;
   return (
     <div css={style}>
