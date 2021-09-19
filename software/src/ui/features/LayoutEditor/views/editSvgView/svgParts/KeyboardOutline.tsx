@@ -35,6 +35,8 @@ const cssOutlinePoint = css`
   &:hover {
     opacity: 0.7;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;
 
 export function startOutlinePointDragOperation(

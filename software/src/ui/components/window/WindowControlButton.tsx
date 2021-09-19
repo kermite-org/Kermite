@@ -8,7 +8,12 @@ type Props = {
   disabled?: boolean;
 };
 
-export const WindowControlButton: FC<Props> = ({ icon, onClick, hint, disabled }) => (
+export const WindowControlButton: FC<Props> = ({
+  icon,
+  onClick,
+  hint,
+  disabled,
+}) => (
   <div css={style} onClick={onClick} data-hint={hint} data-disabled={disabled}>
     <i className={icon} />
   </div>
@@ -30,4 +35,6 @@ const style = css`
     opacity: 0.3;
     pointer-events: none;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;

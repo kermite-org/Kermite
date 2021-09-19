@@ -1,4 +1,5 @@
 import { FC, jsx, css } from 'qx';
+import { uiTheme } from '~/ui/base';
 
 interface Props {
   onClick?(): void;
@@ -51,4 +52,6 @@ const style = css`
     cursor: inherit;
     opacity: 0.5;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;

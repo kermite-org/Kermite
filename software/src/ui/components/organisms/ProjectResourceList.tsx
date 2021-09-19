@@ -123,6 +123,8 @@ const style = css`
         &.--selected {
           background: ${uiTheme.colors.clSelectHighlight};
         }
+
+        transition: ${uiTheme.commonTransitionSpec};
       }
     }
   }
