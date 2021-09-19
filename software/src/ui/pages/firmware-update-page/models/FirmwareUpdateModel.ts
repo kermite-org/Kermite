@@ -8,8 +8,8 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
-import { projectPackagesReader, uiActions, uiReaders } from '~/ui/commonStore';
 import { modalAlert } from '~/ui/components';
+import { projectPackagesReader, uiActions, uiReaders } from '~/ui/store';
 
 export type FirmwareUpdatePhase =
   | 'WaitingReset'

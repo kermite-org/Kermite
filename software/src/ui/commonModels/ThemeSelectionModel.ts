@@ -1,6 +1,6 @@
 import { useMemo } from 'qx';
 import { ThemeKey, uiThemeConfigLoader } from '~/ui/base';
-import { dispatchCoreAction } from '~/ui/commonStore/base';
+import { dispatchCoreAction } from '~/ui/store/base';
 
 interface IThemeSelectionModel {
   currentThemeKey: ThemeKey;

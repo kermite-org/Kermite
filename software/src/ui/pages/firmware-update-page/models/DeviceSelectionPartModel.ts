@@ -1,6 +1,6 @@
 import { IKeyboardDeviceInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
-import { uiState } from '~/ui/commonStore';
+import { uiState } from '~/ui/store';
 
 interface IDeviceSelectionPartModel {
   deviceOptions: ISelectorOption[];
@@ -21,9 +21,10 @@ function makeDeviceOptionEntry(
 export function useDeviceSelectionPartModel(): IDeviceSelectionPartModel {
   const selectionStatus = uiState.core.deviceSelectionStatus;
   const noneOption: ISelectorOption = { label: 'none', value: 'none' };
-  const deviceOptionsBase: ISelectorOption[] = selectionStatus.allDeviceInfos.map(
-    (deviceInfo) => makeDeviceOptionEntry(deviceInfo),
-  );
+  const deviceOptionsBase: ISelectorOption[] =
+    selectionStatus.allDeviceInfos.map((deviceInfo) =>
+      makeDeviceOptionEntry(deviceInfo),
+    );
   const deviceOptions = [noneOption, ...deviceOptionsBase];
 
   const setSelectedDevicePath = (path: string) => {

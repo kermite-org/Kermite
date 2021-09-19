@@ -6,7 +6,7 @@ import {
   IStandardFirmwareEditValues,
   IStandardFirmwareMcuType,
 } from '~/ui/features/StandardFirmwareEditor/types';
-import { createSimpleSelector } from '~/ui/helpers';
+import { createSimpleSelector } from '~/ui/utils';
 
 type IStandardFirmwareEditState = {
   originalValues: IStandardFirmwareEditValues;

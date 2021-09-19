@@ -1,6 +1,6 @@
 import { compareObjectByJsonStringify } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import { uiReaders } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/store';
 
 export type ICustomFirmwareEditValues = {
   customFirmwareId: string;

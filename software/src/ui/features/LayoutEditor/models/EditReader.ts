@@ -3,7 +3,7 @@ import {
   decodeGridSpec,
   IGridSpecKey,
 } from '~/ui/features/LayoutEditor/models/GridDefinitions';
-import { createSimpleSelector } from '~/ui/helpers';
+import { createSimpleSelector } from '~/ui/utils';
 import { appState, IEnvBoolPropKey } from './AppState';
 import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
 import {

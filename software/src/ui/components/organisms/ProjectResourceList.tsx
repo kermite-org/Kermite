@@ -4,7 +4,7 @@ import {
   IProjectResourceItemType,
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { withStopPropagation } from '~/ui/helpers';
+import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
   className?: string;

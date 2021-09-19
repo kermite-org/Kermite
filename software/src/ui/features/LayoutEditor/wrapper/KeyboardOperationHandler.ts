@@ -1,7 +1,7 @@
 import { rerender } from 'qx';
 import { editMutations, editReader } from '~/ui/features/LayoutEditor/models';
 
-export function keyboardOperationHander(e: KeyboardEvent) {
+export function keyboardOperationHandler(e: KeyboardEvent) {
   if (e.key === 'Delete' || (e.key === 'Backspace' && e.metaKey)) {
     const { currentKeyEntity, currentOutlinePoint } = editReader;
     if (currentKeyEntity) {

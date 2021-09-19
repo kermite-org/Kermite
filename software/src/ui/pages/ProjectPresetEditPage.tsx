@@ -2,12 +2,12 @@ import { css, FC, jsx, useState } from 'qx';
 import { fallbackProjectPresetEntry, IProjectPresetEntry } from '~/shared';
 import { uiConfiguration, uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
 import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
 import {
   AssignerGeneralComponent,
   AssignerGeneralComponent_OutputPropsSupplier,
-} from '~/ui/pages/editor-core';
+} from '~/ui/features/ProfileEditor';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
 
 type Props = {
   spec: IPageSpec_ProjectPresetEdit;

@@ -5,7 +5,7 @@ import {
   globalSettingsWriter,
   uiReaders,
   uiState,
-} from '~/ui/commonStore';
+} from '~/ui/store';
 
 export interface ISettingsPageModel {
   flagDeveloperMode: boolean;

@@ -6,12 +6,6 @@ import {
   ICustomFirmwareEntry,
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
-import {
-  projectPackagesReader,
-  projectPackagesWriter,
-  uiActions,
-  uiReaders,
-} from '~/ui/commonStore';
 import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
 import {
   fallbackCustomFirmwareEditValues,
@@ -19,6 +13,12 @@ import {
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
+import {
+  projectPackagesReader,
+  projectPackagesWriter,
+  uiActions,
+  uiReaders,
+} from '~/ui/store';
 
 const helpers = {
   getExistingVariationIds(): string[] {

@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-key */
 import { getMcuNameFromKermiteMcuCode } from '~/shared';
 import { texts } from '~/ui/base';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
+import { projectPackagesReader, uiReaders } from '~/ui/store';
 
 interface IConnectedDevicesAttrsPartModel {
   tableData: [string, string][] | undefined;

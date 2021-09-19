@@ -2,7 +2,7 @@ import { jsx, css } from 'qx';
 import { ISelectorOption, texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components/atoms/FlatListSelector';
 import { ClosableOverlay } from '~/ui/components/modals/CommonDialogParts';
-import { reflectValue } from '~/ui/helpers';
+import { reflectValue } from '~/ui/utils';
 
 export interface IProjectAttachmentFileSelectorModalModel {
   titleText: string;
