@@ -4,7 +4,7 @@ import {
   IProjectResourceItemType,
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { withStopPropagation } from '~/ui/helpers';
+import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
   className?: string;
@@ -67,7 +67,7 @@ export const ProjectResourceList: FC<Props> = ({
   );
   return (
     <div css={style} className={className} onClick={clearSelection}>
-      <ResourceItemsBlock groupName="presets" items={presets} />
+      <ResourceItemsBlock groupName="profiles" items={presets} />
       <ResourceItemsBlock groupName="layouts" items={layouts} />
       <ResourceItemsBlock groupName="firmwares" items={firmwares} />
     </div>
@@ -123,6 +123,8 @@ const style = css`
         &.--selected {
           background: ${uiTheme.colors.clSelectHighlight};
         }
+
+        transition: ${uiTheme.commonTransitionSpec};
       }
     }
   }

@@ -14,7 +14,7 @@ import {
   ProjectKeyboardListExamples,
 } from '~/ui/components';
 import { RouterHeaderBarExamples } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar.visor';
-import { fieldSetter } from '~/ui/helpers';
+import { fieldSetter } from '~/ui/utils';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;
 

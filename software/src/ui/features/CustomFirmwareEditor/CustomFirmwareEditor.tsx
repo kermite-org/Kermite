@@ -1,5 +1,5 @@
 import { css, FC, jsx, useInlineEffect } from 'qx';
-import { GeneralInput, GeneralSelector } from '~/ui/components';
+import { GeneralSelector } from '~/ui/components';
 import {
   customFirmwareEditorModel,
   ICustomFirmwareEditValues,
@@ -20,11 +20,7 @@ export const CustomFirmwareEditor_OutputPropsSupplier = {
 
 export const CustomFirmwareEditor: FC<Props> = ({ sourceEditValues }) => {
   const {
-    actions: {
-      setFirmwareName: setVariationName,
-      setCustomFirmwareId,
-      loadEditValues,
-    },
+    actions: { setCustomFirmwareId, loadEditValues },
   } = customFirmwareEditorModel;
   useInlineEffect(() => loadEditValues(sourceEditValues), [sourceEditValues]);
   const {
@@ -32,13 +28,6 @@ export const CustomFirmwareEditor: FC<Props> = ({ sourceEditValues }) => {
   } = customFirmwareEditorModel;
   return (
     <div css={style}>
-      <div className="row">
-        <div>variation name</div>
-        <GeneralInput
-          value={editValues.firmwareName}
-          setValue={setVariationName}
-        />
-      </div>
       <div className="row">
         <div>firmware</div>
         <GeneralSelector

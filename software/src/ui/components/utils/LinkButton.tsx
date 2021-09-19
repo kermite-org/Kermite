@@ -1,5 +1,5 @@
 import { FC, jsx, QxNode } from 'qx';
-import { uiActions } from '~/ui/commonStore';
+import { uiActions } from '~/ui/store';
 
 type Props = {
   className?: string;

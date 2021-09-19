@@ -1,8 +1,8 @@
 import { css, FC, jsx, useMemo } from 'qx';
-import { uiReaders } from '~/ui/commonStore';
 import { PresetKeyboardView } from '~/ui/components';
 import { projectResourceHelpers } from '~/ui/pages/ProjectResourcePage/core';
 import { usePresetKeyboardViewModel } from '~/ui/pages/preset-browser-page/viewModels';
+import { uiReaders } from '~/ui/store';
 
 type Props = {
   presetName: string;

@@ -7,23 +7,25 @@ import {
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { uiConfiguration } from '~/ui/base';
+import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
+import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
-} from '~/ui/commonStore';
-import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { resourceManagementUtils } from '~/ui/helpers';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
+} from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 export interface IProjectStandardFirmwareEditPageModel {
+  editFirmwareName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
   canSave: boolean;
   saveHandler(): void;
 }
 
-async function inputSavingFirmwareName(): Promise<string | undefined> {
+export async function inputSavingFirmwareName(): Promise<string | undefined> {
   const allVariationNames =
     uiReaders.editTargetProject?.firmwares.map((it) => it.firmwareName) || [];
   return await resourceManagementUtils.inputSavingResourceName({
@@ -87,21 +89,25 @@ const actions = {
     projectResourceActions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
-    uiActions.closeSubPage();
+    if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
+      store.sourceEntry = newFirmwareEntry;
+    } else {
+      uiActions.closeSubPage();
+    }
   },
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  firmwareName: string,
+  sourceFirmwareName: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(firmwareName),
-    [firmwareName],
+    () => actions.loadSourceFirmwareEntry(sourceFirmwareName),
+    [sourceFirmwareName],
   );
   const {
-    sourceEntry: { standardFirmwareConfig },
+    sourceEntry: { standardFirmwareConfig, firmwareName: editFirmwareName },
     canSave,
   } = readers;
   const { saveHandler } = actions;
-  return { standardFirmwareConfig, canSave, saveHandler };
+  return { editFirmwareName, standardFirmwareConfig, canSave, saveHandler };
 }

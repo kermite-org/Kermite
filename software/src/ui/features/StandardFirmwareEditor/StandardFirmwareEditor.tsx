@@ -1,32 +1,21 @@
-import { css, FC, jsx, QxChildren } from 'qx';
+import { css, FC, jsx } from 'qx';
+import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
+import { FieldItem } from '~/ui/features/StandardFirmwareEditor/FieldItem';
 import {
-  standardFirmwareEditActions,
-  standardFirmwareEditStore,
-} from '~/ui/features/StandardFirmwareEditor/core';
-import { standardFirmwareEditModelHelpers } from '~/ui/features/StandardFirmwareEditor/helpers';
-import { useStandardFirmwareEditModel } from '~/ui/features/StandardFirmwareEditor/model';
+  standardFirmwareEditModelHelpers,
+  standardFirmwareEditor_fieldValueConverters,
+} from '~/ui/features/StandardFirmwareEditor/helpers';
+import { useStandardFirmwareEditPresenter } from '~/ui/features/StandardFirmwareEditor/presenter';
+import { standardFirmwareEditStore } from '~/ui/features/StandardFirmwareEditor/store';
 import { IStandardFirmwareEditValues } from '~/ui/features/StandardFirmwareEditor/types';
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
 };
 
-function arrayToText(arr: string[] | undefined): string {
-  return arr?.join(', ') || '';
-}
-
-function arrayFromText(text: string): string[] | undefined {
-  if (text === '') {
-    return undefined;
-  }
-  return text.split(',').map((a) => a.trim());
-}
-
-function integerFromText(text: string): number | undefined {
-  const value = parseInt(text);
-  return isFinite(value) ? value : undefined;
-}
+const { arrayFromText, arrayToText, integerFromText, integerToText } =
+  standardFirmwareEditor_fieldValueConverters;
 
 function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
   key: K,
@@ -38,46 +27,19 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     rawValue: Extract<IStandardFirmwareEditValues[K], string | boolean>,
   ) => {
     const value = converter ? converter(rawValue) : rawValue;
-    standardFirmwareEditActions.commitValue(key, value);
+    standardFirmwareEditStore.actions.commitValue(key, value);
   };
 }
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
-  get canSave() {
-    const { originalValues, editValues } = standardFirmwareEditStore;
-    const isModified = editValues !== originalValues;
-    const errors =
-      standardFirmwareEditModelHelpers.validateEditValues(editValues);
-    const hasError = Object.values(errors).some((a) => !!a);
-    const validForSaving =
-      standardFirmwareEditModelHelpers.validateForSave(editValues);
-    return isModified && !hasError && validForSaving;
+  get canSave(): boolean {
+    return standardFirmwareEditStore.readers.canSave;
   },
-  emitSavingEditValues() {
-    const { editValues } = standardFirmwareEditStore;
+  emitSavingEditValues(): IKermiteStandardKeyboardSpec {
     return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
-      editValues,
+      standardFirmwareEditStore.state.editValues,
     );
   },
-};
-
-const FieldItem: FC<{ title: string; children: QxChildren }> = ({
-  title,
-  children,
-}) => {
-  const styleChildren = css`
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  `;
-  return (
-    <tr>
-      <td>{title}</td>
-      <td>
-        <div css={styleChildren}>{children}</div>
-      </td>
-    </tr>
-  );
 };
 
 export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
@@ -87,13 +49,14 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
     isAvr,
     isRp,
     availablePinsText,
-    errors,
-  } = useStandardFirmwareEditModel(firmwareConfig);
+    fieldErrors,
+    totalError,
+  } = useStandardFirmwareEditPresenter(firmwareConfig);
 
   return (
     <div css={style}>
       <div>standard firmware configuration</div>
-      <table>
+      <table className="config-table">
         <tbody>
           <FieldItem title="base firmware type">
             <GeneralSelector
@@ -126,25 +89,25 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useMatrixKeyScanner')}
             />
           </FieldItem>
-          <FieldItem title="row pins">
+          <FieldItem title="row pins" indent>
             <GeneralInput
               value={arrayToText(editValues.matrixRowPins)}
               setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
-              invalid={!!errors.matrixRowPins}
+              invalid={!!fieldErrors.matrixRowPins}
             />
-            <div>{errors.matrixRowPins}</div>
+            <div>{fieldErrors.matrixRowPins}</div>
           </FieldItem>
-          <FieldItem title="column pins">
+          <FieldItem title="column pins" indent>
             <GeneralInput
               value={arrayToText(editValues.matrixColumnPins)}
               setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
               width={400}
               disabled={!editValues.useMatrixKeyScanner}
-              invalid={!!errors.matrixColumnPins}
+              invalid={!!fieldErrors.matrixColumnPins}
             />
-            <div>{errors.matrixColumnPins}</div>
+            <div>{fieldErrors.matrixColumnPins}</div>
           </FieldItem>
 
           <FieldItem title="use direct wired key scanner">
@@ -153,15 +116,15 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useDirectWiredKeyScanner')}
             />
           </FieldItem>
-          <FieldItem title="direct wired pins">
+          <FieldItem title="direct wired pins" indent>
             <GeneralInput
               value={arrayToText(editValues.directWiredPins)}
               setValue={valueChangeHandler('directWiredPins', arrayFromText)}
               width={400}
               disabled={!editValues.useDirectWiredKeyScanner}
-              invalid={!!errors.directWiredPins}
+              invalid={!!fieldErrors.directWiredPins}
             />
-            <div>{errors.directWiredPins}</div>
+            <div>{fieldErrors.directWiredPins}</div>
           </FieldItem>
 
           <FieldItem title="use encoder">
@@ -170,15 +133,15 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useEncoder')}
             />
           </FieldItem>
-          <FieldItem title="encoder pins">
+          <FieldItem title="encoder pins" indent>
             <GeneralInput
               value={arrayToText(editValues.encoderPins)}
               setValue={valueChangeHandler('encoderPins', arrayFromText)}
               width={100}
               disabled={!editValues.useEncoder}
-              invalid={!!errors.encoderPins}
+              invalid={!!fieldErrors.encoderPins}
             />
-            <div>{errors.encoderPins}</div>
+            <div>{fieldErrors.encoderPins}</div>
           </FieldItem>
 
           <FieldItem title="use lighting">
@@ -187,30 +150,30 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useLighting')}
             />
           </FieldItem>
-          <FieldItem title="lighting pin">
+          <FieldItem title="lighting pin" indent>
             <GeneralInput
               value={editValues.lightingPin || ''}
               setValue={valueChangeHandler('lightingPin')}
               width={100}
               disabled={!(editValues.useLighting && isRp)}
-              invalid={!!errors.lightingPin}
+              invalid={!!fieldErrors.lightingPin}
             />
-            <div>{errors.lightingPin}</div>
+            <div>{fieldErrors.lightingPin}</div>
           </FieldItem>
 
-          <FieldItem title="lighting num LEDs">
+          <FieldItem title="lighting num LEDs" indent>
             <GeneralInput
               type="number"
-              value={editValues.lightingNumLeds?.toString() || ''}
+              value={integerToText(editValues.lightingNumLeds)}
               setValue={valueChangeHandler(
                 'lightingNumLeds',
                 integerFromText as any,
               )}
               width={100}
               disabled={!editValues.useLighting}
-              invalid={!!errors.lightingNumLeds}
+              invalid={!!fieldErrors.lightingNumLeds}
             />
-            <div>{errors.lightingNumLeds}</div>
+            <div>{fieldErrors.lightingNumLeds}</div>
           </FieldItem>
 
           <FieldItem title="use LCD">
@@ -222,13 +185,16 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
+      <div className="total-error" qxIf={!!totalError}>
+        note: {totalError}
+      </div>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
     </div>
   );
 };
 
 const style = css`
-  table {
+  > .config-table {
     margin-top: 10px;
 
     td {
@@ -236,8 +202,9 @@ const style = css`
     }
   }
 
-  button {
+  > .total-error {
+    margin-left: 5px;
     margin-top: 10px;
-    padding: 5px 10px;
+    color: #888;
   }
 `;

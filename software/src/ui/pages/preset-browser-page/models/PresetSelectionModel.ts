@@ -6,10 +6,10 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import { projectPackagesReader, uiReaders } from '~/ui/commonStore';
-import { fieldSetter } from '~/ui/helpers';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
+import { projectPackagesReader, uiReaders } from '~/ui/store';
+import { fieldSetter } from '~/ui/utils';
 
 export interface IPresetSelectionModel {
   projectSelectorSource: ISelectorSource;
@@ -54,7 +54,7 @@ function makePresetOptions(
   return [
     ...projectInfo.layouts.map(({ layoutName }) => ({
       value: createPresetKey('blank', layoutName),
-      label: `[blank]${layoutName}`,
+      label: `(layout)${layoutName}`,
       spec: {
         type: 'blank' as const,
         layoutName,
@@ -62,7 +62,7 @@ function makePresetOptions(
     })),
     ...projectInfo.presets.map(({ presetName }) => ({
       value: createPresetKey('preset', presetName),
-      label: `[preset]${presetName}`,
+      label: `(profile)${presetName}`,
       spec: {
         type: 'preset' as const,
         presetName,

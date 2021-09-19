@@ -60,6 +60,8 @@ const cssKeyRect = css`
   &:hover {
     opacity: 0.7;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;
 
 const cssText = css`
@@ -71,6 +73,7 @@ const cssText = css`
   &[data-selected] {
     fill: #4bb;
   }
+  transition: ${uiTheme.commonTransitionSpec};
 `;
 
 const KeyEntityCardSingle = (props: {

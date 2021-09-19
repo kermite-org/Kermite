@@ -1,6 +1,6 @@
 import * as usb from 'usb';
-import { IFirmwareUpdateScheme } from '~/shell/services/firmwareUpdate/Interfaces';
 import { avrDfuFlashCommander_flashFirmware } from '~/shell/services/firmwareUpdate/flashSchemeAtmegaDfu/AvrDfuFlashCommander';
+import { IFirmwareUpdateScheme } from '~/shell/services/firmwareUpdate/types';
 
 export class FirmwareUpdateSchemeAtMegaDfu implements IFirmwareUpdateScheme {
   resetDeviceDetectionStatus() {}

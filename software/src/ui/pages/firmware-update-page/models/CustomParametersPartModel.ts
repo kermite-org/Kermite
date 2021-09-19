@@ -1,10 +1,10 @@
 import { IKeyboardDeviceStatus, SystemParameterDefinitions } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { uiReaders } from '~/ui/commonStore';
 import {
   ICustomParameterModel,
   makeParameterModel,
 } from '~/ui/pages/firmware-update-page/models/CustomParameterModel';
+import { uiReaders } from '~/ui/store';
 
 interface ICustomParametersPartModel {
   parameterModels: ICustomParameterModel[];

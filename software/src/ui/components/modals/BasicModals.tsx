@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { createModal } from '~/ui/components/overlay';
-import { reflectFieldValue } from '~/ui/helpers';
+import { reflectFieldValue } from '~/ui/utils';
 import {
   CommonDialogFrame,
   ClosableOverlay,
@@ -99,6 +99,7 @@ export const modalTextEdit = createModal(
         padding-left: 4px;
       `;
 
+      const isValid = !!editValues.text && editValues.text !== defaultText;
       return (
         <ClosableOverlay close={close}>
           <CommonDialogFrame caption={caption} close={close}>
@@ -109,13 +110,15 @@ export const modalTextEdit = createModal(
                   type="text"
                   css={cssCommonTextInput}
                   value={editValues.text}
-                  onChange={reflectFieldValue(editValues, 'text')}
+                  onInput={reflectFieldValue(editValues, 'text')}
                   spellcheck={'false' as any}
                 />
               </div>
             </DialogContentRow>
             <DialogButtonsRow>
-              <DialogButton onClick={submit}>OK</DialogButton>
+              <DialogButton onClick={submit} disabled={!isValid}>
+                OK
+              </DialogButton>
             </DialogButtonsRow>
           </CommonDialogFrame>
         </ClosableOverlay>

@@ -9,7 +9,7 @@ import {
   ProfileDataConverter,
   IProjectFirmwareEntry,
 } from '~/shared';
-import { uiReaders } from '~/ui/commonStore';
+import { uiReaders } from '~/ui/store';
 
 export const projectResourceHelpers = {
   createProjectResourceListItemKeys(

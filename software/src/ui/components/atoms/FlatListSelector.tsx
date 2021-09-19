@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { ISelectorOption } from '~/ui/base';
-import { reflectValue } from '~/ui/helpers';
+import { reflectValue } from '~/ui/utils';
 
 interface Props {
   options: ISelectorOption[];
@@ -42,4 +42,8 @@ const style = css`
   padding: 5px;
   font-size: 15px;
   outline: none;
+
+  > option {
+    cursor: pointer;
+  }
 `;

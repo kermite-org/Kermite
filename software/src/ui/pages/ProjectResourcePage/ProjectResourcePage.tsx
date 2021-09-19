@@ -2,9 +2,9 @@ import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
-import { reflectValue } from '~/ui/helpers';
 import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/models/ProjectResourcePageModel';
 import { ResourceItemDetailView } from '~/ui/pages/ProjectResourcePage/organisms/ResourceItemDetailView';
+import { reflectValue } from '~/ui/utils';
 
 export const ProjectResourcePage: FC = () => {
   const {

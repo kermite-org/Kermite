@@ -5,6 +5,7 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { fileDialogLoaders } from '~/shell/loaders/FileDialogLoaders';
+import { checkLocalRepositoryFolder } from '~/shell/loaders/LocalResourceHelper';
 import { userPresetHubDataLoader } from '~/shell/loaders/UserPresetHubDataLoader';
 import {
   keyboardConfigModule,
@@ -22,7 +23,6 @@ import {
 import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
 import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModule';
 import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';
-import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';

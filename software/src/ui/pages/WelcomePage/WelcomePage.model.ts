@@ -2,7 +2,7 @@ import {
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
-import { uiActions, uiState } from '~/ui/commonStore';
+import { uiActions, uiState } from '~/ui/store';
 
 interface WelcomePageModel {
   appVersion: string;

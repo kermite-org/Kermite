@@ -16,8 +16,8 @@ import { QxDebugPage5 } from '~/ui-mock-view/QxDebugPage5';
 import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
 import { SvgScalingDevPage } from '~/ui-mock-view/SvgScalingDev';
-import { LayoutManagerPageComponent } from '~/ui/pages/layouter-page';
-import { MockPageLayouterDevelopment } from './MockPageLayouterDevelopment';
+import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
+import { MockPageLayoutEditorDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
   return (

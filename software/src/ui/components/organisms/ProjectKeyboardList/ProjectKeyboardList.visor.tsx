@@ -6,7 +6,7 @@ import {
   exampleData_persistKeyboardDesign_astelia,
   exampleData_persistKeyboardDesign_miniversRev2,
   exampleData_persistKeyboardDesign_shiro,
-} from '~/ui/exampleData';
+} from '~/ui/constants';
 
 const convertDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign;
 

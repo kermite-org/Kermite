@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { GlobalHintDisplay } from '~/ui/facets';
+import { GlobalHintDisplay } from '~/ui/root/organisms';
 
 export const WindowStatusBarSection: FC = () => (
   <div css={style}>
