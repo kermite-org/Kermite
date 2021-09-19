@@ -4,13 +4,13 @@ import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelate
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
 import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { resourceManagementUtils } from '~/ui/utils';
 import {
   profilesActions,
   profilesReader,
 } from '~/ui/pages/assigner-page/models';
 import { callProfileSetupModal } from '~/ui/pages/assigner-page/ui_modal_profileSetup/ProfileSetupModal';
 import { commitUiState, uiActions, uiState } from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 async function checkShallLoadData(): Promise<boolean> {
   if (!editorModel.checkDirty()) {

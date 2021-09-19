@@ -11,13 +11,13 @@ import {
   ipcAgent,
   ISelectorOption,
 } from '~/ui/base';
-import { fieldSetter, useFetcher, usePersistState } from '~/ui/utils';
 import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
 import {
   dispatchCoreAction,
   projectPackagesReader,
   uiActions,
 } from '~/ui/store';
+import { fieldSetter, useFetcher, usePersistState } from '~/ui/utils';
 
 function makeProjectOptions(
   infos: IProjectPackageInfo[],

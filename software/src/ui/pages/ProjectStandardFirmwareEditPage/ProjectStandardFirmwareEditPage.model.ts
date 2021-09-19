@@ -9,7 +9,6 @@ import {
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { resourceManagementUtils } from '~/ui/utils';
 import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import {
   projectPackagesReader,
@@ -17,6 +16,7 @@ import {
   uiActions,
   uiReaders,
 } from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 export interface IProjectStandardFirmwareEditPageModel {
   editFirmwareName: string;
