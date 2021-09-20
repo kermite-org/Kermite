@@ -5,10 +5,7 @@ import { createSimpleSelector } from '~/ui/utils';
 
 const resourceItemsSelector = createSimpleSelector(
   () => uiReaders.editTargetProject,
-  (project) =>
-    (project &&
-      projectResourceHelpers.createProjectResourceListItemKeys(project)) ||
-    [],
+  projectResourceHelpers.createProjectResourceListItemKeys,
 );
 
 export const projectResourceReaders = {
