@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { editorModel } from '~/ui/editors';
 import {
   profilesActions,
   profilesReader,

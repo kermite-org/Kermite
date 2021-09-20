@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { LayoutEditorCore } from '~/ui/features';
+import { LayoutEditorCore } from '~/ui/editors';
 import { LayoutManagerTopBarTemplate } from '~/ui/pages/layout-editor-page/templates/LayoutManagerTopBarTemplate';
 
 export const LayoutManagerPageComponent: FC = () => {

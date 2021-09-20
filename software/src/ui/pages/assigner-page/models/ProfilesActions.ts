@@ -1,5 +1,5 @@
 import { IPresetSpec, IProfileEntry, IResourceOrigin } from '~/shared';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { editorModel } from '~/ui/editors';
 import { dispatchCoreAction } from '~/ui/store';
 
 export const profilesActions = {

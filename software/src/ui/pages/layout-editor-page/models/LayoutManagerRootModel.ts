@@ -1,6 +1,5 @@
 import { useEffect } from 'qx';
-import { LayoutEditorCore } from '~/ui/features';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { LayoutEditorCore, editorModel } from '~/ui/editors';
 import { layoutManagerState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { uiState } from '~/ui/store';
 

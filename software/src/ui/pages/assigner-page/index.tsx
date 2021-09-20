@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { KeyAssignEditView } from '~/ui/features/ProfileEditor';
-import { ProfileConfigurationModalLayer } from '~/ui/features/ProfileEditor/ui_modal_profileConfiguration';
+import { KeyAssignEditView } from '~/ui/editors';
+import { ProfileConfigurationModalLayer } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 

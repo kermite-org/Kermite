@@ -1,5 +1,5 @@
 import { useState } from 'qx';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { editorModel } from '~/ui/editors';
 import {
   profilesActions,
   profilesReader,

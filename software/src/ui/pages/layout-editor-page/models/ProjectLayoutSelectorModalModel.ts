@@ -1,7 +1,7 @@
 import { useState } from 'qx';
 import { ISelectorOption } from '~/ui/base';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
-import { LayoutEditorCore } from '~/ui/features';
+import { LayoutEditorCore } from '~/ui/editors';
 import { layoutManagerActions } from '~/ui/pages/layout-editor-page/models/LayoutManagerActions';
 import { ILayoutManagerModalState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';

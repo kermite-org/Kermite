@@ -1,4 +1,4 @@
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { editorModel } from '~/ui/editors';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiReaders } from '~/ui/store';
 

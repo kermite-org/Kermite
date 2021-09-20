@@ -1,7 +1,7 @@
 import { useEffect } from 'qx';
 import { fallbackProfileData } from '~/shared';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { removeInvalidProfileAssigns } from '~/ui/features/ProfileEditor/models/ProfileDataHelper';
+import { editorModel } from '~/ui/editors';
+import { removeInvalidProfileAssigns } from '~/ui/editors/ProfileEditor/models/ProfileDataHelper';
 import { profilesReader } from '~/ui/pages/assigner-page/models/ProfilesReader';
 import { dispatchCoreAction } from '~/ui/store';
 

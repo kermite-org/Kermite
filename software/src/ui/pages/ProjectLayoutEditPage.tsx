@@ -2,12 +2,12 @@ import { css, FC, jsx } from 'qx';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
 import { uiConfiguration, uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
-import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
+import { RouteHeaderBar } from '~/ui/components';
 import {
   LayoutEditorGeneralComponent,
   LayoutEditorGeneralComponent_OutputPropsSupplier,
   LayoutEditorCore,
-} from '~/ui/features';
+} from '~/ui/editors';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
 import { useMemoEx } from '~/ui/utils';
 

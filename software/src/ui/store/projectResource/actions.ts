@@ -1,6 +1,7 @@
 import { decodeProjectResourceItemKey } from '~/shared';
 import { modalConfirm } from '~/ui/components';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
+import { projectPackagesWriter } from '~/ui/store/ProjectPackages';
+import { uiActions, uiReaders } from '~/ui/store/base';
 import { projectResourceReaders } from '~/ui/store/projectResource/readers';
 import { projectResourceState } from '~/ui/store/projectResource/state';
 import { resourceManagementUtils } from '~/ui/utils';
