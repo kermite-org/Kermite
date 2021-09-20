@@ -1,4 +1,3 @@
-import produce from 'immer';
 import {
   createProjectKey,
   fallbackProjectPackageInfo,
@@ -53,19 +52,8 @@ export const projectPackageModule = createCoreModule({
   },
   async project_saveLocalProjectPackageInfo(projectInfo) {
     await projectPackageProvider.saveLocalProjectPackageInfo(projectInfo);
-    const allProjectPackageInfos = produce(
-      coreState.allProjectPackageInfos,
-      (draft) => {
-        const index = draft.findIndex(
-          (it) => it.projectKey === projectInfo.projectKey,
-        );
-        if (index >= 0) {
-          draft.splice(index, 1, projectInfo);
-        } else {
-          draft.push(projectInfo);
-        }
-      },
-    );
+    const allProjectPackageInfos =
+      await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
   },
   async project_loadAllCustomFirmwareInfos() {
@@ -103,14 +91,33 @@ export const projectPackageModule = createCoreModule({
       await projectPackageProvider.deleteLocalProjectPackageFile(
         project.packageName,
       );
-      const allProjectPackageInfos = coreState.allProjectPackageInfos.filter(
-        (it) => it !== project,
-      );
+      const allProjectPackageInfos =
+        await projectPackageProvider.getAllProjectPackageInfos();
       const globalSettings: IGlobalSettings = {
         ...coreState.globalSettings,
         globalProjectSpec: undefined,
       };
       commitCoreState({ allProjectPackageInfos, globalSettings });
+    }
+  },
+  async project_renameLocalProject({ projectId, newKeyboardName }) {
+    const project = projectPackageModuleHelper.findProjectInfo(
+      'local',
+      projectId,
+    );
+    if (project) {
+      await projectPackageProvider.deleteLocalProjectPackageFile(
+        project.packageName,
+      );
+      const newProject: IProjectPackageInfo = {
+        ...project,
+        keyboardName: newKeyboardName,
+        packageName: newKeyboardName.toLowerCase(),
+      };
+      await projectPackageProvider.saveLocalProjectPackageInfo(newProject);
+      const allProjectPackageInfos =
+        await projectPackageProvider.getAllProjectPackageInfos();
+      commitCoreState({ allProjectPackageInfos });
     }
   },
   async project_openLocalProjectsFolder() {

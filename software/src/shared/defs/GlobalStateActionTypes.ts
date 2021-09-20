@@ -95,6 +95,7 @@ export type ICoreAction = Partial<{
   project_createLocalProject: { keyboardName: string };
   project_createLocalProjectBasedOnOnlineProject: { projectId: string };
   project_deleteLocalProject: { projectId: string };
+  project_renameLocalProject: { projectId: string; newKeyboardName: string };
   project_openLocalProjectsFolder: 1;
 
   config_loadGlobalSettings: 1;
