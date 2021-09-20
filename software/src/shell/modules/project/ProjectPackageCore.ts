@@ -35,11 +35,16 @@ function convertPackageFileContentToPackageInfo(
   origin: IResourceOrigin,
   packageName: string,
 ): IProjectPackageInfo {
+  let { keyboardName } = data;
+  if (keyboardName.toLowerCase() !== packageName) {
+    keyboardName = packageName;
+  }
   return {
+    ...data,
     projectKey: createProjectKey(origin, data.projectId),
     origin,
     packageName,
-    ...data,
+    keyboardName,
   };
 }
 
