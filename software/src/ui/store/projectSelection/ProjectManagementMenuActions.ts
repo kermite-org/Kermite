@@ -4,11 +4,8 @@ import {
   modalConfirm,
   modalTextEdit,
 } from '~/ui/components';
-import {
-  uiReaders,
-  dispatchCoreAction,
-  projectPackagesReader,
-} from '~/ui/store';
+import { projectPackagesReader } from '~/ui/store/ProjectPackages';
+import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {
