@@ -61,7 +61,7 @@ export const projectResourceActions = {
     const { selectedItemKey } = projectResourceReaders;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'preset') {
+    if (itemType === 'profile') {
       uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
     } else if (itemType === 'layout') {
       uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
@@ -92,7 +92,7 @@ export const projectResourceActions = {
       message: 'Resource item delete. Are you sure?',
     });
     if (ok) {
-      if (itemType === 'preset') {
+      if (itemType === 'profile') {
         projectPackagesWriter.deleteLocalProjectPreset(itemName);
       } else if (itemType === 'layout') {
         projectPackagesWriter.deleteLocalProjectLayout(itemName);
@@ -107,7 +107,7 @@ export const projectResourceActions = {
     const { selectedItemKey } = projectResourceReaders;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'preset') {
+    if (itemType === 'profile') {
       const allItemNames = projectInfo.presets.map((it) => it.presetName);
       helpers.renameProjectResourceListItem(
         'preset',
@@ -138,7 +138,7 @@ export const projectResourceActions = {
     const { selectedItemKey } = projectResourceReaders;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'preset') {
+    if (itemType === 'profile') {
       const allItemNames = projectInfo.presets.map((it) => it.presetName);
       helpers.renameProjectResourceListItem(
         'preset',

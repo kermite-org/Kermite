@@ -17,7 +17,7 @@ export const projectResourceHelpers = {
   ): string[] {
     return [
       ...projectInfo.presets.map((it) =>
-        encodeProjectResourceItemKey('preset', it.presetName),
+        encodeProjectResourceItemKey('profile', it.presetName),
       ),
       ...projectInfo.layouts.map((it) =>
         encodeProjectResourceItemKey('layout', it.layoutName),

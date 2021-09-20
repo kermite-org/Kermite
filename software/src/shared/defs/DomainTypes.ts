@@ -285,4 +285,4 @@ export type IBootloaderDeviceDetectionStatus =
       targetDeviceSig: string;
     };
 
-export type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
+export type IProjectResourceItemType = 'profile' | 'layout' | 'firmware';

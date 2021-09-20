@@ -26,7 +26,7 @@ export const ResourceItemDetailView: FC<Props> = ({ selectedItemKey }) => {
         </GeneralButton>
       </div>
       <div className="content-body">
-        {itemType === 'preset' && <PresetDetailView presetName={itemName} />}
+        {itemType === 'profile' && <PresetDetailView presetName={itemName} />}
         {itemType === 'layout' && <LayoutDetailView layoutName={itemName} />}
         {itemType === 'firmware' && (
           <FirmwareDetailView firmwareName={itemName} />
