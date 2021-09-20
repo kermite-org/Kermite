@@ -195,7 +195,7 @@ export const standardFirmwareEditModelHelpers = {
       lightingPin: lightingPin && subHelpers.validatePin(lightingPin, mcuType),
       lightingNumLeds:
         (lightingNumLeds !== undefined &&
-          subHelpers.checkNumberInRange(lightingNumLeds, 0, 256)) ||
+          subHelpers.checkNumberInRange(lightingNumLeds, 1, 256)) ||
         undefined,
     };
   },
