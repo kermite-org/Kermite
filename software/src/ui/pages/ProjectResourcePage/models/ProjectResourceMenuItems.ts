@@ -1,6 +1,6 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectResourceStore } from '~/ui/pages/ProjectResourcePage/core';
 import { uiReaders } from '~/ui/store';
+import { projectResourceStore } from '~/ui/store/projectResource';
 
 export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
   return [

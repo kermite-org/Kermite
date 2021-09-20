@@ -11,7 +11,6 @@ import {
   fallbackCustomFirmwareEditValues,
   ICustomFirmwareEditValues,
 } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 import {
   projectPackagesReader,
@@ -19,6 +18,7 @@ import {
   uiActions,
   uiReaders,
 } from '~/ui/store';
+import { projectResourceStore } from '~/ui/store/projectResource';
 
 const helpers = {
   getExistingVariationIds(): string[] {
@@ -93,7 +93,7 @@ const actions = {
       customFirmwareId,
     };
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
-    projectResourceActions.setSelectedItemKey(
+    projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', state.sourceEntry.firmwareName),
     );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {

@@ -9,13 +9,13 @@ import {
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
 } from '~/ui/store';
+import { projectResourceStore } from '~/ui/store/projectResource';
 import { resourceManagementUtils } from '~/ui/utils';
 
 export interface IProjectStandardFirmwareEditPageModel {
@@ -86,7 +86,7 @@ const actions = {
     };
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
 
-    projectResourceActions.setSelectedItemKey(
+    projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {

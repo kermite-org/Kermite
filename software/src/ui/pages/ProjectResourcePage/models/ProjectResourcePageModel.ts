@@ -1,6 +1,6 @@
 import { useEffect } from 'qx';
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectResourceStore } from '~/ui/pages/ProjectResourcePage/core';
+import { projectResourceStore } from '~/ui/store/projectResource';
 import { createProjectResourceMenuItems } from '~/ui/pages/ProjectResourcePage/models/ProjectResourceMenuItems';
 
 interface IProjectResourcePageModel {

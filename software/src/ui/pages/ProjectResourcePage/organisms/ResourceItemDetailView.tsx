@@ -1,10 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { decodeProjectResourceItemKey } from '~/shared';
 import { GeneralButton } from '~/ui/components';
-import { projectResourceStore } from '~/ui/pages/ProjectResourcePage/core';
 import { FirmwareDetailView } from '~/ui/pages/ProjectResourcePage/organisms/FirmwareDetailView';
 import { LayoutDetailView } from '~/ui/pages/ProjectResourcePage/organisms/LayoutDetailView';
 import { PresetDetailView } from '~/ui/pages/ProjectResourcePage/organisms/PresetDetailView';
+import { projectResourceStore } from '~/ui/store/projectResource';
 import { useMemoEx } from '~/ui/utils';
 
 type Props = {
