@@ -5,6 +5,7 @@ import {
   getOriginAndProjectIdFromProjectKey,
   IProjectPackageInfo,
   IResourceOrigin,
+  sortOrderBy,
 } from '~/shared';
 import { featureFlags } from '~/shared/defs/FeatureFlags';
 import {
@@ -28,16 +29,18 @@ function createSourceProjectItems(
   allProjectPackageInfos: IProjectPackageInfo[],
   resourceOrigin: IResourceOrigin,
 ): IProjectKeyboardListProjectItem[] {
-  return allProjectPackageInfos
-    .filter((info) => info.origin === resourceOrigin)
-    .map((info) => ({
-      projectId: info.projectId,
-      projectKey: info.projectKey,
-      keyboardName: info.keyboardName,
-      design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
-      ),
-    }));
+  const filteredProjects = allProjectPackageInfos.filter(
+    (info) => info.origin === resourceOrigin,
+  );
+  filteredProjects.sort(sortOrderBy((it) => it.keyboardName));
+  return filteredProjects.map((info) => ({
+    projectId: info.projectId,
+    projectKey: info.projectKey,
+    keyboardName: info.keyboardName,
+    design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+      info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
+    ),
+  }));
 }
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
