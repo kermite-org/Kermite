@@ -1,17 +1,17 @@
 import { css, FC, jsx, QxNode } from 'qx';
 import {
   Icon,
-  OnboardingStepShiftButton,
+  SetupNavigationStepShiftButton,
   NavigationStepList,
 } from '~/ui/components';
-import { useOnboardingFrameModel } from './OnboardingFrame.model';
+import { useSetupNavigationFrameModel } from './SetupNavigationFrame.model';
 
 type Props = {
   className?: string;
   children: QxNode;
 };
 
-export const OnboardingFrame: FC<Props> = ({ className, children }) => {
+export const SetupNavigationFrame: FC<Props> = ({ className, children }) => {
   const {
     allSteps,
     currentStep,
@@ -24,7 +24,7 @@ export const OnboardingFrame: FC<Props> = ({ className, children }) => {
     shiftStepForward,
     canCompleteSteps,
     completeSteps,
-  } = useOnboardingFrameModel();
+  } = useSetupNavigationFrameModel();
   return (
     <div css={style} className={className}>
       <div className="top-bar">
@@ -44,22 +44,22 @@ export const OnboardingFrame: FC<Props> = ({ className, children }) => {
       </div>
       {children}
       <div className="bottom-bar">
-        <OnboardingStepShiftButton
+        <SetupNavigationStepShiftButton
           qxIf={currentStep === 0}
           text="キャンセル"
           onClick={closePanel}
         />
-        <OnboardingStepShiftButton
+        <SetupNavigationStepShiftButton
           onClick={shiftStepBack}
           qxIf={canShiftStepBack}
           text="戻る"
         />
-        <OnboardingStepShiftButton
+        <SetupNavigationStepShiftButton
           onClick={shiftStepForward}
           qxIf={canShiftStepForward}
           text="次へ"
         />
-        <OnboardingStepShiftButton
+        <SetupNavigationStepShiftButton
           onClick={completeSteps}
           qxIf={canCompleteSteps}
           text="完了"

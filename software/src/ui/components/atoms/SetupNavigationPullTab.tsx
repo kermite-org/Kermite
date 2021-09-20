@@ -5,7 +5,7 @@ type Props = {
   handler?: () => void;
 };
 
-export const OnboardingPullTab: FC<Props> = ({ className, handler }) => (
+export const SetupNavigationPullTab: FC<Props> = ({ className, handler }) => (
   <div css={style} className={className} onClick={handler}>
     ナビ
   </div>
@@ -27,7 +27,7 @@ const style = css`
   user-select: none;
 `;
 
-export const OnboardingPullTabPlacer = styled.div`
+export const SetupNavigationPullTabPlacer = styled.div`
   position: absolute;
   top: 80px;
   right: -2px;

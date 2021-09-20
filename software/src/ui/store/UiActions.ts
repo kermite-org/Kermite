@@ -28,11 +28,11 @@ export const uiActions = {
   closePageModal() {
     commitUiState({ pageModalSpec: undefined });
   },
-  openOnboardingPanel() {
-    commitUiSettings({ showOnboardingPanel: true });
+  openSetupNavigationPanel() {
+    commitUiSettings({ showSetupNavigationPanel: true });
   },
-  closeOnboardingPanel() {
-    commitUiSettings({ showOnboardingPanel: false });
+  closeSetupNavigationPanel() {
+    commitUiSettings({ showSetupNavigationPanel: false });
   },
   setGlobalProjectSpec(spec: IGlobalProjectSpec) {
     globalSettingsWriter.writeValue('globalProjectSpec', spec);

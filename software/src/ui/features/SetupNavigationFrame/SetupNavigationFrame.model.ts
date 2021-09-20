@@ -2,7 +2,7 @@ import { getObjectKeyByValue, isNumberInRange } from '~/shared';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
 
-interface OnboardingFrameModel {
+interface SetupNavigationFrameModel {
   allSteps: number[];
   currentStep: number;
   setCurrentStep(step: number): void;
@@ -39,7 +39,7 @@ function getStepByPagePath(pagePath: string): number {
   return _step === undefined ? -1 : parseInt(_step);
 }
 
-export function useOnboardingFrameModel(): OnboardingFrameModel {
+export function useSetupNavigationFrameModel(): SetupNavigationFrameModel {
   const { pagePath } = uiReaders;
   const currentStep = getStepByPagePath(pagePath);
 
@@ -50,7 +50,7 @@ export function useOnboardingFrameModel(): OnboardingFrameModel {
     }
   };
 
-  const closePanel = uiActions.closeOnboardingPanel;
+  const closePanel = uiActions.closeSetupNavigationPanel;
 
   const currentStepInstruction = stepInstructionMap[currentStep];
 

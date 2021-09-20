@@ -15,7 +15,7 @@ export interface IUiSettings {
   showLayerDefaultAssign: boolean;
   siteDpiScale: number;
   showGlobalHint: boolean;
-  showOnboardingPanel: boolean;
+  showSetupNavigationPanel: boolean;
 }
 
 const defaultUiSettings: IUiSettings = {
@@ -24,7 +24,7 @@ const defaultUiSettings: IUiSettings = {
   showLayerDefaultAssign: false,
   siteDpiScale: 1.0,
   showGlobalHint: true,
-  showOnboardingPanel: false,
+  showSetupNavigationPanel: false,
 };
 
 export type IUiState = {

@@ -11,7 +11,7 @@ export const WelcomePage: FC = () => {
     setLanguageEnglish,
     isLanguageJapanese,
     setLanguageJapanese,
-    openOnboardingPanel,
+    openSetupNavigationPanel,
     isDarkTheme,
     setDarkTheme,
   } = useWelcomePageModel();
@@ -37,7 +37,10 @@ export const WelcomePage: FC = () => {
           </WelcomePageButton>
         </div>
         <div className="row">
-          <WelcomePageButton className="button" onClick={openOnboardingPanel}>
+          <WelcomePageButton
+            className="button"
+            onClick={openSetupNavigationPanel}
+          >
             セットアップナビゲーションを表示
           </WelcomePageButton>
         </div>
