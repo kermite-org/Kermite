@@ -1,7 +1,7 @@
-import { projectResourceActions } from '~/ui/store/projectResource/ProjectResourceActions';
-import { projectResourceHelpers } from '~/ui/store/projectResource/ProjectResourceHelpers';
-import { projectResourceReaders } from '~/ui/store/projectResource/ProjectResourceReaders';
-import { projectResourceState } from '~/ui/store/projectResource/ProjectResourceState';
+import { projectResourceActions } from '~/ui/store/projectResource/actions';
+import { projectResourceHelpers } from '~/ui/store/projectResource/helpers';
+import { projectResourceReaders } from '~/ui/store/projectResource/readers';
+import { projectResourceState } from '~/ui/store/projectResource/state';
 
 export const projectResourceStore = {
   state: projectResourceState,

@@ -1,8 +1,8 @@
 import { decodeProjectResourceItemKey } from '~/shared';
 import { modalConfirm } from '~/ui/components';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
-import { projectResourceReaders } from '~/ui/store/projectResource/ProjectResourceReaders';
-import { projectResourceState } from '~/ui/store/projectResource/ProjectResourceState';
+import { projectResourceReaders } from '~/ui/store/projectResource/readers';
+import { projectResourceState } from '~/ui/store/projectResource/state';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {
