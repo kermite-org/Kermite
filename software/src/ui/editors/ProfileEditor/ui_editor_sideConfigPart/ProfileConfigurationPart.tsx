@@ -1,15 +1,15 @@
 import { css, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiReaders } from '~/ui/store';
 
 export const ProfileConfigurationPart = () => {
   const projectInfos = uiReaders.allProjectPackageInfos;
-  const projectId = editorModel.profileData.projectId;
+  const projectId = assignerModel.profileData.projectId;
   const info = projectInfos.find((it) => it.projectId === projectId);
   const keyboardName = info?.keyboardName;
-  const currentAssignType = editorModel.profileData.settings.assignType;
+  const currentAssignType = assignerModel.profileData.settings.assignType;
 
   const { isEditProfileAvailable } = profilesReader;
 

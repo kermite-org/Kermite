@@ -1,5 +1,5 @@
 import { texts } from '~/ui/base';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 
 export interface IOperationSlotViewModel {
   text: string;
@@ -30,7 +30,7 @@ export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel 
     isSlotSelected,
     dualModeEditTargetOperationSig,
     setDualModeEditTargetOperationSig,
-  } = editorModel;
+  } = assignerModel;
 
   const slots = slotsSource.map((it) => {
     return {

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 
 type Props = {
   className?: string;
@@ -25,7 +25,8 @@ function getSlotTriggerText(
 }
 
 export const SlotTriggerDisplay: FC<Props> = ({ className }) => {
-  const { assignEntry, dualModeEditTargetOperationSig: slotSig } = editorModel;
+  const { assignEntry, dualModeEditTargetOperationSig: slotSig } =
+    assignerModel;
   if (assignEntry?.type === 'dual') {
     const hasPrimary = !!assignEntry.primaryOp;
     const hasSecondary = !!assignEntry.secondaryOp;

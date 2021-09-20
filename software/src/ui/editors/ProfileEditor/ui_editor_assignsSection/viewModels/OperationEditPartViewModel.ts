@@ -7,7 +7,7 @@ import {
   VirtualKey,
 } from '~/shared';
 import { IOperationCardViewModel, texts } from '~/ui/base';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import {
   virtualKeyGroupsTable2,
   virtualKeyGroupsTable3,
@@ -35,7 +35,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     editOperation,
     writeEditOperation,
     isSlotSelected,
-  } = editorModel;
+  } = assignerModel;
 
   const noAssignEntry: IOperationCardViewModel = {
     sig: 'none',
@@ -86,7 +86,7 @@ export interface IOperationEditPartViewModel {
 function makeVirtualKeyEntryGroup(
   group: VirtualKey[],
 ): IOperationCardViewModel[] {
-  const { editOperation, writeEditOperation } = editorModel;
+  const { editOperation, writeEditOperation } = assignerModel;
   return group.map((vk) => ({
     sig: vk,
     text: VirtualKeyTexts[vk] || '',
@@ -108,12 +108,12 @@ function makeVirtualKeyEntryGroup(
 }
 
 export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
-  const { editOperation, writeEditOperation } = editorModel;
+  const { editOperation, writeEditOperation } = assignerModel;
 
   const isDualSecondary =
     RestrictDualSecondaryAssigns &&
-    editorModel.isDualMode &&
-    editorModel.dualModeEditTargetOperationSig === 'sec';
+    assignerModel.isDualMode &&
+    assignerModel.dualModeEditTargetOperationSig === 'sec';
 
   const virtualKeyEntryGroups: IOperationCardViewModel[][] =
     virtualKeyGroupsTable2.map(makeVirtualKeyEntryGroup);
@@ -148,7 +148,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
     });
 
   const layerCallEntries: IOperationCardViewModel[] =
-    editorModel.profileData.layers
+    assignerModel.profileData.layers
       // .filter((la) => la.layerId !== 'la0')
       .map((la) => ({
         sig: la.layerId,

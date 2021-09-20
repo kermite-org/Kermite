@@ -1,4 +1,4 @@
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import {
   makePlainOperationEditCardsViewModel,
   makeOperationEditPartViewModel,
@@ -7,8 +7,8 @@ import { makeOperationLayerOptionEditViewModel } from '~/ui/editors/ProfileEdito
 import { makeOperationSlotsPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';
 
 export function makeAssignEditSectionViewModel() {
-  const isDisabled = !editorModel.isSlotSelected;
-  const { isSingleMode, isDualMode } = editorModel;
+  const isDisabled = !assignerModel.isSlotSelected;
+  const { isSingleMode, isDualMode } = assignerModel;
 
   const operationSlotsVM = makeOperationSlotsPartViewModel();
   const plainOperationEditCardsVM = makePlainOperationEditCardsViewModel();

@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { uniqueArrayItemsByField } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { uiReaders } from '~/ui/store';
 
 const fallbackProjectId = '000000';
@@ -14,7 +14,7 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
     'projectId',
   ).map((it) => ({ label: it.keyboardName, value: it.projectId }));
 
-  const originalProjectId = editorModel.loadedProfileData.projectId;
+  const originalProjectId = assignerModel.loadedProfileData.projectId;
   if (
     originalProjectId !== fallbackProjectId &&
     !options.find((it) => it.value === originalProjectId)
@@ -34,8 +34,8 @@ function makeTargetProjectSelectOptions(): ISelectorOption[] {
 
 export const KeyboardProjectSelectionPart: FC = () => {
   const options = makeTargetProjectSelectOptions();
-  const value = editorModel.profileData.projectId || '';
-  const setValue = editorModel.changeProjectId;
+  const value = assignerModel.profileData.projectId || '';
+  const setValue = assignerModel.changeProjectId;
 
   return (
     <div css={style}>

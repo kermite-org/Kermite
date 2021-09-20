@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import {
   reflectFieldValue,
   reflectValue,
@@ -8,11 +8,11 @@ import {
 } from '~/ui/utils';
 
 export const DualModeSettingsPart: FC = () => {
-  if (editorModel.profileData.settings.assignType === 'single') {
+  if (assignerModel.profileData.settings.assignType === 'single') {
     return null;
   }
 
-  const { settings } = editorModel.profileData;
+  const { settings } = assignerModel.profileData;
 
   const onTapHoldThresholdValueChanged = (value: string) => {
     const val = parseInt(value);

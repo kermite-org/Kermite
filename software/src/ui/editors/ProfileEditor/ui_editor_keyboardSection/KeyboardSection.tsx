@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { usePlayerModel } from '~/ui/commonModels';
 import { EditorKeyboardView } from '~/ui/components/keyboard';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
 import { ProfileSetupNavigationCardView } from '~/ui/editors/ProfileEditor/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
@@ -14,13 +14,13 @@ export const KeyboardSection: FC = () => {
     position: relative;
     height: 100%;
   `;
-  const { clearAssignSlotSelection } = editorModel;
+  const { clearAssignSlotSelection } = assignerModel;
 
-  playerModel.setProfileData(editorModel.profileData);
+  playerModel.setProfileData(assignerModel.profileData);
 
   const cardsPartVm = makeEditKeyUnitCardsPartViewModel(
     playerModel,
-    editorModel,
+    assignerModel,
   );
 
   if (!profilesReader.isEditProfileAvailable) {
@@ -33,7 +33,7 @@ export const KeyboardSection: FC = () => {
       <EditorKeyboardView
         cards={cardsPartVm.cards}
         showLayerDefaultAssign={cardsPartVm.showLayerDefaultAssign}
-        design={editorModel.displayDesign}
+        design={assignerModel.displayDesign}
       />
       <LayerStateView playerModel={playerModel} />
     </div>

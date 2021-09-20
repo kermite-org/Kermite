@@ -5,7 +5,7 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { LayoutEditorCore, editorModel } from '~/ui/editors';
+import { LayoutEditorCore, assignerModel } from '~/ui/editors';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
@@ -70,7 +70,7 @@ export const layoutManagerActions = {
       layoutManagerReader.editSource.type === 'CurrentProfile' &&
       layoutManagerReader.isModified
     ) {
-      editorModel.restoreOriginalDesign();
+      assignerModel.restoreOriginalDesign();
     }
     dispatchCoreAction({ layout_createNewLayout: 1 });
   },

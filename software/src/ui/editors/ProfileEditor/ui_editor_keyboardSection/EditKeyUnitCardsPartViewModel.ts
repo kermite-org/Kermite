@@ -2,7 +2,7 @@ import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
 import { IEditKeyUnitCardViewModel } from '~/ui/base';
 import { IPlayerModel } from '~/ui/commonModels';
 import { getAssignEntryTexts } from '~/ui/components/keyboard';
-import { EditorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { AssignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { uiActions, uiState } from '~/ui/store';
 
 export interface IEditKeyUnitCardPartViewModel {
@@ -13,7 +13,7 @@ export interface IEditKeyUnitCardPartViewModel {
 function getAssignForKeyUnit(
   keyUnitId: string,
   playerModel: IPlayerModel,
-  editorModel: EditorModel,
+  editorModel: AssignerModel,
 ): IAssignEntryWithLayerFallback | undefined {
   const dynamic = uiState.settings.showLayersDynamic;
   return dynamic
@@ -26,7 +26,7 @@ function getAssignForKeyUnit(
 function makeEditKeyUnitCardViewModel(
   ke: IDisplayKeyEntity,
   playerModel: IPlayerModel,
-  editorModel: EditorModel,
+  editorModel: AssignerModel,
 ): IEditKeyUnitCardViewModel {
   const keyUnitId = ke.keyId;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
@@ -62,7 +62,7 @@ function makeEditKeyUnitCardViewModel(
 
 export function makeEditKeyUnitCardsPartViewModel(
   playerModel: IPlayerModel,
-  editorModel: EditorModel,
+  editorModel: AssignerModel,
 ): IEditKeyUnitCardPartViewModel {
   const { showLayerDefaultAssign } = uiState.settings;
   return {

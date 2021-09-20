@@ -1,5 +1,5 @@
 import { LayerInvocationMode, generateNumberSequence } from '~/shared';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 
 export interface IOperationLayerOptionEditViewModel {
   enabled: boolean;
@@ -21,7 +21,7 @@ const exclusionGroupValues = generateNumberSequence(7).map((a) =>
 );
 
 export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEditViewModel {
-  const { editOperation } = editorModel;
+  const { editOperation } = assignerModel;
 
   if (editOperation?.type === 'layerCall') {
     return {

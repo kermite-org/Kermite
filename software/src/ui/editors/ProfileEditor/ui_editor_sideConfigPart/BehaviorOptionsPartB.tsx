@@ -1,14 +1,14 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { CheckBoxLine, ConfigurationButton } from '~/ui/components';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { commitUiSettings, commitUiState, uiState } from '~/ui/store';
 
 export const BehaviorOptionsPartB: FC = () => {
   const { settings } = uiState;
 
-  const { isUserProfileEditorView } = editorModel;
+  const { isUserProfileEditorView } = assignerModel;
   return (
     <div css={style}>
       <CheckBoxLine

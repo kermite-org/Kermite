@@ -1,3 +1,3 @@
 export * from './EditorGeneralComponent';
 export * from './KeyAssignEditView';
-export * from './models/EditorModel';
+export * from './models/AssignerModel';

@@ -1,14 +1,14 @@
 import { jsx, css, FC } from 'qx';
 import { IProfileAssignType } from '~/shared';
 import { texts } from '~/ui/base';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { reflectValue } from '~/ui/utils';
 
 const AssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];
-  const currentAssignType = editorModel.profileData.settings.assignType;
+  const currentAssignType = assignerModel.profileData.settings.assignType;
   const setAssignType = (value: string) => {
-    editorModel.changeProfileAssignType(value as IProfileAssignType);
+    assignerModel.changeProfileAssignType(value as IProfileAssignType);
   };
   return { assignTypeOptions, currentAssignType, setAssignType };
 };

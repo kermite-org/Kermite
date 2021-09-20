@@ -1,5 +1,5 @@
 import { ILayer } from '~/shared';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiActions } from '~/ui/store';
 
@@ -15,7 +15,7 @@ export interface ILayerListBoxPartViewModel {
 }
 
 function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
-  const { isLayerCurrent, setCurrentLayerId } = editorModel;
+  const { isLayerCurrent, setCurrentLayerId } = assignerModel;
   const { layerId, layerName } = layer;
   const isCurrent = isLayerCurrent(layerId);
   const setCurrent = () => {
@@ -35,6 +35,6 @@ export function makeLayerListBoxPartViewModel(): ILayerListBoxPartViewModel {
     return { layers: [] };
   }
   return {
-    layers: editorModel.layers.map(makeLayerListViewModel),
+    layers: assignerModel.layers.map(makeLayerListViewModel),
   };
 }

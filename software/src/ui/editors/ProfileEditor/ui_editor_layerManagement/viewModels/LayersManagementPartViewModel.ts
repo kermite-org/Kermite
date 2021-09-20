@@ -3,7 +3,7 @@ import { removeArrayItems } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import {
   callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,
@@ -23,8 +23,8 @@ export interface ILayerManagementPartViewModel {
 }
 
 export function makeLayerManagementPartViewModel(): ILayerManagementPartViewModel {
-  const { layers } = editorModel;
-  const curLayer = editorModel.currentLayer!;
+  const { layers } = assignerModel;
+  const curLayer = assignerModel.currentLayer!;
   const isCurrentLayerCustom = curLayer?.layerId !== 'la0' || false;
 
   const canShiftCurrentLayerOrder = (dir: -1 | 1): boolean => {
@@ -57,7 +57,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
       });
       if (ok) {
         removeArrayItems(layers, curLayer);
-        editorModel.setCurrentLayerId(layers[0].layerId);
+        assignerModel.setCurrentLayerId(layers[0].layerId);
       }
     },
     editCurrentLayer: async () => {

@@ -1,7 +1,7 @@
 import { css, FC, jsx, useEffect } from 'qx';
 import { IPersistProfileData, ProfileDataConverter } from '~/shared';
 import { KeyAssignEditView } from '~/ui/editors/ProfileEditor/KeyAssignEditView';
-import { editorModel } from '~/ui/editors/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { ProfileConfigurationModalLayer } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration';
 
 type Props = {
@@ -10,11 +10,11 @@ type Props = {
 
 export const AssignerGeneralComponent_OutputPropsSupplier = {
   get isModified() {
-    return editorModel.checkDirty();
+    return assignerModel.checkDirty();
   },
   emitSavingDesign() {
     return ProfileDataConverter.convertProfileDataToPersist(
-      editorModel.profileData,
+      assignerModel.profileData,
     );
   },
 };
@@ -23,7 +23,7 @@ export const AssignerGeneralComponent: FC<Props> = ({ originalProfile }) => {
   useEffect(() => {
     const profileData =
       ProfileDataConverter.convertProfileDataFromPersist(originalProfile);
-    editorModel.loadProfileData(profileData);
+    assignerModel.loadProfileData(profileData);
   }, [originalProfile]);
 
   return (

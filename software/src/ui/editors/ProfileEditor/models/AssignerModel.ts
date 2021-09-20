@@ -27,7 +27,7 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
   ter: 'tertiaryOp',
 };
 
-export class EditorModel {
+export class AssignerModel {
   // state
 
   loadedProfileData: IProfileData = fallbackProfileData;
@@ -252,4 +252,4 @@ export class EditorModel {
   }
 }
 
-export const editorModel = new EditorModel();
+export const assignerModel = new AssignerModel();
