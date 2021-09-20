@@ -22,9 +22,8 @@ export const projectResourceReaders = {
   get resourceItemKeys(): string[] {
     return resourceItemsSelector();
   },
-  get isSelectedItemKeyIncludedInList() {
-    const { selectedItemKey } = projectResourceReaders;
-    const { resourceItemKeys } = projectResourceReaders;
+  get isSelectedItemKeyIncludedInList(): boolean {
+    const { resourceItemKeys, selectedItemKey } = projectResourceReaders;
     return resourceItemKeys.includes(selectedItemKey);
   },
 };
