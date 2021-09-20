@@ -43,12 +43,11 @@ export const projectManagementMenuActions = {
     if (keyboardName) {
       const allProjectNames = uiReaders.allProjectPackageInfos
         .filter((info) => info.origin === 'local')
-        .map((info) => info.packageName);
+        .map((info) => info.keyboardName);
       const res = resourceManagementUtils.checkValidResourceName(
         keyboardName,
         allProjectNames,
         'project package',
-        true,
       );
       if (res === 'ok') {
         dispatchCoreAction({ project_createLocalProject: { keyboardName } });

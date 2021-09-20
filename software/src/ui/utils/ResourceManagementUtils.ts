@@ -5,14 +5,14 @@ export const resourceManagementUtils = {
     resourceName: string,
     existingResourceNames: string[],
     resourceTypeNameText: string,
-    checkCaseSensitive?: boolean,
+    allowDifferentCasingVariants?: boolean,
   ): string | 'ok' {
     // eslint-disable-next-line no-irregular-whitespace
     // eslint-disable-next-line no-misleading-character-class
     if (resourceName.match(/[/./\\:*?"<>| \u3000\u0e49]/)) {
       return `${resourceName} is not a valid ${resourceTypeNameText}.`;
     }
-    const existingName = checkCaseSensitive
+    const existingName = allowDifferentCasingVariants
       ? existingResourceNames.find((it) => it === resourceName)
       : existingResourceNames.find(
           (it) => it.toLowerCase() === resourceName.toLowerCase(),
@@ -29,7 +29,7 @@ export const resourceManagementUtils = {
     resourceTypeNameText: string;
     existingResourceNames: string[];
     defaultText?: string;
-    checkCaseSensitive?: boolean;
+    allowDifferentCasingVariants?: boolean;
   }): Promise<string | undefined> {
     const {
       modalTitle,
@@ -37,7 +37,7 @@ export const resourceManagementUtils = {
       resourceTypeNameText,
       existingResourceNames,
       defaultText,
-      checkCaseSensitive,
+      allowDifferentCasingVariants,
     } = args;
     const resourceName = await modalTextEdit({
       caption: modalTitle,
@@ -49,7 +49,7 @@ export const resourceManagementUtils = {
         resourceName,
         existingResourceNames,
         resourceTypeNameText,
-        checkCaseSensitive,
+        allowDifferentCasingVariants,
       );
       if (res !== 'ok') {
         await modalAlert(`${res} operation cancelled.`);
