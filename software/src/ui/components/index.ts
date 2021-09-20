@@ -11,3 +11,4 @@ export * from './utils';
 export * from './widget';
 export * from './window';
 export * from './windowInner';
+export * from './layouts';

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { CommonPageFrame } from '~/ui/components';
 import {
   ConnectedDeviceAttrsPart,
   CustomParametersPart,
@@ -9,28 +9,25 @@ import {
 
 export const FirmwareUpdatePage: FC = () => {
   return (
-    <div css={style}>
-      <div className="topRow">
-        <div className="leftColumn">
-          <DeviceSelectionPart />
-          <CustomParametersPart />
+    <CommonPageFrame>
+      <div css={style}>
+        <div className="topRow">
+          <div className="leftColumn">
+            <DeviceSelectionPart />
+            <CustomParametersPart />
+          </div>
+          <div className="rightColumn">
+            <ConnectedDeviceAttrsPart />
+          </div>
         </div>
-        <div className="rightColumn">
-          <ConnectedDeviceAttrsPart />
-        </div>
-      </div>
 
-      <FirmwareUpdatePart />
-    </div>
+        <FirmwareUpdatePart />
+      </div>
+    </CommonPageFrame>
   );
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-  height: 100%;
-  padding: 30px;
-
   > * + * {
     margin-top: 40px;
   }

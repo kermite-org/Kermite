@@ -46,8 +46,6 @@ export const ProjectSelectionPart: FC = () => {
 };
 
 const style = css`
-  margin-top: 10px;
-
   > .top-row {
     display: flex;
     justify-content: space-between;

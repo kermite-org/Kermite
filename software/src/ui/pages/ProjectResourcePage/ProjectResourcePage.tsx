@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
-import { GeneralButtonMenu } from '~/ui/components';
+import { CommonPageFrame, GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
 import { useProjectResourcePageModel } from '~/ui/pages/ProjectResourcePage/models/ProjectResourcePageModel';
 import { ResourceItemDetailView } from '~/ui/pages/ProjectResourcePage/organisms/ResourceItemDetailView';
@@ -17,9 +16,8 @@ export const ProjectResourcePage: FC = () => {
     menuItems,
   } = useProjectResourcePageModel();
   return (
-    <div css={style}>
-      <div className="content">
-        <div>project resource edit page</div>
+    <CommonPageFrame pageTitle="Project Resource Edit Page">
+      <div css={style}>
         <div className="top-row">
           <GeneralButtonMenu menuItems={menuItems} />
           <div className="keyboard-name-part">{keyboardName}</div>
@@ -53,45 +51,38 @@ export const ProjectResourcePage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </CommonPageFrame>
   );
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-  height: 100%;
-  padding: 15px;
+  > .top-row {
+    display: flex;
+    align-items: center;
 
-  > .content {
-    > .top-row {
-      display: flex;
-      align-items: center;
-
-      > .keyboard-name-part {
-        margin-left: 10px;
-      }
-    }
-
-    > * + * {
-      margin-top: 10px;
-    }
-
-    > .main-row {
-      display: flex;
-      min-height: 400px;
-      gap: 10px;
-      > .left-column {
-        width: 250px;
-      }
-      > .right-column {
-        flex-grow: 1;
-        border: solid 1px #888;
-      }
-    }
-
-    .keyboard-name-input {
+    > .keyboard-name-part {
       margin-left: 10px;
     }
+  }
+
+  > * + * {
+    margin-top: 10px;
+  }
+
+  > .main-row {
+    display: flex;
+    min-height: 400px;
+    gap: 10px;
+    > .left-column {
+      width: 250px;
+    }
+    > .right-column {
+      flex-grow: 1;
+      border: solid 1px #888;
+    }
+  }
+
+  .keyboard-name-input {
+    margin-left: 10px;
   }
 `;

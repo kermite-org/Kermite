@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { CommonPageFrame } from '~/ui/components';
 import { IPresetBrowserViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 import {
   PresetKeyboardSection,
@@ -17,24 +17,20 @@ export const PresetBrowserPageView: FC<Props> = ({
   viewModel,
   customContent,
 }) => (
-  <div css={style}>
-    <div>{pageTitle}</div>
-    <PresetSelectionSection
-      viewModel={viewModel.presetSelectionSectionViewModel}
-    />
-    <PresetKeyboardSection
-      viewModel={viewModel.presetKeyboardSectionViewModel}
-    />
-    {customContent && <div>{customContent}</div>}
-  </div>
+  <CommonPageFrame pageTitle={pageTitle}>
+    <div css={style}>
+      <PresetSelectionSection
+        viewModel={viewModel.presetSelectionSectionViewModel}
+      />
+      <PresetKeyboardSection
+        viewModel={viewModel.presetKeyboardSectionViewModel}
+      />
+      {customContent && <div>{customContent}</div>}
+    </div>
+  </CommonPageFrame>
 );
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-
-  height: 100%;
-  padding: 20px;
   > * + * {
     margin-top: 10px;
   }
