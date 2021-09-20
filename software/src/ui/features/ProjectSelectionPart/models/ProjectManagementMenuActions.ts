@@ -53,7 +53,7 @@ const helpers = {
       if (res === 'ok') {
         return keyboardName;
       } else {
-        modalConfirm({
+        await modalConfirm({
           message: res,
           caption: 'error',
         });
@@ -77,9 +77,23 @@ export const projectManagementMenuActions = {
       projectOptions,
       selectedValue: '',
     });
-    if (projectId) {
+    const project = projectPackagesReader.findProjectInfo('online', projectId);
+    if (project) {
+      const projectKeyboardName = project?.keyboardName.toLowerCase();
+      const allLocalProjectKeyboardNames = uiReaders.allProjectPackageInfos
+        .filter((info) => info.origin === 'local')
+        .map((info) => info.keyboardName.toLowerCase());
+      if (allLocalProjectKeyboardNames.includes(projectKeyboardName)) {
+        await modalConfirm({
+          message: `project ${projectKeyboardName} already exists in local. please rename it first.`,
+          caption: 'error',
+        });
+        return;
+      }
       dispatchCoreAction({
-        project_createLocalProjectBasedOnOnlineProject: { projectId },
+        project_createLocalProjectBasedOnOnlineProject: {
+          projectId: project.projectId,
+        },
       });
     }
   },
