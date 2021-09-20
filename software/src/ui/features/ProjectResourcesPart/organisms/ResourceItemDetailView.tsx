@@ -1,9 +1,9 @@
 import { css, FC, jsx } from 'qx';
 import { decodeProjectResourceItemKey } from '~/shared';
 import { GeneralButton } from '~/ui/components';
-import { FirmwareDetailView } from '~/ui/pages/ProjectResourcePage/organisms/FirmwareDetailView';
-import { LayoutDetailView } from '~/ui/pages/ProjectResourcePage/organisms/LayoutDetailView';
-import { PresetDetailView } from '~/ui/pages/ProjectResourcePage/organisms/PresetDetailView';
+import { FirmwareDetailView } from '~/ui/features/ProjectResourcesPart/organisms/FirmwareDetailView';
+import { LayoutDetailView } from '~/ui/features/ProjectResourcesPart/organisms/LayoutDetailView';
+import { PresetDetailView } from '~/ui/features/ProjectResourcesPart/organisms/PresetDetailView';
 import { projectResourceStore } from '~/ui/store/projectResource';
 import { useMemoEx } from '~/ui/utils';
 

@@ -1,7 +1,7 @@
 import { useEffect } from 'qx';
 import { IGeneralMenuItem } from '~/ui/base';
+import { createProjectResourceMenuItems } from '~/ui/features/ProjectResourcesPart/models/ProjectResourceMenuItems';
 import { projectResourceStore } from '~/ui/store/projectResource';
-import { createProjectResourceMenuItems } from '~/ui/pages/ProjectResourcePage/models/ProjectResourceMenuItems';
 
 interface IProjectResourcePageModel {
   keyboardName: string;
