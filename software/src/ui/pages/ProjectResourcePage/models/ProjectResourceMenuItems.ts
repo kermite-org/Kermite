@@ -1,8 +1,5 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import {
-  projectResourceActions,
-  projectResourceReaders,
-} from '~/ui/pages/ProjectResourcePage/core';
+import { projectResourceStore } from '~/ui/pages/ProjectResourcePage/core';
 import { uiReaders } from '~/ui/store';
 
 export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
@@ -10,33 +7,33 @@ export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
     {
       type: 'menuEntry',
       text: 'create standard firmware',
-      handler: projectResourceActions.createStandardFirmware,
+      handler: projectResourceStore.actions.createStandardFirmware,
       disabled: !uiReaders.editTargetProject,
     },
     {
       type: 'menuEntry',
       text: 'create custom firmware',
-      handler: projectResourceActions.createCustomFirmware,
+      handler: projectResourceStore.actions.createCustomFirmware,
       disabled: !uiReaders.editTargetProject,
     },
     { type: 'separator' },
     {
       type: 'menuEntry',
       text: 'rename item',
-      handler: projectResourceActions.renameSelectedResourceItem,
-      disabled: !projectResourceReaders.isItemSelected,
+      handler: projectResourceStore.actions.renameSelectedResourceItem,
+      disabled: !projectResourceStore.readers.isItemSelected,
     },
     {
       type: 'menuEntry',
       text: 'copy item',
-      handler: projectResourceActions.copySelectedResourceItem,
-      disabled: !projectResourceReaders.isItemSelected,
+      handler: projectResourceStore.actions.copySelectedResourceItem,
+      disabled: !projectResourceStore.readers.isItemSelected,
     },
     {
       type: 'menuEntry',
       text: 'delete item',
-      handler: projectResourceActions.deleteSelectedResourceItem,
-      disabled: !projectResourceReaders.isItemSelected,
+      handler: projectResourceStore.actions.deleteSelectedResourceItem,
+      disabled: !projectResourceStore.readers.isItemSelected,
     },
   ];
 }

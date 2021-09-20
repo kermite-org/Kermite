@@ -1,9 +1,6 @@
 import { useEffect } from 'qx';
 import { IGeneralMenuItem } from '~/ui/base';
-import {
-  projectResourceActions,
-  projectResourceReaders,
-} from '~/ui/pages/ProjectResourcePage/core';
+import { projectResourceStore } from '~/ui/pages/ProjectResourcePage/core';
 import { createProjectResourceMenuItems } from '~/ui/pages/ProjectResourcePage/models/ProjectResourceMenuItems';
 
 interface IProjectResourcePageModel {
@@ -18,16 +15,16 @@ interface IProjectResourcePageModel {
 }
 
 export function useProjectResourcePageModel(): IProjectResourcePageModel {
-  useEffect(projectResourceActions.resetState, []);
+  useEffect(projectResourceStore.actions.resetState, []);
   const menuItems = createProjectResourceMenuItems();
   const { selectedItemKey, keyboardName, resourceItemKeys } =
-    projectResourceReaders;
+    projectResourceStore.readers;
   const {
     editSelectedResourceItem,
     clearSelection,
     setSelectedItemKey,
     handleKeyboardNameChange,
-  } = projectResourceActions;
+  } = projectResourceStore.actions;
   return {
     keyboardName,
     handleKeyboardNameChange,

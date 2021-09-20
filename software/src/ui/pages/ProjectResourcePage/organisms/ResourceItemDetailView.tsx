@@ -1,10 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { decodeProjectResourceItemKey } from '~/shared';
 import { GeneralButton } from '~/ui/components';
-import {
-  projectResourceActions,
-  projectResourceHelpers,
-} from '~/ui/pages/ProjectResourcePage/core';
+import { projectResourceStore } from '~/ui/pages/ProjectResourcePage/core';
 import { FirmwareDetailView } from '~/ui/pages/ProjectResourcePage/organisms/FirmwareDetailView';
 import { LayoutDetailView } from '~/ui/pages/ProjectResourcePage/organisms/LayoutDetailView';
 import { PresetDetailView } from '~/ui/pages/ProjectResourcePage/organisms/PresetDetailView';
@@ -18,7 +15,8 @@ type Props = {
 function checkCanEdit(selectedItemKey: string): boolean {
   const { itemType, itemName } = decodeProjectResourceItemKey(selectedItemKey);
   if (itemType === 'firmware') {
-    const firmwareEntry = projectResourceHelpers.getFirmwareEntry(itemName);
+    const firmwareEntry =
+      projectResourceStore.helpers.getFirmwareEntry(itemName);
     if (firmwareEntry?.type === 'custom') {
       return false;
     }
@@ -28,7 +26,7 @@ function checkCanEdit(selectedItemKey: string): boolean {
 
 export const ResourceItemDetailView: FC<Props> = ({ selectedItemKey }) => {
   const { itemType, itemName } = decodeProjectResourceItemKey(selectedItemKey);
-  const { editSelectedResourceItem } = projectResourceActions;
+  const { editSelectedResourceItem } = projectResourceStore.actions;
   const canEdit = useMemoEx(checkCanEdit, [selectedItemKey]);
   return (
     <div css={style}>
