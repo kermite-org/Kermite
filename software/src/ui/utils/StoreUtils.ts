@@ -17,12 +17,12 @@ export function createSimpleSelector<TSource, TResult>(
   };
 }
 
-export function createSimpleSelector2<T extends (...args: any[]) => any>(
-  transformer: T,
-  sourceReader: () => Parameters<T>,
-): () => ReturnType<T> {
-  let source: Parameters<T> | undefined;
-  let result: ReturnType<T> | undefined;
+export function createSimpleSelector2<T extends any[], R>(
+  transformer: (...args: [...T]) => R,
+  sourceReader: () => [...T],
+): () => R {
+  let source: T | undefined;
+  let result: R | undefined;
 
   return () => {
     const _source = sourceReader();

@@ -41,7 +41,7 @@ const helpers = {
 
 const sourceProjectItemsSelector = createSimpleSelector2(
   helpers.createSourceProjectItems,
-  () => [uiReaders.allProjectPackageInfos, state.tabResourceOrigin] as any,
+  () => [uiReaders.allProjectPackageInfos, state.tabResourceOrigin],
 );
 
 const readers = {
