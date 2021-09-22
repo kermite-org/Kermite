@@ -46,6 +46,7 @@ KermiteKeyboardDefinitionData defs = {
   .useDebugUart = false,
   .useMatrixKeyScanner = false,
   .useDirectWiredKeyScanner = false,
+  .useEncoder = false,
   .useRgbLighting = false,
   .useOledDisplay = false,
   .numMatrixRows = 0,
