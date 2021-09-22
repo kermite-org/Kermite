@@ -4,8 +4,8 @@
 
 void rgbLighting_preConfigure();
 
-void rgbLighting_initialize(int8_t pin, uint8_t numLeds, uint8_t numLedsRight);
+void rgbLighting_initialize(int8_t pin);
 
-void rgbLighting_setBoardSide(int8_t side);
+void rgbLighting_setNumLeds(uint8_t numLeds);
 
 void rgbLighting_update();

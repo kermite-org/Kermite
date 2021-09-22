@@ -7,12 +7,9 @@
 #include "km0/kernel/commandDefinitions.h"
 #include "km0/kernel/configManager.h"
 
-static int numLedsLeftDefault = 0;
-static int numLedsRight = 0;
-
 //----------------------------------------------------------------------
 
-static int numLeds = 0;
+static uint8_t numLeds = 0;
 
 static bool glowEnabled = false;
 static uint8_t glowColor = 0;
@@ -239,19 +236,13 @@ void rgbLighting_preConfigure() {
   configManager_overrideParameterMaxValue(SystemParameter_GlowPattern, 4);
 }
 
-void rgbLighting_initialize(int8_t pin, uint8_t _numLeds, uint8_t _numLedsRight) {
-  numLedsLeftDefault = _numLeds;
-  numLedsRight = _numLedsRight;
+void rgbLighting_initialize(int8_t pin) {
   configManager_addParameterChangeListener(parameterChangeHandler);
   serialLed_initialize(pin);
 }
 
-void rgbLighting_setBoardSide(int8_t side) {
-  if (side == 0) {
-    numLeds = numLedsLeftDefault;
-  } else {
-    numLeds = numLedsRight;
-  }
+void rgbLighting_setNumLeds(uint8_t _numLeds) {
+  numLeds = _numLeds;
 }
 
 void rgbLighting_update() {
