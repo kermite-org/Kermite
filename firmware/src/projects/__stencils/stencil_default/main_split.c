@@ -91,6 +91,12 @@
 extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
 #endif
 
+#ifdef KS_USE_RGB_LIGHTING
+#ifndef KS_NUM_RGBLEDS_RIGHT
+#define KS_NUM_RGBLEDS_RIGHT KS_NUM_RGBLEDS
+#endif
+#endif
+
 static void setupBoard(int8_t side) {
 
 #ifdef KS_USE_KEY_MATRIX
@@ -154,7 +160,11 @@ static void setupBoard(int8_t side) {
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
-  rgbLighting_setBoardSide(side);
+  if (side == 0) {
+    rgbLighting_setNumLeds(KS_NUM_RGBLEDS);
+  } else {
+    rgbLighting_setNumLeds(KS_NUM_RGBLEDS_RIGHT);
+  }
 #endif
 }
 
@@ -184,11 +194,8 @@ int main() {
 #endif
 
 #ifdef KS_USE_RGB_LIGHTING
-#ifndef KS_NUM_RGBLEDS_RIGHT
-#define KS_NUM_RGBLEDS_RIGHT KS_NUM_RGBLEDS
-#endif
   rgbLighting_preConfigure();
-  rgbLighting_initialize(KS_RGBLED_PIN, KS_NUM_RGBLEDS, KS_NUM_RGBLEDS_RIGHT);
+  rgbLighting_initialize(KS_RGBLED_PIN);
   keyboardMain_useRgbLightingModule(rgbLighting_update);
 #endif
 

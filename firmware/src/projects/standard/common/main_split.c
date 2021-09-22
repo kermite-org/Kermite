@@ -158,7 +158,11 @@ static void setupBoard(int8_t side) {
 
 #ifdef KS_USE_RGB_LIGHTING
   if (defs.useRgbLighting) {
-    rgbLighting_setBoardSide(side);
+    if (side == 0) {
+      rgbLighting_setNumLeds(defs.rgbLightingNumLeds);
+    } else {
+      rgbLighting_setNumLeds(defs.rgbLightingNumLedsRight);
+    }
   }
 #endif
 }
@@ -194,7 +198,7 @@ int main() {
 #ifdef KS_USE_RGB_LIGHTING
   if (defs.useRgbLighting) {
     rgbLighting_preConfigure();
-    rgbLighting_initialize(defs.rgbLightingPin, defs.rgbLightingNumLeds, defs.rgbLightingNumLedsRight);
+    rgbLighting_initialize(defs.rgbLightingPin);
     keyboardMain_useRgbLightingModule(rgbLighting_update);
   }
 #endif
