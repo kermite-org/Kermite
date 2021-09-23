@@ -12,6 +12,9 @@ export const resourceManagementUtils = {
     if (resourceName.match(/[/./\\:*?"<>| \u3000\u0e49]/)) {
       return `${resourceName} is not a valid ${resourceTypeNameText}.`;
     }
+    if (resourceName.length > 32) {
+      return `${resourceTypeNameText} should be no more than 32 characters.`;
+    }
     const existingName = allowDifferentCasingVariants
       ? existingResourceNames.find((it) => it === resourceName)
       : existingResourceNames.find(
