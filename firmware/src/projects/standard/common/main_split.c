@@ -10,6 +10,7 @@
 #include "km0/scanner/keyScanner_directWired.h"
 #include "km0/scanner/keyScanner_encoders.h"
 #include "km0/wrapper/splitKeyboard.h"
+
 #ifdef KS_USE_OLED_DISPLAY
 #include "km0/visualizer/oledDisplay.h"
 #endif

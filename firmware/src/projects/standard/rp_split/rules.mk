@@ -33,4 +33,7 @@ MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledCoreEx.c
 MODULE_SRCS += km0/visualizer/oledDisplay_rp/oledDisplayEx_default.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
 
+DEFINES += KS_USE_OLED_DISPLAY
+DEFINES += KS_USE_RGB_LIGHTING
+
 PROJECT_SRCS += ../common/main_split.c
