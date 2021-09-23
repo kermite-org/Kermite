@@ -81,7 +81,7 @@ function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
   return true;
 }
 
-export function serializeCustomKeyboardSpec(
+export function serializeCustomKeyboardSpec_Unified(
   spec: IKermiteStandardKeyboardSpec,
   meta: IStandardKeyboardInjectedMetaData,
 ): number[] {
@@ -149,5 +149,89 @@ export function serializeCustomKeyboardSpec(
     ...pinDefinitionsBytes,
     spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
     spec.lightingNumLeds,
+  ]);
+}
+
+// Symmetrical Split
+export function serializeCustomKeyboardSpec_Split(
+  spec: IKermiteStandardKeyboardSpec,
+  meta: IStandardKeyboardInjectedMetaData,
+): number[] {
+  if (!checkKeyboardSpec(spec)) {
+    throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
+  }
+  let numMatrixRows = 0;
+  let numMatrixColumns = 0;
+  let numDirectWiredKeys = 0;
+  let numEncoder = 0;
+  const keyScannerPins: string[] = [];
+  if (
+    spec.useMatrixKeyScanner &&
+    !!spec.matrixRowPins &&
+    !!spec.matrixColumnPins
+  ) {
+    numMatrixRows = spec.matrixRowPins.length;
+    numMatrixColumns = spec.matrixColumnPins.length;
+    keyScannerPins.push(...spec.matrixRowPins, ...spec.matrixColumnPins);
+    keyScannerPins.push(...spec.matrixRowPins, ...spec.matrixColumnPins); // Right
+  }
+  if (spec.useDirectWiredKeyScanner && !!spec.directWiredPins) {
+    numDirectWiredKeys = spec.directWiredPins.length;
+    keyScannerPins.push(...spec.directWiredPins);
+    keyScannerPins.push(...spec.directWiredPins); // Right
+  }
+  if (spec.useEncoder && !!spec.encoderPins) {
+    numEncoder = 1;
+    keyScannerPins.push(...spec.encoderPins);
+    keyScannerPins.push(...spec.encoderPins); // Right
+  }
+
+  if (keyScannerPins.length > 32) {
+    throw new Error(`maximum number of key scanner pins (32) exceeded`);
+  }
+
+  const pinDefinitionsBytes = padByteArray(
+    keyScannerPins.map(mapPinNameToPinNumber),
+    32,
+    0xff,
+  );
+
+  if (
+    !(
+      meta.keyboardName.length < 32 && isStringPrintableAscii(meta.keyboardName)
+    )
+  ) {
+    throw new Error(
+      `invalid keyboard name ${meta.keyboardName} for embedded attribute`,
+    );
+  }
+
+  return convertArrayElementsToBytes([
+    ...stringToEmbedBytes(meta.projectId, 7),
+    ...stringToEmbedBytes(meta.variationId, 3),
+    ...stringToEmbedBytes(meta.deviceInstanceCode, 9),
+    ...stringToEmbedBytes(meta.keyboardName, 33),
+    spec.useBoardLedsProMicroAvr,
+    spec.useBoardLedsProMicroRp,
+    spec.useBoardLedsRpiPico,
+    spec.useDebugUart,
+    spec.useMatrixKeyScanner,
+    spec.useDirectWiredKeyScanner,
+    spec.useEncoder,
+    spec.useLighting,
+    spec.useLcd,
+    numMatrixRows,
+    numMatrixColumns,
+    numMatrixRows, // Right
+    numMatrixColumns, // Right
+    numDirectWiredKeys,
+    numDirectWiredKeys, // Right
+    numEncoder,
+    numEncoder, // Right
+    ...pinDefinitionsBytes,
+    spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
+    spec.lightingNumLeds,
+    spec.lightingNumLeds, // Right
+    mapPinNameToPinNumber(spec.singleWireSignalPin),
   ]);
 }
