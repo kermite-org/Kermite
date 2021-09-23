@@ -9,12 +9,12 @@ import {
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/editors';
+import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
-  projectResourceStore,
 } from '~/ui/store';
 import { resourceManagementUtils } from '~/ui/utils';
 

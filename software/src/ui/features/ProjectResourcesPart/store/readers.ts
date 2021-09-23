@@ -1,6 +1,6 @@
+import { projectResourceHelpers } from '~/ui/features/ProjectResourcesPart/store/helpers';
+import { projectResourceState } from '~/ui/features/ProjectResourcesPart/store/state';
 import { uiReaders } from '~/ui/store/base';
-import { projectResourceHelpers } from '~/ui/store/projectResource/helpers';
-import { projectResourceState } from '~/ui/store/projectResource/state';
 import { createSimpleSelector } from '~/ui/utils';
 
 const resourceItemsSelector = createSimpleSelector(

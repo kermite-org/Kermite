@@ -4,7 +4,7 @@ import { GeneralButton } from '~/ui/components';
 import { FirmwareDetailView } from '~/ui/features/ProjectResourcesPart/organisms/FirmwareDetailView';
 import { LayoutDetailView } from '~/ui/features/ProjectResourcesPart/organisms/LayoutDetailView';
 import { PresetDetailView } from '~/ui/features/ProjectResourcesPart/organisms/PresetDetailView';
-import { projectResourceStore } from '~/ui/store/projectResource';
+import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { useMemoEx } from '~/ui/utils';
 
 type Props = {
