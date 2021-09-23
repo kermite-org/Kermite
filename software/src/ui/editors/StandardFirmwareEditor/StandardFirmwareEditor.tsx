@@ -48,6 +48,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
     editValues,
     isAvr,
     isRp,
+    isSplit,
     availablePinsText,
     fieldErrors,
     totalError,
@@ -182,6 +183,18 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               onChange={valueChangeHandler('useLcd')}
             />
           </FieldItem>
+
+          <FieldItem title="single wire signal pin" qxIf={isSplit}>
+            <GeneralInput
+              value={editValues.singleWireSignalPin || ''}
+              setValue={valueChangeHandler('singleWireSignalPin')}
+              width={100}
+              invalid={!!fieldErrors.singleWireSignalPin}
+              disabled={!(isSplit && isRp)}
+            />
+            <div className="error">{fieldErrors.singleWireSignalPin}</div>
+          </FieldItem>
+
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
