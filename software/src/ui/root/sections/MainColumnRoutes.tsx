@@ -7,7 +7,7 @@ import {
   ProjectStandardFirmwareEditPage,
   SettingsPage,
   WelcomePage,
-  ProjectCustomFirmwareEditPage,
+  ProjectCustomFirmwareCreatePage,
 } from '~/ui/pages';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
@@ -28,11 +28,11 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectPresetEdit' && (
           <ProjectPresetEditPage spec={pageSpec} />
         )}
+        {pageSpec.type === 'projectCustomFirmwareCreate' && (
+          <ProjectCustomFirmwareCreatePage />
+        )}
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
-        )}
-        {pageSpec.type === 'projectCustomFirmwareSetup' && (
-          <ProjectCustomFirmwareEditPage spec={pageSpec} />
         )}
       </div>
     );

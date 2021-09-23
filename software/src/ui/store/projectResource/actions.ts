@@ -52,10 +52,7 @@ export const projectResourceActions = {
     });
   },
   createCustomFirmware() {
-    uiActions.navigateTo({
-      type: 'projectCustomFirmwareSetup',
-      firmwareName: '',
-    });
+    uiActions.navigateTo({ type: 'projectCustomFirmwareCreate' });
   },
   editSelectedResourceItem() {
     const projectInfo = uiReaders.editTargetProject!;
@@ -77,10 +74,10 @@ export const projectResourceActions = {
           firmwareName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        uiActions.navigateTo({
-          type: 'projectCustomFirmwareSetup',
-          firmwareName,
-        });
+        // uiActions.navigateTo({
+        //   type: 'projectCustomFirmwareSetup',
+        //   firmwareName,
+        // });
       }
     }
   },
