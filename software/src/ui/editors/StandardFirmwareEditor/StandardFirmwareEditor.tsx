@@ -182,6 +182,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
             <ToggleSwitch
               checked={editValues.useLcd}
               onChange={valueChangeHandler('useLcd')}
+              disabled={isAvr && isSplit}
             />
           </FieldItem>
 
