@@ -11,23 +11,29 @@ import {
 export const PresetBrowserPage2: FC = () => {
   const model = usePresetSelectionModel2();
   const viewModel = usePresetBrowserViewModel(model);
+  const noPresets = model.projectSelectorSource.options.length === 0;
   return (
     <CommonPageFrame pageTitle={texts.label_presetBrowser2_pageTitle}>
       <div css={style}>
-        <PresetSelectionSection
-          viewModel={viewModel.presetSelectionSectionViewModel}
-        />
-        <PresetKeyboardSection
-          viewModel={viewModel.presetKeyboardSectionViewModel}
-        />
-        <CustomContent />
+        {noPresets && <div>No Presets Available</div>}
+        {!noPresets && (
+          <div>
+            <PresetSelectionSection
+              viewModel={viewModel.presetSelectionSectionViewModel}
+            />
+            <PresetKeyboardSection
+              viewModel={viewModel.presetKeyboardSectionViewModel}
+            />
+            <CustomContent />
+          </div>
+        )}
       </div>
     </CommonPageFrame>
   );
 };
 
 const style = css`
-  > * + * {
+  > div > * + * {
     margin-top: 10px;
   }
 `;

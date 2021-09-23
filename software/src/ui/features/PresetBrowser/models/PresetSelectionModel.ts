@@ -1,25 +1,12 @@
 import { useEffect, useLocal, useMemo } from 'qx';
-import { IPresetSpec, IProfileData, IProjectPackageInfo } from '~/shared';
+import { IPresetSpec, IProjectPackageInfo } from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
-import {
-  getSelectionValueCorrected,
-  ISelectorOption,
-  ISelectorSource,
-} from '~/ui/base';
+import { getSelectionValueCorrected, ISelectorOption } from '~/ui/base';
 import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/features/PresetBrowser/models/ProfileCreator';
 import { useProfileDataLoaded } from '~/ui/features/PresetBrowser/models/ProfileDataLoader';
+import { IPresetSelectionModel } from '~/ui/features/PresetBrowser/models/types';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
 import { fieldSetter } from '~/ui/utils';
-
-export interface IPresetSelectionModel {
-  projectSelectorSource: ISelectorSource;
-  presetSelectorSource: ISelectorSource;
-  currentProjectKey: string;
-  currentPresetKey: string;
-  selectProject(projectKey: string): void;
-  loadedProfileData: IProfileData;
-  editSelectedProjectPreset(): void;
-}
 
 function getProjectSelectionLabel(info: IProjectPackageInfo): string {
   if (uiReaders.isDeveloperMode) {
