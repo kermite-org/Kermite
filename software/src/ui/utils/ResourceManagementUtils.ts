@@ -1,12 +1,12 @@
-import { modalAlert, modalTextEdit } from '~/ui/components';
+import { modalTextEdit } from '~/ui/components';
 
-export const resourceManagementUtils = {
+const helpers = {
   checkValidResourceName(
     resourceName: string,
     existingResourceNames: string[],
     resourceTypeNameText: string,
     allowDifferentCasingVariants?: boolean,
-  ): string | 'ok' {
+  ): string | undefined {
     // eslint-disable-next-line no-irregular-whitespace
     // eslint-disable-next-line no-misleading-character-class
     if (resourceName.match(/[/./\\:*?"<>| \u3000\u0e49]/)) {
@@ -23,9 +23,23 @@ export const resourceManagementUtils = {
     if (existingName) {
       return `${existingName} already exists.`;
     }
-    return 'ok';
+    return undefined;
   },
-
+  makeResourceNameValidator(
+    existingResourceNames: string[],
+    resourceTypeNameText: string,
+    allowDifferentCasingVariants?: boolean,
+  ): (text: string) => string | undefined {
+    return (resourceName) =>
+      helpers.checkValidResourceName(
+        resourceName,
+        existingResourceNames,
+        resourceTypeNameText,
+        allowDifferentCasingVariants,
+      );
+  },
+};
+export const resourceManagementUtils = {
   async inputSavingResourceName(args: {
     modalTitle: string;
     modalMessage: string;
@@ -42,24 +56,17 @@ export const resourceManagementUtils = {
       defaultText,
       allowDifferentCasingVariants,
     } = args;
-    const resourceName = await modalTextEdit({
+
+    const validator = helpers.makeResourceNameValidator(
+      existingResourceNames,
+      resourceTypeNameText,
+      allowDifferentCasingVariants,
+    );
+    return await modalTextEdit({
       caption: modalTitle,
       message: modalMessage,
       defaultText,
+      validator,
     });
-    if (resourceName !== undefined) {
-      const res = resourceManagementUtils.checkValidResourceName(
-        resourceName,
-        existingResourceNames,
-        resourceTypeNameText,
-        allowDifferentCasingVariants,
-      );
-      if (res !== 'ok') {
-        await modalAlert(`${res} operation cancelled.`);
-        return undefined;
-      }
-      return resourceName;
-    }
-    return undefined;
   },
 };
