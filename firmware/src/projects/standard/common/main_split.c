@@ -109,8 +109,12 @@ static void setupBoard(int8_t side) {
   uint8_t *encoderPinsR = &pins[numEncodersPins];
   pins += numEncodersPins + numEncodersPinsR;
 
+  uint8_t numScanSlotsLeft = (numRows * numColumns) + numDwKeys + numEncodersPins;
+  uint8_t numScanSlotsRight = (numRowsR * numColumnsR) + numDwKeysR + numEncodersPinsR;
+  splitKeyboard_setNumScanSlots(numScanSlotsLeft, numScanSlotsRight);
+
   uint8_t scanIndexBaseL = 0;
-  uint8_t scanIndexBaseR = (numRows * numColumns) + numDwKeys + numEncodersPins;
+  uint8_t scanIndexBaseR = numScanSlotsLeft;
 
   if (defs.useMatrixKeyScanner) {
     if (side == 0 && numRows > 0 && numColumns > 0) {
@@ -156,7 +160,6 @@ static void setupBoard(int8_t side) {
       scanIndexBaseR += 2;
     }
   }
-
 #ifdef KS_USE_RGB_LIGHTING
   if (defs.useRgbLighting) {
     if (side == 0) {
@@ -205,6 +208,7 @@ int main() {
 #endif
 
   boardLink_singleWire_setSignalPin(defs.singleWireSignalPin);
+
   splitKeyboard_setBoardConfigCallback(setupBoard);
   splitKeyboard_start();
 
