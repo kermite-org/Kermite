@@ -11,7 +11,7 @@ import {
   ipcAgent,
   ISelectorOption,
 } from '~/ui/base';
-import { IPresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
+import { IPresetSelectionModel } from '~/ui/features/PresetBrowser/models';
 import {
   dispatchCoreAction,
   projectPackagesReader,

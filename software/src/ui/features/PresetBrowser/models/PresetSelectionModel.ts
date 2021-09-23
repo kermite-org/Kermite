@@ -6,8 +6,8 @@ import {
   ISelectorOption,
   ISelectorSource,
 } from '~/ui/base';
-import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/pages/preset-browser-page/models/ProfileCreator';
-import { useProfileDataLoaded } from '~/ui/pages/preset-browser-page/models/ProfileDataLoader';
+import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/features/PresetBrowser/models/ProfileCreator';
+import { useProfileDataLoaded } from '~/ui/features/PresetBrowser/models/ProfileDataLoader';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
 import { fieldSetter } from '~/ui/utils';
 

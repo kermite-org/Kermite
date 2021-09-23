@@ -1,12 +1,12 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
-import { usePresetSelectionModel } from '~/ui/pages/preset-browser-page/models';
-import { usePresetBrowserViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 import {
+  usePresetBrowserViewModel,
   PresetSelectionSection,
   PresetKeyboardSection,
-} from '~/ui/pages/preset-browser-page/views';
+  usePresetSelectionModel,
+} from '~/ui/features/PresetBrowser';
 
 export const PresetBrowserPage: FC = () => {
   const model = usePresetSelectionModel();

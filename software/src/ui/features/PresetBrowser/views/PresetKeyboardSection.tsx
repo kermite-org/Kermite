@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { PresetLayersBox } from '~/ui/components';
 import { PresetKeyboardView } from '~/ui/components/keyboard';
-import { IPresetKeyboardSectionViewModel } from '~/ui/pages/preset-browser-page/viewModels/PresetKeyboardSectionViewModel';
+import { IPresetKeyboardSectionViewModel } from '~/ui/features/PresetBrowser/viewModels';
 
 type Props = {
   viewModel: IPresetKeyboardSectionViewModel;
