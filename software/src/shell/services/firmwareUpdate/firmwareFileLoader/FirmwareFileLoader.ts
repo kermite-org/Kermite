@@ -68,9 +68,11 @@ const localStandardFirmwarePaths: {
   AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
   RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
   AvrSplit: pathResolve(
-    '../firmware/build/standard/avr/standard_avr_split.hex',
+    '../firmware/build/standard/avr_split/standard_avr_split.hex',
   ),
-  RpSplit: pathResolve('../firmware/build/standard/rp/standard_rp_split.uf2'),
+  RpSplit: pathResolve(
+    '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+  ),
 };
 
 async function debugLoadLocalStandardBaseFirmware(
