@@ -1,7 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { ipcAgent, texts } from '~/ui/base';
+import { CommonPageFrame } from '~/ui/components';
 import { usePresetBrowserViewModel } from '~/ui/pages/preset-browser-page/viewModels';
-import { PresetBrowserPageView } from '~/ui/pages/preset-browser-page/views/PresetBrowserPageView';
+import {
+  PresetSelectionSection,
+  PresetKeyboardSection,
+} from '~/ui/pages/preset-browser-page/views';
 import { usePresetSelectionModel2 } from '~/ui/pages/preset-browser-page2/models/PresetSelectionModel2';
 
 const CustomContent: FC = () => {
@@ -33,10 +37,22 @@ export const PresetBrowserPage2: FC = () => {
   const model = usePresetSelectionModel2();
   const viewModel = usePresetBrowserViewModel(model);
   return (
-    <PresetBrowserPageView
-      pageTitle={texts.label_presetBrowser2_pageTitle}
-      viewModel={viewModel}
-      customContent={<CustomContent />}
-    />
+    <CommonPageFrame pageTitle={texts.label_presetBrowser2_pageTitle}>
+      <div css={style}>
+        <PresetSelectionSection
+          viewModel={viewModel.presetSelectionSectionViewModel}
+        />
+        <PresetKeyboardSection
+          viewModel={viewModel.presetKeyboardSectionViewModel}
+        />
+        <CustomContent />
+      </div>
+    </CommonPageFrame>
   );
 };
+
+const style = css`
+  > * + * {
+    margin-top: 10px;
+  }
+`;
