@@ -19,7 +19,7 @@ const helpers = {
     const projectInfo = uiReaders.editTargetProject;
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
-  saveFirmwareEntry(firmwareName: string, customFirmwareId: string) {
+  async saveFirmwareEntry(firmwareName: string, customFirmwareId: string) {
     const variationId = getNextFirmwareId(helpers.getExistingVariationIds());
     const newFirmwareEntry: ICustomFirmwareEntry = {
       type: 'custom',
@@ -27,7 +27,7 @@ const helpers = {
       firmwareName,
       customFirmwareId,
     };
-    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    await projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
     projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', firmwareName),
     );
@@ -44,7 +44,7 @@ export const ProjectCustomFirmwareCreatePage: FC = () => {
     if (firmwareName) {
       const { customFirmwareId } =
         CustomFirmwareEditor_OutputPropsSupplier.emitSavingEditValues();
-      helpers.saveFirmwareEntry(firmwareName, customFirmwareId);
+      await helpers.saveFirmwareEntry(firmwareName, customFirmwareId);
       uiActions.closeSubPage();
     }
   };
