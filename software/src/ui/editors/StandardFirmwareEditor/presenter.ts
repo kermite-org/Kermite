@@ -30,6 +30,7 @@ const constants = {
 
 export function useStandardFirmwareEditPresenter(
   firmwareConfig: IStandardFirmwareEditValues,
+  isNewConfig: boolean,
 ): IStandardFirmwareEditPresenter {
   const {
     state: { editValues },
@@ -37,7 +38,10 @@ export function useStandardFirmwareEditPresenter(
     actions: { loadFirmwareConfig },
   } = standardFirmwareEditStore;
 
-  useEffect(() => loadFirmwareConfig(firmwareConfig), [firmwareConfig]);
+  useEffect(
+    () => loadFirmwareConfig(firmwareConfig, isNewConfig),
+    [firmwareConfig, isNewConfig],
+  );
 
   const { availablePinsTextAvr, availablePinsTextRp, baseFirmwareTypeOptions } =
     constants;

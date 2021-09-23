@@ -13,6 +13,7 @@ import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
+  isNewConfig: boolean;
 };
 
 const { arrayFromText, arrayToText, integerFromText, integerToText } =
@@ -43,7 +44,10 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
   },
 };
 
-export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
+export const StandardFirmwareEditor: FC<Props> = ({
+  firmwareConfig,
+  isNewConfig,
+}) => {
   const {
     baseFirmwareTypeOptions,
     editValues,
@@ -53,7 +57,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
     availablePinsText,
     fieldErrors,
     totalError,
-  } = useStandardFirmwareEditPresenter(firmwareConfig);
+  } = useStandardFirmwareEditPresenter(firmwareConfig, isNewConfig);
 
   return (
     <div css={style}>
