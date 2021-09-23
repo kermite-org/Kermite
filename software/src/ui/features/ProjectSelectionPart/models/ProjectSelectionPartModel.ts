@@ -6,7 +6,8 @@ import {
   makePlainSelectorOption,
 } from '~/ui/base';
 import { createProjectManagementMenuItems } from '~/ui/features/ProjectSelectionPart/models/ProjectManagementMenuModel';
-import { uiReaders, projectSelectionStore } from '~/ui/store';
+import { projectSelectionStore } from '~/ui/features/ProjectSelectionPart/store';
+import { uiReaders } from '~/ui/store';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
