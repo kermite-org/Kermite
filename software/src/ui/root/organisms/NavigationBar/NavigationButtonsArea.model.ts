@@ -1,5 +1,5 @@
 import { featureFlags } from '~/shared/defs/FeatureFlags';
-import { texts } from '~/ui/base';
+import { appUi, texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
 
@@ -54,7 +54,7 @@ const itemsSource: NavigationItemSource[] = [
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.hint_sideMenu_app_shapePreview,
-    isAvailable: () => uiReaders.isDeveloperMode,
+    isAvailable: () => appUi.isDevelopment && uiReaders.isDeveloperMode,
   },
   {
     pagePath: '/firmwareUpdate',
