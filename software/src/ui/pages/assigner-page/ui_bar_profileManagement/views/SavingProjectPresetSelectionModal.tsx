@@ -4,11 +4,13 @@ import { ISelectorOption, texts } from '~/ui/base';
 import {
   IProjectAttachmentFileSelectorModalModel,
   modalConfirm,
+  modalError,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/components';
 import { profilesActions } from '~/ui/pages/assigner-page/models';
 import { IProfileManagementPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -137,8 +139,16 @@ function makeProjectAttachmentFileSelectorViewModel_Saving(
         return;
       }
     }
-    baseVm.saveProfileAsPreset(currentProjectId, currentPresetName);
-    baseVm.closeModal();
+    const error = resourceManagementUtils.checkValidResourceName(
+      savingName,
+      'preset name',
+    );
+    if (error) {
+      modalError(error);
+    } else {
+      baseVm.saveProfileAsPreset(currentProjectId, currentPresetName);
+      baseVm.closeModal();
+    }
   };
 
   return {

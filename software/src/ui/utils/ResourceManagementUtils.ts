@@ -1,10 +1,10 @@
 import { modalTextEdit } from '~/ui/components';
 
-const helpers = {
+export const resourceManagementUtils = {
   checkValidResourceName(
     resourceName: string,
-    existingResourceNames: string[],
     resourceTypeNameText: string,
+    existingResourceNames?: string[],
     allowDifferentCasingVariants?: boolean,
   ): string | undefined {
     // eslint-disable-next-line no-irregular-whitespace
@@ -15,36 +15,36 @@ const helpers = {
     if (resourceName.length > 32) {
       return `${resourceTypeNameText} should be no more than 32 characters.`;
     }
-    const existingName = allowDifferentCasingVariants
-      ? existingResourceNames.find((it) => it === resourceName)
-      : existingResourceNames.find(
-          (it) => it.toLowerCase() === resourceName.toLowerCase(),
-        );
-    if (existingName) {
-      return `${existingName} already exists.`;
+    if (existingResourceNames) {
+      const existingName = allowDifferentCasingVariants
+        ? existingResourceNames.find((it) => it === resourceName)
+        : existingResourceNames.find(
+            (it) => it.toLowerCase() === resourceName.toLowerCase(),
+          );
+      if (existingName) {
+        return `${existingName} already exists.`;
+      }
     }
     return undefined;
   },
   makeResourceNameValidator(
-    existingResourceNames: string[],
     resourceTypeNameText: string,
+    existingResourceNames?: string[],
     allowDifferentCasingVariants?: boolean,
   ): (text: string) => string | undefined {
     return (resourceName) =>
-      helpers.checkValidResourceName(
+      resourceManagementUtils.checkValidResourceName(
         resourceName,
-        existingResourceNames,
         resourceTypeNameText,
+        existingResourceNames,
         allowDifferentCasingVariants,
       );
   },
-};
-export const resourceManagementUtils = {
   async inputSavingResourceName(args: {
     modalTitle: string;
     modalMessage: string;
     resourceTypeNameText: string;
-    existingResourceNames: string[];
+    existingResourceNames?: string[];
     defaultText?: string;
     allowDifferentCasingVariants?: boolean;
   }): Promise<string | undefined> {
@@ -57,9 +57,9 @@ export const resourceManagementUtils = {
       allowDifferentCasingVariants,
     } = args;
 
-    const validator = helpers.makeResourceNameValidator(
-      existingResourceNames,
+    const validator = resourceManagementUtils.makeResourceNameValidator(
       resourceTypeNameText,
+      existingResourceNames,
       allowDifferentCasingVariants,
     );
     return await modalTextEdit({

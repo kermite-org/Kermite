@@ -1,12 +1,16 @@
 import { useState } from 'qx';
 import { ISelectorOption } from '~/ui/base';
-import { IProjectAttachmentFileSelectorModalModel } from '~/ui/components';
+import {
+  IProjectAttachmentFileSelectorModalModel,
+  modalError,
+} from '~/ui/components';
 import { LayoutEditorCore } from '~/ui/editors';
 import { layoutManagerActions } from '~/ui/pages/layout-editor-page/models/LayoutManagerActions';
 import { ILayoutManagerModalState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';
 import { layoutManagerReader } from '~/ui/pages/layout-editor-page/models/LayoutManagerReaders';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 const configs = {
   selectorSize: 7,
@@ -84,14 +88,23 @@ function submit(
 ) {
   if (operationMode === 'Load') {
     layoutManagerActions.loadFromProject(currentProjectId, currentLayoutName);
+    layoutManagerActions.closeModal();
   } else if (operationMode === 'Save') {
-    layoutManagerActions.saveToProject(
-      currentProjectId,
+    const error = resourceManagementUtils.checkValidResourceName(
       currentLayoutName,
-      LayoutEditorCore.emitSavingDesign(),
+      'layout name',
     );
+    if (!error) {
+      layoutManagerActions.saveToProject(
+        currentProjectId,
+        currentLayoutName,
+        LayoutEditorCore.emitSavingDesign(),
+      );
+      layoutManagerActions.closeModal();
+    } else {
+      modalError(error);
+    }
   }
-  layoutManagerActions.closeModal();
 }
 
 export function makeProjectLayoutSelectorModalModel():
