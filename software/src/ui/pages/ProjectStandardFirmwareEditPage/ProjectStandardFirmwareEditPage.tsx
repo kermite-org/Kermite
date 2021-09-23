@@ -21,6 +21,7 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
         backPagePath="/projectResource"
         canSave={canSave}
         saveHandler={saveHandler}
+        editMode={editFirmwareName ? 'Edit' : 'Create'}
       />
       <div className="content">
         <StandardFirmwareEditor firmwareConfig={standardFirmwareConfig} />
