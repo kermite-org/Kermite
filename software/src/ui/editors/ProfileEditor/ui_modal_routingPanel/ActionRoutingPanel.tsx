@@ -1,4 +1,5 @@
 import { css, jsx } from 'qx';
+import { IMappingEntry } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { FcWithClassName, uiTheme } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
@@ -10,35 +11,52 @@ import {
   getRoutingTargetModifierOptions,
 } from '~/ui/editors/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanelModel';
 import { commitUiState } from '~/ui/store';
-import { fieldSetter } from '~/ui/utils';
 
-export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
-  const { mappingEntries } = assignerModel.profileData;
-
-  const addMappingEntry = () => {
+const actions = {
+  addMappingEntry() {
     const newId = generateNextSequentialId(
       're-',
-      mappingEntries.map((it) => it.itemId),
+      assignerModel.profileData.mappingEntries.map((it) => it.itemId),
     );
-    mappingEntries.push({
+    const entry: IMappingEntry = {
       itemId: newId,
       channelIndex: 0,
       srcKey: 'K_NONE',
       srcModifiers: 0,
       dstKey: 'K_NONE',
       dstModifiers: 0,
+    };
+    assignerModel.patchEditProfileData((profile) =>
+      profile.mappingEntries.push(entry),
+    );
+  },
+
+  deleteLastMappingEntry() {
+    assignerModel.patchEditProfileData((profile) => {
+      if (profile.mappingEntries.length > 0) {
+        profile.mappingEntries.pop();
+      }
     });
-  };
-
-  const deleteLastMappingEntry = () => {
-    if (mappingEntries.length > 0) {
-      mappingEntries.pop();
-    }
-  };
-
-  const handleClose = () => {
+  },
+  handleClose() {
     commitUiState({ profileRoutingPanelVisible: false });
-  };
+  },
+};
+
+const helpers = {
+  itemValueSetter<K extends keyof IMappingEntry>(index: number, key: K) {
+    return (value: IMappingEntry[K]) => {
+      assignerModel.patchEditProfileData(
+        (profile) => (profile.mappingEntries[index][key] = value),
+      );
+    };
+  },
+};
+
+export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
+  const { mappingEntries } = assignerModel.profileData;
+  const { addMappingEntry, deleteLastMappingEntry, handleClose } = actions;
+  const { itemValueSetter } = helpers;
 
   return (
     <div css={style} class={className}>
@@ -73,34 +91,34 @@ export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
                     <GeneralSelectorN
                       options={getRoutingChannelOptions()}
                       value={item.channelIndex}
-                      setValue={fieldSetter(item, 'channelIndex')}
+                      setValue={itemValueSetter(index, 'channelIndex')}
                     />
                   </td>
                   <td>
                     <GeneralSelector
                       value={item.srcKey}
-                      setValue={fieldSetter(item, 'srcKey') as any}
+                      setValue={itemValueSetter(index, 'srcKey')}
                       options={getRoutingTargetKeyOptions('source')}
                     />
                   </td>
                   <td>
                     <GeneralSelectorN
                       value={item.srcModifiers}
-                      setValue={fieldSetter(item, 'srcModifiers')}
+                      setValue={itemValueSetter(index, 'srcModifiers')}
                       options={getRoutingTargetModifierOptions('source')}
                     />
                   </td>
                   <td>
                     <GeneralSelector
                       value={item.dstKey}
-                      setValue={fieldSetter(item, 'dstKey') as any}
+                      setValue={itemValueSetter(index, 'dstKey')}
                       options={getRoutingTargetKeyOptions('dest')}
                     />
                   </td>
                   <td>
                     <GeneralSelectorN
                       value={item.dstModifiers}
-                      setValue={fieldSetter(item, 'dstModifiers')}
+                      setValue={itemValueSetter(index, 'dstModifiers')}
                       options={getRoutingTargetModifierOptions('dest')}
                     />
                   </td>

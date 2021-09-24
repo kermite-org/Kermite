@@ -1,5 +1,5 @@
 import { asyncRerender } from 'qx';
-import { removeArrayItems } from '~/shared';
+import { ILayer, removeArrayItemsMatched } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
 import { texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
@@ -22,6 +22,40 @@ export interface ILayerManagementPartViewModel {
   addNewLayer(): void;
 }
 
+const actions = {
+  addLayer(layer: ILayer) {
+    assignerModel.patchEditProfileData((profile) => profile.layers.push(layer));
+  },
+  removeLayer(layerId: string) {
+    assignerModel.patchEditProfileData((profile) =>
+      removeArrayItemsMatched(profile.layers, (la) => la.layerId === layerId),
+    );
+  },
+  shiftLayerOrder(layerId: string, dir: -1 | 1) {
+    assignerModel.patchEditProfileData((profile) => {
+      const { layers } = profile;
+      const si = layers.findIndex((la) => la.layerId === layerId);
+      const di = si + dir;
+      [layers[si], layers[di]] = [layers[di], layers[si]];
+    });
+  },
+  setLayerAttributes(
+    layerId: string,
+    editValues: ILayerConfigurationModelEditValues,
+  ) {
+    assignerModel.patchEditProfileData((profile) => {
+      const layer = profile.layers.find((la) => la.layerId === layerId);
+      if (layer) {
+        layer.layerName = editValues.layerName;
+        layer.attachedModifiers = editValues.attachedModifiers;
+        layer.defaultScheme = editValues.defaultScheme;
+        layer.exclusionGroup = editValues.exclusionGroup;
+        layer.initialActive = editValues.initialActive;
+      }
+    });
+  },
+};
+
 export function makeLayerManagementPartViewModel(): ILayerManagementPartViewModel {
   const { layers } = assignerModel;
   const curLayer = assignerModel.currentLayer!;
@@ -38,9 +72,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
   };
 
   const shiftCurrentLayerOrder = (dir: -1 | 1) => {
-    const si = layers.indexOf(curLayer);
-    const di = si + dir;
-    [layers[si], layers[di]] = [layers[di], layers[si]];
+    actions.shiftLayerOrder(curLayer.layerId, dir);
   };
 
   return {
@@ -56,7 +88,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         caption: 'Delete Layer',
       });
       if (ok) {
-        removeArrayItems(layers, curLayer);
+        actions.removeLayer(curLayer.layerId);
         assignerModel.setCurrentLayerId(layers[0].layerId);
       }
     },
@@ -81,11 +113,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
         isRootLayer: !isCurrentLayerCustom,
       });
       if (editValues) {
-        curLayer.layerName = editValues.layerName;
-        curLayer.attachedModifiers = editValues.attachedModifiers;
-        curLayer.defaultScheme = editValues.defaultScheme;
-        curLayer.exclusionGroup = editValues.exclusionGroup;
-        curLayer.initialActive = editValues.initialActive;
+        actions.setLayerAttributes(curLayer.layerId, editValues);
         asyncRerender();
       }
     },
@@ -104,21 +132,11 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
       if (layerAttrs?.layerName) {
         const existingIds = layers.map((la) => la.layerId);
         const newLayerId = generateNextSequentialId('la', existingIds);
-        const {
-          layerName,
-          defaultScheme,
-          attachedModifiers,
-          exclusionGroup,
-          initialActive,
-        } = layerAttrs;
-        layers.push({
+        const layer: ILayer = {
           layerId: newLayerId,
-          layerName,
-          defaultScheme,
-          attachedModifiers,
-          exclusionGroup,
-          initialActive,
-        });
+          ...layerAttrs,
+        };
+        actions.addLayer(layer);
         asyncRerender();
       }
     },

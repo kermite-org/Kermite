@@ -1,11 +1,7 @@
-import { jsx, css, FC } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
-import {
-  reflectFieldValue,
-  reflectValue,
-  reflectFieldChecked,
-} from '~/ui/utils';
+import { reflectChecked, reflectValue } from '~/ui/utils';
 
 export const DualModeSettingsPart: FC = () => {
   if (assignerModel.profileData.settings.assignType === 'single') {
@@ -13,13 +9,14 @@ export const DualModeSettingsPart: FC = () => {
   }
 
   const { settings } = assignerModel.profileData;
+  const { writeSettingsValueDual } = assignerModel;
 
-  const onTapHoldThresholdValueChanged = (value: string) => {
-    const val = parseInt(value);
-    if (isFinite(val) && 1 <= val && val < 3000) {
-      settings.tapHoldThresholdMs = val;
+  const onTapHoldThresholdValueChanged = (test: string) => {
+    const value = parseInt(test);
+    if (isFinite(value) && 1 <= value && value < 3000) {
+      writeSettingsValueDual('tapHoldThresholdMs', value);
     } else {
-      console.log(`${val} is not appropriate for the parameter.`);
+      console.log(`${value} is not appropriate for the parameter.`);
     }
   };
 
@@ -44,7 +41,12 @@ export const DualModeSettingsPart: FC = () => {
             <td>
               <select
                 value={settings.primaryDefaultTrigger}
-                onChange={reflectFieldValue(settings, 'primaryDefaultTrigger')}
+                onChange={reflectValue((value) =>
+                  writeSettingsValueDual(
+                    'primaryDefaultTrigger',
+                    value as 'down' | 'tap',
+                  ),
+                )}
               >
                 <option value="down">down</option>
                 <option value="tap">tap</option>
@@ -85,7 +87,9 @@ export const DualModeSettingsPart: FC = () => {
               <input
                 type="checkbox"
                 checked={settings.useInterruptHold}
-                onChange={reflectFieldChecked(settings, 'useInterruptHold')}
+                onChange={reflectChecked((checked) =>
+                  writeSettingsValueDual('useInterruptHold', checked),
+                )}
               />
             </td>
           </tr>

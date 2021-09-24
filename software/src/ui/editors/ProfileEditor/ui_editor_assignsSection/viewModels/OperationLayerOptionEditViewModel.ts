@@ -21,7 +21,7 @@ const exclusionGroupValues = generateNumberSequence(7).map((a) =>
 );
 
 export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEditViewModel {
-  const { editOperation } = assignerModel;
+  const { editOperation, writeEditOperation } = assignerModel;
 
   if (editOperation?.type === 'layerCall') {
     return {
@@ -29,7 +29,7 @@ export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEd
       allValues: invocationModes,
       selectedValue: editOperation.invocationMode || 'hold',
       onValueChanged(value: LayerInvocationMode) {
-        editOperation.invocationMode = value;
+        writeEditOperation({ ...editOperation, invocationMode: value });
       },
     };
   } else if (editOperation?.type === 'layerClearExclusive') {
@@ -38,7 +38,10 @@ export function makeOperationLayerOptionEditViewModel(): IOperationLayerOptionEd
       allValues: exclusionGroupValues,
       selectedValue: editOperation.targetExclusionGroup.toString(),
       onValueChanged(value: string) {
-        editOperation.targetExclusionGroup = parseInt(value);
+        writeEditOperation({
+          ...editOperation,
+          targetExclusionGroup: parseInt(value),
+        });
       },
     };
   } else {

@@ -1,3 +1,4 @@
+import produce from 'immer';
 import {
   compareObjectByJsonStringify,
   duplicateObjectByJsonStringifyParse,
@@ -11,6 +12,8 @@ import {
   IPersistKeyboardDesign,
   IProfileAssignType,
   IProfileData,
+  IProfileSettings,
+  IProfileSettings_Dual,
   mergeModuleObjects,
 } from '~/shared';
 import { uiReaders } from '~/ui/store';
@@ -29,8 +32,8 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
   sec: 'secondaryOp',
   ter: 'tertiaryOp',
 };
-
 interface IAssignerModel {
+  // readers
   loadedProfileData: IProfileData;
   profileData: IProfileData;
   currentLayerId: string;
@@ -47,9 +50,10 @@ interface IAssignerModel {
   displayDesign: IDisplayKeyboardDesign;
   currentLayer: ILayer | undefined;
   editOperation: IAssignOperation | undefined;
-  preModifiedDesign: IPersistKeyboardDesign | undefined;
-  profileAssignType: IProfileAssignType;
-  dualModeOperationPath: IDualModeOperationPath;
+
+  // preModifiedDesign: IPersistKeyboardDesign | undefined;
+  // profileAssignType: IProfileAssignType;
+  // dualModeOperationPath: IDualModeOperationPath;
 
   isLayerCurrent: (layerId: string) => boolean;
   isKeyUnitCurrent: (keyUnitId: string) => boolean;
@@ -65,6 +69,8 @@ interface IAssignerModel {
   checkDirtyWithCleanupSideEffect: () => boolean;
   checkDirty: () => boolean;
 
+  // actions
+  patchEditProfileData: (recipe: (draft: IProfileData) => void) => void;
   loadProfileData: (profileData: IProfileData) => void;
   setCurrentLayerId: (layerId: string) => void;
   setCurrentKeyUnitId: (keyUnitId: string) => void;
@@ -79,6 +85,14 @@ interface IAssignerModel {
   translateKeyIndexToKeyUnitId: (keyIndex: number) => string | undefined;
   replaceKeyboardDesign: (design: IPersistKeyboardDesign) => void;
   restoreOriginalDesign: () => void;
+  writeSettingsValue<K extends keyof IProfileSettings>(
+    key: K,
+    value: IProfileSettings[K],
+  ): void;
+  writeSettingsValueDual<K extends keyof IProfileSettings_Dual>(
+    key: K,
+    value: IProfileSettings_Dual[K],
+  ): void;
 }
 
 type IState = {
@@ -230,9 +244,21 @@ const readers = {
       state.profileData,
     );
   },
+
+  translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
+    const keyEntity = readers.displayDesign.keyEntities.find(
+      (kp) => kp.keyIndex === keyIndex,
+    );
+    return keyEntity?.keyId;
+  },
 };
 
 const actions = {
+  patchEditProfileData(recipe: (draft: IProfileData) => void) {
+    state.profileData = produce(state.profileData, (draft) => {
+      recipe(draft);
+    });
+  },
   loadProfileData(profileData: IProfileData) {
     state.loadedProfileData = profileData;
     state.profileData = duplicateObjectByJsonStringifyParse(profileData);
@@ -243,7 +269,6 @@ const actions = {
       state.preModifiedDesign = undefined;
     }
   },
-
   setCurrentLayerId(layerId: string) {
     state.currentLayerId = layerId;
   },
@@ -266,21 +291,26 @@ const actions = {
   },
 
   writeAssignEntry(assign: IAssignEntry | undefined) {
-    state.profileData.assigns[readers.slotAddress] = assign;
+    actions.patchEditProfileData(
+      (profileData) => (profileData.assigns[readers.slotAddress] = assign),
+    );
   },
 
   writeEditOperation(op: IAssignOperation | undefined) {
     const assign = readers.assignEntry;
     if (readers.profileAssignType === 'single') {
       if (assign?.type === 'single') {
-        assign.op = op;
+        actions.writeAssignEntry({ ...assign, op });
       } else {
         actions.writeAssignEntry({ type: 'single', op });
       }
     }
     if (readers.profileAssignType === 'dual') {
       if (assign?.type === 'dual') {
-        assign[readers.dualModeOperationPath] = op;
+        actions.writeAssignEntry({
+          ...assign,
+          [readers.dualModeOperationPath]: op,
+        });
       } else {
         actions.writeAssignEntry({
           type: 'dual',
@@ -298,28 +328,44 @@ const actions = {
   },
 
   changeProjectId(projectId: string) {
-    state.profileData.projectId = projectId;
-  },
-
-  translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
-    const keyEntity = readers.displayDesign.keyEntities.find(
-      (kp) => kp.keyIndex === keyIndex,
-    );
-    return keyEntity?.keyId;
+    actions.patchEditProfileData((profile) => (profile.projectId = projectId));
   },
 
   replaceKeyboardDesign(design: IPersistKeyboardDesign) {
     if (state.profileData !== fallbackProfileData) {
-      state.profileData.keyboardDesign = design;
+      if (state.profileData.keyboardDesign !== design) {
+        actions.patchEditProfileData(
+          (profile) => (profile.keyboardDesign = design),
+        );
+      }
     } else {
       state.preModifiedDesign = design;
     }
   },
 
   restoreOriginalDesign() {
-    state.profileData.keyboardDesign = duplicateObjectByJsonStringifyParse(
-      state.loadedProfileData.keyboardDesign,
+    actions.patchEditProfileData(
+      (profile) =>
+        (profile.keyboardDesign = duplicateObjectByJsonStringifyParse(
+          state.loadedProfileData.keyboardDesign,
+        )),
     );
+  },
+  writeSettingsValue<K extends keyof IProfileSettings>(
+    key: K,
+    value: IProfileSettings[K],
+  ) {
+    actions.patchEditProfileData((profile) => (profile.settings[key] = value));
+  },
+  writeSettingsValueDual<K extends keyof IProfileSettings_Dual>(
+    key: K,
+    value: IProfileSettings_Dual[K],
+  ) {
+    actions.patchEditProfileData((profile) => {
+      if (profile.settings.assignType === 'dual') {
+        profile.settings[key] = value;
+      }
+    });
   },
 };
 

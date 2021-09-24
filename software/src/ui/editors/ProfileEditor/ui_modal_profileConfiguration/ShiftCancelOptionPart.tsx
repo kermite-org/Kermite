@@ -1,10 +1,11 @@
 import { FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
-import { reflectFieldChecked } from '~/ui/utils';
+import { reflectChecked } from '~/ui/utils';
 
 export const ShiftCancelOptionPart: FC = () => {
   const { settings } = assignerModel.profileData;
+  const { writeSettingsValue } = assignerModel;
   return (
     <div>
       <label data-hint={texts.hint_assigner_profileConfigModal_shiftCancel}>
@@ -12,7 +13,9 @@ export const ShiftCancelOptionPart: FC = () => {
         <input
           type="checkbox"
           checked={settings.useShiftCancel}
-          onChange={reflectFieldChecked(settings, 'useShiftCancel')}
+          onChange={reflectChecked((checked) =>
+            writeSettingsValue('useShiftCancel', checked),
+          )}
         />
       </label>
     </div>
