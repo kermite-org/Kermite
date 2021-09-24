@@ -1,6 +1,8 @@
 import produce from 'immer';
 import {
+  cloneObject,
   compareObjectByJsonStringify,
+  copyObjectProps,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
   getDisplayKeyboardDesignSingleCached,
@@ -93,6 +95,8 @@ interface IAssignerModel {
     key: K,
     value: IProfileSettings_Dual[K],
   ): void;
+  preserveEditData(): void;
+  restoreEditData(): void;
 }
 
 type IState = {
@@ -101,17 +105,19 @@ type IState = {
   currentLayerId: string;
   currentKeyUnitId: string;
   dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig;
-  preModifiedDesign: IPersistKeyboardDesign | undefined;
+  preModifiedDesign: IPersistKeyboardDesign | 'none';
 };
 
-const state: IState = {
+const defaultState: IState = {
   loadedProfileData: fallbackProfileData,
   profileData: fallbackProfileData,
   currentLayerId: '',
   currentKeyUnitId: '',
   dualModeEditTargetOperationSig: 'pri',
-  preModifiedDesign: undefined,
+  preModifiedDesign: 'none',
 };
+
+const state: IState = cloneObject(defaultState);
 
 const readers = {
   get loadedProfileData() {
@@ -253,20 +259,32 @@ const readers = {
   },
 };
 
+let stateBackingStore: IState | undefined;
+
 const actions = {
   patchEditProfileData(recipe: (draft: IProfileData) => void) {
     state.profileData = produce(state.profileData, (draft) => {
       recipe(draft);
     });
   },
+  preserveEditData() {
+    stateBackingStore = cloneObject(state);
+    copyObjectProps(state, defaultState);
+  },
+  restoreEditData() {
+    if (stateBackingStore) {
+      copyObjectProps(state, stateBackingStore);
+      stateBackingStore = undefined;
+    }
+  },
   loadProfileData(profileData: IProfileData) {
     state.loadedProfileData = profileData;
     state.profileData = duplicateObjectByJsonStringifyParse(profileData);
     state.currentLayerId = profileData.layers[0].layerId;
 
-    if (state.preModifiedDesign) {
+    if (state.preModifiedDesign !== 'none') {
       state.profileData.keyboardDesign = state.preModifiedDesign;
-      state.preModifiedDesign = undefined;
+      state.preModifiedDesign = 'none';
     }
   },
   setCurrentLayerId(layerId: string) {
