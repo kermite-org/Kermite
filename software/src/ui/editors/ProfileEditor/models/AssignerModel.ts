@@ -86,7 +86,6 @@ type IState = {
   profileData: IProfileData;
   currentLayerId: string;
   currentKeyUnitId: string;
-  slotAddress: string;
   dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig;
   preModifiedDesign: IPersistKeyboardDesign | undefined;
 };
@@ -96,7 +95,6 @@ const state: IState = {
   profileData: fallbackProfileData,
   currentLayerId: '',
   currentKeyUnitId: '',
-  slotAddress: '',
   dualModeEditTargetOperationSig: 'pri',
   preModifiedDesign: undefined,
 };
@@ -115,7 +113,8 @@ const readers = {
     return state.currentKeyUnitId;
   },
   get slotAddress() {
-    return state.slotAddress;
+    const { currentLayerId, currentKeyUnitId } = state;
+    return `${currentLayerId}.${currentKeyUnitId}`;
   },
   get dualModeEditTargetOperationSig() {
     return state.dualModeEditTargetOperationSig;
@@ -146,7 +145,7 @@ const readers = {
   },
 
   get assignEntry() {
-    return state.profileData.assigns[state.slotAddress];
+    return state.profileData.assigns[readers.slotAddress];
   },
 
   get layers() {
@@ -233,13 +232,6 @@ const readers = {
   },
 };
 
-const helpers = {
-  updateEditAssignSlot() {
-    const { currentLayerId, currentKeyUnitId } = state;
-    state.slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
-  },
-};
-
 const actions = {
   loadProfileData(profileData: IProfileData) {
     state.loadedProfileData = profileData;
@@ -254,13 +246,11 @@ const actions = {
 
   setCurrentLayerId(layerId: string) {
     state.currentLayerId = layerId;
-    helpers.updateEditAssignSlot();
   },
 
   setCurrentKeyUnitId(keyUnitId: string) {
     state.currentKeyUnitId = keyUnitId;
     state.dualModeEditTargetOperationSig = 'pri';
-    helpers.updateEditAssignSlot();
   },
 
   setDualModeEditTargetOperationSig(sig: IDualModeEditTargetOperationSig) {
@@ -276,7 +266,7 @@ const actions = {
   },
 
   writeAssignEntry(assign: IAssignEntry | undefined) {
-    state.profileData.assigns[state.slotAddress] = assign;
+    state.profileData.assigns[readers.slotAddress] = assign;
   },
 
   writeEditOperation(op: IAssignOperation | undefined) {
