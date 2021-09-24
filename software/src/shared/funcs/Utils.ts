@@ -406,3 +406,21 @@ export function splitBytesN(bytes: number[], n: number) {
     .fill(0)
     .map((_, i) => bytes.slice(i * n, i * n + n));
 }
+
+export function mergeModuleObjects<A, B, C, D>(
+  ...args: [A, B, C, D]
+): A & B & C & D;
+export function mergeModuleObjects<A, B, C>(...args: [A, B, C]): A & B & C;
+export function mergeModuleObjects<A, B>(...args: [A, B]): A & B;
+export function mergeModuleObjects<A>(...args: [A]): A {
+  const dest: any = {};
+  for (const src of args) {
+    Object.getOwnPropertyNames(src).forEach((key) => {
+      const descriptor = Object.getOwnPropertyDescriptor(src, key);
+      if (descriptor) {
+        Object.defineProperty(dest, key, descriptor);
+      }
+    });
+  }
+  return dest;
+}
