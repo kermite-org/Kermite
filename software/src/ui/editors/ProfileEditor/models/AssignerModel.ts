@@ -6,6 +6,8 @@ import {
   IAssignEntry,
   IAssignEntryWithLayerFallback,
   IAssignOperation,
+  IDisplayKeyboardDesign,
+  ILayer,
   IPersistKeyboardDesign,
   IProfileAssignType,
   IProfileData,
@@ -27,7 +29,56 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
   ter: 'tertiaryOp',
 };
 
-export class AssignerModel {
+interface IAssignerModel {
+  loadedProfileData: IProfileData;
+  profileData: IProfileData;
+  currentLayerId: string;
+  currentKeyUnitId: string;
+  slotAddress: string;
+  dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig;
+
+  // getters
+  isUserProfileEditorView: boolean;
+  isSingleMode: boolean;
+  isDualMode: boolean;
+  isSlotSelected: boolean;
+  assignEntry: IAssignEntry | undefined;
+  layers: ILayer[];
+  displayDesign: IDisplayKeyboardDesign;
+  currentLayer: ILayer | undefined;
+  editOperation: IAssignOperation | undefined;
+
+  isLayerCurrent: (layerId: string) => boolean;
+  isKeyUnitCurrent: (keyUnitId: string) => boolean;
+  getAssignForKeyUnit: (
+    keyUnitId: string,
+    targetLayerId?: string,
+  ) => IAssignEntry | undefined;
+  getAssignForKeyUnitWithLayerFallback: (
+    keyUnitId: string,
+    targetLayerId?: string,
+  ) => IAssignEntryWithLayerFallback | undefined;
+  getLayerById: (layerId: string) => ILayer | undefined;
+  checkDirtyWithCleanupSideEffect: () => boolean;
+  checkDirty: () => boolean;
+
+  // mutations
+  loadProfileData: (profileData: IProfileData) => void;
+  setCurrentLayerId: (layerId: string) => void;
+  setCurrentKeyUnitId: (keyUnitId: string) => void;
+  setDualModeEditTargetOperationSig: (
+    sig: IDualModeEditTargetOperationSig,
+  ) => void;
+  clearAssignSlotSelection: () => void;
+  writeAssignEntry: (assign: IAssignEntry | undefined) => void;
+  writeEditOperation: (op: IAssignOperation | undefined) => void;
+  changeProfileAssignType: (dstAssignType: IProfileAssignType) => void;
+  changeProjectId: (projectId: string) => void;
+  translateKeyIndexToKeyUnitId: (keyIndex: number) => string | undefined;
+  replaceKeyboardDesign: (design: IPersistKeyboardDesign) => void;
+  restoreOriginalDesign: () => void;
+}
+export class AssignerModel implements IAssignerModel {
   // state
 
   loadedProfileData: IProfileData = fallbackProfileData;
