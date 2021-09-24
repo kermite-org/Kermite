@@ -1,6 +1,14 @@
 import { jsx, useEffect } from 'qx';
 import { IPersistKeyboardDesign } from '~/shared';
-import { editMutations, editReader } from '~/ui/editors/LayoutEditor/models';
+import {
+  appState,
+  editManager,
+  editMutations,
+  editReader,
+  IEditState,
+  IEnvState,
+  IModification,
+} from '~/ui/editors/LayoutEditor/models';
 import { LayoutEditorViewRoot } from '~/ui/editors/LayoutEditor/views/LayoutEditorViewRoot';
 import {
   KeyboardDesignConverter,
@@ -9,7 +17,34 @@ import {
 } from '~/ui/editors/LayoutEditor/wrapper';
 import { windowKeyboardEventEffect } from '~/ui/utils';
 
+interface IBackingStoreData {
+  editor: IEditState;
+  env: IEnvState;
+  undoStack: IModification[];
+  redoStack: IModification[];
+}
+
 export namespace LayoutEditorCore {
+  let backingStoreData: IBackingStoreData | undefined;
+
+  export function preserveEditState() {
+    backingStoreData = {
+      editor: appState.editor,
+      env: appState.env,
+      undoStack: editManager.undoStack,
+      redoStack: editManager.redoStack,
+    };
+  }
+
+  export function restoreEditState() {
+    if (backingStoreData) {
+      appState.editor = backingStoreData.editor;
+      appState.env = backingStoreData.env;
+      editManager.undoStack = backingStoreData.undoStack;
+      editManager.redoStack = backingStoreData.redoStack;
+    }
+  }
+
   export function loadEditDesign(persistDesign: IPersistKeyboardDesign) {
     try {
       const design =

@@ -17,8 +17,11 @@ export const LayoutEditorGeneralComponent_OutputPropsSupplier = {
 
 export const LayoutEditorGeneralComponent: FC<Props> = ({ layout }) => {
   useEffect(() => {
+    LayoutEditorCore.preserveEditState();
     LayoutEditorCore.loadEditDesign(layout);
-  }, [layout]);
+
+    return () => LayoutEditorCore.restoreEditState();
+  }, []);
 
   return <LayoutEditorCore.Component />;
 };
