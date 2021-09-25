@@ -1,6 +1,5 @@
 import produce from 'immer';
 import {
-  cloneObject,
   compareObjectByJsonStringify,
   copyObjectProps,
   duplicateObjectByJsonStringifyParse,
@@ -18,7 +17,7 @@ import {
   IProfileSettings_Dual,
   mergeModuleObjects,
 } from '~/shared';
-import { uiReaders } from '~/ui/store';
+import { uiReaders, uiState } from '~/ui/store';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,
@@ -41,7 +40,6 @@ type IState = {
   currentLayerId: string;
   currentKeyUnitId: string;
   dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig;
-  preModifiedDesign: IPersistKeyboardDesign | 'none';
 };
 
 const defaultState: IState = {
@@ -50,10 +48,9 @@ const defaultState: IState = {
   currentLayerId: '',
   currentKeyUnitId: '',
   dualModeEditTargetOperationSig: 'pri',
-  preModifiedDesign: 'none',
 };
 
-const state: IState = cloneObject(defaultState);
+const state: IState = { ...defaultState };
 
 const readers = {
   get loadedProfileData(): IProfileData {
@@ -75,10 +72,6 @@ const readers = {
   get dualModeEditTargetOperationSig(): IDualModeEditTargetOperationSig {
     return state.dualModeEditTargetOperationSig;
   },
-  get preModifiedDesign(): IPersistKeyboardDesign | 'none' {
-    return state.preModifiedDesign;
-  },
-
   get isUserProfileEditorView(): boolean {
     return uiReaders.pagePath === '/assigner';
   },
@@ -217,11 +210,6 @@ const actions = {
     state.loadedProfileData = profileData;
     state.profileData = duplicateObjectByJsonStringifyParse(profileData);
     state.currentLayerId = profileData.layers[0].layerId;
-
-    if (state.preModifiedDesign !== 'none') {
-      state.profileData.keyboardDesign = state.preModifiedDesign;
-      state.preModifiedDesign = 'none';
-    }
   },
   setCurrentLayerId(layerId: string) {
     state.currentLayerId = layerId;
@@ -286,14 +274,15 @@ const actions = {
   },
 
   replaceKeyboardDesign(design: IPersistKeyboardDesign) {
-    if (state.profileData !== fallbackProfileData) {
+    if (uiState.core.profileEditSource.type === 'InternalProfile') {
+      if (state.loadedProfileData === fallbackProfileData) {
+        actions.loadProfileData(uiState.core.loadedProfileData);
+      }
       if (state.profileData.keyboardDesign !== design) {
         actions.patchEditProfileData(
           (profile) => (profile.keyboardDesign = design),
         );
       }
-    } else {
-      state.preModifiedDesign = design;
     }
   },
 
