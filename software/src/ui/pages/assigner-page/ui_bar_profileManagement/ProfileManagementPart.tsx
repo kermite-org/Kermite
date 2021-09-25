@@ -5,7 +5,6 @@ import {
   OperationButtonWithIcon,
   ConfigurationButton,
 } from '~/ui/components';
-import { updateProfileDataSourceHandling } from '~/ui/pages/assigner-page/models';
 import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
 import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
 import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
@@ -19,7 +18,6 @@ import { SavingProjectPresetSelectionModal } from '~/ui/pages/assigner-page/ui_b
 import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
 export const ProfileManagementPart: FcWithClassName = ({ className }) => {
-  updateProfileDataSourceHandling();
   const baseVm = makeProfilesOperationModel();
   const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
   const { profileSelectorSource } = useProfileSelectorModel();
