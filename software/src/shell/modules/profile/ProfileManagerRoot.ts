@@ -90,10 +90,6 @@ async function loadProfileByEditSource(
     return fallbackProfileData;
   } else if (editSource.type === 'InternalProfile') {
     return await profileManagerCore.loadProfile(editSource.profileEntry);
-  } else if (editSource.type === 'ExternalFile') {
-    return await profileManagerCore.loadExternalProfileFile(
-      editSource.filePath,
-    );
   }
   return fallbackProfileData;
 }
@@ -126,10 +122,7 @@ function onCoreStateChange(partialState: Partial<ICoreState>) {
   }
   if (partialState.profileEditSource) {
     const { profileEditSource } = partialState;
-    if (
-      profileEditSource.type === 'InternalProfile' ||
-      profileEditSource.type === 'ExternalFile'
-    ) {
+    if (profileEditSource.type === 'InternalProfile') {
       saveEditSource(profileEditSource);
     }
   }

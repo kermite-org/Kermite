@@ -41,7 +41,6 @@ export const profilesOperationReader = {
     const { profileEditSource } = profilesReader;
     return (
       profileEditSource.type === 'ProfileNewlyCreated' ||
-      profileEditSource.type === 'ExternalFile' ||
       (profileEditSource.type === 'InternalProfile' &&
         assignerModel.checkDirty())
     );
@@ -51,9 +50,6 @@ export const profilesOperationReader = {
   },
   get isMenuItemSaveEnabled(): boolean {
     const { profileEditSource } = profilesReader;
-    return (
-      profileEditSource.type === 'ProfileNewlyCreated' ||
-      profileEditSource.type === 'ExternalFile'
-    );
+    return profileEditSource.type === 'ProfileNewlyCreated';
   },
 };

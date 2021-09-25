@@ -122,10 +122,7 @@ const openConfiguration = () => {
 
 const onSaveButton = () => {
   const editSourceType = profilesReader.profileEditSource.type;
-  if (
-    editSourceType === 'ProfileNewlyCreated' ||
-    editSourceType === 'ExternalFile'
-  ) {
+  if (editSourceType === 'ProfileNewlyCreated') {
     handleSaveUnsavedProfile();
   } else {
     profilesActions.saveProfile();
