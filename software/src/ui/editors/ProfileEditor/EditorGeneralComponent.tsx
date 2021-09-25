@@ -27,7 +27,7 @@ export const AssignerGeneralComponent: FC<Props> = ({ originalProfile }) => {
     assignerModel.loadProfileData(profileData);
 
     return () => assignerModel.restoreEditData();
-  }, []);
+  }, [originalProfile]);
 
   return (
     <div css={style}>
