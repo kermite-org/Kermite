@@ -18,10 +18,7 @@ export const KeyboardSection: FC = () => {
 
   playerModel.setProfileData(assignerModel.profileData);
 
-  const cardsPartVm = makeEditKeyUnitCardsPartViewModel(
-    playerModel,
-    assignerModel,
-  );
+  const cardsPartVm = makeEditKeyUnitCardsPartViewModel(playerModel);
 
   if (!profilesReader.isEditProfileAvailable) {
     // Profileが存在しない場合、presetBrowserへの導線を表示
