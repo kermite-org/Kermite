@@ -204,7 +204,7 @@ const actions = {
     });
   },
   preserveEditData() {
-    stateBackingStore = cloneObject(state);
+    stateBackingStore = { ...state };
     copyObjectProps(state, defaultState);
   },
   restoreEditData() {
