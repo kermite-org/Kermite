@@ -1,13 +1,13 @@
 import { appState, IEditState } from './AppState';
 
-interface IModification {
+export interface IModification {
   oldState: IEditState;
   newState: IEditState;
 }
 
 class EditManager {
-  private undoStack: IModification[] = [];
-  private redoStack: IModification[] = [];
+  undoStack: IModification[] = [];
+  redoStack: IModification[] = [];
 
   reset() {
     this.undoStack = [];

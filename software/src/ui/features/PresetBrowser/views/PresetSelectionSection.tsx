@@ -5,7 +5,7 @@ import {
   KeyboardProjectSelector,
   GeneralButton,
 } from '~/ui/components';
-import { IPresetSelectionSectionViewModel } from '~/ui/pages/preset-browser-page/viewModels/PresetSelectionSectionViewModel';
+import { IPresetSelectionSectionViewModel } from '~/ui/features/PresetBrowser/viewModels';
 
 type Props = {
   viewModel: IPresetSelectionSectionViewModel;

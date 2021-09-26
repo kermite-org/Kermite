@@ -142,6 +142,9 @@ export namespace ProfileDataMigrator {
       if (profile.projectId === '') {
         profile.projectId = '000000';
       }
+      if (!profile.mappingEntries) {
+        profile.mappingEntries = [];
+      }
     }
     return profile;
   }

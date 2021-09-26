@@ -1,8 +1,6 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import {
-  projectPackagesReader,
-  projectManagementMenuActions,
-} from '~/ui/store';
+import { projectManagementMenuActions } from '~/ui/features/ProjectSelectionPart/store';
+import { projectPackagesReader } from '~/ui/store';
 
 export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
   return [
