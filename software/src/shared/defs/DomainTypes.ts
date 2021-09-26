@@ -191,11 +191,8 @@ export type IProfileEditSource =
   | {
       type: 'InternalProfile';
       profileEntry: IProfileEntry;
-    }
-  | {
-      type: 'ExternalFile';
-      filePath: string;
     };
+
 export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;

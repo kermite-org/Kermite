@@ -21,7 +21,7 @@ export const LayoutEditorGeneralComponent: FC<Props> = ({ layout }) => {
     LayoutEditorCore.loadEditDesign(layout);
 
     return () => LayoutEditorCore.restoreEditState();
-  }, []);
+  }, [layout]);
 
   return <LayoutEditorCore.Component />;
 };

@@ -13,7 +13,6 @@ import {
   profilesReader,
 } from '~/ui/pages/assigner-page/models';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
-import { getFileNameFromPath } from '~/ui/utils';
 
 export type IProfileSelectorModel = {
   profileSelectorSource: ISelectorSource;
@@ -44,21 +43,11 @@ function makeProfileNameSelectorOption(
 }
 
 const selectorValueNewlyCreated = '__PROFILE_NEWLY_CREATED__';
-const selectorValueExternalProfile = '__PROFILE_EXTERNALLY_LOADED__';
 
 const selectorOptionNewlyCreated: ISelectorOption = {
   label: '(untitled)',
   value: selectorValueNewlyCreated,
 };
-
-function createSelectorOptionExternalProfile(
-  filePath: string,
-): ISelectorOption {
-  return {
-    label: `(file)${getFileNameFromPath(filePath)}`,
-    value: selectorValueExternalProfile,
-  };
-}
 
 function makeProfileSelectionSource(
   visibleProfileEntries: IProfileEntry[],
@@ -78,15 +67,6 @@ function makeProfileSelectionSource(
     return {
       options: [selectorOptionNewlyCreated, ...optionsBase],
       value: selectorValueNewlyCreated,
-      setValue,
-    };
-  } else if (profileEditSource.type === 'ExternalFile') {
-    return {
-      options: [
-        createSelectorOptionExternalProfile(profileEditSource.filePath),
-        ...optionsBase,
-      ],
-      value: selectorValueExternalProfile,
       setValue,
     };
   } else if (profileEditSource.type === 'InternalProfile') {

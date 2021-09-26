@@ -2,10 +2,12 @@ import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/editors';
 import { ProfileConfigurationModalLayer } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration';
+import { updateProfileDataSourceHandling } from '~/ui/pages/assigner-page/models';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 
 export const AssignerPage: FC = () => {
+  updateProfileDataSourceHandling();
   return (
     <div css={style}>
       <div className="topRow">

@@ -1,16 +1,23 @@
+import produce from 'immer';
 import {
   compareObjectByJsonStringify,
+  copyObjectProps,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
   getDisplayKeyboardDesignSingleCached,
   IAssignEntry,
   IAssignEntryWithLayerFallback,
   IAssignOperation,
+  IDisplayKeyboardDesign,
+  ILayer,
   IPersistKeyboardDesign,
   IProfileAssignType,
   IProfileData,
+  IProfileSettings,
+  IProfileSettings_Dual,
+  mergeModuleObjects,
 } from '~/shared';
-import { uiReaders } from '~/ui/store';
+import { uiReaders, uiState } from '~/ui/store';
 import {
   changeProfileDataAssignType,
   removeInvalidProfileAssigns,
@@ -27,85 +34,118 @@ const dualModeEditTargetOperationSigToOperationPathMap: {
   ter: 'tertiaryOp',
 };
 
-export class AssignerModel {
-  // state
+type IState = {
+  loadedProfileData: IProfileData;
+  profileData: IProfileData;
+  currentLayerId: string;
+  currentKeyUnitId: string;
+  dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig;
+};
 
-  loadedProfileData: IProfileData = fallbackProfileData;
-  profileData: IProfileData = fallbackProfileData;
-  currentLayerId: string = '';
-  currentKeyUnitId: string = '';
-  slotAddress: string = '';
-  dualModeEditTargetOperationSig: IDualModeEditTargetOperationSig = 'pri';
+const defaultState: IState = {
+  loadedProfileData: fallbackProfileData,
+  profileData: fallbackProfileData,
+  currentLayerId: '',
+  currentKeyUnitId: '',
+  dualModeEditTargetOperationSig: 'pri',
+};
 
-  private preModifiedDesign?: IPersistKeyboardDesign;
+const state: IState = { ...defaultState };
 
-  // getters
-
-  get isUserProfileEditorView() {
+const readers = {
+  get loadedProfileData(): IProfileData {
+    return state.loadedProfileData;
+  },
+  get profileData(): IProfileData {
+    return state.profileData;
+  },
+  get currentLayerId(): string {
+    return state.currentLayerId;
+  },
+  get currentKeyUnitId(): string {
+    return state.currentKeyUnitId;
+  },
+  get slotAddress(): string {
+    const { currentLayerId, currentKeyUnitId } = state;
+    return `${currentLayerId}.${currentKeyUnitId}`;
+  },
+  get dualModeEditTargetOperationSig(): IDualModeEditTargetOperationSig {
+    return state.dualModeEditTargetOperationSig;
+  },
+  get isUserProfileEditorView(): boolean {
     return uiReaders.pagePath === '/assigner';
-  }
+  },
 
-  private get profileAssignType(): IProfileAssignType {
-    return this.profileData.settings.assignType;
-  }
+  get profileAssignType(): IProfileAssignType {
+    return state.profileData.settings.assignType;
+  },
 
-  get isSingleMode() {
-    return this.profileAssignType === 'single';
-  }
+  get isSingleMode(): boolean {
+    return readers.profileAssignType === 'single';
+  },
 
-  get isDualMode() {
-    return this.profileAssignType === 'dual';
-  }
+  get isDualMode(): boolean {
+    return readers.profileAssignType === 'dual';
+  },
 
-  get isSlotSelected() {
-    const { currentLayerId, currentKeyUnitId } = this;
+  get isSlotSelected(): boolean {
+    const { currentLayerId, currentKeyUnitId } = state;
     return !!(currentLayerId && currentKeyUnitId);
-  }
+  },
 
-  get assignEntry() {
-    return this.profileData.assigns[this.slotAddress];
-  }
+  get assignEntry(): IAssignEntry | undefined {
+    return state.profileData.assigns[readers.slotAddress];
+  },
 
-  get layers() {
-    return this.profileData.layers;
-  }
+  get layers(): ILayer[] {
+    return state.profileData.layers;
+  },
 
-  get displayDesign() {
+  get displayDesign(): IDisplayKeyboardDesign {
     return getDisplayKeyboardDesignSingleCached(
-      this.profileData.keyboardDesign,
+      state.profileData.keyboardDesign,
     );
-  }
-
-  get currentLayer() {
-    return this.profileData.layers.find(
-      (la) => la.layerId === this.currentLayerId,
+  },
+  get currentLayer(): ILayer | undefined {
+    return state.profileData.layers.find(
+      (la) => la.layerId === state.currentLayerId,
     );
-  }
+  },
+  get editOperation(): IAssignOperation | undefined {
+    const assign = readers.assignEntry;
+    if (assign?.type === 'single') {
+      return assign.op;
+    }
+    if (assign?.type === 'dual') {
+      return assign[readers.dualModeOperationPath];
+    }
+    return undefined;
+  },
 
-  isLayerCurrent = (layerId: string) => {
-    return this.currentLayerId === layerId;
-  };
+  isLayerCurrent(layerId: string): boolean {
+    return state.currentLayerId === layerId;
+  },
 
-  isKeyUnitCurrent = (keyUnitId: string) => {
-    return this.currentKeyUnitId === keyUnitId;
-  };
+  isKeyUnitCurrent(keyUnitId: string): boolean {
+    return state.currentKeyUnitId === keyUnitId;
+  },
 
-  getAssignForKeyUnit = (
+  getAssignForKeyUnit(
     keyUnitId: string,
     targetLayerId?: string,
-  ): IAssignEntry | undefined => {
-    const layerId = targetLayerId || this.currentLayerId;
-    return this.profileData.assigns[`${layerId}.${keyUnitId}`];
-  };
+  ): IAssignEntry | undefined {
+    const layerId = targetLayerId || state.currentLayerId;
+    return state.profileData.assigns[`${layerId}.${keyUnitId}`];
+  },
 
-  getAssignForKeyUnitWithLayerFallback = (
+  getAssignForKeyUnitWithLayerFallback(
     keyUnitId: string,
     targetLayerId?: string,
-  ): IAssignEntryWithLayerFallback | undefined => {
-    const layerId = targetLayerId || this.currentLayerId;
-    const assign = this.profileData.assigns[`${layerId}.${keyUnitId}`];
+  ): IAssignEntryWithLayerFallback | undefined {
+    const layerId = targetLayerId || state.currentLayerId;
+    const assign = state.profileData.assigns[`${layerId}.${keyUnitId}`];
     if (!assign) {
-      const defaultScheme = this.currentLayer?.defaultScheme;
+      const defaultScheme = readers.currentLayer?.defaultScheme;
       if (defaultScheme === 'transparent') {
         return { type: 'layerFallbackTransparent' };
       }
@@ -114,142 +154,163 @@ export class AssignerModel {
       }
     }
     return assign;
-  };
+  },
 
-  private get dualModeOperationPath(): IDualModeOperationPath {
-    const sig = this.dualModeEditTargetOperationSig;
+  get dualModeOperationPath(): IDualModeOperationPath {
+    const sig = state.dualModeEditTargetOperationSig;
     return dualModeEditTargetOperationSigToOperationPathMap[sig];
-  }
+  },
 
-  get editOperation(): IAssignOperation | undefined {
-    const assign = this.assignEntry;
-    if (assign?.type === 'single') {
-      return assign.op;
-    }
-    if (assign?.type === 'dual') {
-      return assign[this.dualModeOperationPath];
-    }
-    return undefined;
-  }
-
-  getLayerById(layerId: string) {
-    return this.layers.find((la) => la.layerId === layerId);
-  }
+  getLayerById(layerId: string): ILayer | undefined {
+    return readers.layers.find((la) => la.layerId === layerId);
+  },
 
   checkDirtyWithCleanupSideEffect(): boolean {
-    removeInvalidProfileAssigns(this.profileData);
+    removeInvalidProfileAssigns(state.profileData);
     return !compareObjectByJsonStringify(
-      this.loadedProfileData,
-      this.profileData,
+      state.loadedProfileData,
+      state.profileData,
     );
-  }
+  },
 
   checkDirty(): boolean {
     return !compareObjectByJsonStringify(
-      this.loadedProfileData,
-      this.profileData,
+      state.loadedProfileData,
+      state.profileData,
     );
-  }
-
-  // mutations
-
-  loadProfileData = (profileData: IProfileData) => {
-    this.loadedProfileData = profileData;
-    this.profileData = duplicateObjectByJsonStringifyParse(profileData);
-    this.currentLayerId = profileData.layers[0].layerId;
-
-    if (this.preModifiedDesign) {
-      this.profileData.keyboardDesign = this.preModifiedDesign;
-      this.preModifiedDesign = undefined;
-    }
-  };
-
-  private updateEditAssignSlot = () => {
-    const { currentLayerId, currentKeyUnitId } = this;
-    this.slotAddress = `${currentLayerId}.${currentKeyUnitId}`;
-  };
-
-  setCurrentLayerId = (layerId: string) => {
-    this.currentLayerId = layerId;
-    this.updateEditAssignSlot();
-  };
-
-  setCurrentKeyUnitId = (keyUnitId: string) => {
-    this.currentKeyUnitId = keyUnitId;
-    this.dualModeEditTargetOperationSig = 'pri';
-    this.updateEditAssignSlot();
-  };
-
-  setDualModeEditTargetOperationSig = (
-    sig: IDualModeEditTargetOperationSig,
-  ) => {
-    this.dualModeEditTargetOperationSig = sig;
-    const assign = this.assignEntry;
-    if (assign?.type === 'block' || assign?.type === 'transparent') {
-      this.writeAssignEntry(undefined);
-    }
-  };
-
-  clearAssignSlotSelection = () => {
-    this.setCurrentKeyUnitId('');
-  };
-
-  writeAssignEntry = (assign: IAssignEntry | undefined) => {
-    this.profileData.assigns[this.slotAddress] = assign;
-  };
-
-  writeEditOperation = (op: IAssignOperation | undefined) => {
-    const assign = this.assignEntry;
-    if (this.profileAssignType === 'single') {
-      if (assign?.type === 'single') {
-        assign.op = op;
-      } else {
-        this.writeAssignEntry({ type: 'single', op });
-      }
-    }
-    if (this.profileAssignType === 'dual') {
-      if (assign?.type === 'dual') {
-        assign[this.dualModeOperationPath] = op;
-      } else {
-        this.writeAssignEntry({
-          type: 'dual',
-          [this.dualModeOperationPath]: op,
-        });
-      }
-    }
-  };
-
-  changeProfileAssignType = (dstAssignType: IProfileAssignType) => {
-    this.profileData = changeProfileDataAssignType(
-      this.profileData,
-      dstAssignType,
-    );
-  };
-
-  changeProjectId = (projectId: string) => {
-    this.profileData.projectId = projectId;
-  };
+  },
 
   translateKeyIndexToKeyUnitId(keyIndex: number): string | undefined {
-    const keyEntity = this.displayDesign.keyEntities.find(
+    const keyEntity = readers.displayDesign.keyEntities.find(
       (kp) => kp.keyIndex === keyIndex,
     );
     return keyEntity?.keyId;
-  }
+  },
+};
+
+let stateBackingStore: IState | undefined;
+
+const actions = {
+  patchEditProfileData(recipe: (draft: IProfileData) => void) {
+    state.profileData = produce(state.profileData, (draft) => {
+      recipe(draft);
+    });
+  },
+  preserveEditData() {
+    stateBackingStore = { ...state };
+    copyObjectProps(state, defaultState);
+  },
+  restoreEditData() {
+    if (stateBackingStore) {
+      copyObjectProps(state, stateBackingStore);
+      stateBackingStore = undefined;
+    }
+  },
+  loadProfileData(profileData: IProfileData) {
+    state.loadedProfileData = profileData;
+    state.profileData = duplicateObjectByJsonStringifyParse(profileData);
+    state.currentLayerId = profileData.layers[0].layerId;
+  },
+  setCurrentLayerId(layerId: string) {
+    state.currentLayerId = layerId;
+  },
+
+  setCurrentKeyUnitId(keyUnitId: string) {
+    state.currentKeyUnitId = keyUnitId;
+    state.dualModeEditTargetOperationSig = 'pri';
+  },
+
+  setDualModeEditTargetOperationSig(sig: IDualModeEditTargetOperationSig) {
+    state.dualModeEditTargetOperationSig = sig;
+    const assign = readers.assignEntry;
+    if (assign?.type === 'block' || assign?.type === 'transparent') {
+      actions.writeAssignEntry(undefined);
+    }
+  },
+
+  clearAssignSlotSelection() {
+    actions.setCurrentKeyUnitId('');
+  },
+
+  writeAssignEntry(assign: IAssignEntry | undefined) {
+    actions.patchEditProfileData(
+      (profileData) => (profileData.assigns[readers.slotAddress] = assign),
+    );
+  },
+
+  writeEditOperation(op: IAssignOperation | undefined) {
+    const assign = readers.assignEntry;
+    if (readers.profileAssignType === 'single') {
+      if (assign?.type === 'single') {
+        actions.writeAssignEntry({ ...assign, op });
+      } else {
+        actions.writeAssignEntry({ type: 'single', op });
+      }
+    }
+    if (readers.profileAssignType === 'dual') {
+      if (assign?.type === 'dual') {
+        actions.writeAssignEntry({
+          ...assign,
+          [readers.dualModeOperationPath]: op,
+        });
+      } else {
+        actions.writeAssignEntry({
+          type: 'dual',
+          [readers.dualModeOperationPath]: op,
+        });
+      }
+    }
+  },
+
+  changeProfileAssignType(dstAssignType: IProfileAssignType) {
+    state.profileData = changeProfileDataAssignType(
+      state.profileData,
+      dstAssignType,
+    );
+  },
+
+  changeProjectId(projectId: string) {
+    actions.patchEditProfileData((profile) => (profile.projectId = projectId));
+  },
 
   replaceKeyboardDesign(design: IPersistKeyboardDesign) {
-    if (this.profileData !== fallbackProfileData) {
-      this.profileData.keyboardDesign = design;
-    } else {
-      this.preModifiedDesign = design;
+    if (
+      uiState.core.profileEditSource.type === 'InternalProfile' &&
+      state.loadedProfileData === fallbackProfileData
+    ) {
+      actions.loadProfileData(uiState.core.loadedProfileData);
     }
-  }
+    if (state.profileData.keyboardDesign !== design) {
+      actions.patchEditProfileData(
+        (profile) => (profile.keyboardDesign = design),
+      );
+    }
+  },
 
   restoreOriginalDesign() {
-    this.profileData.keyboardDesign = duplicateObjectByJsonStringifyParse(
-      this.loadedProfileData.keyboardDesign,
+    actions.patchEditProfileData(
+      (profile) =>
+        (profile.keyboardDesign = duplicateObjectByJsonStringifyParse(
+          state.loadedProfileData.keyboardDesign,
+        )),
     );
-  }
-}
+  },
+  writeSettingsValue<K extends keyof IProfileSettings>(
+    key: K,
+    value: IProfileSettings[K],
+  ) {
+    actions.patchEditProfileData((profile) => (profile.settings[key] = value));
+  },
+  writeSettingsValueDual<K extends keyof IProfileSettings_Dual>(
+    key: K,
+    value: IProfileSettings_Dual[K],
+  ) {
+    actions.patchEditProfileData((profile) => {
+      if (profile.settings.assignType === 'dual') {
+        profile.settings[key] = value;
+      }
+    });
+  },
+};
 
-export const assignerModel = new AssignerModel();
+export const assignerModel = mergeModuleObjects(readers, actions);

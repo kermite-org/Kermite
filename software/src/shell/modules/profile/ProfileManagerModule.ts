@@ -4,7 +4,6 @@ import {
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
   IProfileData,
-  IProfileEditSource,
   IProfileEntry,
   ProfileDataConverter,
 } from '~/shared';
@@ -207,11 +206,6 @@ export const profileManagerModule = createCoreModule({
     const { profileEditSource: editSource } = coreState;
     if (editSource.type === 'NoEditProfileAvailable') {
     } else if (editSource.type === 'ProfileNewlyCreated') {
-    } else if (editSource.type === 'ExternalFile') {
-      await profileManagerCore.saveExternalProfileFile(
-        editSource.filePath,
-        profileData,
-      );
     } else if (editSource.type === 'InternalProfile') {
       if (editSource.profileEntry.projectId !== profileData.projectId) {
         await profileManagerInternalFuncs.saveProfileWithProjectIdChange(
@@ -285,13 +279,9 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_importFromFile({ filePath }) {
-    const editSource: IProfileEditSource = {
-      type: 'ExternalFile',
-      filePath: filePath,
-    };
     const profile = await profileManagerCore.loadExternalProfileFile(filePath);
     commitCoreState({
-      profileEditSource: editSource,
+      profileEditSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profile,
     });
   },

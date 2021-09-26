@@ -21,9 +21,12 @@ export const AssignerGeneralComponent_OutputPropsSupplier = {
 
 export const AssignerGeneralComponent: FC<Props> = ({ originalProfile }) => {
   useEffect(() => {
+    assignerModel.preserveEditData();
     const profileData =
       ProfileDataConverter.convertProfileDataFromPersist(originalProfile);
     assignerModel.loadProfileData(profileData);
+
+    return () => assignerModel.restoreEditData();
   }, [originalProfile]);
 
   return (

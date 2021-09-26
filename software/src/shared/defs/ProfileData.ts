@@ -94,18 +94,28 @@ export type IAssignEntryWithLayerFallback =
   | { type: 'layerFallbackTransparent' }
   | { type: 'layerFallbackBlock' };
 
-type IProfileSettings =
-  | {
-      assignType: 'single';
-      useShiftCancel: boolean;
-    }
-  | {
-      assignType: 'dual';
-      useShiftCancel: boolean;
-      primaryDefaultTrigger: 'down' | 'tap';
-      useInterruptHold: boolean;
-      tapHoldThresholdMs: number;
-    };
+export type IProfileSettings_Single = {
+  assignType: 'single';
+  useShiftCancel: boolean;
+};
+
+export type IProfileSettings_Dual = {
+  assignType: 'dual';
+  useShiftCancel: boolean;
+  primaryDefaultTrigger: 'down' | 'tap';
+  useInterruptHold: boolean;
+  tapHoldThresholdMs: number;
+};
+
+export type IProfileSettings = IProfileSettings_Single | IProfileSettings_Dual;
+
+export type IProfileSettingsAllValues = {
+  assignType: 'single' | 'dual';
+  useShiftCancel: boolean;
+  primaryDefaultTrigger: 'down' | 'tap';
+  useInterruptHold: boolean;
+  tapHoldThresholdMs: number;
+};
 
 export type IAssignsDictionary = {
   // laX.kuY
