@@ -9,11 +9,13 @@ import {
 import { createSimpleSelector } from '~/ui/utils';
 
 type IStandardFirmwareEditState = {
+  isNewConfig: boolean;
   originalValues: IStandardFirmwareEditValues;
   editValues: IStandardFirmwareEditValues;
 };
 
 const state: IStandardFirmwareEditState = {
+  isNewConfig: false,
   originalValues: fallbackStandardKeyboardSpec,
   editValues: fallbackStandardKeyboardSpec,
 };
@@ -48,19 +50,23 @@ const readers = {
   },
   get canSave(): boolean {
     const {
-      state: { originalValues, editValues },
+      state: { originalValues, editValues, isNewConfig },
       readers: { fieldErrors, totalError },
     } = standardFirmwareEditStore;
     const isModified = editValues !== originalValues;
     const hasError = Object.values(fieldErrors).some((a) => !!a);
-    return isModified && !hasError && !totalError;
+    return (isNewConfig || isModified) && !hasError && !totalError;
   },
 };
 
 const actions = {
-  loadFirmwareConfig(firmwareConfig: IStandardFirmwareEditValues) {
+  loadFirmwareConfig(
+    firmwareConfig: IStandardFirmwareEditValues,
+    isNewConfig: boolean,
+  ) {
     state.originalValues = firmwareConfig;
     state.editValues = firmwareConfig;
+    state.isNewConfig = isNewConfig;
   },
   commitValue<K extends keyof IStandardFirmwareEditValues>(
     key: K,

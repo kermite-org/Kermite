@@ -1,8 +1,8 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { PresetKeyboardView } from '~/ui/components';
+import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { usePresetKeyboardViewModel } from '~/ui/pages/preset-browser-page/viewModels';
 import { uiReaders } from '~/ui/store';
-import { projectResourceStore } from '~/ui/store/projectResource';
 
 type Props = {
   layoutName: string;

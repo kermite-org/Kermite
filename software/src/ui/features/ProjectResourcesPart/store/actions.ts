@@ -1,9 +1,9 @@
 import { decodeProjectResourceItemKey } from '~/shared';
 import { modalConfirm } from '~/ui/components';
+import { projectResourceReaders } from '~/ui/features/ProjectResourcesPart/store/readers';
+import { projectResourceState } from '~/ui/features/ProjectResourcesPart/store/state';
 import { projectPackagesWriter } from '~/ui/store/ProjectPackages';
 import { uiActions, uiReaders } from '~/ui/store/base';
-import { projectResourceReaders } from '~/ui/store/projectResource/readers';
-import { projectResourceState } from '~/ui/store/projectResource/state';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {
@@ -52,10 +52,7 @@ export const projectResourceActions = {
     });
   },
   createCustomFirmware() {
-    uiActions.navigateTo({
-      type: 'projectCustomFirmwareSetup',
-      firmwareName: '',
-    });
+    uiActions.navigateTo({ type: 'projectCustomFirmwareCreate' });
   },
   editSelectedResourceItem() {
     const projectInfo = uiReaders.editTargetProject!;
@@ -77,10 +74,10 @@ export const projectResourceActions = {
           firmwareName,
         });
       } else if (firmwareInfo?.type === 'custom') {
-        uiActions.navigateTo({
-          type: 'projectCustomFirmwareSetup',
-          firmwareName,
-        });
+        // uiActions.navigateTo({
+        //   type: 'projectCustomFirmwareSetup',
+        //   firmwareName,
+        // });
       }
     }
   },

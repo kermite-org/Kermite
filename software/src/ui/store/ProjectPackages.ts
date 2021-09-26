@@ -80,7 +80,7 @@ export const projectPackagesReader = {
   },
 };
 
-function patchLocalEditProject(
+async function patchLocalEditProject(
   produceFn: (draft: IProjectPackageInfo) => void,
 ) {
   const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -88,7 +88,7 @@ function patchLocalEditProject(
     return;
   }
   const newProjectInfo = produce(projectInfo, produceFn);
-  projectPackagesWriter.saveLocalProject(newProjectInfo);
+  await projectPackagesWriter.saveLocalProject(newProjectInfo);
 }
 
 function insertItemToArray<T, K extends keyof T>(
@@ -144,8 +144,8 @@ function copyItemInArray<T, K extends keyof T>(
 }
 
 export const projectPackagesWriter = {
-  saveLocalProject(projectInfo: IProjectPackageInfo) {
-    dispatchCoreAction({
+  async saveLocalProject(projectInfo: IProjectPackageInfo) {
+    await dispatchCoreAction({
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
@@ -159,8 +159,8 @@ export const projectPackagesWriter = {
       insertItemToArray(draft.layouts, 'layoutName', item),
     );
   },
-  saveLocalProjectFirmware(item: IProjectFirmwareEntry) {
-    patchLocalEditProject((draft) =>
+  async saveLocalProjectFirmware(item: IProjectFirmwareEntry) {
+    await patchLocalEditProject((draft) =>
       insertItemToArray(draft.firmwares, 'firmwareName', item),
     );
   },

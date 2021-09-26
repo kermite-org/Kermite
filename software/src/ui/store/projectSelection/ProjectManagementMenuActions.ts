@@ -1,9 +1,5 @@
 import { ISelectorOption } from '~/ui/base';
-import {
-  callProjectSelectionModal,
-  modalConfirm,
-  modalTextEdit,
-} from '~/ui/components';
+import { callProjectSelectionModal, modalConfirm } from '~/ui/components';
 import { projectPackagesReader } from '~/ui/store/ProjectPackages';
 import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
@@ -32,31 +28,17 @@ const helpers = {
   async inputNewKeyboardName(
     originalName: string,
   ): Promise<string | undefined> {
-    const keyboardName = await modalTextEdit({
-      message: 'keyboard name',
-      caption: 'create new project',
+    const allProjectNames = uiReaders.allProjectPackageInfos
+      .filter((info) => info.origin === 'local')
+      .map((info) => info.keyboardName)
+      .filter((it) => it !== originalName);
+    return await resourceManagementUtils.inputSavingResourceName({
+      modalTitle: 'create new project',
+      modalMessage: 'keyboard name',
       defaultText: originalName,
+      resourceTypeNameText: 'project package',
+      existingResourceNames: allProjectNames,
     });
-    if (keyboardName) {
-      const allProjectNames = uiReaders.allProjectPackageInfos
-        .filter((info) => info.origin === 'local')
-        .map((info) => info.keyboardName)
-        .filter((it) => it !== originalName);
-      const res = resourceManagementUtils.checkValidResourceName(
-        keyboardName,
-        allProjectNames,
-        'project package',
-      );
-      if (res === 'ok') {
-        return keyboardName;
-      } else {
-        await modalConfirm({
-          message: res,
-          caption: 'error',
-        });
-      }
-    }
-    return undefined;
   },
 };
 

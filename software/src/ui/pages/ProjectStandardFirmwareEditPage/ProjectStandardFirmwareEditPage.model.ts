@@ -7,14 +7,13 @@ import {
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { uiConfiguration } from '~/ui/base';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/editors';
+import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
-  projectResourceStore,
 } from '~/ui/store';
 import { resourceManagementUtils } from '~/ui/utils';
 
@@ -72,6 +71,7 @@ const actions = {
     }
   },
   async saveHandler() {
+    const isCreate = !store.sourceEntry.firmwareName;
     if (!store.sourceEntry.firmwareName) {
       const newVariationName = await inputSavingFirmwareName();
       if (!newVariationName) {
@@ -84,15 +84,15 @@ const actions = {
       ...store.sourceEntry,
       standardFirmwareConfig: emitSavingEditValues(),
     };
-    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    await projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
 
     projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
-    if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
-      store.sourceEntry = newFirmwareEntry;
-    } else {
+    if (isCreate) {
       uiActions.closeSubPage();
+    } else {
+      store.sourceEntry = newFirmwareEntry;
     }
   },
 };

@@ -145,15 +145,6 @@ export const layoutManagerActions = {
   },
 
   save(design: IPersistKeyboardDesign) {
-    const { editSource } = layoutManagerReader;
-    const isProfile = editSource.type === 'CurrentProfile';
-    if (isProfile) {
-      throw new Error('invalid handler invocation');
-    }
-    // const ok = await modalConfirm({
-    //   message: `File overwritten. Are you ok?`,
-    //   caption: 'Save',
-    // });
     dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
     LayoutEditorCore.rebase();
   },
