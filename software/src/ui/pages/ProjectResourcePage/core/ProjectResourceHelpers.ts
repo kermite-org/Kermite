@@ -13,11 +13,14 @@ import { uiReaders } from '~/ui/store';
 
 export const projectResourceHelpers = {
   createProjectResourceListItemKeys(
-    projectInfo: IProjectPackageInfo,
+    projectInfo?: IProjectPackageInfo,
   ): string[] {
-    return [
+    if (!projectInfo) {
+      return [];
+    }
+    const keys = [
       ...projectInfo.presets.map((it) =>
-        encodeProjectResourceItemKey('preset', it.presetName),
+        encodeProjectResourceItemKey('profile', it.presetName),
       ),
       ...projectInfo.layouts.map((it) =>
         encodeProjectResourceItemKey('layout', it.layoutName),
@@ -26,6 +29,8 @@ export const projectResourceHelpers = {
         encodeProjectResourceItemKey('firmware', it.firmwareName),
       ),
     ];
+    keys.sort();
+    return keys;
   },
   getPresetEntry(presetName: string): IProjectPresetEntry | undefined {
     return uiReaders.editTargetProject?.presets.find(

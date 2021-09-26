@@ -97,7 +97,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               disabled={!editValues.useMatrixKeyScanner}
               invalid={!!fieldErrors.matrixRowPins}
             />
-            <div>{fieldErrors.matrixRowPins}</div>
+            <div className="error">{fieldErrors.matrixRowPins}</div>
           </FieldItem>
           <FieldItem title="column pins" indent>
             <GeneralInput
@@ -107,7 +107,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               disabled={!editValues.useMatrixKeyScanner}
               invalid={!!fieldErrors.matrixColumnPins}
             />
-            <div>{fieldErrors.matrixColumnPins}</div>
+            <div className="error">{fieldErrors.matrixColumnPins}</div>
           </FieldItem>
 
           <FieldItem title="use direct wired key scanner">
@@ -124,7 +124,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               disabled={!editValues.useDirectWiredKeyScanner}
               invalid={!!fieldErrors.directWiredPins}
             />
-            <div>{fieldErrors.directWiredPins}</div>
+            <div className="error">{fieldErrors.directWiredPins}</div>
           </FieldItem>
 
           <FieldItem title="use encoder">
@@ -141,7 +141,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               disabled={!editValues.useEncoder}
               invalid={!!fieldErrors.encoderPins}
             />
-            <div>{fieldErrors.encoderPins}</div>
+            <div className="error">{fieldErrors.encoderPins}</div>
           </FieldItem>
 
           <FieldItem title="use lighting">
@@ -158,7 +158,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               disabled={!(editValues.useLighting && isRp)}
               invalid={!!fieldErrors.lightingPin}
             />
-            <div>{fieldErrors.lightingPin}</div>
+            <div className="error">{fieldErrors.lightingPin}</div>
           </FieldItem>
 
           <FieldItem title="lighting num LEDs" indent>
@@ -173,7 +173,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
               disabled={!editValues.useLighting}
               invalid={!!fieldErrors.lightingNumLeds}
             />
-            <div>{fieldErrors.lightingNumLeds}</div>
+            <div className="error">{fieldErrors.lightingNumLeds}</div>
           </FieldItem>
 
           <FieldItem title="use LCD">
@@ -186,7 +186,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
         </tbody>
       </table>
       <div className="total-error" qxIf={!!totalError}>
-        note: {totalError}
+        {totalError}
       </div>
       <div qxIf={false}>{JSON.stringify(editValues)}</div>
     </div>
@@ -202,9 +202,15 @@ const style = css`
     }
   }
 
+  table {
+    .error {
+      color: #f44;
+    }
+  }
+
   > .total-error {
     margin-left: 5px;
     margin-top: 10px;
-    color: #888;
+    color: #f44;
   }
 `;

@@ -21,8 +21,8 @@ function createMenuItems(): IGeneralMenuItem[] {
     {
       type: 'menuEntry',
       text: 'rename',
-      handler: () => {},
-      disabled: true,
+      handler: projectManagementMenuActions.handleRenameProject,
+      disabled: !projectPackagesReader.getEditTargetProject(),
     },
     {
       type: 'menuEntry',

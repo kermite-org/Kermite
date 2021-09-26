@@ -11,7 +11,7 @@ import {
 } from '~/ui/store';
 import { resourceManagementUtils } from '~/ui/utils';
 
-const projectManagementMenuActionsHelpers = {
+const helpers = {
   makeLoadableSourceProjectOptions(): ISelectorOption[] {
     const { allProjectPackageInfos } = uiReaders;
     const blankOption: ISelectorOption = {
@@ -32,45 +32,68 @@ const projectManagementMenuActionsHelpers = {
       }));
     return [blankOption, ...presentOptions];
   },
-};
-
-export const projectManagementMenuActions = {
-  async handleCreateNewProject() {
+  async inputNewKeyboardName(
+    originalName: string,
+  ): Promise<string | undefined> {
     const keyboardName = await modalTextEdit({
       message: 'keyboard name',
       caption: 'create new project',
+      defaultText: originalName,
     });
     if (keyboardName) {
       const allProjectNames = uiReaders.allProjectPackageInfos
         .filter((info) => info.origin === 'local')
-        .map((info) => info.packageName);
+        .map((info) => info.keyboardName)
+        .filter((it) => it !== originalName);
       const res = resourceManagementUtils.checkValidResourceName(
         keyboardName,
         allProjectNames,
         'project package',
-        true,
       );
       if (res === 'ok') {
-        dispatchCoreAction({ project_createLocalProject: { keyboardName } });
+        return keyboardName;
       } else {
-        modalConfirm({
+        await modalConfirm({
           message: res,
           caption: 'error',
         });
       }
     }
+    return undefined;
+  },
+};
+
+export const projectManagementMenuActions = {
+  async handleCreateNewProject() {
+    const keyboardName = await helpers.inputNewKeyboardName('');
+    if (keyboardName) {
+      dispatchCoreAction({ project_createLocalProject: { keyboardName } });
+    }
   },
   async handleImportOnlineProject() {
-    const projectOptions =
-      projectManagementMenuActionsHelpers.makeLoadableSourceProjectOptions();
+    const projectOptions = helpers.makeLoadableSourceProjectOptions();
     const projectId = await callProjectSelectionModal({
       modalTitle: 'import online project',
       projectOptions,
       selectedValue: '',
     });
-    if (projectId) {
+    const project = projectPackagesReader.findProjectInfo('online', projectId);
+    if (project) {
+      const projectKeyboardName = project?.keyboardName.toLowerCase();
+      const allLocalProjectKeyboardNames = uiReaders.allProjectPackageInfos
+        .filter((info) => info.origin === 'local')
+        .map((info) => info.keyboardName.toLowerCase());
+      if (allLocalProjectKeyboardNames.includes(projectKeyboardName)) {
+        await modalConfirm({
+          message: `project ${projectKeyboardName} already exists in local. please rename it first.`,
+          caption: 'error',
+        });
+        return;
+      }
       dispatchCoreAction({
-        project_createLocalProjectBasedOnOnlineProject: { projectId },
+        project_createLocalProjectBasedOnOnlineProject: {
+          projectId: project.projectId,
+        },
       });
     }
   },
@@ -84,6 +107,22 @@ export const projectManagementMenuActions = {
       if (ok) {
         dispatchCoreAction({
           project_deleteLocalProject: { projectId: project.projectId },
+        });
+      }
+    }
+  },
+  async handleRenameProject() {
+    const project = projectPackagesReader.getEditTargetProject();
+    if (project) {
+      const newKeyboardName = await helpers.inputNewKeyboardName(
+        project.keyboardName,
+      );
+      if (newKeyboardName) {
+        dispatchCoreAction({
+          project_renameLocalProject: {
+            projectId: project.projectId,
+            newKeyboardName,
+          },
         });
       }
     }
