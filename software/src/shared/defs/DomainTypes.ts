@@ -48,6 +48,7 @@ export type IKermiteStandardKeyboardSpec = {
   lightingPin?: string;
   lightingNumLeds?: number;
   useLcd?: boolean;
+  singleWireSignalPin?: string;
 };
 
 export interface IProjectResourceInfo {

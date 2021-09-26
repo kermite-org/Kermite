@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { appUi } from '~/ui/base';
 import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
 import { FieldItem } from '~/ui/editors/StandardFirmwareEditor/FieldItem';
 import {
@@ -48,6 +49,7 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
     editValues,
     isAvr,
     isRp,
+    isSplit,
     availablePinsText,
     fieldErrors,
     totalError,
@@ -180,8 +182,28 @@ export const StandardFirmwareEditor: FC<Props> = ({ firmwareConfig }) => {
             <ToggleSwitch
               checked={editValues.useLcd}
               onChange={valueChangeHandler('useLcd')}
+              disabled={isAvr && isSplit}
             />
           </FieldItem>
+
+          <FieldItem title="single wire signal pin" qxIf={isSplit}>
+            <GeneralInput
+              value={editValues.singleWireSignalPin || ''}
+              setValue={valueChangeHandler('singleWireSignalPin')}
+              width={100}
+              invalid={!!fieldErrors.singleWireSignalPin}
+              disabled={!(isSplit && isRp)}
+            />
+            <div className="error">{fieldErrors.singleWireSignalPin}</div>
+          </FieldItem>
+
+          <FieldItem title="use debug uart" qxIf={appUi.isDevelopment}>
+            <ToggleSwitch
+              checked={editValues.useDebugUart}
+              onChange={valueChangeHandler('useDebugUart')}
+            />
+          </FieldItem>
+
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
