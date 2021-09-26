@@ -274,15 +274,16 @@ const actions = {
   },
 
   replaceKeyboardDesign(design: IPersistKeyboardDesign) {
-    if (uiState.core.profileEditSource.type === 'InternalProfile') {
-      if (state.loadedProfileData === fallbackProfileData) {
-        actions.loadProfileData(uiState.core.loadedProfileData);
-      }
-      if (state.profileData.keyboardDesign !== design) {
-        actions.patchEditProfileData(
-          (profile) => (profile.keyboardDesign = design),
-        );
-      }
+    if (
+      uiState.core.profileEditSource.type === 'InternalProfile' &&
+      state.loadedProfileData === fallbackProfileData
+    ) {
+      actions.loadProfileData(uiState.core.loadedProfileData);
+    }
+    if (state.profileData.keyboardDesign !== design) {
+      actions.patchEditProfileData(
+        (profile) => (profile.keyboardDesign = design),
+      );
     }
   },
 
