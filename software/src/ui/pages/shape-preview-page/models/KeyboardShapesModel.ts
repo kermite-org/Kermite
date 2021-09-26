@@ -6,12 +6,12 @@ import {
 } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { UiLocalStorage } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonStore';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
   shapeViewPersistStateSchema,
 } from '~/ui/pages/shape-preview-page/models/ShapeViewPersistState';
+import { projectPackagesReader } from '~/ui/store';
 
 export interface IKeyboardShapesModel {
   settings: IShapeViewPersistState;

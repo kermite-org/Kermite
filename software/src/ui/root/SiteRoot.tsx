@@ -14,19 +14,19 @@ import {
 } from '~/ui/base';
 import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
-  commitUiState,
-  lazyInitializeCoreServices,
-  uiReaders,
-  uiState,
-  uiStateDriverEffect,
-} from '~/ui/commonStore';
-import {
   DebugOverlay,
   ForegroundModalLayerRoot,
   SiteDpiScaler,
 } from '~/ui/components';
 import { WidgetZoneRoot } from '~/ui/pages/widget';
 import { ConfiguratorZoneRoot } from '~/ui/root/ConfiguratorZoneRoot';
+import {
+  commitUiState,
+  lazyInitializeCoreServices,
+  uiReaders,
+  uiState,
+  uiStateDriverEffect,
+} from '~/ui/store';
 
 setShortCssProcessor(shortCssProcessor);
 
@@ -49,6 +49,7 @@ const cssGlobal = css`
 
   body {
     overflow: hidden;
+    user-select: none;
   }
 
   select {

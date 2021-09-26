@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { WindowTitlePart } from '~/ui/components';
-import { WindowControlButtonsPart } from '~/ui/facets';
+import { WindowControlButtonsPart } from '~/ui/root/organisms';
 
 export const WindowTitleBarSection: FC = () => (
   <div css={style}>

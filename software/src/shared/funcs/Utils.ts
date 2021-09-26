@@ -376,6 +376,10 @@ export function uniqueArrayItemsByField<T>(items: T[], fieldKey: keyof T): T[] {
   );
 }
 
+export function checkArrayItemsUnique<T>(arr: T[]): boolean {
+  return arr.every((a, idx) => arr.indexOf(a) === idx);
+}
+
 export function bumpObjectProps<T extends {}>(obj: T, source: T) {
   getObjectKeys(obj).forEach((key) => obj[key]);
   getObjectKeys(source).forEach((key) => (obj[key] = source[key]));
@@ -401,4 +405,22 @@ export function splitBytesN(bytes: number[], n: number) {
   return Array(m)
     .fill(0)
     .map((_, i) => bytes.slice(i * n, i * n + n));
+}
+
+export function mergeModuleObjects<A, B, C, D>(
+  ...args: [A, B, C, D]
+): A & B & C & D;
+export function mergeModuleObjects<A, B, C>(...args: [A, B, C]): A & B & C;
+export function mergeModuleObjects<A, B>(...args: [A, B]): A & B;
+export function mergeModuleObjects<A>(...args: [A]): A {
+  const dest: any = {};
+  for (const src of args) {
+    Object.getOwnPropertyNames(src).forEach((key) => {
+      const descriptor = Object.getOwnPropertyDescriptor(src, key);
+      if (descriptor) {
+        Object.defineProperty(dest, key, descriptor);
+      }
+    });
+  }
+  return dest;
 }

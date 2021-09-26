@@ -1,5 +1,5 @@
 import { jsx, css, useLocal, FC } from 'qx';
-import { IGeneralMenuItem } from '~/ui/base';
+import { IGeneralMenuItem, uiTheme } from '~/ui/base';
 import { GeneralButtonMenuButton } from '~/ui/components/molecules/GeneralButtonMenu.Button';
 
 type Props = {
@@ -81,6 +81,8 @@ const cssMenuPanel = css`
       pointer-events: none;
       opacity: 0.5;
     }
+
+    transition: ${uiTheme.commonTransitionSpec};
   }
 `;
 

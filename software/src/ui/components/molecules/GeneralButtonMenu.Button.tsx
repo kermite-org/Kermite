@@ -1,4 +1,5 @@
 import { jsx, css, QxNode, FC } from 'qx';
+import { uiTheme } from '~/ui/base';
 
 type Props = {
   handler?: () => void;
@@ -46,4 +47,6 @@ const style = css`
     opacity: 0.5;
     pointer-events: none;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;

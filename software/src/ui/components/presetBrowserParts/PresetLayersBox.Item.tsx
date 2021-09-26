@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { withStopPropagation } from '~/ui/helpers';
+import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
   layerName: string;
@@ -33,4 +33,6 @@ const style = css`
   &:hover {
     opacity: 0.7;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;

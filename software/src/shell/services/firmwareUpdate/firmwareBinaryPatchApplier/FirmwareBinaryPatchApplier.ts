@@ -1,5 +1,12 @@
-import { compareArray, IKermiteStandardKeyboardSpec } from '~/shared';
-import { serializeCustomKeyboardSpec } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
+import {
+  compareArray,
+  IKermiteStandardKeyboardSpec,
+  IStandardBaseFirmwareType,
+} from '~/shared';
+import {
+  serializeCustomKeyboardSpec_Split,
+  serializeCustomKeyboardSpec_Unified,
+} from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
 import {
   decodeBytesFromHexFileContent,
   encodeBytesToHexFileContent,
@@ -34,13 +41,35 @@ function getCustomDataLocation(binaryBytes: number[]): number {
   return markerPosition + 4;
 }
 
+function checkCustomDataBytes(bytes: number[]) {
+  const valid = bytes.every((it) => isFinite(it) && 0 <= it && it <= 0xff);
+  if (!valid) {
+    throw new Error('invalid custom data bytes');
+  }
+}
+
+const specSerializerFunctionMap: {
+  [key in IStandardBaseFirmwareType]: (
+    spec: IKermiteStandardKeyboardSpec,
+    meta: IStandardKeyboardInjectedMetaData,
+  ) => number[];
+} = {
+  AvrUnified: serializeCustomKeyboardSpec_Unified,
+  RpUnified: serializeCustomKeyboardSpec_Unified,
+  AvrSplit: serializeCustomKeyboardSpec_Split,
+  RpSplit: serializeCustomKeyboardSpec_Split,
+};
+
 export function applyStandardFirmwareBinaryPatch(
   buffer: Uint8Array,
   firmwareBinaryFormat: 'hex' | 'uf2',
   targetKeyboardSpec: IKermiteStandardKeyboardSpec,
   meta: IStandardKeyboardInjectedMetaData,
 ): Uint8Array {
-  const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec, meta);
+  const specSerializerFunc =
+    specSerializerFunctionMap[targetKeyboardSpec.baseFirmwareType];
+  const customDataBytes = specSerializerFunc(targetKeyboardSpec, meta);
+  checkCustomDataBytes(customDataBytes);
 
   if (firmwareBinaryFormat === 'hex') {
     const hexFileContentText = new TextDecoder().decode(buffer);

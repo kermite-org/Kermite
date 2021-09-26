@@ -85,4 +85,5 @@ const style = css`
   &:hover {
     opacity: 0.7;
   }
+  transition: ${uiTheme.commonTransitionSpec};
 `;

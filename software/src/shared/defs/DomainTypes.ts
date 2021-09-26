@@ -48,6 +48,7 @@ export type IKermiteStandardKeyboardSpec = {
   lightingPin?: string;
   lightingNumLeds?: number;
   useLcd?: boolean;
+  singleWireSignalPin?: string;
 };
 
 export interface IProjectResourceInfo {
@@ -190,11 +191,8 @@ export type IProfileEditSource =
   | {
       type: 'InternalProfile';
       profileEntry: IProfileEntry;
-    }
-  | {
-      type: 'ExternalFile';
-      filePath: string;
     };
+
 export interface IProfileManagerCommand {
   creatProfile?: {
     name: string;
@@ -285,4 +283,4 @@ export type IBootloaderDeviceDetectionStatus =
       targetDeviceSig: string;
     };
 
-export type IProjectResourceItemType = 'preset' | 'layout' | 'firmware';
+export type IProjectResourceItemType = 'profile' | 'layout' | 'firmware';

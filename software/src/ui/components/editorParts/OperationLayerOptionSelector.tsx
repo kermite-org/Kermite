@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
-import { reflectValue } from '~/ui/helpers';
+import { reflectValue } from '~/ui/utils';
 
 type Props = {
   enabled: boolean;

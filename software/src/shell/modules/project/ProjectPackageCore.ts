@@ -35,11 +35,16 @@ function convertPackageFileContentToPackageInfo(
   origin: IResourceOrigin,
   packageName: string,
 ): IProjectPackageInfo {
+  let { keyboardName } = data;
+  if (keyboardName.toLowerCase() !== packageName) {
+    keyboardName = packageName;
+  }
   return {
+    ...data,
     projectKey: createProjectKey(origin, data.projectId),
     origin,
     packageName,
-    ...data,
+    keyboardName,
   };
 }
 
@@ -79,8 +84,13 @@ type IIndexFirmwaresContent = {
 };
 
 const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
+let cachedRemotePackages: IProjectPackageInfo[] | undefined;
 
 async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+  if (cachedRemotePackages) {
+    return cachedRemotePackages;
+  }
+
   const indexContent = (await fetchJson(
     `${remoteBaseUrl}/index.json`,
   )) as IIndexContent;
@@ -89,7 +99,7 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   const targetPaths = Object.keys(indexContent.files).filter((it) =>
     it.endsWith('.kmpkg.json'),
   );
-  return await Promise.all(
+  cachedRemotePackages = await Promise.all(
     targetPaths.map(async (path) => {
       const data = (await fetchJson(
         `${remoteBaseUrl}/${path}`,
@@ -99,6 +109,7 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
       return convertPackageFileContentToPackageInfo(data, origin, packageName);
     }),
   );
+  return cachedRemotePackages;
 }
 
 async function loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(): Promise<
@@ -179,6 +190,8 @@ export const projectPackageProvider = {
     return data.firmwares.map(mapIndexFirmwareEntryToCustomFirmwareInfo);
   },
   async openLocalProjectsFolder() {
-    await shell.openPath(getUserProjectsFolderPath());
+    const folderPath = getUserProjectsFolderPath();
+    await fsxEnsureFolderExists(folderPath);
+    await shell.openPath(folderPath);
   },
 };

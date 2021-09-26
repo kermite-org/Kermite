@@ -144,7 +144,7 @@ const int sm_rx1 = KM0_RP_SINGLEWIRE__PIO_SM_RX;
 #error KM0_RP_SINGLEWIRE__PIN_SIGNAL should be provided
 #endif
 
-const int pin_signal = KM0_RP_SINGLEWIRE__PIN_SIGNAL;
+static int pin_signal = KM0_RP_SINGLEWIRE__PIN_SIGNAL;
 
 #ifdef KM0_RP_SINGLEWIRE__PIN_DEBUG_TIMING_MONITOR
 const int pin_rcv_sideset = KM0_RP_SINGLEWIRE__PIN_DEBUG_TIMING_MONITOR;
@@ -217,6 +217,10 @@ static void deinit_rx_pcint() {
 
 //------------------------------------------------------------
 //exports
+
+void boardLink_singleWire_setSignalPin(int8_t pin) {
+  pin_signal = pin;
+}
 
 void boardLink_initialize() {
   setup_programs();

@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { createModal } from '~/ui/components/overlay';
-import { reflectFieldValue } from '~/ui/helpers';
+import { reflectFieldValue } from '~/ui/utils';
 import {
   CommonDialogFrame,
   ClosableOverlay,
@@ -79,8 +79,13 @@ export const modalConfirm = createModal(
 );
 
 export const modalTextEdit = createModal(
-  (args: { message: string; defaultText?: string; caption: string }) => {
-    const { message, defaultText, caption } = args;
+  (args: {
+    message: string;
+    defaultText?: string;
+    caption: string;
+    validator?: (text: string) => string | undefined;
+  }) => {
+    const { message, defaultText, caption, validator } = args;
     const editValues = {
       text: defaultText || '',
     };
@@ -99,6 +104,16 @@ export const modalTextEdit = createModal(
         padding-left: 4px;
       `;
 
+      const cssErrorText = css`
+        margin-top: 5px;
+        color: red;
+        min-height: 20px;
+      `;
+
+      const baseValid = !!editValues.text && editValues.text !== defaultText;
+      const errorText = baseValid && validator?.(editValues.text);
+      const isValid = baseValid && !errorText;
+
       return (
         <ClosableOverlay close={close}>
           <CommonDialogFrame caption={caption} close={close}>
@@ -109,13 +124,16 @@ export const modalTextEdit = createModal(
                   type="text"
                   css={cssCommonTextInput}
                   value={editValues.text}
-                  onChange={reflectFieldValue(editValues, 'text')}
+                  onInput={reflectFieldValue(editValues, 'text')}
                   spellcheck={'false' as any}
                 />
               </div>
+              <div css={cssErrorText}>{errorText}</div>
             </DialogContentRow>
             <DialogButtonsRow>
-              <DialogButton onClick={submit}>OK</DialogButton>
+              <DialogButton onClick={submit} disabled={!isValid}>
+                OK
+              </DialogButton>
             </DialogButtonsRow>
           </CommonDialogFrame>
         </ClosableOverlay>

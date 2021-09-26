@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { reflectValue } from '~/ui/helpers';
+import { reflectValue } from '~/ui/utils';
 
 interface Props {
   min: number;

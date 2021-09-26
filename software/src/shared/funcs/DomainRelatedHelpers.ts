@@ -137,13 +137,13 @@ export function encodeProjectResourceItemKey(
   itemType: IProjectResourceItemType,
   itemName: string,
 ): string {
-  return `${itemType}#${itemName}`;
+  return `${itemType}:${itemName}`;
 }
 
 export function decodeProjectResourceItemKey(key: string): {
   itemType: IProjectResourceItemType;
   itemName: string;
 } {
-  const [itemType, itemName] = key.split('#');
+  const [itemType, itemName] = key.split(':');
   return { itemType: itemType as IProjectResourceItemType, itemName };
 }

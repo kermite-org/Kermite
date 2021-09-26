@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'qx';
 import { CheckBoxLine } from '~/ui/components';
-import { fieldSetter } from '~/ui/helpers';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models';
+import { fieldSetter } from '~/ui/utils';
 
 interface Props {
   settings: IShapeViewPersistState;

@@ -227,8 +227,9 @@ export const styled: {
   {
     get: <K extends keyof JSX.IntrinsicElements>(_target: any, tag: K) => {
       return (...args: Parameters<typeof css>) => {
-        const className = css(...args);
+        const classNameBase = css(...args);
         return (props: JSX.IntrinsicElements[K]) => {
+          const className = [classNameBase, props.className || ''].join(' ');
           return jsxCreateElementFunction(tag, { ...props, className });
         };
       };

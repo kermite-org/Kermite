@@ -1,7 +1,7 @@
 export type PagePaths =
   | '/'
   | '/assigner'
-  | '/layouter'
+  | '/layoutEditor'
   | '/shapePreview'
   | '/firmwareUpdate'
   | '/presetBrowser'
@@ -22,19 +22,24 @@ export type IPageSpec_ProjectPresetEdit = {
   presetName: string;
 };
 
-export type IPageSpec_ProjectStandardFirmwareEdit = {
-  type: 'projectStandardFirmwareEdit';
-  firmwareName: string;
+export type IPageSpec_ProjectCustomFirmwareCreate = {
+  type: 'projectCustomFirmwareCreate';
 };
 
-export type IPageModalSpec_ProjectCustomFirmwareSetup = {
-  type: 'projectCustomFirmwareSetup';
+export type IPageSpec_ProjectStandardFirmwareCreate = {
+  type: 'projectStandardFirmwareCreate';
+};
+
+export type IPageSpec_ProjectStandardFirmwareEdit = {
+  type: 'projectStandardFirmwareEdit';
   firmwareName: string;
 };
 
 export type IPageSpec =
   | IPageSpec_ProjectLayoutEdit
   | IPageSpec_ProjectPresetEdit
+  | IPageSpec_ProjectCustomFirmwareCreate
+  | IPageSpec_ProjectStandardFirmwareCreate
   | IPageSpec_ProjectStandardFirmwareEdit;
 
-export type IPageModelSpec = IPageModalSpec_ProjectCustomFirmwareSetup;
+export type IPageModelSpec = never;

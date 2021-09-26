@@ -3,14 +3,14 @@ import {
   loadLocalStorageKeyboardDesignOrDefault,
   saveLocalStorageKeyboardDesign,
 } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
-import { UiLayouterCore } from '~/ui/features';
+import { LayoutEditorCore } from '~/ui/editors';
 
-export const MockPageLayouterDevelopment = () => {
+export const MockPageLayoutEditorDevelopment = () => {
   useEffect(() => {
-    UiLayouterCore.loadEditDesign(loadLocalStorageKeyboardDesignOrDefault());
+    LayoutEditorCore.loadEditDesign(loadLocalStorageKeyboardDesignOrDefault());
     return () =>
-      saveLocalStorageKeyboardDesign(UiLayouterCore.emitSavingDesign());
+      saveLocalStorageKeyboardDesign(LayoutEditorCore.emitSavingDesign());
   }, []);
 
-  return <UiLayouterCore.Component />;
+  return <LayoutEditorCore.Component />;
 };

@@ -4,7 +4,7 @@ import {
   IProjectResourceItemType,
 } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { withStopPropagation } from '~/ui/helpers';
+import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
   className?: string;
@@ -27,7 +27,7 @@ function createResourceItems(
   selectedItemKey: string,
   setSelectedItemKey: (key: string) => void,
 ): {
-  presets: IProjectResourceListItem[];
+  profiles: IProjectResourceListItem[];
   layouts: IProjectResourceListItem[];
   firmwares: IProjectResourceListItem[];
 } {
@@ -43,11 +43,11 @@ function createResourceItems(
       },
     };
   });
-  const presets = resourceItems.filter((it) => it.itemType === 'preset');
+  const profiles = resourceItems.filter((it) => it.itemType === 'profile');
   const layouts = resourceItems.filter((it) => it.itemType === 'layout');
   const firmwares = resourceItems.filter((it) => it.itemType === 'firmware');
   return {
-    presets,
+    profiles,
     layouts,
     firmwares,
   };
@@ -60,14 +60,14 @@ export const ProjectResourceList: FC<Props> = ({
   setSelectedItemKey,
   clearSelection,
 }) => {
-  const { presets, layouts, firmwares } = createResourceItems(
+  const { profiles, layouts, firmwares } = createResourceItems(
     resourceItemKeys,
     selectedItemKey,
     setSelectedItemKey,
   );
   return (
     <div css={style} className={className} onClick={clearSelection}>
-      <ResourceItemsBlock groupName="presets" items={presets} />
+      <ResourceItemsBlock groupName="profiles" items={profiles} />
       <ResourceItemsBlock groupName="layouts" items={layouts} />
       <ResourceItemsBlock groupName="firmwares" items={firmwares} />
     </div>
@@ -123,6 +123,8 @@ const style = css`
         &.--selected {
           background: ${uiTheme.colors.clSelectHighlight};
         }
+
+        transition: ${uiTheme.commonTransitionSpec};
       }
     }
   }

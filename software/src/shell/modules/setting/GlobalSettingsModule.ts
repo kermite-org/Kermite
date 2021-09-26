@@ -5,12 +5,12 @@ import {
 } from '~/shared';
 import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { applicationStorage } from '~/shell/base';
+import { checkLocalRepositoryFolder } from '~/shell/loaders/LocalResourceHelper';
 import {
   commitCoreState,
   coreState,
   createCoreModule,
 } from '~/shell/modules/core';
-import { checkLocalRepositoryFolder } from '~/shell/modules/project/projectResources/LocalResourceHelper';
 
 const globalSettingsModuleHelpers = {
   fixGlobalSettingsOnLoad(globalSettings: IGlobalSettings) {

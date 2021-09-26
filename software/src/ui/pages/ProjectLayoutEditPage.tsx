@@ -1,20 +1,21 @@
 import { css, FC, jsx } from 'qx';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { uiConfiguration, uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/commonStore';
-import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
+import { RouteHeaderBar } from '~/ui/components';
 import {
-  LayouterGeneralComponent,
-  LayouterGeneralComponent_OutputPropsSupplier,
-} from '~/ui/features';
-import { useMemoEx } from '~/ui/helpers';
+  LayoutEditorGeneralComponent,
+  LayoutEditorGeneralComponent_OutputPropsSupplier,
+  LayoutEditorCore,
+} from '~/ui/editors';
+import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
+import { useMemoEx } from '~/ui/utils';
 
 type Props = {
   spec: IPageSpec_ProjectLayoutEdit;
 };
 
-const readers = {
+const helpers = {
   getSourceLayoutEntryOrCreate(layoutName: string): IProjectLayoutEntry {
     const projectInfo = uiReaders.editTargetProject;
     const layoutEntry = projectInfo?.layouts.find(
@@ -25,18 +26,23 @@ const readers = {
 };
 
 export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
-  const sourceLayoutEntry = useMemoEx(readers.getSourceLayoutEntryOrCreate, [
+  const sourceLayoutEntry = useMemoEx(helpers.getSourceLayoutEntryOrCreate, [
     layoutName,
   ]);
   const { isModified, emitSavingDesign } =
-    LayouterGeneralComponent_OutputPropsSupplier;
+    LayoutEditorGeneralComponent_OutputPropsSupplier;
 
   const saveHandler = () => {
-    projectPackagesWriter.saveLocalProjectLayout({
+    const newLayoutEntry: IProjectLayoutEntry = {
       ...sourceLayoutEntry,
       data: emitSavingDesign(),
-    });
-    uiActions.closeSubPage();
+    };
+    projectPackagesWriter.saveLocalProjectLayout(newLayoutEntry);
+    if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
+      LayoutEditorCore.rebase();
+    } else {
+      uiActions.closeSubPage();
+    }
   };
   return (
     <div css={style}>
@@ -46,7 +52,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
         canSave={isModified}
         saveHandler={saveHandler}
       />
-      <LayouterGeneralComponent layout={sourceLayoutEntry.data} />
+      <LayoutEditorGeneralComponent layout={sourceLayoutEntry.data} />
     </div>
   );
 };

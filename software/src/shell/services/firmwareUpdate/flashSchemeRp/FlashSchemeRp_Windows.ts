@@ -1,6 +1,6 @@
 import { createDictionaryFromKeyValues } from '~/shared';
 import { executeShellCommandAsync, fsxCopyFile } from '~/shell/funcs';
-import { IFirmwareUpdateScheme } from '~/shell/services/firmwareUpdate/Interfaces';
+import { IFirmwareUpdateScheme } from '~/shell/services/firmwareUpdate/types';
 
 async function findMountedDriveByVolumeName(
   volumeName: string,

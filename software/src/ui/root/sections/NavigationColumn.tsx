@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/facets';
+import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/root/organisms';
 
 type Props = {
   disabled?: boolean;

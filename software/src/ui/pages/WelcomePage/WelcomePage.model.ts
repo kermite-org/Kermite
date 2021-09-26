@@ -2,7 +2,7 @@ import {
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
-import { uiActions, uiState } from '~/ui/commonStore';
+import { uiActions, uiState } from '~/ui/store';
 
 interface WelcomePageModel {
   appVersion: string;
@@ -10,7 +10,7 @@ interface WelcomePageModel {
   setLanguageEnglish(): void;
   isLanguageJapanese: boolean;
   setLanguageJapanese(): void;
-  openOnboardingPanel(): void;
+  openSetupNavigationPanel(): void;
   isDarkTheme: boolean;
   setDarkTheme(isDark: boolean): void;
 }
@@ -25,7 +25,7 @@ export function useWelcomePageModel(): WelcomePageModel {
   const isLanguageJapanese = currentLanguage === 'japanese';
   const setLanguageJapanese = () => changeLanguage('japanese');
 
-  const { openOnboardingPanel } = uiActions;
+  const { openSetupNavigationPanel } = uiActions;
 
   const isDarkTheme = currentThemeKey === 'dark';
   const setDarkTheme = (isDark: boolean) =>
@@ -37,7 +37,7 @@ export function useWelcomePageModel(): WelcomePageModel {
     setLanguageEnglish,
     isLanguageJapanese,
     setLanguageJapanese,
-    openOnboardingPanel,
+    openSetupNavigationPanel,
     isDarkTheme,
     setDarkTheme,
   };

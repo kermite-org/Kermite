@@ -1,6 +1,6 @@
 // import drivelist from 'drivelist';
 import { fsExistsSync, fsxCopyFile } from '~/shell/funcs';
-import { IFirmwareUpdateScheme } from '~/shell/services/firmwareUpdate/Interfaces';
+import { IFirmwareUpdateScheme } from '~/shell/services/firmwareUpdate/types';
 
 export class FirmwareUpdateSchemeRp_Mac implements IFirmwareUpdateScheme {
   resetDeviceDetectionStatus() {}

@@ -28,37 +28,39 @@ static const int pin_masterSlaveDetermination = -1;
 #define KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET (KM0_KEYBOARD__NUM_SCAN_SLOTS / 2)
 #endif
 
-#define NumScanSlotsAll KM0_KEYBOARD__NUM_SCAN_SLOTS
-#define RighthandScanSlotsOffset KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
+#define _NumScanSlotsAll KM0_KEYBOARD__NUM_SCAN_SLOTS
+#define _RighthandScanSlotsOffset KM0_KEYBOARD__RIGHTHAND_SCAN_SLOTS_OFFSET
 
-#define NumScanSlotsLeft RighthandScanSlotsOffset
-#define NumScanSlotsRight (NumScanSlotsAll - NumScanSlotsLeft)
+#define _NumScanSlotsLeft _RighthandScanSlotsOffset
+#define _NumScanSlotsRight (_NumScanSlotsAll - _NumScanSlotsLeft)
 
 // #define NumScanSlotBytesLeft Ceil(NumScanSlotsLeft / 8)
-#define NumScanSlotBytesLeft ((NumScanSlotsLeft + 7) / 8)
-#define NumScanSlotBytesRight ((NumScanSlotsRight + 7) / 8)
+#define _NumScanSlotBytesLeft ((_NumScanSlotsLeft + 7) / 8)
+#define _NumScanSlotBytesRight ((_NumScanSlotsRight + 7) / 8)
 
-#define NumScanSlotBytesLarger (NumScanSlotBytesLeft > NumScanSlotBytesRight ? NumScanSlotBytesLeft : NumScanSlotBytesRight)
-#define SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
-#define SingleWireMaxPacketSize (SingleWireMaxPacketSizeTmp > 4 ? SingleWireMaxPacketSizeTmp : 4)
+#define NumScanSlotBytesLarger (_NumScanSlotBytesLeft > _NumScanSlotBytesRight ? _NumScanSlotBytesLeft : _NumScanSlotBytesRight)
+#define _SingleWireMaxPacketSizeTmp (NumScanSlotBytesLarger + 1)
+#define SingleWireMaxPacketSize (_SingleWireMaxPacketSizeTmp > 4 ? _SingleWireMaxPacketSizeTmp : 4)
 
-// #ifdef KERMITE_TARGET_MCU_RP2040
-// static const int heartbeat_led_tick_division_shift = 1;
-// #else
-// static const int heartbeat_led_tick_division_shift = 0;
-// #endif
+//dynamic overridable values
+static uint8_t numScanSlots = _NumScanSlotsAll;
+static uint8_t righthandScanSlotsOffset = _RighthandScanSlotsOffset;
+static uint8_t numScanSlotsLeft = _NumScanSlotsLeft;
+static uint8_t numScanSlotsRight = _NumScanSlotsRight;
+static uint8_t numScanSlotBytesLeft = _NumScanSlotBytesLeft;
+static uint8_t numScanSlotBytesRight = _NumScanSlotBytesRight;
 
 enum {
   SplitOp_MasterOath = 0xC0,                  //Master --> Slave
   SplitOp_InputScanSlotStatesRequest = 0xC1,  //Master --> Slave
   SplitOp_InputScanSlotStatesResponse = 0xC2, //Masetr <-- Slave
-  //Masater-->Slave
+  //Master-->Slave
   SplitOp_TaskOrder_FlashHeartbeat = 0xD1,
   SplitOp_TaskOrder_ScanKeyStates = 0xD2,
   SplitOp_TaskOrder_UpdateRgbLeds = 0xD3,
   SplitOp_TaskOrder_UpdateOled = 0xD4,
   SplitOp_IdleCheck = 0xDF,
-  //Masater-->Slave
+  //Master-->Slave
   SplitOp_MasterScanSlotStateChanged = 0xE1,
   SplitOp_MasterParameterChanged = 0xE2,
   //Master <-- Slave
@@ -194,7 +196,7 @@ static void master_pullAltSideKeyStates() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
 
   bool isSlaveRight = !isRightHand;
-  uint8_t refSize = (isSlaveRight ? NumScanSlotBytesRight : NumScanSlotBytesLeft) + 1;
+  uint8_t refSize = (isSlaveRight ? numScanSlotBytesRight : numScanSlotBytesLeft) + 1;
 
   if (sz == refSize && sw_rxbuf[0] == SplitOp_InputScanSlotStatesResponse) {
     uint8_t *payloadBytes = sw_rxbuf + 1;
@@ -202,10 +204,10 @@ static void master_pullAltSideKeyStates() {
 
     if (isSlaveRight) {
       //masterが左手側の場合inputScanSlotFlagsの後半部分にslave側のボードのキー状態を格納する
-      utils_copyBitFlagsBuf(inputScanSlotFlags, RighthandScanSlotsOffset, payloadBytes, 0, NumScanSlotsRight);
+      utils_copyBitFlagsBuf(inputScanSlotFlags, righthandScanSlotsOffset, payloadBytes, 0, numScanSlotsRight);
     } else {
       //masterが右手側の場合inputScanSlotFlagsの前半部分にslave側のボードのキー状態を格納する
-      utils_copyBitFlagsBuf(inputScanSlotFlags, 0, payloadBytes, 0, NumScanSlotsLeft);
+      utils_copyBitFlagsBuf(inputScanSlotFlags, 0, payloadBytes, 0, numScanSlotsLeft);
     }
   } else {
     printf("no keystate response from slave\n");
@@ -349,18 +351,18 @@ static void slave_respondNack() {
 static void slave_prepareKeyStateSendingBytes() {
   uint8_t *inputScanSlotFlags = keyboardMain_getInputScanSlotFlags();
   if (isRightHand) {
-    //slaveが右手側の場合inputScanSlotFlagsの後ろ半分にあるキー状態をmasaterに送る
-    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, RighthandScanSlotsOffset, NumScanSlotsRight);
-    slaveSendingKeyStateBytesLen = NumScanSlotBytesRight;
+    //slaveが右手側の場合inputScanSlotFlagsの後ろ半分にあるキー状態をmasterに送る
+    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, righthandScanSlotsOffset, numScanSlotsRight);
+    slaveSendingKeyStateBytesLen = numScanSlotBytesRight;
   } else {
-    //slaveが左手側の場合inputScanSlotFlagsの前半分にあるキー状態をmasaterに送る
-    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, 0, NumScanSlotsLeft);
-    slaveSendingKeyStateBytesLen = NumScanSlotBytesLeft;
+    //slaveが左手側の場合inputScanSlotFlagsの前半分にあるキー状態をmasterに送る
+    utils_copyBitFlagsBuf(slaveSendingKeyStateBytes, 0, inputScanSlotFlags, 0, numScanSlotsLeft);
+    slaveSendingKeyStateBytesLen = numScanSlotBytesLeft;
   }
 }
 
 //単線通信の受信割り込みコールバック
-static void slave_onRecevierInterruption() {
+static void slave_onReceiverInterruption() {
   uint8_t sz = boardLink_readRxBuffer(sw_rxbuf, SingleWireMaxPacketSize);
   if (sz > 0) {
     uint8_t cmd = sw_rxbuf[0];
@@ -444,12 +446,12 @@ static void slave_ledTask(uint32_t step) {
 
 static void slave_start() {
   keyboardMain_setAsSplitSlave();
-  boardLink_setupSlaveReceiver(slave_onRecevierInterruption);
+  boardLink_setupSlaveReceiver(slave_onReceiverInterruption);
 
   while (1) {
     if (taskOrder == SplitOp_TaskOrder_ScanKeyStates) {
       keyboardMain_udpateKeyScanners();
-      // keyboardMain_updateKeyInidicatorLed();
+      // keyboardMain_updateKeyIndicatorLed();
       keyboardMain_updateInputSlotInidicatorLed();
       slave_prepareKeyStateSendingBytes();
       taskOrder = 0;
@@ -509,8 +511,8 @@ static void detection_ledTask(uint32_t step) {
 }
 
 //USB接続が確立していない期間の動作
-//双方待機し、USB接続が確立すると自分がMasterになり、相手にMaseter確定通知パケットを送る
-static bool detenction_determineMasterSlaveByUsbConnection() {
+//双方待機し、USB接続が確立すると自分がMasterになり、相手にMaster確定通知パケットを送る
+static bool detection_determineMasterSlaveByUsbConnection() {
   boardLink_initialize();
   boardLink_setupSlaveReceiver(detection_onDataReceivedFromMaster);
   system_enableInterrupts();
@@ -538,7 +540,7 @@ static bool detenction_determineMasterSlaveByUsbConnection() {
   return isMaster;
 }
 
-static bool detection_detemineMasterSlaveByPin() {
+static bool detection_determineMasterSlaveByPin() {
   digitalIo_setInputPullup(pin_masterSlaveDetermination);
   delayMs(1);
   return digitalIo_read(pin_masterSlaveDetermination) == 1;
@@ -569,7 +571,7 @@ static void showModeByLedBlinkPattern(bool isMaster) {
 static void startFixedMode() {
   printf("master/slave fixed mode\n");
   keyboardMain_initialize();
-  bool isMaster = detection_detemineMasterSlaveByPin();
+  bool isMaster = detection_determineMasterSlaveByPin();
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);
 
@@ -587,7 +589,7 @@ static void startDynamicMode() {
   configManager_setParameterExposeFlag(SystemParameter_MasterSide);
   keyboardMain_initialize();
   usbIoCore_initialize();
-  bool isMaster = detenction_determineMasterSlaveByUsbConnection();
+  bool isMaster = detection_determineMasterSlaveByUsbConnection();
   printf("isMaster:%d\n", isMaster);
   showModeByLedBlinkPattern(isMaster);
   if (isMaster) {
@@ -596,6 +598,15 @@ static void startDynamicMode() {
     usbIoCore_deInit();
     slave_start();
   }
+}
+
+void splitKeyboard_setNumScanSlots(uint8_t _numScanSlotsLeft, uint8_t _numScanSlotsRight) {
+  numScanSlots = _numScanSlotsLeft + _numScanSlotsRight;
+  righthandScanSlotsOffset = _numScanSlotsLeft;
+  numScanSlotsLeft = _numScanSlotsLeft;
+  numScanSlotsRight = _numScanSlotsRight;
+  numScanSlotBytesLeft = (numScanSlotsLeft + 7) / 8;
+  numScanSlotBytesRight = (numScanSlotsRight + 7) / 8;
 }
 
 void splitKeyboard_setBoardConfigCallback(void (*callback)(int8_t side)) {

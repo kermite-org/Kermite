@@ -7,23 +7,24 @@ import {
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/editors';
+import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
-} from '~/ui/commonStore';
-import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { resourceManagementUtils } from '~/ui/helpers';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
+} from '~/ui/store';
+import { resourceManagementUtils } from '~/ui/utils';
 
 export interface IProjectStandardFirmwareEditPageModel {
+  editFirmwareName: string;
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
   canSave: boolean;
   saveHandler(): void;
 }
 
-async function inputSavingFirmwareName(): Promise<string | undefined> {
+export async function inputSavingFirmwareName(): Promise<string | undefined> {
   const allVariationNames =
     uiReaders.editTargetProject?.firmwares.map((it) => it.firmwareName) || [];
   return await resourceManagementUtils.inputSavingResourceName({
@@ -70,6 +71,7 @@ const actions = {
     }
   },
   async saveHandler() {
+    const isCreate = !store.sourceEntry.firmwareName;
     if (!store.sourceEntry.firmwareName) {
       const newVariationName = await inputSavingFirmwareName();
       if (!newVariationName) {
@@ -82,26 +84,30 @@ const actions = {
       ...store.sourceEntry,
       standardFirmwareConfig: emitSavingEditValues(),
     };
-    projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    await projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
 
-    projectResourceActions.setSelectedItemKey(
+    projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
-    uiActions.closeSubPage();
+    if (isCreate) {
+      uiActions.closeSubPage();
+    } else {
+      store.sourceEntry = newFirmwareEntry;
+    }
   },
 };
 
 export function useProjectStandardFirmwareEditPageModel(
-  firmwareName: string,
+  sourceFirmwareName: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(firmwareName),
-    [firmwareName],
+    () => actions.loadSourceFirmwareEntry(sourceFirmwareName),
+    [sourceFirmwareName],
   );
   const {
-    sourceEntry: { standardFirmwareConfig },
+    sourceEntry: { standardFirmwareConfig, firmwareName: editFirmwareName },
     canSave,
   } = readers;
   const { saveHandler } = actions;
-  return { standardFirmwareConfig, canSave, saveHandler };
+  return { editFirmwareName, standardFirmwareConfig, canSave, saveHandler };
 }

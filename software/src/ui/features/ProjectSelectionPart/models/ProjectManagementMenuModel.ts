@@ -1,12 +1,8 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectPackagesReader } from '~/ui/commonStore';
-import { projectManagementMenuActions } from '~/ui/features/ProjectSelectionPart/models/ProjectManagementMenuActions';
+import { projectManagementMenuActions } from '~/ui/features/ProjectSelectionPart/store';
+import { projectPackagesReader } from '~/ui/store';
 
-export type ProjectManagementMenuModel = {
-  menuItems: IGeneralMenuItem[];
-};
-
-function createMenuItems(): IGeneralMenuItem[] {
+export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
   return [
     {
       type: 'menuEntry',
@@ -21,8 +17,8 @@ function createMenuItems(): IGeneralMenuItem[] {
     {
       type: 'menuEntry',
       text: 'rename',
-      handler: () => {},
-      disabled: true,
+      handler: projectManagementMenuActions.handleRenameProject,
+      disabled: !projectPackagesReader.getEditTargetProject(),
     },
     {
       type: 'menuEntry',
@@ -36,10 +32,4 @@ function createMenuItems(): IGeneralMenuItem[] {
       handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
     },
   ];
-}
-
-export function useProjectManagementMenuModel(): ProjectManagementMenuModel {
-  return {
-    menuItems: createMenuItems(),
-  };
 }

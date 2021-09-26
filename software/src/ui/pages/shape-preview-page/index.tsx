@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
-import { GeneralSelector } from '~/ui/components';
+import { CommonPageFrame, GeneralSelector } from '~/ui/components';
 import { PreviewKeyboardShapeView } from '~/ui/components/keyboard';
 import { useShapePreviewPageModel } from '~/ui/pages/shape-preview-page/models';
 import { ShapePreviewOptionsBox } from '~/ui/pages/shape-preview-page/organisms/ShapePreviewOptionsBox';
@@ -14,40 +13,36 @@ export const ShapePreviewPage: FC = () => {
     holdKeyIndices,
   } = useShapePreviewPageModel();
   return (
-    <div css={style}>
-      <div>keyboard shape preview</div>
-      <div class="topRow">
-        <GeneralSelector {...projectSelectorSource} width={160} />
-        <GeneralSelector {...layoutSelectorSource} width={160} />
-        <div class="spacer" />
-        <ShapePreviewOptionsBox settings={settings} />
+    <CommonPageFrame pageTitle="Keyboard Shape Preview">
+      <div css={style}>
+        <div class="topRow">
+          <GeneralSelector {...projectSelectorSource} width={160} />
+          <GeneralSelector {...layoutSelectorSource} width={160} />
+          <div class="spacer" />
+          <ShapePreviewOptionsBox settings={settings} />
+        </div>
+        <div class="keyboardRow">
+          {loadedDesign && (
+            <PreviewKeyboardShapeView
+              keyboardDesign={loadedDesign}
+              settings={settings}
+            />
+          )}
+        </div>
+        <div class="restRow">
+          hold key indices: {JSON.stringify(holdKeyIndices)}
+        </div>
       </div>
-      <div class="keyboardRow">
-        {loadedDesign && (
-          <PreviewKeyboardShapeView
-            keyboardDesign={loadedDesign}
-            settings={settings}
-          />
-        )}
-      </div>
-      <div class="restRow">
-        hold key indices: {JSON.stringify(holdKeyIndices)}
-      </div>
-    </div>
+    </CommonPageFrame>
   );
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-  height: 100%;
-  padding: 10px;
-  > * + * {
-    margin-top: 5px;
-  }
+  flex-grow: 1;
 
-  display: flex;
-  flex-direction: column;
+  > * + * {
+    margin-top: 10px;
+  }
 
   > * {
     flex-shrink: 0;

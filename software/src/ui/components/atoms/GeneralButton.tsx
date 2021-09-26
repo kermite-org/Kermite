@@ -81,4 +81,6 @@ const style = css`
     cursor: inherit;
     opacity: 0.3;
   }
+
+  transition: ${uiTheme.commonTransitionSpec};
 `;
