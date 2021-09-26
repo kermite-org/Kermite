@@ -7,7 +7,7 @@ import {
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors';
 import {
   profilesActions,
   profilesReader,
@@ -104,7 +104,7 @@ function makeProfileSelectionSource(
 }
 
 const loadProfile = async (profileEntry: IProfileEntry) => {
-  if (editorModel.checkDirty()) {
+  if (assignerModel.checkDirty()) {
     const ok = await modalConfirm({
       caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
       message: texts.label_assigner_confirmModal_loadProfile_modalMessage,

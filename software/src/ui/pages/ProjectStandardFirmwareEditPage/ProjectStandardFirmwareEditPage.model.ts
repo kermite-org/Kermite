@@ -8,13 +8,13 @@ import {
   IStandardFirmwareEntry,
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
-import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/features/StandardFirmwareEditor/StandardFirmwareEditor';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
+import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/editors';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
+  projectResourceStore,
 } from '~/ui/store';
 import { resourceManagementUtils } from '~/ui/utils';
 
@@ -86,7 +86,7 @@ const actions = {
     };
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
 
-    projectResourceActions.setSelectedItemKey(
+    projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {

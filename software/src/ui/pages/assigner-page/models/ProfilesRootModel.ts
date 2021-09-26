@@ -1,15 +1,15 @@
 import { useEffect } from 'qx';
 import { fallbackProfileData } from '~/shared';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
-import { removeInvalidProfileAssigns } from '~/ui/features/ProfileEditor/models/ProfileDataHelper';
+import { assignerModel } from '~/ui/editors';
+import { removeInvalidProfileAssigns } from '~/ui/editors/ProfileEditor/models/ProfileDataHelper';
 import { profilesReader } from '~/ui/pages/assigner-page/models/ProfilesReader';
 import { dispatchCoreAction } from '~/ui/store';
 
 function affectStoreLoadedProfileDataToModelProfileData() {
   const { loadedProfileData } = profilesReader;
   useEffect(() => {
-    if (editorModel.loadedProfileData !== loadedProfileData) {
-      editorModel.loadProfileData(loadedProfileData);
+    if (assignerModel.loadedProfileData !== loadedProfileData) {
+      assignerModel.loadProfileData(loadedProfileData);
     }
   }, [loadedProfileData]);
 }
@@ -17,8 +17,8 @@ function affectStoreLoadedProfileDataToModelProfileData() {
 let profileStringified: string = JSON.stringify(fallbackProfileData);
 
 function affectModelProfileDataToStoreEditProfile() {
-  removeInvalidProfileAssigns(editorModel.profileData);
-  const str = JSON.stringify(editorModel.profileData);
+  removeInvalidProfileAssigns(assignerModel.profileData);
+  const str = JSON.stringify(assignerModel.profileData);
   if (str !== profileStringified) {
     const obj = JSON.parse(str);
     dispatchCoreAction({

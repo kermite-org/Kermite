@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectCustomFirmwareEdit } from '~/ui/commonModels';
-import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
-import { CustomFirmwareEditor } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
+import { RouteHeaderBar } from '~/ui/components';
+import { CustomFirmwareEditor } from '~/ui/editors';
 import { useProjectCustomFirmwareEditPageModel } from '~/ui/pages/ProjectCustomFirmwareEditPage/ProjectCustomFirmwareEditPage.model';
 
 type Props = {

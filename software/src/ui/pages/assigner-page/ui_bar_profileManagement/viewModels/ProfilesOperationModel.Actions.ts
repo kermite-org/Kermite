@@ -3,7 +3,7 @@ import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors';
 import {
   profilesActions,
   profilesReader,
@@ -13,7 +13,7 @@ import { commitUiState, uiActions, uiState } from '~/ui/store';
 import { resourceManagementUtils } from '~/ui/utils';
 
 async function checkShallLoadData(): Promise<boolean> {
-  if (!editorModel.checkDirty()) {
+  if (!assignerModel.checkDirty()) {
     return true;
   }
   return await modalConfirm({
@@ -104,7 +104,7 @@ const deleteProfile = async () => {
 
 const handleSaveUnsavedProfile = async () => {
   if (profilesReader.profileEditSource.type !== 'InternalProfile') {
-    const projectId = editorModel.profileData.projectId;
+    const projectId = assignerModel.profileData.projectId;
     const newProfileName = await inputNewProfileName(
       texts.label_assigner_profileNameEditModal_modalTitleSave,
       projectId,

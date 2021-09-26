@@ -1,20 +1,12 @@
-import { useState } from 'qx';
+import { useEffect } from 'qx';
 import {
-  createFallbackPersistKeyboardDesign,
-  DisplayKeyboardDesignLoader,
-  getOriginAndProjectIdFromProjectKey,
-  IProjectPackageInfo,
-  IResourceOrigin,
-  sortOrderBy,
-} from '~/shared';
-import { featureFlags } from '~/shared/defs/FeatureFlags';
-import {
+  IGeneralMenuItem,
   IProjectKeyboardListProjectItem,
   ISelectorSource,
   makePlainSelectorOption,
 } from '~/ui/base';
-import { uiReaders, globalSettingsWriter } from '~/ui/store';
-import { useMemoEx } from '~/ui/utils';
+import { createProjectManagementMenuItems } from '~/ui/features/ProjectSelectionPart/models/ProjectManagementMenuModel';
+import { uiReaders, projectSelectionStore } from '~/ui/store';
 
 type IProjectSelectionPageModel = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
@@ -23,53 +15,21 @@ type IProjectSelectionPageModel = {
   canSelectResourceOrigin: boolean;
   resourceOriginSelectorSource: ISelectorSource;
   isMenuButtonVisible: boolean;
+  menuItems: IGeneralMenuItem[];
 };
 
-function createSourceProjectItems(
-  allProjectPackageInfos: IProjectPackageInfo[],
-  resourceOrigin: IResourceOrigin,
-): IProjectKeyboardListProjectItem[] {
-  const filteredProjects = allProjectPackageInfos.filter(
-    (info) => info.origin === resourceOrigin,
-  );
-  filteredProjects.sort(sortOrderBy((it) => it.keyboardName));
-  return filteredProjects.map((info) => ({
-    projectId: info.projectId,
-    projectKey: info.projectKey,
-    keyboardName: info.keyboardName,
-    design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-      info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
-    ),
-  }));
-}
-
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
-  const { isDeveloperMode } = uiReaders;
-  const canSelectResourceOrigin =
-    featureFlags.allowEditLocalProject && isDeveloperMode;
+  const {
+    readers: { canSelectResourceOrigin, tabResourceOrigin, sourceProjectItems },
+    actions: { setTabResourceOrigin, setProjectKey, resetState },
+  } = projectSelectionStore;
 
-  const [resourceOrigin, setResourceOrigin] = useState(
-    canSelectResourceOrigin
-      ? uiReaders.globalProjectOrigin || 'online'
-      : 'online',
-  );
-
-  const sourceProjectItems = useMemoEx(createSourceProjectItems, [
-    uiReaders.allProjectPackageInfos,
-    resourceOrigin,
-  ]);
-
-  const setProjectKey = (projectKey: string) => {
-    const projectSpec =
-      (projectKey && getOriginAndProjectIdFromProjectKey(projectKey)) ||
-      undefined;
-    globalSettingsWriter.writeValue('globalProjectSpec', projectSpec);
-  };
+  useEffect(resetState, []);
 
   const resourceOriginSelectorSource: ISelectorSource = {
     options: ['local', 'online'].map(makePlainSelectorOption),
-    value: resourceOrigin,
-    setValue: (text: string) => setResourceOrigin(text as IResourceOrigin),
+    value: tabResourceOrigin,
+    setValue: setTabResourceOrigin,
   };
 
   return {
@@ -78,6 +38,7 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
     setProjectKey,
     canSelectResourceOrigin,
     resourceOriginSelectorSource,
-    isMenuButtonVisible: resourceOrigin === 'local',
+    isMenuButtonVisible: tabResourceOrigin === 'local',
+    menuItems: createProjectManagementMenuItems(),
   };
 }

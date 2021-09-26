@@ -1,12 +1,10 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectManagementMenuActions } from '~/ui/features/ProjectSelectionPart/models/ProjectManagementMenuActions';
-import { projectPackagesReader } from '~/ui/store';
+import {
+  projectPackagesReader,
+  projectManagementMenuActions,
+} from '~/ui/store';
 
-export type ProjectManagementMenuModel = {
-  menuItems: IGeneralMenuItem[];
-};
-
-function createMenuItems(): IGeneralMenuItem[] {
+export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
   return [
     {
       type: 'menuEntry',
@@ -36,10 +34,4 @@ function createMenuItems(): IGeneralMenuItem[] {
       handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
     },
   ];
-}
-
-export function useProjectManagementMenuModel(): ProjectManagementMenuModel {
-  return {
-    menuItems: createMenuItems(),
-  };
 }

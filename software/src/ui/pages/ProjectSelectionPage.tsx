@@ -1,17 +1,9 @@
-import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { FC, jsx } from 'qx';
+import { CommonPageFrame } from '~/ui/components';
 import { ProjectSelectionPart } from '~/ui/features';
 
 export const ProjectSelectionPage: FC = () => (
-  <div css={style}>
-    Keyboard Product Selection
+  <CommonPageFrame pageTitle="Keyboard Product Selection">
     <ProjectSelectionPart />
-  </div>
+  </CommonPageFrame>
 );
-
-const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
-  height: 100%;
-  padding: 20px;
-`;

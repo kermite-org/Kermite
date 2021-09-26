@@ -6,18 +6,18 @@ import {
   ICustomFirmwareEntry,
 } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
-import { CustomFirmwareEditor_OutputPropsSupplier } from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor';
 import {
+  CustomFirmwareEditor_OutputPropsSupplier,
   fallbackCustomFirmwareEditValues,
   ICustomFirmwareEditValues,
-} from '~/ui/features/CustomFirmwareEditor/CustomFirmwareEditor.model';
-import { projectResourceActions } from '~/ui/pages/ProjectResourcePage/core';
+} from '~/ui/editors';
 import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 import {
   projectPackagesReader,
   projectPackagesWriter,
   uiActions,
   uiReaders,
+  projectResourceStore,
 } from '~/ui/store';
 
 const helpers = {
@@ -93,7 +93,7 @@ const actions = {
       customFirmwareId,
     };
     projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
-    projectResourceActions.setSelectedItemKey(
+    projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', state.sourceEntry.firmwareName),
     );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {

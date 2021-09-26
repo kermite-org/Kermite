@@ -10,8 +10,7 @@ import {
   IResourceOrigin,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { uiReaders } from '~/ui/store/UiReaders';
-import { dispatchCoreAction, uiState } from '~/ui/store/base';
+import { uiReaders, dispatchCoreAction, uiState } from '~/ui/store/base';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {

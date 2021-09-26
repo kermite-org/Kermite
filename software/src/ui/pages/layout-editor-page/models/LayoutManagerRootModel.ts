@@ -1,6 +1,5 @@
 import { useEffect } from 'qx';
-import { LayoutEditorCore } from '~/ui/features';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { LayoutEditorCore, assignerModel } from '~/ui/editors';
 import { layoutManagerState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { uiState } from '~/ui/store';
 
@@ -24,7 +23,7 @@ export const layoutManagerRootModel = {
         const layoutEditSourceOnClosingView = uiState.core.layoutEditSource;
         if (layoutEditSourceOnClosingView.type === 'CurrentProfile') {
           const design = LayoutEditorCore.emitSavingDesign();
-          editorModel.replaceKeyboardDesign(design);
+          assignerModel.replaceKeyboardDesign(design);
         }
       };
     }, []);

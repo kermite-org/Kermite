@@ -1,5 +1,5 @@
 import { IPresetSpec, IProfileEntry, IResourceOrigin } from '~/shared';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors';
 import { dispatchCoreAction } from '~/ui/store';
 
 export const profilesActions = {
@@ -35,7 +35,7 @@ export const profilesActions = {
 
   saveProfile: async () => {
     await dispatchCoreAction({
-      profile_saveCurrentProfile: { profileData: editorModel.profileData },
+      profile_saveCurrentProfile: { profileData: assignerModel.profileData },
     });
   },
 
@@ -43,7 +43,7 @@ export const profilesActions = {
     dispatchCoreAction({
       profile_saveProfileAs: {
         newProfileName,
-        profileData: editorModel.profileData,
+        profileData: assignerModel.profileData,
       },
     });
   },
@@ -54,7 +54,10 @@ export const profilesActions = {
 
   exportToFile: async (filePath: string) => {
     await dispatchCoreAction({
-      profile_exportToFile: { filePath, profileData: editorModel.profileData },
+      profile_exportToFile: {
+        filePath,
+        profileData: assignerModel.profileData,
+      },
     });
   },
 
@@ -63,7 +66,7 @@ export const profilesActions = {
       profile_saveAsProjectPreset: {
         projectId,
         presetName,
-        profileData: editorModel.profileData,
+        profileData: assignerModel.profileData,
       },
     });
   },
