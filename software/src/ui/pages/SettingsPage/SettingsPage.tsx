@@ -108,7 +108,7 @@ const style = css`
   background: ${uiTheme.colors.clBackground};
   color: ${uiTheme.colors.clMainText};
   height: 100%;
-  padding: 10px;
+  padding: 20px;
   position: relative;
 
   > * + * {
@@ -119,7 +119,7 @@ const style = css`
     position: absolute;
     top: 0;
     right: 0;
-    margin: 10px;
+    margin: 20px;
   }
 
   .text-disabled {

@@ -5,8 +5,7 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { LayoutEditorCore } from '~/ui/features';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { LayoutEditorCore, assignerModel } from '~/ui/editors';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
@@ -71,7 +70,7 @@ export const layoutManagerActions = {
       layoutManagerReader.editSource.type === 'CurrentProfile' &&
       layoutManagerReader.isModified
     ) {
-      editorModel.restoreOriginalDesign();
+      assignerModel.restoreOriginalDesign();
     }
     dispatchCoreAction({ layout_createNewLayout: 1 });
   },
@@ -146,15 +145,6 @@ export const layoutManagerActions = {
   },
 
   save(design: IPersistKeyboardDesign) {
-    const { editSource } = layoutManagerReader;
-    const isProfile = editSource.type === 'CurrentProfile';
-    if (isProfile) {
-      throw new Error('invalid handler invocation');
-    }
-    // const ok = await modalConfirm({
-    //   message: `File overwritten. Are you ok?`,
-    //   caption: 'Save',
-    // });
     dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
     LayoutEditorCore.rebase();
   },

@@ -79,8 +79,13 @@ export const modalConfirm = createModal(
 );
 
 export const modalTextEdit = createModal(
-  (args: { message: string; defaultText?: string; caption: string }) => {
-    const { message, defaultText, caption } = args;
+  (args: {
+    message: string;
+    defaultText?: string;
+    caption: string;
+    validator?: (text: string) => string | undefined;
+  }) => {
+    const { message, defaultText, caption, validator } = args;
     const editValues = {
       text: defaultText || '',
     };
@@ -99,7 +104,16 @@ export const modalTextEdit = createModal(
         padding-left: 4px;
       `;
 
-      const isValid = !!editValues.text && editValues.text !== defaultText;
+      const cssErrorText = css`
+        margin-top: 5px;
+        color: red;
+        min-height: 20px;
+      `;
+
+      const baseValid = !!editValues.text && editValues.text !== defaultText;
+      const errorText = baseValid && validator?.(editValues.text);
+      const isValid = baseValid && !errorText;
+
       return (
         <ClosableOverlay close={close}>
           <CommonDialogFrame caption={caption} close={close}>
@@ -114,6 +128,7 @@ export const modalTextEdit = createModal(
                   spellcheck={'false' as any}
                 />
               </div>
+              <div css={cssErrorText}>{errorText}</div>
             </DialogContentRow>
             <DialogButtonsRow>
               <DialogButton onClick={submit} disabled={!isValid}>

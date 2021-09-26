@@ -1,35 +1,52 @@
-import { modalAlert, modalTextEdit } from '~/ui/components';
+import { modalTextEdit } from '~/ui/components';
 
 export const resourceManagementUtils = {
   checkValidResourceName(
     resourceName: string,
-    existingResourceNames: string[],
     resourceTypeNameText: string,
-    checkCaseSensitive?: boolean,
-  ): string | 'ok' {
+    existingResourceNames?: string[],
+    allowDifferentCasingVariants?: boolean,
+  ): string | undefined {
     // eslint-disable-next-line no-irregular-whitespace
     // eslint-disable-next-line no-misleading-character-class
     if (resourceName.match(/[/./\\:*?"<>| \u3000\u0e49]/)) {
       return `${resourceName} is not a valid ${resourceTypeNameText}.`;
     }
-    const existingName = checkCaseSensitive
-      ? existingResourceNames.find((it) => it === resourceName)
-      : existingResourceNames.find(
-          (it) => it.toLowerCase() === resourceName.toLowerCase(),
-        );
-    if (existingName) {
-      return `${existingName} already exists.`;
+    if (resourceName.length > 32) {
+      return `${resourceTypeNameText} should be no more than 32 characters.`;
     }
-    return 'ok';
+    if (existingResourceNames) {
+      const existingName = allowDifferentCasingVariants
+        ? existingResourceNames.find((it) => it === resourceName)
+        : existingResourceNames.find(
+            (it) => it.toLowerCase() === resourceName.toLowerCase(),
+          );
+      if (existingName) {
+        return `${existingName} already exists.`;
+      }
+    }
+    return undefined;
   },
-
+  makeResourceNameValidator(
+    resourceTypeNameText: string,
+    existingResourceNames?: string[],
+    allowDifferentCasingVariants?: boolean,
+  ): (text: string) => string | undefined {
+    return (resourceName) =>
+      resourceManagementUtils.checkValidResourceName(
+        resourceName,
+        resourceTypeNameText,
+        existingResourceNames,
+        allowDifferentCasingVariants,
+      );
+  },
   async inputSavingResourceName(args: {
     modalTitle: string;
     modalMessage: string;
     resourceTypeNameText: string;
-    existingResourceNames: string[];
+    existingResourceNames?: string[];
     defaultText?: string;
-    checkCaseSensitive?: boolean;
+    allowDifferentCasingVariants?: boolean;
   }): Promise<string | undefined> {
     const {
       modalTitle,
@@ -37,26 +54,19 @@ export const resourceManagementUtils = {
       resourceTypeNameText,
       existingResourceNames,
       defaultText,
-      checkCaseSensitive,
+      allowDifferentCasingVariants,
     } = args;
-    const resourceName = await modalTextEdit({
+
+    const validator = resourceManagementUtils.makeResourceNameValidator(
+      resourceTypeNameText,
+      existingResourceNames,
+      allowDifferentCasingVariants,
+    );
+    return await modalTextEdit({
       caption: modalTitle,
       message: modalMessage,
       defaultText,
+      validator,
     });
-    if (resourceName !== undefined) {
-      const res = resourceManagementUtils.checkValidResourceName(
-        resourceName,
-        existingResourceNames,
-        resourceTypeNameText,
-        checkCaseSensitive,
-      );
-      if (res !== 'ok') {
-        await modalAlert(`${res} operation cancelled.`);
-        return undefined;
-      }
-      return resourceName;
-    }
-    return undefined;
   },
 };

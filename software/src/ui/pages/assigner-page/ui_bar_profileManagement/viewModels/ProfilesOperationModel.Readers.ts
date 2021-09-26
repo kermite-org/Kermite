@@ -1,4 +1,4 @@
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiReaders } from '~/ui/store';
 
@@ -10,7 +10,7 @@ export const profilesOperationReader = {
     const isInternalProfile = profileEditSource.type === 'InternalProfile';
     const isDeviceConnected = deviceStatus.isConnected;
 
-    const refProjectId = editorModel.profileData.projectId;
+    const refProjectId = assignerModel.profileData.projectId;
     const standardFirmwareIds = ['HCV52K', 'HCV52L'];
     const deviceFirmwareId = deviceStatus.isConnected
       ? deviceStatus.deviceAttrs.firmwareId
@@ -41,8 +41,8 @@ export const profilesOperationReader = {
     const { profileEditSource } = profilesReader;
     return (
       profileEditSource.type === 'ProfileNewlyCreated' ||
-      profileEditSource.type === 'ExternalFile' ||
-      (profileEditSource.type === 'InternalProfile' && editorModel.checkDirty())
+      (profileEditSource.type === 'InternalProfile' &&
+        assignerModel.checkDirty())
     );
   },
   get isCurrentProfileInternal(): boolean {
@@ -50,9 +50,6 @@ export const profilesOperationReader = {
   },
   get isMenuItemSaveEnabled(): boolean {
     const { profileEditSource } = profilesReader;
-    return (
-      profileEditSource.type === 'ProfileNewlyCreated' ||
-      profileEditSource.type === 'ExternalFile'
-    );
+    return profileEditSource.type === 'ProfileNewlyCreated';
   },
 };

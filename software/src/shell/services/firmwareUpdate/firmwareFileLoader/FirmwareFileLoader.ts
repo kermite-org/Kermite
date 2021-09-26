@@ -45,6 +45,8 @@ const standardFirmwarePaths: {
 } = {
   AvrUnified: 'firmwares/standard/standard_avr.hex',
   RpUnified: 'firmwares/standard/standard_rp.uf2',
+  AvrSplit: 'firmwares/standard/standard_avr_split.hex',
+  RpSplit: 'firmwares/standard/standard_rp_split.uf2',
 };
 
 async function fetchStandardBaseFirmware(
@@ -65,9 +67,15 @@ const localStandardFirmwarePaths: {
 } = {
   AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
   RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
+  AvrSplit: pathResolve(
+    '../firmware/build/standard/avr_split/standard_avr_split.hex',
+  ),
+  RpSplit: pathResolve(
+    '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+  ),
 };
 
-async function debugloadLocalStandardBaseFirmware(
+async function debugLoadLocalStandardBaseFirmware(
   baseFirmwareType: IStandardBaseFirmwareType,
 ): Promise<IFirmwareFetchResult> {
   const filePath = localStandardFirmwarePaths[baseFirmwareType];
@@ -136,7 +144,7 @@ export async function loadFirmwareFileBytes(
       getFirmwareTargetDeviceFromBaseFirmwareType(baseFirmwareType);
 
     const firmwareLoader = config.debugLoadLocalFirmware
-      ? debugloadLocalStandardBaseFirmware
+      ? debugLoadLocalStandardBaseFirmware
       : fetchStandardBaseFirmware;
 
     const { fileName: sourceFirmwareFileName, data: sourceFirmwareBytes } =

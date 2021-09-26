@@ -1,5 +1,5 @@
 import { useState } from 'qx';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors';
 import {
   profilesActions,
   profilesReader,
@@ -45,7 +45,7 @@ export function makeProfilesOperationModel(): IProfileManagementPartViewModel {
   const [modalState, setModalState] =
     useState<IProfileManagerModalState>('None');
 
-  const currentProfileProjectId = editorModel.loadedProfileData.projectId;
+  const currentProfileProjectId = assignerModel.loadedProfileData.projectId;
 
   const { saveProfile, exportProfileAsProjectPreset: saveProfileAsPreset } =
     profilesActions;

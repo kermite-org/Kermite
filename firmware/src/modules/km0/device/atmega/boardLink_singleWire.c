@@ -218,6 +218,10 @@ escape:
   return 0;
 }
 
+void boardLink_singleWire_setSignalPin(int8_t pin) {
+  //dynamic pin configuration is not supported
+}
+
 void boardLink_initialize() {
   signalPin_endTransmit_standby();
   debug_initTimeDebugPin();

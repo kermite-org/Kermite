@@ -1,19 +1,19 @@
 import { css, FC, jsx } from 'qx';
 import {
-  ProjectResourcePage,
+  PresetBrowserPage,
+  PresetBrowserPage2,
+  ProjectCustomFirmwareCreatePage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
+  ProjectResourcePage,
   ProjectSelectionPage,
   ProjectStandardFirmwareEditPage,
   SettingsPage,
   WelcomePage,
-  ProjectCustomFirmwareEditPage,
 } from '~/ui/pages';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
-import { PresetBrowserPage } from '~/ui/pages/preset-browser-page';
-import { PresetBrowserPage2 } from '~/ui/pages/preset-browser-page2';
 import { ShapePreviewPage } from '~/ui/pages/shape-preview-page';
 import { uiReaders, uiState } from '~/ui/store';
 
@@ -28,11 +28,11 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectPresetEdit' && (
           <ProjectPresetEditPage spec={pageSpec} />
         )}
+        {pageSpec.type === 'projectCustomFirmwareCreate' && (
+          <ProjectCustomFirmwareCreatePage />
+        )}
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
-        )}
-        {pageSpec.type === 'projectCustomFirmwareSetup' && (
-          <ProjectCustomFirmwareEditPage spec={pageSpec} />
         )}
       </div>
     );

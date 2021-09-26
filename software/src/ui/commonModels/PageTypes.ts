@@ -22,20 +22,24 @@ export type IPageSpec_ProjectPresetEdit = {
   presetName: string;
 };
 
-export type IPageSpec_ProjectStandardFirmwareEdit = {
-  type: 'projectStandardFirmwareEdit';
-  firmwareName: string;
+export type IPageSpec_ProjectCustomFirmwareCreate = {
+  type: 'projectCustomFirmwareCreate';
 };
 
-export type IPageSpec_ProjectCustomFirmwareEdit = {
-  type: 'projectCustomFirmwareSetup';
+export type IPageSpec_ProjectStandardFirmwareCreate = {
+  type: 'projectStandardFirmwareCreate';
+};
+
+export type IPageSpec_ProjectStandardFirmwareEdit = {
+  type: 'projectStandardFirmwareEdit';
   firmwareName: string;
 };
 
 export type IPageSpec =
   | IPageSpec_ProjectLayoutEdit
   | IPageSpec_ProjectPresetEdit
-  | IPageSpec_ProjectStandardFirmwareEdit
-  | IPageSpec_ProjectCustomFirmwareEdit;
+  | IPageSpec_ProjectCustomFirmwareCreate
+  | IPageSpec_ProjectStandardFirmwareCreate
+  | IPageSpec_ProjectStandardFirmwareEdit;
 
 export type IPageModelSpec = never;

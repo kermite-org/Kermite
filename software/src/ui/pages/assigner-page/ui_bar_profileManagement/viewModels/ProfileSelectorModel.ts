@@ -7,13 +7,12 @@ import {
 } from '~/shared';
 import { ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { editorModel } from '~/ui/features/ProfileEditor/models/EditorModel';
+import { assignerModel } from '~/ui/editors';
 import {
   profilesActions,
   profilesReader,
 } from '~/ui/pages/assigner-page/models';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
-import { getFileNameFromPath } from '~/ui/utils';
 
 export type IProfileSelectorModel = {
   profileSelectorSource: ISelectorSource;
@@ -44,21 +43,11 @@ function makeProfileNameSelectorOption(
 }
 
 const selectorValueNewlyCreated = '__PROFILE_NEWLY_CREATED__';
-const selectorValueExternalProfile = '__PROFILE_EXTERNALLY_LOADED__';
 
 const selectorOptionNewlyCreated: ISelectorOption = {
   label: '(untitled)',
   value: selectorValueNewlyCreated,
 };
-
-function createSelectorOptionExternalProfile(
-  filePath: string,
-): ISelectorOption {
-  return {
-    label: `(file)${getFileNameFromPath(filePath)}`,
-    value: selectorValueExternalProfile,
-  };
-}
 
 function makeProfileSelectionSource(
   visibleProfileEntries: IProfileEntry[],
@@ -80,15 +69,6 @@ function makeProfileSelectionSource(
       value: selectorValueNewlyCreated,
       setValue,
     };
-  } else if (profileEditSource.type === 'ExternalFile') {
-    return {
-      options: [
-        createSelectorOptionExternalProfile(profileEditSource.filePath),
-        ...optionsBase,
-      ],
-      value: selectorValueExternalProfile,
-      setValue,
-    };
   } else if (profileEditSource.type === 'InternalProfile') {
     return {
       options: optionsBase,
@@ -104,7 +84,7 @@ function makeProfileSelectionSource(
 }
 
 const loadProfile = async (profileEntry: IProfileEntry) => {
-  if (editorModel.checkDirty()) {
+  if (assignerModel.checkDirty()) {
     const ok = await modalConfirm({
       caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
       message: texts.label_assigner_confirmModal_loadProfile_modalMessage,

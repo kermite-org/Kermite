@@ -2,26 +2,32 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/firmware-update-page/models';
+import {
+  PartBody,
+  PartHeader,
+} from '~/ui/pages/firmware-update-page/sections/Components';
 
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();
   return (
     <div css={style}>
-      <div>{texts.label_device_deviceInfo_sectionTitle}</div>
-      {tableData && (
-        <div>
-          <table>
-            <tbody>
-              {tableData.map((item, idx) => (
-                <tr key={idx}>
-                  <td>{item[0]}</td>
-                  <td>{item[1]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <PartHeader>{texts.label_device_deviceInfo_sectionTitle}</PartHeader>
+      <PartBody>
+        {tableData && (
+          <div>
+            <table>
+              <tbody>
+                {tableData.map((item, idx) => (
+                  <tr key={idx}>
+                    <td>{item[0]}</td>
+                    <td>{item[1]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </PartBody>
     </div>
   );
 };
