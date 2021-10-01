@@ -51,12 +51,9 @@ const testOptions: ISelectorOption[] = [
   { value: 'user003', label: 'suzuki' },
 ];
 
-const testOptions2: ISelectorOption[] = [
-  'select',
-  'move',
-  'add',
-  'delete',
-].map((it) => ({ label: it, value: it }));
+const testOptions2: ISelectorOption[] = ['select', 'move', 'add', 'delete'].map(
+  (it) => ({ label: it, value: it }),
+);
 
 const testOptions3: ISelectorOption[] = ['manual', 'auto'].map((it) => ({
   label: it,
@@ -154,17 +151,17 @@ export const MockPageComponentDevelopment: FC = () => {
         <OperationButtonOnlyIcon icon="redo" />
       </Row>
       <Row>
-        <Icon spec={'settings'} size={20} />
-        <Icon spec={'fa fa-cog'} size={20} />
-        <Icon spec={'settings'} size={40} />
-        <Icon spec={'fa fa-cog'} size={40} />
+        <Icon spec="settings" size={20} />
+        <Icon spec="fa fa-cog" size={20} />
+        <Icon spec="settings" size={40} />
+        <Icon spec="fa fa-cog" size={40} />
         <div css={cssIconsContainer}>
-          <Icon spec={'settings'} />
-          <Icon spec={'fa fa-cog'} />
-          <Icon spec={'settings'} size={20} />
-          <Icon spec={'fa fa-cog'} size={20} />
-          <Icon spec={'settings'} size={40} />
-          <Icon spec={'fa fa-cog'} size={40} />
+          <Icon spec="settings" />
+          <Icon spec="fa fa-cog" />
+          <Icon spec="settings" size={20} />
+          <Icon spec="fa fa-cog" size={20} />
+          <Icon spec="settings" size={40} />
+          <Icon spec="fa fa-cog" size={40} />
         </div>
       </Row>
     </div>
