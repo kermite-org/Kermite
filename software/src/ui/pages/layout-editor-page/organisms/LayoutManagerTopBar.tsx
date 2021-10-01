@@ -28,14 +28,14 @@ export const LayoutManagerTopBar: FC<Props> = ({
       <div className="first-row">
         Edit Target
         <RadioButtonLine
-          text="Current Profile"
+          text="Current Profile Layout"
           checked={editTargetRadioSelection === 'CurrentProfile'}
           onClick={() => setEditTargetRadioSelection('CurrentProfile')}
           radioGroupName="radio_group_edit_target_selection"
           disabled={!canEditCurrentProfile}
         />
         <RadioButtonLine
-          text="Layout File"
+          text="Individual Layout"
           checked={editTargetRadioSelection === 'LayoutFile'}
           onClick={() => setEditTargetRadioSelection('LayoutFile')}
           radioGroupName="radio_group_edit_target_selection"
