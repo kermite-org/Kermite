@@ -88,6 +88,9 @@ export const layoutManagerModule = createCoreModule({
       loadedLayoutData: design,
     });
   },
+  async layout_exportToFile({ filePath, design }) {
+    await LayoutFileLoader.saveLayoutToFile(filePath, design);
+  },
   layout_createProjectLayout({ projectId, layoutName }) {
     const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
     if (projectInfo) {
