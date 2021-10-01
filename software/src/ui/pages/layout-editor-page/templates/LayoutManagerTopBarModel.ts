@@ -12,6 +12,7 @@ type LayoutManagerTopBarModel = {
   editSourceText: string;
   canOverwrite: boolean;
   overwriteLayout(): void;
+  saveButtonVisible: boolean;
 };
 
 export function useLayoutManagerTopBarModel(): LayoutManagerTopBarModel {
@@ -21,6 +22,7 @@ export function useLayoutManagerTopBarModel(): LayoutManagerTopBarModel {
     editTargetRadioSelection,
     editSourceText,
     canOverwrite,
+    saveButtonVisible,
   } = layoutManagerReader;
   const { setEditTargetRadioSelection, overwriteLayout } = layoutManagerActions;
   return {
@@ -31,5 +33,6 @@ export function useLayoutManagerTopBarModel(): LayoutManagerTopBarModel {
     editSourceText,
     canOverwrite,
     overwriteLayout,
+    saveButtonVisible,
   };
 }

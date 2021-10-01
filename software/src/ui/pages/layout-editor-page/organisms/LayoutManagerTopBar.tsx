@@ -12,6 +12,7 @@ type Props = {
   editSourceText: string;
   canOverwrite: boolean;
   overwriteLayout(): void;
+  saveButtonVisible: boolean;
 };
 
 export const LayoutManagerTopBar: FC<Props> = ({
@@ -22,6 +23,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
   editSourceText,
   canOverwrite,
   overwriteLayout,
+  saveButtonVisible,
 }) => {
   return (
     <div css={style}>
@@ -49,6 +51,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
           label="save"
           disabled={!canOverwrite}
           onClick={overwriteLayout}
+          qxIf={saveButtonVisible}
         />
       </div>
     </div>
