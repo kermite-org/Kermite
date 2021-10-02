@@ -35,7 +35,13 @@ function createFunctionComponentWrapper(
         doLater(() => flushHookEffects(self.hook));
         return vnode;
       };
-      return self.renderWithHook(props);
+      const renderRes = self.renderWithHook(props);
+      if (props.css && renderRes.vtype === 'vElement') {
+        renderRes.props.class = renderRes.props.class
+          ? `${renderRes.props.class} ${props.css}`
+          : props.css;
+      }
+      return renderRes;
     },
     update(self: IComponentState, props: IProps) {
       return self.renderWithHook(props);
