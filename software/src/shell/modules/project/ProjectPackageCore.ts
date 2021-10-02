@@ -6,6 +6,7 @@ import {
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
+  validateResourceName,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
@@ -134,7 +135,9 @@ function getUserProjectFilePath(packageName: string) {
 
 async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   const projectsFolder = getUserProjectsFolderPath();
-  return await loadProjectPackageFiles(projectsFolder, 'local');
+  return (await loadProjectPackageFiles(projectsFolder, 'local')).filter(
+    (it) => validateResourceName(it.packageName, 'package name') === undefined,
+  );
 }
 
 async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
