@@ -31,13 +31,10 @@ const helpers = {
 export const projectResourceActions = {
   resetState() {
     const { globalProjectKey } = uiReaders;
-    const needClearSelection =
-      globalProjectKey !== projectResourceState.loadedProjectKey ||
-      !projectResourceReaders.isSelectedItemKeyIncludedInList;
-    if (needClearSelection) {
-      projectResourceActions.clearSelection();
+    if (globalProjectKey !== projectResourceState.loadedProjectKey) {
+      projectResourceState.loadedProjectKey = globalProjectKey;
+      projectResourceState.selectedItemKey = '';
     }
-    projectResourceState.loadedProjectKey = globalProjectKey;
   },
   setSelectedItemKey(key: string) {
     projectResourceState.selectedItemKey = key;
