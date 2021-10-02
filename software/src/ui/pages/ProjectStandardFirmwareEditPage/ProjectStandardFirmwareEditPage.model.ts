@@ -7,6 +7,7 @@ import {
   IKermiteStandardKeyboardSpec,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { modalConfirm } from '~/ui/components';
 import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/editors';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import {
@@ -22,6 +23,7 @@ export interface IProjectStandardFirmwareEditPageModel {
   standardFirmwareConfig: IKermiteStandardKeyboardSpec;
   canSave: boolean;
   saveHandler(): void;
+  backHandler(): void;
 }
 
 export async function inputSavingFirmwareName(): Promise<string | undefined> {
@@ -40,6 +42,9 @@ const store = new (class {
 })();
 
 const readers = {
+  get isEdit() {
+    return !!store.sourceEntry.firmwareName;
+  },
   get canSave() {
     return StandardFirmwareEditor_OutputPropsSupplier.canSave;
   },
@@ -71,7 +76,7 @@ const actions = {
     }
   },
   async saveHandler() {
-    const isCreate = !store.sourceEntry.firmwareName;
+    const { isEdit } = readers;
     if (!store.sourceEntry.firmwareName) {
       const newVariationName = await inputSavingFirmwareName();
       if (!newVariationName) {
@@ -89,11 +94,24 @@ const actions = {
     projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
     );
-    if (isCreate) {
+    if (!isEdit) {
       uiActions.closeSubPage();
     } else {
       store.sourceEntry = newFirmwareEntry;
     }
+  },
+  async backHandler() {
+    const { isModified } = StandardFirmwareEditor_OutputPropsSupplier;
+    if (isModified) {
+      const ok = await modalConfirm({
+        message: 'Unsaved changes will be lost. Are you ok?',
+        caption: 'Back',
+      });
+      if (!ok) {
+        return;
+      }
+    }
+    uiActions.closeSubPage();
   },
 };
 
@@ -108,6 +126,12 @@ export function useProjectStandardFirmwareEditPageModel(
     sourceEntry: { standardFirmwareConfig, firmwareName: editFirmwareName },
     canSave,
   } = readers;
-  const { saveHandler } = actions;
-  return { editFirmwareName, standardFirmwareConfig, canSave, saveHandler };
+  const { saveHandler, backHandler } = actions;
+  return {
+    editFirmwareName,
+    standardFirmwareConfig,
+    canSave,
+    saveHandler,
+    backHandler,
+  };
 }

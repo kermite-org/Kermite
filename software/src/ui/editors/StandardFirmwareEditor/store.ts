@@ -48,6 +48,12 @@ const readers = {
   get totalError(): string {
     return selectors.totalError();
   },
+  get isModified(): boolean {
+    const {
+      state: { originalValues, editValues },
+    } = standardFirmwareEditStore;
+    return editValues !== originalValues;
+  },
   get canSave(): boolean {
     const {
       state: { originalValues, editValues, isNewConfig },

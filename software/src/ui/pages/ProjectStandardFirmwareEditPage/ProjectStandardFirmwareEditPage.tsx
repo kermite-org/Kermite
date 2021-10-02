@@ -12,17 +12,22 @@ type Props = {
 export const ProjectStandardFirmwareEditPage: FC<Props> = ({
   spec: { firmwareName: sourceFirmwareName },
 }) => {
-  const { editFirmwareName, standardFirmwareConfig, canSave, saveHandler } =
-    useProjectStandardFirmwareEditPageModel(sourceFirmwareName);
+  const {
+    editFirmwareName,
+    standardFirmwareConfig,
+    canSave,
+    saveHandler,
+    backHandler,
+  } = useProjectStandardFirmwareEditPageModel(sourceFirmwareName);
 
   const isNewConfig = !sourceFirmwareName;
   return (
     <div css={style}>
       <RouteHeaderBar
         title={`edit project firmware: ${editFirmwareName || '(new)'}`}
-        backPagePath="/projectResource"
         canSave={canSave}
         saveHandler={saveHandler}
+        backHandler={backHandler}
         editMode={editFirmwareName ? 'Edit' : 'Create'}
       />
       <div className="content">
