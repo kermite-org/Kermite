@@ -329,7 +329,7 @@ declare global {
 
     type TargetedEvent<
       Target extends EventTarget = EventTarget,
-      TypedEvent extends Event = Event
+      TypedEvent extends Event = Event,
     > = Omit<TypedEvent, 'currentTarget'> & {
       readonly currentTarget: Target;
     };
