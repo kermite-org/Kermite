@@ -25,7 +25,18 @@ applyGlobalStyle(css`
   }
 `);
 
+function apiTest() {
+  (async () => {
+    const res = await fetch(
+      'https://app.kermite.org/krs/resources2/index.json',
+    );
+    const obj = await res.json();
+    console.log({ obj });
+  })();
+}
+
 const PageRoot: FC = () => {
+  // useEffect(apiTest, []);
   return (
     <div>
       <DeviceDevelopmentPage />
