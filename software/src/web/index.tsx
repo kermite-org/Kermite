@@ -25,6 +25,7 @@ applyGlobalStyle(css`
   }
 `);
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function apiTest() {
   (async () => {
     const res = await fetch(
