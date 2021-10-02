@@ -49,6 +49,19 @@ function convertPackageFileContentToPackageInfo(
   };
 }
 
+function convertProjectPackageInfoToFileContent(
+  info: IProjectPackageInfo,
+): IProjectPackageFileContent {
+  return {
+    formatRevision: info.formatRevision,
+    projectId: info.projectId,
+    keyboardName: info.keyboardName,
+    firmwares: info.firmwares,
+    layouts: info.layouts,
+    presets: info.presets,
+  };
+}
+
 async function loadProjectPackageFiles(
   folderPath: string,
   origin: IResourceOrigin,
@@ -141,10 +154,11 @@ async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
 }
 
 async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
+  const savingData = convertProjectPackageInfoToFileContent(info);
   const filePath = getUserProjectFilePath(info.packageName);
   console.log(`saving ${pathBasename(filePath)}`);
   await fsxEnsureFolderExists(pathDirname(filePath));
-  await fsxWriteJsonFile(filePath, info);
+  await fsxWriteJsonFile(filePath, savingData);
 }
 
 async function deleteUserProjectPackageFileImpl(packageName: string) {
