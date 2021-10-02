@@ -156,7 +156,7 @@ export function validateResourceName(
 ): string | undefined {
   // eslint-disable-next-line no-irregular-whitespace
   // eslint-disable-next-line no-misleading-character-class
-  if (resourceName.match(/[/./\\:*?"<>| \u3000\u0e49]/)) {
+  if (resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/)) {
     return `${resourceName} is not a valid ${resourceTypeNameText}.`;
   }
   if (resourceName.length > 32) {
