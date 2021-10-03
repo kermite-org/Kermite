@@ -16,7 +16,7 @@ export const NavigationStepListStepCard: FC<Props> = ({
   <svg
     css={style}
     classNames={[className, isActive && '--active']}
-    viewBox={'0 0 51 30'}
+    viewBox="0 0 51 30"
     onClick={clickHandler}
   >
     <polygon points="0,0 40,0, 50,15 40,30, 0,30 10,15" className="shape" />

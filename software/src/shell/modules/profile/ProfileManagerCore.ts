@@ -1,4 +1,4 @@
-import { IProfileData, IProfileEntry } from '~/shared';
+import { validateResourceName, IProfileData, IProfileEntry } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
   fspCopyFile,
@@ -35,14 +35,19 @@ export const profileManagerCore = {
   async listAllProfileEntries(): Promise<IProfileEntry[]> {
     const profilesFolderPath = appEnv.resolveUserDataFilePath(`data/profiles`);
     const filePaths = await globAsync('*/*.profile.json', profilesFolderPath);
-    return filePaths.map((filePath) => {
-      const projectId = pathDirname(filePath);
-      const profileName = pathBasename(filePath, '.profile.json');
-      return {
-        projectId,
-        profileName,
-      };
-    });
+    return filePaths
+      .map((filePath) => {
+        const projectId = pathDirname(filePath);
+        const profileName = pathBasename(filePath, '.profile.json');
+        return {
+          projectId,
+          profileName,
+        };
+      })
+      .filter(
+        (it) =>
+          validateResourceName(it.profileName, 'profile name') === undefined,
+      );
   },
   async loadProfile(profileEntry: IProfileEntry): Promise<IProfileData> {
     const filePath = getProfileFilePath(profileEntry);

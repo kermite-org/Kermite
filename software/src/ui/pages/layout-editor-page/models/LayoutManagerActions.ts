@@ -143,7 +143,20 @@ export const layoutManagerActions = {
       });
     }
   },
-
+  async exportToFileWithDialog() {
+    const design = LayoutEditorCore.emitSavingDesign();
+    const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
+    if (filePath) {
+      const modFilePath = forceChangeFilePathExtension(
+        filePath,
+        '.layout.json',
+      );
+      await dispatchCoreAction({
+        layout_exportToFile: { filePath: modFilePath, design },
+      });
+      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
+    }
+  },
   save(design: IPersistKeyboardDesign) {
     dispatchCoreAction({ layout_overwriteCurrentLayout: { design } });
     LayoutEditorCore.rebase();

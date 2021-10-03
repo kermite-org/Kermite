@@ -6,6 +6,7 @@ import {
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
+  validateResourceName,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import {
@@ -45,6 +46,19 @@ function convertPackageFileContentToPackageInfo(
     origin,
     packageName,
     keyboardName,
+  };
+}
+
+function convertProjectPackageInfoToFileContent(
+  info: IProjectPackageInfo,
+): IProjectPackageFileContent {
+  return {
+    formatRevision: info.formatRevision,
+    projectId: info.projectId,
+    keyboardName: info.keyboardName,
+    firmwares: info.firmwares,
+    layouts: info.layouts,
+    presets: info.presets,
   };
 }
 
@@ -134,14 +148,17 @@ function getUserProjectFilePath(packageName: string) {
 
 async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   const projectsFolder = getUserProjectsFolderPath();
-  return await loadProjectPackageFiles(projectsFolder, 'local');
+  return (await loadProjectPackageFiles(projectsFolder, 'local')).filter(
+    (it) => validateResourceName(it.packageName, 'package name') === undefined,
+  );
 }
 
 async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
+  const savingData = convertProjectPackageInfoToFileContent(info);
   const filePath = getUserProjectFilePath(info.packageName);
   console.log(`saving ${pathBasename(filePath)}`);
   await fsxEnsureFolderExists(pathDirname(filePath));
-  await fsxWriteJsonFile(filePath, info);
+  await fsxWriteJsonFile(filePath, savingData);
 }
 
 async function deleteUserProjectPackageFileImpl(packageName: string) {

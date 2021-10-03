@@ -2,7 +2,10 @@
 import { shell } from 'electron';
 import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
-import { executeWithFatalErrorHandler } from '~/shell/base/ErrorChecker';
+import {
+  executeWithFatalErrorHandler,
+  reportShellError,
+} from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
 import { fileDialogLoaders } from '~/shell/loaders/FileDialogLoaders';
 import { checkLocalRepositoryFolder } from '~/shell/loaders/LocalResourceHelper';
@@ -141,8 +144,12 @@ export class ApplicationRoot {
       );
       globalSettingsModule.config_loadGlobalSettings(1);
       keyboardConfigModule.config_loadKeyboardConfig(1);
-      await dispatchCoreAction({ project_loadAllProjectPackages: 1 });
-      await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 });
+      await dispatchCoreAction({ project_loadAllProjectPackages: 1 }).catch(
+        reportShellError,
+      );
+      await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 }).catch(
+        reportShellError,
+      );
       await profileManagerRoot.initializeAsync();
       await layoutManagerRoot.initializeAsync();
       this.deviceService.initialize();

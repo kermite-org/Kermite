@@ -116,6 +116,8 @@ const style = css`
       > .item {
         padding: 2px 5px;
         cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:hover {
           background: #0bd2;

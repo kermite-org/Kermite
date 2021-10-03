@@ -62,4 +62,7 @@ export const layoutManagerReader = {
     const { editSource, isModified } = layoutManagerReader;
     return editSource.type !== 'LayoutNewlyCreated' && isModified;
   },
+  get saveButtonVisible(): boolean {
+    return layoutManagerReader.editSource.type !== 'CurrentProfile';
+  },
 };

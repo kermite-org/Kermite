@@ -149,6 +149,7 @@ export type ICoreAction = Partial<{
   layout_overwriteCurrentLayout: { design: IPersistKeyboardDesign };
   layout_loadFromFile: { filePath: string };
   layout_saveToFile: { filePath: string; design: IPersistKeyboardDesign };
+  layout_exportToFile: { filePath: string; design: IPersistKeyboardDesign };
   layout_createProjectLayout: { projectId: string; layoutName: string };
   layout_loadProjectLayout: { projectId: string; layoutName: string };
   layout_saveProjectLayout: {

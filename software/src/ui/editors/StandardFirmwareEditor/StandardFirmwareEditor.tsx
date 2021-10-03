@@ -34,6 +34,9 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
 }
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
+  get isModified(): boolean {
+    return standardFirmwareEditStore.readers.isModified;
+  },
   get canSave(): boolean {
     return standardFirmwareEditStore.readers.canSave;
   },
