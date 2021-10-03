@@ -12,6 +12,7 @@ type Props = {
   editSourceText: string;
   canOverwrite: boolean;
   overwriteLayout(): void;
+  saveButtonVisible: boolean;
 };
 
 export const LayoutManagerTopBar: FC<Props> = ({
@@ -22,20 +23,21 @@ export const LayoutManagerTopBar: FC<Props> = ({
   editSourceText,
   canOverwrite,
   overwriteLayout,
+  saveButtonVisible,
 }) => {
   return (
     <div css={style}>
       <div className="first-row">
         Edit Target
         <RadioButtonLine
-          text="Current Profile"
+          text="Current Profile Layout"
           checked={editTargetRadioSelection === 'CurrentProfile'}
           onClick={() => setEditTargetRadioSelection('CurrentProfile')}
           radioGroupName="radio_group_edit_target_selection"
           disabled={!canEditCurrentProfile}
         />
         <RadioButtonLine
-          text="Layout File"
+          text="Individual Layout"
           checked={editTargetRadioSelection === 'LayoutFile'}
           onClick={() => setEditTargetRadioSelection('LayoutFile')}
           radioGroupName="radio_group_edit_target_selection"
@@ -49,6 +51,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
           label="save"
           disabled={!canOverwrite}
           onClick={overwriteLayout}
+          qxIf={saveButtonVisible}
         />
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { useState } from 'qx';
+import { validateResourceName } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {
   IProjectAttachmentFileSelectorModalModel,
@@ -10,7 +11,6 @@ import { ILayoutManagerModalState } from '~/ui/pages/layout-editor-page/models/L
 import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';
 import { layoutManagerReader } from '~/ui/pages/layout-editor-page/models/LayoutManagerReaders';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
-import { resourceManagementUtils } from '~/ui/utils';
 
 const configs = {
   selectorSize: 7,
@@ -90,10 +90,7 @@ function submit(
     layoutManagerActions.loadFromProject(currentProjectId, currentLayoutName);
     layoutManagerActions.closeModal();
   } else if (operationMode === 'Save') {
-    const error = resourceManagementUtils.checkValidResourceName(
-      currentLayoutName,
-      'layout name',
-    );
+    const error = validateResourceName(currentLayoutName, 'layout name');
     if (!error) {
       layoutManagerActions.saveToProject(
         currentProjectId,

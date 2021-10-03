@@ -56,8 +56,8 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
   return [
     {
       type: 'menuEntry',
-      text: 'save to file...',
-      handler: layoutManagerActions.saveToFileWithDialog,
+      text: 'export to file...',
+      handler: layoutManagerActions.exportToFileWithDialog,
       disabled: !layoutManagerReader.canSaveToFile,
     },
     {

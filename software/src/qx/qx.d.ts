@@ -55,6 +55,7 @@ declare global {
     interface IntrinsicAttributes {
       key?: any;
       qxIf?: boolean;
+      css?: string;
     }
 
     type Element = VNode | ((props?: any) => Element | null);
@@ -329,7 +330,7 @@ declare global {
 
     type TargetedEvent<
       Target extends EventTarget = EventTarget,
-      TypedEvent extends Event = Event
+      TypedEvent extends Event = Event,
     > = Omit<TypedEvent, 'currentTarget'> & {
       readonly currentTarget: Target;
     };

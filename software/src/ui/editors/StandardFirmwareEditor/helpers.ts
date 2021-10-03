@@ -175,8 +175,8 @@ export const standardFirmwareEditModelHelpers = {
     if (isAvr) {
       editValues.singleWireSignalPin = isSplit ? 'PD2' : undefined;
     }
-    if (isAvr) {
-      editValues.useLighting = false;
+    if (isAvr && isSplit) {
+      editValues.useLcd = false;
     }
   },
   validateEditValues(

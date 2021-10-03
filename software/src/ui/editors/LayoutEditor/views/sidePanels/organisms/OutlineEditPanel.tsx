@@ -29,14 +29,14 @@ export const OutlineEditPanel: FC = () => {
           <ConfigVStack>
             <GeneralConfigTextEditRow
               {...vmX}
-              label={'x'}
+              label="x"
               labelWidth={70}
               inputWidth={80}
               unit="mm"
             />
             <GeneralConfigTextEditRow
               {...vmY}
-              label={'y'}
+              label="y"
               labelWidth={70}
               inputWidth={80}
               unit="mm"

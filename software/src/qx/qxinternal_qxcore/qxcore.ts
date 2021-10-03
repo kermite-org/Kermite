@@ -44,10 +44,12 @@ export function mount(
     });
   } else if (vnode.vtype === 'vComponent') {
     // console.log(`mount-fc ${vnode.debugSig} ${(vnode as any).marker || ''}`);
-    vnode.state.componentState = {};
+    vnode.state.componentState = {} as any;
     const renderRes =
-      vnode.componentWrapper.mount(vnode.state.componentState, vnode.props) ||
-      createVBlank(null);
+      vnode.componentWrapper.mount(
+        vnode.state.componentState as any,
+        vnode.props,
+      ) || createVBlank(null);
     vnode.state.renderRes = renderRes;
     dom = mount(parentDom, renderRes, insertBeforeTarget);
   } else {
@@ -71,7 +73,7 @@ function unmount(parentDom: Node, oldVNode: IVNode) {
   } else if (oldVNode.vtype === 'vComponent') {
     unmount(parentDom, oldVNode.state.renderRes!);
     oldVNode.state.renderRes = undefined;
-    oldVNode.componentWrapper.unmount(oldVNode.state.componentState);
+    oldVNode.componentWrapper.unmount(oldVNode.state.componentState!);
   } else {
     throw new Error(`invalid vnode ${oldVNode}`);
   }
@@ -92,7 +94,7 @@ function patchFc(
   const oldRenderRes = oldVNode.state.renderRes!;
   const renderRes =
     newVNode.componentWrapper.update(
-      newVNode.state.componentState,
+      newVNode.state.componentState!,
       newVNode.props,
     ) || createVBlank(null);
   newVNode.state.renderRes = renderRes;

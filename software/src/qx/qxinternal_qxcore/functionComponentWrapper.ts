@@ -4,7 +4,11 @@ import {
   flushHookEffects,
   startHooks,
 } from 'qx/hookImpl';
-import { IVComponentWrapper } from 'qx/qxinternal_qxcore/types';
+import {
+  IComponentState,
+  IProps,
+  IVComponentWrapper,
+} from 'qx/qxinternal_qxcore/types';
 
 const promise = Promise.resolve();
 function doLater(fn: () => void) {
@@ -17,11 +21,11 @@ function createFunctionComponentWrapper(
   const fcName = renderFunction.name;
   return {
     name: fcName,
-    mount(self: any, props: any) {
+    mount(self: IComponentState, props: IProps) {
       // console.log('mount', fcName);
       self.fcsig = fcName;
       self.hook = createHookInstance();
-      self.renderWithHook = (props: any) => {
+      self.renderWithHook = (props: IProps) => {
         startHooks(self.hook);
         const vnode = renderFunction(props);
         if (vnode) {
@@ -31,12 +35,18 @@ function createFunctionComponentWrapper(
         doLater(() => flushHookEffects(self.hook));
         return vnode;
       };
+      const renderRes = self.renderWithHook(props);
+      if (props.css && renderRes.vtype === 'vElement') {
+        renderRes.props.class = renderRes.props.class
+          ? `${renderRes.props.class} ${props.css}`
+          : props.css;
+      }
+      return renderRes;
+    },
+    update(self: IComponentState, props: IProps) {
       return self.renderWithHook(props);
     },
-    update(self: any, props: any) {
-      return self.renderWithHook(props);
-    },
-    unmount(self: any) {
+    unmount(self: IComponentState) {
       // console.log('unmount', fcName);
       flushHookEffects(self.hook, true);
     },
@@ -51,9 +61,8 @@ export function getFunctionComponentWrapperCached(
   renderFunction: IRenderFunction,
 ) {
   if (!renderFunction.__QxFunctionComponentWrapper) {
-    renderFunction.__QxFunctionComponentWrapper = createFunctionComponentWrapper(
-      renderFunction,
-    );
+    renderFunction.__QxFunctionComponentWrapper =
+      createFunctionComponentWrapper(renderFunction);
   }
   return renderFunction.__QxFunctionComponentWrapper;
 }

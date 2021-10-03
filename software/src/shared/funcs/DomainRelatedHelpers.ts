@@ -147,3 +147,30 @@ export function decodeProjectResourceItemKey(key: string): {
   const [itemType, itemName] = key.split(':');
   return { itemType: itemType as IProjectResourceItemType, itemName };
 }
+
+export function validateResourceName(
+  resourceName: string,
+  resourceTypeNameText: string,
+  existingResourceNames?: string[],
+  allowDifferentCasingVariants?: boolean,
+): string | undefined {
+  // eslint-disable-next-line no-irregular-whitespace
+  // eslint-disable-next-line no-misleading-character-class
+  if (resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/)) {
+    return `${resourceName} is not a valid ${resourceTypeNameText}.`;
+  }
+  if (resourceName.length > 32) {
+    return `${resourceTypeNameText} should be no more than 32 characters.`;
+  }
+  if (existingResourceNames) {
+    const existingName = allowDifferentCasingVariants
+      ? existingResourceNames.find((it) => it === resourceName)
+      : existingResourceNames.find(
+          (it) => it.toLowerCase() === resourceName.toLowerCase(),
+        );
+    if (existingName) {
+      return `${existingName} already exists.`;
+    }
+  }
+  return undefined;
+}
