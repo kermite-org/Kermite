@@ -139,8 +139,6 @@ export function decodeProjectResourceItemKey(key: string): {
 export function validateResourceName(
   resourceName: string,
   resourceTypeNameText: string,
-  existingResourceNames?: string[],
-  allowDifferentCasingVariants?: boolean,
 ): string | undefined {
   if (
     // eslint-disable-next-line no-misleading-character-class
@@ -152,12 +150,22 @@ export function validateResourceName(
   if (resourceName.length > 32) {
     return `${resourceTypeNameText} should be no more than 32 characters.`;
   }
-  if (existingResourceNames) {
-    const existingName = allowDifferentCasingVariants
-      ? existingResourceNames.find((it) => it === resourceName)
-      : existingResourceNames.find(
-          (it) => it.toLowerCase() === resourceName.toLowerCase(),
-        );
+  return undefined;
+}
+
+export function validateResourceNameWithDuplicationCheck(
+  resourceName: string,
+  resourceTypeNameText: string,
+  checkedResourceNames: string[],
+): string | undefined {
+  const error = validateResourceName(resourceName, resourceTypeNameText);
+  if (error) {
+    return error;
+  }
+  if (checkedResourceNames) {
+    const existingName = checkedResourceNames.find(
+      (it) => it.toLowerCase() === resourceName.toLowerCase(),
+    );
     if (existingName) {
       return `${existingName} already exists.`;
     }

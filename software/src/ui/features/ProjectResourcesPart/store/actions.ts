@@ -17,7 +17,7 @@ const helpers = {
       modalTitle: `rename ${target}`,
       modalMessage: `new ${target} name`,
       resourceTypeNameText: `${target} name`,
-      defaultText: itemName,
+      currentName: itemName,
       existingResourceNames: allItemNames,
     });
     if (newName && newName !== itemName) {
