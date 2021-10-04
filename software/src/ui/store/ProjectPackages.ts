@@ -6,7 +6,7 @@ import {
   IProjectFirmwareEntry,
   IProjectLayoutEntry,
   IProjectPackageInfo,
-  IProjectPresetEntry,
+  IProjectProfileEntry,
   IResourceOrigin,
   IStandardFirmwareEntry,
 } from '~/shared';
@@ -149,9 +149,9 @@ export const projectPackagesWriter = {
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
-  saveLocalProjectPreset(item: IProjectPresetEntry) {
+  saveLocalProjectPreset(item: IProjectProfileEntry) {
     patchLocalEditProject((draft) =>
-      insertItemToArray(draft.presets, 'presetName', item),
+      insertItemToArray(draft.profiles, 'profileName', item),
     );
   },
   saveLocalProjectLayout(item: IProjectLayoutEntry) {
@@ -166,7 +166,7 @@ export const projectPackagesWriter = {
   },
   deleteLocalProjectPreset(presetName: string) {
     patchLocalEditProject((draft) =>
-      removeItemFromArray(draft.presets, 'presetName', presetName),
+      removeItemFromArray(draft.profiles, 'profileName', presetName),
     );
   },
   deleteLocalProjectLayout(layoutName: string) {
@@ -181,7 +181,7 @@ export const projectPackagesWriter = {
   },
   renameLocalProjectPreset(oldName: string, newName: string) {
     patchLocalEditProject((draft) => {
-      renameItemInArray(draft.presets, 'presetName', oldName, newName);
+      renameItemInArray(draft.profiles, 'profileName', oldName, newName);
     });
   },
   renameLocalProjectLayout(oldName: string, newName: string) {
@@ -196,7 +196,7 @@ export const projectPackagesWriter = {
   },
   copyLocalProjectPreset(srcName: string, newName: string) {
     patchLocalEditProject((draft) => {
-      copyItemInArray(draft.presets, 'presetName', srcName, newName);
+      copyItemInArray(draft.profiles, 'profileName', srcName, newName);
     });
   },
   copyLocalProjectLayout(srcName: string, newName: string) {

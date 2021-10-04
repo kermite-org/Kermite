@@ -85,8 +85,8 @@ export interface IProjectLayoutEntry {
   data: IPersistKeyboardDesign;
 }
 
-export interface IProjectPresetEntry {
-  presetName: string;
+export interface IProjectProfileEntry {
+  profileName: string;
   data: IPersistProfileData;
 }
 export interface IProjectPackageFileContent {
@@ -95,7 +95,7 @@ export interface IProjectPackageFileContent {
   keyboardName: string;
   firmwares: IProjectFirmwareEntry[];
   layouts: IProjectLayoutEntry[];
-  presets: IProjectPresetEntry[];
+  profiles: IProjectProfileEntry[];
 }
 
 export type IProjectPackageInfo = {

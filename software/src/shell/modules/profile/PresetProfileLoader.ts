@@ -76,11 +76,11 @@ export function presetProfileLoader_loadPresetProfileData(
   );
   if (projectInfo) {
     if (presetSpec.type === 'preset') {
-      const presetData = projectInfo.presets.find(
-        (it) => it.presetName === presetSpec.presetName,
+      const profileData = projectInfo.profiles.find(
+        (it) => it.profileName === presetSpec.presetName,
       )?.data;
-      if (presetData) {
-        return ProfileDataConverter.convertProfileDataFromPersist(presetData);
+      if (profileData) {
+        return ProfileDataConverter.convertProfileDataFromPersist(profileData);
       }
     } else {
       const layoutData = projectInfo.layouts.find(

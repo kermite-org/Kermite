@@ -58,7 +58,7 @@ function convertProjectPackageInfoToFileContent(
     keyboardName: info.keyboardName,
     firmwares: info.firmwares,
     layouts: info.layouts,
-    presets: info.presets,
+    profiles: info.profiles,
   };
 }
 

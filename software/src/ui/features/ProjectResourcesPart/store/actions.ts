@@ -108,9 +108,9 @@ export const projectResourceActions = {
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
     if (itemType === 'profile') {
-      const allItemNames = projectInfo.presets.map((it) => it.presetName);
+      const allItemNames = projectInfo.profiles.map((it) => it.profileName);
       helpers.renameProjectResourceListItem(
-        'preset',
+        'profile',
         itemName,
         allItemNames,
         projectPackagesWriter.renameLocalProjectPreset,
@@ -139,9 +139,9 @@ export const projectResourceActions = {
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
     if (itemType === 'profile') {
-      const allItemNames = projectInfo.presets.map((it) => it.presetName);
+      const allItemNames = projectInfo.profiles.map((it) => it.profileName);
       helpers.renameProjectResourceListItem(
-        'preset',
+        'profile',
         itemName,
         allItemNames,
         projectPackagesWriter.copyLocalProjectPreset,

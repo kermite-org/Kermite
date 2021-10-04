@@ -46,7 +46,7 @@ function useCoreProps(baseVm: IProfileManagementPartViewModel): ICoreProps {
   );
 
   const presetNameOptions =
-    currentProject?.presets.map(({ presetName }) => ({
+    currentProject?.profiles.map(({ profileName: presetName }) => ({
       value: presetName,
       label: presetName,
     })) || [];
