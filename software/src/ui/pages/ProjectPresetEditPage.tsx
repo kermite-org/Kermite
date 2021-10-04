@@ -36,7 +36,10 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
       ...sourceProfileEntry,
       data: emitSavingDesign(),
     };
-    projectPackagesWriter.saveLocalProjectPreset(newProfileEntry);
+    projectPackagesWriter.saveLocalProjectResourceItem(
+      'profile',
+      newProfileEntry,
+    );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
       setSourceProfileEntry(newProfileEntry);
     } else {

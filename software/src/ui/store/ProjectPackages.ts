@@ -7,6 +7,7 @@ import {
   IProjectLayoutEntry,
   IProjectPackageInfo,
   IProjectProfileEntry,
+  IProjectResourceItemType,
   IResourceOrigin,
   IStandardFirmwareEntry,
 } from '~/shared';
@@ -143,70 +144,83 @@ function copyItemInArray<T, K extends keyof T>(
   }
 }
 
+type IResourceItemTypeMap = {
+  profile: IProjectProfileEntry;
+  layout: IProjectLayoutEntry;
+  firmware: IProjectFirmwareEntry;
+};
+
+const fieldNamesMap = {
+  profile: {
+    itemsField: 'profiles',
+    itemNameField: 'profileName',
+  },
+  layout: {
+    itemsField: 'layouts',
+    itemNameField: 'layoutName',
+  },
+  firmware: {
+    itemsField: 'firmwares',
+    itemNameField: 'firmwareName',
+  },
+} as const;
+
 export const projectPackagesWriter = {
   async saveLocalProject(projectInfo: IProjectPackageInfo) {
     await dispatchCoreAction({
       project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
-  saveLocalProjectPreset(item: IProjectProfileEntry) {
-    patchLocalEditProject((draft) =>
-      insertItemToArray(draft.profiles, 'profileName', item),
-    );
-  },
-  saveLocalProjectLayout(item: IProjectLayoutEntry) {
-    patchLocalEditProject((draft) =>
-      insertItemToArray(draft.layouts, 'layoutName', item),
-    );
-  },
-  async saveLocalProjectFirmware(item: IProjectFirmwareEntry) {
+  async saveLocalProjectResourceItem<
+    T extends IProjectResourceItemType,
+    Item = IResourceItemTypeMap[T],
+  >(type: T, item: Item) {
+    const { itemsField, itemNameField } = fieldNamesMap[type];
     await patchLocalEditProject((draft) =>
-      insertItemToArray(draft.firmwares, 'firmwareName', item),
+      insertItemToArray<any, any>(draft[itemsField], itemNameField, item),
     );
   },
-  deleteLocalProjectPreset(presetName: string) {
+  deleteLocalProjectResourceItem<T extends IProjectResourceItemType>(
+    type: T,
+    targetItemName: string,
+  ) {
+    const { itemsField, itemNameField } = fieldNamesMap[type];
     patchLocalEditProject((draft) =>
-      removeItemFromArray(draft.profiles, 'profileName', presetName),
+      removeItemFromArray<any, any>(
+        draft[itemsField],
+        itemNameField,
+        targetItemName,
+      ),
     );
   },
-  deleteLocalProjectLayout(layoutName: string) {
-    patchLocalEditProject((draft) =>
-      removeItemFromArray(draft.layouts, 'layoutName', layoutName),
-    );
-  },
-  deleteLocalProjectFirmware(firmwareName: string) {
-    patchLocalEditProject((draft) =>
-      removeItemFromArray(draft.firmwares, 'firmwareName', firmwareName),
-    );
-  },
-  renameLocalProjectPreset(oldName: string, newName: string) {
+  renameLocalProjectResourceItem<T extends IProjectResourceItemType>(
+    type: T,
+    oldName: string,
+    newName: string,
+  ) {
+    const { itemsField, itemNameField } = fieldNamesMap[type];
     patchLocalEditProject((draft) => {
-      renameItemInArray(draft.profiles, 'profileName', oldName, newName);
+      renameItemInArray<any, any>(
+        draft[itemsField],
+        itemNameField,
+        oldName,
+        newName,
+      );
     });
   },
-  renameLocalProjectLayout(oldName: string, newName: string) {
+  copyLocalProjectResourceItem<T extends IProjectResourceItemType>(
+    type: T,
+    srcName: string,
+    newName: string,
+  ) {
+    const { itemsField, itemNameField } = fieldNamesMap[type];
     patchLocalEditProject((draft) => {
-      renameItemInArray(draft.layouts, 'layoutName', oldName, newName);
-    });
-  },
-  renameLocalProjectFirmware(oldName: string, newName: string) {
-    patchLocalEditProject((draft) => {
-      renameItemInArray(draft.firmwares, 'firmwareName', oldName, newName);
-    });
-  },
-  copyLocalProjectPreset(srcName: string, newName: string) {
-    patchLocalEditProject((draft) => {
-      copyItemInArray(draft.profiles, 'profileName', srcName, newName);
-    });
-  },
-  copyLocalProjectLayout(srcName: string, newName: string) {
-    patchLocalEditProject((draft) => {
-      copyItemInArray(draft.layouts, 'layoutName', srcName, newName);
-    });
-  },
-  copyLocalProjectFirmware(srcName: string, newName: string) {
-    patchLocalEditProject((draft) => {
-      copyItemInArray(draft.firmwares, 'firmwareName', srcName, newName);
+      copyItemInArray<any, any>(
+        draft[itemsField],
+        itemNameField,
+        srcName,
+        newName,
+      );
     });
   },
 };
