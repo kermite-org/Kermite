@@ -154,9 +154,11 @@ export function validateResourceName(
   existingResourceNames?: string[],
   allowDifferentCasingVariants?: boolean,
 ): string | undefined {
-  // eslint-disable-next-line no-irregular-whitespace
-  // eslint-disable-next-line no-misleading-character-class
-  if (resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/)) {
+  if (
+    // eslint-disable-next-line no-misleading-character-class
+    resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/) ||
+    resourceName.match(/^\s+$/)
+  ) {
     return `${resourceName} is not a valid ${resourceTypeNameText}.`;
   }
   if (resourceName.length > 32) {
