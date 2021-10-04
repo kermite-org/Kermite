@@ -159,6 +159,10 @@ export type IPersistProfileData = {
   mappingEntries: IMappingEntry[];
 };
 
+export type IPersistProfileFileData = IPersistProfileData & {
+  profileName: string;
+};
+
 export const fallbackPersistProfileData: IPersistProfileData = {
   formatRevision: 'PRF06',
   projectId: '',
