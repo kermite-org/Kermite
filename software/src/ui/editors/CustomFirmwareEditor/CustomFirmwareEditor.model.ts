@@ -32,7 +32,10 @@ const readers = {
         .filter((info) => info.firmwareProjectPath !== 'standard')
         .map((info) => ({
           value: info.firmwareId,
-          label: `${info.firmwareProjectPath}/${info.variationName}`,
+          label:
+            info.firmwareOrigin === 'localRepo'
+              ? `(local-build) ${info.firmwareProjectPath}/${info.variationName}`
+              : `${info.firmwareProjectPath}/${info.variationName}`,
         })),
     ];
   },
