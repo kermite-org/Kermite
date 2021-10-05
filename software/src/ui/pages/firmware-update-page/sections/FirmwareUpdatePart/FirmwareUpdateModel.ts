@@ -34,34 +34,29 @@ function getTargetDeviceFromFirmwareInfo(
   }
   return undefined;
 }
-export class FirmwareUpdateModel {
+
+const state = new (class {
   currentProjectFirmwareSpec: string = '';
   phase: FirmwareUpdatePhase = 'WaitingReset';
-
   firmwareUploadResult: string | undefined = undefined;
-
-  private projectInfosWithFirmware: IProjectPackageInfo[] = [];
-
-  private deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
+  projectInfosWithFirmware: IProjectPackageInfo[] = [];
+  deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
     detected: false,
   };
+})();
 
+const readers = {
   get detectedDeviceSig(): string | undefined {
     return (
-      (this.deviceDetectionStatus.detected &&
-        this.deviceDetectionStatus.targetDeviceSig) ||
+      (state.deviceDetectionStatus.detected &&
+        state.deviceDetectionStatus.targetDeviceSig) ||
       undefined
     );
-  }
-
-  setCurrentProjectFirmwareSpec = (spec: string) => {
-    this.currentProjectFirmwareSpec = spec;
-  };
-
+  },
   get firmwareOptions() {
     const blankOption = { value: '', label: 'select firmware' };
     const _firmwareOptions = flattenArray(
-      this.projectInfosWithFirmware.map((info) =>
+      state.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
           value: `${info.projectKey}:${firmware.firmwareName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
@@ -71,52 +66,30 @@ export class FirmwareUpdateModel {
       ),
     );
     return [blankOption, ..._firmwareOptions];
-  }
-
+  },
   getFirmwareSelectionSource(): ISelectorSource {
     if (
-      !this.firmwareOptions.some(
-        (option) => option.value === this.currentProjectFirmwareSpec,
+      !readers.firmwareOptions.some(
+        (option) => option.value === state.currentProjectFirmwareSpec,
       )
     ) {
-      this.currentProjectFirmwareSpec = '';
+      state.currentProjectFirmwareSpec = '';
     }
     return {
-      options: this.firmwareOptions,
-      value: this.currentProjectFirmwareSpec,
-      setValue: this.setCurrentProjectFirmwareSpec,
+      options: readers.firmwareOptions,
+      value: state.currentProjectFirmwareSpec,
+      setValue: (spec: string) => (state.currentProjectFirmwareSpec = spec),
     };
-  }
-
+  },
   get canSelectTargetFirmware() {
-    const { phase } = this;
+    const { phase } = state;
     return phase === 'WaitingReset' || phase === 'WaitingUploadOrder';
-  }
-
-  // 0: WaitingReset
-  backToInitialPhase = () => {
-    this.phase = 'WaitingReset';
-  };
-
-  // 1: WaitingReset --> WaitingUploadOrder
-  private onDeviceDetectionEvent = (ev: IBootloaderDeviceDetectionStatus) => {
-    this.deviceDetectionStatus = ev;
-    if (this.phase === 'WaitingReset' && this.deviceDetectionStatus.detected) {
-      this.phase = 'WaitingUploadOrder';
-    }
-    if (
-      this.phase === 'WaitingUploadOrder' &&
-      !this.deviceDetectionStatus.detected
-    ) {
-      this.phase = 'WaitingReset';
-    }
-  };
-
+  },
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
-    if (this.deviceDetectionStatus.detected) {
+    if (state.deviceDetectionStatus.detected) {
       const [projectKey, firmwareName] =
-        this.currentProjectFirmwareSpec.split(':');
-      const projectInfo = this.projectInfosWithFirmware.find((it) =>
+        state.currentProjectFirmwareSpec.split(':');
+      const projectInfo = state.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
       const firmwareInfo = projectInfo?.firmwares.find(
@@ -127,32 +100,62 @@ export class FirmwareUpdateModel {
         return (
           !!targetDevice &&
           checkDeviceBootloaderMatch(
-            this.deviceDetectionStatus.bootloaderType,
+            state.deviceDetectionStatus.bootloaderType,
             targetDevice,
           )
         );
       }
     }
     return false;
-  }
+  },
+};
+
+const actions = {
+  fetchProjectInfos() {
+    state.projectInfosWithFirmware = projectPackagesReader
+      .getProjectInfosGlobalProjectSelectionAffected()
+      .filter((info) => info.firmwares.length > 0);
+  },
+
+  // 0: WaitingReset
+  backToInitialPhase() {
+    state.phase = 'WaitingReset';
+  },
+
+  // 1: WaitingReset --> WaitingUploadOrder
+  setDeviceStatus(deviceDetectionStatus: IBootloaderDeviceDetectionStatus) {
+    state.deviceDetectionStatus = deviceDetectionStatus;
+    if (
+      state.phase === 'WaitingReset' &&
+      state.deviceDetectionStatus.detected
+    ) {
+      state.phase = 'WaitingUploadOrder';
+    }
+    if (
+      state.phase === 'WaitingUploadOrder' &&
+      !state.deviceDetectionStatus.detected
+    ) {
+      state.phase = 'WaitingReset';
+    }
+  },
 
   // 2: WaitingUploadOrder --> Uploading --> UploadSuccess,UploadFailure
-  uploadFirmware = async () => {
-    if (!this.currentProjectFirmwareSpec) {
+  async uploadFirmware() {
+    if (!state.currentProjectFirmwareSpec) {
       await modalAlert('please select firmware');
       return;
     }
     if (
-      this.phase === 'WaitingUploadOrder' &&
-      this.deviceDetectionStatus.detected
+      state.phase === 'WaitingUploadOrder' &&
+      state.deviceDetectionStatus.detected
     ) {
       const [projectKey, firmwareName] =
-        this.currentProjectFirmwareSpec.split(':');
-      const info = this.projectInfosWithFirmware.find((it) =>
+        state.currentProjectFirmwareSpec.split(':');
+      const info = state.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
       if (info) {
-        this.phase = 'Uploading';
+        state.phase = 'Uploading';
         uiActions.setLoading();
         const res = await ipcAgent.async.firmup_uploadFirmware(
           info.origin,
@@ -160,28 +163,19 @@ export class FirmwareUpdateModel {
           firmwareName,
         );
         uiActions.clearLoading();
-        this.firmwareUploadResult = res;
+        state.firmwareUploadResult = res;
         if (res === 'ok') {
-          this.phase = 'UploadSuccess';
+          state.phase = 'UploadSuccess';
         } else {
-          this.phase = 'UploadFailure';
+          state.phase = 'UploadFailure';
         }
       }
     }
-  };
+  },
+};
 
-  private fetchProjectInfos() {
-    this.projectInfosWithFirmware = projectPackagesReader
-      .getProjectInfosGlobalProjectSelectionAffected()
-      .filter((info) => info.firmwares.length > 0);
-  }
-
-  startPageSession = () => {
-    this.fetchProjectInfos();
-    return ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
-      this.onDeviceDetectionEvent,
-    );
-  };
-}
-
-export const firmwareUpdateModel = new FirmwareUpdateModel();
+export const firmwareUpdateModel = {
+  state,
+  readers,
+  actions,
+};

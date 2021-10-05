@@ -1,5 +1,5 @@
 import { useEffect } from 'qx';
-import { ISelectorSource } from '~/ui/base';
+import { ipcAgent, ISelectorSource } from '~/ui/base';
 import { showCommandOutputLogModal } from '~/ui/components';
 import {
   firmwareUpdateModel,
@@ -19,25 +19,33 @@ interface IFirmwareUpdatePartModel {
 
 export function useFirmwareUpdatePartModel(): IFirmwareUpdatePartModel {
   const model = firmwareUpdateModel;
-  useEffect(model.startPageSession, []);
+
+  const { state, readers, actions } = model;
+  useEffect(() => {
+    actions.fetchProjectInfos();
+    return ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
+      actions.setDeviceStatus,
+    );
+  }, []);
+
   return {
-    phase: model.phase,
-    detectedDeviceSig: model.detectedDeviceSig,
-    canSelectTargetFirmware: model.canSelectTargetFirmware,
-    firmwareSelectorSource: model.getFirmwareSelectionSource(),
+    phase: state.phase,
+    detectedDeviceSig: readers.detectedDeviceSig,
+    canSelectTargetFirmware: readers.canSelectTargetFirmware,
+    firmwareSelectorSource: readers.getFirmwareSelectionSource(),
     get canFlashSelectedFirmwareToDetectedDevice() {
-      return model.canFlashSelectedFirmwareToDetectedDevice;
+      return readers.canFlashSelectedFirmwareToDetectedDevice;
     },
     onWriteButton() {
-      model.uploadFirmware();
+      actions.uploadFirmware();
     },
     onResetButton() {
-      model.backToInitialPhase();
+      actions.backToInitialPhase();
     },
     onLogButton() {
       showCommandOutputLogModal({
         caption: 'Operation Command Log',
-        logText: model.firmwareUploadResult || '',
+        logText: state.firmwareUploadResult || '',
       });
     },
   };
