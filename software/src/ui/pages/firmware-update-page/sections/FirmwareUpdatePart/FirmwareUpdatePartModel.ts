@@ -21,12 +21,13 @@ export function useFirmwareUpdatePartModel(): IFirmwareUpdatePartModel {
   const model = firmwareUpdateModel;
 
   const { state, readers, actions } = model;
-  useEffect(() => {
-    actions.fetchProjectInfos();
-    return ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
-      actions.setDeviceStatus,
-    );
-  }, []);
+  useEffect(
+    () =>
+      ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
+        actions.setDeviceStatus,
+      ),
+    [],
+  );
 
   return {
     phase: state.phase,

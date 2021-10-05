@@ -36,16 +36,21 @@ function getTargetDeviceFromFirmwareInfo(
 }
 
 const state = new (class {
-  currentProjectFirmwareSpec: string = '';
+  currentProjectFirmwareSpec: string = ''; // `${projectKey}:${firmwareName}`
   phase: FirmwareUpdatePhase = 'WaitingReset';
   firmwareUploadResult: string | undefined = undefined;
-  projectInfosWithFirmware: IProjectPackageInfo[] = [];
   deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
     detected: false,
   };
 })();
 
 const readers = {
+  get projectInfosWithFirmware(): IProjectPackageInfo[] {
+    return projectPackagesReader
+      .getProjectInfosGlobalProjectSelectionAffected()
+      .filter((info) => info.firmwares.length > 0);
+  },
+
   get detectedDeviceSig(): string | undefined {
     return (
       (state.deviceDetectionStatus.detected &&
@@ -56,7 +61,7 @@ const readers = {
   get firmwareOptions() {
     const blankOption = { value: '', label: 'select firmware' };
     const _firmwareOptions = flattenArray(
-      state.projectInfosWithFirmware.map((info) =>
+      readers.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
           value: `${info.projectKey}:${firmware.firmwareName}`,
           label: `${info.origin === 'local' ? '(local) ' : ''} ${
@@ -89,7 +94,7 @@ const readers = {
     if (state.deviceDetectionStatus.detected) {
       const [projectKey, firmwareName] =
         state.currentProjectFirmwareSpec.split(':');
-      const projectInfo = state.projectInfosWithFirmware.find((it) =>
+      const projectInfo = readers.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
       const firmwareInfo = projectInfo?.firmwares.find(
@@ -111,12 +116,6 @@ const readers = {
 };
 
 const actions = {
-  fetchProjectInfos() {
-    state.projectInfosWithFirmware = projectPackagesReader
-      .getProjectInfosGlobalProjectSelectionAffected()
-      .filter((info) => info.firmwares.length > 0);
-  },
-
   // 0: WaitingReset
   backToInitialPhase() {
     state.phase = 'WaitingReset';
@@ -151,7 +150,7 @@ const actions = {
     ) {
       const [projectKey, firmwareName] =
         state.currentProjectFirmwareSpec.split(':');
-      const info = state.projectInfosWithFirmware.find((it) =>
+      const info = readers.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
       if (info) {
