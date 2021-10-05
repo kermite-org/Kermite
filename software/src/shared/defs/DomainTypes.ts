@@ -104,7 +104,10 @@ export type IProjectPackageInfo = {
   packageName: string;
 } & IProjectPackageFileContent;
 
+export type IFirmwareOrigin = 'localRepo' | 'online';
+
 export type ICustomFirmwareInfo = {
+  firmwareOrigin: IFirmwareOrigin;
   firmwareId: string;
   firmwareProjectPath: string;
   variationName: string;

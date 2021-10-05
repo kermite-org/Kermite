@@ -20,6 +20,7 @@ function mapIndexFirmwareEntryToCustomFirmwareInfo(
   entry: IIndexFirmwaresContent['firmwares'][0],
 ): ICustomFirmwareInfo {
   return {
+    firmwareOrigin: 'online',
     firmwareId: entry.firmwareId,
     firmwareProjectPath: entry.firmwareProjectPath,
     variationName: entry.variationName,
