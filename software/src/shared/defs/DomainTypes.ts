@@ -112,9 +112,11 @@ export type ICustomFirmwareInfo = {
   firmwareProjectPath: string;
   variationName: string;
   targetDevice: string;
+  binaryFileName: string;
   buildRevision: number;
   buildTimestamp: string;
 };
+
 export interface IProjectCustomDefinition {
   customParameterSpecs?: ICustomParameterSpec[];
 }
