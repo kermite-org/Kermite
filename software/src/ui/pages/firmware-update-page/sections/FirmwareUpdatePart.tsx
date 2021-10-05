@@ -12,7 +12,7 @@ export const FirmwareUpdatePart: FC = () => {
     phase,
     detectedDeviceSig,
     canSelectTargetFirmware,
-    projectSelectorSource,
+    firmwareSelectorSource,
     canFlashSelectedFirmwareToDetectedDevice,
     onWriteButton,
     onResetButton,
@@ -29,7 +29,7 @@ export const FirmwareUpdatePart: FC = () => {
 
         <div className="mainRow">
           <GeneralSelector
-            {...projectSelectorSource}
+            {...firmwareSelectorSource}
             width={350}
             disabled={!canSelectTargetFirmware}
             hint={texts.label_device_firmwareUpdate_projectSelector}
@@ -62,7 +62,7 @@ export const FirmwareUpdatePart: FC = () => {
             detectedDeviceSig &&
             !canFlashSelectedFirmwareToDetectedDevice && (
               <div className="note">
-                {projectSelectorSource.value
+                {firmwareSelectorSource.value
                   ? 'Selected firmware is not supposed to be flashed into this device.'
                   : 'Please select firmware.'}
               </div>

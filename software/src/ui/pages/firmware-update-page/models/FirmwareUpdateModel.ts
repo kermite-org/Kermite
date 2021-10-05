@@ -58,9 +58,9 @@ export class FirmwareUpdateModel {
     this.currentProjectFirmwareSpec = spec;
   };
 
-  get projectOptions() {
+  get firmwareOptions() {
     const blankOption = { value: '', label: 'select firmware' };
-    const projectOptions = flattenArray(
+    const _firmwareOptions = flattenArray(
       this.projectInfosWithFirmware.map((info) =>
         info.firmwares.map((firmware) => ({
           value: `${info.projectKey}:${firmware.firmwareName}`,
@@ -70,19 +70,19 @@ export class FirmwareUpdateModel {
         })),
       ),
     );
-    return [blankOption, ...projectOptions];
+    return [blankOption, ..._firmwareOptions];
   }
 
-  getProjectSelectionSource(): ISelectorSource {
+  getFirmwareSelectionSource(): ISelectorSource {
     if (
-      !this.projectOptions.some(
+      !this.firmwareOptions.some(
         (option) => option.value === this.currentProjectFirmwareSpec,
       )
     ) {
       this.currentProjectFirmwareSpec = '';
     }
     return {
-      options: this.projectOptions,
+      options: this.firmwareOptions,
       value: this.currentProjectFirmwareSpec,
       setValue: this.setCurrentProjectFirmwareSpec,
     };

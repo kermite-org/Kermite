@@ -10,7 +10,7 @@ interface IFirmwareUpdatePartModel {
   phase: FirmwareUpdatePhase;
   detectedDeviceSig: string | undefined;
   canSelectTargetFirmware: boolean;
-  projectSelectorSource: ISelectorSource;
+  firmwareSelectorSource: ISelectorSource;
   canFlashSelectedFirmwareToDetectedDevice: boolean;
   onWriteButton(): void;
   onResetButton(): void;
@@ -24,7 +24,7 @@ export function useFirmwareUpdatePartModel(): IFirmwareUpdatePartModel {
     phase: model.phase,
     detectedDeviceSig: model.detectedDeviceSig,
     canSelectTargetFirmware: model.canSelectTargetFirmware,
-    projectSelectorSource: model.getProjectSelectionSource(),
+    firmwareSelectorSource: model.getFirmwareSelectionSource(),
     get canFlashSelectedFirmwareToDetectedDevice() {
       return model.canFlashSelectedFirmwareToDetectedDevice;
     },
