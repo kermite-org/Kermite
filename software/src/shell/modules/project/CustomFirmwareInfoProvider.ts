@@ -106,7 +106,7 @@ namespace LocalRepositoryFirmwareListLoader {
       if (valid) {
         const binaryFileName = pathBasename(targetBinaryFilePath);
         return {
-          firmwareOrigin: 'localRepo',
+          firmwareOrigin: 'localBuild',
           firmwareId,
           firmwareProjectPath: projectPath,
           variationName,

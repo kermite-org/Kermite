@@ -58,7 +58,7 @@ function makeFirmwareOptions(
       (it) => it.signature === signature && it.firmwareOrigin === 'online',
     );
     const hasLocalBuild = tempFirmwareItems.some(
-      (it) => it.signature === signature && it.firmwareOrigin === 'localRepo',
+      (it) => it.signature === signature && it.firmwareOrigin === 'localBuild',
     );
     const originText = [hasOnline && 'online', hasLocalBuild && 'local-build']
       .filter((it) => !!it)
