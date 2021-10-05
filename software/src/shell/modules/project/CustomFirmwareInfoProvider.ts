@@ -91,7 +91,10 @@ namespace LocalRepositoryFirmwareListLoader {
         ) ?? '';
       const rulesMkContent = await fsxReadFile(ruleMkFilePath);
       const targetDevice =
-        getMatched(rulesMkContent, /^TARGET_MCU\s?=\s?(.+)$/m) ?? '';
+        (getMatched(
+          rulesMkContent,
+          /^TARGET_MCU\s?=\s?(.+)$/m,
+        ) as IFirmwareTargetDevice) ?? '';
 
       if (!(firmwareId && targetDevice)) {
         return undefined;
@@ -149,7 +152,7 @@ const state = new (class {
   firmwareIdToLocalBinaryFilePathMap: Record<string, string> = {};
 })();
 
-export const CustomFirmwareInfoProvider = {
+export const customFirmwareInfoProvider = {
   async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
     state.onlineFirmwareInfos ||=
       await OnlineFirmwareListLoader.loadOnlineFirmwareInfos();
@@ -168,5 +171,8 @@ export const CustomFirmwareInfoProvider = {
         ...rest,
       })),
     ];
+  },
+  getLocalBuildFirmwareBinaryPath(firmwareId: string): string | undefined {
+    return state.firmwareIdToLocalBinaryFilePathMap[firmwareId];
   },
 };

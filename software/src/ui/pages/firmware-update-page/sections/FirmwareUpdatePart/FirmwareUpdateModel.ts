@@ -1,13 +1,14 @@
 import {
   checkDeviceBootloaderMatch,
-  flattenArray,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
+  ICustomFirmwareInfo,
+  IFirmwareOriginEx,
   IFirmwareTargetDevice,
   IProjectFirmwareEntry,
   IProjectPackageInfo,
 } from '~/shared';
-import { ipcAgent, ISelectorSource } from '~/ui/base';
+import { ipcAgent, ISelectorOption, ISelectorSource } from '~/ui/base';
 import { modalAlert } from '~/ui/components';
 import { projectPackagesReader, uiActions, uiReaders } from '~/ui/store';
 
@@ -18,25 +19,65 @@ export type FirmwareUpdatePhase =
   | 'UploadSuccess'
   | 'UploadFailure';
 
-function getTargetDeviceFromFirmwareInfo(
-  entry: IProjectFirmwareEntry,
-): IFirmwareTargetDevice | undefined {
-  if (entry.type === 'standard') {
-    return getFirmwareTargetDeviceFromBaseFirmwareType(
-      entry.standardFirmwareConfig.baseFirmwareType,
-    );
-  }
-  if (entry.type === 'custom') {
-    const item = uiReaders.allCustomFirmwareInfos.find(
-      (it) => it.firmwareId === entry.customFirmwareId,
-    );
-    return item?.targetDevice as IFirmwareTargetDevice;
-  }
-  return undefined;
-}
+const helpers = {
+  getTargetDeviceFromFirmwareInfo(
+    entry: IProjectFirmwareEntry,
+  ): IFirmwareTargetDevice | undefined {
+    if (entry.type === 'standard') {
+      return getFirmwareTargetDeviceFromBaseFirmwareType(
+        entry.standardFirmwareConfig.baseFirmwareType,
+      );
+    }
+    if (entry.type === 'custom') {
+      const item = uiReaders.allCustomFirmwareInfos.find(
+        (it) => it.firmwareId === entry.customFirmwareId,
+      );
+      return item?.targetDevice as IFirmwareTargetDevice;
+    }
+    return undefined;
+  },
+
+  createFirmwareOptions(
+    projectInfosWithFirmware: IProjectPackageInfo[],
+    allCustomFirmwareInfos: ICustomFirmwareInfo[],
+  ): ISelectorOption[] {
+    return projectInfosWithFirmware
+      .map((info) =>
+        info.firmwares.map((firmware) => {
+          const projectOriginText =
+            info.origin === 'local' ? '(local-package) ' : '';
+          const { projectKey, keyboardName } = info;
+          const { firmwareName } = firmware;
+          if (firmware.type === 'standard') {
+            return [
+              {
+                value: `${projectKey}:${firmwareName}:unspecified`,
+                label: `${projectOriginText} ${keyboardName} ${firmwareName}`,
+              },
+            ];
+          } else {
+            const customFirmwares = allCustomFirmwareInfos.filter(
+              (it) => it.firmwareId === firmware.customFirmwareId,
+            );
+            return customFirmwares.map((customFirmware) => {
+              const { firmwareOrigin } = customFirmware;
+              const firmwareOriginText =
+                (firmwareOrigin === 'localBuild' && '(local-build)') || '';
+              return {
+                value: `${projectKey}:${firmwareName}:${firmwareOrigin}`,
+                label: `${projectOriginText} ${keyboardName} ${firmwareName} ${firmwareOriginText}`,
+              };
+            });
+          }
+        }),
+      )
+      .flat()
+      .flat();
+  },
+};
 
 const state = new (class {
-  currentProjectFirmwareSpec: string = ''; // `${projectKey}:${firmwareName}`
+  currentProjectFirmwareSpec: string = ''; // `${projectKey}:${firmwareName}:${firmwareOrigin}`
   phase: FirmwareUpdatePhase = 'WaitingReset';
   firmwareUploadResult: string | undefined = undefined;
   deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
@@ -58,19 +99,15 @@ const readers = {
       undefined
     );
   },
-  get firmwareOptions() {
+  get firmwareOptions(): ISelectorOption[] {
     const blankOption = { value: '', label: 'select firmware' };
-    const _firmwareOptions = flattenArray(
-      readers.projectInfosWithFirmware.map((info) =>
-        info.firmwares.map((firmware) => ({
-          value: `${info.projectKey}:${firmware.firmwareName}`,
-          label: `${info.origin === 'local' ? '(local) ' : ''} ${
-            info.keyboardName
-          } (${firmware.firmwareName})`,
-        })),
+    return [
+      blankOption,
+      ...helpers.createFirmwareOptions(
+        readers.projectInfosWithFirmware,
+        uiReaders.allCustomFirmwareInfos,
       ),
-    );
-    return [blankOption, ..._firmwareOptions];
+    ];
   },
   getFirmwareSelectionSource(): ISelectorSource {
     if (
@@ -92,7 +129,8 @@ const readers = {
   },
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
     if (state.deviceDetectionStatus.detected) {
-      const [projectKey, firmwareName] =
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [projectKey, firmwareName, _firmwareOrigin] =
         state.currentProjectFirmwareSpec.split(':');
       const projectInfo = readers.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
@@ -101,7 +139,8 @@ const readers = {
         (f) => f.firmwareName === firmwareName,
       );
       if (firmwareInfo) {
-        const targetDevice = getTargetDeviceFromFirmwareInfo(firmwareInfo);
+        const targetDevice =
+          helpers.getTargetDeviceFromFirmwareInfo(firmwareInfo);
         return (
           !!targetDevice &&
           checkDeviceBootloaderMatch(
@@ -148,7 +187,7 @@ const actions = {
       state.phase === 'WaitingUploadOrder' &&
       state.deviceDetectionStatus.detected
     ) {
-      const [projectKey, firmwareName] =
+      const [projectKey, firmwareName, firmwareOrigin] =
         state.currentProjectFirmwareSpec.split(':');
       const info = readers.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
@@ -160,6 +199,7 @@ const actions = {
           info.origin,
           info.projectId,
           firmwareName,
+          firmwareOrigin as IFirmwareOriginEx,
         );
         uiActions.clearLoading();
         state.firmwareUploadResult = res;

@@ -1,6 +1,7 @@
 import {
   generateRandomDeviceInstanceCode,
   getFirmwareTargetDeviceFromBaseFirmwareType,
+  IFirmwareOriginEx,
   IFirmwareTargetDevice,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -20,6 +21,7 @@ import {
   pathResolve,
 } from '~/shell/funcs';
 import { coreState } from '~/shell/modules/core';
+import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
 import { applyStandardFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
 import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
@@ -133,6 +135,7 @@ function makeInjectedMetaData(
 export async function loadFirmwareFileBytes(
   packageInfo: IProjectPackageInfo,
   firmwareName: string,
+  firmwareOrigin: IFirmwareOriginEx,
 ): Promise<IFirmwareFetchResultWithTargetDevice | undefined> {
   const firmwareEntry = packageInfo.firmwares.find(
     (it) => it.firmwareName === firmwareName,
@@ -170,7 +173,23 @@ export async function loadFirmwareFileBytes(
     };
   }
   if (firmwareEntry?.type === 'custom') {
-    return await fetchCustomFirmware(firmwareEntry.customFirmwareId);
+    if (firmwareOrigin === 'online') {
+      return await fetchCustomFirmware(firmwareEntry.customFirmwareId);
+    } else if (firmwareOrigin === 'localBuild') {
+      const filePath =
+        customFirmwareInfoProvider.getLocalBuildFirmwareBinaryPath(
+          firmwareEntry.customFirmwareId,
+        );
+      const info = coreState.allCustomFirmwareInfos.find(
+        (it) => it.firmwareId === firmwareEntry.customFirmwareId,
+      );
+      if (filePath && info) {
+        const fileName = pathBasename(filePath);
+        console.log(`loading local firmware ${filePath}`);
+        const data = await fsxReadBinaryFile(filePath);
+        return { fileName, data, targetDevice: info.targetDevice };
+      }
+    }
   }
   return undefined;
 }
@@ -179,6 +198,7 @@ export async function firmwareFileLoader_loadFirmwareFile(
   origin: IResourceOrigin,
   projectId: string,
   firmwareName: string,
+  firmwareOrigin: IFirmwareOriginEx,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
   const packageInfos = coreState.allProjectPackageInfos;
   const packageInfo = packageInfos.find(
@@ -187,7 +207,11 @@ export async function firmwareFileLoader_loadFirmwareFile(
   if (!packageInfo) {
     return undefined;
   }
-  const loadResult = await loadFirmwareFileBytes(packageInfo, firmwareName);
+  const loadResult = await loadFirmwareFileBytes(
+    packageInfo,
+    firmwareName,
+    firmwareOrigin,
+  );
   if (!loadResult) {
     return undefined;
   }

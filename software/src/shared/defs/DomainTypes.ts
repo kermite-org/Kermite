@@ -106,12 +106,14 @@ export type IProjectPackageInfo = {
 
 export type IFirmwareOrigin = 'localBuild' | 'online';
 
+export type IFirmwareOriginEx = 'localBuild' | 'online' | 'unspecified';
+
 export type ICustomFirmwareInfo = {
   firmwareOrigin: IFirmwareOrigin;
   firmwareId: string;
   firmwareProjectPath: string;
   variationName: string;
-  targetDevice: string;
+  targetDevice: IFirmwareTargetDevice;
   binaryFileName: string;
   buildRevision: number;
   buildTimestamp: string;
