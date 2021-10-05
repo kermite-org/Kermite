@@ -1,11 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
-import { useFirmwareUpdatePartModel } from '~/ui/pages/firmware-update-page/models';
 import {
   PartBody,
   PartHeader,
-} from '~/ui/pages/firmware-update-page/sections/Components';
+} from '~/ui/pages/firmware-update-page/Components';
+import { useFirmwareUpdatePartModel } from '~/ui/pages/firmware-update-page/sections/FirmwareUpdatePart/FirmwareUpdatePartModel';
 
 export const FirmwareUpdatePart: FC = () => {
   const {

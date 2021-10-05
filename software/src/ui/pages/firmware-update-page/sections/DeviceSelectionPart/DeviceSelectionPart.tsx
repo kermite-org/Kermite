@@ -1,11 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components';
-import { useDeviceSelectionPartModel } from '~/ui/pages/firmware-update-page/models';
 import {
   PartBody,
   PartHeader,
-} from '~/ui/pages/firmware-update-page/sections/Components';
+} from '~/ui/pages/firmware-update-page/Components';
+import { useDeviceSelectionPartModel } from '~/ui/pages/firmware-update-page/sections/DeviceSelectionPart/DeviceSelectionPartModel';
 
 export const DeviceSelectionPart: FC = () => {
   const { deviceOptions, currentDevicePath, setSelectedDevicePath } =
