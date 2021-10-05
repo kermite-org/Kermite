@@ -1,6 +1,12 @@
-import { compareObjectByJsonStringify } from '~/shared';
+import {
+  compareObjectByJsonStringify,
+  ICustomFirmwareInfo,
+  IFirmwareOrigin,
+  uniqueArrayItems,
+} from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import { uiReaders } from '~/ui/store';
+import { createSimpleSelector } from '~/ui/utils';
 
 export type ICustomFirmwareEditValues = {
   customFirmwareId: string;
@@ -15,6 +21,62 @@ const store = new (class {
   editValues: ICustomFirmwareEditValues = fallbackCustomFirmwareEditValues;
 })();
 
+type ITempFirmwareItem = {
+  firmwareOrigin: IFirmwareOrigin;
+  firmwareId: string;
+  variationPath: string;
+  signature: string; // ${firmwareId}:${variationPath}
+};
+
+function makeFirmwareOptions(
+  allCustomFirmwareInfos: ICustomFirmwareInfo[],
+): ISelectorOption[] {
+  const dedicatedFirmwareInfos = allCustomFirmwareInfos.filter(
+    (info) => info.firmwareProjectPath !== 'standard',
+  );
+
+  const tempFirmwareItems: ITempFirmwareItem[] = dedicatedFirmwareInfos.map(
+    (info) => {
+      const { firmwareOrigin, firmwareId, firmwareProjectPath, variationName } =
+        info;
+      const variationPath = `${firmwareProjectPath}/${variationName}`;
+      const signature = `${firmwareId}:${variationPath}`;
+      return {
+        firmwareOrigin,
+        firmwareId,
+        variationPath,
+        signature,
+      };
+    },
+  );
+  const allSignatures = uniqueArrayItems(
+    tempFirmwareItems.map((it) => it.signature),
+  );
+
+  return allSignatures.map((signature) => {
+    const hasOnline = tempFirmwareItems.some(
+      (it) => it.signature === signature && it.firmwareOrigin === 'online',
+    );
+    const hasLocalBuild = tempFirmwareItems.some(
+      (it) => it.signature === signature && it.firmwareOrigin === 'localRepo',
+    );
+    const originText = [hasOnline && 'online', hasLocalBuild && 'local-build']
+      .filter((it) => !!it)
+      .join(', ');
+
+    const [firmwareId, variationPath] = signature.split(':');
+    return {
+      label: `[${firmwareId}] (${originText}) ${variationPath}`,
+      value: firmwareId,
+    };
+  });
+}
+
+const firmwareOptionsSelector = createSimpleSelector(
+  () => uiReaders.allCustomFirmwareInfos,
+  makeFirmwareOptions,
+);
+
 const readers = {
   get originalValues(): ICustomFirmwareEditValues {
     return store.originalValues;
@@ -28,15 +90,7 @@ const readers = {
         value: '',
         label: 'select firmware',
       },
-      ...uiReaders.allCustomFirmwareInfos
-        .filter((info) => info.firmwareProjectPath !== 'standard')
-        .map((info) => ({
-          value: info.firmwareId,
-          label:
-            info.firmwareOrigin === 'localRepo'
-              ? `(local-build) ${info.firmwareProjectPath}/${info.variationName}`
-              : `${info.firmwareProjectPath}/${info.variationName}`,
-        })),
+      ...firmwareOptionsSelector(),
     ];
   },
   get canSave(): boolean {

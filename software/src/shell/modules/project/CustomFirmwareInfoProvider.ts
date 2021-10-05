@@ -2,7 +2,6 @@ import {
   getMatched,
   ICustomFirmwareInfo,
   IFirmwareTargetDevice,
-  uniqueArrayItemsByField,
 } from '~/shared';
 import { appConfig } from '~/shell/base';
 import {
@@ -162,13 +161,12 @@ export const CustomFirmwareInfoProvider = {
         it.firmwareLocalBinaryFilePath,
       ]),
     );
-    const allFirmwareInfos = [
+    return [
       ...state.onlineFirmwareInfos,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ...localFirmwareInfos.map(({ firmwareLocalBinaryFilePath, ...rest }) => ({
         ...rest,
       })),
     ];
-    return uniqueArrayItemsByField(allFirmwareInfos, 'firmwareId');
   },
 };
