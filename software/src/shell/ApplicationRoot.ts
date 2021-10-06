@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { shell } from 'electron';
-import { getAppErrorData, makeCompactStackTrace } from '~/shared';
+import { getAppErrorData, ICoreState, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import {
   executeWithFatalErrorHandler,
@@ -125,6 +125,14 @@ export class ApplicationRoot {
     });
   }
 
+  onCoreStateChange = async (diff: Partial<ICoreState>) => {
+    if (diff.globalSettings) {
+      await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 }).catch(
+        reportShellError,
+      );
+    }
+  };
+
   async initialize() {
     await executeWithFatalErrorHandler(async () => {
       console.log(`initialize services`);
@@ -158,6 +166,7 @@ export class ApplicationRoot {
       );
       await profileManagerRoot.initializeAsync();
       await layoutManagerRoot.initializeAsync();
+      coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
       commitCoreState({
@@ -176,6 +185,7 @@ export class ApplicationRoot {
       this.windowWrapper.terminate();
       profileManagerRoot.terminate();
       layoutManagerRoot.terminate();
+      coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
       await applicationStorage.terminateAsync();
     });
   }

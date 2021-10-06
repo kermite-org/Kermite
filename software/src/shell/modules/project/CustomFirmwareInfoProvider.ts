@@ -14,8 +14,8 @@ import {
   pathDirname,
   pathJoin,
   pathRelative,
-  pathResolve,
 } from '~/shell/funcs';
+import { globalSettingsReader } from '~/shell/modules/core';
 
 namespace OnlineFirmwareListLoader {
   type IIndexFirmwaresContent = {
@@ -127,12 +127,11 @@ namespace LocalRepositoryFirmwareListLoader {
     return undefined;
   }
 
-  export async function loadLocalFirmwareInfos(): Promise<
-    ICustomFirmwareInfo_WithBinaryFilePath[]
-  > {
-    // todo: globalSettingsのlocal repository pathから読み込む
-    const projectsRoot = pathResolve('../firmware/src/projects');
-    const buildsRoot = pathResolve('../firmware/build');
+  async function loadLocalFirmwareInfosImpl(
+    localRepositoryDir: string,
+  ): Promise<ICustomFirmwareInfo_WithBinaryFilePath[]> {
+    const projectsRoot = pathJoin(localRepositoryDir, 'firmware/src/projects');
+    const buildsRoot = pathJoin(localRepositoryDir, 'firmware/build');
     const elfFilePaths = await globAsync(`${buildsRoot}/**/*.elf`);
     const allFirmwareInfos = await Promise.all(
       elfFilePaths.map(
@@ -144,6 +143,25 @@ namespace LocalRepositoryFirmwareListLoader {
       (it) => !!it,
     ) as ICustomFirmwareInfo_WithBinaryFilePath[];
     return firmwareInfos;
+  }
+
+  const cashed = new (class {
+    localRepositoryDir: string = '';
+    items: ICustomFirmwareInfo_WithBinaryFilePath[] = [];
+  })();
+
+  export async function loadLocalFirmwareInfos(): Promise<
+    ICustomFirmwareInfo_WithBinaryFilePath[]
+  > {
+    const localRepositoryDir = globalSettingsReader.getLocalRepositoryDir();
+    if (!localRepositoryDir) {
+      return [];
+    }
+    if (localRepositoryDir !== cashed.localRepositoryDir) {
+      cashed.localRepositoryDir = localRepositoryDir;
+      cashed.items = await loadLocalFirmwareInfosImpl(localRepositoryDir);
+    }
+    return cashed.items;
   }
 }
 

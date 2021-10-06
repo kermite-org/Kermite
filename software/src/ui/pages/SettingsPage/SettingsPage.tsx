@@ -47,7 +47,6 @@ export const SettingsPage = () => {
               checked={flagUseLocalResources}
               setChecked={setFlagUseLocalResources}
               disabled={!flagDeveloperMode}
-              qxIf={false}
             />
             <div>
               <div
