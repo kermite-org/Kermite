@@ -1,11 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { GeneralSelector, CheckBox, Slider } from '~/ui/components';
-import { useCustomParametersPartModel } from '~/ui/pages/firmware-update-page/models';
 import {
   PartBody,
   PartHeader,
-} from '~/ui/pages/firmware-update-page/sections/Components';
+} from '~/ui/pages/firmware-update-page/Components';
+import { useCustomParametersPartModel } from '~/ui/pages/firmware-update-page/sections/CustomParametersPart/CustomParametersPartModel';
 
 export const CustomParametersPart: FC = () => {
   const {

@@ -11,6 +11,7 @@ import {
   coreState,
   createCoreModule,
 } from '~/shell/modules/core';
+import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
 import { projectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
 const projectPackageModuleHelper = {
@@ -58,7 +59,7 @@ export const projectPackageModule = createCoreModule({
   },
   async project_loadAllCustomFirmwareInfos() {
     const allCustomFirmwareInfos =
-      await projectPackageProvider.getAllCustomFirmwareInfos();
+      await customFirmwareInfoProvider.getAllCustomFirmwareInfos();
     commitCoreState({ allCustomFirmwareInfos });
   },
   async project_createLocalProject({ keyboardName }) {

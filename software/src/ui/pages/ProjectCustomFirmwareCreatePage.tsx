@@ -27,7 +27,10 @@ const helpers = {
       firmwareName,
       customFirmwareId,
     };
-    await projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    await projectPackagesWriter.saveLocalProjectResourceItem(
+      'firmware',
+      newFirmwareEntry,
+    );
     projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', firmwareName),
     );

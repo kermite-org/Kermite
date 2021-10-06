@@ -9,4 +9,5 @@ export const appConfig = {
   pageTitle: 'Kermite',
   initialPageWidth: 1280,
   initialPageHeight: 800,
+  onlineResourcesBaseUrl: 'https://app.kermite.org/krs/resources2',
 };

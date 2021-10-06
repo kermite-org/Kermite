@@ -200,7 +200,7 @@ export const textSourceEnglish = {
   label_settings_header_resources: 'Resources',
   label_settings_configUseOnlineProjectResources:
     'Use Online Project Resources',
-  label_settings_configUseLocalProjectResources: 'Use Local Project Resources',
+  label_settings_configUseLocalProjectResources: 'Use Local Repository Resources',
   label_settings_configKermiteRootDirectory: 'Kermite Root Directory',
   label_settings_header_userInterface: 'User Interface',
   label_settings_configUiScaling: 'UI Scaling',
@@ -454,7 +454,7 @@ export const textSourceJapanese = {
   label_settings_configUseOnlineProjectResources:
     'オンラインプロジェクトリソースを使用',
   label_settings_configUseLocalProjectResources:
-    'ローカルプロジェクトリソースを使用',
+    'ローカルリポジトリ内のリソースを参照',
   label_settings_configKermiteRootDirectory: 'Kermiteのソースコードの場所',
   label_settings_header_userInterface: 'ユーザーインターフェイス',
   label_settings_configUiScaling: 'UIスケーリング',

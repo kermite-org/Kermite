@@ -424,3 +424,8 @@ export function mergeModuleObjects<A>(...args: [A]): A {
   }
   return dest;
 }
+
+export function getMatched(text: string, pattern: RegExp): string | undefined {
+  const m = text.match(pattern);
+  return m?.[1] ?? undefined;
+}

@@ -1,0 +1,16 @@
+{
+  "version": "0.2",
+  "ignorePaths": [],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [],
+  "ignoreWords": [
+    "Bootloader",
+    "Leds",
+    "Uart",
+    "atmega",
+    "firmwares",
+    "kermite"
+  ],
+  "import": []
+}
