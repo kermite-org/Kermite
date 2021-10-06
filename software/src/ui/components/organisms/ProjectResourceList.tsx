@@ -116,6 +116,7 @@ const style = css`
       > .item {
         padding: 2px 5px;
         cursor: pointer;
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
 

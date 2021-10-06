@@ -5,6 +5,7 @@ import {
   IPersistProfileData,
   IProfileData,
   profileFormatRevisionLatest,
+  IPersistProfileFileData,
 } from '~/shared/defs';
 import { createDictionaryFromKeyValues } from '~/shared/funcs';
 
@@ -46,6 +47,20 @@ export namespace ProfileDataConverter {
       layers: source.layers,
       assigns: convertAssignsDictionaryToArray(source.assigns),
       mappingEntries: source.mappingEntries,
+    };
+  }
+
+  export function convertProfileToPersistFileData(
+    source: IProfileData,
+    profileName: string,
+  ): IPersistProfileFileData {
+    const { formatRevision, projectId, ...restProps } =
+      convertProfileDataToPersist(source);
+    return {
+      formatRevision,
+      projectId,
+      profileName,
+      ...restProps,
     };
   }
 

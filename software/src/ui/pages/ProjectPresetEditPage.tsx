@@ -1,5 +1,5 @@
 import { css, FC, jsx, useState } from 'qx';
-import { fallbackProjectPresetEntry, IProjectPresetEntry } from '~/shared';
+import { fallbackProjectProfileEntry, IProjectProfileEntry } from '~/shared';
 import { uiConfiguration, uiTheme } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/components';
@@ -14,31 +14,34 @@ type Props = {
 };
 
 const helpers = {
-  loadSourcePresetEntry(presetName: string): IProjectPresetEntry {
+  loadSourceProfileEntry(presetName: string): IProjectProfileEntry {
     const projectInfo = uiReaders.editTargetProject;
-    const presetEntry = projectInfo?.presets.find(
-      (it) => it.presetName === presetName,
+    const profileEntry = projectInfo?.profiles.find(
+      (it) => it.profileName === presetName,
     );
-    return presetEntry || fallbackProjectPresetEntry;
+    return profileEntry || fallbackProjectProfileEntry;
   },
 };
 
 export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
-  const [sourcePresetEntry, setSourcePresetEntry] = useState(
-    helpers.loadSourcePresetEntry(presetName),
+  const [sourceProfileEntry, setSourceProfileEntry] = useState(
+    helpers.loadSourceProfileEntry(presetName),
   );
 
   const { isModified, emitSavingDesign } =
     AssignerGeneralComponent_OutputPropsSupplier;
 
   const saveHandler = () => {
-    const newPresetEntry: IProjectPresetEntry = {
-      ...sourcePresetEntry,
+    const newProfileEntry: IProjectProfileEntry = {
+      ...sourceProfileEntry,
       data: emitSavingDesign(),
     };
-    projectPackagesWriter.saveLocalProjectPreset(newPresetEntry);
+    projectPackagesWriter.saveLocalProjectResourceItem(
+      'profile',
+      newProfileEntry,
+    );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
-      setSourcePresetEntry(newPresetEntry);
+      setSourceProfileEntry(newProfileEntry);
     } else {
       uiActions.closeSubPage();
     }
@@ -47,12 +50,12 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
   return (
     <div css={style}>
       <RouteHeaderBar
-        title={`edit project preset: ${sourcePresetEntry.presetName}`}
+        title={`edit project preset: ${sourceProfileEntry.profileName}`}
         backPagePath="/projectResource"
         canSave={isModified}
         saveHandler={saveHandler}
       />
-      <AssignerGeneralComponent originalProfile={sourcePresetEntry.data} />
+      <AssignerGeneralComponent originalProfile={sourceProfileEntry.data} />
     </div>
   );
 };

@@ -1,46 +1,37 @@
-import { validateResourceName } from '~/shared';
+import { validateResourceNameWithDuplicationCheck } from '~/shared';
 import { modalTextEdit } from '~/ui/components';
 
 export const resourceManagementUtils = {
-  makeResourceNameValidator(
-    resourceTypeNameText: string,
-    existingResourceNames?: string[],
-    allowDifferentCasingVariants?: boolean,
-  ): (text: string) => string | undefined {
-    return (resourceName) =>
-      validateResourceName(
-        resourceName,
-        resourceTypeNameText,
-        existingResourceNames,
-        allowDifferentCasingVariants,
-      );
-  },
   async inputSavingResourceName(args: {
     modalTitle: string;
     modalMessage: string;
     resourceTypeNameText: string;
-    existingResourceNames?: string[];
-    defaultText?: string;
-    allowDifferentCasingVariants?: boolean;
+    currentName?: string;
+    existingResourceNames: string[];
   }): Promise<string | undefined> {
     const {
       modalTitle,
       modalMessage,
       resourceTypeNameText,
       existingResourceNames,
-      defaultText,
-      allowDifferentCasingVariants,
+      currentName = '',
     } = args;
 
-    const validator = resourceManagementUtils.makeResourceNameValidator(
-      resourceTypeNameText,
-      existingResourceNames,
-      allowDifferentCasingVariants,
+    const checkedResourceNames = existingResourceNames.filter(
+      (it) => it !== currentName,
     );
+
+    const validator = (text: string) =>
+      validateResourceNameWithDuplicationCheck(
+        text,
+        resourceTypeNameText,
+        checkedResourceNames,
+      );
+
     return await modalTextEdit({
       caption: modalTitle,
       message: modalMessage,
-      defaultText,
+      defaultText: currentName,
       validator,
     });
   },

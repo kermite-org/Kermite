@@ -25,8 +25,8 @@ export function useProfileDataLoaded(
       );
       if (info) {
         if (presetSpec.type === 'preset') {
-          const profile = info.presets.find(
-            (profile) => profile.presetName === presetSpec.presetName,
+          const profile = info.profiles.find(
+            (profile) => profile.profileName === presetSpec.presetName,
           );
           if (profile) {
             return ProfileDataConverter.convertProfileDataFromPersist(

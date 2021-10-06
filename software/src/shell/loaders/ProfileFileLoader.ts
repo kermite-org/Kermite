@@ -1,6 +1,7 @@
 import {
   AppError,
   IPersistProfileData,
+  IPersistProfileFileData,
   IProfileData,
   ProfileDataConverter,
 } from '~/shared';
@@ -37,26 +38,30 @@ export namespace ProfileFileLoader {
   export async function loadProfileFromFile(
     filePath: string,
   ): Promise<IProfileData> {
-    const _profileData = (await fsxReadJsonFile(
+    const profileFileData = (await fsxReadJsonFile(
       filePath,
-    )) as IPersistProfileData;
-    return convertProfileDataFromPersistProfileData(_profileData, filePath);
+    )) as IPersistProfileFileData;
+    return convertProfileDataFromPersistProfileData(profileFileData, filePath);
   }
 
   export async function loadProfileFromUri(uri: string): Promise<IProfileData> {
-    const _profileData = (await cacheRemoteResource(
+    const profileFileData = (await cacheRemoteResource(
       fetchJson,
       uri,
-    )) as IPersistProfileData;
-    return convertProfileDataFromPersistProfileData(_profileData, uri);
+    )) as IPersistProfileFileData;
+    return convertProfileDataFromPersistProfileData(profileFileData, uri);
   }
 
   export async function saveProfileToFile(
     filePath: string,
     profileData: IProfileData,
+    profileName: string,
   ): Promise<void> {
     const persistProfileData =
-      ProfileDataConverter.convertProfileDataToPersist(profileData);
+      ProfileDataConverter.convertProfileToPersistFileData(
+        profileData,
+        profileName,
+      );
     await fsxWriteJsonFile(filePath, persistProfileData);
   }
 }

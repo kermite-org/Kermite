@@ -1,5 +1,5 @@
 import {
-  IProjectPresetEntry,
+  IProjectProfileEntry,
   IProjectLayoutEntry,
   encodeProjectResourceItemKey,
   IProjectPackageInfo,
@@ -19,8 +19,8 @@ export const projectResourceHelpers = {
       return [];
     }
     const keys = [
-      ...projectInfo.presets.map((it) =>
-        encodeProjectResourceItemKey('profile', it.presetName),
+      ...projectInfo.profiles.map((it) =>
+        encodeProjectResourceItemKey('profile', it.profileName),
       ),
       ...projectInfo.layouts.map((it) =>
         encodeProjectResourceItemKey('layout', it.layoutName),
@@ -32,9 +32,9 @@ export const projectResourceHelpers = {
     keys.sort();
     return keys;
   },
-  getPresetEntry(presetName: string): IProjectPresetEntry | undefined {
-    return uiReaders.editTargetProject?.presets.find(
-      (it) => it.presetName === presetName,
+  getProfileEntry(profileName: string): IProjectProfileEntry | undefined {
+    return uiReaders.editTargetProject?.profiles.find(
+      (it) => it.profileName === profileName,
     );
   },
   getLayoutEntry(layoutName: string): IProjectLayoutEntry | undefined {
@@ -48,10 +48,12 @@ export const projectResourceHelpers = {
     );
   },
   loadProfileData(presetName: string): IProfileData {
-    const presetEntry = projectResourceHelpers.getPresetEntry(presetName);
+    const profileEntry = projectResourceHelpers.getProfileEntry(presetName);
     return (
-      (presetEntry &&
-        ProfileDataConverter.convertProfileDataFromPersist(presetEntry.data)) ||
+      (profileEntry &&
+        ProfileDataConverter.convertProfileDataFromPersist(
+          profileEntry.data,
+        )) ||
       fallbackProfileData
     );
   },

@@ -89,7 +89,10 @@ const actions = {
       ...store.sourceEntry,
       standardFirmwareConfig: emitSavingEditValues(),
     };
-    await projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    await projectPackagesWriter.saveLocalProjectResourceItem(
+      'firmware',
+      newFirmwareEntry,
+    );
 
     projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', store.sourceEntry.firmwareName),
