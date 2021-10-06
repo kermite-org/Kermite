@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { appUi, uiTheme } from '~/ui/base';
 import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/root/organisms';
 
 type Props = {
@@ -9,8 +9,8 @@ type Props = {
 export const NavigationColumn: FC<Props> = ({ disabled }) => (
   <div css={style} className={disabled && '--disabled'}>
     <div className="base">
-      <GlobalMenuPart />
       <NavigationButtonsArea className="buttons-area" />
+      <GlobalMenuPart qxIf={appUi.isDevelopment} className="menu-part" />
     </div>
     <div className="cover" />
   </div>
@@ -26,9 +26,8 @@ const style = css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 10px;
 
-    > .buttons-area {
+    > .menu-part {
       margin-top: 20px;
     }
   }

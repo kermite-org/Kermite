@@ -1,11 +1,11 @@
-import { jsx, css, FC } from 'qx';
-import { texts, uiTheme } from '~/ui/base';
+import { jsx, css } from 'qx';
+import { FcWithClassName, texts, uiTheme } from '~/ui/base';
 import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/GlobalMenuPart.model';
 
-export const GlobalMenuPart: FC = () => {
+export const GlobalMenuPart: FcWithClassName = ({ className }) => {
   const { isOpen, openMenu, closeMenu, menuItems } = useGlobalMenuPartModel();
   return (
-    <div css={style}>
+    <div css={style} className={className}>
       <div className="overlay" qxIf={isOpen} onClick={closeMenu} />
       <div className="menuArea">
         <div
