@@ -17,7 +17,7 @@ export const NavigationColumn: FC<Props> = ({ disabled }) => (
 );
 
 const style = css`
-  width: 50px;
+  width: 55px;
   flex-shrink: 0;
   position: relative;
   background: ${uiTheme.colors.clNavigationColumn};
