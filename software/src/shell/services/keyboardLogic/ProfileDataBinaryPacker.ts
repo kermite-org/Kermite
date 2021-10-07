@@ -14,7 +14,7 @@ import {
   routerConstants,
   systemActionToCodeMap,
   encodeModifierVirtualKeys,
-  IProfileSettings,
+  IProfileSettingsM,
 } from '~/shared';
 import {
   blo,
@@ -46,7 +46,7 @@ interface IRawLayerInfo {
 }
 
 type IProfileContext = {
-  settings: IProfileSettings;
+  settings: IProfileSettingsM;
   layersDict: { [layerId: string]: IRawLayerInfo };
 };
 
@@ -292,7 +292,6 @@ function encodeRawAssignEntry(
     } else {
       // primary only
       const isPrimaryDefaultTriggerTap =
-        settings.assignType === 'dual' &&
         settings.primaryDefaultTrigger === 'tap';
       if (isPrimaryDefaultTriggerTap) {
         return encodeRawAssignOperations('dual', ra.layerIndex, [
@@ -432,12 +431,10 @@ function encodeProfileHeaderData(profile: IProfileData): number[] {
 // [1, 2] tapHoldThresholdMs (16bit/BE)
 // [3] useInterruptHold
 function encodeProfileSettingsData(profile: IProfileData): number[] {
-  const { settings } = profile;
+  const settings = profile.settings as IProfileSettingsM;
   const shiftCancelMode = settings.useShiftCancel ? 1 : 0;
-  const tapHoldThresholdMs =
-    settings.assignType === 'dual' ? settings.tapHoldThresholdMs : 0;
-  const useInterruptHold =
-    settings.assignType === 'dual' ? settings.useInterruptHold : false;
+  const tapHoldThresholdMs = settings.tapHoldThresholdMs || 0;
+  const useInterruptHold = settings.useInterruptHold || false;
   return [
     shiftCancelMode,
     bhi(tapHoldThresholdMs),

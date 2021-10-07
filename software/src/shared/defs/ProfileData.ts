@@ -109,12 +109,12 @@ export type IProfileSettings_Dual = {
 
 export type IProfileSettings = IProfileSettings_Single | IProfileSettings_Dual;
 
-export type IProfileSettingsAllValues = {
+export type IProfileSettingsM = {
   assignType: 'single' | 'dual';
   useShiftCancel: boolean;
-  primaryDefaultTrigger: 'down' | 'tap';
-  useInterruptHold: boolean;
-  tapHoldThresholdMs: number;
+  primaryDefaultTrigger?: 'down' | 'tap';
+  useInterruptHold?: boolean;
+  tapHoldThresholdMs?: number;
 };
 
 export type IAssignsDictionary = {
