@@ -278,8 +278,7 @@ function encodeRawAssignEntry(
       ]);
     } else if (entry.secondaryOp) {
       // secondary only
-      const secondaryDefaultTriggerHold = false;
-      if (secondaryDefaultTriggerHold) {
+      if (settings.secondaryDefaultTrigger === 'hold') {
         return encodeRawAssignOperations('dual', ra.layerIndex, [
           encodeNoAssignOperation(),
           encodeAssignOperation(entry.secondaryOp, layer, context),
@@ -291,9 +290,7 @@ function encodeRawAssignEntry(
       }
     } else {
       // primary only
-      const isPrimaryDefaultTriggerTap =
-        settings.primaryDefaultTrigger === 'tap';
-      if (isPrimaryDefaultTriggerTap) {
+      if (settings.primaryDefaultTrigger === 'tap') {
         return encodeRawAssignOperations('dual', ra.layerIndex, [
           encodeAssignOperation(entry.primaryOp, layer, context),
           encodeNoAssignOperation(),
@@ -432,7 +429,11 @@ function encodeProfileHeaderData(profile: IProfileData): number[] {
 // [3] useInterruptHold
 function encodeProfileSettingsData(profile: IProfileData): number[] {
   const settings = profile.settings as IProfileSettingsM;
-  const shiftCancelMode = settings.useShiftCancel ? 1 : 0;
+  const shiftCancelMode = {
+    none: 0,
+    shiftLayer: 1,
+    all: 2,
+  }[settings.shiftCancelMode];
   const tapHoldThresholdMs = settings.tapHoldThresholdMs || 0;
   const useInterruptHold = settings.useInterruptHold || false;
   return [

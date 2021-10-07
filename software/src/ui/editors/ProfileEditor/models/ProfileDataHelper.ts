@@ -48,8 +48,9 @@ export function changeProfileDataAssignType(
       ...profile,
       settings: {
         assignType: 'dual',
-        useShiftCancel: profile.settings.useShiftCancel,
+        shiftCancelMode: profile.settings.shiftCancelMode,
         primaryDefaultTrigger: 'down',
+        secondaryDefaultTrigger: 'down',
         tapHoldThresholdMs: 200,
         useInterruptHold: true,
       },
@@ -64,7 +65,7 @@ export function changeProfileDataAssignType(
       ...profile,
       settings: {
         assignType: 'single',
-        useShiftCancel: profile.settings.useShiftCancel,
+        shiftCancelMode: profile.settings.shiftCancelMode,
       },
       assigns: mapObjectValues(
         profile.assigns,
