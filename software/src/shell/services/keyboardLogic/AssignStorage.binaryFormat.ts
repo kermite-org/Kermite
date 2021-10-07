@@ -51,7 +51,7 @@ namespace AssignStorageBinaryFormat {
   type OpKeyInput = BasedOn<u16> & {
     bit15_14: { fOperationType: Fixed<b2, 0b01> };
     bit13: Reserved;
-    bit12: { fIsShiftCancellable: b1 };
+    bit12: { isBelongToShiftLayer: b1 };
     bit11_8: { fModifiers: AttachedModifiers };
     bit7_0: { fLogicalKeyCode: b8 };
   };
@@ -114,24 +114,22 @@ namespace AssignStorageBinaryFormat {
     transparent: 5;
   };
 
-  type AssignEntryHeaderA<
-    TAssignTypeValue extends valueOf<AssignTypeValues>
-  > = BasedOn<u8> & {
-    bit7: Fixed<b1, 1>;
-    bit6_4: { fAssignType: TAssignTypeValue };
-    bit3_0: { fLayerIndex: b4 }; // 0~15
-  };
+  type AssignEntryHeaderA<TAssignTypeValue extends valueOf<AssignTypeValues>> =
+    BasedOn<u8> & {
+      bit7: Fixed<b1, 1>;
+      bit6_4: { fAssignType: TAssignTypeValue };
+      bit3_0: { fLayerIndex: b4 }; // 0~15
+    };
 
-  type AssignEntryHeaderB<
-    TAssignTypeValue extends valueOf<AssignTypeValues>
-  > = BasedOn<u16> & {
-    bit15: Fixed<b1, 1>;
-    bit14_12: { fAssignType: TAssignTypeValue };
-    bit11_8: { fLayerIndex: b4 }; // 0~15
-    bit7_6: { fOpWordLengthCodePrimary: b2 };
-    bit5_3: { fOpWordLengthCodeSecondary: b3 };
-    bit2_0: { fOpWordLengthCodeTertiary: b3 };
-  };
+  type AssignEntryHeaderB<TAssignTypeValue extends valueOf<AssignTypeValues>> =
+    BasedOn<u16> & {
+      bit15: Fixed<b1, 1>;
+      bit14_12: { fAssignType: TAssignTypeValue };
+      bit11_8: { fLayerIndex: b4 }; // 0~15
+      bit7_6: { fOpWordLengthCodePrimary: b2 };
+      bit5_3: { fOpWordLengthCodeSecondary: b3 };
+      bit2_0: { fOpWordLengthCodeTertiary: b3 };
+    };
 
   type BlockAssignEntry = BasedOn<u8> & {
     byte0: { header: AssignEntryHeaderA<4> };

@@ -51,7 +51,6 @@ interface IRawLayerInfo {
 
 type IProfileContext = {
   layersDict: { [layerId: string]: IRawLayerInfo };
-  useShiftCancel: boolean;
 };
 
 function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
@@ -81,7 +80,7 @@ keyInput (logicalKey)
 0bTTxS_MMMM 0bKKKK_KKKK
 0b01~
 TT: type, 0b01 for keyInput
-S: isShiftLayer
+S: isBelongsToShiftLayer
 MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KKKK_KKKK: logical keycode
 
@@ -138,11 +137,9 @@ function encodeAssignOperation(
     }
     const modifiers = op.attachedModifiers;
     const logicalKey = getLogicalKeyForVirtualKey(vk);
-    // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
-    const fIsShiftCancellable =
-      context.useShiftCancel && layer.isShiftLayer ? 1 : 0;
+    const fIsBelongToShiftLayer = layer.isShiftLayer ? 1 : 0;
     return [
-      (fAssignType << 6) | (fIsShiftCancellable << 4) | modifiers,
+      (fAssignType << 6) | (fIsBelongToShiftLayer << 4) | modifiers,
       logicalKey,
     ];
   }
@@ -385,10 +382,8 @@ function createProfileContext(profile: IProfileData): IProfileContext {
       },
     ]),
   );
-  const useShiftCancel = profile.settings.useShiftCancel;
   return {
     layersDict,
-    useShiftCancel,
   };
 }
 

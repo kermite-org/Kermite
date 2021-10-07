@@ -676,8 +676,17 @@ function convertKeyInputOperationWordToOutputKeyStrokeAction(
       logicalKey,
       isSecondaryLayout,
     );
-    const isInShiftCancellableLayer = ((opWord >> 12) & 1) > 0;
-    action.shiftCancel = isInShiftCancellableLayer && hidKey & 0x200 ? 1 : 0;
+    if (hidKey & 0x200) {
+      const { shiftCancelMode } = logicConfig;
+      if (shiftCancelMode === ShiftCancelMode.ApplyToShiftLayer) {
+        const isBelongToShiftLayer = ((opWord >> 12) & 1) > 0;
+        if (isBelongToShiftLayer) {
+          action.shiftCancel = 1;
+        }
+      } else if (shiftCancelMode === ShiftCancelMode.ApplyToAll) {
+        action.shiftCancel = 1;
+      }
+    }
     const shiftOn = (hidKey & 0x100) > 0;
     if (shiftOn) {
       action.modFlags |= ModFlag.Shift;
@@ -802,7 +811,14 @@ function assignBinder_handleKeyOff(slot: KeySlot) {
 // --------------------------------------------------------------------------------
 // resolver common
 
+const ShiftCancelMode = {
+  None: 0,
+  ApplyToShiftLayer: 1,
+  ApplyToAll: 2,
+};
+
 const logicConfig = {
+  shiftCancelMode: ShiftCancelMode.None,
   tapHoldThresholdMs: 200,
   useInterruptHold: true,
 };
