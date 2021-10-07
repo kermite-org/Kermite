@@ -21,6 +21,13 @@ import {
   writeUint8,
 } from '~/shell/services/keyboardDevice/Helpers';
 
+const logicConfig = new (class {
+  primaryDefaultTrigger: 'down' | 'tap' = 'down';
+  secondaryDefaultTrigger: 'down' | 'hold' = 'down';
+})();
+// logicConfig.primaryDefaultTrigger = 'tap';
+// logicConfig.secondaryDefaultTrigger = 'hold';
+
 /*
 Key Assigns Restriction
 supports max 16 Layers
@@ -167,6 +174,10 @@ function encodeAssignOperation(
   return [0];
 }
 
+function encodeNoAssignOperation(): number[] {
+  return [0];
+}
+
 function encodeOperationWordLengths(operationWordLengths: number[]) {
   let value = 0;
   const szPri = operationWordLengths[0];
@@ -272,14 +283,28 @@ function encodeRawAssignEntry(
       ]);
     } else if (entry.secondaryOp) {
       // secondary only
-      return encodeRawAssignOperations('single', ra.layerIndex, [
-        encodeAssignOperation(entry.secondaryOp, layer, context),
-      ]);
+      if (logicConfig.secondaryDefaultTrigger === 'hold') {
+        return encodeRawAssignOperations('dual', ra.layerIndex, [
+          encodeNoAssignOperation(),
+          encodeAssignOperation(entry.secondaryOp, layer, context),
+        ]);
+      } else {
+        return encodeRawAssignOperations('single', ra.layerIndex, [
+          encodeAssignOperation(entry.secondaryOp, layer, context),
+        ]);
+      }
     } else {
       // primary only
-      return encodeRawAssignOperations('single', ra.layerIndex, [
-        encodeAssignOperation(entry.primaryOp, layer, context),
-      ]);
+      if (logicConfig.primaryDefaultTrigger === 'tap') {
+        return encodeRawAssignOperations('dual', ra.layerIndex, [
+          encodeAssignOperation(entry.primaryOp, layer, context),
+          encodeNoAssignOperation(),
+        ]);
+      } else {
+        return encodeRawAssignOperations('single', ra.layerIndex, [
+          encodeAssignOperation(entry.primaryOp, layer, context),
+        ]);
+      }
     }
   }
 }
