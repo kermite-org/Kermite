@@ -21,7 +21,7 @@ struct {
 };
 
 void keyActionRemapper_setupDataReader() {
-  uint16_t addrMappingEntriesBlock = dataStorage_getDataAddress_mappingEntries();
+  uint16_t addrMappingEntriesBlock = dataStorage_getDataAddress_profileData_mappingEntries();
   if (addrMappingEntriesBlock) {
     local.numItems = dataMemory_readByte(addrMappingEntriesBlock);
     local.addrItems = addrMappingEntriesBlock + 1;

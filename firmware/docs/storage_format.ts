@@ -48,6 +48,11 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
         numKeys: U8;
         numLayers: U8;
       };
+      profileSettings: Chunk<0xbb72> & {
+        shiftCancelMode: U8;
+        tapHoldThresholdMs: U16;
+        useInterruptHold: U8;
+      };
       layerList: Chunk<0xbb74> & {
         layerItems: {
           attrs: Bytes<2>;
