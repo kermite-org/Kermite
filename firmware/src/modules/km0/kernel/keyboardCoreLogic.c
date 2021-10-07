@@ -739,7 +739,7 @@ static void handleOperationOff(uint32_t opWord) {
 //--------------------------------------------------------------------------------
 //assign binder
 
-#define KIDX_NONE 255
+#define KEY_INDEX_NONE 255
 
 #ifndef KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
 #define KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS 10
@@ -821,11 +821,11 @@ typedef struct {
 static ResolverState resolverState;
 
 static void initResolverState() {
-  resolverState.interruptKeyIndex = KIDX_NONE;
+  resolverState.interruptKeyIndex = KEY_INDEX_NONE;
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->isActive = false;
-    slot->keyIndex = KIDX_NONE;
+    slot->keyIndex = KEY_INDEX_NONE;
     slot->steps = 0;
     slot->hold = false;
     slot->nextHold = false;
@@ -1104,7 +1104,7 @@ static bool keySlot_tripleResolverC(KeySlot *slot) {
       keySlot_pushStepC(slot, Step_U);
       return true;
     } else if (steps == Steps_D && tick < TH) {
-      //single stap
+      //single tap
       keySlot_pushStepC(slot, Step_U);
     } else {
       //up
@@ -1140,7 +1140,7 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
   }
 
   ResolverState *rs = &resolverState;
-  slot->interrupted = rs->interruptKeyIndex != KIDX_NONE && rs->interruptKeyIndex != slot->keyIndex;
+  slot->interrupted = rs->interruptKeyIndex != KEY_INDEX_NONE && rs->interruptKeyIndex != slot->keyIndex;
 
   if (!slot->resolverProc && slot->inputEdge == InputEdge_Down) {
     uint16_t layerActiveFlags = getLayerActiveFlags();
@@ -1182,7 +1182,7 @@ static void triggerResolver_tick(uint8_t ms) {
       keySlot_tick(slot, ms);
     }
   }
-  rs->interruptKeyIndex = KIDX_NONE;
+  rs->interruptKeyIndex = KEY_INDEX_NONE;
 
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &rs->keySlots[i];
@@ -1195,7 +1195,7 @@ static void triggerResolver_tick(uint8_t ms) {
   }
 }
 
-static KeySlot *triggerResoler_attachKeyToFreeSlot(uint8_t keyIndex) {
+static KeySlot *triggerResolver_attachKeyToFreeSlot(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     if (!slot->isActive) {
@@ -1207,7 +1207,7 @@ static KeySlot *triggerResoler_attachKeyToFreeSlot(uint8_t keyIndex) {
   return NULL;
 }
 
-static KeySlot *triggerResoler_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
+static KeySlot *triggerResolver_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     if (slot->isActive && slot->keyIndex == keyIndex) {
@@ -1220,9 +1220,9 @@ static KeySlot *triggerResoler_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
 static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
   if (isDown) {
     //printf("corelogic, keydown %d\n", keyIndex);
-    KeySlot *slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    KeySlot *slot = triggerResolver_getActiveKeySlotByKeyIndex(keyIndex);
     if (!slot) {
-      slot = triggerResoler_attachKeyToFreeSlot(keyIndex);
+      slot = triggerResolver_attachKeyToFreeSlot(keyIndex);
     }
     if (slot) {
       resolverState.interruptKeyIndex = keyIndex;
@@ -1232,7 +1232,7 @@ static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
     }
   } else {
     //printf("corelogic, keyup %d\n", keyIndex);
-    KeySlot *slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    KeySlot *slot = triggerResolver_getActiveKeySlotByKeyIndex(keyIndex);
     if (slot) {
       slot->nextHold = false;
     }

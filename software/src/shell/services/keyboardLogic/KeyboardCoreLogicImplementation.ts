@@ -1016,7 +1016,7 @@ function keySlot_dualResolverB(slot: KeySlot): boolean {
   }
 
   if (steps === 'DU' && !hold && tick >= TH) {
-    // slient after tap
+    // silent after tap
     keySlot_pushStepB(slot, '_');
     return true;
   }
@@ -1122,7 +1122,7 @@ function keySlot_tripleResolverC(slot: KeySlot): boolean {
 
   if (inputEdge === InputEdge.Up) {
     if (steps === 'DUD' && tick < TH) {
-      // dtap
+      // double-tap
       keySlot_pushStepC(slot, 'U');
       return true;
     } else if (steps === 'D' && tick < TH) {
@@ -1162,8 +1162,9 @@ function keySlot_tick(slot: KeySlot, ms: number) {
     slot.inputEdge = InputEdge.Up;
   }
 
-  const interrupt_kidx = resolverState.interruptKeyIndex;
-  slot.interrupted = interrupt_kidx !== -1 && interrupt_kidx !== slot.keyIndex;
+  const interrupt_key_index = resolverState.interruptKeyIndex;
+  slot.interrupted =
+    interrupt_key_index !== -1 && interrupt_key_index !== slot.keyIndex;
 
   if (!slot.resolverProc && slot.inputEdge === InputEdge.Down) {
     const assignSet = findAssignInLayerStack(
