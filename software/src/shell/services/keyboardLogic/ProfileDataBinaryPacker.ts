@@ -178,6 +178,8 @@ function encodeOperationWordLengths(operationWordLengths: number[]) {
   return value;
 }
 
+type IAssignType = 'single' | 'dual' | 'triple' | 'block' | 'transparent';
+
 /*
 rawAssignEntryHeader
 0b1TTT_LLLL <0bAABB_BCCC>
@@ -195,7 +197,7 @@ BBB: secondary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4b
 CCC: primary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4byte)
 */
 function encodeRawAssignEntryHeaderBytes(
-  type: 'single' | 'dual' | 'triple' | 'block' | 'transparent',
+  type: IAssignType,
   layerIndex: number,
   operationWordLengths?: number[],
 ): number[] {
@@ -211,6 +213,21 @@ function encodeRawAssignEntryHeaderBytes(
   return hasSecondByte && operationWordLengths
     ? [firstByte, encodeOperationWordLengths(operationWordLengths)]
     : [firstByte];
+}
+
+function encodeRawAssignOperations(
+  assignType: IAssignType,
+  layerIndex: number,
+  operationWords: number[][],
+): number[] {
+  return [
+    ...encodeRawAssignEntryHeaderBytes(
+      assignType,
+      layerIndex,
+      operationWords.map((it) => it.length),
+    ),
+    ...flattenArray(operationWords),
+  ];
 }
 
 /*
@@ -237,58 +254,32 @@ function encodeRawAssignEntry(
     return encodeRawAssignEntryHeaderBytes('transparent', ra.layerIndex);
   } else if (entry.type === 'single') {
     // single
-    const primaryOpWord = encodeAssignOperation(entry.op, layer, context);
-    return [
-      ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-        primaryOpWord.length,
-      ]),
-      ...primaryOpWord,
-    ];
+    return encodeRawAssignOperations('single', ra.layerIndex, [
+      encodeAssignOperation(entry.op, layer, context),
+    ]);
   } else {
     // dual
     if (entry.tertiaryOp) {
-      const operationWords = [
+      return encodeRawAssignOperations('triple', ra.layerIndex, [
         encodeAssignOperation(entry.primaryOp, layer, context),
         encodeAssignOperation(entry.secondaryOp, layer, context),
         encodeAssignOperation(entry.tertiaryOp, layer, context),
-      ];
-      return [
-        ...encodeRawAssignEntryHeaderBytes(
-          'triple',
-          ra.layerIndex,
-          operationWords.map((it) => it.length),
-        ),
-        ...flattenArray(operationWords),
-      ];
+      ]);
     } else if (entry.primaryOp && entry.secondaryOp) {
-      const operationWords = [
+      return encodeRawAssignOperations('dual', ra.layerIndex, [
         encodeAssignOperation(entry.primaryOp, layer, context),
         encodeAssignOperation(entry.secondaryOp, layer, context),
-      ];
-      return [
-        ...encodeRawAssignEntryHeaderBytes(
-          'dual',
-          ra.layerIndex,
-          operationWords.map((it) => it.length),
-        ),
-        ...flattenArray(operationWords),
-      ];
+      ]);
     } else if (entry.secondaryOp) {
-      const opWord = encodeAssignOperation(entry.secondaryOp, layer, context);
-      return [
-        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-          opWord.length,
-        ]),
-        ...opWord,
-      ];
+      // secondary only
+      return encodeRawAssignOperations('single', ra.layerIndex, [
+        encodeAssignOperation(entry.secondaryOp, layer, context),
+      ]);
     } else {
-      const opWord = encodeAssignOperation(entry.primaryOp, layer, context);
-      return [
-        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-          opWord.length,
-        ]),
-        ...opWord,
-      ];
+      // primary only
+      return encodeRawAssignOperations('single', ra.layerIndex, [
+        encodeAssignOperation(entry.primaryOp, layer, context),
+      ]);
     }
   }
 }
