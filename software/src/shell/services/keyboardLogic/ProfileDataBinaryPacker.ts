@@ -16,6 +16,8 @@ import {
   encodeModifierVirtualKeys,
 } from '~/shared';
 import {
+  blo,
+  bhi,
   writeBytes,
   writeUint16LE,
   writeUint8,
@@ -423,6 +425,25 @@ function encodeProfileHeaderData(profile: IProfileData): number[] {
   return buffer;
 }
 
+// ProfileSettingsBytes
+// [0] shiftCancelMode
+// [1, 2] tapHoldThresholdMs (16bit/LE)
+// [3] useInterruptHold
+function encodeProfileSettingsData(profile: IProfileData): number[] {
+  const { settings } = profile;
+  const shiftCancelMode = settings.useShiftCancel ? 1 : 0;
+  const tapHoldThresholdMs =
+    settings.assignType === 'dual' ? settings.tapHoldThresholdMs : 0;
+  const useInterruptHold =
+    settings.assignType === 'dual' ? settings.useInterruptHold : false;
+  return [
+    shiftCancelMode,
+    blo(tapHoldThresholdMs),
+    bhi(tapHoldThresholdMs),
+    useInterruptHold ? 1 : 0,
+  ];
+}
+
 // LayerAttributeByte
 // 0bDxIx_MMMM 0bxxxx_xQQQ
 // D: default scheme, 0 for transparent, 1 for block
@@ -471,6 +492,7 @@ function encodeMappingEntriesData(profile: IProfileData): number[] {
 export function makeProfileBinaryData(profile: IProfileData): number[] {
   const data = [
     ...createChunk(0xbb71, encodeProfileHeaderData(profile)),
+    ...createChunk(0xbb72, encodeProfileSettingsData(profile)),
     ...createChunk(0xbb74, encodeLayerListData(profile)),
     ...createChunk(0xbb76, encodeMappingEntriesData(profile)),
     ...createChunk(0xbb78, encodeKeyMappingData(profile)),

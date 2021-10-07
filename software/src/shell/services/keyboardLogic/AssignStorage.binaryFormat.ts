@@ -181,6 +181,26 @@ namespace AssignStorageBinaryFormat {
   };
 
   // --------------------
+  // profile header
+
+  type ProfileHeaderContent = {
+    logicModelType: 0x01;
+    configStorageFormatRevision: u8;
+    profileBinaryFormatRevision: u8;
+    numKeys: u8; // 1~254
+    numLayers: u8; // 1-16
+  };
+
+  // --------------------
+  // profile header
+
+  type ProfileSettingsBytes = {
+    shiftCancelMode: u8;
+    tapHoldThresholdMs: u16;
+    useInterruptHold: u8;
+  };
+
+  // --------------------
   // layer attributes
 
   type LayerDefaultSchemeValues = DefineValues<b1> & {
@@ -195,17 +215,6 @@ namespace AssignStorageBinaryFormat {
     bit12_8: { fAttachedModifiers: AttachedModifiers };
     bit7_3: Reserved;
     bit2_0: { fExclusionGroup: b3 };
-  };
-
-  // --------------------
-  // profile header
-
-  type ProfileHeaderContent = {
-    logicModelType: 0x01;
-    configStorageFormatRevision: u8;
-    profileBinaryFormatRevision: u8;
-    numKeys: u8; // 1~254
-    numLayers: u8; // 1-16
   };
 
   // --------------------
@@ -227,6 +236,9 @@ namespace AssignStorageBinaryFormat {
   type BinaryProfileData = Chunk<0xaa70> & {
     profileHeader: Chunk<0xbb71> & {
       data: ProfileHeaderContent;
+    };
+    profileSettings: Chunk<0xbb72> & {
+      data: ProfileSettingsBytes;
     };
     layerList: Chunk<0xbb74> & {
       items: LayerAttributeWord[]; // numLayers個の配列
