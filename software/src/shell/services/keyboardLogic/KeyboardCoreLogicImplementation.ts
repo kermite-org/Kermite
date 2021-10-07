@@ -802,7 +802,9 @@ function assignBinder_handleKeyOff(slot: KeySlot) {
 // --------------------------------------------------------------------------------
 // resolver common
 
-const TH = 200;
+const logicConfig = {
+  tapHoldThresholdMs: 200,
+};
 
 const InputEdge = {
   None: 0,
@@ -993,9 +995,10 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
 
 function keySlot_dualResolverB(slot: KeySlot): boolean {
   const { inputEdge, hold, steps, tick, interrupted } = slot;
+  const { tapHoldThresholdMs } = logicConfig;
 
   if (inputEdge === InputEdge.Down) {
-    if (steps === 'DU' && tick < TH) {
+    if (steps === 'DU' && tick < tapHoldThresholdMs) {
       // tap-rehold
       keySlot_pushStepB(slot, 'D');
     } else {
@@ -1005,24 +1008,24 @@ function keySlot_dualResolverB(slot: KeySlot): boolean {
     }
   }
 
-  if (steps === 'D' && hold && tick >= TH) {
+  if (steps === 'D' && hold && tick >= tapHoldThresholdMs) {
     // hold
     keySlot_pushStepB(slot, '_');
   }
 
-  if (steps === 'D' && hold && tick < TH && interrupted) {
+  if (steps === 'D' && hold && tick < tapHoldThresholdMs && interrupted) {
     // interrupt hold
     keySlot_pushStepB(slot, '_');
   }
 
-  if (steps === 'DU' && !hold && tick >= TH) {
+  if (steps === 'DU' && !hold && tick >= tapHoldThresholdMs) {
     // silent after tap
     keySlot_pushStepB(slot, '_');
     return true;
   }
 
   if (inputEdge === InputEdge.Up) {
-    if (steps === 'D' && tick < TH) {
+    if (steps === 'D' && tick < tapHoldThresholdMs) {
       // tap
       keySlot_pushStepB(slot, 'U');
     }
@@ -1056,7 +1059,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     keySlot_debugShowSlotTrigger(slot, TriggerC);
   }
 
-  const { steps, keyIndex } = slot;
+  const { steps } = slot;
 
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerC.Down) {
@@ -1087,9 +1090,10 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 }
 function keySlot_tripleResolverC(slot: KeySlot): boolean {
   const { inputEdge, steps, tick, hold, interrupted } = slot;
+  const { tapHoldThresholdMs } = logicConfig;
 
   if (inputEdge === InputEdge.Down) {
-    if (steps === 'DU' && tick < TH) {
+    if (steps === 'DU' && tick < tapHoldThresholdMs) {
       // down2
       keySlot_pushStepC(slot, 'D');
     } else {
@@ -1099,33 +1103,33 @@ function keySlot_tripleResolverC(slot: KeySlot): boolean {
     }
   }
 
-  if (steps === 'D' && hold && tick >= TH) {
+  if (steps === 'D' && hold && tick >= tapHoldThresholdMs) {
     // hold
     keySlot_pushStepC(slot, '_');
   }
 
-  if (steps === 'D' && hold && tick < TH && interrupted) {
+  if (steps === 'D' && hold && tick < tapHoldThresholdMs && interrupted) {
     // interrupt hold
     keySlot_pushStepC(slot, '_');
   }
 
-  if (steps === 'DUD' && hold && tick >= TH) {
+  if (steps === 'DUD' && hold && tick >= tapHoldThresholdMs) {
     // hold2
     keySlot_pushStepC(slot, '_');
   }
 
-  if (steps === 'DU' && !hold && tick >= TH) {
+  if (steps === 'DU' && !hold && tick >= tapHoldThresholdMs) {
     // silent after single tap
     keySlot_pushStepC(slot, '_');
     return true;
   }
 
   if (inputEdge === InputEdge.Up) {
-    if (steps === 'DUD' && tick < TH) {
+    if (steps === 'DUD' && tick < tapHoldThresholdMs) {
       // double-tap
       keySlot_pushStepC(slot, 'U');
       return true;
-    } else if (steps === 'D' && tick < TH) {
+    } else if (steps === 'D' && tick < tapHoldThresholdMs) {
       // tap
       keySlot_pushStepC(slot, 'U');
     } else {
