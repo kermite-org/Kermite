@@ -7,10 +7,13 @@
   "ignoreWords": [
     "Bootloader",
     "Leds",
+    "Rehold",
+    "Remapper",
     "Uart",
     "atmega",
     "firmwares",
-    "kermite"
+    "kermite",
+    "oneshot"
   ],
   "import": []
 }

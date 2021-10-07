@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'qx';
+import { IProfileSettings_Dual } from '~/shared';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 
 type Props = {
@@ -12,11 +13,24 @@ function getSlotTriggerText(
   hasPrimary: boolean,
   hasSecondary: boolean,
   hasTertiary: boolean,
+  settings: IProfileSettings_Dual,
 ): ISlotTriggerDisplayText {
   if (slotSig === 'pri') {
-    return hasSecondary || hasTertiary ? 'tap' : 'normal';
+    if (hasSecondary || hasTertiary) {
+      return 'tap';
+    } else if (settings.primaryDefaultTrigger === 'tap') {
+      return 'tap';
+    } else {
+      return 'normal';
+    }
   } else if (slotSig === 'sec') {
-    return hasPrimary || hasTertiary ? 'hold' : 'normal';
+    if (hasPrimary || hasTertiary) {
+      return 'hold';
+    } else if (settings.secondaryDefaultTrigger === 'hold') {
+      return 'hold';
+    } else {
+      return 'normal';
+    }
   } else if (slotSig === 'ter') {
     return 'double-tap';
   } else {
@@ -25,9 +39,12 @@ function getSlotTriggerText(
 }
 
 export const SlotTriggerDisplay: FC<Props> = ({ className }) => {
-  const { assignEntry, dualModeEditTargetOperationSig: slotSig } =
-    assignerModel;
-  if (assignEntry?.type === 'dual') {
+  const {
+    assignEntry,
+    dualModeEditTargetOperationSig: slotSig,
+    profileData: { settings },
+  } = assignerModel;
+  if (settings.assignType === 'dual' && assignEntry?.type === 'dual') {
     const hasPrimary = !!assignEntry.primaryOp;
     const hasSecondary = !!assignEntry.secondaryOp;
     const hasTertiary = !!assignEntry.tertiaryOp;
@@ -43,6 +60,7 @@ export const SlotTriggerDisplay: FC<Props> = ({ className }) => {
         hasPrimary,
         hasSecondary,
         hasTertiary,
+        settings,
       );
       return (
         <div css={style} className={className}>

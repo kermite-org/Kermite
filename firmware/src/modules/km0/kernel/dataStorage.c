@@ -42,8 +42,9 @@ enum {
 
 enum {
   SubChunkSig_ProfileDataHeader = 0xbb71,
+  SubChunkSig_ProfileSettings = 0xbb72,
   SubChunkSig_ProfileLayerList = 0xbb74,
-  SubChunkSig_MappingEntries = 0xbb76,
+  SubChunkSig_ProfileMappingEntries = 0xbb76,
   SubChunkSig_ProfileKeyAssigns = 0xbb78,
 };
 
@@ -219,8 +220,16 @@ uint16_t dataStorage_getDataAddress_profileData_profileHeader() {
   return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileDataHeader);
 }
 
+uint16_t dataStorage_getDataAddress_profileData_profileSettings() {
+  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileSettings);
+}
+
 uint16_t dataStorage_getDataAddress_profileData_layerList() {
   return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileLayerList);
+}
+
+uint16_t dataStorage_getDataAddress_profileData_mappingEntries() {
+  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_ProfileMappingEntries);
 }
 
 uint16_t dataStorage_getDataAddress_profileData_keyAssigns() {
@@ -229,8 +238,4 @@ uint16_t dataStorage_getDataAddress_profileData_keyAssigns() {
 
 uint16_t dataStorage_getDataSize_profileData_keyAssigns() {
   return getSubChunkBodySize(ChunkSig_ProfileData, SubChunkSig_ProfileKeyAssigns);
-}
-
-uint16_t dataStorage_getDataAddress_mappingEntries() {
-  return getSubChunkBodyAddress(ChunkSig_ProfileData, SubChunkSig_MappingEntries);
 }

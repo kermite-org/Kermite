@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
+import { DualModeSettingsPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/DualModeSettingsPart';
 import { KeyboardProjectSelectionPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { uiReaders, uiState } from '~/ui/store';
@@ -28,8 +29,7 @@ export const ProfileConfigurationModalLayer: FC = () => {
         <div css={cssDialogContent}>
           <KeyboardProjectSelectionPart qxIf={showProjectSelectionUi} />
           <AssignTypeSelectionPart />
-          {/* Dualモードの挙動オプションUI, ロジックでのオプション変更への対応が未実装のため非表示 */}
-          {/* <DualModeSettingsPart /> */}
+          <DualModeSettingsPart />
           <ShiftCancelOptionPart />
         </div>
       </CommonDialogFrame>

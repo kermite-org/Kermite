@@ -29,7 +29,11 @@ function makeEditKeyUnitCardViewModel(
   const keyUnitId = ke.keyId;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
 
-  const { currentKeyUnitId, setCurrentKeyUnitId } = assignerModel;
+  const {
+    currentKeyUnitId,
+    setCurrentKeyUnitId,
+    profileData: { settings },
+  } = assignerModel;
   const isCurrent = currentKeyUnitId === keyUnitId;
   const setCurrent = () => {
     setCurrentKeyUnitId(keyUnitId);
@@ -37,7 +41,7 @@ function makeEditKeyUnitCardViewModel(
   };
   const assign = getAssignForKeyUnit(keyUnitId, playerModel);
   const { primaryText, secondaryText, tertiaryText, isLayerFallback } =
-    getAssignEntryTexts(assign, assignerModel.layers);
+    getAssignEntryTexts(assign, assignerModel.layers, settings);
 
   const dynamic = uiState.settings.showLayersDynamic;
   const isHold = (dynamic && playerModel.keyStates[ke.keyId]) || false;

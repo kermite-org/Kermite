@@ -97,11 +97,13 @@ export const textSourceEnglish = {
   label_assigner_profileConfigModal_dualMode_header: 'dual mode settings',
   label_assigner_profileConfigModal_dualMode_primaryDefaultTrigger:
     'primary default trigger',
+  label_assigner_profileConfigModal_dualMode_secondaryDefaultTrigger:
+    'secondary default trigger',
   label_assigner_profileConfigModal_dualMode_tapHoldThreshold:
     'tap hold threshold',
   label_assigner_profileConfigModal_dualMode_useInterruptHold:
     'use interrupt hold',
-  label_assigner_profileConfigModal_shiftCancel: 'use shift cancel feature',
+  label_assigner_profileConfigModal_shiftCancel: 'shift cancel mode',
   hint_assigner_profileConfigModal_assignModel:
     'Select logic model. (single: single assign for each key, dual: multiple assigns for each key)',
   hint_assigner_profileConfigModal_dualMode_header:
@@ -200,7 +202,8 @@ export const textSourceEnglish = {
   label_settings_header_resources: 'Resources',
   label_settings_configUseOnlineProjectResources:
     'Use Online Project Resources',
-  label_settings_configUseLocalProjectResources: 'Use Local Repository Resources',
+  label_settings_configUseLocalProjectResources:
+    'Use Local Repository Resources',
   label_settings_configKermiteRootDirectory: 'Kermite Root Directory',
   label_settings_header_userInterface: 'User Interface',
   label_settings_configUiScaling: 'UI Scaling',
@@ -344,11 +347,13 @@ export const textSourceJapanese = {
   label_assigner_profileConfigModal_assignModel: 'ロジックモデル',
   label_assigner_profileConfigModal_dualMode_header: 'Dualモード設定',
   label_assigner_profileConfigModal_dualMode_primaryDefaultTrigger:
-    'デフォルトトリガ',
+    'プライマリデフォルトトリガ',
+  label_assigner_profileConfigModal_dualMode_secondaryDefaultTrigger:
+    'セカンダリデフォルトトリガ',
   label_assigner_profileConfigModal_dualMode_tapHoldThreshold: 'タップ判定時間',
   label_assigner_profileConfigModal_dualMode_useInterruptHold:
     '割り込みホールド機能を使用',
-  label_assigner_profileConfigModal_shiftCancel: 'Shiftキャンセル機能を使用',
+  label_assigner_profileConfigModal_shiftCancel: 'Shiftキャンセル',
   hint_assigner_profileConfigModal_assignModel:
     'ロジックモデルを選択します。(single: キーに対して単一の機能を割り当てるモデル, dual: キー毎にタップ/ホールドによって切り替わる複数の機能を割り当てるモデル)',
   hint_assigner_profileConfigModal_dualMode_header:
@@ -383,7 +388,8 @@ export const textSourceJapanese = {
   label_assigner_newProfileModal_layout: 'レイアウト',
   label_assigner_profileNameEditModal_modalTitleRename:
     'プロファイルの名前を変更',
-  label_assigner_profileNameEditModal_modalTitleCopy: 'プロファイルを別名で保存',
+  label_assigner_profileNameEditModal_modalTitleCopy:
+    'プロファイルを別名で保存',
   label_assigner_profileNameEditModal_modalTitleSave: 'プロファイルを保存',
   label_assigner_profileNameEditModal_newProfileName: 'プロファイル名',
   label_assigner_confirmModal_deleteProfile_modalTitle: 'プロファイルを削除',
