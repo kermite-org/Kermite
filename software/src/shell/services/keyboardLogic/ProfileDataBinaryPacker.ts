@@ -14,6 +14,7 @@ import {
   routerConstants,
   systemActionToCodeMap,
   encodeModifierVirtualKeys,
+  IProfileSettings,
 } from '~/shared';
 import {
   blo,
@@ -22,13 +23,6 @@ import {
   writeUint16LE,
   writeUint8,
 } from '~/shell/services/keyboardDevice/Helpers';
-
-const logicConfig = new (class {
-  primaryDefaultTrigger: 'down' | 'tap' = 'down';
-  secondaryDefaultTrigger: 'down' | 'hold' = 'down';
-})();
-// logicConfig.primaryDefaultTrigger = 'tap';
-// logicConfig.secondaryDefaultTrigger = 'hold';
 
 /*
 Key Assigns Restriction
@@ -52,6 +46,7 @@ interface IRawLayerInfo {
 }
 
 type IProfileContext = {
+  settings: IProfileSettings;
   layersDict: { [layerId: string]: IRawLayerInfo };
 };
 
@@ -258,6 +253,7 @@ function encodeRawAssignEntry(
 ): number[] {
   const { entry } = ra;
   const layer = context.layersDict[ra.layerId];
+  const { settings } = context;
   if (entry.type === 'block') {
     return encodeRawAssignEntryHeaderBytes('block', ra.layerIndex);
   } else if (entry.type === 'transparent') {
@@ -282,7 +278,8 @@ function encodeRawAssignEntry(
       ]);
     } else if (entry.secondaryOp) {
       // secondary only
-      if (logicConfig.secondaryDefaultTrigger === 'hold') {
+      const secondaryDefaultTriggerHold = false;
+      if (secondaryDefaultTriggerHold) {
         return encodeRawAssignOperations('dual', ra.layerIndex, [
           encodeNoAssignOperation(),
           encodeAssignOperation(entry.secondaryOp, layer, context),
@@ -294,7 +291,10 @@ function encodeRawAssignEntry(
       }
     } else {
       // primary only
-      if (logicConfig.primaryDefaultTrigger === 'tap') {
+      const isPrimaryDefaultTriggerTap =
+        settings.assignType === 'dual' &&
+        settings.primaryDefaultTrigger === 'tap';
+      if (isPrimaryDefaultTriggerTap) {
         return encodeRawAssignOperations('dual', ra.layerIndex, [
           encodeAssignOperation(entry.primaryOp, layer, context),
           encodeNoAssignOperation(),
@@ -375,6 +375,7 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
 }
 
 function createProfileContext(profile: IProfileData): IProfileContext {
+  const { settings } = profile;
   const layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
       la.layerId,
@@ -385,6 +386,7 @@ function createProfileContext(profile: IProfileData): IProfileContext {
     ]),
   );
   return {
+    settings,
     layersDict,
   };
 }
@@ -427,7 +429,7 @@ function encodeProfileHeaderData(profile: IProfileData): number[] {
 
 // ProfileSettingsBytes
 // [0] shiftCancelMode
-// [1, 2] tapHoldThresholdMs (16bit/LE)
+// [1, 2] tapHoldThresholdMs (16bit/BE)
 // [3] useInterruptHold
 function encodeProfileSettingsData(profile: IProfileData): number[] {
   const { settings } = profile;
@@ -438,8 +440,8 @@ function encodeProfileSettingsData(profile: IProfileData): number[] {
     settings.assignType === 'dual' ? settings.useInterruptHold : false;
   return [
     shiftCancelMode,
-    blo(tapHoldThresholdMs),
     bhi(tapHoldThresholdMs),
+    blo(tapHoldThresholdMs),
     useInterruptHold ? 1 : 0,
   ];
 }

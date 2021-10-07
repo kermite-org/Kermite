@@ -56,7 +56,6 @@ function readStorageWordBE(addr: u16): u16 {
 
 // --------------------------------------------------------------------------------
 // execution options
-
 const logicOptions = new (class {
   systemLayout: u8 = 0;
   wiringMode: u8 = 0;
@@ -282,21 +281,35 @@ const assignMemoryReaderState = new (class {
   layerAttributeWords: u16[] = Array(NumLayersMax).fill(0);
 })();
 
+const logicConfig = new (class {
+  shiftCancelMode: u8 = 0;
+  tapHoldThresholdMs: u16 = 0;
+  useInterruptHold: u8 = 0;
+})();
+
 function initAssignMemoryReader() {
-  const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
-  const layerListDataLocation = dataStorage.getChunk_layerList().address;
-  const keyMappingDataLocation = dataStorage.getChunk_keyAssigns().address;
-  const keyMappingDataSize = dataStorage.getChunk_keyAssigns().size;
   const rs = assignMemoryReaderState;
+  const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
   const numLayers = readStorageByte(profileHeaderLocation + 4);
   rs.numLayers = numLayers;
+
+  const keyMappingDataLocation = dataStorage.getChunk_keyAssigns().address;
+  const keyMappingDataSize = dataStorage.getChunk_keyAssigns().size;
   rs.assignsStartAddress = keyMappingDataLocation;
   rs.assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
   // console.log('nl:%d bl:%d\n', numLayers, keyMappingDataSize);
+
+  const layerListDataLocation = dataStorage.getChunk_layerList().address;
   for (let i = 0; i < 16; i++) {
     rs.layerAttributeWords[i] =
       i < numLayers ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
+
+  const settingsLocation = dataStorage.getChunk_profileSettings().address;
+  logicConfig.shiftCancelMode = readStorageByte(settingsLocation + 0);
+  logicConfig.tapHoldThresholdMs = readStorageWordBE(settingsLocation + 1);
+  logicConfig.useInterruptHold = readStorageByte(settingsLocation + 3);
+
   keyActionRemapper_setupDataReader();
 }
 
@@ -638,6 +651,12 @@ const InvocationMode = {
   Oneshot: 5,
 };
 
+const ShiftCancelMode = {
+  None: 0,
+  ApplyToShiftLayer: 1,
+  ApplyToAll: 2,
+};
+
 function convertSingleModifierToFlags(opWord: u16): u16 {
   const wordBase = opWord & 0xf000;
   let modifiers = (opWord >> 8) & 0x0f;
@@ -810,18 +829,6 @@ function assignBinder_handleKeyOff(slot: KeySlot) {
 
 // --------------------------------------------------------------------------------
 // resolver common
-
-const ShiftCancelMode = {
-  None: 0,
-  ApplyToShiftLayer: 1,
-  ApplyToAll: 2,
-};
-
-const logicConfig = {
-  shiftCancelMode: ShiftCancelMode.None,
-  tapHoldThresholdMs: 200,
-  useInterruptHold: true,
-};
 
 const InputEdge = {
   None: 0,
