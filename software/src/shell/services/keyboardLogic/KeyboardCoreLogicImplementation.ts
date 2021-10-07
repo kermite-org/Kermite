@@ -804,6 +804,7 @@ function assignBinder_handleKeyOff(slot: KeySlot) {
 
 const logicConfig = {
   tapHoldThresholdMs: 200,
+  useInterruptHold: true,
 };
 
 const InputEdge = {
@@ -1167,8 +1168,10 @@ function keySlot_tick(slot: KeySlot, ms: number) {
   }
 
   const interrupt_key_index = resolverState.interruptKeyIndex;
-  slot.interrupted =
-    interrupt_key_index !== -1 && interrupt_key_index !== slot.keyIndex;
+  if (logicConfig.useInterruptHold) {
+    slot.interrupted =
+      interrupt_key_index !== -1 && interrupt_key_index !== slot.keyIndex;
+  }
 
   if (!slot.resolverProc && slot.inputEdge === InputEdge.Down) {
     const assignSet = findAssignInLayerStack(
