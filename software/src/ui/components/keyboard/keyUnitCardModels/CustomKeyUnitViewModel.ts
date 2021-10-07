@@ -6,7 +6,7 @@ import {
 } from '~/ui/components/keyboard/keyUnitCardModels/KeyUnitCardViewModelCommon';
 
 export function makeCustomKeyUnitViewModels<
-  TCustomKeyUnitViewModel extends ICustomKeyUnitViewModelBase
+  TCustomKeyUnitViewModel extends ICustomKeyUnitViewModelBase,
 >(
   profileData: IProfileData,
   keyboardDesign: IDisplayKeyboardDesign,
@@ -15,7 +15,7 @@ export function makeCustomKeyUnitViewModels<
     source: ICustomKeyUnitViewModelBase,
   ) => TCustomKeyUnitViewModel,
 ): TCustomKeyUnitViewModel[] {
-  const { layers, assigns } = profileData;
+  const { layers, assigns, settings } = profileData;
   return keyboardDesign.keyEntities.map((ku) => {
     const keyUnitId = ku.keyId;
     const pos = {
@@ -34,6 +34,7 @@ export function makeCustomKeyUnitViewModels<
     const { primaryText, secondaryText, isLayerFallback } = getAssignEntryTexts(
       assign,
       layers,
+      settings,
     );
 
     return propsDecorator({

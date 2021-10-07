@@ -270,11 +270,12 @@ export function usePlayerModel(): IPlayerModel {
     holdKeyIndices,
     plainShiftPressed,
   } = local;
-  const { layers } = profileData;
+  const { layers, settings } = profileData;
   return {
     holdKeyIndices,
     keyStates,
     layers,
+    profileSettings: settings,
     displayDesign,
     layerStackItems: makeLayerStackItems(layers, layerStateFlags),
     shiftHold: checkShiftHold(layers, layerStateFlags, plainShiftPressed),
