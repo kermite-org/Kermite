@@ -177,6 +177,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
     isAvr,
     isRp,
     isSplit,
+    isOddSplit,
     availablePinsText,
     fieldErrors,
     totalError,
@@ -231,6 +232,24 @@ export const StandardFirmwareEditor: FC<Props> = ({
             editValues={editValues}
             fieldErrors={fieldErrors}
           />
+
+          <MultiplePinsFieldRow
+            label="row pins right"
+            fieldKey="matrixRowPinsR"
+            availabilityKey="useMatrixKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            qxIf={isOddSplit}
+          />
+          <MultiplePinsFieldRow
+            label="column pins right"
+            fieldKey="matrixColumnPinsR"
+            availabilityKey="useMatrixKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            qxIf={isOddSplit}
+          />
+
           <ToggleFieldRow
             label="use direct wired key scanner"
             fieldKey="useDirectWiredKeyScanner"
@@ -243,6 +262,14 @@ export const StandardFirmwareEditor: FC<Props> = ({
             editValues={editValues}
             fieldErrors={fieldErrors}
           />
+          <MultiplePinsFieldRow
+            label="direct wired pins right"
+            fieldKey="directWiredPinsR"
+            availabilityKey="useDirectWiredKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            qxIf={isOddSplit}
+          />
           <ToggleFieldRow
             label="use encoder"
             fieldKey="useEncoder"
@@ -254,6 +281,14 @@ export const StandardFirmwareEditor: FC<Props> = ({
             availabilityKey="useEncoder"
             editValues={editValues}
             fieldErrors={fieldErrors}
+          />
+          <MultiplePinsFieldRow
+            label="encoder pins right"
+            fieldKey="encoderPinsR"
+            availabilityKey="useEncoder"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            qxIf={isOddSplit}
           />
           <ToggleFieldRow
             fieldKey="useLighting"
@@ -275,6 +310,15 @@ export const StandardFirmwareEditor: FC<Props> = ({
             fieldErrors={fieldErrors}
             availabilityKey="useLighting"
             indent={true}
+          />
+          <IntegerFieldRow
+            label="lighting num LEDs right"
+            fieldKey="lightingNumLedsR"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            availabilityKey="useLighting"
+            indent={true}
+            qxIf={isOddSplit}
           />
 
           <ToggleFieldRow
