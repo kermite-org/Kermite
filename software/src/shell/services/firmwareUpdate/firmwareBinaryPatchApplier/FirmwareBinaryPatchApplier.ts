@@ -34,11 +34,11 @@ function getBinaryContentMarkerIndex(
 }
 
 function getCustomDataLocation(binaryBytes: number[]): number {
-  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
+  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, '$KMDF');
   if (markerPosition === -1) {
     throw new Error('cannot find marker');
   }
-  return markerPosition + 4;
+  return markerPosition + 5;
 }
 
 function checkCustomDataBytes(bytes: number[]) {
