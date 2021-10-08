@@ -222,39 +222,58 @@ export const standardFirmwareEditModelHelpers = {
   validateEditValues(
     editValues: IStandardFirmwareEditValues,
   ): IStandardFirmwareEditErrors {
-    const mcuType = standardFirmwareEditModelHelpers.getMcuType(
-      editValues.baseFirmwareType,
-    );
-    const isSplit = standardFirmwareEditModelHelpers.getIsSplit(
-      editValues.baseFirmwareType,
-    );
-    const allowedEncoderPinCounts = isSplit ? [2] : [2, 4, 6];
+    const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
+
     const {
+      baseFirmwareType,
       matrixRowPins,
       matrixColumnPins,
       directWiredPins,
       encoderPins,
+      matrixRowPinsR,
+      matrixColumnPinsR,
+      directWiredPinsR,
+      encoderPinsR,
       lightingPin,
       lightingNumLeds,
+      lightingNumLedsR,
       singleWireSignalPin,
     } = editValues;
+
+    const mcuType = getMcuType(baseFirmwareType);
+    const isSplit = getIsSplit(baseFirmwareType);
+
+    const allowedEncoderPinCounts = isSplit ? [2] : [2, 4, 6];
+
+    const checkPins = (pins: string[] | undefined) =>
+      pins && subHelpers.validatePins(pins, mcuType);
+
+    const checkEncoderPins = (pins: string[] | undefined) =>
+      pins &&
+      (subHelpers.validatePins(pins, mcuType) ||
+        subHelpers.checkPinsCountEx(pins, allowedEncoderPinCounts) ||
+        subHelpers.validateAvrEncoderPrimaryPins(pins, mcuType));
+
+    const checkNumLeds = (numLeds: number | undefined) =>
+      (numLeds !== undefined &&
+        subHelpers.checkNumberInRange(numLeds, 1, 256)) ||
+      undefined;
+
     return {
-      matrixRowPins:
-        matrixRowPins && subHelpers.validatePins(matrixRowPins, mcuType),
-      matrixColumnPins:
-        matrixColumnPins && subHelpers.validatePins(matrixColumnPins, mcuType),
-      directWiredPins:
-        directWiredPins && subHelpers.validatePins(directWiredPins, mcuType),
-      encoderPins:
-        encoderPins &&
-        (subHelpers.validatePins(encoderPins, mcuType) ||
-          subHelpers.checkPinsCountEx(encoderPins, allowedEncoderPinCounts) ||
-          subHelpers.validateAvrEncoderPrimaryPins(encoderPins, mcuType)),
+      matrixRowPins: checkPins(matrixRowPins),
+      matrixColumnPins: checkPins(matrixColumnPins),
+      directWiredPins: checkPins(directWiredPins),
+      encoderPins: checkEncoderPins(encoderPins),
+
+      matrixRowPinsR: checkPins(matrixRowPinsR),
+      matrixColumnPinsR: checkPins(matrixColumnPinsR),
+      directWiredPinsR: checkPins(directWiredPinsR),
+      encoderPinsR: checkEncoderPins(encoderPinsR),
+
       lightingPin: lightingPin && subHelpers.validatePin(lightingPin, mcuType),
-      lightingNumLeds:
-        (lightingNumLeds !== undefined &&
-          subHelpers.checkNumberInRange(lightingNumLeds, 1, 256)) ||
-        undefined,
+      lightingNumLeds: checkNumLeds(lightingNumLeds),
+      lightingNumLedsR: checkNumLeds(lightingNumLedsR),
+
       singleWireSignalPin:
         singleWireSignalPin &&
         (subHelpers.validatePin(singleWireSignalPin, mcuType) ||
