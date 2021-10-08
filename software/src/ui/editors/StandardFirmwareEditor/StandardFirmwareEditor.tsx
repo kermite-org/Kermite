@@ -9,7 +9,10 @@ import {
 } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { useStandardFirmwareEditPresenter } from '~/ui/editors/StandardFirmwareEditor/presenter';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
-import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
+import {
+  IStandardFirmwareEditErrors,
+  IStandardFirmwareEditValues,
+} from '~/ui/editors/StandardFirmwareEditor/types';
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
@@ -32,6 +35,123 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     standardFirmwareEditStore.actions.commitValue(key, value);
   };
 }
+
+type ExtractKeysWithType<Obj, Type> = {
+  [K in keyof Obj]: Obj[K] extends Type ? K : never;
+}[keyof Obj];
+
+type IFlagFieldKey = ExtractKeysWithType<
+  Required<IStandardFirmwareEditValues>,
+  boolean
+>;
+
+type ISinglePinsFieldKey = ExtractKeysWithType<
+  Required<IStandardFirmwareEditValues>,
+  string
+>;
+
+type IMultiplePinsFieldKey = ExtractKeysWithType<
+  Required<IStandardFirmwareEditValues>,
+  string[]
+>;
+
+type IIntegerFieldKey = ExtractKeysWithType<
+  Required<IStandardFirmwareEditValues>,
+  number
+>;
+
+const ToggleFieldRow: FC<{
+  label: string;
+  fieldKey: IFlagFieldKey;
+  editValues: IStandardFirmwareEditValues;
+  disabled?: boolean;
+}> = ({ label, fieldKey, editValues, disabled }) => (
+  <FieldItem title={label}>
+    <ToggleSwitch
+      checked={editValues[fieldKey]}
+      onChange={valueChangeHandler(fieldKey)}
+      disabled={disabled}
+    />
+  </FieldItem>
+);
+
+const IntegerFieldRow: FC<{
+  label: string;
+  fieldKey: IIntegerFieldKey;
+  editValues: IStandardFirmwareEditValues;
+  fieldErrors: IStandardFirmwareEditErrors;
+  availabilityKey?: IFlagFieldKey;
+  disabled?: boolean;
+  indent?: boolean;
+}> = ({
+  label,
+  fieldKey,
+  editValues,
+  fieldErrors,
+  availabilityKey,
+  disabled,
+  indent,
+}) => (
+  <FieldItem title={label} indent={indent}>
+    <GeneralInput
+      type="number"
+      value={integerToText(editValues[fieldKey])}
+      setValue={valueChangeHandler(fieldKey, integerFromText as any)}
+      width={100}
+      disabled={availabilityKey ? !editValues[availabilityKey] : disabled}
+      invalid={!!fieldErrors[fieldKey]}
+    />
+    <div className="error">{fieldErrors[fieldKey]}</div>
+  </FieldItem>
+);
+
+const MultiplePinsFieldRow: FC<{
+  label: string;
+  fieldKey: IMultiplePinsFieldKey;
+  availabilityKey: IFlagFieldKey;
+  editValues: IStandardFirmwareEditValues;
+  fieldErrors: IStandardFirmwareEditErrors;
+}> = ({ label, fieldKey, availabilityKey, editValues, fieldErrors }) => (
+  <FieldItem title={label} indent>
+    <GeneralInput
+      value={arrayToText(editValues[fieldKey])}
+      setValue={valueChangeHandler(fieldKey, arrayFromText)}
+      width={400}
+      disabled={!editValues[availabilityKey]}
+      invalid={!!fieldErrors[fieldKey]}
+    />
+    <div className="error">{fieldErrors[fieldKey]}</div>
+  </FieldItem>
+);
+
+const SinglePinFieldRow: FC<{
+  label: string;
+  fieldKey: ISinglePinsFieldKey;
+  editValues: IStandardFirmwareEditValues;
+  fieldErrors: IStandardFirmwareEditErrors;
+  availabilityKey?: IFlagFieldKey;
+  disabled?: boolean;
+  indent?: boolean;
+}> = ({
+  label,
+  fieldKey,
+  availabilityKey,
+  editValues,
+  fieldErrors,
+  disabled,
+  indent,
+}) => (
+  <FieldItem title={label} indent={indent}>
+    <GeneralInput
+      value={editValues[fieldKey] || ''}
+      setValue={valueChangeHandler(fieldKey)}
+      width={100}
+      disabled={availabilityKey ? !editValues[availabilityKey] : disabled}
+      invalid={!!fieldErrors[fieldKey]}
+    />
+    <div className="error">{fieldErrors[fieldKey]}</div>
+  </FieldItem>
+);
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
   get isModified(): boolean {
@@ -74,140 +194,110 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('baseFirmwareType')}
             />
           </FieldItem>
-          <FieldItem title="use board LEDs ProMicro" qxIf={isAvr}>
-            <ToggleSwitch
-              checked={editValues.useBoardLedsProMicroAvr}
-              onChange={valueChangeHandler('useBoardLedsProMicroAvr')}
-            />
-          </FieldItem>
-          <FieldItem title="use board LEDs ProMicro RP2040" qxIf={isRp}>
-            <ToggleSwitch
-              checked={editValues.useBoardLedsProMicroRp}
-              onChange={valueChangeHandler('useBoardLedsProMicroRp')}
-            />
-          </FieldItem>
-          <FieldItem title="use board LEDs RPi Pico" qxIf={isRp}>
-            <ToggleSwitch
-              checked={editValues.useBoardLedsRpiPico}
-              onChange={valueChangeHandler('useBoardLedsRpiPico')}
-            />
-          </FieldItem>
-          <FieldItem title="use matrix key scanner">
-            <ToggleSwitch
-              checked={editValues.useMatrixKeyScanner}
-              onChange={valueChangeHandler('useMatrixKeyScanner')}
-            />
-          </FieldItem>
-          <FieldItem title="row pins" indent>
-            <GeneralInput
-              value={arrayToText(editValues.matrixRowPins)}
-              setValue={valueChangeHandler('matrixRowPins', arrayFromText)}
-              width={400}
-              disabled={!editValues.useMatrixKeyScanner}
-              invalid={!!fieldErrors.matrixRowPins}
-            />
-            <div className="error">{fieldErrors.matrixRowPins}</div>
-          </FieldItem>
-          <FieldItem title="column pins" indent>
-            <GeneralInput
-              value={arrayToText(editValues.matrixColumnPins)}
-              setValue={valueChangeHandler('matrixColumnPins', arrayFromText)}
-              width={400}
-              disabled={!editValues.useMatrixKeyScanner}
-              invalid={!!fieldErrors.matrixColumnPins}
-            />
-            <div className="error">{fieldErrors.matrixColumnPins}</div>
-          </FieldItem>
-          <FieldItem title="use direct wired key scanner">
-            <ToggleSwitch
-              checked={editValues.useDirectWiredKeyScanner}
-              onChange={valueChangeHandler('useDirectWiredKeyScanner')}
-            />
-          </FieldItem>
-          <FieldItem title="direct wired pins" indent>
-            <GeneralInput
-              value={arrayToText(editValues.directWiredPins)}
-              setValue={valueChangeHandler('directWiredPins', arrayFromText)}
-              width={400}
-              disabled={!editValues.useDirectWiredKeyScanner}
-              invalid={!!fieldErrors.directWiredPins}
-            />
-            <div className="error">{fieldErrors.directWiredPins}</div>
-          </FieldItem>
+          <ToggleFieldRow
+            label="use board LEDs ProMicro"
+            fieldKey="useBoardLedsProMicroAvr"
+            editValues={editValues}
+            qxIf={isAvr}
+          />
+          <ToggleFieldRow
+            label="use board LEDs ProMicro RP2040"
+            fieldKey="useBoardLedsProMicroRp"
+            editValues={editValues}
+            qxIf={isRp}
+          />
+          <ToggleFieldRow
+            label="use board LEDs RPi Pico"
+            fieldKey="useBoardLedsRpiPico"
+            editValues={editValues}
+            qxIf={isRp}
+          />
+          <ToggleFieldRow
+            fieldKey="useMatrixKeyScanner"
+            label="use matrix key scanner"
+            editValues={editValues}
+          />
+          <MultiplePinsFieldRow
+            label="row pins"
+            fieldKey="matrixRowPins"
+            availabilityKey="useMatrixKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+          />
+          <MultiplePinsFieldRow
+            label="column pins"
+            fieldKey="matrixColumnPins"
+            availabilityKey="useMatrixKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+          />
+          <ToggleFieldRow
+            label="use direct wired key scanner"
+            fieldKey="useDirectWiredKeyScanner"
+            editValues={editValues}
+          />
+          <MultiplePinsFieldRow
+            label="direct wired pins"
+            fieldKey="directWiredPins"
+            availabilityKey="useDirectWiredKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+          />
+          <ToggleFieldRow
+            label="use encoder"
+            fieldKey="useEncoder"
+            editValues={editValues}
+          />
+          <MultiplePinsFieldRow
+            label="encoder pins"
+            fieldKey="encoderPins"
+            availabilityKey="useEncoder"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+          />
+          <ToggleFieldRow
+            fieldKey="useLighting"
+            label="use lighting"
+            editValues={editValues}
+          />
+          <SinglePinFieldRow
+            label="lighting pin"
+            fieldKey="lightingPin"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            disabled={!(editValues.useLighting && isRp)}
+            indent={true}
+          />
+          <IntegerFieldRow
+            label="lighting num LEDs"
+            fieldKey="lightingNumLeds"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            availabilityKey="useLighting"
+            indent={true}
+          />
 
-          <FieldItem title="use encoder">
-            <ToggleSwitch
-              checked={editValues.useEncoder}
-              onChange={valueChangeHandler('useEncoder')}
-            />
-          </FieldItem>
-          <FieldItem title="encoder pins" indent>
-            <GeneralInput
-              value={arrayToText(editValues.encoderPins)}
-              setValue={valueChangeHandler('encoderPins', arrayFromText)}
-              width={400}
-              disabled={!editValues.useEncoder}
-              invalid={!!fieldErrors.encoderPins}
-            />
-            <div className="error">{fieldErrors.encoderPins}</div>
-          </FieldItem>
+          <ToggleFieldRow
+            fieldKey="useLcd"
+            label="use OLED"
+            editValues={editValues}
+            disabled={isAvr && isSplit}
+          />
 
-          <FieldItem title="use lighting">
-            <ToggleSwitch
-              checked={editValues.useLighting}
-              onChange={valueChangeHandler('useLighting')}
-            />
-          </FieldItem>
-          <FieldItem title="lighting pin" indent>
-            <GeneralInput
-              value={editValues.lightingPin || ''}
-              setValue={valueChangeHandler('lightingPin')}
-              width={100}
-              disabled={!(editValues.useLighting && isRp)}
-              invalid={!!fieldErrors.lightingPin}
-            />
-            <div className="error">{fieldErrors.lightingPin}</div>
-          </FieldItem>
+          <SinglePinFieldRow
+            label="single wire signal pin"
+            fieldKey="singleWireSignalPin"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+            qxIf={isSplit}
+          />
 
-          <FieldItem title="lighting num LEDs" indent>
-            <GeneralInput
-              type="number"
-              value={integerToText(editValues.lightingNumLeds)}
-              setValue={valueChangeHandler(
-                'lightingNumLeds',
-                integerFromText as any,
-              )}
-              width={100}
-              disabled={!editValues.useLighting}
-              invalid={!!fieldErrors.lightingNumLeds}
-            />
-            <div className="error">{fieldErrors.lightingNumLeds}</div>
-          </FieldItem>
-
-          <FieldItem title="use LCD">
-            <ToggleSwitch
-              checked={editValues.useLcd}
-              onChange={valueChangeHandler('useLcd')}
-              disabled={isAvr && isSplit}
-            />
-          </FieldItem>
-
-          <FieldItem title="single wire signal pin" qxIf={isSplit}>
-            <GeneralInput
-              value={editValues.singleWireSignalPin || ''}
-              setValue={valueChangeHandler('singleWireSignalPin')}
-              width={100}
-              invalid={!!fieldErrors.singleWireSignalPin}
-            />
-            <div className="error">{fieldErrors.singleWireSignalPin}</div>
-          </FieldItem>
-
-          <FieldItem title="use debug uart" qxIf={appUi.isDevelopment}>
-            <ToggleSwitch
-              checked={editValues.useDebugUart}
-              onChange={valueChangeHandler('useDebugUart')}
-            />
-          </FieldItem>
+          <ToggleFieldRow
+            fieldKey="useDebugUart"
+            label="use debug uart"
+            editValues={editValues}
+            qxIf={appUi.isDevelopment}
+          />
 
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
