@@ -1,157 +1,17 @@
 import { css, FC, jsx } from 'qx';
 import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { appUi } from '~/ui/base';
-import { GeneralInput, GeneralSelector, ToggleSwitch } from '~/ui/components';
-import { FieldItem } from '~/ui/editors/StandardFirmwareEditor/FieldItem';
-import {
-  standardFirmwareEditModelHelpers,
-  standardFirmwareEditor_fieldValueConverters,
-} from '~/ui/editors/StandardFirmwareEditor/helpers';
+import { GeneralSelector } from '~/ui/components';
+import { standardFirmwareEditorComponents } from '~/ui/editors/StandardFirmwareEditor/components';
+import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { useStandardFirmwareEditPresenter } from '~/ui/editors/StandardFirmwareEditor/presenter';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
-import {
-  IStandardFirmwareEditErrors,
-  IStandardFirmwareEditValues,
-} from '~/ui/editors/StandardFirmwareEditor/types';
+import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
 
 export type Props = {
   firmwareConfig: IStandardFirmwareEditValues;
   isNewConfig: boolean;
 };
-
-const { arrayFromText, arrayToText, integerFromText, integerToText } =
-  standardFirmwareEditor_fieldValueConverters;
-
-function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
-  key: K,
-  converter?: (
-    value: Extract<IStandardFirmwareEditValues[K], string | boolean>,
-  ) => IStandardFirmwareEditValues[K],
-) {
-  return (
-    rawValue: Extract<IStandardFirmwareEditValues[K], string | boolean>,
-  ) => {
-    const value = converter ? converter(rawValue) : rawValue;
-    standardFirmwareEditStore.actions.commitValue(key, value);
-  };
-}
-
-type ExtractKeysWithType<Obj, Type> = {
-  [K in keyof Obj]: Obj[K] extends Type ? K : never;
-}[keyof Obj];
-
-type IFlagFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  boolean
->;
-
-type ISinglePinsFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  string
->;
-
-type IMultiplePinsFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  string[]
->;
-
-type IIntegerFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  number
->;
-
-const ToggleFieldRow: FC<{
-  label: string;
-  fieldKey: IFlagFieldKey;
-  editValues: IStandardFirmwareEditValues;
-  disabled?: boolean;
-}> = ({ label, fieldKey, editValues, disabled }) => (
-  <FieldItem title={label}>
-    <ToggleSwitch
-      checked={editValues[fieldKey]}
-      onChange={valueChangeHandler(fieldKey)}
-      disabled={disabled}
-    />
-  </FieldItem>
-);
-
-const IntegerFieldRow: FC<{
-  label: string;
-  fieldKey: IIntegerFieldKey;
-  editValues: IStandardFirmwareEditValues;
-  fieldErrors: IStandardFirmwareEditErrors;
-  availabilityKey?: IFlagFieldKey;
-  disabled?: boolean;
-  indent?: boolean;
-}> = ({
-  label,
-  fieldKey,
-  editValues,
-  fieldErrors,
-  availabilityKey,
-  disabled,
-  indent,
-}) => (
-  <FieldItem title={label} indent={indent}>
-    <GeneralInput
-      type="number"
-      value={integerToText(editValues[fieldKey])}
-      setValue={valueChangeHandler(fieldKey, integerFromText as any)}
-      width={100}
-      disabled={availabilityKey ? !editValues[availabilityKey] : disabled}
-      invalid={!!fieldErrors[fieldKey]}
-    />
-    <div className="error">{fieldErrors[fieldKey]}</div>
-  </FieldItem>
-);
-
-const MultiplePinsFieldRow: FC<{
-  label: string;
-  fieldKey: IMultiplePinsFieldKey;
-  availabilityKey: IFlagFieldKey;
-  editValues: IStandardFirmwareEditValues;
-  fieldErrors: IStandardFirmwareEditErrors;
-}> = ({ label, fieldKey, availabilityKey, editValues, fieldErrors }) => (
-  <FieldItem title={label} indent>
-    <GeneralInput
-      value={arrayToText(editValues[fieldKey])}
-      setValue={valueChangeHandler(fieldKey, arrayFromText)}
-      width={400}
-      disabled={!editValues[availabilityKey]}
-      invalid={!!fieldErrors[fieldKey]}
-    />
-    <div className="error">{fieldErrors[fieldKey]}</div>
-  </FieldItem>
-);
-
-const SinglePinFieldRow: FC<{
-  label: string;
-  fieldKey: ISinglePinsFieldKey;
-  editValues: IStandardFirmwareEditValues;
-  fieldErrors: IStandardFirmwareEditErrors;
-  availabilityKey?: IFlagFieldKey;
-  disabled?: boolean;
-  indent?: boolean;
-}> = ({
-  label,
-  fieldKey,
-  availabilityKey,
-  editValues,
-  fieldErrors,
-  disabled,
-  indent,
-}) => (
-  <FieldItem title={label} indent={indent}>
-    <GeneralInput
-      value={editValues[fieldKey] || ''}
-      setValue={valueChangeHandler(fieldKey)}
-      width={100}
-      disabled={availabilityKey ? !editValues[availabilityKey] : disabled}
-      invalid={!!fieldErrors[fieldKey]}
-    />
-    <div className="error">{fieldErrors[fieldKey]}</div>
-  </FieldItem>
-);
 
 export const StandardFirmwareEditor_OutputPropsSupplier = {
   get isModified(): boolean {
@@ -182,6 +42,15 @@ export const StandardFirmwareEditor: FC<Props> = ({
     fieldErrors,
     totalError,
   } = useStandardFirmwareEditPresenter(firmwareConfig, isNewConfig);
+
+  const {
+    valueChangeHandler,
+    FieldItem,
+    ToggleFieldRow,
+    IntegerFieldRow,
+    SinglePinFieldRow,
+    MultiplePinsFieldRow,
+  } = standardFirmwareEditorComponents;
 
   return (
     <div css={style}>
