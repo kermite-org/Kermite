@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.API_TOKEN_GITHUB }}
 
       - name: Check Firmware IDs
-        run: yarn checkFirmwareIds --abortOnError
+        run: yarn checkFirmwareIds
         working-directory: ./firmware/ci
 
       - name: Update All Project Distributions
