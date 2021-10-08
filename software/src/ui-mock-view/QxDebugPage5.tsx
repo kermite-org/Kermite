@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, QxChildren } from 'qx';
 
 const Foo: FC = () => {
   const styleFoo = css`
@@ -20,11 +20,31 @@ const Foo: FC = () => {
   );
 };
 
+const Bar: FC<{ children?: QxChildren }> = ({ children }) => {
+  return <div css={baseBarStyle}>{children}</div>;
+};
+
+const baseBarStyle = css`
+  color: green;
+`;
+
 export const QxDebugPage5: FC = () => {
   console.log(`render`);
   return (
     <div>
       <Foo />
+      <Bar>bar1</Bar>
+      <Bar css={customBarStyle}>
+        <div>bar2</div>
+        <h3>hoge</h3>
+      </Bar>
     </div>
   );
 };
+
+const customBarStyle = css`
+  font-size: 24px;
+  > h3 {
+    color: red;
+  }
+`;

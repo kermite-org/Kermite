@@ -61,9 +61,13 @@ const actions = {
     state.tabResourceOrigin = origin;
   },
   resetState() {
-    state.tabResourceOrigin = readers.canSelectResourceOrigin
-      ? uiReaders.globalProjectOrigin || 'online'
-      : 'online';
+    if (!readers.canSelectResourceOrigin) {
+      state.tabResourceOrigin = 'online';
+    } else {
+      if (uiReaders.globalProjectOrigin) {
+        state.tabResourceOrigin = uiReaders.globalProjectOrigin;
+      }
+    }
   },
   setProjectKey(projectKey: string) {
     const projectSpec =

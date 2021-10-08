@@ -27,7 +27,10 @@ const helpers = {
       firmwareName,
       customFirmwareId,
     };
-    await projectPackagesWriter.saveLocalProjectFirmware(newFirmwareEntry);
+    await projectPackagesWriter.saveLocalProjectResourceItem(
+      'firmware',
+      newFirmwareEntry,
+    );
     projectResourceStore.actions.setSelectedItemKey(
       encodeProjectResourceItemKey('firmware', firmwareName),
     );
@@ -52,7 +55,7 @@ export const ProjectCustomFirmwareCreatePage: FC = () => {
   return (
     <div css={style}>
       <RouteHeaderBar
-        title={`edit custom firmware: (new)`}
+        title="edit custom firmware: (new)"
         backPagePath="/projectResource"
         canSave={canSave}
         saveHandler={saveHandler}

@@ -5,6 +5,7 @@ type Props = {
   className?: string;
   title: string;
   backPagePath?: string;
+  backHandler?(): void;
   canSave?: boolean;
   saveHandler?(): void;
   editMode?: 'Create' | 'Edit';
@@ -14,14 +15,18 @@ export const RouteHeaderBar: FC<Props> = ({
   className,
   title,
   backPagePath,
+  backHandler,
   canSave,
   saveHandler,
   editMode = 'Edit',
 }) => (
   <div css={style} className={className}>
-    <LinkButton className="back-button" qxIf={!!backPagePath}>
+    <LinkButton className="back-button" qxIf={!!backPagePath} to={backPagePath}>
       back
     </LinkButton>
+    <div className="back-button" qxIf={!!backHandler} onClick={backHandler}>
+      back
+    </div>
     <div className="title">{title}</div>
     <button
       className="save-button"

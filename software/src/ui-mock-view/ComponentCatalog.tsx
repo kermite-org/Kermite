@@ -71,7 +71,7 @@ export const ComponentCatalogPage: FC = () => {
       </div>
       <div className="preview-area">
         {currentVisual && (
-          <div className={'preview-content'}>
+          <div className="preview-content">
             {Object.entries(currentVisual).map(([key, value]) => (
               <div className="row" key={key}>
                 {typeof value === 'function' ? value({}) : value}

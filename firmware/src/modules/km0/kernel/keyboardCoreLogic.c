@@ -266,22 +266,39 @@ typedef struct {
   uint16_t layerAttributeWords[NumLayersMax];
 } AssignMemoryReaderState;
 
+typedef struct {
+  uint8_t shiftCancelMode;
+  uint16_t tapHoldThresholdMs;
+  bool useInterruptHold;
+} LogicConfig;
+
 static AssignMemoryReaderState assignMemoryReaderState;
 
+static LogicConfig logicConfig;
+
 static void initAssignMemoryReader() {
-  uint16_t profileHeaderLocation = dataStorage_getDataAddress_profileData_profileHeader();
-  uint16_t layerListDataLocation = dataStorage_getDataAddress_profileData_layerList();
-  uint16_t keyMappingDataLocation = dataStorage_getDataAddress_profileData_keyAssigns();
-  uint16_t keyMappingDataSize = dataStorage_getDataSize_profileData_keyAssigns();
   AssignMemoryReaderState *rs = &assignMemoryReaderState;
+
+  uint16_t profileHeaderLocation = dataStorage_getDataAddress_profileData_profileHeader();
   uint8_t numLayers = readStorageByte(profileHeaderLocation + 4);
   rs->numLayers = numLayers;
+
+  uint16_t keyMappingDataLocation = dataStorage_getDataAddress_profileData_keyAssigns();
+  uint16_t keyMappingDataSize = dataStorage_getDataSize_profileData_keyAssigns();
   rs->assignsStartAddress = keyMappingDataLocation;
   rs->assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
   printf("numLayers:%d keyMappingDataSize:%d\n", numLayers, keyMappingDataSize);
+
+  uint16_t layerListDataLocation = dataStorage_getDataAddress_profileData_layerList();
   for (uint8_t i = 0; i < 16; i++) {
     rs->layerAttributeWords[i] = (i < numLayers) ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
+
+  uint16_t profileSettingsLocation = dataStorage_getDataAddress_profileData_profileSettings();
+  logicConfig.shiftCancelMode = readStorageByte(profileSettingsLocation + 0);
+  logicConfig.tapHoldThresholdMs = readStorageWordBE(profileSettingsLocation + 1);
+  logicConfig.useInterruptHold = readStorageByte(profileSettingsLocation + 3) > 0;
+
   keyActionRemapper_setupDataReader();
 }
 
@@ -619,6 +636,12 @@ enum {
   InvocationMode_Oneshot = 5,
 };
 
+enum {
+  ShiftCancelMode_None = 0,
+  ShiftCancelMode_ApplyToShiftLayer = 1,
+  ShiftCancelMode_ApplyToAll = 2,
+};
+
 static uint16_t convertSingleModifierToFlags(uint16_t opWord) {
   uint16_t wordBase = opWord & 0xf000;
   uint8_t modifiers = (opWord >> 8) & 0x0f;
@@ -650,8 +673,17 @@ static OutputKeyStrokeAction convertKeyInputOperationWordToOutputKeyStrokeAction
     bool isSecondaryLayout = logicOptions.systemLayout == 1;
     uint16_t hidKey = keyCodeTranslator_mapLogicalKeyToHidKeyCode(
         logicalKey, isSecondaryLayout);
-    bool isInShiftCancelLayer = ((opWord >> 12) & 1) > 0;
-    action.shiftCancel = isInShiftCancelLayer && (hidKey & 0x200) > 0;
+    if ((hidKey & 0x200) > 0) {
+      uint8_t shiftCancelMode = logicConfig.shiftCancelMode;
+      if (shiftCancelMode == ShiftCancelMode_ApplyToShiftLayer) {
+        bool isBelongToShiftLayer = ((opWord >> 12) & 1) > 0;
+        if (isBelongToShiftLayer) {
+          action.shiftCancel = 1;
+        }
+      } else if (shiftCancelMode == ShiftCancelMode_ApplyToAll) {
+        action.shiftCancel = 1;
+      }
+    }
     bool shiftOn = (hidKey & 0x100) > 0;
     if (shiftOn) {
       action.modFlags |= ModFlag_Shift;
@@ -739,7 +771,7 @@ static void handleOperationOff(uint32_t opWord) {
 //--------------------------------------------------------------------------------
 //assign binder
 
-#define KIDX_NONE 255
+#define KEY_INDEX_NONE 255
 
 #ifndef KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS
 #define KM0_KEYBOARD_CORELOGIC__NUM_INPUT_KEY_SLOTS 10
@@ -781,8 +813,6 @@ static void assignBinder_handleKeyOff(KeySlot *slot) {
 //--------------------------------------------------------------------------------
 //resolver common
 
-#define TH 200
-
 static const bool DebugShowTrigger = false;
 // static const bool DebugShowTrigger = true;
 
@@ -821,11 +851,11 @@ typedef struct {
 static ResolverState resolverState;
 
 static void initResolverState() {
-  resolverState.interruptKeyIndex = KIDX_NONE;
+  resolverState.interruptKeyIndex = KEY_INDEX_NONE;
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     slot->isActive = false;
-    slot->keyIndex = KIDX_NONE;
+    slot->keyIndex = KEY_INDEX_NONE;
     slot->steps = 0;
     slot->hold = false;
     slot->nextHold = false;
@@ -972,9 +1002,10 @@ static bool keySlot_dualResolverB(KeySlot *slot) {
   uint16_t tick = slot->tick;
   bool hold = slot->hold;
   bool interrupted = slot->interrupted;
+  uint16_t tapHoldThresholdMs = logicConfig.tapHoldThresholdMs;
 
   if (inputEdge == InputEdge_Down) {
-    if (steps == Steps_DU && tick < TH) {
+    if (steps == Steps_DU && tick < tapHoldThresholdMs) {
       //tap-rehold
       keySlot_pushStepB(slot, Step_D);
     } else {
@@ -984,24 +1015,24 @@ static bool keySlot_dualResolverB(KeySlot *slot) {
     }
   }
 
-  if (steps == Steps_D && hold && tick >= TH) {
+  if (steps == Steps_D && hold && tick >= tapHoldThresholdMs) {
     //hold
     keySlot_pushStepB(slot, Step_W);
   }
 
-  if (steps == Steps_D && hold && tick < TH && interrupted) {
+  if (steps == Steps_D && hold && tick < tapHoldThresholdMs && interrupted) {
     //interrupt hold
     keySlot_pushStepB(slot, Step_W);
   }
 
-  if (steps == Steps_DU && !hold && tick >= TH) {
+  if (steps == Steps_DU && !hold && tick >= tapHoldThresholdMs) {
     //silent after tap
     keySlot_pushStepB(slot, Step_W);
     return true;
   }
 
   if (inputEdge == InputEdge_Up) {
-    if (steps == Steps_D && tick < TH) {
+    if (steps == Steps_D && tick < tapHoldThresholdMs) {
       //tap
       keySlot_pushStepB(slot, Step_U);
     }
@@ -1065,9 +1096,10 @@ static bool keySlot_tripleResolverC(KeySlot *slot) {
   uint16_t tick = slot->tick;
   bool hold = slot->hold;
   bool interrupted = slot->interrupted;
+  uint16_t tapHoldThresholdMs = logicConfig.tapHoldThresholdMs;
 
   if (inputEdge == InputEdge_Down) {
-    if (steps == Steps_DU && tick < TH) {
+    if (steps == Steps_DU && tick < tapHoldThresholdMs) {
       //down2
       keySlot_pushStepC(slot, Step_D);
     } else {
@@ -1077,34 +1109,34 @@ static bool keySlot_tripleResolverC(KeySlot *slot) {
     }
   }
 
-  if (steps == Steps_D && hold && tick >= TH) {
+  if (steps == Steps_D && hold && tick >= tapHoldThresholdMs) {
     //hold
     keySlot_pushStepC(slot, Step_W);
   }
 
-  if (steps == Steps_D && hold && tick < TH && interrupted) {
+  if (steps == Steps_D && hold && tick < tapHoldThresholdMs && interrupted) {
     //interrupt hold
     keySlot_pushStepC(slot, Step_W);
   }
 
-  if (steps == Steps_DUD && hold && tick >= TH) {
+  if (steps == Steps_DUD && hold && tick >= tapHoldThresholdMs) {
     //hold2
     keySlot_pushStepC(slot, Step_W);
   }
 
-  if (steps == Steps_DU && !hold && tick >= TH) {
+  if (steps == Steps_DU && !hold && tick >= tapHoldThresholdMs) {
     //silent after single tap
     keySlot_pushStepC(slot, Step_W);
     return true;
   }
 
   if (inputEdge == InputEdge_Up) {
-    if (steps == Steps_DUD && tick < TH) {
+    if (steps == Steps_DUD && tick < tapHoldThresholdMs) {
       //double tap
       keySlot_pushStepC(slot, Step_U);
       return true;
-    } else if (steps == Steps_D && tick < TH) {
-      //single stap
+    } else if (steps == Steps_D && tick < tapHoldThresholdMs) {
+      //single tap
       keySlot_pushStepC(slot, Step_U);
     } else {
       //up
@@ -1140,7 +1172,9 @@ static void keySlot_tick(KeySlot *slot, uint8_t ms) {
   }
 
   ResolverState *rs = &resolverState;
-  slot->interrupted = rs->interruptKeyIndex != KIDX_NONE && rs->interruptKeyIndex != slot->keyIndex;
+  if (logicConfig.useInterruptHold) {
+    slot->interrupted = rs->interruptKeyIndex != KEY_INDEX_NONE && rs->interruptKeyIndex != slot->keyIndex;
+  }
 
   if (!slot->resolverProc && slot->inputEdge == InputEdge_Down) {
     uint16_t layerActiveFlags = getLayerActiveFlags();
@@ -1182,7 +1216,7 @@ static void triggerResolver_tick(uint8_t ms) {
       keySlot_tick(slot, ms);
     }
   }
-  rs->interruptKeyIndex = KIDX_NONE;
+  rs->interruptKeyIndex = KEY_INDEX_NONE;
 
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &rs->keySlots[i];
@@ -1195,7 +1229,7 @@ static void triggerResolver_tick(uint8_t ms) {
   }
 }
 
-static KeySlot *triggerResoler_attachKeyToFreeSlot(uint8_t keyIndex) {
+static KeySlot *triggerResolver_attachKeyToFreeSlot(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     if (!slot->isActive) {
@@ -1207,7 +1241,7 @@ static KeySlot *triggerResoler_attachKeyToFreeSlot(uint8_t keyIndex) {
   return NULL;
 }
 
-static KeySlot *triggerResoler_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
+static KeySlot *triggerResolver_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
   for (uint8_t i = 0; i < NumKeySlots; i++) {
     KeySlot *slot = &resolverState.keySlots[i];
     if (slot->isActive && slot->keyIndex == keyIndex) {
@@ -1220,9 +1254,9 @@ static KeySlot *triggerResoler_getActiveKeySlotByKeyIndex(uint8_t keyIndex) {
 static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
   if (isDown) {
     //printf("corelogic, keydown %d\n", keyIndex);
-    KeySlot *slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    KeySlot *slot = triggerResolver_getActiveKeySlotByKeyIndex(keyIndex);
     if (!slot) {
-      slot = triggerResoler_attachKeyToFreeSlot(keyIndex);
+      slot = triggerResolver_attachKeyToFreeSlot(keyIndex);
     }
     if (slot) {
       resolverState.interruptKeyIndex = keyIndex;
@@ -1232,7 +1266,7 @@ static void triggerResolver_handleKeyInput(uint8_t keyIndex, bool isDown) {
     }
   } else {
     //printf("corelogic, keyup %d\n", keyIndex);
-    KeySlot *slot = triggerResoler_getActiveKeySlotByKeyIndex(keyIndex);
+    KeySlot *slot = triggerResolver_getActiveKeySlotByKeyIndex(keyIndex);
     if (slot) {
       slot->nextHold = false;
     }

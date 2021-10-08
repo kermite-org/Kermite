@@ -81,9 +81,28 @@ function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
   return true;
 }
 
+export function serializeCommonKeyboardMetadata(
+  meta: IStandardKeyboardInjectedMetaData,
+): number[] {
+  if (
+    !(
+      meta.keyboardName.length < 32 && isStringPrintableAscii(meta.keyboardName)
+    )
+  ) {
+    throw new Error(
+      `invalid keyboard name ${meta.keyboardName} for embedded attribute`,
+    );
+  }
+  return [
+    ...stringToEmbedBytes(meta.projectId, 7),
+    ...stringToEmbedBytes(meta.variationId, 3),
+    ...stringToEmbedBytes(meta.deviceInstanceCode, 9),
+    ...stringToEmbedBytes(meta.keyboardName, 33),
+  ];
+}
+
 export function serializeCustomKeyboardSpec_Unified(
   spec: IKermiteStandardKeyboardSpec,
-  meta: IStandardKeyboardInjectedMetaData,
 ): number[] {
   if (!checkKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
@@ -119,21 +138,7 @@ export function serializeCustomKeyboardSpec_Unified(
     0xff,
   );
 
-  if (
-    !(
-      meta.keyboardName.length < 32 && isStringPrintableAscii(meta.keyboardName)
-    )
-  ) {
-    throw new Error(
-      `invalid keyboard name ${meta.keyboardName} for embedded attribute`,
-    );
-  }
-
   return convertArrayElementsToBytes([
-    ...stringToEmbedBytes(meta.projectId, 7),
-    ...stringToEmbedBytes(meta.variationId, 3),
-    ...stringToEmbedBytes(meta.deviceInstanceCode, 9),
-    ...stringToEmbedBytes(meta.keyboardName, 33),
     spec.useBoardLedsProMicroAvr,
     spec.useBoardLedsProMicroRp,
     spec.useBoardLedsRpiPico,
@@ -155,7 +160,6 @@ export function serializeCustomKeyboardSpec_Unified(
 // Symmetrical Split
 export function serializeCustomKeyboardSpec_Split(
   spec: IKermiteStandardKeyboardSpec,
-  meta: IStandardKeyboardInjectedMetaData,
 ): number[] {
   if (!checkKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
@@ -196,21 +200,7 @@ export function serializeCustomKeyboardSpec_Split(
     0xff,
   );
 
-  if (
-    !(
-      meta.keyboardName.length < 32 && isStringPrintableAscii(meta.keyboardName)
-    )
-  ) {
-    throw new Error(
-      `invalid keyboard name ${meta.keyboardName} for embedded attribute`,
-    );
-  }
-
   return convertArrayElementsToBytes([
-    ...stringToEmbedBytes(meta.projectId, 7),
-    ...stringToEmbedBytes(meta.variationId, 3),
-    ...stringToEmbedBytes(meta.deviceInstanceCode, 9),
-    ...stringToEmbedBytes(meta.keyboardName, 33),
     spec.useBoardLedsProMicroAvr,
     spec.useBoardLedsProMicroRp,
     spec.useBoardLedsRpiPico,

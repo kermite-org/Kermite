@@ -5,6 +5,12 @@ import { appGlobal } from '~/shell/base/AppGlobal';
 
 const badExecutionContextNames: string[] = [];
 
+export function reportShellError(error: any) {
+  const rootDir = appEnv.resolveApplicationRootDir();
+  console.error(makeCompactStackTrace(error));
+  appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
+}
+
 export async function executeWithAppErrorHandler(
   executionContextName: string,
   func: () => Promise<void>,
@@ -18,9 +24,7 @@ export async function executeWithAppErrorHandler(
   try {
     await func();
   } catch (error) {
-    const rootDir = appEnv.resolveApplicationRootDir();
-    console.error(makeCompactStackTrace(error));
-    appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
+    reportShellError(error);
     if (executionContextName) {
       // setIntervalのコールバックなどで例外が発生した場合に、次回以降処理を実行しないようにする
       badExecutionContextNames.push(executionContextName);
@@ -28,16 +32,10 @@ export async function executeWithAppErrorHandler(
   }
 }
 
-export async function executeWithAppErrorHandler2(
+export function executeWithAppErrorHandler2(
   func: () => Promise<void>,
 ): Promise<void> {
-  try {
-    await func();
-  } catch (error) {
-    const rootDir = appEnv.resolveApplicationRootDir();
-    console.error(makeCompactStackTrace(error));
-    appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
-  }
+  return func().catch(reportShellError);
 }
 
 export function withAppErrorHandler<T extends (...args: any[]) => any>(

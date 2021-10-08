@@ -51,7 +51,7 @@ namespace AssignStorageBinaryFormat {
   type OpKeyInput = BasedOn<u16> & {
     bit15_14: { fOperationType: Fixed<b2, 0b01> };
     bit13: Reserved;
-    bit12: { fIsShiftCancellable: b1 };
+    bit12: { isBelongToShiftLayer: b1 };
     bit11_8: { fModifiers: AttachedModifiers };
     bit7_0: { fLogicalKeyCode: b8 };
   };
@@ -114,24 +114,22 @@ namespace AssignStorageBinaryFormat {
     transparent: 5;
   };
 
-  type AssignEntryHeaderA<
-    TAssignTypeValue extends valueOf<AssignTypeValues>
-  > = BasedOn<u8> & {
-    bit7: Fixed<b1, 1>;
-    bit6_4: { fAssignType: TAssignTypeValue };
-    bit3_0: { fLayerIndex: b4 }; // 0~15
-  };
+  type AssignEntryHeaderA<TAssignTypeValue extends valueOf<AssignTypeValues>> =
+    BasedOn<u8> & {
+      bit7: Fixed<b1, 1>;
+      bit6_4: { fAssignType: TAssignTypeValue };
+      bit3_0: { fLayerIndex: b4 }; // 0~15
+    };
 
-  type AssignEntryHeaderB<
-    TAssignTypeValue extends valueOf<AssignTypeValues>
-  > = BasedOn<u16> & {
-    bit15: Fixed<b1, 1>;
-    bit14_12: { fAssignType: TAssignTypeValue };
-    bit11_8: { fLayerIndex: b4 }; // 0~15
-    bit7_6: { fOpWordLengthCodePrimary: b2 };
-    bit5_3: { fOpWordLengthCodeSecondary: b3 };
-    bit2_0: { fOpWordLengthCodeTertiary: b3 };
-  };
+  type AssignEntryHeaderB<TAssignTypeValue extends valueOf<AssignTypeValues>> =
+    BasedOn<u16> & {
+      bit15: Fixed<b1, 1>;
+      bit14_12: { fAssignType: TAssignTypeValue };
+      bit11_8: { fLayerIndex: b4 }; // 0~15
+      bit7_6: { fOpWordLengthCodePrimary: b2 };
+      bit5_3: { fOpWordLengthCodeSecondary: b3 };
+      bit2_0: { fOpWordLengthCodeTertiary: b3 };
+    };
 
   type BlockAssignEntry = BasedOn<u8> & {
     byte0: { header: AssignEntryHeaderA<4> };
@@ -183,6 +181,26 @@ namespace AssignStorageBinaryFormat {
   };
 
   // --------------------
+  // profile header
+
+  type ProfileHeaderContent = {
+    logicModelType: 0x01;
+    configStorageFormatRevision: u8;
+    profileBinaryFormatRevision: u8;
+    numKeys: u8; // 1~254
+    numLayers: u8; // 1-16
+  };
+
+  // --------------------
+  // profile header
+
+  type ProfileSettingsBytes = {
+    shiftCancelMode: u8;
+    tapHoldThresholdMs: u16;
+    useInterruptHold: u8;
+  };
+
+  // --------------------
   // layer attributes
 
   type LayerDefaultSchemeValues = DefineValues<b1> & {
@@ -197,17 +215,6 @@ namespace AssignStorageBinaryFormat {
     bit12_8: { fAttachedModifiers: AttachedModifiers };
     bit7_3: Reserved;
     bit2_0: { fExclusionGroup: b3 };
-  };
-
-  // --------------------
-  // profile header
-
-  type ProfileHeaderContent = {
-    logicModelType: 0x01;
-    configStorageFormatRevision: u8;
-    profileBinaryFormatRevision: u8;
-    numKeys: u8; // 1~254
-    numLayers: u8; // 1-16
   };
 
   // --------------------
@@ -229,6 +236,9 @@ namespace AssignStorageBinaryFormat {
   type BinaryProfileData = Chunk<0xaa70> & {
     profileHeader: Chunk<0xbb71> & {
       data: ProfileHeaderContent;
+    };
+    profileSettings: Chunk<0xbb72> & {
+      data: ProfileSettingsBytes;
     };
     layerList: Chunk<0xbb74> & {
       items: LayerAttributeWord[]; // numLayers個の配列

@@ -3,6 +3,7 @@ import {
   IDisplayKeyboardDesign,
   ILayer,
   IProfileData,
+  IProfileSettings,
 } from '~/shared';
 
 export interface ISystemLayoutModel {
@@ -24,6 +25,7 @@ export interface IPlayerModel {
   holdKeyIndices: number[];
   keyStates: { [keyId: string]: boolean };
   layers: ILayer[];
+  profileSettings: IProfileSettings;
   displayDesign: IDisplayKeyboardDesign;
   layerStackItems: ILayerStackItem[];
   shiftHold: boolean;

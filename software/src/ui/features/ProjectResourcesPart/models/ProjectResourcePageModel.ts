@@ -16,6 +16,7 @@ interface IProjectResourcePageModel {
 
 export function useProjectResourcePageModel(): IProjectResourcePageModel {
   useEffect(projectResourceStore.actions.resetState, []);
+
   const menuItems = createProjectResourceMenuItems();
   const { selectedItemKey, keyboardName, resourceItemKeys } =
     projectResourceStore.readers;

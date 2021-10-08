@@ -1,3 +1,5 @@
+import { IHookInstance } from 'qx/hookImpl';
+
 export type IElementProps = {
   id?: string;
   className?: string;
@@ -31,11 +33,17 @@ export type IProps = {
   [key: string]: any;
 };
 
+export type IComponentState = {
+  fcsig: string;
+  hook: IHookInstance;
+  renderWithHook: (props: IProps) => IVNode;
+};
+
 export type IVComponentWrapper = {
   name: string;
-  mount: (self: any, props: IProps) => IVNode | null;
-  update: (self: any, props: IProps) => IVNode | null;
-  unmount: (self: any) => void;
+  mount: (self: IComponentState, props: IProps) => IVNode | null;
+  update: (self: IComponentState, props: IProps) => IVNode | null;
+  unmount: (self: IComponentState) => void;
 };
 
 export type IVComponent = {
@@ -46,7 +54,7 @@ export type IVComponent = {
   children: IVNode[];
   debugSig: string;
   state: {
-    componentState?: any;
+    componentState?: IComponentState;
     renderRes?: IVNode;
   };
   dom?: Node; // 関数コンポーネントのVNodeと関数コンポーネントのレンダリング結果のルート要素のVNodeが同じdom要素を参照する

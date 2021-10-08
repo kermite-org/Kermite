@@ -6,6 +6,7 @@ import {
   ILayer,
   IPersistAssignEntry,
   IPersistProfileData,
+  IProfileSettings,
   ModifierVirtualKey,
   ProfileDataConverter,
 } from '~/shared';
@@ -118,6 +119,36 @@ export namespace ProfileDataMigrator {
     );
   }
 
+  function fixProfileDataPRF06(profile: IPersistProfileData) {
+    if (profile.projectId.length > 6) {
+      profile.projectId = profile.projectId.slice(0, 6);
+    }
+    if (profile.projectId === '') {
+      profile.projectId = '000000';
+    }
+    if (!profile.mappingEntries) {
+      profile.mappingEntries = [];
+    }
+    const settings = profile.settings as IProfileSettings & {
+      useShiftCancel?: Boolean;
+    };
+    if (
+      settings.shiftCancelMode === undefined &&
+      'useShiftCancel' in settings
+    ) {
+      settings.shiftCancelMode = settings.useShiftCancel
+        ? 'shiftLayer'
+        : 'none';
+      delete settings.useShiftCancel;
+    }
+    if (
+      settings.assignType === 'dual' &&
+      settings.secondaryDefaultTrigger === undefined
+    ) {
+      settings.secondaryDefaultTrigger = 'down';
+    }
+  }
+
   export function fixProfileData(
     sourceProfile: IPersistProfileData,
   ): IPersistProfileData {
@@ -136,15 +167,7 @@ export namespace ProfileDataMigrator {
       fixProfileDataPRF05toPRF06(profile);
     }
     if (profile.formatRevision === <string>'PRF06') {
-      if (profile.projectId.length > 6) {
-        profile.projectId = profile.projectId.slice(0, 6);
-      }
-      if (profile.projectId === '') {
-        profile.projectId = '000000';
-      }
-      if (!profile.mappingEntries) {
-        profile.mappingEntries = [];
-      }
+      fixProfileDataPRF06(profile);
     }
     return profile;
   }

@@ -13,12 +13,21 @@ export class ActionDistributor<T> {
 
   async putAction(action: T): Promise<void> {
     const allKeys = getObjectKeys(action);
-    for (const receiver of this.receivers) {
-      for (const key of allKeys) {
-        const res = receiver[key]?.(action[key]!);
-        if (res instanceof Promise) {
-          await res;
+
+    for (const key of allKeys) {
+      let handled = false;
+      for (const receiver of this.receivers) {
+        const handler = receiver[key];
+        if (handler) {
+          const res = handler(action[key]!);
+          if (res instanceof Promise) {
+            await res;
+          }
+          handled = true;
         }
+      }
+      if (!handled) {
+        console.log(`no action handler found for ${key} `);
       }
     }
   }

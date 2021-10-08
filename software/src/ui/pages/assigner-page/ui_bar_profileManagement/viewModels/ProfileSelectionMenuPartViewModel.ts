@@ -1,6 +1,6 @@
 import { useLocal } from 'qx';
 import { texts } from '~/ui/base';
-import { uiReaders } from '~/ui/store';
+import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
 import { IProfileManagementPartViewModel } from './ProfilesOperationModel';
 
 interface IMenuItem {
@@ -9,6 +9,7 @@ interface IMenuItem {
   hint: string;
   handler(): void;
   enabled: boolean;
+  active?: boolean;
 }
 
 export interface IProfileSelectionMenuPartViewModel {
@@ -92,6 +93,17 @@ function createMenuItemSources(
       hint: texts.hint_assigner_menu_openUserProfilesFolder,
       handler: vm.openUserProfilesFolder,
       enabled: vm.isCurrentProfileInternal,
+    },
+    {
+      key: 'miShowInputArea',
+      text: texts.label_globalMenu_showTestInputArea,
+      handler: () =>
+        commitUiSettings({
+          showTestInputArea: !uiState.settings.showTestInputArea,
+        }),
+      active: uiState.settings.showTestInputArea,
+      hint: texts.hint_globalMenu_showTestInputArea,
+      enabled: true,
     },
   ];
 }

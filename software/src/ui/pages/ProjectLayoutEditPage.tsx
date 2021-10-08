@@ -37,7 +37,10 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
       ...sourceLayoutEntry,
       data: emitSavingDesign(),
     };
-    projectPackagesWriter.saveLocalProjectLayout(newLayoutEntry);
+    projectPackagesWriter.saveLocalProjectResourceItem(
+      'layout',
+      newLayoutEntry,
+    );
     if (!uiConfiguration.closeProjectResourceEditPageOnSave) {
       LayoutEditorCore.rebase();
     } else {

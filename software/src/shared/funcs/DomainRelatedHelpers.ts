@@ -114,23 +114,14 @@ export function parseProfileEntry(profileKey: string): IProfileEntry {
 
 export function getNextFirmwareId(existingIds: string[]): string {
   const allNumbers = existingIds.map((id) => parseInt(id));
+  if (!allNumbers.every((it) => isFinite(it))) {
+    throw new Error('invalid firmware variation ids detected');
+  }
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   if (newNumber >= 100) {
     throw new Error('firmware id reaches to 100');
   }
   return `00${newNumber.toString()}`.slice(-2);
-}
-
-export function getNextProjectResourceId(
-  prefix: 'pr' | 'lt' | 'fw',
-  existingIds: string[],
-): string {
-  const allNumbers = existingIds.map((id) => parseInt(id.replace(prefix, '')));
-  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 1;
-  if (newNumber >= 100) {
-    throw new Error('resource id reaches to 100');
-  }
-  return prefix + ('00' + newNumber.toString()).slice(-2);
 }
 
 export function encodeProjectResourceItemKey(
@@ -146,4 +137,41 @@ export function decodeProjectResourceItemKey(key: string): {
 } {
   const [itemType, itemName] = key.split(':');
   return { itemType: itemType as IProjectResourceItemType, itemName };
+}
+
+export function validateResourceName(
+  resourceName: string,
+  resourceTypeNameText: string,
+): string | undefined {
+  if (
+    // eslint-disable-next-line no-misleading-character-class
+    resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/) ||
+    resourceName.match(/^\s+$/)
+  ) {
+    return `${resourceName} is not a valid ${resourceTypeNameText}.`;
+  }
+  if (resourceName.length > 32) {
+    return `${resourceTypeNameText} should be no more than 32 characters.`;
+  }
+  return undefined;
+}
+
+export function validateResourceNameWithDuplicationCheck(
+  resourceName: string,
+  resourceTypeNameText: string,
+  checkedResourceNames: string[],
+): string | undefined {
+  const error = validateResourceName(resourceName, resourceTypeNameText);
+  if (error) {
+    return error;
+  }
+  if (checkedResourceNames) {
+    const existingName = checkedResourceNames.find(
+      (it) => it.toLowerCase() === resourceName.toLowerCase(),
+    );
+    if (existingName) {
+      return `${existingName} already exists.`;
+    }
+  }
+  return undefined;
 }

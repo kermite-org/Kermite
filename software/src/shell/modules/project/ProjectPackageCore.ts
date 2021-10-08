@@ -1,15 +1,13 @@
 import { shell } from 'electron';
 import {
   createProjectKey,
-  ICustomFirmwareInfo,
-  IFirmwareTargetDevice,
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
+  validateResourceName,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig, appEnv } from '~/shell/base';
 import {
-  cacheRemoteResource,
   fetchJson,
   fsxDeleteFile,
   fsxEnsureFolderExists,
@@ -48,6 +46,19 @@ function convertPackageFileContentToPackageInfo(
   };
 }
 
+function convertProjectPackageInfoToFileContent(
+  info: IProjectPackageInfo,
+): IProjectPackageFileContent {
+  return {
+    formatRevision: info.formatRevision,
+    projectId: info.projectId,
+    keyboardName: info.keyboardName,
+    firmwares: info.firmwares,
+    layouts: info.layouts,
+    profiles: info.profiles,
+  };
+}
+
 async function loadProjectPackageFiles(
   folderPath: string,
   origin: IResourceOrigin,
@@ -69,30 +80,16 @@ type IIndexContent = {
   files: Record<string, string>;
 };
 
-type IIndexFirmwaresContent = {
-  firmwares: {
-    firmwareId: string;
-    firmwareProjectPath: string;
-    variationName: string;
-    targetDevice: IFirmwareTargetDevice;
-    buildResult: 'success' | 'failure';
-    firmwareFileName: string;
-    metadataFileName: string;
-    releaseBuildRevision: number;
-    buildTimestamp: string;
-  }[];
-};
-
-const remoteBaseUrl = 'https://app.kermite.org/krs/resources2';
 let cachedRemotePackages: IProjectPackageInfo[] | undefined;
 
 async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   if (cachedRemotePackages) {
     return cachedRemotePackages;
   }
+  const { onlineResourcesBaseUrl } = appConfig;
 
   const indexContent = (await fetchJson(
-    `${remoteBaseUrl}/index.json`,
+    `${onlineResourcesBaseUrl}/index.json`,
   )) as IIndexContent;
   const origin = 'online' as const;
 
@@ -102,7 +99,7 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   cachedRemotePackages = await Promise.all(
     targetPaths.map(async (path) => {
       const data = (await fetchJson(
-        `${remoteBaseUrl}/${path}`,
+        `${onlineResourcesBaseUrl}/${path}`,
       )) as IProjectPackageFileContent;
       migrateProjectPackageData(data);
       const packageName = pathBasename(path, '.kmpkg.json');
@@ -134,32 +131,22 @@ function getUserProjectFilePath(packageName: string) {
 
 async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   const projectsFolder = getUserProjectsFolderPath();
-  return await loadProjectPackageFiles(projectsFolder, 'local');
+  return (await loadProjectPackageFiles(projectsFolder, 'local')).filter(
+    (it) => validateResourceName(it.packageName, 'package name') === undefined,
+  );
 }
 
 async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
+  const savingData = convertProjectPackageInfoToFileContent(info);
   const filePath = getUserProjectFilePath(info.packageName);
   console.log(`saving ${pathBasename(filePath)}`);
   await fsxEnsureFolderExists(pathDirname(filePath));
-  await fsxWriteJsonFile(filePath, info);
+  await fsxWriteJsonFile(filePath, savingData);
 }
 
 async function deleteUserProjectPackageFileImpl(packageName: string) {
   const filePath = getUserProjectFilePath(packageName);
   await fsxDeleteFile(filePath);
-}
-
-function mapIndexFirmwareEntryToCustomFirmwareInfo(
-  entry: IIndexFirmwaresContent['firmwares'][0],
-): ICustomFirmwareInfo {
-  return {
-    firmwareId: entry.firmwareId,
-    firmwareProjectPath: entry.firmwareProjectPath,
-    variationName: entry.variationName,
-    targetDevice: entry.targetDevice,
-    buildRevision: entry.releaseBuildRevision,
-    buildTimestamp: entry.buildTimestamp,
-  };
 }
 
 export const projectPackageProvider = {
@@ -181,13 +168,6 @@ export const projectPackageProvider = {
   },
   async deleteLocalProjectPackageFile(packageName: string) {
     await deleteUserProjectPackageFileImpl(packageName);
-  },
-  async getAllCustomFirmwareInfos(): Promise<ICustomFirmwareInfo[]> {
-    const data = (await cacheRemoteResource(
-      fetchJson,
-      `${remoteBaseUrl}/index.firmwares.json`,
-    )) as IIndexFirmwaresContent;
-    return data.firmwares.map(mapIndexFirmwareEntryToCustomFirmwareInfo);
   },
   async openLocalProjectsFolder() {
     const folderPath = getUserProjectsFolderPath();

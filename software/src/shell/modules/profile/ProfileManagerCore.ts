@@ -1,4 +1,9 @@
-import { IProfileData, IProfileEntry } from '~/shared';
+import {
+  validateResourceName,
+  IProfileData,
+  IProfileEntry,
+  IPersistProfileFileData,
+} from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
   fspCopyFile,
@@ -7,17 +12,44 @@ import {
   fspUnlink,
   fsRmdirSync,
   fsxEnsureFolderExists,
+  fsxReadJsonFile,
   globAsync,
   pathBasename,
   pathDirname,
+  pathJoin,
 } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 function getProfileFilePath(profileEntry: IProfileEntry): string {
   const { projectId, profileName } = profileEntry;
   return appEnv.resolveUserDataFilePath(
-    `data/profiles/${projectId}/${profileName}.profile.json`,
+    `data/profiles/${projectId}/${profileName.toLowerCase()}.profile.json`,
   );
+}
+
+async function getProfileEntry(
+  relativeFilePath: string,
+  profilesFolderPath: string,
+): Promise<IProfileEntry> {
+  const projectId = pathDirname(relativeFilePath);
+  const filePath = pathJoin(profilesFolderPath, relativeFilePath);
+  const userProfileData = (await fsxReadJsonFile(
+    filePath,
+  )) as IPersistProfileFileData;
+  const profileNameFromContent = userProfileData.profileName || '';
+  const profileNameFromFileName = pathBasename(
+    relativeFilePath,
+    '.profile.json',
+  );
+  const isContentProfileNameValid =
+    profileNameFromContent.toLowerCase() === profileNameFromFileName;
+  const profileName = isContentProfileNameValid
+    ? profileNameFromContent
+    : profileNameFromFileName;
+  return {
+    projectId,
+    profileName,
+  };
 }
 
 export const profileManagerCore = {
@@ -34,15 +66,20 @@ export const profileManagerCore = {
   },
   async listAllProfileEntries(): Promise<IProfileEntry[]> {
     const profilesFolderPath = appEnv.resolveUserDataFilePath(`data/profiles`);
-    const filePaths = await globAsync('*/*.profile.json', profilesFolderPath);
-    return filePaths.map((filePath) => {
-      const projectId = pathDirname(filePath);
-      const profileName = pathBasename(filePath, '.profile.json');
-      return {
-        projectId,
-        profileName,
-      };
-    });
+    const relativeFilePaths = await globAsync(
+      '*/*.profile.json',
+      profilesFolderPath,
+    );
+    return (
+      await Promise.all(
+        relativeFilePaths.map((relPath) =>
+          getProfileEntry(relPath, profilesFolderPath),
+        ),
+      )
+    ).filter(
+      (it) =>
+        validateResourceName(it.profileName, 'profile name') === undefined,
+    );
   },
   async loadProfile(profileEntry: IProfileEntry): Promise<IProfileData> {
     const filePath = getProfileFilePath(profileEntry);
@@ -60,7 +97,11 @@ export const profileManagerCore = {
     const filePath = getProfileFilePath(profileEntry);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
     await this.ensureSavingFolder(filePath);
-    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
+    await ProfileFileLoader.saveProfileToFile(
+      filePath,
+      profileData,
+      profileEntry.profileName,
+    );
   },
   async loadExternalProfileFile(filePath: string): Promise<IProfileData> {
     return await ProfileFileLoader.loadProfileFromFile(filePath);
@@ -69,7 +110,14 @@ export const profileManagerCore = {
     filePath: string,
     profileData: IProfileData,
   ): Promise<void> {
-    await ProfileFileLoader.saveProfileToFile(filePath, profileData);
+    const profileName = pathBasename(filePath, '.profile.json');
+    const baseDir = pathDirname(filePath);
+    const savingFilePath = pathJoin(baseDir, profileName.toLowerCase());
+    await ProfileFileLoader.saveProfileToFile(
+      savingFilePath,
+      profileData,
+      profileName,
+    );
   },
   async deleteProfile(profileEntry: IProfileEntry): Promise<void> {
     const filePath = getProfileFilePath(profileEntry);

@@ -1,5 +1,5 @@
 import { jsx, useState } from 'qx';
-import { IProjectPackageInfo } from '~/shared';
+import { validateResourceName, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
 import {
   IProjectAttachmentFileSelectorModalModel,
@@ -10,7 +10,6 @@ import {
 import { profilesActions } from '~/ui/pages/assigner-page/models';
 import { IProfileManagementPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
-import { resourceManagementUtils } from '~/ui/utils';
 
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();
@@ -47,7 +46,7 @@ function useCoreProps(baseVm: IProfileManagementPartViewModel): ICoreProps {
   );
 
   const presetNameOptions =
-    currentProject?.presets.map(({ presetName }) => ({
+    currentProject?.profiles.map(({ profileName: presetName }) => ({
       value: presetName,
       label: presetName,
     })) || [];
@@ -139,10 +138,7 @@ function makeProjectAttachmentFileSelectorViewModel_Saving(
         return;
       }
     }
-    const error = resourceManagementUtils.checkValidResourceName(
-      savingName,
-      'preset name',
-    );
+    const error = validateResourceName(savingName, 'preset name');
     if (error) {
       modalError(error);
     } else {

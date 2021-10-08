@@ -94,27 +94,35 @@ export type IAssignEntryWithLayerFallback =
   | { type: 'layerFallbackTransparent' }
   | { type: 'layerFallbackBlock' };
 
+export type IShiftCancelMode = 'none' | 'shiftLayer' | 'all';
+
+export type IPrimaryDefaultTrigger = 'down' | 'tap';
+
+export type ISecondaryDefaultTrigger = 'down' | 'hold';
+
 export type IProfileSettings_Single = {
   assignType: 'single';
-  useShiftCancel: boolean;
+  shiftCancelMode: IShiftCancelMode;
 };
 
 export type IProfileSettings_Dual = {
   assignType: 'dual';
-  useShiftCancel: boolean;
-  primaryDefaultTrigger: 'down' | 'tap';
+  shiftCancelMode: IShiftCancelMode;
+  primaryDefaultTrigger: IPrimaryDefaultTrigger;
+  secondaryDefaultTrigger: ISecondaryDefaultTrigger;
   useInterruptHold: boolean;
   tapHoldThresholdMs: number;
 };
 
 export type IProfileSettings = IProfileSettings_Single | IProfileSettings_Dual;
 
-export type IProfileSettingsAllValues = {
+export type IProfileSettingsM = {
   assignType: 'single' | 'dual';
-  useShiftCancel: boolean;
-  primaryDefaultTrigger: 'down' | 'tap';
-  useInterruptHold: boolean;
-  tapHoldThresholdMs: number;
+  shiftCancelMode: IShiftCancelMode;
+  primaryDefaultTrigger?: IPrimaryDefaultTrigger;
+  secondaryDefaultTrigger?: ISecondaryDefaultTrigger;
+  useInterruptHold?: boolean;
+  tapHoldThresholdMs?: number;
 };
 
 export type IAssignsDictionary = {
@@ -159,13 +167,17 @@ export type IPersistProfileData = {
   mappingEntries: IMappingEntry[];
 };
 
+export type IPersistProfileFileData = IPersistProfileData & {
+  profileName: string;
+};
+
 export const fallbackPersistProfileData: IPersistProfileData = {
   formatRevision: 'PRF06',
   projectId: '',
   keyboardDesign: createFallbackPersistKeyboardDesign(),
   settings: {
     assignType: 'single',
-    useShiftCancel: false,
+    shiftCancelMode: 'none',
   },
   layers: [
     {
@@ -186,7 +198,7 @@ export const fallbackProfileData: IProfileData = {
   keyboardDesign: createFallbackPersistKeyboardDesign(),
   settings: {
     assignType: 'single',
-    useShiftCancel: false,
+    shiftCancelMode: 'none',
   },
   layers: [
     {

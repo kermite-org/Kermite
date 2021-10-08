@@ -10,7 +10,7 @@ export const FlatListSelectorExamples = {
   base: (
     <FlatListSelector
       options={options}
-      value={'apple'}
+      value="apple"
       setValue={() => {}}
       size={10}
     />

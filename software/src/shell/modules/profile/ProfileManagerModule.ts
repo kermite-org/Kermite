@@ -260,14 +260,14 @@ export const profileManagerModule = createCoreModule({
       const preset =
         ProfileDataConverter.convertProfileDataToPersist(profileData);
       const newProjectInfo = produce(projectInfo, (draft) => {
-        const profile = draft.presets.find(
-          (it) => it.presetName === presetName,
+        const profile = draft.profiles.find(
+          (it) => it.profileName === presetName,
         );
         if (profile) {
           profile.data = preset;
         } else {
-          draft.presets.push({
-            presetName: presetName,
+          draft.profiles.push({
+            profileName: presetName,
             data: preset,
           });
         }

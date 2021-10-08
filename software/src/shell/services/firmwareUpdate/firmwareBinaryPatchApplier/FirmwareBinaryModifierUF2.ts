@@ -8,12 +8,13 @@ const uf2Config = {
 };
 
 export function patchUf2FileContent(
-  uf2FileContentBytes: number[],
+  buffer: Uint8Array,
   callback: (binaryBytes: number[]) => void,
-): number[] {
+): Uint8Array {
   const { blockSize, blockHeaderSize, blockPayloadLength } = uf2Config;
 
-  const blocks = splitBytesN(uf2FileContentBytes, blockSize);
+  const fileContentBytes = [...new Uint8Array(buffer)];
+  const blocks = splitBytesN(fileContentBytes, blockSize);
 
   const srcPayloads = blocks.map((block) =>
     block.slice(blockHeaderSize, blockHeaderSize + blockPayloadLength),
@@ -24,5 +25,5 @@ export function patchUf2FileContent(
 
   blocks.forEach((block, i) => replaceArrayContent(block, 32, modPayloads[i]));
 
-  return flattenArray(blocks);
+  return new Uint8Array(flattenArray(blocks));
 }

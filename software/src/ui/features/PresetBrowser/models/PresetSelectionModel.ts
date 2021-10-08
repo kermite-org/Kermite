@@ -47,12 +47,12 @@ function makePresetOptions(
         layoutName,
       },
     })),
-    ...projectInfo.presets.map(({ presetName }) => ({
-      value: createPresetKey('preset', presetName),
-      label: `(profile)${presetName}`,
+    ...projectInfo.profiles.map(({ profileName }) => ({
+      value: createPresetKey('preset', profileName),
+      label: `(profile)${profileName}`,
       spec: {
         type: 'preset' as const,
-        presetName,
+        presetName: profileName,
       },
     })),
   ];
