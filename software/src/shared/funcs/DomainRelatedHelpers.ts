@@ -91,7 +91,11 @@ export function checkDeviceBootloaderMatch(
 export function getFirmwareTargetDeviceFromBaseFirmwareType(
   baseFirmwareType: IStandardBaseFirmwareType,
 ): IFirmwareTargetDevice {
-  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+  if (
+    baseFirmwareType === 'AvrUnified' ||
+    baseFirmwareType === 'AvrSplit' ||
+    baseFirmwareType === 'AvrOddSplit'
+  ) {
     return 'atmega32u4';
   } else {
     return 'rp2040';

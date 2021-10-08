@@ -66,6 +66,8 @@ namespace fetcherOnlineStandard {
     RpUnified: 'firmwares/standard/standard_rp.uf2',
     AvrSplit: 'firmwares/standard/standard_avr_split.hex',
     RpSplit: 'firmwares/standard/standard_rp_split.uf2',
+    AvrOddSplit: 'firmwares/standard/standard_avr_split.hex',
+    RpOddSplit: 'firmwares/standard/standard_rp_split.uf2',
   };
 
   export async function fetchStandardBaseFirmware(
@@ -92,6 +94,12 @@ namespace fetcherLocalDebugStandard {
       '../firmware/build/standard/avr_split/standard_avr_split.hex',
     ),
     RpSplit: pathResolve(
+      '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+    ),
+    AvrOddSplit: pathResolve(
+      '../firmware/build/standard/avr_split/standard_avr_split.hex',
+    ),
+    RpOddSplit: pathResolve(
       '../firmware/build/standard/rp_split/standard_rp_split.uf2',
     ),
   };
