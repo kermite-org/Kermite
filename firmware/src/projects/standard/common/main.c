@@ -25,6 +25,7 @@ typedef struct {
   uint8_t numMatrixRows;
   uint8_t numMatrixColumns;
   uint8_t numDirectWiredKeys;
+  uint8_t numEncoders;
   uint8_t keyScannerPins[32];
   uint8_t rgbLightingPin;
   uint8_t rgbLightingNumLeds;
@@ -44,12 +45,13 @@ KermiteKeyboardDefinitionData defs = {
   .numMatrixRows = 0,
   .numMatrixColumns = 0,
   .numDirectWiredKeys = 0,
+  .numEncoders = 0,
   .keyScannerPins = { 0 },
   .rgbLightingPin = 0,
   .rgbLightingNumLeds = 0,
 };
 
-static EncoderConfig encoderConfigs[1] = { { .pinA = 0, .pinB = 0, .scanIndexBase = 0 } };
+static EncoderConfig encoderConfigs[3] = { 0 };
 
 int main() {
   if (defs.useBoardLedsProMicroAvr) {
@@ -97,14 +99,17 @@ int main() {
     scanIndexBase += numKeys;
   }
   if (defs.useEncoder) {
-    EncoderConfig *config = &encoderConfigs[0];
-    config->pinA = defs.keyScannerPins[pinsOffset];
-    config->pinB = defs.keyScannerPins[pinsOffset + 1];
-    config->scanIndexBase = scanIndexBase;
+    uint8_t numEncoders = defs.numEncoders;
+    for (int i = 0; i < numEncoders; i++) {
+      EncoderConfig *config = &encoderConfigs[i];
+      config->pinA = defs.keyScannerPins[pinsOffset + i * 2];
+      config->pinB = defs.keyScannerPins[pinsOffset + i * 2 + 1];
+      config->scanIndexBase = scanIndexBase + i * 2;
+    }
     keyboardMain_useKeyScanner(keyScanner_encoders_update);
-    keyScanner_encoders_initialize(1, encoderConfigs);
-    pinsOffset += 2;
-    scanIndexBase += 2;
+    keyScanner_encoders_initialize(numEncoders, encoderConfigs);
+    pinsOffset += numEncoders * 2;
+    scanIndexBase += numEncoders * 2;
   }
   generalKeyboard_start();
   return 0;
