@@ -192,9 +192,13 @@ export const standardFirmwareEditModelHelpers = {
     diff: Partial<IKermiteStandardKeyboardSpec>,
   ) {
     const { baseFirmwareType: fw } = editValues;
-    const isAvr = fw === 'AvrSplit' || fw === 'AvrUnified';
-    const isRp = fw === 'RpUnified' || fw === 'RpSplit';
-    const isSplit = fw === 'AvrSplit' || fw === 'RpSplit';
+    const isAvr = fw === 'AvrUnified' || fw === 'AvrSplit' || 'AvrOddSplit';
+    const isRp = fw === 'RpUnified' || fw === 'RpSplit' || 'RpOddSplit';
+    const isSplit =
+      fw === 'AvrSplit' ||
+      fw === 'RpSplit' ||
+      fw === 'AvrOddSplit' ||
+      fw === 'RpOddSplit';
     if (isAvr) {
       editValues.useBoardLedsProMicroRp = false;
       editValues.useBoardLedsRpiPico = false;
