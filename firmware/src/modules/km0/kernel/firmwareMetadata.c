@@ -13,7 +13,6 @@
 
 CommonFirmwareMetadata commonFirmwareMetadata = {
   .dataHeader = { '$', 'K', 'M', 'M', 'D' },
-  .firmwareId = KERMITE_FIRMWARE_ID,
   .projectId = "000000",
   .variationId = "00",
   .deviceInstanceCode = "00000000",

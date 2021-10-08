@@ -81,7 +81,7 @@ function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
   return true;
 }
 
-export function serializeCommonKeyboardMetaData(
+export function serializeCommonKeyboardMetadata(
   meta: IStandardKeyboardInjectedMetaData,
 ): number[] {
   if (

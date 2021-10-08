@@ -127,7 +127,7 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, Kermite_Project_McuCode, 3);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, commonFirmwareMetadata.firmwareId, 6);
+  buf = writeTextBytes(buf, KERMITE_FIRMWARE_ID, 6);
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, commonFirmwareMetadata.projectId, 6);
   buf = writeTextBytes(buf, ":", 1);
