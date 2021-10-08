@@ -5,9 +5,7 @@ function calcHexRowChecksum(values: number[]): number {
   return (~sum + 1) & 0xff;
 }
 
-export function decodeBytesFromHexFileContent(
-  hexFileContentText: string
-): number[] {
+function decodeBytesFromHexFileContent(hexFileContentText: string): number[] {
   const lines = hexFileContentText.split(/\r?\n/);
   lines.pop();
 
@@ -24,7 +22,7 @@ export function decodeBytesFromHexFileContent(
   return flattenArray(blocks);
 }
 
-export function encodeBytesToHexFileContent(binaryBytes: number[]): string {
+function encodeBytesToHexFileContent(binaryBytes: number[]): string {
   const blocks = splitBytesN(binaryBytes, 16);
 
   let position = 0;
@@ -51,4 +49,15 @@ export function encodeBytesToHexFileContent(binaryBytes: number[]): string {
   });
   lines.push(':00000001FF');
   return lines.join('\n');
+}
+
+export function patchHexFileContent(
+  buffer: Uint8Array,
+  callback: (binaryBytes: number[]) => void,
+): Uint8Array {
+  const hexFileContentText = new TextDecoder().decode(buffer);
+  const binaryBytes = decodeBytesFromHexFileContent(hexFileContentText);
+  callback(binaryBytes);
+  const modHexFileContentText = encodeBytesToHexFileContent(binaryBytes);
+  return new TextEncoder().encode(modHexFileContentText);
 }

@@ -4,13 +4,11 @@ import {
   IStandardBaseFirmwareType,
 } from '~/shared';
 import {
+  serializeCommonKeyboardMetaData,
   serializeCustomKeyboardSpec_Split,
   serializeCustomKeyboardSpec_Unified,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
-import {
-  decodeBytesFromHexFileContent,
-  encodeBytesToHexFileContent,
-} from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryDataConverter';
+import { patchHexFileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryModifierHex';
 import { patchUf2FileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryModifierUF2';
 import { replaceArrayContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
@@ -33,8 +31,15 @@ function getBinaryContentMarkerIndex(
   return -1;
 }
 
-function getCustomDataLocation(binaryBytes: number[]): number {
-  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, '$KMDF');
+function getCustomDataLocation(
+  binaryBytes: number[],
+  type: 'metadata' | 'standardKeyboardDefinition',
+): number {
+  const markerCode = {
+    metadata: '$KMFC',
+    standardKeyboardDefinition: '$KMDF',
+  }[type];
+  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, markerCode);
   if (markerPosition === -1) {
     throw new Error('cannot find marker');
   }
@@ -60,33 +65,30 @@ const specSerializerFunctionMap: {
   RpSplit: serializeCustomKeyboardSpec_Split,
 };
 
-export function applyStandardFirmwareBinaryPatch(
+export function applyFirmwareBinaryPatch(
   buffer: Uint8Array,
   firmwareBinaryFormat: 'hex' | 'uf2',
-  targetKeyboardSpec: IKermiteStandardKeyboardSpec,
   meta: IStandardKeyboardInjectedMetaData,
+  targetKeyboardSpec?: IKermiteStandardKeyboardSpec,
 ): Uint8Array {
-  const specSerializerFunc =
-    specSerializerFunctionMap[targetKeyboardSpec.baseFirmwareType];
-  const customDataBytes = specSerializerFunc(targetKeyboardSpec, meta);
-  checkCustomDataBytes(customDataBytes);
+  const patchFileContentFn =
+    firmwareBinaryFormat === 'uf2' ? patchUf2FileContent : patchHexFileContent;
 
-  if (firmwareBinaryFormat === 'hex') {
-    const hexFileContentText = new TextDecoder().decode(buffer);
-    const binaryBytes = decodeBytesFromHexFileContent(hexFileContentText);
-    const dataLocation = getCustomDataLocation(binaryBytes);
-    replaceArrayContent(binaryBytes, dataLocation, customDataBytes);
-    const modHexFileContentText = encodeBytesToHexFileContent(binaryBytes);
-    return new TextEncoder().encode(modHexFileContentText);
-  } else {
-    const srcUf2FileContentBytes = [...new Uint8Array(buffer)];
-    const modUf2FileContentBytes = patchUf2FileContent(
-      srcUf2FileContentBytes,
-      (binaryBytes) => {
-        const dataLocation = getCustomDataLocation(binaryBytes);
-        replaceArrayContent(binaryBytes, dataLocation, customDataBytes);
-      },
-    );
-    return new Uint8Array(modUf2FileContentBytes);
-  }
+  return patchFileContentFn(buffer, (binaryBytes) => {
+    const metaDataBytes = serializeCommonKeyboardMetaData(meta);
+    const metaDataLocation = getCustomDataLocation(binaryBytes, 'metadata');
+    replaceArrayContent(binaryBytes, metaDataLocation, metaDataBytes);
+
+    if (targetKeyboardSpec) {
+      const specSerializerFunc =
+        specSerializerFunctionMap[targetKeyboardSpec.baseFirmwareType];
+      const customDataBytes = specSerializerFunc(targetKeyboardSpec, meta);
+      checkCustomDataBytes(customDataBytes);
+      const definitionDataLocation = getCustomDataLocation(
+        binaryBytes,
+        'standardKeyboardDefinition',
+      );
+      replaceArrayContent(binaryBytes, definitionDataLocation, customDataBytes);
+    }
+  });
 }
