@@ -311,3 +311,90 @@ export function serializeCustomKeyboardSpec_Split(
     mapPinNameToPinNumber(spec.singleWireSignalPin),
   ]);
 }
+
+// Asymmetrical Split
+export function serializeCustomKeyboardSpec_OddSplit(
+  spec: IKermiteStandardKeyboardSpec,
+): number[] {
+  if (!checkKeyboardSpec(spec)) {
+    throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
+  }
+  let numMatrixRows = 0;
+  let numMatrixColumns = 0;
+  let numDirectWiredKeys = 0;
+  let numEncoders = 0;
+
+  let numMatrixRowsR = 0;
+  let numMatrixColumnsR = 0;
+  let numDirectWiredKeysR = 0;
+  let numEncodersR = 0;
+
+  const keyScannerPins: string[] = [];
+  if (spec.useMatrixKeyScanner) {
+    if (spec.matrixRowPins && spec.matrixColumnPins) {
+      numMatrixRows = spec.matrixRowPins.length;
+      numMatrixColumns = spec.matrixColumnPins.length;
+      keyScannerPins.push(...spec.matrixRowPins, ...spec.matrixColumnPins);
+    }
+    if (spec.matrixRowPinsR && spec.matrixColumnPinsR) {
+      numMatrixRowsR = spec.matrixRowPinsR.length;
+      numMatrixColumnsR = spec.matrixColumnPinsR.length;
+      keyScannerPins.push(...spec.matrixRowPinsR, ...spec.matrixColumnPinsR);
+    }
+  }
+  if (spec.useDirectWiredKeyScanner) {
+    if (spec.directWiredPins) {
+      numDirectWiredKeys = spec.directWiredPins.length;
+      keyScannerPins.push(...spec.directWiredPins);
+    }
+    if (spec.directWiredPinsR) {
+      numDirectWiredKeysR = spec.directWiredPinsR.length;
+      keyScannerPins.push(...spec.directWiredPinsR);
+    }
+  }
+  if (spec.useEncoder) {
+    if (spec.encoderPins) {
+      numEncoders = 1;
+      keyScannerPins.push(...spec.encoderPins);
+    }
+    if (spec.encoderPinsR) {
+      numEncodersR = 1;
+      keyScannerPins.push(...spec.encoderPinsR);
+    }
+  }
+
+  if (keyScannerPins.length > 32) {
+    throw new Error(`maximum number of key scanner pins (32) exceeded`);
+  }
+
+  const pinDefinitionsBytes = padByteArray(
+    keyScannerPins.map(mapPinNameToPinNumber),
+    32,
+    0xff,
+  );
+
+  return convertArrayElementsToBytes([
+    spec.useBoardLedsProMicroAvr,
+    spec.useBoardLedsProMicroRp,
+    spec.useBoardLedsRpiPico,
+    spec.useDebugUart,
+    spec.useMatrixKeyScanner,
+    spec.useDirectWiredKeyScanner,
+    spec.useEncoder,
+    spec.useLighting,
+    spec.useLcd,
+    numMatrixRows,
+    numMatrixColumns,
+    numMatrixRowsR,
+    numMatrixColumnsR,
+    numDirectWiredKeys,
+    numDirectWiredKeysR,
+    numEncoders,
+    numEncodersR,
+    ...pinDefinitionsBytes,
+    spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
+    spec.lightingNumLeds,
+    spec.lightingNumLedsR,
+    mapPinNameToPinNumber(spec.singleWireSignalPin),
+  ]);
+}
