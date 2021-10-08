@@ -146,7 +146,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
             <GeneralInput
               value={arrayToText(editValues.encoderPins)}
               setValue={valueChangeHandler('encoderPins', arrayFromText)}
-              width={100}
+              width={400}
               disabled={!editValues.useEncoder}
               invalid={!!fieldErrors.encoderPins}
             />

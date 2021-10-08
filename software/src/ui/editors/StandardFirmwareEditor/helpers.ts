@@ -48,12 +48,18 @@ const subHelpers = {
       return `invalid pins specification`;
     }
   },
-  validateAvrEncoderPrimaryPin(
-    pin: string,
+  validateAvrEncoderPrimaryPins(
+    pins: string[],
     mcuType: IStandardFirmwareMcuType,
   ): string | undefined {
     if (mcuType === 'avr') {
-      const valid = acceptableAvrEncoderPrimaryPins.includes(pin);
+      const numEncoder = pins.length / 2;
+      const checkedPins = generateNumberSequence(numEncoder).map(
+        (i) => pins[i * 2],
+      );
+      const valid = checkedPins.every((pin) =>
+        acceptableAvrEncoderPrimaryPins.includes(pin),
+      );
       if (!valid) {
         return `primary pin for encoder must be PB0~PB7`;
       }
@@ -62,6 +68,14 @@ const subHelpers = {
   checkPinsCount(pins: string[], expectedLength: number): string | undefined {
     if (pins.length !== expectedLength) {
       return `number of pins should be ${expectedLength}`;
+    }
+  },
+  checkPinsCountEx(
+    pins: string[],
+    expectedLengths: number[],
+  ): string | undefined {
+    if (!expectedLengths.some((it) => it === pins.length)) {
+      return `number of pins should be ${expectedLengths.join(',')}`;
     }
   },
   checkNumberInRange(
@@ -185,6 +199,10 @@ export const standardFirmwareEditModelHelpers = {
     const mcuType = standardFirmwareEditModelHelpers.getMcuType(
       editValues.baseFirmwareType,
     );
+    const isSplit = standardFirmwareEditModelHelpers.getIsSplit(
+      editValues.baseFirmwareType,
+    );
+    const allowedEncoderPinCounts = isSplit ? [2] : [2, 4, 6];
     const {
       matrixRowPins,
       matrixColumnPins,
@@ -204,8 +222,8 @@ export const standardFirmwareEditModelHelpers = {
       encoderPins:
         encoderPins &&
         (subHelpers.validatePins(encoderPins, mcuType) ||
-          subHelpers.checkPinsCount(encoderPins, 2) ||
-          subHelpers.validateAvrEncoderPrimaryPin(encoderPins[0], mcuType)),
+          subHelpers.checkPinsCountEx(encoderPins, allowedEncoderPinCounts) ||
+          subHelpers.validateAvrEncoderPrimaryPins(encoderPins, mcuType)),
       lightingPin: lightingPin && subHelpers.validatePin(lightingPin, mcuType),
       lightingNumLeds:
         (lightingNumLeds !== undefined &&

@@ -65,8 +65,16 @@ function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
   ) {
     return false;
   }
-  if (useEncoder && !(encoderPins && encoderPins.length === 2)) {
-    return false;
+  if (useEncoder) {
+    const isSplit =
+      baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+    const valid =
+      encoderPins &&
+      ((!isSplit && [2, 4, 6].includes(encoderPins.length)) ||
+        (isSplit && encoderPins.length === 2));
+    if (!valid) {
+      return false;
+    }
   }
   if (
     useLighting &&
@@ -110,6 +118,7 @@ export function serializeCustomKeyboardSpec_Unified(
   let numMatrixRows = 0;
   let numMatrixColumns = 0;
   let numDirectWiredKeys = 0;
+  let numEncoders = 0;
   const keyScannerPins: string[] = [];
   if (
     spec.useMatrixKeyScanner &&
@@ -125,6 +134,7 @@ export function serializeCustomKeyboardSpec_Unified(
     keyScannerPins.push(...spec.directWiredPins);
   }
   if (spec.useEncoder && !!spec.encoderPins) {
+    numEncoders = spec.encoderPins.length / 2;
     keyScannerPins.push(...spec.encoderPins);
   }
 
@@ -151,6 +161,7 @@ export function serializeCustomKeyboardSpec_Unified(
     numMatrixRows,
     numMatrixColumns,
     numDirectWiredKeys,
+    numEncoders,
     ...pinDefinitionsBytes,
     spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
     spec.lightingNumLeds,
