@@ -54,7 +54,7 @@ jobs:
         working-directory: ./firmware/ci
 
       - name: Check Firmware IDs
-        run: yarn checkFirmwareIds --abortOnError
+        run: yarn checkFirmwareIds
         working-directory: ./firmware/ci
 
       - name: Check Firmware Build Errors
