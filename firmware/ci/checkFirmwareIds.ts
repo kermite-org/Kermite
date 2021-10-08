@@ -8,14 +8,13 @@ import {
   pathRelative,
   stringifyArray,
   uniqueArrayItems,
-  uniqueArrayItemsDeep,
 } from "./helpers";
 
 process.chdir("..");
 
-const AbortOnError = process.argv.includes("--abortOnError");
+let hasError = false;
 
-function getAllProjectVariationPaths() {
+function getAllFirmwarePaths() {
   return globSync("src/projects/**/rules.mk")
     .map((filePath) => pathDirname(filePath))
     .filter((filePath) => fsExistsSync(pathJoin(filePath, "config.h")))
@@ -23,79 +22,74 @@ function getAllProjectVariationPaths() {
     .filter((vp) => !(vp.startsWith("dev/") || vp.startsWith("study/")));
 }
 
-interface IProjectInfo {
-  projectPath: string;
-  projectId: string;
+interface IFirmwareInfo {
+  firmwarePath: string;
+  firmwareId: string;
 }
 
-function loadProjectInfo(projectVariationPath: string): IProjectInfo {
-  const projectPath = pathDirname(projectVariationPath);
-  const configFilePath = `./src/projects/${projectVariationPath}/config.h`;
+function loadFirmwareInfo(firmwarePath: string): IFirmwareInfo {
+  const configFilePath = `./src/projects/${firmwarePath}/config.h`;
 
   const configContent = fsxReadTextFile(configFilePath);
-  const projectId =
+  const firmwareId =
     getMatched(
       configContent,
       /^#define KERMITE_FIRMWARE_ID "([a-zA-Z0-9]+)"$/m
     ) || "";
 
   try {
-    if (!projectId) {
-      throw `KERMITE_FIRMWARE_ID is not defined in ${projectVariationPath}/config.h`;
+    if (!firmwareId) {
+      throw `KERMITE_FIRMWARE_ID is not defined in ${firmwarePath}/config.h`;
     }
 
-    if (!projectId?.match(/^[a-zA-Z0-9]{6}$/)) {
-      throw `invalid Project ID ${projectId} for ${projectPath}`;
+    if (!firmwareId?.match(/^[a-zA-Z0-9]{6}$/)) {
+      throw `invalid Project ID ${firmwareId} for ${firmwarePath}`;
     }
   } catch (error) {
     console.log(error);
-    if (AbortOnError) {
-      process.exit(1);
-    }
+    hasError = true;
   }
 
   return {
-    projectPath,
-    projectId,
+    firmwarePath,
+    firmwareId,
   };
 }
 
-function checkAllProjectIds(_projectInfos: IProjectInfo[]) {
-  const projectInfos = uniqueArrayItemsDeep(_projectInfos);
-  // console.log({ projectInfos });
-  const allProjectIds = projectInfos
-    .map((info) => info.projectId)
+function checkAllFirmwareIds(firmwareInfos: IFirmwareInfo[]) {
+  const allFirmwareIds = firmwareInfos
+    .map((info) => info.firmwareId)
     .filter((a) => !!a);
 
-  const duplicatedProjectIds = uniqueArrayItems(
-    allProjectIds.filter((it, index) => allProjectIds.indexOf(it) !== index)
+  const duplicatedFirmwareIds = uniqueArrayItems(
+    allFirmwareIds.filter((it, index) => allFirmwareIds.indexOf(it) !== index)
   );
-  if (duplicatedProjectIds.length > 0) {
-    duplicatedProjectIds.forEach((badProjectId) => {
-      const badProjectPath = projectInfos
-        .filter((info) => info.projectId === badProjectId)
-        .map((info) => info.projectPath);
+
+  if (duplicatedFirmwareIds.length > 0) {
+    duplicatedFirmwareIds.forEach((badFirmwareId) => {
+      const badProjectPath = firmwareInfos
+        .filter((info) => info.firmwareId === badFirmwareId)
+        .map((info) => info.firmwarePath);
       console.log(
-        `Project ID conflict. ${badProjectId} is used for ${stringifyArray(
+        `Firmware ID conflict. ${badFirmwareId} is used for ${stringifyArray(
           badProjectPath
         )}`
       );
     });
-    if (AbortOnError) {
-      process.exit(1);
-    }
+    hasError = true;
   }
 }
 
 function checkFirmwareIds() {
-  const projectVariationPaths = getAllProjectVariationPaths();
-  // console.log({ projectVariationPaths });
-  const projectInfos = projectVariationPaths.map(loadProjectInfo);
-  checkAllProjectIds(projectInfos);
-  if (AbortOnError) {
+  const firmwarePaths = getAllFirmwarePaths();
+  // console.log({ firmwarePaths });
+  const firmwareInfos = firmwarePaths.map(loadFirmwareInfo);
+  // console.log({ firmwareInfos });
+  checkAllFirmwareIds(firmwareInfos);
+  if (!hasError) {
     console.log("ok");
   } else {
-    console.log("done");
+    process.exit(1);
   }
 }
 
