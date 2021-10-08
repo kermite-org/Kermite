@@ -17,9 +17,9 @@ const AbortOnError = process.argv.includes("--abortOnError");
 
 function getAllProjectVariationPaths() {
   return globSync("src/projects/**/rules.mk")
-    .map((fpath) => pathDirname(fpath))
-    .filter((fpath) => fsExistsSync(pathJoin(fpath, "config.h")))
-    .map((fpath) => pathRelative("src/projects", fpath))
+    .map((filePath) => pathDirname(filePath))
+    .filter((filePath) => fsExistsSync(pathJoin(filePath, "config.h")))
+    .map((filePath) => pathRelative("src/projects", filePath))
     .filter((vp) => !(vp.startsWith("dev/") || vp.startsWith("study/")));
 }
 
@@ -67,16 +67,16 @@ function checkAllProjectIds(_projectInfos: IProjectInfo[]) {
     .map((info) => info.projectId)
     .filter((a) => !!a);
 
-  const duprecatedProjectIds = uniqueArrayItems(
+  const duplicatedProjectIds = uniqueArrayItems(
     allProjectIds.filter((it, index) => allProjectIds.indexOf(it) !== index)
   );
-  if (duprecatedProjectIds.length > 0) {
-    duprecatedProjectIds.forEach((badProjectId) => {
+  if (duplicatedProjectIds.length > 0) {
+    duplicatedProjectIds.forEach((badProjectId) => {
       const badProjectPath = projectInfos
         .filter((info) => info.projectId === badProjectId)
         .map((info) => info.projectPath);
       console.log(
-        `Project ID confliction. ${badProjectId} is used for ${stringifyArray(
+        `Project ID conflict. ${badProjectId} is used for ${stringifyArray(
           badProjectPath
         )}`
       );
