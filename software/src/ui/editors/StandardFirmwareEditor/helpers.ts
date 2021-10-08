@@ -378,6 +378,7 @@ export const standardFirmwareEditModelHelpers = {
       ...((useDirectWiredKeyScanner && directWiredPins) || []),
       ...((useEncoder && encoderPins) || []),
       ...((useLighting && lightingPin && [lightingPin]) || []),
+      ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
     ];
     if (!checkArrayItemsUnique(allPins)) {
       return 'pin duplication detected';
@@ -388,6 +389,7 @@ export const standardFirmwareEditModelHelpers = {
       ...((useDirectWiredKeyScanner && directWiredPinsR) || []),
       ...((useEncoder && encoderPinsR) || []),
       ...((useLighting && lightingPin && [lightingPin]) || []),
+      ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
     ];
     if (!checkArrayItemsUnique(allPinsR)) {
       return 'pin duplication detected';
