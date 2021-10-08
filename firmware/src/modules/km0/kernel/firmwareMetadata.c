@@ -1,4 +1,4 @@
-#include "firmwareMetaData.h"
+#include "firmwareMetadata.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/types.h"

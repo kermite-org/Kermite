@@ -3,7 +3,7 @@
 #include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
-#include "firmwareMetaData.h"
+#include "firmwareMetadata.h"
 #include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "keyboardMainInternal.h"

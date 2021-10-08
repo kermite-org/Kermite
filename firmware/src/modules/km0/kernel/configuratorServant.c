@@ -2,7 +2,7 @@
 #include "commandDefinitions.h"
 #include "configManager.h"
 #include "dataStorage.h"
-#include "firmwareMetaData.h"
+#include "firmwareMetadata.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
