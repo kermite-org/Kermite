@@ -16,6 +16,7 @@ export interface IUiSettings {
   siteDpiScale: number;
   showGlobalHint: boolean;
   showSetupNavigationPanel: boolean;
+  showProfileAdvancedOptions: boolean;
 }
 
 const defaultUiSettings: IUiSettings = {
@@ -25,6 +26,7 @@ const defaultUiSettings: IUiSettings = {
   siteDpiScale: 1.0,
   showGlobalHint: true,
   showSetupNavigationPanel: false,
+  showProfileAdvancedOptions: false,
 };
 
 export type IUiState = {
