@@ -1,6 +1,6 @@
 import {
   checkArrayItemsUnique,
-  duplicateObjectByJsonStringifyParse,
+  cloneObject,
   flattenArray,
   generateNumberSequence,
   getObjectKeys,
@@ -106,23 +106,38 @@ export const standardFirmwareEditModelHelpers = {
   getMcuType(
     baseFirmwareType: IStandardBaseFirmwareType,
   ): IStandardFirmwareMcuType {
-    if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+    if (
+      baseFirmwareType === 'AvrUnified' ||
+      baseFirmwareType === 'AvrSplit' ||
+      baseFirmwareType === 'AvrOddSplit'
+    ) {
       return 'avr';
     } else if (
       baseFirmwareType === 'RpUnified' ||
-      baseFirmwareType === 'RpSplit'
+      baseFirmwareType === 'RpSplit' ||
+      baseFirmwareType === 'RpOddSplit'
     ) {
       return 'rp';
     }
     throw new Error(`invalid baseFirmwareType ${baseFirmwareType}`);
   },
   getIsSplit(baseFirmwareType: IStandardBaseFirmwareType): boolean {
-    return baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+    return (
+      baseFirmwareType === 'AvrSplit' ||
+      baseFirmwareType === 'RpSplit' ||
+      baseFirmwareType === 'AvrOddSplit' ||
+      baseFirmwareType === 'RpOddSplit'
+    );
+  },
+  getIsOddSplit(baseFirmwareType: IStandardBaseFirmwareType): boolean {
+    return (
+      baseFirmwareType === 'AvrOddSplit' || baseFirmwareType === 'RpOddSplit'
+    );
   },
   cleanupSavingFirmwareConfig(
     sourceData: IKermiteStandardKeyboardSpec,
   ): IKermiteStandardKeyboardSpec {
-    const data = duplicateObjectByJsonStringifyParse(sourceData);
+    const data = cloneObject(sourceData);
     getObjectKeys(data).forEach((key) => {
       const value = data[key];
       if (value === false || (Array.isArray(value) && value.length === 0)) {
@@ -138,18 +153,26 @@ export const standardFirmwareEditModelHelpers = {
       useMatrixKeyScanner,
       useDirectWiredKeyScanner,
       useEncoder,
-      matrixColumnPins,
       matrixRowPins,
+      matrixColumnPins,
       directWiredPins,
       encoderPins,
+      matrixRowPinsR,
+      matrixColumnPinsR,
+      directWiredPinsR,
+      encoderPinsR,
       useLighting,
       lightingPin,
       lightingNumLeds,
+      lightingNumLedsR,
       useLcd,
       singleWireSignalPin,
     } = data;
-    const isSplit =
-      baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+
+    const { getIsSplit, getIsOddSplit } = standardFirmwareEditModelHelpers;
+    const isSplit = getIsSplit(baseFirmwareType);
+    const isOddSplit = getIsOddSplit(baseFirmwareType);
+
     return {
       baseFirmwareType,
       useBoardLedsProMicroAvr,
@@ -166,8 +189,18 @@ export const standardFirmwareEditModelHelpers = {
       directWiredPins:
         (useDirectWiredKeyScanner && directWiredPins) || undefined,
       encoderPins: (useEncoder && encoderPins) || undefined,
+      matrixRowPinsR:
+        (isOddSplit && useMatrixKeyScanner && matrixRowPinsR) || undefined,
+      matrixColumnPinsR:
+        (isOddSplit && useMatrixKeyScanner && matrixColumnPinsR) || undefined,
+      directWiredPinsR:
+        (isOddSplit && useDirectWiredKeyScanner && directWiredPinsR) ||
+        undefined,
+      encoderPinsR: (isOddSplit && useEncoder && encoderPinsR) || undefined,
       lightingPin: (useLighting && lightingPin) || undefined,
       lightingNumLeds: useLighting ? lightingNumLeds : undefined,
+      lightingNumLedsR:
+        isOddSplit && useLighting ? lightingNumLedsR : undefined,
       singleWireSignalPin: (isSplit && singleWireSignalPin) || undefined,
     };
   },
@@ -175,10 +208,13 @@ export const standardFirmwareEditModelHelpers = {
     editValues: IKermiteStandardKeyboardSpec,
     diff: Partial<IKermiteStandardKeyboardSpec>,
   ) {
-    const { baseFirmwareType: fw } = editValues;
-    const isAvr = fw === 'AvrSplit' || fw === 'AvrUnified';
-    const isRp = fw === 'RpUnified' || fw === 'RpSplit';
-    const isSplit = fw === 'AvrSplit' || fw === 'RpSplit';
+    const { baseFirmwareType } = editValues;
+
+    const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
+    const isAvr = getMcuType(baseFirmwareType) === 'avr';
+    const isRp = getMcuType(baseFirmwareType) === 'rp';
+    const isSplit = getIsSplit(baseFirmwareType);
+
     if (isAvr) {
       editValues.useBoardLedsProMicroRp = false;
       editValues.useBoardLedsRpiPico = false;
@@ -206,39 +242,68 @@ export const standardFirmwareEditModelHelpers = {
   validateEditValues(
     editValues: IStandardFirmwareEditValues,
   ): IStandardFirmwareEditErrors {
-    const mcuType = standardFirmwareEditModelHelpers.getMcuType(
-      editValues.baseFirmwareType,
-    );
-    const isSplit = standardFirmwareEditModelHelpers.getIsSplit(
-      editValues.baseFirmwareType,
-    );
-    const allowedEncoderPinCounts = isSplit ? [2] : [2, 4, 6];
+    const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
+
     const {
+      baseFirmwareType,
+      useMatrixKeyScanner,
+      useDirectWiredKeyScanner,
+      useEncoder,
+      useLighting,
       matrixRowPins,
       matrixColumnPins,
       directWiredPins,
       encoderPins,
+      matrixRowPinsR,
+      matrixColumnPinsR,
+      directWiredPinsR,
+      encoderPinsR,
       lightingPin,
       lightingNumLeds,
+      lightingNumLedsR,
       singleWireSignalPin,
     } = editValues;
+
+    const mcuType = getMcuType(baseFirmwareType);
+    const isSplit = getIsSplit(baseFirmwareType);
+
+    const allowedEncoderPinCounts = isSplit ? [2] : [2, 4, 6];
+
+    const checkPins = (
+      enabled: boolean | undefined,
+      pins: string[] | undefined,
+    ) =>
+      (enabled && pins && subHelpers.validatePins(pins, mcuType)) || undefined;
+
+    const checkEncoderPins = (pins: string[] | undefined) =>
+      (useEncoder &&
+        pins &&
+        (subHelpers.validatePins(pins, mcuType) ||
+          subHelpers.checkPinsCountEx(pins, allowedEncoderPinCounts) ||
+          subHelpers.validateAvrEncoderPrimaryPins(pins, mcuType))) ||
+      undefined;
+
+    const checkNumLeds = (numLeds: number | undefined) =>
+      (useLighting &&
+        numLeds !== undefined &&
+        subHelpers.checkNumberInRange(numLeds, 1, 256)) ||
+      undefined;
+
     return {
-      matrixRowPins:
-        matrixRowPins && subHelpers.validatePins(matrixRowPins, mcuType),
-      matrixColumnPins:
-        matrixColumnPins && subHelpers.validatePins(matrixColumnPins, mcuType),
-      directWiredPins:
-        directWiredPins && subHelpers.validatePins(directWiredPins, mcuType),
-      encoderPins:
-        encoderPins &&
-        (subHelpers.validatePins(encoderPins, mcuType) ||
-          subHelpers.checkPinsCountEx(encoderPins, allowedEncoderPinCounts) ||
-          subHelpers.validateAvrEncoderPrimaryPins(encoderPins, mcuType)),
+      matrixRowPins: checkPins(useMatrixKeyScanner, matrixRowPins),
+      matrixColumnPins: checkPins(useMatrixKeyScanner, matrixColumnPins),
+      directWiredPins: checkPins(useDirectWiredKeyScanner, directWiredPins),
+      encoderPins: checkEncoderPins(encoderPins),
+
+      matrixRowPinsR: checkPins(useMatrixKeyScanner, matrixRowPinsR),
+      matrixColumnPinsR: checkPins(useMatrixKeyScanner, matrixColumnPinsR),
+      directWiredPinsR: checkPins(useDirectWiredKeyScanner, directWiredPinsR),
+      encoderPinsR: checkEncoderPins(encoderPinsR),
+
       lightingPin: lightingPin && subHelpers.validatePin(lightingPin, mcuType),
-      lightingNumLeds:
-        (lightingNumLeds !== undefined &&
-          subHelpers.checkNumberInRange(lightingNumLeds, 1, 256)) ||
-        undefined,
+      lightingNumLeds: checkNumLeds(lightingNumLeds),
+      lightingNumLedsR: checkNumLeds(lightingNumLedsR),
+
       singleWireSignalPin:
         singleWireSignalPin &&
         (subHelpers.validatePin(singleWireSignalPin, mcuType) ||
@@ -254,30 +319,67 @@ export const standardFirmwareEditModelHelpers = {
       useMatrixKeyScanner,
       matrixRowPins,
       matrixColumnPins,
+      matrixRowPinsR,
+      matrixColumnPinsR,
       useDirectWiredKeyScanner,
       directWiredPins,
+      directWiredPinsR,
       useEncoder,
       encoderPins,
+      encoderPinsR,
       useLighting,
       lightingPin,
       lightingNumLeds,
+      lightingNumLedsR,
       singleWireSignalPin,
     } = editValues;
 
-    const isSplit =
-      baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+    const { getIsSplit, getIsOddSplit } = standardFirmwareEditModelHelpers;
+    const isSplit = getIsSplit(baseFirmwareType);
+    const isOddSplit = getIsOddSplit(baseFirmwareType);
 
-    if (useMatrixKeyScanner && !(matrixRowPins && matrixColumnPins)) {
-      return 'matrix pins should be specified';
+    if (isSplit && !singleWireSignalPin) {
+      return 'single wire signal pin should be specified';
     }
-    if (useDirectWiredKeyScanner && !directWiredPins) {
-      return 'direct wired pins should be specified';
-    }
-    if (useEncoder && !encoderPins) {
-      return 'encoder pins should be specified';
-    }
-    if (useLighting && !(lightingPin && lightingNumLeds !== undefined)) {
-      return 'lighting pin and num LEDs should be specified';
+
+    if (!isOddSplit) {
+      if (useMatrixKeyScanner && !(matrixRowPins && matrixColumnPins)) {
+        return 'matrix pins should be specified';
+      }
+      if (useDirectWiredKeyScanner && !directWiredPins) {
+        return 'direct wired pins should be specified';
+      }
+      if (useEncoder && !encoderPins) {
+        return 'encoder pins should be specified';
+      }
+      if (useLighting && !(lightingPin && lightingNumLeds !== undefined)) {
+        return 'lighting pin and num LEDs should be specified';
+      }
+    } else {
+      if (
+        useMatrixKeyScanner &&
+        !(
+          (matrixRowPins && matrixColumnPins) ||
+          (matrixRowPinsR && matrixColumnPinsR)
+        )
+      ) {
+        return 'matrix pins should be specified';
+      }
+      if (useDirectWiredKeyScanner && !(directWiredPins || directWiredPinsR)) {
+        return 'direct wired pins should be specified';
+      }
+      if (useEncoder && !(encoderPins || encoderPinsR)) {
+        return 'encoder pins should be specified';
+      }
+      if (
+        useLighting &&
+        !(
+          lightingPin &&
+          (lightingNumLeds !== undefined || lightingNumLedsR !== undefined)
+        )
+      ) {
+        return 'lighting pin and num LEDs should be specified';
+      }
     }
     const allPins = [
       ...((useMatrixKeyScanner && matrixRowPins) || []),
@@ -285,13 +387,23 @@ export const standardFirmwareEditModelHelpers = {
       ...((useDirectWiredKeyScanner && directWiredPins) || []),
       ...((useEncoder && encoderPins) || []),
       ...((useLighting && lightingPin && [lightingPin]) || []),
+      ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
     ];
     if (!checkArrayItemsUnique(allPins)) {
       return 'pin duplication detected';
     }
-    if (isSplit && !singleWireSignalPin) {
-      return 'single wire signal pin should be specified';
+    const allPinsR = [
+      ...((useMatrixKeyScanner && matrixRowPinsR) || []),
+      ...((useMatrixKeyScanner && matrixColumnPinsR) || []),
+      ...((useDirectWiredKeyScanner && directWiredPinsR) || []),
+      ...((useEncoder && encoderPinsR) || []),
+      ...((useLighting && lightingPin && [lightingPin]) || []),
+      ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
+    ];
+    if (!checkArrayItemsUnique(allPinsR)) {
+      return 'pin duplication detected';
     }
+
     return '';
   },
 };

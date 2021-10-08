@@ -5,6 +5,7 @@ import {
 } from '~/shared';
 import {
   serializeCommonKeyboardMetadata,
+  serializeCustomKeyboardSpec_OddSplit,
   serializeCustomKeyboardSpec_Split,
   serializeCustomKeyboardSpec_Unified,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
@@ -63,6 +64,8 @@ const specSerializerFunctionMap: {
   RpUnified: serializeCustomKeyboardSpec_Unified,
   AvrSplit: serializeCustomKeyboardSpec_Split,
   RpSplit: serializeCustomKeyboardSpec_Split,
+  AvrOddSplit: serializeCustomKeyboardSpec_OddSplit,
+  RpOddSplit: serializeCustomKeyboardSpec_OddSplit,
 };
 
 export function applyFirmwareBinaryPatch(

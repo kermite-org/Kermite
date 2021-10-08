@@ -13,6 +13,7 @@ export interface IStandardFirmwareEditPresenter {
   isAvr: boolean;
   isRp: boolean;
   isSplit: boolean;
+  isOddSplit: boolean;
   fieldErrors: IStandardFirmwareEditErrors;
   totalError: string;
 }
@@ -23,6 +24,8 @@ const constants = {
     'RpUnified',
     'AvrSplit',
     'RpSplit',
+    'AvrOddSplit',
+    'RpOddSplit',
   ].map(makePlainSelectorOption),
   availablePinsTextAvr: 'PB0~PB7, PC0~PC7, PD0~PD7, PE0~PE7, PF0~PF7',
   availablePinsTextRp: 'GP0~GP29',
@@ -34,7 +37,7 @@ export function useStandardFirmwareEditPresenter(
 ): IStandardFirmwareEditPresenter {
   const {
     state: { editValues },
-    readers: { mcuType, isSplit, fieldErrors, totalError },
+    readers: { mcuType, isSplit, isOddSplit, fieldErrors, totalError },
     actions: { loadFirmwareConfig },
   } = standardFirmwareEditStore;
 
@@ -57,6 +60,7 @@ export function useStandardFirmwareEditPresenter(
     isAvr,
     isRp,
     isSplit,
+    isOddSplit,
     fieldErrors,
     totalError,
   };

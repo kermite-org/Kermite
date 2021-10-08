@@ -29,7 +29,9 @@ export type IStandardBaseFirmwareType =
   | 'AvrUnified'
   | 'AvrSplit'
   | 'RpUnified'
-  | 'RpSplit';
+  | 'RpSplit'
+  | 'AvrOddSplit'
+  | 'RpOddSplit';
 
 export type IKermiteStandardKeyboardSpec = {
   baseFirmwareType: IStandardBaseFirmwareType;
@@ -40,13 +42,18 @@ export type IKermiteStandardKeyboardSpec = {
   useMatrixKeyScanner?: boolean;
   matrixRowPins?: string[];
   matrixColumnPins?: string[];
+  matrixRowPinsR?: string[];
+  matrixColumnPinsR?: string[];
   useDirectWiredKeyScanner?: boolean;
   directWiredPins?: string[];
+  directWiredPinsR?: string[];
   useEncoder?: boolean;
   encoderPins?: string[];
+  encoderPinsR?: string[];
   useLighting?: boolean;
   lightingPin?: string;
   lightingNumLeds?: number;
+  lightingNumLedsR?: number;
   useLcd?: boolean;
   singleWireSignalPin?: string;
 };
