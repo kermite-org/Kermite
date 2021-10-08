@@ -106,18 +106,34 @@ export const standardFirmwareEditModelHelpers = {
   getMcuType(
     baseFirmwareType: IStandardBaseFirmwareType,
   ): IStandardFirmwareMcuType {
-    if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+    if (
+      baseFirmwareType === 'AvrUnified' ||
+      baseFirmwareType === 'AvrSplit' ||
+      baseFirmwareType === 'AvrOddSplit'
+    ) {
       return 'avr';
     } else if (
       baseFirmwareType === 'RpUnified' ||
-      baseFirmwareType === 'RpSplit'
+      baseFirmwareType === 'RpSplit' ||
+      baseFirmwareType === 'RpOddSplit'
     ) {
       return 'rp';
     }
     throw new Error(`invalid baseFirmwareType ${baseFirmwareType}`);
   },
   getIsSplit(baseFirmwareType: IStandardBaseFirmwareType): boolean {
-    return baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+    // return baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+    return (
+      baseFirmwareType === 'AvrSplit' ||
+      baseFirmwareType === 'RpSplit' ||
+      baseFirmwareType === 'AvrOddSplit' ||
+      baseFirmwareType === 'RpOddSplit'
+    );
+  },
+  getIsOddSplit(baseFirmwareType: IStandardBaseFirmwareType): boolean {
+    return (
+      baseFirmwareType === 'AvrOddSplit' || baseFirmwareType === 'RpOddSplit'
+    );
   },
   cleanupSavingFirmwareConfig(
     sourceData: IKermiteStandardKeyboardSpec,

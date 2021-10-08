@@ -118,7 +118,6 @@ export const StandardFirmwareEditor: FC<Props> = ({
             />
             <div className="error">{fieldErrors.matrixColumnPins}</div>
           </FieldItem>
-
           <FieldItem title="use direct wired key scanner">
             <ToggleSwitch
               checked={editValues.useDirectWiredKeyScanner}
