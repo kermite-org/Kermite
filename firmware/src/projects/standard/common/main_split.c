@@ -4,7 +4,7 @@
 #include "km0/device/boardLink.h"
 #include "km0/device/debugUart.h"
 #include "km0/device/system.h"
-#include "km0/kernel/firmwareConfigurationData.h"
+#include "km0/kernel/firmwareMetadata.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_directWired.h"

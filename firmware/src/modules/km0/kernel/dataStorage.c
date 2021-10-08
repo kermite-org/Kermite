@@ -1,6 +1,6 @@
 #include "dataStorage.h"
 #include "commandDefinitions.h"
-#include "firmwareConfigurationData.h"
+#include "firmwareMetaData.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
@@ -150,7 +150,7 @@ static bool validateStorageDataFormat() {
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   dataMemory_readBytes(posSystemDataBody, tempDataBuf, 6);
   bool projectIdValid = utils_compareBytes(
-      tempDataBuf, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
+      tempDataBuf, (uint8_t *)commonFirmwareMetadata.firmwareId, 6);
   if (!projectIdValid) {
     return false;
   }
@@ -176,7 +176,7 @@ static void resetDataStorage() {
   uint16_t posSystemDataBody = getChunkBodyAddress(ChunkSig_SystemData);
   if (posSystemDataBody) {
     //write project id
-    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
+    dataMemory_writeBytes(posSystemDataBody, (uint8_t *)commonFirmwareMetadata.firmwareId, 6);
     //write default instance number
     dataMemory_writeBytes(posSystemDataBody + 8, (uint8_t *)"00000000", 8);
   }

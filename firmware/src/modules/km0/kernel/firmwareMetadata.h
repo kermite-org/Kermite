@@ -9,6 +9,6 @@ typedef struct {
   char variationId[3];
   char deviceInstanceCode[9];
   char keyboardName[33];
-} FirmwareConfigurationData;
+} CommonFirmwareMetadata;
 
-extern FirmwareConfigurationData firmwareConfigurationData;
+extern CommonFirmwareMetadata commonFirmwareMetadata;
