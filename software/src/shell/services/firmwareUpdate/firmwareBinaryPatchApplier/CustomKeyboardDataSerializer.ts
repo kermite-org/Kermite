@@ -32,22 +32,33 @@ function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
     useLighting,
     lightingPin,
     lightingNumLeds,
+    singleWireSignalPin,
   } = spec;
 
-  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+  const isAvr =
+    baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit';
+  const isRp =
+    baseFirmwareType === 'RpUnified' || baseFirmwareType === 'RpSplit';
+
+  const isSplit =
+    baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
+
+  if (isAvr) {
     if (useBoardLedsProMicroRp || useBoardLedsRpiPico) {
       return false;
     }
-  } else if (
-    baseFirmwareType === 'RpUnified' ||
-    baseFirmwareType === 'RpSplit'
-  ) {
+  } else if (isRp) {
     if (useBoardLedsProMicroAvr) {
       return false;
     }
   } else {
     return false;
   }
+
+  if (isSplit && !singleWireSignalPin) {
+    return false;
+  }
+
   if (
     useMatrixKeyScanner &&
     !(
@@ -66,8 +77,6 @@ function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
     return false;
   }
   if (useEncoder) {
-    const isSplit =
-      baseFirmwareType === 'AvrSplit' || baseFirmwareType === 'RpSplit';
     const valid =
       encoderPins &&
       ((!isSplit && [2, 4, 6].includes(encoderPins.length)) ||
