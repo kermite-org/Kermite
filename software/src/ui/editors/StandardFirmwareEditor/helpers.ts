@@ -247,6 +247,10 @@ export const standardFirmwareEditModelHelpers = {
 
     const {
       baseFirmwareType,
+      useMatrixKeyScanner,
+      useDirectWiredKeyScanner,
+      useEncoder,
+      useLighting,
       matrixRowPins,
       matrixColumnPins,
       directWiredPins,
@@ -266,29 +270,35 @@ export const standardFirmwareEditModelHelpers = {
 
     const allowedEncoderPinCounts = isSplit ? [2] : [2, 4, 6];
 
-    const checkPins = (pins: string[] | undefined) =>
-      pins && subHelpers.validatePins(pins, mcuType);
+    const checkPins = (
+      enabled: boolean | undefined,
+      pins: string[] | undefined,
+    ) =>
+      (enabled && pins && subHelpers.validatePins(pins, mcuType)) || undefined;
 
     const checkEncoderPins = (pins: string[] | undefined) =>
-      pins &&
-      (subHelpers.validatePins(pins, mcuType) ||
-        subHelpers.checkPinsCountEx(pins, allowedEncoderPinCounts) ||
-        subHelpers.validateAvrEncoderPrimaryPins(pins, mcuType));
+      (useEncoder &&
+        pins &&
+        (subHelpers.validatePins(pins, mcuType) ||
+          subHelpers.checkPinsCountEx(pins, allowedEncoderPinCounts) ||
+          subHelpers.validateAvrEncoderPrimaryPins(pins, mcuType))) ||
+      undefined;
 
     const checkNumLeds = (numLeds: number | undefined) =>
-      (numLeds !== undefined &&
+      (useLighting &&
+        numLeds !== undefined &&
         subHelpers.checkNumberInRange(numLeds, 1, 256)) ||
       undefined;
 
     return {
-      matrixRowPins: checkPins(matrixRowPins),
-      matrixColumnPins: checkPins(matrixColumnPins),
-      directWiredPins: checkPins(directWiredPins),
+      matrixRowPins: checkPins(useMatrixKeyScanner, matrixRowPins),
+      matrixColumnPins: checkPins(useMatrixKeyScanner, matrixColumnPins),
+      directWiredPins: checkPins(useDirectWiredKeyScanner, directWiredPins),
       encoderPins: checkEncoderPins(encoderPins),
 
-      matrixRowPinsR: checkPins(matrixRowPinsR),
-      matrixColumnPinsR: checkPins(matrixColumnPinsR),
-      directWiredPinsR: checkPins(directWiredPinsR),
+      matrixRowPinsR: checkPins(useMatrixKeyScanner, matrixRowPinsR),
+      matrixColumnPinsR: checkPins(useMatrixKeyScanner, matrixColumnPinsR),
+      directWiredPinsR: checkPins(useDirectWiredKeyScanner, directWiredPinsR),
       encoderPinsR: checkEncoderPins(encoderPinsR),
 
       lightingPin: lightingPin && subHelpers.validatePin(lightingPin, mcuType),
