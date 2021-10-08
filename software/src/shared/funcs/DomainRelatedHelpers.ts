@@ -114,6 +114,9 @@ export function parseProfileEntry(profileKey: string): IProfileEntry {
 
 export function getNextFirmwareId(existingIds: string[]): string {
   const allNumbers = existingIds.map((id) => parseInt(id));
+  if (!allNumbers.every((it) => isFinite(it))) {
+    throw new Error('invalid firmware variation ids detected');
+  }
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   if (newNumber >= 100) {
     throw new Error('firmware id reaches to 100');
