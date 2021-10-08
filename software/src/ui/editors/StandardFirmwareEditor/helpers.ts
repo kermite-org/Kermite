@@ -23,6 +23,8 @@ const acceptableAvrEncoderPrimaryPins = [0, 1, 2, 3, 4, 5, 6, 7].map(
   (idx) => 'PB' + idx,
 );
 
+const acceptableAvrSingleWirePins = ['PD0', 'PD2'];
+
 const availablePinsRp = generateNumberSequence(30).map((i) => 'GP' + i);
 
 const subHelpers = {
@@ -62,6 +64,17 @@ const subHelpers = {
       );
       if (!valid) {
         return `primary pin for encoder must be PB0~PB7`;
+      }
+    }
+  },
+  validateAvrSingleWireSignalPin(
+    pin: string,
+    mcuType: IStandardFirmwareMcuType,
+  ): string | undefined {
+    if (mcuType === 'avr') {
+      const valid = acceptableAvrSingleWirePins.includes(pin);
+      if (!valid) {
+        return `signal pin must be PD0 or PD2`;
       }
     }
   },
@@ -186,9 +199,6 @@ export const standardFirmwareEditModelHelpers = {
     if (isAvr && editValues.useLighting) {
       editValues.lightingPin = 'PD3';
     }
-    if (isAvr) {
-      editValues.singleWireSignalPin = isSplit ? 'PD2' : undefined;
-    }
     if (isAvr && isSplit) {
       editValues.useLcd = false;
     }
@@ -231,7 +241,11 @@ export const standardFirmwareEditModelHelpers = {
         undefined,
       singleWireSignalPin:
         singleWireSignalPin &&
-        subHelpers.validatePin(singleWireSignalPin, mcuType),
+        (subHelpers.validatePin(singleWireSignalPin, mcuType) ||
+          subHelpers.validateAvrSingleWireSignalPin(
+            singleWireSignalPin,
+            mcuType,
+          )),
     };
   },
   getTotalValidationError(editValues: IStandardFirmwareEditValues): string {

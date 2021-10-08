@@ -199,7 +199,6 @@ export const StandardFirmwareEditor: FC<Props> = ({
               setValue={valueChangeHandler('singleWireSignalPin')}
               width={100}
               invalid={!!fieldErrors.singleWireSignalPin}
-              disabled={!(isSplit && isRp)}
             />
             <div className="error">{fieldErrors.singleWireSignalPin}</div>
           </FieldItem>
