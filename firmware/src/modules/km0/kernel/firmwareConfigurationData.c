@@ -12,6 +12,7 @@
 #endif
 
 FirmwareConfigurationData firmwareConfigurationData = {
+  .dataHeader = { '$', 'K', 'M', 'F', 'C' },
   .firmwareId = KERMITE_FIRMWARE_ID,
   .projectId = "000000",
   .variationId = "00",
