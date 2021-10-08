@@ -3,7 +3,7 @@
 #include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
-#include "firmwareConfigurationData.h"
+#include "firmwareMetaData.h"
 #include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "keyboardMainInternal.h"
@@ -127,16 +127,16 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, Kermite_Project_McuCode, 3);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.firmwareId, 6);
+  buf = writeTextBytes(buf, KERMITE_FIRMWARE_ID, 6);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.projectId, 6);
+  buf = writeTextBytes(buf, commonFirmwareMetadata.projectId, 6);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.variationId, 2);
+  buf = writeTextBytes(buf, commonFirmwareMetadata.variationId, 2);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.deviceInstanceCode, 8);
+  buf = writeTextBytes(buf, commonFirmwareMetadata.deviceInstanceCode, 8);
   buf = writeTextBytes(buf, "\0", 1);
 
-  usbIoCore_setProductName(firmwareConfigurationData.keyboardName);
+  usbIoCore_setProductName(commonFirmwareMetadata.keyboardName);
 }
 
 static void resetKeyboardCoreLogic() {

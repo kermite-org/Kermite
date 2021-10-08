@@ -2,7 +2,7 @@
 #include "commandDefinitions.h"
 #include "configManager.h"
 #include "dataStorage.h"
-#include "firmwareConfigurationData.h"
+#include "firmwareMetaData.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
@@ -117,14 +117,14 @@ static void emitDeviceAttributesResponse() {
   p[3] = Kermite_ProfileBinaryFormatRevision;
   p[4] = Kermite_ConfigParametersRevision;
   utils_copyBytes(p + 5, (uint8_t *)Kermite_Project_McuCode, 3);
-  utils_copyBytes(p + 15, (uint8_t *)firmwareConfigurationData.firmwareId, 6);
+  utils_copyBytes(p + 15, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
   p[21] = Kermite_Project_IsResourceOriginOnline;
   p[22] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
   p[23] = Kermite_Project_ReleaseBuildRevision & 0xFF;
   utils_fillBytes(p + 24, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 24, (uint8_t *)Kermite_Project_VariationName, slen);
-  utils_copyBytes(p + 40, (uint8_t *)firmwareConfigurationData.deviceInstanceCode, 8);
+  utils_copyBytes(p + 40, (uint8_t *)commonFirmwareMetadata.deviceInstanceCode, 8);
   p[48] = keyMappingDataCapacity >> 8 & 0xFF;
   p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);

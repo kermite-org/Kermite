@@ -4,7 +4,7 @@
 #include "km0/device/boardLink.h"
 #include "km0/device/debugUart.h"
 #include "km0/device/system.h"
-#include "km0/kernel/firmwareConfigurationData.h"
+#include "km0/kernel/firmwareMetadata.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_directWired.h"
@@ -20,11 +20,7 @@
 #endif
 
 typedef struct {
-  uint8_t dataHeader[4];
-  char projectId[7];
-  char variationId[3];
-  char deviceInstanceCode[9];
-  char keyboardName[33];
+  uint8_t dataHeader[5];
   bool useBoardLedsProMicroAvr;
   bool useBoardLedsProMicroRp;
   bool useBoardLedsRpiPico;
@@ -50,11 +46,7 @@ typedef struct {
 } KermiteKeyboardDefinitionData;
 
 KermiteKeyboardDefinitionData defs = {
-  .dataHeader = { 0x4B, 0x4D, 0x44, 0x46 }, //K,M,D,F
-  .projectId = "000000",
-  .variationId = "00",
-  .deviceInstanceCode = "00000000",
-  .keyboardName = "unnamed keyboard",
+  .dataHeader = { '$', 'K', 'M', 'D', 'F' },
   .useBoardLedsProMicroAvr = false,
   .useBoardLedsProMicroRp = false,
   .useBoardLedsRpiPico = false,
@@ -172,11 +164,6 @@ static void setupBoard(int8_t side) {
 }
 
 int main() {
-  utils_copyTextBytes(firmwareConfigurationData.projectId, defs.projectId, 7);
-  utils_copyTextBytes(firmwareConfigurationData.variationId, defs.variationId, 3);
-  utils_copyTextBytes(firmwareConfigurationData.deviceInstanceCode, defs.deviceInstanceCode, 9);
-  utils_copyTextBytes(firmwareConfigurationData.keyboardName, defs.keyboardName, 33);
-
   if (defs.useBoardLedsProMicroAvr) {
     boardIoImpl_setupLeds_proMicroAvr();
   }
