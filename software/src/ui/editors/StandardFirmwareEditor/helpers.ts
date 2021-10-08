@@ -1,5 +1,6 @@
 import {
   checkArrayItemsUnique,
+  cloneObject,
   duplicateObjectByJsonStringifyParse,
   flattenArray,
   generateNumberSequence,
@@ -137,7 +138,7 @@ export const standardFirmwareEditModelHelpers = {
   cleanupSavingFirmwareConfig(
     sourceData: IKermiteStandardKeyboardSpec,
   ): IKermiteStandardKeyboardSpec {
-    const data = duplicateObjectByJsonStringifyParse(sourceData);
+    const data = cloneObject(sourceData);
     getObjectKeys(data).forEach((key) => {
       const value = data[key];
       if (value === false || (Array.isArray(value) && value.length === 0)) {
@@ -153,19 +154,25 @@ export const standardFirmwareEditModelHelpers = {
       useMatrixKeyScanner,
       useDirectWiredKeyScanner,
       useEncoder,
-      matrixColumnPins,
       matrixRowPins,
+      matrixColumnPins,
       directWiredPins,
       encoderPins,
+      matrixRowPinsR,
+      matrixColumnPinsR,
+      directWiredPinsR,
+      encoderPinsR,
       useLighting,
       lightingPin,
       lightingNumLeds,
+      lightingNumLedsR,
       useLcd,
       singleWireSignalPin,
     } = data;
 
-    const { getIsSplit } = standardFirmwareEditModelHelpers;
+    const { getIsSplit, getIsOddSplit } = standardFirmwareEditModelHelpers;
     const isSplit = getIsSplit(baseFirmwareType);
+    const isOddSplit = getIsOddSplit(baseFirmwareType);
 
     return {
       baseFirmwareType,
@@ -183,8 +190,18 @@ export const standardFirmwareEditModelHelpers = {
       directWiredPins:
         (useDirectWiredKeyScanner && directWiredPins) || undefined,
       encoderPins: (useEncoder && encoderPins) || undefined,
+      matrixRowPinsR:
+        (isOddSplit && useMatrixKeyScanner && matrixRowPinsR) || undefined,
+      matrixColumnPinsR:
+        (isOddSplit && useMatrixKeyScanner && matrixColumnPinsR) || undefined,
+      directWiredPinsR:
+        (isOddSplit && useDirectWiredKeyScanner && directWiredPinsR) ||
+        undefined,
+      encoderPinsR: (isOddSplit && useEncoder && encoderPinsR) || undefined,
       lightingPin: (useLighting && lightingPin) || undefined,
       lightingNumLeds: useLighting ? lightingNumLeds : undefined,
+      lightingNumLedsR:
+        isOddSplit && useLighting ? lightingNumLedsR : undefined,
       singleWireSignalPin: (isSplit && singleWireSignalPin) || undefined,
     };
   },
@@ -349,8 +366,7 @@ export const standardFirmwareEditModelHelpers = {
         useLighting &&
         !(
           lightingPin &&
-          lightingNumLeds !== undefined &&
-          lightingNumLedsR !== undefined
+          (lightingNumLeds !== undefined || lightingNumLedsR !== undefined)
         )
       ) {
         return 'lighting pin and num LEDs should be specified';
