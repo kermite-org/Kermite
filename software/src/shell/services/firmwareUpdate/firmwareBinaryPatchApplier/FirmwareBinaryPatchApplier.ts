@@ -4,7 +4,7 @@ import {
   IStandardBaseFirmwareType,
 } from '~/shared';
 import {
-  serializeCommonKeyboardMetaData,
+  serializeCommonKeyboardMetadata,
   serializeCustomKeyboardSpec_Split,
   serializeCustomKeyboardSpec_Unified,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
@@ -36,7 +36,7 @@ function getCustomDataLocation(
   type: 'metadata' | 'standardKeyboardDefinition',
 ): number {
   const markerCode = {
-    metadata: '$KMFC',
+    metadata: '$KMMD',
     standardKeyboardDefinition: '$KMDF',
   }[type];
   const markerPosition = getBinaryContentMarkerIndex(binaryBytes, markerCode);
@@ -46,7 +46,7 @@ function getCustomDataLocation(
   return markerPosition + 5;
 }
 
-function checkCustomDataBytes(bytes: number[]) {
+function checkCustomDataBytesValueRange(bytes: number[]) {
   const valid = bytes.every((it) => isFinite(it) && 0 <= it && it <= 0xff);
   if (!valid) {
     throw new Error('invalid custom data bytes');
@@ -75,7 +75,8 @@ export function applyFirmwareBinaryPatch(
     firmwareBinaryFormat === 'uf2' ? patchUf2FileContent : patchHexFileContent;
 
   return patchFileContentFn(buffer, (binaryBytes) => {
-    const metaDataBytes = serializeCommonKeyboardMetaData(meta);
+    const metaDataBytes = serializeCommonKeyboardMetadata(meta);
+    checkCustomDataBytesValueRange(metaDataBytes);
     const metaDataLocation = getCustomDataLocation(binaryBytes, 'metadata');
     replaceArrayContent(binaryBytes, metaDataLocation, metaDataBytes);
 
@@ -83,7 +84,7 @@ export function applyFirmwareBinaryPatch(
       const specSerializerFunc =
         specSerializerFunctionMap[targetKeyboardSpec.baseFirmwareType];
       const customDataBytes = specSerializerFunc(targetKeyboardSpec, meta);
-      checkCustomDataBytes(customDataBytes);
+      checkCustomDataBytesValueRange(customDataBytes);
       const definitionDataLocation = getCustomDataLocation(
         binaryBytes,
         'standardKeyboardDefinition',
