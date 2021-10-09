@@ -55,7 +55,7 @@ export function receivedBytesDecoder(
     const isProjectOriginOnline = !!buf[21];
     const projectReleaseBuildRevision = (buf[22] << 8) | buf[23];
     const firmwareVariationName = bytesToString([...buf].slice(24, 40));
-    const deviceInstanceCode = bytesToString([...buf].slice(40, 48));
+    const deviceInstanceCode = bytesToString([...buf].slice(40, 44));
     const assignStorageCapacity = (buf[48] << 8) | buf[49];
     return {
       type: 'deviceAttributeResponse',

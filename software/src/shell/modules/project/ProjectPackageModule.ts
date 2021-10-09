@@ -1,7 +1,7 @@
 import {
   createProjectKey,
   fallbackProjectPackageInfo,
-  generateRandomId,
+  generateRandomIdBase62,
   IGlobalSettings,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -32,7 +32,7 @@ const projectPackageModuleHelper = {
   createLocalProject(keyboardName: string): IProjectPackageInfo {
     // todo: 既存のオンラインプロジェクトのIDのリストと比較して、重複しないIDにする
     const origin = 'local';
-    const projectId = generateRandomId(6);
+    const projectId = generateRandomIdBase62(6);
     const projectKey = createProjectKey(origin, projectId);
     return {
       ...fallbackProjectPackageInfo,

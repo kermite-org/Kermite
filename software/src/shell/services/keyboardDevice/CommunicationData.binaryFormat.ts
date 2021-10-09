@@ -45,7 +45,8 @@ namespace CommunicationDataBinaryFormat {
     [21]: { isOnlineProject: u8 };
     [22_23]: { projectReleaseBuildRevision: u16 };
     [24_39]: { variationName: Bytes<16> };
-    [40_47]: { deviceInstanceCode: Bytes<8> };
+    [40_43]: { deviceInstanceCode: Bytes<4> };
+    [44_47]: { reserved: Bytes<4> };
     [48_49]: { assignStorageCapacity: u16 };
   };
 
