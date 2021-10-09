@@ -5,6 +5,7 @@ import {
   IGlobalSettings,
   IProjectPackageInfo,
   IResourceOrigin,
+  uniqueArrayItems,
 } from '~/shared';
 import {
   commitCoreState,
@@ -29,10 +30,21 @@ const projectPackageModuleHelper = {
       projectKey: info.projectKey.replace('online', 'local'),
     };
   },
+  generateUniqueProjectId(): string {
+    const existingProjectIds = uniqueArrayItems(
+      coreState.allProjectPackageInfos.map((it) => it.projectId),
+    );
+    for (let i = 0; i < 100; i++) {
+      const projectId = generateRandomIdBase62(6);
+      if (!existingProjectIds.includes(projectId)) {
+        return projectId;
+      }
+    }
+    throw new Error('failed to generate unique project id');
+  },
   createLocalProject(keyboardName: string): IProjectPackageInfo {
-    // todo: 既存のオンラインプロジェクトのIDのリストと比較して、重複しないIDにする
     const origin = 'local';
-    const projectId = generateRandomIdBase62(6);
+    const projectId = projectPackageModuleHelper.generateUniqueProjectId();
     const projectKey = createProjectKey(origin, projectId);
     return {
       ...fallbackProjectPackageInfo,
