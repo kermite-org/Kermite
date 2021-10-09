@@ -124,7 +124,7 @@ static void emitDeviceAttributesResponse() {
   utils_fillBytes(p + 24, 0, 16);
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 24, (uint8_t *)Kermite_Project_VariationName, slen);
-  utils_copyBytes(p + 40, (uint8_t *)commonFirmwareMetadata.deviceInstanceCode, 8);
+  utils_copyBytes(p + 40, (uint8_t *)commonFirmwareMetadata.deviceInstanceCode, 4);
   p[48] = keyMappingDataCapacity >> 8 & 0xFF;
   p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);
