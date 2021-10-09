@@ -135,8 +135,7 @@ void devEntry() {
   configurationMemoryReader_initialize(NumKeys);
 
   keyMatrixScanner_initialize(
-      NumRows, NumColumns, rowPins, columnPins, onPhysicalKeyStateChanged
-      /*, todo impl: onLayerChanged */);
+      NumRows, NumColumns, rowPins, columnPins, onPhysicalKeyStateChanged);
 
   uint16_t cnt = 0;
   while (1) {

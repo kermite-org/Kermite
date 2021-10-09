@@ -9,7 +9,7 @@ import {
   IResourceOrigin,
   IStandardBaseFirmwareType,
 } from '~/shared/defs';
-import { generateNumberSequence } from '~/shared/funcs/Utils';
+import { generateRandomIdBase62 } from '~/shared/funcs/Utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
 export function createProjectKey(origin: IResourceOrigin, projectId: string) {
@@ -49,16 +49,14 @@ export function generateNextSequentialId(
 }
 
 export function generateRandomDeviceInstanceCode(): string {
-  return generateNumberSequence(8)
-    .map((_) => ((Math.random() * 16) >> 0).toString(16))
-    .join('');
+  return generateRandomIdBase62(4);
 }
 
 export function checkDeviceInstanceCodeValid(code: string): boolean {
-  if (code === '00000000') {
+  if (code === '0000') {
     return false;
   }
-  return /^[0-9a-f]{8}$/.test(code);
+  return /^[0-9a-zA-Z]{4}$/.test(code);
 }
 
 const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
