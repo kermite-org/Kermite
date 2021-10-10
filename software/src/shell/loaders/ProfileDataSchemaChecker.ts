@@ -47,12 +47,13 @@ export const profileDataSchemaChecker = vObject({
   settings: vSchemaOneOf([
     vObject({
       assignType: vValueEquals('single'),
-      useShiftCancel: vBoolean(),
+      shiftCancelMode: vValueOneOf(['none', 'shiftLayer', 'all']),
     }),
     vObject({
       assignType: vValueEquals('dual'),
-      useShiftCancel: vBoolean(),
+      shiftCancelMode: vValueOneOf(['none', 'shiftLayer', 'all']),
       primaryDefaultTrigger: vValueOneOf(['down', 'tap']),
+      secondaryDefaultTrigger: vValueOneOf(['down', 'hold']),
       useInterruptHold: vBoolean(),
       tapHoldThresholdMs: vNumber(),
     }),

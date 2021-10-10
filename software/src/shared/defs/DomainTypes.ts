@@ -29,7 +29,9 @@ export type IStandardBaseFirmwareType =
   | 'AvrUnified'
   | 'AvrSplit'
   | 'RpUnified'
-  | 'RpSplit';
+  | 'RpSplit'
+  | 'AvrOddSplit'
+  | 'RpOddSplit';
 
 export type IKermiteStandardKeyboardSpec = {
   baseFirmwareType: IStandardBaseFirmwareType;
@@ -40,13 +42,18 @@ export type IKermiteStandardKeyboardSpec = {
   useMatrixKeyScanner?: boolean;
   matrixRowPins?: string[];
   matrixColumnPins?: string[];
+  matrixRowPinsR?: string[];
+  matrixColumnPinsR?: string[];
   useDirectWiredKeyScanner?: boolean;
   directWiredPins?: string[];
+  directWiredPinsR?: string[];
   useEncoder?: boolean;
   encoderPins?: string[];
+  encoderPinsR?: string[];
   useLighting?: boolean;
   lightingPin?: string;
   lightingNumLeds?: number;
+  lightingNumLedsR?: number;
   useLcd?: boolean;
   singleWireSignalPin?: string;
 };
@@ -85,8 +92,8 @@ export interface IProjectLayoutEntry {
   data: IPersistKeyboardDesign;
 }
 
-export interface IProjectPresetEntry {
-  presetName: string;
+export interface IProjectProfileEntry {
+  profileName: string;
   data: IPersistProfileData;
 }
 export interface IProjectPackageFileContent {
@@ -95,7 +102,7 @@ export interface IProjectPackageFileContent {
   keyboardName: string;
   firmwares: IProjectFirmwareEntry[];
   layouts: IProjectLayoutEntry[];
-  presets: IProjectPresetEntry[];
+  profiles: IProjectProfileEntry[];
 }
 
 export type IProjectPackageInfo = {
@@ -104,14 +111,21 @@ export type IProjectPackageInfo = {
   packageName: string;
 } & IProjectPackageFileContent;
 
+export type IFirmwareOrigin = 'localBuild' | 'online';
+
+export type IFirmwareOriginEx = 'localBuild' | 'online' | 'unspecified';
+
 export type ICustomFirmwareInfo = {
+  firmwareOrigin: IFirmwareOrigin;
   firmwareId: string;
   firmwareProjectPath: string;
   variationName: string;
-  targetDevice: string;
+  targetDevice: IFirmwareTargetDevice;
+  binaryFileName: string;
   buildRevision: number;
   buildTimestamp: string;
 };
+
 export interface IProjectCustomDefinition {
   customParameterSpecs?: ICustomParameterSpec[];
 }

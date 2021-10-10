@@ -1,5 +1,6 @@
 #include "km0/device/system.h"
 #include "pico_sdk/src/common/include/pico/stdlib.h"
+#include "pico_sdk/src/rp2_common/include/pico/bootrom.h"
 
 void delayMs(uint16_t ms) {
   sleep_ms(ms);
@@ -24,6 +25,8 @@ void system_disableInterrupts() {
 void system_initializeUserProgram() {
 }
 
-void system_jumpToDfuBootloader() {}
+void system_jumpToDfuBootloader() {
+  reset_usb_boot(0, 0);
+}
 
 void system_setupFallbackStdout() {}

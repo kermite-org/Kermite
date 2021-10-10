@@ -1,4 +1,4 @@
-#include "firmwareConfigurationData.h"
+#include "firmwareMetadata.h"
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/types.h"
@@ -11,10 +11,10 @@
 #error KERMITE_KEYBOARD_NAME is not defined
 #endif
 
-FirmwareConfigurationData firmwareConfigurationData = {
-  .firmwareId = KERMITE_FIRMWARE_ID,
+CommonFirmwareMetadata commonFirmwareMetadata = {
+  .dataHeader = { '$', 'K', 'M', 'M', 'D' },
   .projectId = "000000",
   .variationId = "00",
-  .deviceInstanceCode = "00000000",
+  .deviceInstanceCode = "0000",
   .keyboardName = KERMITE_KEYBOARD_NAME,
 };

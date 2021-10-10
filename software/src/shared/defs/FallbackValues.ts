@@ -5,7 +5,7 @@ import {
   IKeyboardDeviceInfo,
   IProjectLayoutEntry,
   IProjectPackageInfo,
-  IProjectPresetEntry,
+  IProjectProfileEntry,
   IStandardFirmwareEntry,
 } from '~/shared/defs/DomainTypes';
 import { createFallbackPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
@@ -34,8 +34,8 @@ export const fallbackProjectLayoutEntry: IProjectLayoutEntry = {
   data: createFallbackPersistKeyboardDesign(),
 };
 
-export const fallbackProjectPresetEntry: IProjectPresetEntry = {
-  presetName: '',
+export const fallbackProjectProfileEntry: IProjectProfileEntry = {
+  profileName: '',
   data: fallbackPersistProfileData,
 };
 
@@ -48,7 +48,7 @@ export const fallbackProjectPackageInfo: IProjectPackageInfo = {
   keyboardName: '',
   firmwares: [],
   layouts: [],
-  presets: [],
+  profiles: [],
 };
 
 export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {

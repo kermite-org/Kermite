@@ -13,7 +13,7 @@ MODULE_SRCS += km0/device/atmega/boardI2c.c
 #keyboard core modules
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
-MODULE_SRCS += km0/kernel/firmwareConfigurationData.c
+MODULE_SRCS += km0/kernel/firmwareMetadata.c
 MODULE_SRCS += km0/kernel/keyMappingDataValidator.c
 MODULE_SRCS += km0/kernel/configuratorServant.c
 MODULE_SRCS += km0/kernel/keyCodeTranslator.c

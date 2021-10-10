@@ -1,10 +1,34 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
+import { DualModeSettingsPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/DualModeSettingsPart';
 import { KeyboardProjectSelectionPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/ShiftCancelOptionPart';
-import { uiReaders, uiState } from '~/ui/store';
+import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
+import { reflectChecked } from '~/ui/utils';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
+
+const AdvancedOptionSwitchPart: FC = () => (
+  <div css={cssAdvancedOptionSwitchPart}>
+    <input
+      type="checkbox"
+      checked={uiState.settings.showProfileAdvancedOptions}
+      onChange={reflectChecked((checked) =>
+        commitUiSettings({ showProfileAdvancedOptions: checked }),
+      )}
+    />
+    <label>show advanced options</label>
+  </div>
+);
+
+const cssAdvancedOptionSwitchPart = css`
+  display: flex;
+  align-items: center;
+  > input {
+    margin-right: 5px;
+    cursor: pointer;
+  }
+`;
 
 export const ProfileConfigurationModalLayer: FC = () => {
   const visible = uiState.profileConfigModalVisible;
@@ -16,8 +40,12 @@ export const ProfileConfigurationModalLayer: FC = () => {
     return null;
   }
 
+  const showAdvancedOptions = uiState.settings.showProfileAdvancedOptions;
+
   const showProjectSelectionUi =
-    uiReaders.isDeveloperMode && !uiReaders.globalSettings.globalProjectSpec;
+    showAdvancedOptions &&
+    uiReaders.isDeveloperMode &&
+    !uiReaders.globalSettings.globalProjectSpec;
 
   return (
     <ClosableOverlay close={closeModal}>
@@ -28,9 +56,9 @@ export const ProfileConfigurationModalLayer: FC = () => {
         <div css={cssDialogContent}>
           <KeyboardProjectSelectionPart qxIf={showProjectSelectionUi} />
           <AssignTypeSelectionPart />
-          {/* Dualモードの挙動オプションUI, ロジックでのオプション変更への対応が未実装のため非表示 */}
-          {/* <DualModeSettingsPart /> */}
-          <ShiftCancelOptionPart />
+          <DualModeSettingsPart />
+          <ShiftCancelOptionPart qxIf={showAdvancedOptions} />
+          <AdvancedOptionSwitchPart />
         </div>
       </CommonDialogFrame>
     </ClosableOverlay>

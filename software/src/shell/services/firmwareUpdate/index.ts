@@ -1,6 +1,7 @@
 import {
   IBootloaderDeviceDetectionStatus,
   IBootloaderType,
+  IFirmwareOriginEx,
   IntervalTimerWrapper,
   IResourceOrigin,
 } from '~/shared';
@@ -92,11 +93,13 @@ export class FirmwareUpdateService {
     origin: IResourceOrigin,
     projectId: string,
     firmwareName: string,
+    firmwareOrigin: IFirmwareOriginEx,
   ): Promise<'ok' | string> {
     const binarySpec = await firmwareFileLoader_loadFirmwareFile(
       origin,
       projectId,
       firmwareName,
+      firmwareOrigin,
     );
 
     if (!binarySpec) {

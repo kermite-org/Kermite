@@ -1,6 +1,8 @@
 import { css, FC, jsx } from 'qx';
+import { IPrimaryDefaultTrigger, ISecondaryDefaultTrigger } from '~/shared';
 import { texts } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
+import { uiState } from '~/ui/store';
 import { reflectChecked, reflectValue } from '~/ui/utils';
 
 export const DualModeSettingsPart: FC = () => {
@@ -20,6 +22,8 @@ export const DualModeSettingsPart: FC = () => {
     }
   };
 
+  const showAdvancedOptions = uiState.settings.showProfileAdvancedOptions;
+
   return (
     <div css={style}>
       <div data-hint={texts.hint_assigner_profileConfigModal_dualMode_header}>
@@ -28,7 +32,7 @@ export const DualModeSettingsPart: FC = () => {
 
       <table class="settingsTable">
         <tbody>
-          <tr>
+          <tr qxIf={showAdvancedOptions}>
             <td
               data-hint={
                 texts.hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger
@@ -41,11 +45,8 @@ export const DualModeSettingsPart: FC = () => {
             <td>
               <select
                 value={settings.primaryDefaultTrigger}
-                onChange={reflectValue((value) =>
-                  writeSettingsValueDual(
-                    'primaryDefaultTrigger',
-                    value as 'down' | 'tap',
-                  ),
+                onChange={reflectValue((value: IPrimaryDefaultTrigger) =>
+                  writeSettingsValueDual('primaryDefaultTrigger', value),
                 )}
               >
                 <option value="down">down</option>
@@ -53,6 +54,26 @@ export const DualModeSettingsPart: FC = () => {
               </select>
             </td>
           </tr>
+
+          <tr qxIf={showAdvancedOptions}>
+            <td>
+              {
+                texts.label_assigner_profileConfigModal_dualMode_secondaryDefaultTrigger
+              }
+            </td>
+            <td>
+              <select
+                value={settings.secondaryDefaultTrigger}
+                onChange={reflectValue((value: ISecondaryDefaultTrigger) =>
+                  writeSettingsValueDual('secondaryDefaultTrigger', value),
+                )}
+              >
+                <option value="down">down</option>
+                <option value="hold">hold</option>
+              </select>
+            </td>
+          </tr>
+
           <tr>
             <td
               data-hint={

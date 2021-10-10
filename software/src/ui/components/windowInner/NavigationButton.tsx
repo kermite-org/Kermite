@@ -1,5 +1,4 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { Icon } from '~/ui/components/atoms';
 
@@ -17,7 +16,12 @@ type Props = {
 export const NavigationButton: FC<Props> = ({
   vm: { iconSpec, pageName, isCurrent, onClick, hint },
 }) => (
-  <div onClick={onClick} css={style} data-current={isCurrent} data-hint={hint}>
+  <div
+    onClick={onClick}
+    css={style}
+    className={isCurrent && '--active'}
+    data-hint={hint}
+  >
     <Icon spec={iconSpec} />
     <span>{pageName}</span>
   </div>
@@ -30,24 +34,45 @@ const style = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: #fff8;
   cursor: pointer;
+  position: relative;
+
+  &:before {
+    display: block;
+    position: absolute;
+    content: '';
+    width: 3px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    background: #fc0;
+    height: 0;
+    transition: all 0.15s;
+  }
 
   > i {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   > span {
-    font-size: 10px;
+    margin-top: 2px;
+    font-size: 9px;
   }
 
-  &[data-current] {
-    color: #fff;
-    background: #fff3;
-  }
   &:hover {
-    color: #fff;
+    color: #fffc;
   }
 
-  transition: ${uiTheme.commonTransitionSpec};
+  &.--active {
+    color: #fff;
+    background: #fff2;
+
+    &:before {
+      height: 100%;
+    }
+  }
+
+  transition: all 0.3s;
 `;

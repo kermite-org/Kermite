@@ -43,7 +43,7 @@ const createProfile = async () => {
 const inputNewProfileName = async (
   modalTitle: string,
   projectId: string,
-  defaultText: string,
+  currentName: string,
 ): Promise<string | undefined> => {
   const existingProfileNames = profilesReader.allProfileEntries
     .filter((it) => it.projectId === projectId)
@@ -52,7 +52,7 @@ const inputNewProfileName = async (
     modalTitle,
     modalMessage: texts.label_assigner_profileNameEditModal_newProfileName,
     resourceTypeNameText: 'profile name',
-    defaultText,
+    currentName,
     existingResourceNames: existingProfileNames,
   });
 };

@@ -35,7 +35,7 @@ const helpers = {
     return await resourceManagementUtils.inputSavingResourceName({
       modalTitle: 'create new project',
       modalMessage: 'keyboard name',
-      defaultText: originalName,
+      currentName: originalName,
       resourceTypeNameText: 'project package',
       existingResourceNames: allProjectNames,
     });

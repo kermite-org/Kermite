@@ -1,6 +1,7 @@
 import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IBootloaderDeviceDetectionStatus,
+  IFirmwareOriginEx,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -32,6 +33,7 @@ export interface IAppIpcContract {
       origin: IResourceOrigin,
       projectId: string,
       firmwareName: string,
+      firmwareOrigin: IFirmwareOriginEx,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;

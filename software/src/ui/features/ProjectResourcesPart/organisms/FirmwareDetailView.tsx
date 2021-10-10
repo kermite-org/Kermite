@@ -45,6 +45,9 @@ const CustomFirmwareDetailView: FC<{
   const firmwareInfo = uiReaders.allCustomFirmwareInfos.find(
     (it) => it.firmwareId === customFirmwareId,
   )!;
+  if (!firmwareInfo) {
+    return null;
+  }
   return (
     <div>
       <div>firmware type: custom</div>

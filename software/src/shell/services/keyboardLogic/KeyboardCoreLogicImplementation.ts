@@ -56,7 +56,6 @@ function readStorageWordBE(addr: u16): u16 {
 
 // --------------------------------------------------------------------------------
 // execution options
-
 const logicOptions = new (class {
   systemLayout: u8 = 0;
   wiringMode: u8 = 0;
@@ -282,21 +281,35 @@ const assignMemoryReaderState = new (class {
   layerAttributeWords: u16[] = Array(NumLayersMax).fill(0);
 })();
 
+const logicConfig = new (class {
+  shiftCancelMode: u8 = 0;
+  tapHoldThresholdMs: u16 = 0;
+  useInterruptHold: u8 = 0;
+})();
+
 function initAssignMemoryReader() {
-  const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
-  const layerListDataLocation = dataStorage.getChunk_layerList().address;
-  const keyMappingDataLocation = dataStorage.getChunk_keyAssigns().address;
-  const keyMappingDataSize = dataStorage.getChunk_keyAssigns().size;
   const rs = assignMemoryReaderState;
+  const profileHeaderLocation = dataStorage.getChunk_profileHeader().address;
   const numLayers = readStorageByte(profileHeaderLocation + 4);
   rs.numLayers = numLayers;
+
+  const keyMappingDataLocation = dataStorage.getChunk_keyAssigns().address;
+  const keyMappingDataSize = dataStorage.getChunk_keyAssigns().size;
   rs.assignsStartAddress = keyMappingDataLocation;
   rs.assignsEndAddress = keyMappingDataLocation + keyMappingDataSize;
   // console.log('nl:%d bl:%d\n', numLayers, keyMappingDataSize);
+
+  const layerListDataLocation = dataStorage.getChunk_layerList().address;
   for (let i = 0; i < 16; i++) {
     rs.layerAttributeWords[i] =
       i < numLayers ? readStorageWordBE(layerListDataLocation + i * 2) : 0;
   }
+
+  const settingsLocation = dataStorage.getChunk_profileSettings().address;
+  logicConfig.shiftCancelMode = readStorageByte(settingsLocation + 0);
+  logicConfig.tapHoldThresholdMs = readStorageWordBE(settingsLocation + 1);
+  logicConfig.useInterruptHold = readStorageByte(settingsLocation + 3);
+
   keyActionRemapper_setupDataReader();
 }
 
@@ -638,6 +651,12 @@ const InvocationMode = {
   Oneshot: 5,
 };
 
+const ShiftCancelMode = {
+  None: 0,
+  ApplyToShiftLayer: 1,
+  ApplyToAll: 2,
+};
+
 function convertSingleModifierToFlags(opWord: u16): u16 {
   const wordBase = opWord & 0xf000;
   let modifiers = (opWord >> 8) & 0x0f;
@@ -676,8 +695,17 @@ function convertKeyInputOperationWordToOutputKeyStrokeAction(
       logicalKey,
       isSecondaryLayout,
     );
-    const isInShiftCancellableLayer = ((opWord >> 12) & 1) > 0;
-    action.shiftCancel = isInShiftCancellableLayer && hidKey & 0x200 ? 1 : 0;
+    if (hidKey & 0x200) {
+      const { shiftCancelMode } = logicConfig;
+      if (shiftCancelMode === ShiftCancelMode.ApplyToShiftLayer) {
+        const isBelongToShiftLayer = ((opWord >> 12) & 1) > 0;
+        if (isBelongToShiftLayer) {
+          action.shiftCancel = 1;
+        }
+      } else if (shiftCancelMode === ShiftCancelMode.ApplyToAll) {
+        action.shiftCancel = 1;
+      }
+    }
     const shiftOn = (hidKey & 0x100) > 0;
     if (shiftOn) {
       action.modFlags |= ModFlag.Shift;
@@ -801,8 +829,6 @@ function assignBinder_handleKeyOff(slot: KeySlot) {
 
 // --------------------------------------------------------------------------------
 // resolver common
-
-const TH = 200;
 
 const InputEdge = {
   None: 0,
@@ -993,9 +1019,10 @@ function keySlot_pushStepB(slot: KeySlot, step: 'D' | 'U' | '_') {
 
 function keySlot_dualResolverB(slot: KeySlot): boolean {
   const { inputEdge, hold, steps, tick, interrupted } = slot;
+  const { tapHoldThresholdMs } = logicConfig;
 
   if (inputEdge === InputEdge.Down) {
-    if (steps === 'DU' && tick < TH) {
+    if (steps === 'DU' && tick < tapHoldThresholdMs) {
       // tap-rehold
       keySlot_pushStepB(slot, 'D');
     } else {
@@ -1005,24 +1032,24 @@ function keySlot_dualResolverB(slot: KeySlot): boolean {
     }
   }
 
-  if (steps === 'D' && hold && tick >= TH) {
+  if (steps === 'D' && hold && tick >= tapHoldThresholdMs) {
     // hold
     keySlot_pushStepB(slot, '_');
   }
 
-  if (steps === 'D' && hold && tick < TH && interrupted) {
+  if (steps === 'D' && hold && tick < tapHoldThresholdMs && interrupted) {
     // interrupt hold
     keySlot_pushStepB(slot, '_');
   }
 
-  if (steps === 'DU' && !hold && tick >= TH) {
-    // slient after tap
+  if (steps === 'DU' && !hold && tick >= tapHoldThresholdMs) {
+    // silent after tap
     keySlot_pushStepB(slot, '_');
     return true;
   }
 
   if (inputEdge === InputEdge.Up) {
-    if (steps === 'D' && tick < TH) {
+    if (steps === 'D' && tick < tapHoldThresholdMs) {
       // tap
       keySlot_pushStepB(slot, 'U');
     }
@@ -1056,7 +1083,7 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
     keySlot_debugShowSlotTrigger(slot, TriggerC);
   }
 
-  const { steps, keyIndex } = slot;
+  const { steps } = slot;
 
   if (resolverConfig.emitOutputStroke) {
     if (steps === TriggerC.Down) {
@@ -1087,9 +1114,10 @@ function keySlot_pushStepC(slot: KeySlot, step: 'D' | 'U' | '_') {
 }
 function keySlot_tripleResolverC(slot: KeySlot): boolean {
   const { inputEdge, steps, tick, hold, interrupted } = slot;
+  const { tapHoldThresholdMs } = logicConfig;
 
   if (inputEdge === InputEdge.Down) {
-    if (steps === 'DU' && tick < TH) {
+    if (steps === 'DU' && tick < tapHoldThresholdMs) {
       // down2
       keySlot_pushStepC(slot, 'D');
     } else {
@@ -1099,33 +1127,33 @@ function keySlot_tripleResolverC(slot: KeySlot): boolean {
     }
   }
 
-  if (steps === 'D' && hold && tick >= TH) {
+  if (steps === 'D' && hold && tick >= tapHoldThresholdMs) {
     // hold
     keySlot_pushStepC(slot, '_');
   }
 
-  if (steps === 'D' && hold && tick < TH && interrupted) {
+  if (steps === 'D' && hold && tick < tapHoldThresholdMs && interrupted) {
     // interrupt hold
     keySlot_pushStepC(slot, '_');
   }
 
-  if (steps === 'DUD' && hold && tick >= TH) {
+  if (steps === 'DUD' && hold && tick >= tapHoldThresholdMs) {
     // hold2
     keySlot_pushStepC(slot, '_');
   }
 
-  if (steps === 'DU' && !hold && tick >= TH) {
+  if (steps === 'DU' && !hold && tick >= tapHoldThresholdMs) {
     // silent after single tap
     keySlot_pushStepC(slot, '_');
     return true;
   }
 
   if (inputEdge === InputEdge.Up) {
-    if (steps === 'DUD' && tick < TH) {
-      // dtap
+    if (steps === 'DUD' && tick < tapHoldThresholdMs) {
+      // double-tap
       keySlot_pushStepC(slot, 'U');
       return true;
-    } else if (steps === 'D' && tick < TH) {
+    } else if (steps === 'D' && tick < tapHoldThresholdMs) {
       // tap
       keySlot_pushStepC(slot, 'U');
     } else {
@@ -1162,8 +1190,11 @@ function keySlot_tick(slot: KeySlot, ms: number) {
     slot.inputEdge = InputEdge.Up;
   }
 
-  const interrupt_kidx = resolverState.interruptKeyIndex;
-  slot.interrupted = interrupt_kidx !== -1 && interrupt_kidx !== slot.keyIndex;
+  const interrupt_key_index = resolverState.interruptKeyIndex;
+  if (logicConfig.useInterruptHold) {
+    slot.interrupted =
+      interrupt_key_index !== -1 && interrupt_key_index !== slot.keyIndex;
+  }
 
   if (!slot.resolverProc && slot.inputEdge === InputEdge.Down) {
     const assignSet = findAssignInLayerStack(

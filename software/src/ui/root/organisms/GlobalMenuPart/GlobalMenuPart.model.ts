@@ -4,7 +4,6 @@ import {
   useThemeSelectionModel,
   useLanguageSelectionModel,
 } from '~/ui/commonModels';
-import { commitUiSettings, uiState } from '~/ui/store';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -22,20 +21,9 @@ export interface IGlobalMenuModel {
 }
 
 function createMenuItems(): IGlobalMenuItem[] {
-  const { settings } = uiState;
   const themeSelectionModel = useThemeSelectionModel();
   const languageSelectionModel = useLanguageSelectionModel();
-
   const menuItems: IGlobalMenuItem[] = [
-    {
-      key: 'miShowInputArea',
-      text: texts.label_globalMenu_showTestInputArea,
-      handler() {
-        commitUiSettings({ showTestInputArea: !settings.showTestInputArea });
-      },
-      active: settings.showTestInputArea,
-      hint: texts.hint_globalMenu_showTestInputArea,
-    },
     {
       key: 'miThemeLight',
       text: texts.label_globalMenu_theme_light,

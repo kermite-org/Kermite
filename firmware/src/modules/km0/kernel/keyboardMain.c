@@ -3,7 +3,7 @@
 #include "configManager.h"
 #include "configuratorServant.h"
 #include "dataStorage.h"
-#include "firmwareConfigurationData.h"
+#include "firmwareMetadata.h"
 #include "keyMappingDataValidator.h"
 #include "keyboardCoreLogic.h"
 #include "keyboardMainInternal.h"
@@ -118,8 +118,8 @@ static char *writeTextBytes(char *buf, char *text, int len) {
 }
 
 //usb serial number
-//format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<VariationId(2)>:<DeviceInstanceCode(8)>
-//example: A152FD2C:M01:7qHDCp:K3e89X:01:d46d8ab5
+//format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<VariationId(2)>:<DeviceInstanceCode(4)>
+//example: A152FD2C:M01:7qHDCp:K3e89X:01:d46d
 //length: 38bytes (39bytes with null terminator)
 static void setupUsbDeviceAttributes() {
   char *buf = usbIoCore_getSerialNumberTextBufferPointer();
@@ -127,16 +127,16 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, ":", 1);
   buf = writeTextBytes(buf, Kermite_Project_McuCode, 3);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.firmwareId, 6);
+  buf = writeTextBytes(buf, KERMITE_FIRMWARE_ID, 6);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.projectId, 6);
+  buf = writeTextBytes(buf, commonFirmwareMetadata.projectId, 6);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.variationId, 2);
+  buf = writeTextBytes(buf, commonFirmwareMetadata.variationId, 2);
   buf = writeTextBytes(buf, ":", 1);
-  buf = writeTextBytes(buf, firmwareConfigurationData.deviceInstanceCode, 8);
+  buf = writeTextBytes(buf, commonFirmwareMetadata.deviceInstanceCode, 4);
   buf = writeTextBytes(buf, "\0", 1);
 
-  usbIoCore_setProductName(firmwareConfigurationData.keyboardName);
+  usbIoCore_setProductName(commonFirmwareMetadata.keyboardName);
 }
 
 static void resetKeyboardCoreLogic() {

@@ -9,7 +9,7 @@ import {
   IResourceOrigin,
   IStandardBaseFirmwareType,
 } from '~/shared/defs';
-import { generateNumberSequence } from '~/shared/funcs/Utils';
+import { generateRandomIdBase62 } from '~/shared/funcs/Utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
 export function createProjectKey(origin: IResourceOrigin, projectId: string) {
@@ -49,16 +49,14 @@ export function generateNextSequentialId(
 }
 
 export function generateRandomDeviceInstanceCode(): string {
-  return generateNumberSequence(8)
-    .map((_) => ((Math.random() * 16) >> 0).toString(16))
-    .join('');
+  return generateRandomIdBase62(4);
 }
 
 export function checkDeviceInstanceCodeValid(code: string): boolean {
-  if (code === '00000000') {
+  if (code === '0000') {
     return false;
   }
-  return /^[0-9a-f]{8}$/.test(code);
+  return /^[0-9a-zA-Z]{4}$/.test(code);
 }
 
 const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
@@ -91,7 +89,11 @@ export function checkDeviceBootloaderMatch(
 export function getFirmwareTargetDeviceFromBaseFirmwareType(
   baseFirmwareType: IStandardBaseFirmwareType,
 ): IFirmwareTargetDevice {
-  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
+  if (
+    baseFirmwareType === 'AvrUnified' ||
+    baseFirmwareType === 'AvrSplit' ||
+    baseFirmwareType === 'AvrOddSplit'
+  ) {
     return 'atmega32u4';
   } else {
     return 'rp2040';
@@ -114,23 +116,14 @@ export function parseProfileEntry(profileKey: string): IProfileEntry {
 
 export function getNextFirmwareId(existingIds: string[]): string {
   const allNumbers = existingIds.map((id) => parseInt(id));
+  if (!allNumbers.every((it) => isFinite(it))) {
+    throw new Error('invalid firmware variation ids detected');
+  }
   const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
   if (newNumber >= 100) {
     throw new Error('firmware id reaches to 100');
   }
   return `00${newNumber.toString()}`.slice(-2);
-}
-
-export function getNextProjectResourceId(
-  prefix: 'pr' | 'lt' | 'fw',
-  existingIds: string[],
-): string {
-  const allNumbers = existingIds.map((id) => parseInt(id.replace(prefix, '')));
-  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 1;
-  if (newNumber >= 100) {
-    throw new Error('resource id reaches to 100');
-  }
-  return prefix + ('00' + newNumber.toString()).slice(-2);
 }
 
 export function encodeProjectResourceItemKey(
@@ -151,23 +144,33 @@ export function decodeProjectResourceItemKey(key: string): {
 export function validateResourceName(
   resourceName: string,
   resourceTypeNameText: string,
-  existingResourceNames?: string[],
-  allowDifferentCasingVariants?: boolean,
 ): string | undefined {
-  // eslint-disable-next-line no-irregular-whitespace
-  // eslint-disable-next-line no-misleading-character-class
-  if (resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/)) {
+  if (
+    // eslint-disable-next-line no-misleading-character-class
+    resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/) ||
+    resourceName.match(/^\s+$/)
+  ) {
     return `${resourceName} is not a valid ${resourceTypeNameText}.`;
   }
   if (resourceName.length > 32) {
     return `${resourceTypeNameText} should be no more than 32 characters.`;
   }
-  if (existingResourceNames) {
-    const existingName = allowDifferentCasingVariants
-      ? existingResourceNames.find((it) => it === resourceName)
-      : existingResourceNames.find(
-          (it) => it.toLowerCase() === resourceName.toLowerCase(),
-        );
+  return undefined;
+}
+
+export function validateResourceNameWithDuplicationCheck(
+  resourceName: string,
+  resourceTypeNameText: string,
+  checkedResourceNames: string[],
+): string | undefined {
+  const error = validateResourceName(resourceName, resourceTypeNameText);
+  if (error) {
+    return error;
+  }
+  if (checkedResourceNames) {
+    const existingName = checkedResourceNames.find(
+      (it) => it.toLowerCase() === resourceName.toLowerCase(),
+    );
     if (existingName) {
       return `${existingName} already exists.`;
     }

@@ -4,7 +4,7 @@ import { texts } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { reflectValue } from '~/ui/utils';
 
-const AssignTypeSelectionPartViewModel = () => {
+const useAssignTypeSelectionPartViewModel = () => {
   const assignTypeOptions: IProfileAssignType[] = ['single', 'dual'];
   const currentAssignType = assignerModel.profileData.settings.assignType;
   const setAssignType = (value: string) => {
@@ -15,7 +15,7 @@ const AssignTypeSelectionPartViewModel = () => {
 
 export const AssignTypeSelectionPart: FC = () => {
   const { assignTypeOptions, currentAssignType, setAssignType } =
-    AssignTypeSelectionPartViewModel();
+    useAssignTypeSelectionPartViewModel();
 
   return (
     <div css={style}>

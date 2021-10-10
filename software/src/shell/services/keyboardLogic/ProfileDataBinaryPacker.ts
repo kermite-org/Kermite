@@ -14,8 +14,11 @@ import {
   routerConstants,
   systemActionToCodeMap,
   encodeModifierVirtualKeys,
+  IProfileSettingsM,
 } from '~/shared';
 import {
+  blo,
+  bhi,
   writeBytes,
   writeUint16LE,
   writeUint8,
@@ -43,8 +46,8 @@ interface IRawLayerInfo {
 }
 
 type IProfileContext = {
+  settings: IProfileSettingsM;
   layersDict: { [layerId: string]: IRawLayerInfo };
-  useShiftCancel: boolean;
 };
 
 function makeLayerInvocationModeBits(mode: LayerInvocationMode): number {
@@ -74,7 +77,7 @@ keyInput (logicalKey)
 0bTTxS_MMMM 0bKKKK_KKKK
 0b01~
 TT: type, 0b01 for keyInput
-S: isShiftLayer
+S: isBelongsToShiftLayer
 MMMM: modifiers, [os, alt, shift, ctrl] for msb-lsb
 KKKK_KKKK: logical keycode
 
@@ -131,11 +134,9 @@ function encodeAssignOperation(
     }
     const modifiers = op.attachedModifiers;
     const logicalKey = getLogicalKeyForVirtualKey(vk);
-    // ShiftCancelオプションが有効でshiftレイヤの場合のみ、shiftCancelを適用可能にする
-    const fIsShiftCancellable =
-      context.useShiftCancel && layer.isShiftLayer ? 1 : 0;
+    const fIsBelongToShiftLayer = layer.isShiftLayer ? 1 : 0;
     return [
-      (fAssignType << 6) | (fIsShiftCancellable << 4) | modifiers,
+      (fAssignType << 6) | (fIsBelongToShiftLayer << 4) | modifiers,
       logicalKey,
     ];
   }
@@ -167,6 +168,10 @@ function encodeAssignOperation(
   return [0];
 }
 
+function encodeNoAssignOperation(): number[] {
+  return [0];
+}
+
 function encodeOperationWordLengths(operationWordLengths: number[]) {
   let value = 0;
   const szPri = operationWordLengths[0];
@@ -177,6 +182,8 @@ function encodeOperationWordLengths(operationWordLengths: number[]) {
   value |= szTer;
   return value;
 }
+
+type IAssignType = 'single' | 'dual' | 'triple' | 'block' | 'transparent';
 
 /*
 rawAssignEntryHeader
@@ -195,7 +202,7 @@ BBB: secondary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4b
 CCC: primary operation data length, (0: 0byte, 1:1byte, 2:2byte, 3:3byte, 4:4byte)
 */
 function encodeRawAssignEntryHeaderBytes(
-  type: 'single' | 'dual' | 'triple' | 'block' | 'transparent',
+  type: IAssignType,
   layerIndex: number,
   operationWordLengths?: number[],
 ): number[] {
@@ -211,6 +218,21 @@ function encodeRawAssignEntryHeaderBytes(
   return hasSecondByte && operationWordLengths
     ? [firstByte, encodeOperationWordLengths(operationWordLengths)]
     : [firstByte];
+}
+
+function encodeRawAssignOperations(
+  assignType: IAssignType,
+  layerIndex: number,
+  operationWords: number[][],
+): number[] {
+  return [
+    ...encodeRawAssignEntryHeaderBytes(
+      assignType,
+      layerIndex,
+      operationWords.map((it) => it.length),
+    ),
+    ...flattenArray(operationWords),
+  ];
 }
 
 /*
@@ -231,64 +253,53 @@ function encodeRawAssignEntry(
 ): number[] {
   const { entry } = ra;
   const layer = context.layersDict[ra.layerId];
+  const { settings } = context;
   if (entry.type === 'block') {
     return encodeRawAssignEntryHeaderBytes('block', ra.layerIndex);
   } else if (entry.type === 'transparent') {
     return encodeRawAssignEntryHeaderBytes('transparent', ra.layerIndex);
   } else if (entry.type === 'single') {
     // single
-    const primaryOpWord = encodeAssignOperation(entry.op, layer, context);
-    return [
-      ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-        primaryOpWord.length,
-      ]),
-      ...primaryOpWord,
-    ];
+    return encodeRawAssignOperations('single', ra.layerIndex, [
+      encodeAssignOperation(entry.op, layer, context),
+    ]);
   } else {
     // dual
     if (entry.tertiaryOp) {
-      const operationWords = [
+      return encodeRawAssignOperations('triple', ra.layerIndex, [
         encodeAssignOperation(entry.primaryOp, layer, context),
         encodeAssignOperation(entry.secondaryOp, layer, context),
         encodeAssignOperation(entry.tertiaryOp, layer, context),
-      ];
-      return [
-        ...encodeRawAssignEntryHeaderBytes(
-          'triple',
-          ra.layerIndex,
-          operationWords.map((it) => it.length),
-        ),
-        ...flattenArray(operationWords),
-      ];
+      ]);
     } else if (entry.primaryOp && entry.secondaryOp) {
-      const operationWords = [
+      return encodeRawAssignOperations('dual', ra.layerIndex, [
         encodeAssignOperation(entry.primaryOp, layer, context),
         encodeAssignOperation(entry.secondaryOp, layer, context),
-      ];
-      return [
-        ...encodeRawAssignEntryHeaderBytes(
-          'dual',
-          ra.layerIndex,
-          operationWords.map((it) => it.length),
-        ),
-        ...flattenArray(operationWords),
-      ];
+      ]);
     } else if (entry.secondaryOp) {
-      const opWord = encodeAssignOperation(entry.secondaryOp, layer, context);
-      return [
-        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-          opWord.length,
-        ]),
-        ...opWord,
-      ];
+      // secondary only
+      if (settings.secondaryDefaultTrigger === 'hold') {
+        return encodeRawAssignOperations('dual', ra.layerIndex, [
+          encodeNoAssignOperation(),
+          encodeAssignOperation(entry.secondaryOp, layer, context),
+        ]);
+      } else {
+        return encodeRawAssignOperations('single', ra.layerIndex, [
+          encodeAssignOperation(entry.secondaryOp, layer, context),
+        ]);
+      }
     } else {
-      const opWord = encodeAssignOperation(entry.primaryOp, layer, context);
-      return [
-        ...encodeRawAssignEntryHeaderBytes('single', ra.layerIndex, [
-          opWord.length,
-        ]),
-        ...opWord,
-      ];
+      // primary only
+      if (settings.primaryDefaultTrigger === 'tap') {
+        return encodeRawAssignOperations('dual', ra.layerIndex, [
+          encodeAssignOperation(entry.primaryOp, layer, context),
+          encodeNoAssignOperation(),
+        ]);
+      } else {
+        return encodeRawAssignOperations('single', ra.layerIndex, [
+          encodeAssignOperation(entry.primaryOp, layer, context),
+        ]);
+      }
     }
   }
 }
@@ -360,6 +371,7 @@ function makeRawAssignEntries(profile: IProfileData): IRawAssignEntry[] {
 }
 
 function createProfileContext(profile: IProfileData): IProfileContext {
+  const { settings } = profile;
   const layersDict = createDictionaryFromKeyValues(
     profile.layers.map((la, idx) => [
       la.layerId,
@@ -369,10 +381,9 @@ function createProfileContext(profile: IProfileData): IProfileContext {
       },
     ]),
   );
-  const useShiftCancel = profile.settings.useShiftCancel;
   return {
+    settings,
     layersDict,
-    useShiftCancel,
   };
 }
 
@@ -410,6 +421,27 @@ function encodeProfileHeaderData(profile: IProfileData): number[] {
   writeUint8(buffer, 3, numKeys);
   writeUint8(buffer, 4, numLayers);
   return buffer;
+}
+
+// ProfileSettingsBytes
+// [0] shiftCancelMode
+// [1, 2] tapHoldThresholdMs (16bit/BE)
+// [3] useInterruptHold
+function encodeProfileSettingsData(profile: IProfileData): number[] {
+  const settings = profile.settings as IProfileSettingsM;
+  const shiftCancelMode = {
+    none: 0,
+    shiftLayer: 1,
+    all: 2,
+  }[settings.shiftCancelMode];
+  const tapHoldThresholdMs = settings.tapHoldThresholdMs || 0;
+  const useInterruptHold = settings.useInterruptHold || false;
+  return [
+    shiftCancelMode,
+    bhi(tapHoldThresholdMs),
+    blo(tapHoldThresholdMs),
+    useInterruptHold ? 1 : 0,
+  ];
 }
 
 // LayerAttributeByte
@@ -460,6 +492,7 @@ function encodeMappingEntriesData(profile: IProfileData): number[] {
 export function makeProfileBinaryData(profile: IProfileData): number[] {
   const data = [
     ...createChunk(0xbb71, encodeProfileHeaderData(profile)),
+    ...createChunk(0xbb72, encodeProfileSettingsData(profile)),
     ...createChunk(0xbb74, encodeLayerListData(profile)),
     ...createChunk(0xbb76, encodeMappingEntriesData(profile)),
     ...createChunk(0xbb78, encodeKeyMappingData(profile)),

@@ -1,16 +1,18 @@
 import {
   createProjectKey,
   fallbackProjectPackageInfo,
-  generateRandomId,
+  generateRandomIdBase62,
   IGlobalSettings,
   IProjectPackageInfo,
   IResourceOrigin,
+  uniqueArrayItems,
 } from '~/shared';
 import {
   commitCoreState,
   coreState,
   createCoreModule,
 } from '~/shell/modules/core';
+import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
 import { projectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
 
 const projectPackageModuleHelper = {
@@ -28,10 +30,21 @@ const projectPackageModuleHelper = {
       projectKey: info.projectKey.replace('online', 'local'),
     };
   },
+  generateUniqueProjectId(): string {
+    const existingProjectIds = uniqueArrayItems(
+      coreState.allProjectPackageInfos.map((it) => it.projectId),
+    );
+    for (let i = 0; i < 100; i++) {
+      const projectId = generateRandomIdBase62(6);
+      if (!existingProjectIds.includes(projectId)) {
+        return projectId;
+      }
+    }
+    throw new Error('failed to generate unique project id');
+  },
   createLocalProject(keyboardName: string): IProjectPackageInfo {
-    // todo: 既存のオンラインプロジェクトのIDのリストと比較して、重複しないIDにする
     const origin = 'local';
-    const projectId = generateRandomId(6);
+    const projectId = projectPackageModuleHelper.generateUniqueProjectId();
     const projectKey = createProjectKey(origin, projectId);
     return {
       ...fallbackProjectPackageInfo,
@@ -58,7 +71,7 @@ export const projectPackageModule = createCoreModule({
   },
   async project_loadAllCustomFirmwareInfos() {
     const allCustomFirmwareInfos =
-      await projectPackageProvider.getAllCustomFirmwareInfos();
+      await customFirmwareInfoProvider.getAllCustomFirmwareInfos();
     commitCoreState({ allCustomFirmwareInfos });
   },
   async project_createLocalProject({ keyboardName }) {

@@ -1,3 +1,4 @@
+import { standardFirmwareIds } from '~/shared';
 import { assignerModel } from '~/ui/editors';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiReaders } from '~/ui/store';
@@ -11,7 +12,7 @@ export const profilesOperationReader = {
     const isDeviceConnected = deviceStatus.isConnected;
 
     const refProjectId = assignerModel.profileData.projectId;
-    const standardFirmwareIds = ['HCV52K', 'HCV52L'];
+
     const deviceFirmwareId = deviceStatus.isConnected
       ? deviceStatus.deviceAttrs.firmwareId
       : '';

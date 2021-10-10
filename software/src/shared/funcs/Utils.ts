@@ -343,9 +343,11 @@ export function getArrayDiff<T>(curr: T[], next: T[]): [T[], T[]] {
   return [added, removed];
 }
 
-export function generateRandomId(n: number): string {
+export function generateRandomIdBase62(n: number): string {
+  const charactersBase62 =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   return generateNumberSequence(n)
-    .map((_) => String.fromCharCode((97 + Math.random() * 26) >> 0))
+    .map((_) => charactersBase62.charAt((Math.random() * 62) >> 0))
     .join('');
 }
 
@@ -423,4 +425,9 @@ export function mergeModuleObjects<A>(...args: [A]): A {
     });
   }
   return dest;
+}
+
+export function getMatched(text: string, pattern: RegExp): string | undefined {
+  const m = text.match(pattern);
+  return m?.[1] ?? undefined;
 }

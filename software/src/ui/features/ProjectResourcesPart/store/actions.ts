@@ -1,4 +1,8 @@
-import { decodeProjectResourceItemKey } from '~/shared';
+import {
+  decodeProjectResourceItemKey,
+  IProjectPackageInfo,
+  IProjectResourceItemType,
+} from '~/shared';
 import { modalConfirm } from '~/ui/components';
 import { projectResourceReaders } from '~/ui/features/ProjectResourcesPart/store/readers';
 import { projectResourceState } from '~/ui/features/ProjectResourcesPart/store/state';
@@ -7,21 +11,38 @@ import { uiActions, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {
+  getExistingResourceNames(
+    projectInfo: IProjectPackageInfo,
+    type: IProjectResourceItemType,
+  ): string[] {
+    if (type === 'profile') {
+      return projectInfo.profiles.map((it) => it.profileName);
+    } else if (type === 'layout') {
+      return projectInfo.layouts.map((it) => it.layoutName);
+    } else if (type === 'firmware') {
+      return projectInfo.firmwares.map((it) => it.firmwareName);
+    }
+    throw new Error('invalid resource type');
+  },
   async renameProjectResourceListItem(
-    target: string,
+    target: IProjectResourceItemType,
     itemName: string,
     allItemNames: string[],
-    destinationFunction: (oldName: string, newName: string) => void,
+    destinationFunction: (
+      target: IProjectResourceItemType,
+      oldName: string,
+      newName: string,
+    ) => void,
   ) {
     const newName = await resourceManagementUtils.inputSavingResourceName({
       modalTitle: `rename ${target}`,
       modalMessage: `new ${target} name`,
       resourceTypeNameText: `${target} name`,
-      defaultText: itemName,
+      currentName: itemName,
       existingResourceNames: allItemNames,
     });
     if (newName && newName !== itemName) {
-      destinationFunction(itemName, newName);
+      destinationFunction(target, itemName, newName);
       projectResourceState.selectedItemKey =
         projectResourceState.selectedItemKey.replace(itemName, newName);
     }
@@ -92,13 +113,7 @@ export const projectResourceActions = {
       message: 'Resource item delete. Are you sure?',
     });
     if (ok) {
-      if (itemType === 'profile') {
-        projectPackagesWriter.deleteLocalProjectPreset(itemName);
-      } else if (itemType === 'layout') {
-        projectPackagesWriter.deleteLocalProjectLayout(itemName);
-      } else if (itemType === 'firmware') {
-        projectPackagesWriter.deleteLocalProjectFirmware(itemName);
-      }
+      projectPackagesWriter.deleteLocalProjectResourceItem(itemType, itemName);
       projectResourceActions.clearSelection();
     }
   },
@@ -107,61 +122,32 @@ export const projectResourceActions = {
     const { selectedItemKey } = projectResourceReaders;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'profile') {
-      const allItemNames = projectInfo.presets.map((it) => it.presetName);
-      helpers.renameProjectResourceListItem(
-        'preset',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.renameLocalProjectPreset,
-      );
-    } else if (itemType === 'layout') {
-      const allItemNames = projectInfo.layouts.map((it) => it.layoutName);
-      helpers.renameProjectResourceListItem(
-        'layout',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.renameLocalProjectLayout,
-      );
-    } else if (itemType === 'firmware') {
-      const allItemNames = projectInfo.firmwares.map((it) => it.firmwareName);
-      helpers.renameProjectResourceListItem(
-        'firmware',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.renameLocalProjectFirmware,
-      );
-    }
+    const allItemNames = helpers.getExistingResourceNames(
+      projectInfo,
+      itemType,
+    );
+    helpers.renameProjectResourceListItem(
+      itemType,
+      itemName,
+      allItemNames,
+      projectPackagesWriter.renameLocalProjectResourceItem,
+    );
   },
   copySelectedResourceItem() {
     const projectInfo = uiReaders.editTargetProject!;
     const { selectedItemKey } = projectResourceReaders;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
-    if (itemType === 'profile') {
-      const allItemNames = projectInfo.presets.map((it) => it.presetName);
-      helpers.renameProjectResourceListItem(
-        'preset',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.copyLocalProjectPreset,
-      );
-    } else if (itemType === 'layout') {
-      const allItemNames = projectInfo.layouts.map((it) => it.layoutName);
-      helpers.renameProjectResourceListItem(
-        'layout',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.copyLocalProjectLayout,
-      );
-    } else if (itemType === 'firmware') {
-      const allItemNames = projectInfo.firmwares.map((it) => it.firmwareName);
-      helpers.renameProjectResourceListItem(
-        'firmware',
-        itemName,
-        allItemNames,
-        projectPackagesWriter.copyLocalProjectFirmware,
-      );
-    }
+
+    const allItemNames = helpers.getExistingResourceNames(
+      projectInfo,
+      itemType,
+    );
+    helpers.renameProjectResourceListItem(
+      itemType,
+      itemName,
+      allItemNames,
+      projectPackagesWriter.copyLocalProjectResourceItem,
+    );
   },
 };

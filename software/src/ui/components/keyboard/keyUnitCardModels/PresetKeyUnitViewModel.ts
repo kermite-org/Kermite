@@ -3,6 +3,7 @@ import {
   IProfileData,
   IDisplayKeyEntity,
   IDisplayKeyboardDesign,
+  IProfileSettings,
 } from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
 import {
@@ -16,6 +17,7 @@ function createPresetKeyUnitViewModel(
   targetLayerId: string,
   layers: ILayer[],
   assigns: IProfileData['assigns'],
+  settings: IProfileSettings,
 ): IPresetKeyUnitViewModel {
   const keyUnitId = ke.keyId;
   const pos = {
@@ -33,12 +35,8 @@ function createPresetKeyUnitViewModel(
       )
     : getAssignForKeyUnitInInitialLayerStack(keyUnitId, layers, assigns);
 
-  const {
-    primaryText,
-    secondaryText,
-    tertiaryText,
-    isLayerFallback,
-  } = getAssignEntryTexts(assign, layers);
+  const { primaryText, secondaryText, tertiaryText, isLayerFallback } =
+    getAssignEntryTexts(assign, layers, settings);
 
   return {
     keyUnitId,
@@ -56,8 +54,14 @@ export function makePresetKeyUnitViewModels(
   keyboardDesign: IDisplayKeyboardDesign,
   targetLayerId: string,
 ): IPresetKeyUnitViewModel[] {
-  const { layers, assigns } = profileData;
+  const { layers, assigns, settings } = profileData;
   return keyboardDesign.keyEntities.map((ku) => {
-    return createPresetKeyUnitViewModel(ku, targetLayerId, layers, assigns);
+    return createPresetKeyUnitViewModel(
+      ku,
+      targetLayerId,
+      layers,
+      assigns,
+      settings,
+    );
   });
 }

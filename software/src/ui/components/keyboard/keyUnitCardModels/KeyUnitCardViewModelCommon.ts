@@ -7,6 +7,7 @@ import {
   systemActionToLabelTextMap,
   IAssignEntry,
   decodeModifierVirtualKeys,
+  IProfileSettings,
 } from '~/shared';
 
 function getAssignOperationText(
@@ -42,6 +43,7 @@ function getAssignOperationText(
 export function getAssignEntryTexts(
   assign: IAssignEntryWithLayerFallback | undefined,
   layers: ILayer[],
+  settings: IProfileSettings,
 ): {
   primaryText: string;
   secondaryText: string;
@@ -83,7 +85,13 @@ export function getAssignEntryTexts(
       let secText = getAssignOperationText(assign.secondaryOp, layers);
       const terText = getAssignOperationText(assign.tertiaryOp, layers);
 
-      if (!prmText && secText && !terText) {
+      if (
+        settings.assignType === 'dual' &&
+        settings.secondaryDefaultTrigger === 'down' &&
+        !prmText &&
+        secText &&
+        !terText
+      ) {
         prmText = secText;
         secText = '';
       }

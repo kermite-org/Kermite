@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-key */
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/firmware-update-page/models';
 import {
   PartBody,
   PartHeader,
-} from '~/ui/pages/firmware-update-page/sections/Components';
+} from '~/ui/pages/firmware-update-page/Components';
+import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/firmware-update-page/sections/ConnectedDeviceAttrsPart/ConnectedDeviceAttrsPartModel';
 
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();

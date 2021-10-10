@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "ignorePaths": [],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [],
+  "ignoreWords": [
+    "Bootloader",
+    "Leds",
+    "Pico",
+    "Rehold",
+    "Remapper",
+    "Uart",
+    "atmega",
+    "firmwares",
+    "kermite",
+    "oneshot"
+  ],
+  "import": []
+}
