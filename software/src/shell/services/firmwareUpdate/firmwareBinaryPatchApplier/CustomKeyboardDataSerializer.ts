@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboardSpec, isNumberInRange } from '~/shared';
+import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { PinNameToPinNumberMap } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/DataTables';
 import {
   convertArrayElementsToBytes,
@@ -6,6 +6,7 @@ import {
   padByteArray,
   stringToEmbedBytes,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
+import { checkStandardKeyboardSpec } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/StandardKeyboardSpecValidator';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
 
 function mapPinNameToPinNumber(pinName: string | undefined): number {
@@ -14,71 +15,6 @@ function mapPinNameToPinNumber(pinName: string | undefined): number {
     throw new Error(`invalid pinName ${pinName}`);
   }
   return pinNumber;
-}
-
-function checkKeyboardSpec(spec: IKermiteStandardKeyboardSpec): boolean {
-  const {
-    baseFirmwareType,
-    useBoardLedsProMicroAvr,
-    useBoardLedsProMicroRp,
-    useBoardLedsRpiPico,
-    useMatrixKeyScanner,
-    matrixRowPins,
-    matrixColumnPins,
-    useDirectWiredKeyScanner,
-    directWiredPins,
-    useEncoder,
-    encoderPins,
-    useLighting,
-    lightingPin,
-    lightingNumLeds,
-  } = spec;
-
-  if (baseFirmwareType === 'AvrUnified' || baseFirmwareType === 'AvrSplit') {
-    if (useBoardLedsProMicroRp || useBoardLedsRpiPico) {
-      return false;
-    }
-  } else if (
-    baseFirmwareType === 'RpUnified' ||
-    baseFirmwareType === 'RpSplit'
-  ) {
-    if (useBoardLedsProMicroAvr) {
-      return false;
-    }
-  } else {
-    return false;
-  }
-  if (
-    useMatrixKeyScanner &&
-    !(
-      matrixRowPins &&
-      matrixColumnPins &&
-      matrixRowPins.length > 0 &&
-      matrixColumnPins.length > 0
-    )
-  ) {
-    return false;
-  }
-  if (
-    useDirectWiredKeyScanner &&
-    !(directWiredPins && directWiredPins.length > 0)
-  ) {
-    return false;
-  }
-  if (useEncoder && !(encoderPins && encoderPins.length === 2)) {
-    return false;
-  }
-  if (
-    useLighting &&
-    !(
-      lightingPin &&
-      lightingNumLeds !== undefined &&
-      isNumberInRange(lightingNumLeds, 0, 256)
-    )
-  ) {
-    return false;
-  }
-  return true;
 }
 
 export function serializeCommonKeyboardMetadata(
@@ -96,7 +32,7 @@ export function serializeCommonKeyboardMetadata(
   return [
     ...stringToEmbedBytes(meta.projectId, 7),
     ...stringToEmbedBytes(meta.variationId, 3),
-    ...stringToEmbedBytes(meta.deviceInstanceCode, 9),
+    ...stringToEmbedBytes(meta.deviceInstanceCode, 5),
     ...stringToEmbedBytes(meta.keyboardName, 33),
   ];
 }
@@ -104,12 +40,13 @@ export function serializeCommonKeyboardMetadata(
 export function serializeCustomKeyboardSpec_Unified(
   spec: IKermiteStandardKeyboardSpec,
 ): number[] {
-  if (!checkKeyboardSpec(spec)) {
+  if (!checkStandardKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
   }
   let numMatrixRows = 0;
   let numMatrixColumns = 0;
   let numDirectWiredKeys = 0;
+  let numEncoders = 0;
   const keyScannerPins: string[] = [];
   if (
     spec.useMatrixKeyScanner &&
@@ -125,6 +62,7 @@ export function serializeCustomKeyboardSpec_Unified(
     keyScannerPins.push(...spec.directWiredPins);
   }
   if (spec.useEncoder && !!spec.encoderPins) {
+    numEncoders = spec.encoderPins.length / 2;
     keyScannerPins.push(...spec.encoderPins);
   }
 
@@ -151,6 +89,7 @@ export function serializeCustomKeyboardSpec_Unified(
     numMatrixRows,
     numMatrixColumns,
     numDirectWiredKeys,
+    numEncoders,
     ...pinDefinitionsBytes,
     spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
     spec.lightingNumLeds,
@@ -161,7 +100,7 @@ export function serializeCustomKeyboardSpec_Unified(
 export function serializeCustomKeyboardSpec_Split(
   spec: IKermiteStandardKeyboardSpec,
 ): number[] {
-  if (!checkKeyboardSpec(spec)) {
+  if (!checkStandardKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
   }
   let numMatrixRows = 0;
@@ -222,6 +161,93 @@ export function serializeCustomKeyboardSpec_Split(
     spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
     spec.lightingNumLeds,
     spec.lightingNumLeds, // Right
+    mapPinNameToPinNumber(spec.singleWireSignalPin),
+  ]);
+}
+
+// Asymmetrical Split
+export function serializeCustomKeyboardSpec_OddSplit(
+  spec: IKermiteStandardKeyboardSpec,
+): number[] {
+  if (!checkStandardKeyboardSpec(spec)) {
+    throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
+  }
+  let numMatrixRows = 0;
+  let numMatrixColumns = 0;
+  let numDirectWiredKeys = 0;
+  let numEncoders = 0;
+
+  let numMatrixRowsR = 0;
+  let numMatrixColumnsR = 0;
+  let numDirectWiredKeysR = 0;
+  let numEncodersR = 0;
+
+  const keyScannerPins: string[] = [];
+  if (spec.useMatrixKeyScanner) {
+    if (spec.matrixRowPins && spec.matrixColumnPins) {
+      numMatrixRows = spec.matrixRowPins.length;
+      numMatrixColumns = spec.matrixColumnPins.length;
+      keyScannerPins.push(...spec.matrixRowPins, ...spec.matrixColumnPins);
+    }
+    if (spec.matrixRowPinsR && spec.matrixColumnPinsR) {
+      numMatrixRowsR = spec.matrixRowPinsR.length;
+      numMatrixColumnsR = spec.matrixColumnPinsR.length;
+      keyScannerPins.push(...spec.matrixRowPinsR, ...spec.matrixColumnPinsR);
+    }
+  }
+  if (spec.useDirectWiredKeyScanner) {
+    if (spec.directWiredPins) {
+      numDirectWiredKeys = spec.directWiredPins.length;
+      keyScannerPins.push(...spec.directWiredPins);
+    }
+    if (spec.directWiredPinsR) {
+      numDirectWiredKeysR = spec.directWiredPinsR.length;
+      keyScannerPins.push(...spec.directWiredPinsR);
+    }
+  }
+  if (spec.useEncoder) {
+    if (spec.encoderPins) {
+      numEncoders = 1;
+      keyScannerPins.push(...spec.encoderPins);
+    }
+    if (spec.encoderPinsR) {
+      numEncodersR = 1;
+      keyScannerPins.push(...spec.encoderPinsR);
+    }
+  }
+
+  if (keyScannerPins.length > 32) {
+    throw new Error(`maximum number of key scanner pins (32) exceeded`);
+  }
+
+  const pinDefinitionsBytes = padByteArray(
+    keyScannerPins.map(mapPinNameToPinNumber),
+    32,
+    0xff,
+  );
+
+  return convertArrayElementsToBytes([
+    spec.useBoardLedsProMicroAvr,
+    spec.useBoardLedsProMicroRp,
+    spec.useBoardLedsRpiPico,
+    spec.useDebugUart,
+    spec.useMatrixKeyScanner,
+    spec.useDirectWiredKeyScanner,
+    spec.useEncoder,
+    spec.useLighting,
+    spec.useLcd,
+    numMatrixRows,
+    numMatrixColumns,
+    numMatrixRowsR,
+    numMatrixColumnsR,
+    numDirectWiredKeys,
+    numDirectWiredKeysR,
+    numEncoders,
+    numEncodersR,
+    ...pinDefinitionsBytes,
+    spec.useLighting ? mapPinNameToPinNumber(spec.lightingPin) : 0xff,
+    spec.lightingNumLeds,
+    spec.lightingNumLedsR,
     mapPinNameToPinNumber(spec.singleWireSignalPin),
   ]);
 }

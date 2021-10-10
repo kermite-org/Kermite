@@ -6,7 +6,7 @@ typedef struct {
   uint8_t dataHeader[5];
   char projectId[7];
   char variationId[3];
-  char deviceInstanceCode[9];
+  char deviceInstanceCode[5];
   char keyboardName[33];
 } CommonFirmwareMetadata;
 

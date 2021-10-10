@@ -21,16 +21,12 @@
 #define dPORT PORTD
 #define dPIN PIND
 
+//標準ファームウェアで、boardLink_singleWire_setSignalPin()を使って
+//実行時に使用するピン(D0 or D2)を変更できるようにdBitを変数として宣言
 #if KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL == P_D0
-#define dBit 0
-#define dISCx0 ISC00
-#define dINTx INT0
-#define dINTx_vect INT0_vect
+static uint8_t dBit = 0;
 #elif KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL == P_D2
-#define dBit 2
-#define dISCx0 ISC20
-#define dINTx INT2
-#define dINTx_vect INT2_vect
+static uint8_t dBit = 2;
 #else
 #error Singlewire pin configuration option KM0_ATMEGA_SINGLEWIRE__PIN_SIGNAL is not valid.
 #endif
@@ -147,7 +143,7 @@ static void transmitFrame(uint8_t *txbuf, uint8_t len) {
 
   signalPin_endTransmit_standby();
   delayUnit(100);
-  bit_on(EIFR, dINTx);
+  bit_on(EIFR, dBit);
 }
 
 #define ReadAbort 2
@@ -210,16 +206,18 @@ static uint8_t receiveFrame(uint8_t *rxbuf, uint8_t capacity) {
     }
   }
   debug_timingPinHigh();
-  bit_on(EIFR, dINTx);
+  bit_on(EIFR, dBit);
   return bi;
 escape:
   debug_timingPinHigh();
-  bit_on(EIFR, dINTx);
+  bit_on(EIFR, dBit);
   return 0;
 }
 
 void boardLink_singleWire_setSignalPin(int8_t pin) {
-  //dynamic pin configuration is not supported
+  if (pin == D0 || pin == D2) {
+    dBit = pin & 7;
+  }
 }
 
 void boardLink_initialize() {
@@ -254,19 +252,31 @@ static TReceiverCallback pReceiverCallback = 0;
 
 void boardLink_setupSlaveReceiver(void (*_pReceiverCallback)(void)) {
   pReceiverCallback = _pReceiverCallback;
+
   //信号ピンがHIGHからLOWに変化したときに割り込みを生成
-  bits_spec(EICRA, dISCx0, 0b11, 0b10);
-  bit_on(EIMSK, dINTx);
+  if (dBit == 0) {
+    bits_spec(EICRA, ISC00, 0b11, 0b10);
+    bit_on(EIMSK, INT0);
+  } else {
+    bits_spec(EICRA, ISC20, 0b11, 0b10);
+    bit_on(EIMSK, INT2);
+  }
+
   sei();
 }
 
 void boardLink_clearSlaveReceiver() {
   pReceiverCallback = 0;
-  bits_spec(EICRA, dISCx0, 0b11, 0b00);
-  bit_off(EIMSK, dINTx);
+  if (dBit == 0) {
+    bits_spec(EICRA, ISC00, 0b11, 0b00);
+    bit_off(EIMSK, INT0);
+  } else {
+    bits_spec(EICRA, ISC20, 0b11, 0b00);
+    bit_off(EIMSK, INT2);
+  }
 }
 
-ISR(dINTx_vect) {
+static void isrImpl() {
   raw_rx_len = receiveFrame(raw_rx_buf, RawBufferSize);
   raw_tx_len = 0;
   if (pReceiverCallback) {
@@ -274,5 +284,17 @@ ISR(dINTx_vect) {
   }
   if (raw_tx_len > 0) {
     transmitFrame(raw_tx_buf, raw_tx_len);
+  }
+}
+
+ISR(INT0_vect) {
+  if (dBit == 0) {
+    isrImpl();
+  }
+}
+
+ISR(INT2_vect) {
+  if (dBit == 2) {
+    isrImpl();
   }
 }

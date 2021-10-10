@@ -2,6 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { IPrimaryDefaultTrigger, ISecondaryDefaultTrigger } from '~/shared';
 import { texts } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
+import { uiState } from '~/ui/store';
 import { reflectChecked, reflectValue } from '~/ui/utils';
 
 export const DualModeSettingsPart: FC = () => {
@@ -21,6 +22,8 @@ export const DualModeSettingsPart: FC = () => {
     }
   };
 
+  const showAdvancedOptions = uiState.settings.showProfileAdvancedOptions;
+
   return (
     <div css={style}>
       <div data-hint={texts.hint_assigner_profileConfigModal_dualMode_header}>
@@ -29,7 +32,7 @@ export const DualModeSettingsPart: FC = () => {
 
       <table class="settingsTable">
         <tbody>
-          <tr>
+          <tr qxIf={showAdvancedOptions}>
             <td
               data-hint={
                 texts.hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger
@@ -52,7 +55,7 @@ export const DualModeSettingsPart: FC = () => {
             </td>
           </tr>
 
-          <tr>
+          <tr qxIf={showAdvancedOptions}>
             <td>
               {
                 texts.label_assigner_profileConfigModal_dualMode_secondaryDefaultTrigger

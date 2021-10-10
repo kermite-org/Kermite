@@ -42,6 +42,11 @@ const readers = {
       state.editValues.baseFirmwareType,
     );
   },
+  get isOddSplit(): boolean {
+    return standardFirmwareEditModelHelpers.getIsOddSplit(
+      state.editValues.baseFirmwareType,
+    );
+  },
   get fieldErrors(): IStandardFirmwareEditErrors {
     return selectors.fieldErrors();
   },
