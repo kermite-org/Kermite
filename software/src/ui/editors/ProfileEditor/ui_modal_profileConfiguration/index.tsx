@@ -1,7 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
-import { DualModeSettingsPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/DualModeSettingsPart';
+import {
+  DualModeSettingsPart,
+  DualModeSettingsPart2,
+} from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/DualModeSettingsPart';
 import { KeyboardProjectSelectionPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
 import { ShiftCancelOptionPart } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
@@ -17,7 +20,7 @@ const AdvancedOptionSwitchPart: FC = () => (
         commitUiSettings({ showProfileAdvancedOptions: checked }),
       )}
     />
-    <label>show advanced options</label>
+    <label>advanced options</label>
   </div>
 );
 
@@ -57,8 +60,9 @@ export const ProfileConfigurationModalLayer: FC = () => {
           <KeyboardProjectSelectionPart qxIf={showProjectSelectionUi} />
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
-          <ShiftCancelOptionPart qxIf={showAdvancedOptions} />
           <AdvancedOptionSwitchPart />
+          <DualModeSettingsPart2 qxIf={showAdvancedOptions} />
+          <ShiftCancelOptionPart qxIf={showAdvancedOptions} />
         </div>
       </CommonDialogFrame>
     </ClosableOverlay>
