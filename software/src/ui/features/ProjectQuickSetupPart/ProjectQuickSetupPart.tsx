@@ -33,7 +33,7 @@ export const ProjectQuickSetupPart: FC = () => (
 );
 
 const style = css`
-  flex-grow: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
 
@@ -44,11 +44,13 @@ const style = css`
   }
 
   > .main-row {
+    height: 0;
     flex-grow: 1;
     display: flex;
 
     > .firmware-config-column {
       width: 55%;
+      overflow-y: scroll;
     }
     > .layout-config-column {
       width: 45%;

@@ -31,12 +31,11 @@ const style = css`
   flex-direction: column;
 
   > .header {
+    flex-shrink: 0;
   }
 
   > .body {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
     margin-top: 10px;
   }
 `;
