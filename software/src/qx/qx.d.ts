@@ -55,7 +55,7 @@ declare global {
     interface IntrinsicAttributes {
       key?: any;
       qxIf?: boolean;
-      css?: string;
+      class?: string;
     }
 
     type Element = VNode | ((props?: any) => Element | null);

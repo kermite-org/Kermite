@@ -31,10 +31,10 @@ function createFunctionComponentWrapper(
         if (vnode) {
           vnode.marker = `${fcName}`;
         }
-        if (props.css && vnode.vtype === 'vElement') {
+        if (props.class && vnode.vtype === 'vElement') {
           vnode.props.class = vnode.props.class
-            ? `${vnode.props.class} ${props.css}`
-            : props.css;
+            ? `${vnode.props.class} ${props.class}`
+            : props.class;
         }
         endHooks();
         doLater(() => flushHookEffects(self.hook));
