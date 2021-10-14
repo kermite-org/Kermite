@@ -16,19 +16,15 @@ export const ProjectQuickSetupPart: FC = () => (
     <div class="main-row">
       <SectionFrame
         title="Firmware Configuration"
-        className="firmware-config-column"
+        class="firmware-config-column"
       >
         <StandardFirmwareEditor
-          className="firmware-config-editor"
           firmwareConfig={store.firmwareConfig}
           isNewConfig={true}
         />
       </SectionFrame>
 
-      <SectionFrame
-        title="Layout Configuration"
-        className="layout-config-column"
-      >
+      <SectionFrame title="Layout Configuration" class="layout-config-column">
         bbb
       </SectionFrame>
     </div>

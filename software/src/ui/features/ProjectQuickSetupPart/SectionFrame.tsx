@@ -4,10 +4,9 @@ import { uiTheme } from '~/ui/base';
 type Props = {
   title: string;
   children: QxChildren;
-  className?: string;
 };
-export const SectionFrame: FC<Props> = ({ title, children, className }) => (
-  <div css={style} className={className}>
+export const SectionFrame: FC<Props> = ({ title, children }) => (
+  <div css={style}>
     <div class="title">{title}</div>
     <div class="body">{children}</div>
   </div>
