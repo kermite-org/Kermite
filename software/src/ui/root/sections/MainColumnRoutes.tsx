@@ -5,6 +5,7 @@ import {
   ProjectCustomFirmwareCreatePage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
+  ProjectQuickSetupPage,
   ProjectResourcePage,
   ProjectSelectionPage,
   ProjectStandardFirmwareEditPage,
@@ -51,6 +52,7 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectResource' && <ProjectResourcePage />}
+      {pagePath === '/projectQuickSetup' && <ProjectQuickSetupPage />}
     </div>
   );
 };

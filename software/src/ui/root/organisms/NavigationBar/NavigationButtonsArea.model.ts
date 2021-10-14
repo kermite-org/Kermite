@@ -78,6 +78,13 @@ const itemsSource: NavigationItemSource[] = [
     hint: 'project selection',
   },
   {
+    pagePath: '/projectQuickSetup',
+    pageName: 'Quick',
+    iconSpec: 'fa fa-globe',
+    hint: 'project quick setup',
+    isAvailable: () => uiReaders.isDeveloperMode,
+  },
+  {
     pagePath: '/settings',
     pageName: texts.label_sideMenu_app_settings,
     iconSpec: 'fa fa-cog',

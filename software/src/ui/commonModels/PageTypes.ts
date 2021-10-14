@@ -10,7 +10,8 @@ export type PagePaths =
   | '/widget'
   | '/projectSelection'
   | '/home'
-  | '/projectResource';
+  | '/projectResource'
+  | '/projectQuickSetup';
 
 export type IPageSpec_ProjectLayoutEdit = {
   type: 'projectLayoutEdit';
