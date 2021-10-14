@@ -6,7 +6,7 @@ import {
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 
-const store = new (class {
+const state = new (class {
   firmwareConfig: IKermiteStandardKeyboardSpec = fallbackStandardKeyboardSpec;
 })();
 
@@ -19,7 +19,7 @@ export const ProjectQuickSetupPart: FC = () => (
         class="firmware-config-column"
       >
         <StandardFirmwareEditor
-          firmwareConfig={store.firmwareConfig}
+          firmwareConfig={state.firmwareConfig}
           isNewConfig={true}
         />
       </SectionFrame>
@@ -28,7 +28,11 @@ export const ProjectQuickSetupPart: FC = () => (
         bbb
       </SectionFrame>
     </div>
-    <div class="bottom-row"></div>
+    <div class="bottom-row">
+      <div class="flash-column">ddd</div>
+      <div class="connection-column">eee</div>
+      <div class="actions-column">fff</div>
+    </div>
   </div>
 );
 
@@ -60,6 +64,11 @@ const style = css`
   > .bottom-row {
     flex-shrink: 0;
     border: solid 1px red;
-    height: 80px;
+    height: 120px;
+    display: flex;
+    justify-content: space-between;
+    > * {
+      border: solid 1px green;
+    }
   }
 `;
