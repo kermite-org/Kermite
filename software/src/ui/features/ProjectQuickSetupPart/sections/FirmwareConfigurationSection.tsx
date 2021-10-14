@@ -13,9 +13,9 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base
 function useProjectQuickSetupPartModel() {
   const { editValues, canSave } = StandardFirmwareEditor_OutputPropsSupplier;
   useEffect(() => {
-    if (canSave) {
-      projectQuickSetupStore.actions.writeFirmwareConfig(canSave && editValues);
-    }
+    projectQuickSetupStore.actions.writeFirmwareConfig(
+      canSave ? editValues : undefined,
+    );
   }, [editValues, canSave]);
 }
 

@@ -1,27 +1,24 @@
-import produce from 'immer';
 import {
-  fallbackStandardFirmwareEntry,
+  fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
-  IStandardFirmwareEntry,
 } from '~/shared';
+import { appUi } from '~/ui/base';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
 
 const state = new (class {
+  projectId: string = '';
   keyboardName: string = '';
-  firmwareEntry: IStandardFirmwareEntry = fallbackStandardFirmwareEntry;
+  firmwareConfig: IKermiteStandardKeyboardSpec = fallbackStandardKeyboardSpec;
   isConfigValid: boolean = false;
 })();
 
 const actions = {
   writeFirmwareConfig(data: IKermiteStandardKeyboardSpec | undefined) {
     if (data) {
-      state.firmwareEntry = produce(state.firmwareEntry, (draft) => {
-        draft.standardFirmwareConfig = data;
-        draft.variationId = projectQuickSetupStoreHelpers.getNextVariationId(
-          draft.variationId,
-        );
-      });
+      state.firmwareConfig = data;
+      state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
       state.isConfigValid = true;
+      appUi.setDebugValue({ projectId: state.projectId });
     } else {
       state.isConfigValid = false;
     }
