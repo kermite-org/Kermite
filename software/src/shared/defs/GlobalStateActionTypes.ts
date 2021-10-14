@@ -26,13 +26,15 @@ import { fallbackProfileData, IProfileData } from '~/shared/defs/ProfileData';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;
-  allProjectPackageInfos: IProjectPackageInfo[];
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
   keyboardConfig: IKeyboardConfig;
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
+  // project
+  allProjectPackageInfos: IProjectPackageInfo[];
+  draftProjectPackageInfo: IProjectPackageInfo | undefined;
   // profile
   allProfileEntries: IProfileEntry[];
   profileEditSource: IProfileEditSource;
@@ -86,6 +88,7 @@ export const defaultCoreState: ICoreState = {
   editProfileData: fallbackProfileData,
   layoutEditSource: fallbackLayoutEditSource,
   loadedLayoutData: createFallbackPersistKeyboardDesign(),
+  draftProjectPackageInfo: undefined,
 };
 
 export type ICoreAction = Partial<{
@@ -97,6 +100,7 @@ export type ICoreAction = Partial<{
   project_deleteLocalProject: { projectId: string };
   project_renameLocalProject: { projectId: string; newKeyboardName: string };
   project_openLocalProjectsFolder: 1;
+  project_saveLocalDraftProjectPackageInfo: IProjectPackageInfo;
 
   config_loadGlobalSettings: 1;
   config_writeGlobalSettings: Partial<IGlobalSettings>;
