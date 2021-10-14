@@ -1,7 +1,7 @@
 import {
   createProjectKey,
   fallbackProjectPackageInfo,
-  generateRandomIdBase62,
+  generateUniqueRandomId,
   IGlobalSettings,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -34,13 +34,7 @@ const projectPackageModuleHelper = {
     const existingProjectIds = uniqueArrayItems(
       coreState.allProjectPackageInfos.map((it) => it.projectId),
     );
-    for (let i = 0; i < 100; i++) {
-      const projectId = generateRandomIdBase62(6);
-      if (!existingProjectIds.includes(projectId)) {
-        return projectId;
-      }
-    }
-    throw new Error('failed to generate unique project id');
+    return generateUniqueRandomId(6, existingProjectIds);
   },
   createLocalProject(keyboardName: string): IProjectPackageInfo {
     const origin = 'local';
