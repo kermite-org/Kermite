@@ -88,6 +88,7 @@ const actions = {
       standardFirmwareEditModelHelpers.fixEditValuesOnModify(draft, {
         [key]: value,
       });
+      standardFirmwareEditModelHelpers.cleanupFirmwareConfig(draft);
     });
   },
 };

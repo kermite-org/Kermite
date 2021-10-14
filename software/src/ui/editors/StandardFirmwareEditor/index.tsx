@@ -3,7 +3,6 @@ import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { appUi } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
 import { standardFirmwareEditorComponents } from '~/ui/editors/StandardFirmwareEditor/components';
-import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { useStandardFirmwareEditPresenter } from '~/ui/editors/StandardFirmwareEditor/presenter';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
 import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
@@ -20,10 +19,8 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
   get canSave(): boolean {
     return standardFirmwareEditStore.readers.canSave;
   },
-  emitSavingEditValues(): IKermiteStandardKeyboardSpec {
-    return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
-      standardFirmwareEditStore.state.editValues,
-    );
+  get editValues(): IKermiteStandardKeyboardSpec {
+    return standardFirmwareEditStore.state.editValues;
   },
 };
 

@@ -84,10 +84,11 @@ const actions = {
       }
       store.sourceEntry.firmwareName = newVariationName;
     }
-    const { emitSavingEditValues } = StandardFirmwareEditor_OutputPropsSupplier;
+    const { editValues: savingEditValues } =
+      StandardFirmwareEditor_OutputPropsSupplier;
     const newFirmwareEntry = {
       ...store.sourceEntry,
-      standardFirmwareConfig: emitSavingEditValues(),
+      standardFirmwareConfig: savingEditValues,
     };
     await projectPackagesWriter.saveLocalProjectResourceItem(
       'firmware',
