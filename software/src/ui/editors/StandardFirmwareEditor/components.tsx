@@ -12,14 +12,17 @@ const FieldItem: FC<{
   children: QxChildren;
   indent?: boolean;
 }> = ({ title, children, indent }) => {
-  const styleChildren = css`
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  const styleTitleCell = css`
+    &.--indent {
+      padding-left: 15px !important;
+    }
   `;
+  const styleChildren = css``;
   return (
     <tr>
-      <td style={(indent && 'padding-left:15px') || ''}>{title}</td>
+      <td css={styleTitleCell} className={indent && '--indent'}>
+        {title}
+      </td>
       <td>
         <div css={styleChildren}>{children}</div>
       </td>

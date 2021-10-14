@@ -9,6 +9,7 @@ import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/s
 import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
 
 export type Props = {
+  className?: string;
   firmwareConfig: IStandardFirmwareEditValues;
   isNewConfig: boolean;
 };
@@ -28,6 +29,7 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
 };
 
 export const StandardFirmwareEditor: FC<Props> = ({
+  className,
   firmwareConfig,
   isNewConfig,
 }) => {
@@ -53,7 +55,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
   } = standardFirmwareEditorComponents;
 
   return (
-    <div css={style}>
+    <div css={style} className={className}>
       <div>standard firmware configuration</div>
       <table className="config-table">
         <tbody>

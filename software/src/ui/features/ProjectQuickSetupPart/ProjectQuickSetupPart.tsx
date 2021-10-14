@@ -1,5 +1,14 @@
 import { css, FC, jsx } from 'qx';
+import {
+  fallbackStandardKeyboardSpec,
+  IKermiteStandardKeyboardSpec,
+} from '~/shared';
+import { StandardFirmwareEditor } from '~/ui/editors';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
+
+const store = new (class {
+  firmwareConfig: IKermiteStandardKeyboardSpec = fallbackStandardKeyboardSpec;
+})();
 
 export const ProjectQuickSetupPart: FC = () => (
   <div class={style}>
@@ -9,7 +18,11 @@ export const ProjectQuickSetupPart: FC = () => (
         title="Firmware Configuration"
         className="firmware-config-column"
       >
-        aaa
+        <StandardFirmwareEditor
+          className="firmware-config-editor"
+          firmwareConfig={store.firmwareConfig}
+          isNewConfig={true}
+        />
       </SectionFrame>
 
       <SectionFrame
@@ -40,7 +53,6 @@ const style = css`
 
     > .firmware-config-column {
       width: 55%;
-      overflow: scroll;
     }
     > .layout-config-column {
       width: 45%;
