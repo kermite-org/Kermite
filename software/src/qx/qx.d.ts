@@ -656,7 +656,7 @@ declare global {
       charSet?: string;
       challenge?: string;
       checked?: boolean;
-      class?: string;
+      class?: string | false;
       className?: string | false;
       cols?: number;
       colSpan?: number;
