@@ -17,7 +17,10 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared/defs/DomainTypes';
-import { fallbackDeviceSelectionStatus } from '~/shared/defs/FallbackValues';
+import {
+  fallbackDeviceSelectionStatus,
+  fallbackProjectPackageInfo,
+} from '~/shared/defs/FallbackValues';
 import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,
@@ -34,7 +37,7 @@ export type ICoreState = {
   appWindowStatus: IAppWindowStatus;
   // project
   allProjectPackageInfos: IProjectPackageInfo[];
-  draftProjectPackageInfo: IProjectPackageInfo | undefined;
+  draftProjectPackageInfo: IProjectPackageInfo;
   // profile
   allProfileEntries: IProfileEntry[];
   profileEditSource: IProfileEditSource;
@@ -88,7 +91,7 @@ export const defaultCoreState: ICoreState = {
   editProfileData: fallbackProfileData,
   layoutEditSource: fallbackLayoutEditSource,
   loadedLayoutData: createFallbackPersistKeyboardDesign(),
-  draftProjectPackageInfo: undefined,
+  draftProjectPackageInfo: fallbackProjectPackageInfo,
 };
 
 export type ICoreAction = Partial<{
