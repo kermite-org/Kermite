@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { FC, jsx } from 'qx';
 import {
   PresetBrowserPage,
   PresetBrowserPage2,
@@ -22,7 +22,7 @@ export const MainColumnRoutes: FC = () => {
   const { pageSpec } = uiState;
   if (pageSpec) {
     return (
-      <div css={style}>
+      <div>
         {pageSpec.type === 'projectLayoutEdit' && (
           <ProjectLayoutEditPage spec={pageSpec} />
         )}
@@ -41,7 +41,7 @@ export const MainColumnRoutes: FC = () => {
 
   const { pagePath } = uiReaders;
   return (
-    <div css={style}>
+    <div>
       {pagePath === '/assigner' && <AssignerPage />}
       {pagePath === '/layoutEditor' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
@@ -56,9 +56,3 @@ export const MainColumnRoutes: FC = () => {
     </div>
   );
 };
-
-const style = css`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;
