@@ -1,7 +1,4 @@
-// const state = new (class {})();
-
 import { FC, jsx, useEffect } from 'qx';
-import { fallbackStandardKeyboardSpec } from '~/shared';
 import {
   StandardFirmwareEditor,
   StandardFirmwareEditor_ExposedModel,
@@ -13,7 +10,7 @@ function useFirmwareConfigurationSectionModel() {
   const { editValues, canSave, loadFirmwareConfig } =
     StandardFirmwareEditor_ExposedModel;
   useEffect(() => {
-    loadFirmwareConfig(fallbackStandardKeyboardSpec, true);
+    loadFirmwareConfig(projectQuickSetupStore.state.firmwareConfig, true);
   }, []);
   useEffect(() => {
     projectQuickSetupStore.actions.writeFirmwareConfig(
