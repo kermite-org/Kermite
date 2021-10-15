@@ -1,10 +1,10 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, useEffect } from 'qx';
 import { GeneralButton } from '~/ui/components';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection';
 import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection';
+import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection';
 
 function getCreateProfileButtonAvailability() {
   const { isConfigValid, isConnectionValid } = projectQuickSetupStore.state;
@@ -12,17 +12,13 @@ function getCreateProfileButtonAvailability() {
 }
 
 export const ProjectQuickSetupPart: FC = () => {
+  useEffect(projectQuickSetupStore.effects.editDataPersistenceEffect, []);
   return (
     <div class={style}>
       <div class="top-row"></div>
       <div class="main-row">
         <FirmwareConfigurationSection class="firmware-config-section" />
-        <SectionFrame
-          title="Layout Configuration"
-          class="layout-config-section"
-        >
-          bbb
-        </SectionFrame>
+        <LayoutConfigurationSection class="layout-config-section" />
       </div>
       <div class="bottom-row">
         <FirmwareFlashSection class="flash-section" />

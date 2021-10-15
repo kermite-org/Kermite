@@ -1,9 +1,10 @@
 import {
+  copyObjectProps,
   fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
   IProjectPackageInfo,
 } from '~/shared';
-import { appUi } from '~/ui/base';
+import { appUi, UiLocalStorage } from '~/ui/base';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
 
 const state = new (class {
@@ -48,8 +49,24 @@ const actions = {
   },
 };
 
+const effects = {
+  editDataPersistenceEffect() {
+    const storageKey = 'projectQuickSetupEditData';
+    const loadedData = UiLocalStorage.readItem(storageKey);
+    if (loadedData) {
+      copyObjectProps(state, loadedData);
+    }
+    return () => {
+      const { projectId, keyboardName, firmwareConfig } = state;
+      const persistData = { projectId, keyboardName, firmwareConfig };
+      UiLocalStorage.writeItem(storageKey, persistData);
+    };
+  },
+};
+
 export const projectQuickSetupStore = {
   state,
   readers,
   actions,
+  effects,
 };
