@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
+import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection';
 import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection';
 
@@ -17,8 +18,8 @@ export const ProjectQuickSetupPart: FC = () => {
         </SectionFrame>
       </div>
       <div class="bottom-row">
-        <FirmwareFlashSection class="flash-column" />
-        <div class="connection-column">eee</div>
+        <FirmwareFlashSection class="flash-section" />
+        <DeviceAutoConnectionSection class="connection-section" />
         <div class="actions-column">fff</div>
       </div>
     </div>
@@ -60,7 +61,7 @@ const style = css`
       border: solid 1px green;
     }
 
-    > .flash-column {
+    > .flash-section {
     }
   }
 `;
