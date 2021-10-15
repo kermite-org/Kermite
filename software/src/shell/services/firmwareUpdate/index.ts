@@ -3,16 +3,21 @@ import {
   IBootloaderType,
   IFirmwareOriginEx,
   IntervalTimerWrapper,
+  IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
-import { firmwareFileLoader_loadFirmwareFile } from '~/shell/services/firmwareUpdate/firmwareFileLoader/FirmwareFileLoader';
+import {
+  firmwareFileLoader_loadFirmwareFile,
+  firmwareFileLoader_loadFirmwareFileByPackageInfo,
+} from '~/shell/services/firmwareUpdate/firmwareFileLoader/FirmwareFileLoader';
 import { FirmwareUpdateSchemeAtMegaCaterina } from '~/shell/services/firmwareUpdate/flashSchemeAtMegaCaterina/FlashSchemeAtMegaCaterina';
 import { FirmwareUpdateSchemeAtMegaDfu } from '~/shell/services/firmwareUpdate/flashSchemeAtmegaDfu/FlashSchemeAtMegaDfu';
 import { FirmwareUpdateSchemeRp_Mac } from '~/shell/services/firmwareUpdate/flashSchemeRp/FlashSchemeRp_Mac';
 import { FirmwareUpdateSchemeRp_Windows } from '~/shell/services/firmwareUpdate/flashSchemeRp/FlashSchemeRp_Windows';
+import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
 
 const FirmwareUpdateSchemeRp =
   appEnv.platform === 'win32'
@@ -89,19 +94,9 @@ export class FirmwareUpdateService {
     this.timerWrapper.stop();
   }
 
-  async writeFirmware(
-    origin: IResourceOrigin,
-    projectId: string,
-    firmwareName: string,
-    firmwareOrigin: IFirmwareOriginEx,
+  private async writeFirmwareImpl(
+    binarySpec: IFirmwareBinaryFileSpec | undefined,
   ): Promise<'ok' | string> {
-    const binarySpec = await firmwareFileLoader_loadFirmwareFile(
-      origin,
-      projectId,
-      firmwareName,
-      firmwareOrigin,
-    );
-
     if (!binarySpec) {
       return `cannot find firmware`;
     }
@@ -131,5 +126,32 @@ export class FirmwareUpdateService {
       );
     }
     return `cannot determine update method for ${binarySpec.filePath}`;
+  }
+
+  async writeFirmware(
+    origin: IResourceOrigin,
+    projectId: string,
+    firmwareName: string,
+    firmwareOrigin: IFirmwareOriginEx,
+  ): Promise<'ok' | string> {
+    const binarySpec = await firmwareFileLoader_loadFirmwareFile(
+      origin,
+      projectId,
+      firmwareName,
+      firmwareOrigin,
+    );
+    return await this.writeFirmwareImpl(binarySpec);
+  }
+
+  async writeStandardFirmwareDirect(
+    packageInfo: IProjectPackageInfo,
+    firmwareName: string,
+  ): Promise<'ok' | string> {
+    const binarySpec = await firmwareFileLoader_loadFirmwareFileByPackageInfo(
+      packageInfo,
+      firmwareName,
+      'online',
+    );
+    return await this.writeFirmwareImpl(binarySpec);
   }
 }
