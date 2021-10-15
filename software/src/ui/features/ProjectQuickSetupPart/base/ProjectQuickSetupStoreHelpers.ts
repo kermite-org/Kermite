@@ -20,16 +20,24 @@ export const projectQuickSetupStoreHelpers = {
     );
     return generateUniqueRandomId(6, existingProjectIds);
   },
-  createDraftPackageInfo(
-    projectId: string,
-    keyboardName: string,
-    firmwareConfig: IKermiteStandardKeyboardSpec,
-    firmwareName: string,
-  ): IProjectPackageInfo {
+  createDraftPackageInfo(args: {
+    projectId: string;
+    keyboardName: string;
+    firmwareVariationId: string;
+    firmwareName: string;
+    firmwareConfig: IKermiteStandardKeyboardSpec;
+  }): IProjectPackageInfo {
+    const {
+      projectId,
+      keyboardName,
+      firmwareVariationId,
+      firmwareName,
+      firmwareConfig,
+    } = args;
     const origin = 'local';
     const firmwareEntry: IStandardFirmwareEntry = {
       type: 'standard',
-      variationId: '01',
+      variationId: firmwareVariationId,
       firmwareName: firmwareName,
       standardFirmwareConfig: firmwareConfig,
     };

@@ -9,20 +9,29 @@ import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPa
 const state = new (class {
   projectId: string = '';
   keyboardName: string = '';
-  firmwareConfig: IKermiteStandardKeyboardSpec = fallbackStandardKeyboardSpec;
+  firmwareVariationId: string = '01';
   firmwareName: string = 'default';
+  firmwareConfig: IKermiteStandardKeyboardSpec = fallbackStandardKeyboardSpec;
   isConfigValid: boolean = false;
+  isConnectionValid: boolean = false;
 })();
 
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
-    const { projectId, keyboardName, firmwareConfig, firmwareName } = state;
-    return projectQuickSetupStoreHelpers.createDraftPackageInfo(
+    const {
       projectId,
       keyboardName,
-      firmwareConfig,
+      firmwareVariationId,
       firmwareName,
-    );
+      firmwareConfig,
+    } = state;
+    return projectQuickSetupStoreHelpers.createDraftPackageInfo({
+      projectId,
+      keyboardName,
+      firmwareVariationId,
+      firmwareName,
+      firmwareConfig,
+    });
   },
 };
 
