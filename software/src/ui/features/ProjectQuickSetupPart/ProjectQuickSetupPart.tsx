@@ -1,8 +1,15 @@
 import { css, FC, jsx } from 'qx';
+import { GeneralButton } from '~/ui/components';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection';
 import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection';
+
+function getCreateProfileButtonAvailability() {
+  const { isConfigValid, isConnectionValid } = projectQuickSetupStore.state;
+  return isConfigValid && isConnectionValid;
+}
 
 export const ProjectQuickSetupPart: FC = () => {
   return (
@@ -20,7 +27,14 @@ export const ProjectQuickSetupPart: FC = () => {
       <div class="bottom-row">
         <FirmwareFlashSection class="flash-section" />
         <DeviceAutoConnectionSection class="connection-section" />
-        <div class="actions-column">fff</div>
+        <div class="actions-section">
+          <GeneralButton
+            size="large"
+            disabled={!getCreateProfileButtonAvailability()}
+          >
+            Create Profile
+          </GeneralButton>
+        </div>
       </div>
     </div>
   );
@@ -54,14 +68,15 @@ const style = css`
   > .bottom-row {
     flex-shrink: 0;
     border: solid 1px red;
-    height: 120px;
+    height: 80px;
     display: flex;
     justify-content: space-between;
-    > * {
-      border: solid 1px green;
-    }
 
     > .flash-section {
+    }
+
+    > .actions-section {
+      padding: 10px;
     }
   }
 `;
