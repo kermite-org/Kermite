@@ -8,13 +8,16 @@ export const ProjectQuickSetupPart: FC = () => {
     <div class={style}>
       <div class="top-row"></div>
       <div class="main-row">
-        <FirmwareConfigurationSection className="firmware-config-column" />
-        <SectionFrame title="Layout Configuration" class="layout-config-column">
+        <FirmwareConfigurationSection class="firmware-config-section" />
+        <SectionFrame
+          title="Layout Configuration"
+          class="layout-config-section"
+        >
           bbb
         </SectionFrame>
       </div>
       <div class="bottom-row">
-        <div class="flash-column">ddd</div>
+        <FirmwareFlashSection class="flash-column" />
         <div class="connection-column">eee</div>
         <div class="actions-column">fff</div>
       </div>
@@ -38,11 +41,11 @@ const style = css`
     flex-grow: 1;
     display: flex;
 
-    > .firmware-config-column {
+    > .firmware-config-section {
       width: 55%;
       overflow-y: scroll;
     }
-    > .layout-config-column {
+    > .layout-config-section {
       width: 45%;
     }
   }
@@ -55,6 +58,9 @@ const style = css`
     justify-content: space-between;
     > * {
       border: solid 1px green;
+    }
+
+    > .flash-column {
     }
   }
 `;
