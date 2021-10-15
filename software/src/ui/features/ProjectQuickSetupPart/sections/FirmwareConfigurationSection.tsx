@@ -1,8 +1,7 @@
 // const state = new (class {})();
 
-import { jsx, useEffect } from 'qx';
+import { FC, jsx, useEffect } from 'qx';
 import { fallbackStandardKeyboardSpec } from '~/shared';
-import { FcWithClassName } from '~/ui/base';
 import {
   StandardFirmwareEditor,
   StandardFirmwareEditor_OutputPropsSupplier,
@@ -19,12 +18,10 @@ function useProjectQuickSetupPartModel() {
   }, [editValues, canSave]);
 }
 
-export const FirmwareConfigurationSection: FcWithClassName = ({
-  className,
-}) => {
+export const FirmwareConfigurationSection: FC = () => {
   useProjectQuickSetupPartModel();
   return (
-    <SectionFrame title="Firmware Configuration" class={className}>
+    <SectionFrame title="Firmware Configuration">
       <StandardFirmwareEditor
         firmwareConfig={fallbackStandardKeyboardSpec}
         isNewConfig={true}
