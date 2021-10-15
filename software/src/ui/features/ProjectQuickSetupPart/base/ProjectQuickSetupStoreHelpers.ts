@@ -29,7 +29,7 @@ export const projectQuickSetupStoreHelpers = {
     const origin = 'local';
     const firmwareEntry: IStandardFirmwareEntry = {
       type: 'standard',
-      variationId: '00',
+      variationId: '01',
       firmwareName: firmwareName,
       standardFirmwareConfig: firmwareConfig,
     };
