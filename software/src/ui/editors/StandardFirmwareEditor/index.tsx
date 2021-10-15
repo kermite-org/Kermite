@@ -7,12 +7,7 @@ import { useStandardFirmwareEditPresenter } from '~/ui/editors/StandardFirmwareE
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
 import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
 
-export type Props = {
-  firmwareConfig: IStandardFirmwareEditValues;
-  isNewConfig: boolean;
-};
-
-export const StandardFirmwareEditor_OutputPropsSupplier = {
+export const StandardFirmwareEditor_ExposedModel = {
   get isModified(): boolean {
     return standardFirmwareEditStore.readers.isModified;
   },
@@ -22,12 +17,18 @@ export const StandardFirmwareEditor_OutputPropsSupplier = {
   get editValues(): IKermiteStandardKeyboardSpec {
     return standardFirmwareEditStore.state.editValues;
   },
+  loadFirmwareConfig(
+    firmwareConfig: IStandardFirmwareEditValues,
+    isNewConfig: boolean,
+  ) {
+    standardFirmwareEditStore.actions.loadFirmwareConfig(
+      firmwareConfig,
+      isNewConfig,
+    );
+  },
 };
 
-export const StandardFirmwareEditor: FC<Props> = ({
-  firmwareConfig,
-  isNewConfig,
-}) => {
+export const StandardFirmwareEditor: FC = () => {
   const {
     baseFirmwareTypeOptions,
     editValues,
@@ -38,7 +39,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
     availablePinsText,
     fieldErrors,
     totalError,
-  } = useStandardFirmwareEditPresenter(firmwareConfig, isNewConfig);
+  } = useStandardFirmwareEditPresenter();
 
   const {
     valueChangeHandler,

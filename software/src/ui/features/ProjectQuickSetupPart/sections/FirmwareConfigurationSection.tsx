@@ -4,13 +4,17 @@ import { FC, jsx, useEffect } from 'qx';
 import { fallbackStandardKeyboardSpec } from '~/shared';
 import {
   StandardFirmwareEditor,
-  StandardFirmwareEditor_OutputPropsSupplier,
+  StandardFirmwareEditor_ExposedModel,
 } from '~/ui/editors';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 
-function useProjectQuickSetupPartModel() {
-  const { editValues, canSave } = StandardFirmwareEditor_OutputPropsSupplier;
+function useFirmwareConfigurationSectionModel() {
+  const { editValues, canSave, loadFirmwareConfig } =
+    StandardFirmwareEditor_ExposedModel;
+  useEffect(() => {
+    loadFirmwareConfig(fallbackStandardKeyboardSpec, true);
+  }, []);
   useEffect(() => {
     projectQuickSetupStore.actions.writeFirmwareConfig(
       canSave ? editValues : undefined,
@@ -19,13 +23,10 @@ function useProjectQuickSetupPartModel() {
 }
 
 export const FirmwareConfigurationSection: FC = () => {
-  useProjectQuickSetupPartModel();
+  useFirmwareConfigurationSectionModel();
   return (
     <SectionFrame title="Firmware Configuration">
-      <StandardFirmwareEditor
-        firmwareConfig={fallbackStandardKeyboardSpec}
-        isNewConfig={true}
-      />
+      <StandardFirmwareEditor />
     </SectionFrame>
   );
 };

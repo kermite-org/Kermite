@@ -8,7 +8,7 @@ import {
   IStandardFirmwareEntry,
 } from '~/shared';
 import { modalConfirm } from '~/ui/components';
-import { StandardFirmwareEditor_OutputPropsSupplier } from '~/ui/editors';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import {
   projectPackagesReader,
@@ -46,7 +46,7 @@ const readers = {
     return !!store.sourceEntry.firmwareName;
   },
   get canSave() {
-    return StandardFirmwareEditor_OutputPropsSupplier.canSave;
+    return StandardFirmwareEditor_ExposedModel.canSave;
   },
   get sourceEntry(): IStandardFirmwareEntry {
     return store.sourceEntry;
@@ -85,7 +85,7 @@ const actions = {
       store.sourceEntry.firmwareName = newVariationName;
     }
     const { editValues: savingEditValues } =
-      StandardFirmwareEditor_OutputPropsSupplier;
+      StandardFirmwareEditor_ExposedModel;
     const newFirmwareEntry = {
       ...store.sourceEntry,
       standardFirmwareConfig: savingEditValues,
@@ -105,7 +105,7 @@ const actions = {
     }
   },
   async backHandler() {
-    const { isModified } = StandardFirmwareEditor_OutputPropsSupplier;
+    const { isModified } = StandardFirmwareEditor_ExposedModel;
     if (isModified) {
       const ok = await modalConfirm({
         message: 'Unsaved changes will be lost. Are you ok?',
@@ -126,10 +126,22 @@ export function useProjectStandardFirmwareEditPageModel(
     () => actions.loadSourceFirmwareEntry(sourceFirmwareName),
     [sourceFirmwareName],
   );
+
   const {
     sourceEntry: { standardFirmwareConfig, firmwareName: editFirmwareName },
     canSave,
   } = readers;
+  const isNewConfig = !sourceFirmwareName;
+
+  useInlineEffect(
+    () =>
+      StandardFirmwareEditor_ExposedModel.loadFirmwareConfig(
+        standardFirmwareConfig,
+        isNewConfig,
+      ),
+    [standardFirmwareConfig, isNewConfig],
+  );
+
   const { saveHandler, backHandler } = actions;
   return {
     editFirmwareName,
