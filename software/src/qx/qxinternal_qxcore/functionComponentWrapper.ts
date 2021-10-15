@@ -31,7 +31,10 @@ function createFunctionComponentWrapper(
         if (vnode) {
           vnode.marker = `${fcName}`;
         }
-        if (props.class && vnode.vtype === 'vElement') {
+        if (
+          props.class &&
+          (vnode.vtype === 'vElement' || vnode.vtype === 'vComponent')
+        ) {
           vnode.props.class = vnode.props.class
             ? `${vnode.props.class} ${props.class}`
             : props.class;
