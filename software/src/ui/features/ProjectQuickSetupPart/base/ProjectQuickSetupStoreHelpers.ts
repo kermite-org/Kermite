@@ -4,6 +4,7 @@ import {
   IProjectPackageInfo,
   IStandardFirmwareEntry,
   createProjectKey,
+  IKermiteStandardKeyboardSpec,
 } from '~/shared';
 import { uiState } from '~/ui/store';
 
@@ -19,17 +20,18 @@ export const projectQuickSetupStoreHelpers = {
     );
     return generateUniqueRandomId(6, existingProjectIds);
   },
-  __createDraftPackageInfo(): IProjectPackageInfo {
+  createDraftPackageInfo(
+    projectId: string,
+    keyboardName: string,
+    firmwareConfig: IKermiteStandardKeyboardSpec,
+    firmwareName: string,
+  ): IProjectPackageInfo {
     const origin = 'local';
-    const projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
-    const keyboardName = 'draft project';
-    const firmwareConfig: IStandardFirmwareEntry = {
+    const firmwareEntry: IStandardFirmwareEntry = {
       type: 'standard',
       variationId: '00',
-      firmwareName: 'default',
-      standardFirmwareConfig: {
-        baseFirmwareType: 'AvrUnified',
-      },
+      firmwareName: firmwareName,
+      standardFirmwareConfig: firmwareConfig,
     };
     return {
       formatRevision: 'PKG0',
@@ -38,7 +40,7 @@ export const projectQuickSetupStoreHelpers = {
       projectKey: createProjectKey(origin, projectId),
       keyboardName,
       packageName: keyboardName,
-      firmwares: [firmwareConfig],
+      firmwares: [firmwareEntry],
       layouts: [],
       profiles: [],
     };
