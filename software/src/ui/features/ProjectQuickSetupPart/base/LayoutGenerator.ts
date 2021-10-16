@@ -1,9 +1,8 @@
 import {
   createFallbackPersistKeyboardDesign,
-  DisplayKeyboardDesignLoader,
   generateNumberSequence,
-  IDisplayKeyboardDesign,
   IKermiteStandardKeyboardSpec,
+  IPersistKeyboardDesign,
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
 } from '~/shared';
@@ -77,7 +76,7 @@ function makeMatrixKeyEntitiesW(
 export function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
   layoutOptions: ILayoutGeneratorOptions,
-): IDisplayKeyboardDesign {
+): IPersistKeyboardDesign {
   const design = createFallbackPersistKeyboardDesign();
   const isUnified = unifiedKeyboardTypes.includes(spec.baseFirmwareType);
   const isEvenSplit = evenSplitKeyboardTypes.includes(spec.baseFirmwareType);
@@ -195,6 +194,5 @@ export function createLayoutFromFirmwareSpec(
       design.keyEntities.push(...keysRight);
     }
   }
-
-  return DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
+  return design;
 }
