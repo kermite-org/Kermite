@@ -15,6 +15,7 @@ export const LayoutConfigurationSection: FC = () => {
 };
 
 const style = css`
+  padding: 0 5px;
   > .shape-view {
     margin-top: 10px;
     height: 200px;

@@ -59,6 +59,7 @@ const style = css`
     }
     > .layout-config-section {
       width: 45%;
+      overflow-y: scroll;
     }
   }
 
