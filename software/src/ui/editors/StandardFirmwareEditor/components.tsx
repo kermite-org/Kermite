@@ -1,4 +1,5 @@
 import { css, FC, jsx, QxChildren } from 'qx';
+import { ExtractKeysWithType } from '~/shared';
 import { GeneralInput, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditor_fieldValueConverters } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
@@ -46,10 +47,6 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     standardFirmwareEditStore.actions.commitValue(key, value);
   };
 }
-
-type ExtractKeysWithType<Obj, Type> = {
-  [K in keyof Obj]: Obj[K] extends Type ? K : never;
-}[keyof Obj];
 
 type IFlagFieldKey = ExtractKeysWithType<
   Required<IStandardFirmwareEditValues>,
