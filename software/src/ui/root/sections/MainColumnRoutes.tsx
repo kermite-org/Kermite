@@ -35,6 +35,7 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
+        {pageSpec.type === 'projectQuickSetup' && <ProjectQuickSetupPage />}
       </div>
     );
   }
