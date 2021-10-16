@@ -3,7 +3,7 @@ import { texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useFirmwareFlashSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/FirmwareFlashSection.model';
+import { useFirmwareFlashSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/model';
 
 export const FirmwareFlashSection: FC = () => {
   const {
