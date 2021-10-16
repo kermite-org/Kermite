@@ -1,17 +1,16 @@
 import { css, FC, jsx } from 'qx';
 import {
   createFallbackPersistKeyboardDesign,
-  fallbackProfileData,
+  DisplayKeyboardDesignLoader,
   generateNumberSequence,
+  IDisplayKeyboardDesign,
   IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesignRealKeyEntity,
-  IProfileData,
   IStandardBaseFirmwareType,
 } from '~/shared';
-import { PresetKeyboardView } from '~/ui/components';
-import { usePresetKeyboardViewModel } from '~/ui/features/PresetBrowser';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { LayoutPreviewShapeView } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView';
 import { useMemoEx } from '~/ui/utils';
 
 const splitKeyboardTypes: IStandardBaseFirmwareType[] = [
@@ -23,7 +22,7 @@ const splitKeyboardTypes: IStandardBaseFirmwareType[] = [
 
 function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
-): IProfileData {
+): IDisplayKeyboardDesign {
   const design = createFallbackPersistKeyboardDesign();
   const isSplit = splitKeyboardTypes.includes(spec.baseFirmwareType);
   if (!isSplit) {
@@ -43,28 +42,28 @@ function createLayoutFromFirmwareSpec(
             keyId: `key${idx}`,
             x: ix,
             y: iy,
+            keyIndex: idx,
           };
         });
       design.keyEntities.push(...keys);
     }
   }
-  return { ...fallbackProfileData, keyboardDesign: design };
+  return DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
 }
 
 function useLayoutConfigurationSectionModel() {
-  const profileData = useMemoEx(createLayoutFromFirmwareSpec, [
+  const design = useMemoEx(createLayoutFromFirmwareSpec, [
     projectQuickSetupStore.state.firmwareConfig,
   ]);
-  return { profileData };
+  return { design };
 }
 
 export const LayoutConfigurationSection: FC = () => {
-  const { profileData } = useLayoutConfigurationSectionModel();
-  const keyboardViewModel = usePresetKeyboardViewModel(profileData, '');
+  const { design } = useLayoutConfigurationSectionModel();
   return (
     <SectionFrame title="Layout Preview">
       <div class={style}>
-        <PresetKeyboardView {...keyboardViewModel} />
+        <LayoutPreviewShapeView keyboardDesign={design} />
       </div>
     </SectionFrame>
   );
