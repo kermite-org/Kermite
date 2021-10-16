@@ -5,11 +5,17 @@ type Props = {
   title: string;
   children: QxChildren;
   inactive?: boolean;
+  contentClassName?: string;
 };
-export const SectionFrame: FC<Props> = ({ title, children, inactive }) => (
+export const SectionFrame: FC<Props> = ({
+  title,
+  children,
+  inactive,
+  contentClassName,
+}) => (
   <div css={style} class={inactive && '--inactive'}>
     <div class="title">{title}</div>
-    <div class="body">{children}</div>
+    <div classNames={['body', contentClassName]}>{children}</div>
   </div>
 );
 

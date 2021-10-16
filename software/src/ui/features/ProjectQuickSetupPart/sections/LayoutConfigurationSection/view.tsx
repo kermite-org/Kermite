@@ -6,16 +6,15 @@ import { useLayoutConfigurationSectionModel } from '~/ui/features/ProjectQuickSe
 export const LayoutConfigurationSection: FC = () => {
   const { design } = useLayoutConfigurationSectionModel();
   return (
-    <SectionFrame title="Layout Preview">
-      <div class={style}>
-        <LayoutPreviewShapeView keyboardDesign={design} />
-      </div>
+    <SectionFrame title="Layout Preview" contentClassName={style}>
+      <LayoutPreviewShapeView keyboardDesign={design} class="shape-view" />
     </SectionFrame>
   );
 };
 
 const style = css`
-  height: 200px;
-  border: solid 1px #ccc;
-  padding: 5px;
+  > .shape-view {
+    margin-top: 10px;
+    height: 200px;
+  }
 `;
