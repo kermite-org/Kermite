@@ -2,6 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
+import { CoordOriginMark } from '~/ui/features/ProjectQuickSetupPart/parts/CoordOriginMark';
 import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShpaeView.KeyEntityCard';
 
 type Props = {
@@ -33,6 +34,7 @@ export const LayoutPreviewShapeView: FC<Props> = ({ keyboardDesign }) => {
             <LayoutPreviewKeyEntityCard keyEntity={ke} key={ke.keyId} />
           ))}
         </g>
+        <CoordOriginMark />
       </KeyboardSvgFrameWithAutoScaler>
     </div>
   );
