@@ -1,9 +1,9 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { useFirmwareFlashSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection.model';
+import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
+import { useFirmwareFlashSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/FirmwareFlashSection.model';
 
 export const FirmwareFlashSection: FC = () => {
   const {

@@ -1,4 +1,3 @@
-import { css, FC, jsx } from 'qx';
 import {
   createFallbackPersistKeyboardDesign,
   DisplayKeyboardDesignLoader,
@@ -8,9 +7,7 @@ import {
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
 } from '~/shared';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { LayoutPreviewShapeView } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView';
 import { useMemoEx } from '~/ui/utils';
 
 const splitKeyboardTypes: IStandardBaseFirmwareType[] = [
@@ -51,26 +48,9 @@ function createLayoutFromFirmwareSpec(
   return DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
 }
 
-function useLayoutConfigurationSectionModel() {
+export function useLayoutConfigurationSectionModel() {
   const design = useMemoEx(createLayoutFromFirmwareSpec, [
     projectQuickSetupStore.state.firmwareConfig,
   ]);
   return { design };
 }
-
-export const LayoutConfigurationSection: FC = () => {
-  const { design } = useLayoutConfigurationSectionModel();
-  return (
-    <SectionFrame title="Layout Preview">
-      <div class={style}>
-        <LayoutPreviewShapeView keyboardDesign={design} />
-      </div>
-    </SectionFrame>
-  );
-};
-
-const style = css`
-  height: 200px;
-  border: solid 1px #ccc;
-  padding: 5px;
-`;

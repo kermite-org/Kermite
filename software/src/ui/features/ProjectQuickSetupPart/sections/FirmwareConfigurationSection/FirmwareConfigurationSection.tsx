@@ -3,8 +3,8 @@ import {
   StandardFirmwareEditor,
   StandardFirmwareEditor_ExposedModel,
 } from '~/ui/editors';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
 
 function useFirmwareConfigurationSectionModel() {
   const { editValues, canSave, loadFirmwareConfig } =

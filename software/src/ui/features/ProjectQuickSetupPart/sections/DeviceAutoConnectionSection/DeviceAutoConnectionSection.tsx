@@ -1,11 +1,11 @@
 import { css, FC, jsx } from 'qx';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/SectionFrame';
 import {
   useDeviceAutoConnectionAutoConnectFunction,
   useDeviceAutoConnectionConnectionStatus,
   useDeviceKeyEventIndicatorModel,
 } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupHooks';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
 
 type IDeviceAutoConnectionSectionModel = {
   isConnectionValid: boolean;
