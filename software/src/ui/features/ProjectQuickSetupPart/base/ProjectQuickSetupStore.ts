@@ -7,7 +7,7 @@ import {
   IProjectPackageInfo,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { appUi, UiLocalStorage } from '~/ui/base';
+import { UiLocalStorage } from '~/ui/base';
 import {
   fallbackLayoutGeneratorOptions,
   ILayoutGeneratorOptions,
