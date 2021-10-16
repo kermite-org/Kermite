@@ -78,13 +78,6 @@ const itemsSource: NavigationItemSource[] = [
     hint: 'project selection',
   },
   {
-    pagePath: '/projectQuickSetup',
-    pageName: 'Quick',
-    iconSpec: 'fa fa-globe',
-    hint: 'project quick setup',
-    isAvailable: () => uiReaders.isDeveloperMode,
-  },
-  {
     pagePath: '/settings',
     pageName: texts.label_sideMenu_app_settings,
     iconSpec: 'fa fa-cog',
@@ -97,23 +90,6 @@ const itemsSource: NavigationItemSource[] = [
     hint: 'start',
   },
 ];
-
-// const entrySources: NavigationEntrySource[] = [
-//   { pagePath: '/assigner', pageName: 'Assigner', iconSpec: 'keyboard' },
-//   {
-//     pagePath: '/layoutEditor',
-//     pageName: 'Drafter',
-//     iconSpec: 'architecture',
-//   },
-//   { pagePath: '/presetBrowser', pageName: 'Presets', iconSpec: 'menu_book' },
-//   { pagePath: '/shapePreview', pageName: 'Preview', iconSpec: 'format_shapes' },
-//   {
-//     pagePath: '/firmwareUpdate',
-//     pageName: 'Firmware',
-//     iconSpec: 'memory',
-//   },
-//   { pagePath: '/settings', pageName: 'Settings', iconSpec: 'settings' },
-// ];
 
 export function useNavigationButtonsAreaModel(): NavigationBarModel {
   const currentPagePath = uiReaders.pagePath;
