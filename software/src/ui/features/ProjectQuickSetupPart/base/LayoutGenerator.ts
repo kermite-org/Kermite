@@ -87,7 +87,7 @@ export function createLayoutFromFirmwareSpec(
   if (isCentered) {
     design.setup.placementAnchor = 'center';
   }
-  const splitXOffset = 1;
+  const splitXOffset = 0.5;
 
   if (isUnified) {
     if (
@@ -127,8 +127,8 @@ export function createLayoutFromFirmwareSpec(
       let offsetXR = splitXOffset * 2 + nx;
       let offsetY = 0;
       if (isCentered) {
-        offsetXL = -nx - 0.5;
-        offsetXR = 1.5;
+        offsetXL = -nx - splitXOffset + 0.5;
+        offsetXR = splitXOffset + 0.5;
         offsetY = -ny / 2 + 0.5;
       }
       const keysLeft = makeMatrixKeyEntitiesW(
@@ -165,8 +165,8 @@ export function createLayoutFromFirmwareSpec(
       let offsetYL = 0;
       let offsetYR = 0;
       if (isCentered) {
-        offsetXL = -nxl - 0.5;
-        offsetXR = 1.5;
+        offsetXL = -nxl - splitXOffset + 0.5;
+        offsetXR = splitXOffset + 0.5;
         offsetYL = -nyr / 2 + 0.5;
         offsetYR = -nyr / 2 + 0.5;
       }
