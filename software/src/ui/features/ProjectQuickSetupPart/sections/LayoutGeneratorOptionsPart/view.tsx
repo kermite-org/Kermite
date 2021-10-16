@@ -1,14 +1,11 @@
 import { css, FC, jsx, QxChild } from 'qx';
-import { appUi, makePlainSelectorOption } from '~/ui/base';
+import { makePlainSelectorOption } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 
 function useLayoutGeneratorOptionsPartModel() {
-  appUi.setDebugValue({
-    layoutOptions: projectQuickSetupStore.state.layoutOptions,
-  });
   const { firmwareConfig } = projectQuickSetupStore.state;
   const isOddSplit = standardFirmwareEditModelHelpers.getIsOddSplit(
     firmwareConfig.baseFirmwareType,

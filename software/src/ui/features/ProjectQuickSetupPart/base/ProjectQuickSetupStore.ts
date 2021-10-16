@@ -75,7 +75,6 @@ const actions = {
       state.firmwareConfig = data;
       state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
       state.isConfigValid = true;
-      appUi.setDebugValue({ projectId: state.projectId });
     } else {
       state.isConfigValid = false;
     }
