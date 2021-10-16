@@ -2,6 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { ExtractKeysWithType } from '~/shared';
 import { appUi } from '~/ui/base';
 import { ToggleSwitch } from '~/ui/components';
+import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 
@@ -32,15 +33,30 @@ const ToggleSwitchRow: FC<{
   );
 };
 
-export const LayoutGeneratorOptionsPart: FC = () => {
+function useLayoutGeneratorOptionsPartModel() {
   appUi.setDebugValue({
     layoutOptions: projectQuickSetupStore.state.layoutOptions,
   });
+  const { firmwareConfig } = projectQuickSetupStore.state;
+  const isSplit = standardFirmwareEditModelHelpers.getIsSplit(
+    firmwareConfig.baseFirmwareType,
+  );
+  return {
+    isSplit,
+  };
+}
+
+export const LayoutGeneratorOptionsPart: FC = () => {
+  const { isSplit } = useLayoutGeneratorOptionsPartModel();
   return (
     <div class={style}>
       <div class="props-table">
         <ToggleSwitchRow title="invert X" fieldKey="invertX" />
-        <ToggleSwitchRow title="invert X Right" fieldKey="invertXR" />
+        <ToggleSwitchRow
+          title="invert X Right"
+          fieldKey="invertXR"
+          qxIf={isSplit}
+        />
         <ToggleSwitchRow title="invert Y" fieldKey="invertY" />
       </div>
     </div>
