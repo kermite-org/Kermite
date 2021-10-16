@@ -81,16 +81,12 @@ export const LayoutGeneratorOptionsPart: FC = () => {
 
 const style = css`
   > .props-table {
-    display: table;
-    border-collapse: separate;
-    border-spacing: 10px;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 10px;
 
     > .row {
-      display: table-row;
-
-      > * {
-        display: table-cell;
-      }
+      display: contents;
     }
   }
 `;
