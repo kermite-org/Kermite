@@ -1,39 +1,9 @@
-import { css, FC, jsx } from 'qx';
-import { ExtractKeysWithType } from '~/shared';
+import { css, FC, jsx, QxChild } from 'qx';
 import { appUi, makePlainSelectorOption } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-
-function valueChangeHandler<K extends keyof ILayoutGeneratorOptions>(key: K) {
-  return (value: ILayoutGeneratorOptions[K]) => {
-    projectQuickSetupStore.actions.writeLayoutOption(key, value);
-  };
-}
-
-type IFlagFieldKey = ExtractKeysWithType<
-  Required<ILayoutGeneratorOptions>,
-  boolean
->;
-
-const ToggleSwitchRow: FC<{
-  title: string;
-  fieldKey: IFlagFieldKey;
-}> = ({ title, fieldKey }) => {
-  const { layoutOptions } = projectQuickSetupStore.state;
-  return (
-    <div class="row">
-      <div>{title}</div>
-      <div>
-        <ToggleSwitch
-          checked={layoutOptions[fieldKey]}
-          onChange={valueChangeHandler(fieldKey)}
-        />
-      </div>
-    </div>
-  );
-};
 
 function useLayoutGeneratorOptionsPartModel() {
   appUi.setDebugValue({
@@ -56,6 +26,22 @@ function useLayoutGeneratorOptionsPartModel() {
   };
 }
 
+const FieldRow: FC<{ title: string; children: QxChild }> = ({
+  title,
+  children,
+}) => (
+  <div class="row">
+    <div>{title}</div>
+    <div>{children}</div>
+  </div>
+);
+
+function valueChangeHandler<K extends keyof ILayoutGeneratorOptions>(key: K) {
+  return (value: ILayoutGeneratorOptions[K]) => {
+    projectQuickSetupStore.actions.writeLayoutOption(key, value);
+  };
+}
+
 export const LayoutGeneratorOptionsPart: FC = () => {
   const { isSplit, layoutOptions, placementModeOptions } =
     useLayoutGeneratorOptionsPartModel();
@@ -63,23 +49,31 @@ export const LayoutGeneratorOptionsPart: FC = () => {
   return (
     <div class={style}>
       <div class="props-table">
-        <div class="row">
-          <div>placement origin</div>
-          <div>
-            <RibbonSelector
-              options={placementModeOptions}
-              value={layoutOptions.placementOrigin}
-              setValue={valueChangeHandler('placementOrigin')}
-            />
-          </div>
-        </div>
-        <ToggleSwitchRow title="invert X" fieldKey="invertX" />
-        <ToggleSwitchRow
-          title="invert X Right"
-          fieldKey="invertXR"
-          qxIf={isSplit}
-        />
-        <ToggleSwitchRow title="invert Y" fieldKey="invertY" />
+        <FieldRow title="placement origin">
+          <RibbonSelector
+            options={placementModeOptions}
+            value={layoutOptions.placementOrigin}
+            setValue={valueChangeHandler('placementOrigin')}
+          />
+        </FieldRow>
+        <FieldRow title="invert X">
+          <ToggleSwitch
+            checked={layoutOptions.invertX}
+            onChange={valueChangeHandler('invertX')}
+          />
+        </FieldRow>
+        <FieldRow title="invert X right" qxIf={isSplit}>
+          <ToggleSwitch
+            checked={layoutOptions.invertXR}
+            onChange={valueChangeHandler('invertXR')}
+          />
+        </FieldRow>
+        <FieldRow title="invert Y">
+          <ToggleSwitch
+            checked={layoutOptions.invertY}
+            onChange={valueChangeHandler('invertY')}
+          />
+        </FieldRow>
       </div>
     </div>
   );
