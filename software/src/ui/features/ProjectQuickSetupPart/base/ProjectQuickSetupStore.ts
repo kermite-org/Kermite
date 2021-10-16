@@ -14,7 +14,11 @@ import {
 } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/base/LayoutGenerator';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
-import { dispatchCoreAction } from '~/ui/store';
+import {
+  dispatchCoreAction,
+  globalSettingsWriter,
+  uiActions,
+} from '~/ui/store';
 
 const constants = {
   firmwareVariationId: '01',
@@ -84,11 +88,24 @@ const actions = {
       draft[key] = value;
     });
   },
-  createProfile() {
+  async createProfile() {
     const projectInfo = readers.emitDraftProjectInfo();
-    dispatchCoreAction({
+    const { projectId } = projectInfo;
+    await dispatchCoreAction({
       project_saveLocalProjectPackageInfo: projectInfo,
     });
+    await globalSettingsWriter.writeValue('globalProjectSpec', {
+      origin: 'local',
+      projectId,
+    });
+    await dispatchCoreAction({
+      profile_createProfileUnnamed: {
+        targetProjectOrigin: 'local',
+        targetProjectId: projectId,
+        presetSpec: { type: 'blank', layoutName: 'default' },
+      },
+    });
+    uiActions.navigateTo('/assigner');
   },
 };
 
