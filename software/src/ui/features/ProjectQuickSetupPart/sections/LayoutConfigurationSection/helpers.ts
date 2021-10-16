@@ -83,8 +83,7 @@ export function createLayoutFromFirmwareSpec(
   const isEvenSplit = evenSplitKeyboardTypes.includes(spec.baseFirmwareType);
   const isOddSplit = oddSplitKeyboardTypes.includes(spec.baseFirmwareType);
 
-  const { placementOrigin, invertX, invertY } = layoutOptions;
-  const isTopLeft = placementOrigin === 'topLeft';
+  const { placementOrigin, invertX, invertXR, invertY } = layoutOptions;
   const isCentered = placementOrigin === 'center';
   if (isCentered) {
     design.setup.placementAnchor = 'center';
@@ -125,17 +124,14 @@ export function createLayoutFromFirmwareSpec(
     ) {
       const nx = spec.matrixColumnPins.length;
       const ny = spec.matrixRowPins.length;
-
       let offsetXL = 0;
       let offsetXR = splitXOffset * 2 + nx;
       let offsetY = 0;
-
       if (isCentered) {
         offsetXL = -nx - 0.5;
         offsetXR = 1.5;
         offsetY = -ny / 2 + 0.5;
       }
-
       const keysLeft = makeMatrixKeyEntitiesW(
         nx,
         ny,
@@ -159,6 +155,46 @@ export function createLayoutFromFirmwareSpec(
       design.keyEntities.push(...keysLeft);
       design.keyEntities.push(...keysRight);
     }
+  } else if (isOddSplit) {
+    if (spec.useMatrixKeyScanner) {
+      const nxl = spec.matrixColumnPins?.length || 0;
+      const nyl = spec.matrixRowPins?.length || 0;
+      const nxr = spec.matrixColumnPinsR?.length || 0;
+      const nyr = spec.matrixRowPinsR?.length || 0;
+      let offsetXL = 0;
+      let offsetXR = splitXOffset * 2 + nxl;
+      let offsetYL = 0;
+      let offsetYR = 0;
+      if (isCentered) {
+        offsetXL = -nxl - 0.5;
+        offsetXR = 1.5;
+        offsetYL = -nyr / 2 + 0.5;
+        offsetYR = -nyr / 2 + 0.5;
+      }
+      const keysLeft = makeMatrixKeyEntitiesW(
+        nxl,
+        nyl,
+        offsetXL,
+        offsetYL,
+        isCentered,
+        !invertX,
+        invertY,
+        0,
+      );
+      const keysRight = makeMatrixKeyEntitiesW(
+        nxr,
+        nyr,
+        offsetXR,
+        offsetYR,
+        isCentered,
+        invertXR,
+        invertY,
+        nxl * nyl,
+      );
+      design.keyEntities.push(...keysLeft);
+      design.keyEntities.push(...keysRight);
+    }
   }
+
   return DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
 }
