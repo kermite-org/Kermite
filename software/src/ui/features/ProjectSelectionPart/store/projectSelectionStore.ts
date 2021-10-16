@@ -27,11 +27,15 @@ const helpers = {
     const filteredProjects = allProjectPackageInfos.filter(
       (info) => info.origin === resourceOrigin,
     );
-    filteredProjects.sort(sortOrderBy((it) => it.keyboardName));
+    filteredProjects.sort(
+      sortOrderBy((it) => (it.isDraft ? '' : it.keyboardName)),
+    );
     return filteredProjects.map((info) => ({
       projectId: info.projectId,
       projectKey: info.projectKey,
-      keyboardName: info.keyboardName,
+      keyboardName: info.isDraft
+        ? `(draft)${info.keyboardName}`
+        : info.keyboardName,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
