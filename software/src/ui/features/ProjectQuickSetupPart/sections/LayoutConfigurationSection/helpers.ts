@@ -22,7 +22,12 @@ export function createLayoutFromFirmwareSpec(
 ): IDisplayKeyboardDesign {
   const design = createFallbackPersistKeyboardDesign();
   const isSplit = splitKeyboardTypes.includes(spec.baseFirmwareType);
-  const { invertX, invertY } = layoutOptions;
+  const { placementOrigin, invertX, invertY } = layoutOptions;
+  const isCentered = placementOrigin === 'center';
+  if (isCentered) {
+    design.setup.placementAnchor = 'center';
+  }
+
   if (!isSplit) {
     if (
       spec.useMatrixKeyScanner &&
@@ -32,6 +37,12 @@ export function createLayoutFromFirmwareSpec(
       const nx = spec.matrixColumnPins.length;
       const ny = spec.matrixRowPins.length;
       const num = nx * ny;
+      let ox = 0;
+      let oy = 0;
+      if (isCentered) {
+        ox = -nx / 2 + 0.5;
+        oy = -ny / 2 + 0.5;
+      }
       const keys: IPersistKeyboardDesignRealKeyEntity[] =
         generateNumberSequence(num).map((idx) => {
           let ix = idx % nx >> 0;
@@ -44,8 +55,8 @@ export function createLayoutFromFirmwareSpec(
           }
           return {
             keyId: `key${idx}`,
-            x: ix,
-            y: iy,
+            x: ox + ix,
+            y: oy + iy,
             keyIndex: idx,
           };
         });
