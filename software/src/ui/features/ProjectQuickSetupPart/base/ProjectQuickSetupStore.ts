@@ -78,8 +78,13 @@ const effects = {
       copyObjectProps(state, loadedData);
     }
     return () => {
-      const { projectId, keyboardName, firmwareConfig } = state;
-      const persistData = { projectId, keyboardName, firmwareConfig };
+      const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
+      const persistData = {
+        projectId,
+        keyboardName,
+        firmwareConfig,
+        layoutOptions,
+      };
       UiLocalStorage.writeItem(storageKey, persistData);
     };
   },
