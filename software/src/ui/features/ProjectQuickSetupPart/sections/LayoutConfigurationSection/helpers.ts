@@ -126,8 +126,8 @@ export function createLayoutFromFirmwareSpec(
       const nx = spec.matrixColumnPins.length;
       const ny = spec.matrixRowPins.length;
 
-      let offsetXL = -nx - splitXOffset;
-      let offsetXR = splitXOffset;
+      let offsetXL = 0;
+      let offsetXR = splitXOffset * 2 + nx;
       let offsetY = 0;
 
       if (isCentered) {
