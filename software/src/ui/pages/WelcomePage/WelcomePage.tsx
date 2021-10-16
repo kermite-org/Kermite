@@ -14,6 +14,8 @@ export const WelcomePage: FC = () => {
     openSetupNavigationPanel,
     isDarkTheme,
     setDarkTheme,
+    showProjectQuickSetupPage,
+    isDeveloperMode,
   } = useWelcomePageModel();
   return (
     <div css={style}>
@@ -42,6 +44,15 @@ export const WelcomePage: FC = () => {
             onClick={openSetupNavigationPanel}
           >
             セットアップナビゲーションを表示
+          </WelcomePageButton>
+        </div>
+        <div className="row">
+          <WelcomePageButton
+            className="button"
+            onClick={showProjectQuickSetupPage}
+            qxIf={isDeveloperMode}
+          >
+            プロジェクトセットアップ
           </WelcomePageButton>
         </div>
       </div>
