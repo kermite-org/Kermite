@@ -7,25 +7,31 @@ import {
 import { appUi, UiLocalStorage } from '~/ui/base';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
 
-const state = new (class {
-  projectId: string = '';
-  keyboardName: string = '';
-  firmwareVariationId: string = '01';
-  firmwareName: string = 'default';
-  firmwareConfig: IKermiteStandardKeyboardSpec = fallbackStandardKeyboardSpec;
-  isConfigValid: boolean = false;
-  isConnectionValid: boolean = false;
-})();
+const constants = {
+  firmwareVariationId: '01',
+  firmwareName: 'default',
+};
+
+type IState = {
+  projectId: string;
+  keyboardName: string;
+  firmwareConfig: IKermiteStandardKeyboardSpec;
+  isConfigValid: boolean;
+  isConnectionValid: boolean;
+};
+
+const state: IState = {
+  projectId: '',
+  keyboardName: '',
+  firmwareConfig: fallbackStandardKeyboardSpec,
+  isConfigValid: false,
+  isConnectionValid: false,
+};
 
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
-    const {
-      projectId,
-      keyboardName,
-      firmwareVariationId,
-      firmwareName,
-      firmwareConfig,
-    } = state;
+    const { firmwareVariationId, firmwareName } = constants;
+    const { projectId, keyboardName, firmwareConfig } = state;
     return projectQuickSetupStoreHelpers.createDraftPackageInfo({
       projectId,
       keyboardName,
@@ -65,6 +71,7 @@ const effects = {
 };
 
 export const projectQuickSetupStore = {
+  constants,
   state,
   readers,
   actions,

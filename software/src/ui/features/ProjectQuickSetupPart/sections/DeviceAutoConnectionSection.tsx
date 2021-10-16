@@ -13,7 +13,8 @@ type IDeviceAutoConnectionSectionModel = {
 };
 
 function useDeviceAutoConnectionSectionModel(): IDeviceAutoConnectionSectionModel {
-  const { projectId, firmwareVariationId } = projectQuickSetupStore.state;
+  const { projectId } = projectQuickSetupStore.state;
+  const { firmwareVariationId } = projectQuickSetupStore.constants;
 
   const targetDeviceSpec = { projectId, firmwareVariationId };
 
