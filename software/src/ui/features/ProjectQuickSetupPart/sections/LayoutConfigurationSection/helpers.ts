@@ -7,6 +7,7 @@ import {
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
 } from '~/shared';
+import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 
 const splitKeyboardTypes: IStandardBaseFirmwareType[] = [
   'AvrSplit',
@@ -17,9 +18,11 @@ const splitKeyboardTypes: IStandardBaseFirmwareType[] = [
 
 export function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
+  layoutOptions: ILayoutGeneratorOptions,
 ): IDisplayKeyboardDesign {
   const design = createFallbackPersistKeyboardDesign();
   const isSplit = splitKeyboardTypes.includes(spec.baseFirmwareType);
+  const { invertX, invertY } = layoutOptions;
   if (!isSplit) {
     if (
       spec.useMatrixKeyScanner &&
@@ -31,8 +34,14 @@ export function createLayoutFromFirmwareSpec(
       const num = nx * ny;
       const keys: IPersistKeyboardDesignRealKeyEntity[] =
         generateNumberSequence(num).map((idx) => {
-          const ix = idx % nx >> 0;
-          const iy = (idx / nx) >> 0;
+          let ix = idx % nx >> 0;
+          let iy = (idx / nx) >> 0;
+          if (invertX) {
+            ix = nx - ix - 1;
+          }
+          if (invertY) {
+            iy = ny - iy - 1;
+          }
           return {
             keyId: `key${idx}`,
             x: ix,

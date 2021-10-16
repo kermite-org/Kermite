@@ -3,8 +3,10 @@ import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPar
 import { useMemoEx } from '~/ui/utils';
 
 export function useLayoutConfigurationSectionModel() {
+  const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
   const design = useMemoEx(createLayoutFromFirmwareSpec, [
-    projectQuickSetupStore.state.firmwareConfig,
+    firmwareConfig,
+    layoutOptions,
   ]);
   return { design };
 }
