@@ -3,14 +3,18 @@ import {
   copyObjectProps,
   fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
+  IProjectLayoutEntry,
   IProjectPackageInfo,
+  IStandardFirmwareEntry,
 } from '~/shared';
 import { appUi, UiLocalStorage } from '~/ui/base';
 import {
   fallbackLayoutGeneratorOptions,
   ILayoutGeneratorOptions,
 } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/base/LayoutGenerator';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
+import { dispatchCoreAction } from '~/ui/store';
 
 const constants = {
   firmwareVariationId: '01',
@@ -38,14 +42,26 @@ const state: IState = {
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareVariationId, firmwareName } = constants;
-    const { projectId, keyboardName, firmwareConfig } = state;
-    return projectQuickSetupStoreHelpers.createDraftPackageInfo({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
+    const layout = createLayoutFromFirmwareSpec(firmwareConfig, layoutOptions);
+    const projectInfo = projectQuickSetupStoreHelpers.createDraftPackageInfo({
       projectId,
-      keyboardName,
-      firmwareVariationId,
-      firmwareName,
-      firmwareConfig,
+      keyboardName: 'MyKeyboard1', // debug
     });
+    const firmwareEntry: IStandardFirmwareEntry = {
+      type: 'standard',
+      firmwareName,
+      variationId: firmwareVariationId,
+      standardFirmwareConfig: firmwareConfig,
+    };
+    const layoutEntry: IProjectLayoutEntry = {
+      layoutName: 'default',
+      data: layout,
+    };
+    projectInfo.firmwares.push(firmwareEntry);
+    projectInfo.layouts.push(layoutEntry);
+    return projectInfo;
   },
 };
 
@@ -66,6 +82,12 @@ const actions = {
   ) {
     state.layoutOptions = produce(state.layoutOptions, (draft) => {
       draft[key] = value;
+    });
+  },
+  createProfile() {
+    const projectInfo = readers.emitDraftProjectInfo();
+    dispatchCoreAction({
+      project_saveLocalProjectPackageInfo: projectInfo,
     });
   },
 };

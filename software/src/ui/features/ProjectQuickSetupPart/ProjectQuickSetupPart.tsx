@@ -7,8 +7,8 @@ import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sectio
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 
 function getCreateProfileButtonAvailability() {
-  const { isConfigValid, isConnectionValid } = projectQuickSetupStore.state;
-  return isConfigValid && isConnectionValid;
+  const { isConfigValid } = projectQuickSetupStore.state;
+  return isConfigValid;
 }
 
 export const ProjectQuickSetupPart: FC = () => {
@@ -27,6 +27,7 @@ export const ProjectQuickSetupPart: FC = () => {
           <GeneralButton
             size="large"
             disabled={!getCreateProfileButtonAvailability()}
+            onClick={projectQuickSetupStore.actions.createProfile}
           >
             Create Profile
           </GeneralButton>

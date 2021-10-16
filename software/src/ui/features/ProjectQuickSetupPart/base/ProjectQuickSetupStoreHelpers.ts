@@ -1,10 +1,8 @@
 import {
-  uniqueArrayItems,
+  createProjectKey,
   generateUniqueRandomId,
   IProjectPackageInfo,
-  IStandardFirmwareEntry,
-  createProjectKey,
-  IKermiteStandardKeyboardSpec,
+  uniqueArrayItems,
 } from '~/shared';
 import { uiState } from '~/ui/store';
 
@@ -23,32 +21,18 @@ export const projectQuickSetupStoreHelpers = {
   createDraftPackageInfo(args: {
     projectId: string;
     keyboardName: string;
-    firmwareVariationId: string;
-    firmwareName: string;
-    firmwareConfig: IKermiteStandardKeyboardSpec;
   }): IProjectPackageInfo {
-    const {
-      projectId,
-      keyboardName,
-      firmwareVariationId,
-      firmwareName,
-      firmwareConfig,
-    } = args;
+    const { projectId, keyboardName } = args;
     const origin = 'local';
-    const firmwareEntry: IStandardFirmwareEntry = {
-      type: 'standard',
-      variationId: firmwareVariationId,
-      firmwareName: firmwareName,
-      standardFirmwareConfig: firmwareConfig,
-    };
     return {
+      isDraft: true,
       formatRevision: 'PKG0',
       origin,
       projectId,
       projectKey: createProjectKey(origin, projectId),
       keyboardName,
       packageName: keyboardName,
-      firmwares: [firmwareEntry],
+      firmwares: [],
       layouts: [],
       profiles: [],
     };
