@@ -9,6 +9,7 @@ import {
 import { appConfig, appEnv } from '~/shell/base';
 import {
   fetchJson,
+  fsExistsSync,
   fsxDeleteFile,
   fsxEnsureFolderExists,
   fsxListFileBaseNames,
@@ -32,9 +33,10 @@ function convertPackageFileContentToPackageInfo(
   data: IProjectPackageFileContent,
   origin: IResourceOrigin,
   packageName: string,
+  fixKeyboardName: boolean,
 ): IProjectPackageInfo {
   let { keyboardName } = data;
-  if (keyboardName.toLowerCase() !== packageName) {
+  if (fixKeyboardName && keyboardName.toLowerCase() !== packageName) {
     keyboardName = packageName;
   }
   return {
@@ -71,9 +73,34 @@ async function loadProjectPackageFiles(
         filePath,
       )) as IProjectPackageFileContent;
       migrateProjectPackageData(data);
-      return convertPackageFileContentToPackageInfo(data, origin, packageName);
+      return convertPackageFileContentToPackageInfo(
+        data,
+        origin,
+        packageName,
+        true,
+      );
     }),
   );
+}
+
+async function loadDraftProjectPackageFile(
+  filePath: string,
+): Promise<IProjectPackageInfo | undefined> {
+  if (fsExistsSync(filePath)) {
+    const data = (await fsxReadJsonFile(
+      filePath,
+    )) as IProjectPackageFileContent;
+    migrateProjectPackageData(data);
+    const projectInfo = convertPackageFileContentToPackageInfo(
+      data,
+      'local',
+      'draft_project',
+      false,
+    );
+    projectInfo.isDraft = true;
+    return projectInfo;
+  }
+  return undefined;
 }
 
 type IIndexContent = {
@@ -103,7 +130,12 @@ async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
       )) as IProjectPackageFileContent;
       migrateProjectPackageData(data);
       const packageName = pathBasename(path, '.kmpkg.json');
-      return convertPackageFileContentToPackageInfo(data, origin, packageName);
+      return convertPackageFileContentToPackageInfo(
+        data,
+        origin,
+        packageName,
+        true,
+      );
     }),
   );
   return cachedRemotePackages;
@@ -120,32 +152,55 @@ function getUserProjectsFolderPath() {
   return pathJoin(appEnv.userDataFolderPath, 'data', 'projects');
 }
 
-function getUserProjectFilePath(packageName: string) {
+function getUserDraftProjectFilePath() {
   return pathJoin(
     appEnv.userDataFolderPath,
     'data',
-    'projects',
-    `${packageName}.kmpkg.json`,
+    `draft_project.kmpkg.json`,
   );
+}
+
+function getUserProjectFilePath(packageName: string, isDraft: boolean) {
+  if (isDraft) {
+    return getUserDraftProjectFilePath();
+  } else {
+    return pathJoin(
+      appEnv.userDataFolderPath,
+      'data',
+      'projects',
+      `${packageName}.kmpkg.json`,
+    );
+  }
 }
 
 async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
   const projectsFolder = getUserProjectsFolderPath();
-  return (await loadProjectPackageFiles(projectsFolder, 'local')).filter(
+  const projectInfos = (
+    await loadProjectPackageFiles(projectsFolder, 'local')
+  ).filter(
     (it) => validateResourceName(it.packageName, 'package name') === undefined,
   );
+  const draftFilePath = getUserDraftProjectFilePath();
+  const draftProjectInfo = await loadDraftProjectPackageFile(draftFilePath);
+  if (draftProjectInfo) {
+    projectInfos.push(draftProjectInfo);
+  }
+  return projectInfos;
 }
 
 async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
   const savingData = convertProjectPackageInfoToFileContent(info);
-  const filePath = getUserProjectFilePath(info.packageName);
+  const filePath = getUserProjectFilePath(info.packageName, !!info.isDraft);
   console.log(`saving ${pathBasename(filePath)}`);
   await fsxEnsureFolderExists(pathDirname(filePath));
   await fsxWriteJsonFile(filePath, savingData);
 }
 
-async function deleteUserProjectPackageFileImpl(packageName: string) {
-  const filePath = getUserProjectFilePath(packageName);
+async function deleteUserProjectPackageFileImpl(
+  packageName: string,
+  isDraft: boolean,
+) {
+  const filePath = getUserProjectFilePath(packageName, isDraft);
   await fsxDeleteFile(filePath);
 }
 
@@ -167,7 +222,7 @@ export const projectPackageProvider = {
     await saveUserProjectPackageInfoImpl(info);
   },
   async deleteLocalProjectPackageFile(packageName: string) {
-    await deleteUserProjectPackageFileImpl(packageName);
+    await deleteUserProjectPackageFileImpl(packageName, false);
   },
   async openLocalProjectsFolder() {
     const folderPath = getUserProjectsFolderPath();
