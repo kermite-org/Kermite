@@ -86,6 +86,13 @@ export const StandardFirmwareEditor: FC = () => {
             editValues={editValues}
           />
           <MultiplePinsFieldRow
+            label="column pins"
+            fieldKey="matrixColumnPins"
+            availabilityKey="useMatrixKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+          />
+          <MultiplePinsFieldRow
             label="row pins"
             fieldKey="matrixRowPins"
             availabilityKey="useMatrixKeyScanner"
@@ -93,24 +100,16 @@ export const StandardFirmwareEditor: FC = () => {
             fieldErrors={fieldErrors}
           />
           <MultiplePinsFieldRow
-            label="column pins"
-            fieldKey="matrixColumnPins"
-            availabilityKey="useMatrixKeyScanner"
-            editValues={editValues}
-            fieldErrors={fieldErrors}
-          />
-
-          <MultiplePinsFieldRow
-            label="row pins right"
-            fieldKey="matrixRowPinsR"
+            label="column pins right"
+            fieldKey="matrixColumnPinsR"
             availabilityKey="useMatrixKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}
             qxIf={isOddSplit}
           />
           <MultiplePinsFieldRow
-            label="column pins right"
-            fieldKey="matrixColumnPinsR"
+            label="row pins right"
+            fieldKey="matrixRowPinsR"
             availabilityKey="useMatrixKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}
