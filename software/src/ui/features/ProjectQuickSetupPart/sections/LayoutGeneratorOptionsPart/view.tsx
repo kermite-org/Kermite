@@ -75,11 +75,17 @@ export const LayoutGeneratorOptionsPart: FC = () => {
           />
         </FieldRow>
       </div>
+      <div class="note">
+        note: configurations for direct wired keys and encoders are not
+        supported yet
+      </div>
     </div>
   );
 };
 
 const style = css`
+  margin: 5px;
+  margin-top: 10px;
   > .props-table {
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -88,5 +94,10 @@ const style = css`
     > .row {
       display: contents;
     }
+  }
+
+  > .note {
+    margin-top: 10px;
+    color: #888;
   }
 `;
