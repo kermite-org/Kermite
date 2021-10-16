@@ -1,3 +1,4 @@
+import produce from 'immer';
 import {
   copyObjectProps,
   fallbackStandardKeyboardSpec,
@@ -5,6 +6,10 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { appUi, UiLocalStorage } from '~/ui/base';
+import {
+  fallbackLayoutGeneratorOptions,
+  ILayoutGeneratorOptions,
+} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
 
 const constants = {
@@ -16,6 +21,7 @@ type IState = {
   projectId: string;
   keyboardName: string;
   firmwareConfig: IKermiteStandardKeyboardSpec;
+  layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
 };
@@ -24,6 +30,7 @@ const state: IState = {
   projectId: '',
   keyboardName: '',
   firmwareConfig: fallbackStandardKeyboardSpec,
+  layoutOptions: fallbackLayoutGeneratorOptions,
   isConfigValid: false,
   isConnectionValid: false,
 };
@@ -52,6 +59,14 @@ const actions = {
     } else {
       state.isConfigValid = false;
     }
+  },
+  writeLayoutOption<K extends keyof ILayoutGeneratorOptions>(
+    key: K,
+    value: ILayoutGeneratorOptions[K],
+  ) {
+    state.layoutOptions = produce(state.layoutOptions, (draft) => {
+      draft[key] = value;
+    });
   },
 };
 
