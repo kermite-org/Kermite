@@ -16,6 +16,32 @@ const splitKeyboardTypes: IStandardBaseFirmwareType[] = [
   'RpOddSplit',
 ];
 
+function shiftNumbers(arr: number[], offset: number) {
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] += offset;
+  }
+}
+
+function makeMatrixKeyEntities(
+  xs: number[],
+  ys: number[],
+  keyIndexOffset: number,
+): IPersistKeyboardDesignRealKeyEntity[] {
+  const nx = xs.length;
+  const ny = ys.length;
+  const num = nx * ny;
+  return generateNumberSequence(num).map((i) => {
+    const ix = i % nx >> 0;
+    const iy = (i / nx) >> 0;
+    const keyIndex = keyIndexOffset + i;
+    return {
+      keyId: `key${keyIndex}`,
+      x: xs[ix],
+      y: ys[iy],
+      keyIndex,
+    };
+  });
+}
 export function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
   layoutOptions: ILayoutGeneratorOptions,
@@ -36,30 +62,19 @@ export function createLayoutFromFirmwareSpec(
     ) {
       const nx = spec.matrixColumnPins.length;
       const ny = spec.matrixRowPins.length;
-      const num = nx * ny;
-      let ox = 0;
-      let oy = 0;
-      if (isCentered) {
-        ox = -nx / 2 + 0.5;
-        oy = -ny / 2 + 0.5;
+      const xs = generateNumberSequence(nx);
+      const ys = generateNumberSequence(ny);
+      if (invertX) {
+        xs.reverse();
       }
-      const keys: IPersistKeyboardDesignRealKeyEntity[] =
-        generateNumberSequence(num).map((idx) => {
-          let ix = idx % nx >> 0;
-          let iy = (idx / nx) >> 0;
-          if (invertX) {
-            ix = nx - ix - 1;
-          }
-          if (invertY) {
-            iy = ny - iy - 1;
-          }
-          return {
-            keyId: `key${idx}`,
-            x: ox + ix,
-            y: oy + iy,
-            keyIndex: idx,
-          };
-        });
+      if (invertY) {
+        ys.reverse();
+      }
+      if (isCentered) {
+        shiftNumbers(xs, -nx / 2 + 0.5);
+        shiftNumbers(ys, -ny / 2 + 0.5);
+      }
+      const keys = makeMatrixKeyEntities(xs, ys, 0);
       design.keyEntities.push(...keys);
     }
   }
