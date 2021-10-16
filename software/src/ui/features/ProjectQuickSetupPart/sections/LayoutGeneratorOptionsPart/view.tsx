@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { ExtractKeysWithType } from '~/shared';
-import { appUi } from '~/ui/base';
-import { ToggleSwitch } from '~/ui/components';
+import { appUi, makePlainSelectorOption } from '~/ui/base';
+import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
@@ -25,10 +25,12 @@ const ToggleSwitchRow: FC<{
   return (
     <div class="row">
       <div>{title}</div>
-      <ToggleSwitch
-        checked={layoutOptions[fieldKey]}
-        onChange={valueChangeHandler(fieldKey)}
-      />
+      <div>
+        <ToggleSwitch
+          checked={layoutOptions[fieldKey]}
+          onChange={valueChangeHandler(fieldKey)}
+        />
+      </div>
     </div>
   );
 };
@@ -41,16 +43,36 @@ function useLayoutGeneratorOptionsPartModel() {
   const isSplit = standardFirmwareEditModelHelpers.getIsSplit(
     firmwareConfig.baseFirmwareType,
   );
+
+  const placementModeOptions = ['topLeft', 'center'].map(
+    makePlainSelectorOption,
+  );
+  const { layoutOptions } = projectQuickSetupStore.state;
+
   return {
     isSplit,
+    layoutOptions,
+    placementModeOptions,
   };
 }
 
 export const LayoutGeneratorOptionsPart: FC = () => {
-  const { isSplit } = useLayoutGeneratorOptionsPartModel();
+  const { isSplit, layoutOptions, placementModeOptions } =
+    useLayoutGeneratorOptionsPartModel();
+
   return (
     <div class={style}>
       <div class="props-table">
+        <div class="row">
+          <div>placement origin</div>
+          <div>
+            <RibbonSelector
+              options={placementModeOptions}
+              value={layoutOptions.placementOrigin}
+              setValue={valueChangeHandler('placementOrigin')}
+            />
+          </div>
+        </div>
         <ToggleSwitchRow title="invert X" fieldKey="invertX" />
         <ToggleSwitchRow
           title="invert X Right"
