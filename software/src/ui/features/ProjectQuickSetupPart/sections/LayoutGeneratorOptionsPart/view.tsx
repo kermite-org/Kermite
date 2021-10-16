@@ -10,7 +10,7 @@ function useLayoutGeneratorOptionsPartModel() {
     layoutOptions: projectQuickSetupStore.state.layoutOptions,
   });
   const { firmwareConfig } = projectQuickSetupStore.state;
-  const isSplit = standardFirmwareEditModelHelpers.getIsSplit(
+  const isOddSplit = standardFirmwareEditModelHelpers.getIsOddSplit(
     firmwareConfig.baseFirmwareType,
   );
 
@@ -20,7 +20,7 @@ function useLayoutGeneratorOptionsPartModel() {
   const { layoutOptions } = projectQuickSetupStore.state;
 
   return {
-    isSplit,
+    isOddSplit,
     layoutOptions,
     placementModeOptions,
   };
@@ -43,32 +43,32 @@ function valueChangeHandler<K extends keyof ILayoutGeneratorOptions>(key: K) {
 }
 
 export const LayoutGeneratorOptionsPart: FC = () => {
-  const { isSplit, layoutOptions, placementModeOptions } =
+  const { isOddSplit, layoutOptions, placementModeOptions } =
     useLayoutGeneratorOptionsPartModel();
 
   return (
     <div class={style}>
       <div class="props-table">
-        <FieldRow title="placement origin">
+        <FieldRow title="key placement anchor">
           <RibbonSelector
             options={placementModeOptions}
             value={layoutOptions.placementOrigin}
             setValue={valueChangeHandler('placementOrigin')}
           />
         </FieldRow>
-        <FieldRow title="invert X">
+        <FieldRow title="invert key indices X">
           <ToggleSwitch
             checked={layoutOptions.invertX}
             onChange={valueChangeHandler('invertX')}
           />
         </FieldRow>
-        <FieldRow title="invert X right" qxIf={isSplit}>
+        <FieldRow title="invert key indices X right" qxIf={isOddSplit}>
           <ToggleSwitch
             checked={layoutOptions.invertXR}
             onChange={valueChangeHandler('invertXR')}
           />
         </FieldRow>
-        <FieldRow title="invert Y">
+        <FieldRow title="invert key indices Y">
           <ToggleSwitch
             checked={layoutOptions.invertY}
             onChange={valueChangeHandler('invertY')}
