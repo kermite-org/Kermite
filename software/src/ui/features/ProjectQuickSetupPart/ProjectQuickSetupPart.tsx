@@ -1,4 +1,5 @@
 import { css, FC, jsx, useEffect } from 'qx';
+import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
@@ -44,7 +45,7 @@ const style = css`
 
   > .top-row {
     flex-shrink: 0;
-    border: solid 1px red;
+    border: solid 1px ${uiTheme.colors.clPrimary};
     height: 40px;
   }
 
@@ -65,10 +66,10 @@ const style = css`
 
   > .bottom-row {
     flex-shrink: 0;
-    border: solid 1px red;
     height: 80px;
     display: flex;
     justify-content: space-between;
+    border: solid 1px ${uiTheme.colors.clPrimary};
 
     > .flash-section {
     }
