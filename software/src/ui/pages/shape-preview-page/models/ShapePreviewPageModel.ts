@@ -1,6 +1,6 @@
-import { useEffect, useLocal } from 'qx';
-import { IDisplayKeyboardDesign, removeArrayItems } from '~/shared';
-import { ISelectorSource, ipcAgent } from '~/ui/base';
+import { IDisplayKeyboardDesign } from '~/shared';
+import { ISelectorSource } from '~/ui/base';
+import { useHoldKeyIndices } from '~/ui/commonModels';
 import { useKeyboardShapesModel } from '~/ui/pages/shape-preview-page/models/KeyboardShapesModel';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models/ShapeViewPersistState';
 
@@ -10,24 +10,6 @@ export interface IShapePreviewPageModel {
   holdKeyIndices: number[];
   projectSelectorSource: ISelectorSource;
   layoutSelectorSource: ISelectorSource;
-}
-
-function useHoldKeyIndices() {
-  const holdKeyIndices = useLocal<number[]>([]);
-
-  useEffect(() => {
-    return ipcAgent.events.device_keyEvents.subscribe((e) => {
-      if (e.type === 'keyStateChanged') {
-        if (e.isDown) {
-          holdKeyIndices.push(e.keyIndex);
-        } else {
-          removeArrayItems(holdKeyIndices, e.keyIndex);
-        }
-      }
-    });
-  }, []);
-
-  return holdKeyIndices;
 }
 
 export function useShapePreviewPageModel(): IShapePreviewPageModel {
