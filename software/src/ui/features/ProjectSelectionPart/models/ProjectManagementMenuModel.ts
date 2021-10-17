@@ -6,6 +6,7 @@ import { projectPackagesReader } from '~/ui/store';
 export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
   const editTargetProject = projectPackagesReader.getEditTargetProject();
 
+  const isProjectSelected = !!editTargetProject;
   const isDraftProjectSelected = !!editTargetProject?.isDraft;
   const isUserProjectSelected = editTargetProject && !editTargetProject.isDraft;
 
@@ -32,15 +33,13 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
         type: 'menuEntry',
         text: 'rename',
         handler: projectManagementMenuActions.handleRenameProject,
-        disabled: !isUserProjectSelected,
       },
     ),
     ...optInArrayItem<IGeneralMenuItem>(
-      isUserProjectSelected && {
+      isProjectSelected && {
         type: 'menuEntry',
         text: 'delete',
         handler: projectManagementMenuActions.handleDeleteProject,
-        disabled: !isUserProjectSelected,
       },
     ),
     {

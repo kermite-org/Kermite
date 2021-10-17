@@ -221,8 +221,8 @@ export const projectPackageProvider = {
   async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
     await saveUserProjectPackageInfoImpl(info);
   },
-  async deleteLocalProjectPackageFile(packageName: string) {
-    await deleteUserProjectPackageFileImpl(packageName, false);
+  async deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
+    await deleteUserProjectPackageFileImpl(packageName, isDraft);
   },
   async openLocalProjectsFolder() {
     const folderPath = getUserProjectsFolderPath();

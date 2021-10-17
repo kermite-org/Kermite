@@ -100,6 +100,7 @@ export const projectPackageModule = createCoreModule({
     if (project) {
       await projectPackageProvider.deleteLocalProjectPackageFile(
         project.packageName,
+        !!project.isDraft,
       );
       const allProjectPackageInfos =
         await projectPackageProvider.getAllProjectPackageInfos();
@@ -118,6 +119,7 @@ export const projectPackageModule = createCoreModule({
     if (project) {
       await projectPackageProvider.deleteLocalProjectPackageFile(
         project.packageName,
+        false,
       );
       const newProject: IProjectPackageInfo = {
         ...project,
