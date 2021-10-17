@@ -6,6 +6,7 @@ import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
 import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
+import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 
 function getCreateProfileButtonAvailability() {
   const { isConfigValid } = projectQuickSetupStore.state;
@@ -16,7 +17,9 @@ export const ProjectQuickSetupPart: FC = () => {
   useEffect(projectQuickSetupStore.effects.editDataPersistenceEffect, []);
   return (
     <div class={style}>
-      <div class="top-row"></div>
+      <div class="top-row">
+        <ProjectConfigurationSection />
+      </div>
       <div class="main-row">
         <FirmwareConfigurationSection class="firmware-config-section" />
         <LayoutConfigurationSection class="layout-config-section" />
@@ -45,8 +48,6 @@ const style = css`
 
   > .top-row {
     flex-shrink: 0;
-    border: solid 1px ${uiTheme.colors.clPrimary};
-    height: 40px;
   }
 
   > .main-row {

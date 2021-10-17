@@ -51,7 +51,7 @@ const readers = {
     const layout = createLayoutFromFirmwareSpec(firmwareConfig, layoutOptions);
     const projectInfo = projectQuickSetupStoreHelpers.createDraftPackageInfo({
       projectId,
-      keyboardName: 'MyKeyboard1', // debug
+      keyboardName,
     });
     const firmwareEntry: IStandardFirmwareEntry = {
       type: 'standard',
@@ -70,6 +70,10 @@ const readers = {
 };
 
 const actions = {
+  setKeyboardName(keyboardName: string) {
+    state.keyboardName = keyboardName;
+    state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+  },
   writeFirmwareConfig(data: IKermiteStandardKeyboardSpec | undefined) {
     if (data) {
       state.firmwareConfig = data;
