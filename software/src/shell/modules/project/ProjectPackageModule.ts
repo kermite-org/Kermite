@@ -63,9 +63,6 @@ export const projectPackageModule = createCoreModule({
       await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
   },
-  project_saveLocalDraftProjectPackageInfo(projectInfo) {
-    commitCoreState({ draftProjectPackageInfo: projectInfo });
-  },
   async project_loadAllCustomFirmwareInfos() {
     const allCustomFirmwareInfos =
       await customFirmwareInfoProvider.getAllCustomFirmwareInfos();
