@@ -54,7 +54,7 @@ export const WelcomePage: FC = () => {
             onClick={showProjectQuickSetupPage}
             qxIf={isDeveloperMode}
           >
-            プロジェクトセットアップ
+            プロジェクトクイックセットアップ
           </WelcomePageButton>
         </div>
       </div>
