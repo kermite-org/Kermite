@@ -1,4 +1,4 @@
-import { css, FC, jsx, useEffect } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
@@ -14,7 +14,7 @@ function getCreateProfileButtonAvailability() {
 }
 
 export const ProjectQuickSetupPart: FC = () => {
-  useEffect(projectQuickSetupStore.effects.editDataPersistenceEffect, []);
+  projectQuickSetupStore.executeEffectsOnRender();
   return (
     <div class={style}>
       <div class="top-row">

@@ -1,4 +1,5 @@
 import produce from 'immer';
+import { useEffect } from 'qx';
 import {
   copyObjectProps,
   fallbackStandardKeyboardSpec,
@@ -8,6 +9,7 @@ import {
   IStandardFirmwareEntry,
 } from '~/shared';
 import { UiLocalStorage } from '~/ui/base';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import {
   fallbackLayoutGeneratorOptions,
   ILayoutGeneratorOptions,
@@ -50,7 +52,6 @@ const state: IState = createDefaultState();
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareVariationId, firmwareName } = constants;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
     const layout = createLayoutFromFirmwareSpec(firmwareConfig, layoutOptions);
     const projectInfo = projectQuickSetupStoreHelpers.createDraftPackageInfo({
@@ -76,6 +77,13 @@ const readers = {
 const actions = {
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
+    actions.loadFirmwareConfigToEditor();
+  },
+  loadFirmwareConfigToEditor() {
+    StandardFirmwareEditor_ExposedModel.loadFirmwareConfig(
+      state.firmwareConfig,
+      true,
+    );
   },
   setKeyboardName(keyboardName: string) {
     state.keyboardName = keyboardName;
@@ -126,6 +134,8 @@ const effects = {
     if (loadedData) {
       copyObjectProps(state, loadedData);
     }
+    actions.loadFirmwareConfigToEditor();
+
     return () => {
       const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
       const persistData = {
@@ -139,10 +149,19 @@ const effects = {
   },
 };
 
+function executeEffectsOnRender() {
+  useEffect(effects.editDataPersistenceEffect, []);
+
+  const { editValues, canSave } = StandardFirmwareEditor_ExposedModel;
+  useEffect(() => {
+    actions.writeFirmwareConfig(canSave ? editValues : undefined);
+  }, [editValues, canSave]);
+}
+
 export const projectQuickSetupStore = {
   constants,
   state,
   readers,
   actions,
-  effects,
+  executeEffectsOnRender,
 };
