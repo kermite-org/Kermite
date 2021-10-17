@@ -1,8 +1,14 @@
+import { optInArrayItem } from '~/shared';
 import { IGeneralMenuItem } from '~/ui/base';
 import { projectManagementMenuActions } from '~/ui/features/ProjectSelectionPart/store';
 import { projectPackagesReader } from '~/ui/store';
 
 export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
+  const editTargetProject = projectPackagesReader.getEditTargetProject();
+
+  const isDraftProjectSelected = !!editTargetProject?.isDraft;
+  const isUserProjectSelected = editTargetProject && !editTargetProject.isDraft;
+
   return [
     {
       type: 'menuEntry',
@@ -14,18 +20,29 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
       text: 'copy from online project',
       handler: projectManagementMenuActions.handleImportOnlineProject,
     },
-    {
-      type: 'menuEntry',
-      text: 'rename',
-      handler: projectManagementMenuActions.handleRenameProject,
-      disabled: !projectPackagesReader.getEditTargetProject(),
-    },
-    {
-      type: 'menuEntry',
-      text: 'delete',
-      handler: projectManagementMenuActions.handleDeleteProject,
-      disabled: !projectPackagesReader.getEditTargetProject(),
-    },
+    ...optInArrayItem<IGeneralMenuItem>(
+      isDraftProjectSelected && {
+        type: 'menuEntry',
+        text: 'save',
+        handler: projectManagementMenuActions.handleSaveDraftProject,
+      },
+    ),
+    ...optInArrayItem<IGeneralMenuItem>(
+      isUserProjectSelected && {
+        type: 'menuEntry',
+        text: 'rename',
+        handler: projectManagementMenuActions.handleRenameProject,
+        disabled: !isUserProjectSelected,
+      },
+    ),
+    ...optInArrayItem<IGeneralMenuItem>(
+      isUserProjectSelected && {
+        type: 'menuEntry',
+        text: 'delete',
+        handler: projectManagementMenuActions.handleDeleteProject,
+        disabled: !isUserProjectSelected,
+      },
+    ),
     {
       type: 'menuEntry',
       text: 'open data folder',

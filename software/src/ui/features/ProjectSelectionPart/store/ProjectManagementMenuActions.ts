@@ -1,5 +1,9 @@
 import { ISelectorOption } from '~/ui/base';
-import { callProjectSelectionModal, modalConfirm } from '~/ui/components';
+import {
+  callProjectSelectionModal,
+  modalAlert,
+  modalConfirm,
+} from '~/ui/components';
 import { projectPackagesReader } from '~/ui/store/ProjectPackages';
 import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
@@ -105,6 +109,9 @@ export const projectManagementMenuActions = {
         });
       }
     }
+  },
+  async handleSaveDraftProject() {
+    await modalAlert('unimplemented yet');
   },
   handleOpenLocalProjectsFolder() {
     dispatchCoreAction({ project_openLocalProjectsFolder: 1 });

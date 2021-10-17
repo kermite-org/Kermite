@@ -444,3 +444,7 @@ export function getMatched(text: string, pattern: RegExp): string | undefined {
   const m = text.match(pattern);
   return m?.[1] ?? undefined;
 }
+
+export function optInArrayItem<T>(item: T | undefined | false): T[] {
+  return item ? [item] : [];
+}
