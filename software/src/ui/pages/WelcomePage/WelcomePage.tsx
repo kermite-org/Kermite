@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
 import { useWelcomePageModel } from '~/ui/pages/WelcomePage/WelcomePage.model';
@@ -16,6 +17,7 @@ export const WelcomePage: FC = () => {
     setDarkTheme,
     showProjectQuickSetupPage,
     isDeveloperMode,
+    setDeveloperMode,
   } = useWelcomePageModel();
   return (
     <div css={style}>
@@ -66,6 +68,13 @@ export const WelcomePage: FC = () => {
           onChange={setDarkTheme}
         />
       </div>
+      <div className="developer-mode-option-area">
+        <CheckBoxLine
+          text="developer mode"
+          checked={isDeveloperMode}
+          setChecked={setDeveloperMode}
+        />
+      </div>
     </div>
   );
 };
@@ -101,13 +110,13 @@ const style = css`
     width: 400px;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 
     > .row {
       width: 100%;
       display: flex;
       justify-content: center;
-      gap: 30px;
+      gap: 20px;
 
       > .button {
         width: 100%;
@@ -127,5 +136,11 @@ const style = css`
     top: 0;
     right: 0;
     margin: 5px 10px;
+  }
+
+  > .developer-mode-option-area {
+    position: absolute;
+    bottom: 0;
+    margin: 5px;
   }
 `;

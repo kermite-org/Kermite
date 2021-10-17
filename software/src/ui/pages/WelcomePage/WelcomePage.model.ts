@@ -2,7 +2,12 @@ import {
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
-import { uiActions, uiReaders, uiState } from '~/ui/store';
+import {
+  globalSettingsWriter,
+  uiActions,
+  uiReaders,
+  uiState,
+} from '~/ui/store';
 
 interface WelcomePageModel {
   appVersion: string;
@@ -15,6 +20,7 @@ interface WelcomePageModel {
   setDarkTheme(isDark: boolean): void;
   showProjectQuickSetupPage(): void;
   isDeveloperMode: boolean;
+  setDeveloperMode(value: boolean): void;
 }
 
 export function useWelcomePageModel(): WelcomePageModel {
@@ -36,6 +42,8 @@ export function useWelcomePageModel(): WelcomePageModel {
     changeTheme(isDark ? 'dark' : 'light');
 
   const { isDeveloperMode } = uiReaders;
+  const setDeveloperMode = (value: boolean) =>
+    globalSettingsWriter.writeValue('developerMode', value);
 
   return {
     appVersion,
@@ -48,5 +56,6 @@ export function useWelcomePageModel(): WelcomePageModel {
     setDarkTheme,
     showProjectQuickSetupPage,
     isDeveloperMode,
+    setDeveloperMode,
   };
 }
