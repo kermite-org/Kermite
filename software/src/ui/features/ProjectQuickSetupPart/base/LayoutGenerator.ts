@@ -79,6 +79,7 @@ export function createLayoutFromFirmwareSpec(
   const splitXOffset = 0.5;
 
   if (isUnified) {
+    let baseY = 0;
     if (
       spec.useMatrixKeyScanner &&
       spec.matrixRowPins &&
@@ -98,6 +99,28 @@ export function createLayoutFromFirmwareSpec(
         nx,
         offsetX,
         offsetY,
+        invertX,
+        invertY,
+        0,
+      );
+      design.keyEntities.push(...keys);
+      baseY += ny;
+    }
+    if (spec.useDirectWiredKeyScanner && spec.directWiredPins) {
+      const numKeys = spec.directWiredPins.length;
+      const nx = 4;
+      const ny = Math.ceil(numKeys / nx);
+      let offsetX = 0;
+      let offsetY = 0;
+      if (isCentered) {
+        offsetX = -nx / 2 + 0.5;
+        offsetY = -ny / 2 + 0.5;
+      }
+      const keys = makeMatrixKeyEntities(
+        numKeys,
+        nx,
+        offsetX,
+        baseY + offsetY,
         invertX,
         invertY,
         0,
