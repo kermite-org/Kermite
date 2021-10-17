@@ -34,14 +34,18 @@ type IState = {
   isConnectionValid: boolean;
 };
 
-const state: IState = {
-  projectId: '',
-  keyboardName: '',
-  firmwareConfig: fallbackStandardKeyboardSpec,
-  layoutOptions: fallbackLayoutGeneratorOptions,
-  isConfigValid: false,
-  isConnectionValid: false,
-};
+function createDefaultState(): IState {
+  return {
+    projectId: '',
+    keyboardName: '',
+    firmwareConfig: fallbackStandardKeyboardSpec,
+    layoutOptions: fallbackLayoutGeneratorOptions,
+    isConfigValid: false,
+    isConnectionValid: false,
+  };
+}
+
+const state: IState = createDefaultState();
 
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
@@ -70,6 +74,9 @@ const readers = {
 };
 
 const actions = {
+  resetConfigurations() {
+    copyObjectProps(state, createDefaultState());
+  },
   setKeyboardName(keyboardName: string) {
     state.keyboardName = keyboardName;
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
