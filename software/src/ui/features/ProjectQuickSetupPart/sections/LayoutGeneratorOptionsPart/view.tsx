@@ -1,27 +1,8 @@
 import { css, FC, jsx, QxChild } from 'qx';
-import { makePlainSelectorOption } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
-import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-
-function useLayoutGeneratorOptionsPartModel() {
-  const { firmwareConfig } = projectQuickSetupStore.state;
-  const isOddSplit = standardFirmwareEditModelHelpers.getIsOddSplit(
-    firmwareConfig.baseFirmwareType,
-  );
-
-  const placementModeOptions = ['topLeft', 'center'].map(
-    makePlainSelectorOption,
-  );
-  const { layoutOptions } = projectQuickSetupStore.state;
-
-  return {
-    isOddSplit,
-    layoutOptions,
-    placementModeOptions,
-  };
-}
+import { useLayoutGeneratorOptionsPartModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/model';
 
 const FieldRow: FC<{ title: string; children: QxChild }> = ({
   title,
