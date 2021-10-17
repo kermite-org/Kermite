@@ -1,10 +1,11 @@
-import { css, FC, jsx } from 'qx';
+import { FC, jsx } from 'qx';
 import {
   PresetBrowserPage,
   PresetBrowserPage2,
   ProjectCustomFirmwareCreatePage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
+  ProjectQuickSetupPage,
   ProjectResourcePage,
   ProjectSelectionPage,
   ProjectStandardFirmwareEditPage,
@@ -21,7 +22,7 @@ export const MainColumnRoutes: FC = () => {
   const { pageSpec } = uiState;
   if (pageSpec) {
     return (
-      <div css={style}>
+      <div>
         {pageSpec.type === 'projectLayoutEdit' && (
           <ProjectLayoutEditPage spec={pageSpec} />
         )}
@@ -34,13 +35,14 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
+        {pageSpec.type === 'projectQuickSetup' && <ProjectQuickSetupPage />}
       </div>
     );
   }
 
   const { pagePath } = uiReaders;
   return (
-    <div css={style}>
+    <div>
       {pagePath === '/assigner' && <AssignerPage />}
       {pagePath === '/layoutEditor' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
@@ -51,12 +53,7 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectResource' && <ProjectResourcePage />}
+      {pagePath === '/projectQuickSetup' && <ProjectQuickSetupPage />}
     </div>
   );
 };
-
-const style = css`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-`;

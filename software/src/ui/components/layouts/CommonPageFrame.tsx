@@ -4,11 +4,16 @@ import { uiTheme } from '~/ui/base';
 type Props = {
   pageTitle?: string;
   children: QxChildren;
+  className?: string;
 };
 
-export const CommonPageFrame: FC<Props> = ({ pageTitle, children }) => {
+export const CommonPageFrame: FC<Props> = ({
+  pageTitle,
+  children,
+  className,
+}) => {
   return (
-    <div css={style}>
+    <div css={style} className={className}>
       <div className="header" qxIf={!!pageTitle}>
         {pageTitle}
       </div>
@@ -26,12 +31,11 @@ const style = css`
   flex-direction: column;
 
   > .header {
+    flex-shrink: 0;
   }
 
   > .body {
     flex-grow: 1;
-    display: flex;
-    flex-direction: column;
     margin-top: 10px;
   }
 `;

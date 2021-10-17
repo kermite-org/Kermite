@@ -1,6 +1,5 @@
 import {
   checkArrayItemsUnique,
-  cloneObject,
   flattenArray,
   generateNumberSequence,
   getObjectKeys,
@@ -134,10 +133,9 @@ export const standardFirmwareEditModelHelpers = {
       baseFirmwareType === 'AvrOddSplit' || baseFirmwareType === 'RpOddSplit'
     );
   },
-  cleanupSavingFirmwareConfig(
-    sourceData: IKermiteStandardKeyboardSpec,
+  cleanupFirmwareConfig(
+    data: IKermiteStandardKeyboardSpec,
   ): IKermiteStandardKeyboardSpec {
-    const data = cloneObject(sourceData);
     getObjectKeys(data).forEach((key) => {
       const value = data[key];
       if (value === false || (Array.isArray(value) && value.length === 0)) {

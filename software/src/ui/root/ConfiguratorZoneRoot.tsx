@@ -20,22 +20,23 @@ export const ConfiguratorZoneRoot: FC = () => {
       renderStatusBar={WindowStatusBarSection}
     >
       <div css={cssWindowContent}>
-        <div className="main-row">
-          <NavigationColumn disabled={uiReaders.subPageVisible} />
-          {showSetupNavigation ? (
-            <SetupNavigationFrame>
-              <MainColumnRoutes />
-            </SetupNavigationFrame>
-          ) : (
+        <NavigationColumn
+          disabled={uiReaders.subPageVisible}
+          class="side-bar"
+        />
+        {showSetupNavigation ? (
+          <SetupNavigationFrame>
             <MainColumnRoutes />
-          )}
-          <PageModals />
-          <LoadingOverlay isLoading={uiState.isLoading} />
-          <DevToolPullTab
-            qxIf={appUi.isDevelopment}
-            handler={siteModel.toggleDevToolVisible}
-          />
-        </div>
+          </SetupNavigationFrame>
+        ) : (
+          <MainColumnRoutes class="main-column" />
+        )}
+        <PageModals />
+        <LoadingOverlay isLoading={uiState.isLoading} />
+        <DevToolPullTab
+          qxIf={appUi.isDevelopment}
+          handler={siteModel.toggleDevToolVisible}
+        />
       </div>
     </CustomWindowFrame>
   );
@@ -44,11 +45,14 @@ export const ConfiguratorZoneRoot: FC = () => {
 const cssWindowContent = css`
   background: ${uiTheme.colors.clPageBackground};
   color: ${uiTheme.colors.clMainText};
+  height: 100%;
   display: flex;
-  flex-direction: column;
 
-  > .main-row {
+  > .side-bar {
+    flex-shrink: 0;
+  }
+
+  > .main-column {
     flex-grow: 1;
-    display: flex;
   }
 `;

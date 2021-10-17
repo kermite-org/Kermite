@@ -351,6 +351,19 @@ export function generateRandomIdBase62(n: number): string {
     .join('');
 }
 
+export function generateUniqueRandomId(
+  n: number,
+  existingIds: string[],
+): string {
+  for (let i = 0; i < 100; i++) {
+    const projectId = generateRandomIdBase62(n);
+    if (!existingIds.includes(projectId)) {
+      return projectId;
+    }
+  }
+  throw new Error('failed to generate unique id');
+}
+
 export function convertNullToUndefinedRecursive(src: any): any {
   if (src === null) {
     return undefined;
@@ -430,4 +443,8 @@ export function mergeModuleObjects<A>(...args: [A]): A {
 export function getMatched(text: string, pattern: RegExp): string | undefined {
   const m = text.match(pattern);
   return m?.[1] ?? undefined;
+}
+
+export function optInArrayItem<T>(item: T | undefined | false): T[] {
+  return item ? [item] : [];
 }

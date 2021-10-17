@@ -32,11 +32,6 @@ const style = css`
   > .body-row {
     flex-grow: 1;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    > * {
-      flex-grow: 1;
-    }
   }
 
   > .status-bar {
