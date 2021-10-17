@@ -4,9 +4,13 @@ import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape
 
 type Props = {
   keyEntity: IDisplayKeyEntity;
+  isHold: boolean;
 };
 
-export const LayoutPreviewKeyEntityCard: FC<Props> = ({ keyEntity }) => {
+export const LayoutPreviewKeyEntityCard: FC<Props> = ({
+  keyEntity,
+  isHold,
+}) => {
   const ke = keyEntity;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
   const { keyId: keyUnitId, keyIndex, shape } = ke;
@@ -16,7 +20,11 @@ export const LayoutPreviewKeyEntityCard: FC<Props> = ({ keyEntity }) => {
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <KeyUnitShape shape={shape} css={cssKeyShape} />
+      <KeyUnitShape
+        shape={shape}
+        css={cssKeyShape}
+        className={isHold && '--hold'}
+      />
       <text css={cssKeyText} x={0} y={0}>
         {keyIndex}
       </text>
@@ -26,6 +34,10 @@ export const LayoutPreviewKeyEntityCard: FC<Props> = ({ keyEntity }) => {
 
 const cssKeyShape = css`
   fill: rgba(0, 0, 0, 0.3);
+
+  &.--hold {
+    fill: #fa0;
+  }
 `;
 
 const cssKeyText = css`

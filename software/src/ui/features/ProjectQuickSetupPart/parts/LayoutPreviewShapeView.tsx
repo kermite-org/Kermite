@@ -7,9 +7,13 @@ import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
+  holdKeyIndices: number[];
 };
 
-export const LayoutPreviewShapeView: FC<Props> = ({ keyboardDesign }) => {
+export const LayoutPreviewShapeView: FC<Props> = ({
+  keyboardDesign,
+  holdKeyIndices,
+}) => {
   const dpiScale = 2;
   const marginRatio = 0.1;
   const baseStrokeWidth = 0.3;
@@ -31,7 +35,11 @@ export const LayoutPreviewShapeView: FC<Props> = ({ keyboardDesign }) => {
         />
         <g>
           {keyboardDesign.keyEntities.map((ke) => (
-            <LayoutPreviewKeyEntityCard keyEntity={ke} key={ke.keyId} />
+            <LayoutPreviewKeyEntityCard
+              keyEntity={ke}
+              key={ke.keyId}
+              isHold={holdKeyIndices.includes(ke.keyIndex)}
+            />
           ))}
         </g>
         <CoordOriginMark />

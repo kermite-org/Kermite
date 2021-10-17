@@ -3,6 +3,7 @@ import {
   IDisplayKeyboardDesign,
   IKermiteStandardKeyboardSpec,
 } from '~/shared';
+import { useHoldKeyIndices } from '~/ui/commonModels';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/base/LayoutGenerator';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
@@ -22,5 +23,7 @@ export function useLayoutConfigurationSectionModel() {
     firmwareConfig,
     layoutOptions,
   ]);
-  return { design };
+  const holdKeyIndices = useHoldKeyIndices();
+
+  return { design, holdKeyIndices };
 }
