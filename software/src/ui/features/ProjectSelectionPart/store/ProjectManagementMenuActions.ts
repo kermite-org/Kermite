@@ -1,9 +1,6 @@
+import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import {
-  callProjectSelectionModal,
-  modalAlert,
-  modalConfirm,
-} from '~/ui/components';
+import { callProjectSelectionModal, modalConfirm } from '~/ui/components';
 import { projectPackagesReader } from '~/ui/store/ProjectPackages';
 import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
@@ -44,6 +41,23 @@ const helpers = {
       existingResourceNames: allProjectNames,
     });
   },
+  async checkImportingProjectName(
+    project: IProjectPackageInfo,
+  ): Promise<boolean> {
+    const projectKeyboardName = project?.keyboardName.toLowerCase();
+    const allLocalProjectKeyboardNames = uiReaders.allProjectPackageInfos
+      .filter((info) => info.origin === 'local' && !info.isDraft)
+      .map((info) => info.keyboardName.toLowerCase());
+
+    if (allLocalProjectKeyboardNames.includes(projectKeyboardName)) {
+      await modalConfirm({
+        message: `project ${projectKeyboardName} already exists in local. please rename it first.`,
+        caption: 'error',
+      });
+      return false;
+    }
+    return true;
+  },
 };
 
 export const projectManagementMenuActions = {
@@ -62,16 +76,9 @@ export const projectManagementMenuActions = {
     });
     const project = projectPackagesReader.findProjectInfo('online', projectId);
     if (project) {
-      const projectKeyboardName = project?.keyboardName.toLowerCase();
-      const allLocalProjectKeyboardNames = uiReaders.allProjectPackageInfos
-        .filter((info) => info.origin === 'local')
-        .map((info) => info.keyboardName.toLowerCase());
-      if (allLocalProjectKeyboardNames.includes(projectKeyboardName)) {
-        await modalConfirm({
-          message: `project ${projectKeyboardName} already exists in local. please rename it first.`,
-          caption: 'error',
-        });
-        return;
+      const nameOk = await helpers.checkImportingProjectName(project);
+      if (!nameOk) {
+        return false;
       }
       dispatchCoreAction({
         project_createLocalProjectBasedOnOnlineProject: {
@@ -111,7 +118,23 @@ export const projectManagementMenuActions = {
     }
   },
   async handleSaveDraftProject() {
-    await modalAlert('unimplemented yet');
+    const project = uiReaders.allProjectPackageInfos.find((it) => it.isDraft);
+    if (project) {
+      const nameOk = await helpers.checkImportingProjectName(project);
+      if (nameOk) {
+        await dispatchCoreAction({
+          project_deleteLocalProject: { projectId: project.projectId },
+        });
+        const newProject = {
+          ...project,
+          isDraft: undefined,
+          packageName: project.keyboardName.toLowerCase(),
+        };
+        await dispatchCoreAction({
+          project_saveLocalProjectPackageInfo: newProject,
+        });
+      }
+    }
   },
   handleOpenLocalProjectsFolder() {
     dispatchCoreAction({ project_openLocalProjectsFolder: 1 });
