@@ -8,6 +8,9 @@ import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/s
 import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
 
 export const StandardFirmwareEditor_ExposedModel = {
+  get isValid(): boolean {
+    return standardFirmwareEditStore.readers.isValid;
+  },
   get isModified(): boolean {
     return standardFirmwareEditStore.readers.isModified;
   },

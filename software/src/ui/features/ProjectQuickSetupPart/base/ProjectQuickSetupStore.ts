@@ -1,6 +1,7 @@
 import produce from 'immer';
 import { useEffect } from 'qx';
 import {
+  compareObjectByJsonStringify,
   copyObjectProps,
   fallbackStandardKeyboardSpec,
   IKermiteStandardKeyboardSpec,
@@ -42,7 +43,7 @@ function createDefaultState(): IState {
     keyboardName: '',
     firmwareConfig: fallbackStandardKeyboardSpec,
     layoutOptions: fallbackLayoutGeneratorOptions,
-    isConfigValid: false,
+    isConfigValid: true,
     isConnectionValid: false,
   };
 }
@@ -89,13 +90,11 @@ const actions = {
     state.keyboardName = keyboardName;
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
   },
-  writeFirmwareConfig(data: IKermiteStandardKeyboardSpec | undefined) {
-    if (data) {
+  writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
+    const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
+    if (changed) {
       state.firmwareConfig = data;
       state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
-      state.isConfigValid = true;
-    } else {
-      state.isConfigValid = false;
     }
   },
   writeLayoutOption<K extends keyof ILayoutGeneratorOptions>(
@@ -152,10 +151,17 @@ const effects = {
 function executeEffectsOnRender() {
   useEffect(effects.editDataPersistenceEffect, []);
 
-  const { editValues, canSave } = StandardFirmwareEditor_ExposedModel;
+  const { isModified, isValid, editValues } =
+    StandardFirmwareEditor_ExposedModel;
   useEffect(() => {
-    actions.writeFirmwareConfig(canSave ? editValues : undefined);
-  }, [editValues, canSave]);
+    if (isModified && isValid && state.firmwareConfig !== editValues) {
+      actions.writeFirmwareConfig(editValues);
+      state.isConfigValid = true;
+    }
+    if (!isValid) {
+      state.isConfigValid = false;
+    }
+  }, [editValues]);
 }
 
 export const projectQuickSetupStore = {

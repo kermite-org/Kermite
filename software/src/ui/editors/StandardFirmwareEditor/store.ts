@@ -59,14 +59,19 @@ const readers = {
     } = standardFirmwareEditStore;
     return editValues !== originalValues;
   },
+  get isValid(): boolean {
+    const {
+      readers: { fieldErrors, totalError },
+    } = standardFirmwareEditStore;
+    const hasError = Object.values(fieldErrors).some((a) => !!a);
+    return !hasError && !totalError;
+  },
   get canSave(): boolean {
     const {
       state: { originalValues, editValues, isNewConfig },
-      readers: { fieldErrors, totalError },
     } = standardFirmwareEditStore;
     const isModified = editValues !== originalValues;
-    const hasError = Object.values(fieldErrors).some((a) => !!a);
-    return (isNewConfig || isModified) && !hasError && !totalError;
+    return (isNewConfig || isModified) && readers.isValid;
   },
 };
 

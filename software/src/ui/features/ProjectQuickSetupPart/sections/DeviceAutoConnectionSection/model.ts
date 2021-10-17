@@ -19,7 +19,6 @@ export function useDeviceAutoConnectionSectionModel(): IDeviceAutoConnectionSect
   useDeviceAutoConnectionAutoConnectFunction(targetDeviceSpec);
 
   const isConnectionValid =
-    targetDeviceSpec &&
     useDeviceAutoConnectionConnectionStatus(targetDeviceSpec);
 
   const indicatorState = useDeviceKeyEventIndicatorModel(200);
