@@ -1,4 +1,3 @@
-import { useEffect } from 'qx';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
 import {
@@ -31,20 +30,11 @@ const constants = {
   availablePinsTextRp: 'GP0~GP29',
 } as const;
 
-export function useStandardFirmwareEditPresenter(
-  firmwareConfig: IStandardFirmwareEditValues,
-  isNewConfig: boolean,
-): IStandardFirmwareEditPresenter {
+export function useStandardFirmwareEditPresenter(): IStandardFirmwareEditPresenter {
   const {
     state: { editValues },
     readers: { mcuType, isSplit, isOddSplit, fieldErrors, totalError },
-    actions: { loadFirmwareConfig },
   } = standardFirmwareEditStore;
-
-  useEffect(
-    () => loadFirmwareConfig(firmwareConfig, isNewConfig),
-    [firmwareConfig, isNewConfig],
-  );
 
   const { availablePinsTextAvr, availablePinsTextRp, baseFirmwareTypeOptions } =
     constants;

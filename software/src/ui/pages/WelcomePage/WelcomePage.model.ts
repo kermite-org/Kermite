@@ -2,7 +2,12 @@ import {
   useLanguageSelectionModel,
   useThemeSelectionModel,
 } from '~/ui/commonModels';
-import { uiActions, uiState } from '~/ui/store';
+import {
+  globalSettingsWriter,
+  uiActions,
+  uiReaders,
+  uiState,
+} from '~/ui/store';
 
 interface WelcomePageModel {
   appVersion: string;
@@ -13,6 +18,9 @@ interface WelcomePageModel {
   openSetupNavigationPanel(): void;
   isDarkTheme: boolean;
   setDarkTheme(isDark: boolean): void;
+  showProjectQuickSetupPage(): void;
+  isDeveloperMode: boolean;
+  setDeveloperMode(value: boolean): void;
 }
 
 export function useWelcomePageModel(): WelcomePageModel {
@@ -26,10 +34,16 @@ export function useWelcomePageModel(): WelcomePageModel {
   const setLanguageJapanese = () => changeLanguage('japanese');
 
   const { openSetupNavigationPanel } = uiActions;
+  const showProjectQuickSetupPage = () =>
+    uiActions.navigateTo({ type: 'projectQuickSetup' });
 
   const isDarkTheme = currentThemeKey === 'dark';
   const setDarkTheme = (isDark: boolean) =>
     changeTheme(isDark ? 'dark' : 'light');
+
+  const { isDeveloperMode } = uiReaders;
+  const setDeveloperMode = (value: boolean) =>
+    globalSettingsWriter.writeValue('developerMode', value);
 
   return {
     appVersion,
@@ -40,5 +54,8 @@ export function useWelcomePageModel(): WelcomePageModel {
     openSetupNavigationPanel,
     isDarkTheme,
     setDarkTheme,
+    showProjectQuickSetupPage,
+    isDeveloperMode,
+    setDeveloperMode,
   };
 }

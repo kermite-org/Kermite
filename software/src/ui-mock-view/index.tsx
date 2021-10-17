@@ -15,6 +15,7 @@ import { QxDebugPage4 } from '~/ui-mock-view/QxDebugPage4';
 import { QxDebugPage5 } from '~/ui-mock-view/QxDebugPage5';
 import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
+import { SpaLayoutDebugPage } from '~/ui-mock-view/SpaLayoutDebugPage';
 import { SvgScalingDevPage } from '~/ui-mock-view/SvgScalingDev';
 import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
 import { MockPageLayoutEditorDevelopment } from './MockPageLayouterDevelopment';
@@ -26,7 +27,7 @@ const PageRoot = () => {
       {/* <QxDebugPage2 /> */}
       {/* <QxDebugPage3 /> */}
       {/* <QxDebugPage4 /> */}
-      <QxDebugPage5 />
+      {/* <QxDebugPage5 /> */}
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageComponent /> */}
@@ -40,6 +41,7 @@ const PageRoot = () => {
       {/* <ShortCssDevPage /> */}
       {/* <ComponentCatalogPage /> */}
       {/* <SvgScalingDevPage /> */}
+      <SpaLayoutDebugPage />
     </div>
   );
 };

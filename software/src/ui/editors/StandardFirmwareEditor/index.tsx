@@ -3,34 +3,35 @@ import { IKermiteStandardKeyboardSpec } from '~/shared';
 import { appUi } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
 import { standardFirmwareEditorComponents } from '~/ui/editors/StandardFirmwareEditor/components';
-import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { useStandardFirmwareEditPresenter } from '~/ui/editors/StandardFirmwareEditor/presenter';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
 import { IStandardFirmwareEditValues } from '~/ui/editors/StandardFirmwareEditor/types';
 
-export type Props = {
-  firmwareConfig: IStandardFirmwareEditValues;
-  isNewConfig: boolean;
-};
-
-export const StandardFirmwareEditor_OutputPropsSupplier = {
+export const StandardFirmwareEditor_ExposedModel = {
+  get isValid(): boolean {
+    return standardFirmwareEditStore.readers.isValid;
+  },
   get isModified(): boolean {
     return standardFirmwareEditStore.readers.isModified;
   },
   get canSave(): boolean {
     return standardFirmwareEditStore.readers.canSave;
   },
-  emitSavingEditValues(): IKermiteStandardKeyboardSpec {
-    return standardFirmwareEditModelHelpers.cleanupSavingFirmwareConfig(
-      standardFirmwareEditStore.state.editValues,
+  get editValues(): IKermiteStandardKeyboardSpec {
+    return standardFirmwareEditStore.state.editValues;
+  },
+  loadFirmwareConfig(
+    firmwareConfig: IStandardFirmwareEditValues,
+    isNewConfig: boolean,
+  ) {
+    standardFirmwareEditStore.actions.loadFirmwareConfig(
+      firmwareConfig,
+      isNewConfig,
     );
   },
 };
 
-export const StandardFirmwareEditor: FC<Props> = ({
-  firmwareConfig,
-  isNewConfig,
-}) => {
+export const StandardFirmwareEditor: FC = () => {
   const {
     baseFirmwareTypeOptions,
     editValues,
@@ -41,7 +42,7 @@ export const StandardFirmwareEditor: FC<Props> = ({
     availablePinsText,
     fieldErrors,
     totalError,
-  } = useStandardFirmwareEditPresenter(firmwareConfig, isNewConfig);
+  } = useStandardFirmwareEditPresenter();
 
   const {
     valueChangeHandler,
@@ -88,6 +89,13 @@ export const StandardFirmwareEditor: FC<Props> = ({
             editValues={editValues}
           />
           <MultiplePinsFieldRow
+            label="column pins"
+            fieldKey="matrixColumnPins"
+            availabilityKey="useMatrixKeyScanner"
+            editValues={editValues}
+            fieldErrors={fieldErrors}
+          />
+          <MultiplePinsFieldRow
             label="row pins"
             fieldKey="matrixRowPins"
             availabilityKey="useMatrixKeyScanner"
@@ -95,24 +103,16 @@ export const StandardFirmwareEditor: FC<Props> = ({
             fieldErrors={fieldErrors}
           />
           <MultiplePinsFieldRow
-            label="column pins"
-            fieldKey="matrixColumnPins"
-            availabilityKey="useMatrixKeyScanner"
-            editValues={editValues}
-            fieldErrors={fieldErrors}
-          />
-
-          <MultiplePinsFieldRow
-            label="row pins right"
-            fieldKey="matrixRowPinsR"
+            label="column pins right"
+            fieldKey="matrixColumnPinsR"
             availabilityKey="useMatrixKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}
             qxIf={isOddSplit}
           />
           <MultiplePinsFieldRow
-            label="column pins right"
-            fieldKey="matrixColumnPinsR"
+            label="row pins right"
+            fieldKey="matrixRowPinsR"
             availabilityKey="useMatrixKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}

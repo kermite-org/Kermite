@@ -42,7 +42,7 @@ export const SetupNavigationFrame: FC<Props> = ({ className, children }) => {
           <Icon spec="fa fa-times" />
         </div>
       </div>
-      {children}
+      <div className="content-row">{children}</div>
       <div className="bottom-bar">
         <SetupNavigationStepShiftButton
           qxIf={currentStep === 0}
@@ -75,6 +75,7 @@ const style = css`
   flex-direction: column;
 
   > .top-bar {
+    flex-shrink: 0;
     height: 110px;
     padding: 10px 15px;
     position: relative;
@@ -96,7 +97,18 @@ const style = css`
     }
   }
 
+  > .content-row {
+    height: 0;
+    flex-shrink: 1;
+    flex-grow: 1;
+    overflow: hidden;
+    > div {
+      height: 100%;
+    }
+  }
+
   > .bottom-bar {
+    flex-shrink: 0;
     height: 50px;
     display: flex;
     justify-content: center;

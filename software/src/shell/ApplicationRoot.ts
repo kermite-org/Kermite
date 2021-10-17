@@ -74,6 +74,11 @@ export class ApplicationRoot {
           firmwareName,
           firmwareOrigin,
         ),
+      firmup_writeStandardFirmwareDirect: (packageInfo, firmwareName) =>
+        this.firmwareUpdateService.writeStandardFirmwareDirect(
+          packageInfo,
+          firmwareName,
+        ),
       presetHub_getServerProjectIds: () =>
         userPresetHubDataLoader.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>

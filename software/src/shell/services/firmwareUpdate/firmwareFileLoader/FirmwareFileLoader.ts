@@ -254,19 +254,11 @@ export async function loadFirmwareFileBytes(
   return undefined;
 }
 
-export async function firmwareFileLoader_loadFirmwareFile(
-  origin: IResourceOrigin,
-  projectId: string,
+export async function firmwareFileLoader_loadFirmwareFileByPackageInfo(
+  packageInfo: IProjectPackageInfo,
   firmwareName: string,
   firmwareOrigin: IFirmwareOriginEx,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
-  const packageInfos = coreState.allProjectPackageInfos;
-  const packageInfo = packageInfos.find(
-    (info) => info.origin === origin && info.projectId === projectId,
-  );
-  if (!packageInfo) {
-    return undefined;
-  }
   const loadResult = await loadFirmwareFileBytes(
     packageInfo,
     firmwareName,
@@ -288,4 +280,24 @@ export async function firmwareFileLoader_loadFirmwareFile(
     filePath: localTempFilePath,
     targetDevice: targetDevice,
   };
+}
+
+export async function firmwareFileLoader_loadFirmwareFile(
+  origin: IResourceOrigin,
+  projectId: string,
+  firmwareName: string,
+  firmwareOrigin: IFirmwareOriginEx,
+): Promise<IFirmwareBinaryFileSpec | undefined> {
+  const packageInfos = coreState.allProjectPackageInfos;
+  const packageInfo = packageInfos.find(
+    (info) => info.origin === origin && info.projectId === projectId,
+  );
+  if (!packageInfo) {
+    return undefined;
+  }
+  return await firmwareFileLoader_loadFirmwareFileByPackageInfo(
+    packageInfo,
+    firmwareName,
+    firmwareOrigin,
+  );
 }
