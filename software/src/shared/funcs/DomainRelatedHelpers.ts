@@ -172,7 +172,8 @@ export function validateResourceNameWithDuplicationCheck(
       (it) => it.toLowerCase() === resourceName.toLowerCase(),
     );
     if (existingName) {
-      return `${existingName} already exists.`;
+      const resourceType = resourceTypeNameText.replace(' name', '');
+      return `${resourceType} ${existingName} already exists.`;
     }
   }
   return undefined;
