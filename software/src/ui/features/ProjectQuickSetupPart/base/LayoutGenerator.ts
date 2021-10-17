@@ -3,7 +3,6 @@ import {
   generateNumberSequence,
   IKermiteStandardKeyboardSpec,
   IPersistKeyboardDesign,
-  IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
 } from '~/shared';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
@@ -30,27 +29,6 @@ function shiftNumbers(arr: number[], offset: number) {
 }
 
 function makeMatrixKeyEntities(
-  xs: number[],
-  ys: number[],
-  keyIndexOffset: number,
-): IPersistKeyboardDesignRealKeyEntity[] {
-  const nx = xs.length;
-  const ny = ys.length;
-  const num = nx * ny;
-  return generateNumberSequence(num).map((i) => {
-    const ix = i % nx >> 0;
-    const iy = (i / nx) >> 0;
-    const keyIndex = keyIndexOffset + i;
-    return {
-      keyId: `key${keyIndex}`,
-      x: xs[ix],
-      y: ys[iy],
-      keyIndex,
-    };
-  });
-}
-
-function makeMatrixKeyEntitiesW(
   nx: number,
   ny: number,
   offsetX: number,
@@ -69,7 +47,18 @@ function makeMatrixKeyEntitiesW(
   if (invertY) {
     ys.reverse();
   }
-  return makeMatrixKeyEntities(xs, ys, keyIndexOffset);
+  const num = nx * ny;
+  return generateNumberSequence(num).map((i) => {
+    const ix = i % nx >> 0;
+    const iy = (i / nx) >> 0;
+    const keyIndex = keyIndexOffset + i;
+    return {
+      keyId: `key${keyIndex}`,
+      x: xs[ix],
+      y: ys[iy],
+      keyIndex,
+    };
+  });
 }
 
 export function createLayoutFromFirmwareSpec(
@@ -102,7 +91,7 @@ export function createLayoutFromFirmwareSpec(
         offsetX = -nx / 2 + 0.5;
         offsetY = -ny / 2 + 0.5;
       }
-      const keys = makeMatrixKeyEntitiesW(
+      const keys = makeMatrixKeyEntities(
         nx,
         ny,
         offsetX,
@@ -129,7 +118,7 @@ export function createLayoutFromFirmwareSpec(
         offsetXR = splitXOffset + 0.5;
         offsetY = -ny / 2 + 0.5;
       }
-      const keysLeft = makeMatrixKeyEntitiesW(
+      const keysLeft = makeMatrixKeyEntities(
         nx,
         ny,
         offsetXL,
@@ -138,7 +127,7 @@ export function createLayoutFromFirmwareSpec(
         invertY,
         0,
       );
-      const keysRight = makeMatrixKeyEntitiesW(
+      const keysRight = makeMatrixKeyEntities(
         nx,
         ny,
         offsetXR,
@@ -166,7 +155,7 @@ export function createLayoutFromFirmwareSpec(
         offsetYL = -nyr / 2 + 0.5;
         offsetYR = -nyr / 2 + 0.5;
       }
-      const keysLeft = makeMatrixKeyEntitiesW(
+      const keysLeft = makeMatrixKeyEntities(
         nxl,
         nyl,
         offsetXL,
@@ -175,7 +164,7 @@ export function createLayoutFromFirmwareSpec(
         invertY,
         0,
       );
-      const keysRight = makeMatrixKeyEntitiesW(
+      const keysRight = makeMatrixKeyEntities(
         nxr,
         nyr,
         offsetXR,
