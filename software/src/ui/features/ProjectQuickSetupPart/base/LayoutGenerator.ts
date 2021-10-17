@@ -6,6 +6,7 @@ import {
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
 } from '~/shared';
+import { appUi } from '~/ui/base';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 
 const unifiedKeyboardTypes: IStandardBaseFirmwareType[] = [
@@ -95,26 +96,28 @@ function keyPlacer_placeUnifiedKeyboardKeys(
     design.keyEntities.push(...keys);
     baseY += ny;
   }
-  if (spec.useDirectWiredKeyScanner && spec.directWiredPins) {
-    const numKeys = spec.directWiredPins.length;
-    const nx = 4;
-    const ny = Math.ceil(numKeys / nx);
-    let offsetX = 0;
-    let offsetY = 0;
-    if (isCentered) {
-      offsetX = -nx / 2 + 0.5;
-      offsetY = -ny / 2 + 0.5;
+  if (appUi.isDevelopment) {
+    if (spec.useDirectWiredKeyScanner && spec.directWiredPins) {
+      const numKeys = spec.directWiredPins.length;
+      const nx = 4;
+      const ny = Math.ceil(numKeys / nx);
+      let offsetX = 0;
+      let offsetY = 0;
+      if (isCentered) {
+        offsetX = -nx / 2 + 0.5;
+        offsetY = -ny / 2 + 0.5;
+      }
+      const keys = makeMatrixKeyEntities(
+        numKeys,
+        nx,
+        offsetX,
+        baseY + offsetY,
+        invertX,
+        invertY,
+        0,
+      );
+      design.keyEntities.push(...keys);
     }
-    const keys = makeMatrixKeyEntities(
-      numKeys,
-      nx,
-      offsetX,
-      baseY + offsetY,
-      invertX,
-      invertY,
-      0,
-    );
-    design.keyEntities.push(...keys);
   }
 }
 
