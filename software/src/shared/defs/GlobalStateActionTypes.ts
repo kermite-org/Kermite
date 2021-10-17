@@ -26,13 +26,14 @@ import { fallbackProfileData, IProfileData } from '~/shared/defs/ProfileData';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;
-  allProjectPackageInfos: IProjectPackageInfo[];
   allCustomFirmwareInfos: ICustomFirmwareInfo[];
   globalSettings: IGlobalSettings;
   keyboardConfig: IKeyboardConfig;
   deviceStatus: IKeyboardDeviceStatus;
   deviceSelectionStatus: IDeviceSelectionStatus;
   appWindowStatus: IAppWindowStatus;
+  // project
+  allProjectPackageInfos: IProjectPackageInfo[];
   // profile
   allProfileEntries: IProfileEntry[];
   profileEditSource: IProfileEditSource;

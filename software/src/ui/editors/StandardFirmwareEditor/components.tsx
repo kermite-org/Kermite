@@ -1,4 +1,5 @@
 import { css, FC, jsx, QxChildren } from 'qx';
+import { ExtractKeysWithType } from '~/shared';
 import { GeneralInput, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditor_fieldValueConverters } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
@@ -12,14 +13,17 @@ const FieldItem: FC<{
   children: QxChildren;
   indent?: boolean;
 }> = ({ title, children, indent }) => {
-  const styleChildren = css`
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  const styleTitleCell = css`
+    &.--indent {
+      padding-left: 15px !important;
+    }
   `;
+  const styleChildren = css``;
   return (
     <tr>
-      <td style={(indent && 'padding-left:15px') || ''}>{title}</td>
+      <td css={styleTitleCell} className={indent && '--indent'}>
+        {title}
+      </td>
       <td>
         <div css={styleChildren}>{children}</div>
       </td>
@@ -43,10 +47,6 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     standardFirmwareEditStore.actions.commitValue(key, value);
   };
 }
-
-type ExtractKeysWithType<Obj, Type> = {
-  [K in keyof Obj]: Obj[K] extends Type ? K : never;
-}[keyof Obj];
 
 type IFlagFieldKey = ExtractKeysWithType<
   Required<IStandardFirmwareEditValues>,

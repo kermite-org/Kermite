@@ -109,6 +109,7 @@ export type IProjectPackageInfo = {
   projectKey: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
   packageName: string;
+  isDraft?: boolean;
 } & IProjectPackageFileContent;
 
 export type IFirmwareOrigin = 'localBuild' | 'online';

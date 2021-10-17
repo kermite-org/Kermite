@@ -21,8 +21,10 @@ const Foo: FC = () => {
 };
 
 const Bar: FC<{ children?: QxChildren }> = ({ children }) => {
-  return <div css={baseBarStyle}>{children}</div>;
+  return <div class={baseBarStyle}>{children}</div>;
 };
+
+const Buzz: FC<{ text: string }> = ({ text }) => <div>{text}</div>;
 
 const baseBarStyle = css`
   color: green;
@@ -34,9 +36,10 @@ export const QxDebugPage5: FC = () => {
     <div>
       <Foo />
       <Bar>bar1</Bar>
-      <Bar css={customBarStyle}>
+      <Bar class={customBarStyle}>
         <div>bar2</div>
         <h3>hoge</h3>
+        <Buzz text="buzz" class="buzz" />
       </Bar>
     </div>
   );
@@ -45,6 +48,10 @@ export const QxDebugPage5: FC = () => {
 const customBarStyle = css`
   font-size: 24px;
   > h3 {
-    color: red;
+    border: solid 1px blue;
+  }
+
+  > .buzz {
+    color: blue;
   }
 `;

@@ -8,3 +8,4 @@ export * from './ProjectSelectionPage';
 export * from './ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage';
 export * from './SettingsPage/SettingsPage';
 export * from './WelcomePage/WelcomePage';
+export * from './ProrjectQuickSetupPage';

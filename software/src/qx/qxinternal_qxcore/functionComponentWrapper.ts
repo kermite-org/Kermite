@@ -31,17 +31,19 @@ function createFunctionComponentWrapper(
         if (vnode) {
           vnode.marker = `${fcName}`;
         }
+        if (
+          props.class &&
+          (vnode.vtype === 'vElement' || vnode.vtype === 'vComponent')
+        ) {
+          vnode.props.class = vnode.props.class
+            ? `${vnode.props.class} ${props.class}`
+            : props.class;
+        }
         endHooks();
         doLater(() => flushHookEffects(self.hook));
         return vnode;
       };
-      const renderRes = self.renderWithHook(props);
-      if (props.css && renderRes.vtype === 'vElement') {
-        renderRes.props.class = renderRes.props.class
-          ? `${renderRes.props.class} ${props.css}`
-          : props.css;
-      }
-      return renderRes;
+      return self.renderWithHook(props);
     },
     update(self: IComponentState, props: IProps) {
       return self.renderWithHook(props);

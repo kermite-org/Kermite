@@ -2,6 +2,7 @@ import { IAppErrorData } from '~/shared/defs/CustomErrors';
 import {
   IBootloaderDeviceDetectionStatus,
   IFirmwareOriginEx,
+  IProjectPackageInfo,
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
@@ -34,6 +35,11 @@ export interface IAppIpcContract {
       projectId: string,
       firmwareName: string,
       firmwareOrigin: IFirmwareOriginEx,
+    ): Promise<string>;
+
+    firmup_writeStandardFirmwareDirect(
+      packageInfo: IProjectPackageInfo,
+      firmwareName: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
