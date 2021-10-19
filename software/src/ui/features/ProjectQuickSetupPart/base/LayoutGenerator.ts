@@ -6,7 +6,6 @@ import {
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
 } from '~/shared';
-import { appUi } from '~/ui/base';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 
 const unifiedKeyboardTypes: IStandardBaseFirmwareType[] = [
@@ -81,6 +80,7 @@ function placeKeyEntitiesSet(
   invertY: boolean,
   isCentered: boolean,
   keyIndexBase: number,
+  baseX: number,
 ) {
   let matrixPartHeight = 0;
   if (nxMatrixKeys > 0 && nyMatrixKeys > 0) {
@@ -89,11 +89,11 @@ function placeKeyEntitiesSet(
     const keys = makeMatrixKeyEntities(
       nx * ny,
       nx,
-      0,
+      baseX,
       0,
       invertX,
       invertY,
-      0,
+      keyIndexBase,
       isCentered,
     );
     design.keyEntities.push(...keys);
@@ -116,7 +116,7 @@ function placeKeyEntitiesSet(
     const keys = makeMatrixKeyEntities(
       num,
       nx,
-      0,
+      baseX,
       offsetY,
       invertX,
       invertY,
@@ -156,6 +156,7 @@ function keyPlacer_placeUnifiedKeyboardKeys(
     invertY,
     isCentered,
     0,
+    0,
   );
 }
 
@@ -166,40 +167,56 @@ function keyPlacer_placeEvenSplitKeyboardKeys(
 ) {
   const { placementOrigin, invertX, invertY } = layoutOptions;
   const isCentered = placementOrigin === 'center';
-  if (spec.useMatrixKeyScanner && spec.matrixRowPins && spec.matrixColumnPins) {
-    const nx = spec.matrixColumnPins.length;
-    const ny = spec.matrixRowPins.length;
-    const numKeys = nx * ny;
-    let offsetXL = 0;
-    let offsetXR = splitXOffset * 2 + nx;
-    if (isCentered) {
-      const d = nx / 2 + splitXOffset;
-      offsetXL = -d;
-      offsetXR = d;
-    }
-    const keysLeft = makeMatrixKeyEntities(
-      numKeys,
-      nx,
-      offsetXL,
-      0,
-      !invertX,
-      invertY,
-      0,
-      isCentered,
-    );
-    const keysRight = makeMatrixKeyEntities(
-      numKeys,
-      nx,
-      offsetXR,
-      0,
-      invertX,
-      invertY,
-      nx * ny,
-      isCentered,
-    );
-    design.keyEntities.push(...keysLeft);
-    design.keyEntities.push(...keysRight);
+
+  const nxMatrixKeys =
+    (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
+  const nyMatrixKeys =
+    (spec.useMatrixKeyScanner && spec.matrixRowPins?.length) || 0;
+  const numDirectKeys =
+    (spec.useDirectWiredKeyScanner && spec.directWiredPins?.length) || 0;
+  const nxDirectKeys = 4;
+  const numEncoderKeys = (spec.useEncoder && spec.encoderPins?.length) || 0;
+
+  const keyIndexBaseL = 0;
+  const keyIndexBaseR =
+    nxMatrixKeys * nyMatrixKeys + numDirectKeys + numEncoderKeys;
+
+  const nx = Math.max(nxMatrixKeys, nxDirectKeys);
+  let baseXL = 0;
+  let baseXR = splitXOffset * 2 + nx;
+  if (isCentered) {
+    const d = nx / 2 + splitXOffset;
+    baseXL = -d;
+    baseXR = d;
   }
+
+  placeKeyEntitiesSet(
+    design,
+    nxMatrixKeys,
+    nyMatrixKeys,
+    numDirectKeys,
+    nxDirectKeys,
+    numEncoderKeys,
+    !invertX,
+    invertY,
+    isCentered,
+    keyIndexBaseL,
+    baseXL,
+  );
+
+  placeKeyEntitiesSet(
+    design,
+    nxMatrixKeys,
+    nyMatrixKeys,
+    numDirectKeys,
+    nxDirectKeys,
+    numEncoderKeys,
+    invertX,
+    invertY,
+    isCentered,
+    keyIndexBaseR,
+    baseXR,
+  );
 }
 
 function keyPlacer_placeOddSplitKeyboardKeys(
@@ -209,42 +226,65 @@ function keyPlacer_placeOddSplitKeyboardKeys(
 ) {
   const { placementOrigin, invertX, invertXR, invertY } = layoutOptions;
   const isCentered = placementOrigin === 'center';
-  if (spec.useMatrixKeyScanner) {
-    const nxl = spec.matrixColumnPins?.length || 0;
-    const nyl = spec.matrixRowPins?.length || 0;
-    const numKeysL = nxl * nyl;
-    const nxr = spec.matrixColumnPinsR?.length || 0;
-    const nyr = spec.matrixRowPinsR?.length || 0;
-    const numKeysR = nxr * nyr;
-    let offsetXL = 0;
-    let offsetXR = splitXOffset * 2 + nxl;
-    if (isCentered) {
-      offsetXL = -nxl / 2 - splitXOffset;
-      offsetXR = nxr / 2 + splitXOffset;
-    }
-    const keysLeft = makeMatrixKeyEntities(
-      numKeysL,
-      nxl,
-      offsetXL,
-      0,
-      !invertX,
-      invertY,
-      0,
-      isCentered,
-    );
-    const keysRight = makeMatrixKeyEntities(
-      numKeysR,
-      nxr,
-      offsetXR,
-      0,
-      invertXR,
-      invertY,
-      nxl * nyl,
-      isCentered,
-    );
-    design.keyEntities.push(...keysLeft);
-    design.keyEntities.push(...keysRight);
+
+  const nxMatrixKeys =
+    (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
+  const nyMatrixKeys =
+    (spec.useMatrixKeyScanner && spec.matrixRowPins?.length) || 0;
+  const numDirectKeys =
+    (spec.useDirectWiredKeyScanner && spec.directWiredPins?.length) || 0;
+  const nxDirectKeys = 4;
+  const numEncoderKeys = (spec.useEncoder && spec.encoderPins?.length) || 0;
+
+  const nxMatrixKeysR =
+    (spec.useMatrixKeyScanner && spec.matrixColumnPinsR?.length) || 0;
+  const nyMatrixKeysR =
+    (spec.useMatrixKeyScanner && spec.matrixRowPinsR?.length) || 0;
+  const numDirectKeysR =
+    (spec.useDirectWiredKeyScanner && spec.directWiredPinsR?.length) || 0;
+  const nxDirectKeysR = 4;
+  const numEncoderKeysR = (spec.useEncoder && spec.encoderPinsR?.length) || 0;
+
+  const keyIndexBaseL = 0;
+  const keyIndexBaseR =
+    nxMatrixKeys * nyMatrixKeys + numDirectKeys + numEncoderKeys;
+
+  const nxl = Math.max(nxMatrixKeys, nxDirectKeys);
+  const nxr = Math.max(nxMatrixKeysR, nxDirectKeysR);
+  let baseXL = 0;
+  let baseXR = splitXOffset * 2 + nxl;
+  if (isCentered) {
+    baseXL = -nxl / 2 - splitXOffset;
+    baseXR = nxr / 2 + splitXOffset;
   }
+
+  placeKeyEntitiesSet(
+    design,
+    nxMatrixKeys,
+    nyMatrixKeys,
+    numDirectKeys,
+    nxDirectKeys,
+    numEncoderKeys,
+    !invertX,
+    invertY,
+    isCentered,
+    keyIndexBaseL,
+    baseXL,
+  );
+
+  placeKeyEntitiesSet(
+    design,
+    nxMatrixKeysR,
+    nyMatrixKeysR,
+    numDirectKeysR,
+    nxDirectKeysR,
+    numEncoderKeysR,
+    invertXR,
+    invertY,
+    isCentered,
+    keyIndexBaseR,
+    baseXR,
+  );
 }
 
 export function createLayoutFromFirmwareSpec(
