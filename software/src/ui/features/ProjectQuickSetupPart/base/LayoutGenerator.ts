@@ -46,7 +46,7 @@ function makeMatrixKeyEntities(
   if (invertIndicesX) {
     rowIndices.forEach((row) => row.reverse());
   }
-  if (invertIndicesY && numKeys % nx === 0) {
+  if (invertIndicesY) {
     rowIndices.reverse();
   }
   const indices = rowIndices.flat();
@@ -105,7 +105,7 @@ function placeKeyEntitiesSet(
       nx,
       offsetY,
       invertX,
-      invertY,
+      false,
       keyIndexBase,
       isSplit,
       dir,
@@ -129,7 +129,7 @@ function placeKeyEntitiesSet(
       nx,
       offsetY,
       invertX,
-      invertY,
+      false,
       keyIndexBase,
       isSplit,
       dir,
