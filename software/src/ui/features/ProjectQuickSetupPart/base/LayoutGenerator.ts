@@ -73,6 +73,7 @@ function keyPlacer_placeUnifiedKeyboardKeys(
   const { placementOrigin, invertX, invertY } = layoutOptions;
   const isCentered = placementOrigin === 'center';
 
+  let keyIndexBase = 0;
   let baseY = 0;
   if (spec.useMatrixKeyScanner && spec.matrixRowPins && spec.matrixColumnPins) {
     const nx = spec.matrixColumnPins.length;
@@ -94,6 +95,7 @@ function keyPlacer_placeUnifiedKeyboardKeys(
       0,
     );
     design.keyEntities.push(...keys);
+    keyIndexBase += keys.length;
     baseY += ny;
   }
   if (appUi.isDevelopment) {
@@ -114,9 +116,10 @@ function keyPlacer_placeUnifiedKeyboardKeys(
         baseY + offsetY,
         invertX,
         invertY,
-        0,
+        keyIndexBase,
       );
       design.keyEntities.push(...keys);
+      keyIndexBase += keys.length;
     }
   }
 }
