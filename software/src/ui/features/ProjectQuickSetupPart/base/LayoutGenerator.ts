@@ -140,6 +140,38 @@ function placeKeyEntitiesSet(
   }
 }
 
+type IPersistKeyboardDesignWithRealKeys = Omit<
+  IPersistKeyboardDesign,
+  'keyEntities'
+> & {
+  keyEntities: IPersistKeyboardDesignRealKeyEntity[];
+};
+
+function fixCoordOrigin(design: IPersistKeyboardDesign, isCentered: boolean) {
+  const _design = design as IPersistKeyboardDesignWithRealKeys;
+  const xs = _design.keyEntities.map((ke) => ke.x);
+  const ys = _design.keyEntities.map((ke) => ke.y);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  let dx = 0;
+  let dy = 0;
+  if (!isCentered) {
+    dx = -minX;
+    dy = -minY;
+  } else {
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+    dx = -midX;
+    dy = -midY;
+  }
+  _design.keyEntities.forEach((ke) => {
+    ke.x += dx;
+    ke.y += dy;
+  });
+}
+
 export function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
   layoutOptions: ILayoutGeneratorOptions,
@@ -249,6 +281,8 @@ export function createLayoutFromFirmwareSpec(
       1,
     );
   }
+
+  fixCoordOrigin(design, isCentered);
 
   return design;
 }
