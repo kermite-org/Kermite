@@ -46,7 +46,7 @@ export const LayoutGeneratorOptionsPart: FC = () => {
             onChange={valueChangeHandler('invertXR')}
           />
         </FieldRow>
-        <FieldRow title="invert key indices Y">
+        <FieldRow title="invert key indices Y" qxIf={false}>
           <ToggleSwitch
             checked={layoutOptions.invertY}
             onChange={valueChangeHandler('invertY')}
