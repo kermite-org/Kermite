@@ -128,104 +128,20 @@ function placeKeyEntitiesSet(
   }
 }
 
-function keyPlacer_placeUnifiedKeyboardKeys(
+export function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
   layoutOptions: ILayoutGeneratorOptions,
-  design: IPersistKeyboardDesign,
-) {
-  const { placementOrigin, invertX, invertY } = layoutOptions;
-  const isCentered = placementOrigin === 'center';
-
-  const nxMatrixKeys =
-    (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
-  const nyMatrixKeys =
-    (spec.useMatrixKeyScanner && spec.matrixRowPins?.length) || 0;
-  const numDirectKeys =
-    (spec.useDirectWiredKeyScanner && spec.directWiredPins?.length) || 0;
-  const nxDirectKeys = 4;
-  const numEncoderKeys = (spec.useEncoder && spec.encoderPins?.length) || 0;
-
-  placeKeyEntitiesSet(
-    design,
-    nxMatrixKeys,
-    nyMatrixKeys,
-    numDirectKeys,
-    nxDirectKeys,
-    numEncoderKeys,
-    invertX,
-    invertY,
-    isCentered,
-    0,
-    0,
-  );
-}
-
-function keyPlacer_placeEvenSplitKeyboardKeys(
-  spec: IKermiteStandardKeyboardSpec,
-  layoutOptions: ILayoutGeneratorOptions,
-  design: IPersistKeyboardDesign,
-) {
-  const { placementOrigin, invertX, invertY } = layoutOptions;
-  const isCentered = placementOrigin === 'center';
-
-  const nxMatrixKeys =
-    (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
-  const nyMatrixKeys =
-    (spec.useMatrixKeyScanner && spec.matrixRowPins?.length) || 0;
-  const numDirectKeys =
-    (spec.useDirectWiredKeyScanner && spec.directWiredPins?.length) || 0;
-  const nxDirectKeys = 4;
-  const numEncoderKeys = (spec.useEncoder && spec.encoderPins?.length) || 0;
-
-  const keyIndexBaseL = 0;
-  const keyIndexBaseR =
-    nxMatrixKeys * nyMatrixKeys + numDirectKeys + numEncoderKeys;
-
-  const nx = Math.max(nxMatrixKeys, nxDirectKeys);
-  let baseXL = 0;
-  let baseXR = splitXOffset * 2 + nx;
-  if (isCentered) {
-    const d = nx / 2 + splitXOffset;
-    baseXL = -d;
-    baseXR = d;
-  }
-
-  placeKeyEntitiesSet(
-    design,
-    nxMatrixKeys,
-    nyMatrixKeys,
-    numDirectKeys,
-    nxDirectKeys,
-    numEncoderKeys,
-    !invertX,
-    invertY,
-    isCentered,
-    keyIndexBaseL,
-    baseXL,
-  );
-
-  placeKeyEntitiesSet(
-    design,
-    nxMatrixKeys,
-    nyMatrixKeys,
-    numDirectKeys,
-    nxDirectKeys,
-    numEncoderKeys,
-    invertX,
-    invertY,
-    isCentered,
-    keyIndexBaseR,
-    baseXR,
-  );
-}
-
-function keyPlacer_placeOddSplitKeyboardKeys(
-  spec: IKermiteStandardKeyboardSpec,
-  layoutOptions: ILayoutGeneratorOptions,
-  design: IPersistKeyboardDesign,
-) {
+): IPersistKeyboardDesign {
+  const design = createFallbackPersistKeyboardDesign();
   const { placementOrigin, invertX, invertXR, invertY } = layoutOptions;
   const isCentered = placementOrigin === 'center';
+  if (isCentered) {
+    design.setup.placementAnchor = 'center';
+  }
+
+  const isUnified = unifiedKeyboardTypes.includes(spec.baseFirmwareType);
+  const isEvenSplit = evenSplitKeyboardTypes.includes(spec.baseFirmwareType);
+  const isOddSplit = oddSplitKeyboardTypes.includes(spec.baseFirmwareType);
 
   const nxMatrixKeys =
     (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
@@ -249,63 +165,97 @@ function keyPlacer_placeOddSplitKeyboardKeys(
   const keyIndexBaseR =
     nxMatrixKeys * nyMatrixKeys + numDirectKeys + numEncoderKeys;
 
-  const nxl = Math.max(nxMatrixKeys, nxDirectKeys);
-  const nxr = Math.max(nxMatrixKeysR, nxDirectKeysR);
-  let baseXL = 0;
-  let baseXR = splitXOffset * 2 + nxl;
-  if (isCentered) {
-    baseXL = -nxl / 2 - splitXOffset;
-    baseXR = nxr / 2 + splitXOffset;
-  }
-
-  placeKeyEntitiesSet(
-    design,
-    nxMatrixKeys,
-    nyMatrixKeys,
-    numDirectKeys,
-    nxDirectKeys,
-    numEncoderKeys,
-    !invertX,
-    invertY,
-    isCentered,
-    keyIndexBaseL,
-    baseXL,
-  );
-
-  placeKeyEntitiesSet(
-    design,
-    nxMatrixKeysR,
-    nyMatrixKeysR,
-    numDirectKeysR,
-    nxDirectKeysR,
-    numEncoderKeysR,
-    invertXR,
-    invertY,
-    isCentered,
-    keyIndexBaseR,
-    baseXR,
-  );
-}
-
-export function createLayoutFromFirmwareSpec(
-  spec: IKermiteStandardKeyboardSpec,
-  layoutOptions: ILayoutGeneratorOptions,
-): IPersistKeyboardDesign {
-  const design = createFallbackPersistKeyboardDesign();
-  const isUnified = unifiedKeyboardTypes.includes(spec.baseFirmwareType);
-  const isEvenSplit = evenSplitKeyboardTypes.includes(spec.baseFirmwareType);
-  const isOddSplit = oddSplitKeyboardTypes.includes(spec.baseFirmwareType);
-  const { placementOrigin } = layoutOptions;
-  const isCentered = placementOrigin === 'center';
-  if (isCentered) {
-    design.setup.placementAnchor = 'center';
-  }
   if (isUnified) {
-    keyPlacer_placeUnifiedKeyboardKeys(spec, layoutOptions, design);
-  } else if (isEvenSplit) {
-    keyPlacer_placeEvenSplitKeyboardKeys(spec, layoutOptions, design);
-  } else if (isOddSplit) {
-    keyPlacer_placeOddSplitKeyboardKeys(spec, layoutOptions, design);
+    placeKeyEntitiesSet(
+      design,
+      nxMatrixKeys,
+      nyMatrixKeys,
+      numDirectKeys,
+      nxDirectKeys,
+      numEncoderKeys,
+      invertX,
+      invertY,
+      isCentered,
+      keyIndexBaseL,
+      0,
+    );
   }
+  if (isEvenSplit) {
+    const nx = Math.max(nxMatrixKeys, nxDirectKeys);
+    let baseXL = 0;
+    let baseXR = splitXOffset * 2 + nx;
+    if (isCentered) {
+      const d = nx / 2 + splitXOffset;
+      baseXL = -d;
+      baseXR = d;
+    }
+
+    placeKeyEntitiesSet(
+      design,
+      nxMatrixKeys,
+      nyMatrixKeys,
+      numDirectKeys,
+      nxDirectKeys,
+      numEncoderKeys,
+      !invertX,
+      invertY,
+      isCentered,
+      keyIndexBaseL,
+      baseXL,
+    );
+
+    placeKeyEntitiesSet(
+      design,
+      nxMatrixKeys,
+      nyMatrixKeys,
+      numDirectKeys,
+      nxDirectKeys,
+      numEncoderKeys,
+      invertX,
+      invertY,
+      isCentered,
+      keyIndexBaseR,
+      baseXR,
+    );
+  }
+  if (isOddSplit) {
+    const nxl = Math.max(nxMatrixKeys, nxDirectKeys);
+    const nxr = Math.max(nxMatrixKeysR, nxDirectKeysR);
+    let baseXL = 0;
+    let baseXR = splitXOffset * 2 + nxl;
+    if (isCentered) {
+      baseXL = -nxl / 2 - splitXOffset;
+      baseXR = nxr / 2 + splitXOffset;
+    }
+
+    placeKeyEntitiesSet(
+      design,
+      nxMatrixKeys,
+      nyMatrixKeys,
+      numDirectKeys,
+      nxDirectKeys,
+      numEncoderKeys,
+      !invertX,
+      invertY,
+      isCentered,
+      keyIndexBaseL,
+      baseXL,
+    );
+
+    placeKeyEntitiesSet(
+      design,
+      nxMatrixKeysR,
+      nyMatrixKeysR,
+      numDirectKeysR,
+      nxDirectKeysR,
+      numEncoderKeysR,
+      invertXR,
+      invertY,
+      isCentered,
+      keyIndexBaseR,
+      baseXR,
+    );
+  }
+
   return design;
 }
