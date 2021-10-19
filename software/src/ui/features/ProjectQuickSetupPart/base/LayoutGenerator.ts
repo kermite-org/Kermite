@@ -70,19 +70,22 @@ function makeMatrixKeyEntities(
 
 const splitXOffset = 0.5;
 
-function keyPlacer_placeUnifiedKeyboardKeys(
-  spec: IKermiteStandardKeyboardSpec,
-  layoutOptions: ILayoutGeneratorOptions,
+function placeKeyEntitiesSet(
   design: IPersistKeyboardDesign,
+  nxMatrixKeys: number,
+  nyMatrixKeys: number,
+  numDirectKeys: number,
+  nxDirectKeys: number,
+  numEncoderKeys: number,
+  invertX: boolean,
+  invertY: boolean,
+  isCentered: boolean,
+  keyIndexBase: number,
 ) {
-  const { placementOrigin, invertX, invertY } = layoutOptions;
-  const isCentered = placementOrigin === 'center';
-
-  let keyIndexBase = 0;
   let matrixPartHeight = 0;
-  if (spec.useMatrixKeyScanner && spec.matrixRowPins && spec.matrixColumnPins) {
-    const nx = spec.matrixColumnPins.length;
-    const ny = spec.matrixRowPins.length;
+  if (nxMatrixKeys > 0 && nyMatrixKeys > 0) {
+    const nx = nxMatrixKeys;
+    const ny = nyMatrixKeys;
     const keys = makeMatrixKeyEntities(
       nx * ny,
       nx,
@@ -97,32 +100,63 @@ function keyPlacer_placeUnifiedKeyboardKeys(
     keyIndexBase += keys.length;
     matrixPartHeight += ny;
   }
-  if (appUi.isDevelopment) {
-    if (spec.useDirectWiredKeyScanner && spec.directWiredPins) {
-      const numKeys = spec.directWiredPins.length;
-      const nx = 4;
-      const ny = Math.ceil(numKeys / nx);
-      let offsetY = 0;
-      if (!isCentered) {
-        offsetY = matrixPartHeight;
-      } else {
+  if (numDirectKeys > 0) {
+    const num = numDirectKeys;
+    const nx = nxDirectKeys;
+    const ny = Math.ceil(num / nx);
+    let offsetY = 0;
+    if (!isCentered) {
+      offsetY = matrixPartHeight;
+    } else {
+      if (matrixPartHeight) {
         const dwPartHeight = ny;
         offsetY = (matrixPartHeight + dwPartHeight) / 2;
       }
-      const keys = makeMatrixKeyEntities(
-        numKeys,
-        nx,
-        0,
-        offsetY,
-        invertX,
-        invertY,
-        keyIndexBase,
-        isCentered,
-      );
-      design.keyEntities.push(...keys);
-      keyIndexBase += keys.length;
     }
+    const keys = makeMatrixKeyEntities(
+      num,
+      nx,
+      0,
+      offsetY,
+      invertX,
+      invertY,
+      keyIndexBase,
+      isCentered,
+    );
+    design.keyEntities.push(...keys);
+    keyIndexBase += keys.length;
   }
+}
+
+function keyPlacer_placeUnifiedKeyboardKeys(
+  spec: IKermiteStandardKeyboardSpec,
+  layoutOptions: ILayoutGeneratorOptions,
+  design: IPersistKeyboardDesign,
+) {
+  const { placementOrigin, invertX, invertY } = layoutOptions;
+  const isCentered = placementOrigin === 'center';
+
+  const nxMatrixKeys =
+    (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
+  const nyMatrixKeys =
+    (spec.useMatrixKeyScanner && spec.matrixRowPins?.length) || 0;
+  const numDirectKeys =
+    (spec.useDirectWiredKeyScanner && spec.directWiredPins?.length) || 0;
+  const nxDirectKeys = 4;
+  const numEncoderKeys = (spec.useEncoder && spec.encoderPins?.length) || 0;
+
+  placeKeyEntitiesSet(
+    design,
+    nxMatrixKeys,
+    nyMatrixKeys,
+    numDirectKeys,
+    nxDirectKeys,
+    numEncoderKeys,
+    invertX,
+    invertY,
+    isCentered,
+    0,
+  );
 }
 
 function keyPlacer_placeEvenSplitKeyboardKeys(
