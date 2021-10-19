@@ -53,10 +53,6 @@ export const LayoutGeneratorOptionsPart: FC = () => {
           />
         </FieldRow>
       </div>
-      <div class="note">
-        note: configurations for direct wired keys and encoders are not
-        supported yet
-      </div>
     </div>
   );
 };
