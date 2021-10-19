@@ -38,10 +38,15 @@ function makeMatrixKeyEntities(
   invertX: boolean,
   invertY: boolean,
   keyIndexOffset: number,
+  isCentered: boolean,
 ): IPersistKeyboardDesignRealKeyEntity[] {
   const ny = Math.ceil(numKeys / nx);
   const xs = generateNumberSequence(nx);
   const ys = generateNumberSequence(ny);
+  if (isCentered) {
+    offsetX += -nx / 2 + 0.5;
+    offsetY += -ny / 2 + 0.5;
+  }
   shiftNumbers(xs, offsetX);
   shiftNumbers(ys, offsetY);
   if (invertX) {
@@ -74,49 +79,45 @@ function keyPlacer_placeUnifiedKeyboardKeys(
   const isCentered = placementOrigin === 'center';
 
   let keyIndexBase = 0;
-  let baseY = 0;
+  let matrixPartHeight = 0;
   if (spec.useMatrixKeyScanner && spec.matrixRowPins && spec.matrixColumnPins) {
     const nx = spec.matrixColumnPins.length;
     const ny = spec.matrixRowPins.length;
-    const numKeys = nx * ny;
-    let offsetX = 0;
-    let offsetY = 0;
-    if (isCentered) {
-      offsetX = -nx / 2 + 0.5;
-      offsetY = -ny / 2 + 0.5;
-    }
     const keys = makeMatrixKeyEntities(
-      numKeys,
+      nx * ny,
       nx,
-      offsetX,
-      offsetY,
+      0,
+      0,
       invertX,
       invertY,
       0,
+      isCentered,
     );
     design.keyEntities.push(...keys);
     keyIndexBase += keys.length;
-    baseY += ny;
+    matrixPartHeight += ny;
   }
   if (appUi.isDevelopment) {
     if (spec.useDirectWiredKeyScanner && spec.directWiredPins) {
       const numKeys = spec.directWiredPins.length;
       const nx = 4;
       const ny = Math.ceil(numKeys / nx);
-      let offsetX = 0;
       let offsetY = 0;
-      if (isCentered) {
-        offsetX = -nx / 2 + 0.5;
-        offsetY = -ny / 2 + 0.5;
+      if (!isCentered) {
+        offsetY = matrixPartHeight;
+      } else {
+        const dwPartHeight = ny;
+        offsetY = (matrixPartHeight + dwPartHeight) / 2;
       }
       const keys = makeMatrixKeyEntities(
         numKeys,
         nx,
-        offsetX,
-        baseY + offsetY,
+        0,
+        offsetY,
         invertX,
         invertY,
         keyIndexBase,
+        isCentered,
       );
       design.keyEntities.push(...keys);
       keyIndexBase += keys.length;
@@ -137,29 +138,30 @@ function keyPlacer_placeEvenSplitKeyboardKeys(
     const numKeys = nx * ny;
     let offsetXL = 0;
     let offsetXR = splitXOffset * 2 + nx;
-    let offsetY = 0;
     if (isCentered) {
-      offsetXL = -nx - splitXOffset + 0.5;
-      offsetXR = splitXOffset + 0.5;
-      offsetY = -ny / 2 + 0.5;
+      const d = nx / 2 + splitXOffset;
+      offsetXL = -d;
+      offsetXR = d;
     }
     const keysLeft = makeMatrixKeyEntities(
       numKeys,
       nx,
       offsetXL,
-      offsetY,
+      0,
       !invertX,
       invertY,
       0,
+      isCentered,
     );
     const keysRight = makeMatrixKeyEntities(
       numKeys,
       nx,
       offsetXR,
-      offsetY,
+      0,
       invertX,
       invertY,
       nx * ny,
+      isCentered,
     );
     design.keyEntities.push(...keysLeft);
     design.keyEntities.push(...keysRight);
@@ -182,31 +184,29 @@ function keyPlacer_placeOddSplitKeyboardKeys(
     const numKeysR = nxr * nyr;
     let offsetXL = 0;
     let offsetXR = splitXOffset * 2 + nxl;
-    let offsetYL = 0;
-    let offsetYR = 0;
     if (isCentered) {
-      offsetXL = -nxl - splitXOffset + 0.5;
-      offsetXR = splitXOffset + 0.5;
-      offsetYL = -nyr / 2 + 0.5;
-      offsetYR = -nyr / 2 + 0.5;
+      offsetXL = -nxl / 2 - splitXOffset;
+      offsetXR = nxr / 2 + splitXOffset;
     }
     const keysLeft = makeMatrixKeyEntities(
       numKeysL,
       nxl,
       offsetXL,
-      offsetYL,
+      0,
       !invertX,
       invertY,
       0,
+      isCentered,
     );
     const keysRight = makeMatrixKeyEntities(
       numKeysR,
       nxr,
       offsetXR,
-      offsetYR,
+      0,
       invertXR,
       invertY,
       nxl * nyl,
+      isCentered,
     );
     design.keyEntities.push(...keysLeft);
     design.keyEntities.push(...keysRight);
