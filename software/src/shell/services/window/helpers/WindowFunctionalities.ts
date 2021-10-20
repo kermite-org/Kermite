@@ -3,7 +3,7 @@ import { glob } from 'glob';
 import { fsReadFileSync, fsWriteFileSync } from '~/shell/funcs';
 
 export function setupWebContentSourceChecker(
-  webContents: Electron.webContents,
+  webContents: Electron.WebContents,
   publicRootPath: string,
 ) {
   function isUriValidForLocalResources(uri: string) {
