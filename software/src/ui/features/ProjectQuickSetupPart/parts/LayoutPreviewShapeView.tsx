@@ -2,16 +2,19 @@ import { css, FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
+import { IDraftLayoutLabelEntity } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { CoordOriginMark } from '~/ui/features/ProjectQuickSetupPart/parts/CoordOriginMark';
 import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShpaeView.KeyEntityCard';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
+  labelEntities: IDraftLayoutLabelEntity[];
   holdKeyIndices: number[];
 };
 
 export const LayoutPreviewShapeView: FC<Props> = ({
   keyboardDesign,
+  labelEntities,
   holdKeyIndices,
 }) => {
   const dpiScale = 2;
@@ -37,6 +40,9 @@ export const LayoutPreviewShapeView: FC<Props> = ({
           {keyboardDesign.keyEntities.map((ke) => (
             <LayoutPreviewKeyEntityCard
               keyEntity={ke}
+              labelEntities={labelEntities.filter(
+                (it) => it.keyId === ke.keyId,
+              )}
               key={ke.keyId}
               isHold={holdKeyIndices.includes(ke.keyIndex)}
             />

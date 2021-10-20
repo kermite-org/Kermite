@@ -5,11 +5,13 @@ import { useLayoutConfigurationSectionModel } from '~/ui/features/ProjectQuickSe
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 
 export const LayoutConfigurationSection: FC = () => {
-  const { design, holdKeyIndices } = useLayoutConfigurationSectionModel();
+  const { design, labelEntities, holdKeyIndices } =
+    useLayoutConfigurationSectionModel();
   return (
     <SectionFrame title="Layout Preview" contentClassName={style}>
       <LayoutPreviewShapeView
         keyboardDesign={design}
+        labelEntities={labelEntities}
         holdKeyIndices={holdKeyIndices}
         class="shape-view"
       />

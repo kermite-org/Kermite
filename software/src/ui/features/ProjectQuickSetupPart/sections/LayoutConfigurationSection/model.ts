@@ -4,7 +4,10 @@ import {
   IKermiteStandardKeyboardSpec,
 } from '~/shared';
 import { useHoldKeyIndices } from '~/ui/commonModels';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+import {
+  IDraftLayoutLabelEntity,
+  ILayoutGeneratorOptions,
+} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/base/LayoutGenerator';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { useMemoEx } from '~/ui/utils';
@@ -12,18 +15,24 @@ import { useMemoEx } from '~/ui/utils';
 function createLayoutFromFirmwareSpecForDisplayDesign(
   spec: IKermiteStandardKeyboardSpec,
   layoutOptions: ILayoutGeneratorOptions,
-): IDisplayKeyboardDesign {
-  const design = createLayoutFromFirmwareSpec(spec, layoutOptions);
-  return DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
+): [IDisplayKeyboardDesign, IDraftLayoutLabelEntity[]] {
+  const [design, labelEntities] = createLayoutFromFirmwareSpec(
+    spec,
+    layoutOptions,
+  );
+  return [
+    DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design),
+    labelEntities,
+  ];
 }
 
 export function useLayoutConfigurationSectionModel() {
   const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
-  const design = useMemoEx(createLayoutFromFirmwareSpecForDisplayDesign, [
-    firmwareConfig,
-    layoutOptions,
-  ]);
+  const [design, labelEntities] = useMemoEx(
+    createLayoutFromFirmwareSpecForDisplayDesign,
+    [firmwareConfig, layoutOptions],
+  );
   const holdKeyIndices = useHoldKeyIndices();
 
-  return { design, holdKeyIndices };
+  return { design, labelEntities, holdKeyIndices };
 }
