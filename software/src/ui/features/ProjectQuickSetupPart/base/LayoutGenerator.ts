@@ -76,8 +76,6 @@ function makeMatrixKeyEntities(
   });
 }
 
-const seq = generateNumberSequence;
-
 function placeKeyEntitiesSet(
   design: IPersistKeyboardDesign,
   labelEntities: IDraftLayoutLabelEntity[],
@@ -86,8 +84,8 @@ function placeKeyEntitiesSet(
   directPins: string[],
   encoderPins: string[],
   wrapX: number,
-  invertX: boolean,
-  invertY: boolean,
+  invertIndicesX: boolean,
+  invertIndicesY: boolean,
   keyIndexBase: number,
   isSplit: boolean,
   dir: number,
@@ -100,22 +98,38 @@ function placeKeyEntitiesSet(
       nx * ny,
       nx,
       0,
-      invertX,
-      invertY,
+      invertIndicesX,
+      invertIndicesY,
       keyIndexBase,
       isSplit,
       dir,
       1,
     );
     design.keyEntities.push(...keys);
-    seq(nx).forEach((i) => {
-      const le = makeLabelEntity(keys[i].keyId, 'column', columnPins[i]);
+    columnPins.forEach((pin, ix) => {
+      if (invertIndicesX) {
+        ix = nx - 1 - ix;
+      }
+      const le = makeLabelEntity(keys[ix].keyId, 'column', pin);
       labelEntities.push(le);
     });
-    seq(ny).forEach((i) => {
-      const key = keys[i * nx + (nx - 1)];
-      const le = makeLabelEntity(key.keyId, 'row', rowPins[i]);
-      labelEntities.push(le);
+    rowPins.forEach((pin, iy) => {
+      if (invertIndicesY) {
+        iy = ny - 1 - iy;
+      }
+      if (!isSplit) {
+        const ki = iy * nx;
+        const le = makeLabelEntity(keys[ki].keyId, 'rowL', pin);
+        labelEntities.push(le);
+      } else {
+        const ki = iy * nx + (nx - 1);
+        const le = makeLabelEntity(
+          keys[ki].keyId,
+          dir === -1 ? 'rowL' : 'rowR',
+          pin,
+        );
+        labelEntities.push(le);
+      }
     });
     keyIndexBase += keys.length;
     mainKeyBlockHeight = ny;
@@ -128,7 +142,7 @@ function placeKeyEntitiesSet(
       num,
       nx,
       offsetY,
-      invertX,
+      invertIndicesX,
       false,
       keyIndexBase,
       isSplit,
@@ -156,7 +170,7 @@ function placeKeyEntitiesSet(
       num,
       nx,
       offsetY,
-      invertX,
+      invertIndicesX,
       false,
       keyIndexBase,
       isSplit,
@@ -264,7 +278,7 @@ export function createLayoutFromFirmwareSpec(
       directPins,
       encoderPins,
       wrapX,
-      !invertX,
+      invertX,
       invertY,
       keyIndexBaseL,
       true,
@@ -295,7 +309,7 @@ export function createLayoutFromFirmwareSpec(
       directPins,
       encoderPins,
       wrapX,
-      !invertX,
+      invertX,
       invertY,
       keyIndexBaseL,
       true,

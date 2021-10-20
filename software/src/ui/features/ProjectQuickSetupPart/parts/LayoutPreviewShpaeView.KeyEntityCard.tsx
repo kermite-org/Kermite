@@ -36,9 +36,7 @@ export const LayoutPreviewKeyEntityCard: FC<Props> = ({
           <text
             key={le.pinType}
             css={cssLabelText}
-            class={`--type-${le.pinType}${
-              (le.pinType === 'row' && (pos.x < 0 ? '-n' : '-p')) || ''
-            }`}
+            class={`--type-${le.pinType}`}
           >
             {le.pinName}
           </text>
@@ -73,11 +71,11 @@ const cssLabelText = css`
     transform: translateY(-14px);
   }
 
-  &.--type-row-n {
+  &.--type-rowL {
     transform: translateX(-18px);
   }
 
-  &.--type-row-p {
+  &.--type-rowR {
     transform: translateX(18px);
   }
 

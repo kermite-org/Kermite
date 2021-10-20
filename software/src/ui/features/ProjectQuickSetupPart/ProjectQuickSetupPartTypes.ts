@@ -14,7 +14,11 @@ export const fallbackLayoutGeneratorOptions: ILayoutGeneratorOptions = {
   wrapX: -1,
 };
 
-export type IDraftLayoutLabelEntityPinType = 'itself' | 'row' | 'column';
+export type IDraftLayoutLabelEntityPinType =
+  | 'itself'
+  | 'rowL'
+  | 'rowR'
+  | 'column';
 
 export type IDraftLayoutLabelEntity = {
   keyId: string;
