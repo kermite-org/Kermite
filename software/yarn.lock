@@ -1501,7 +1501,7 @@ electron-publish@22.13.1:
     lazy-val "^1.0.5"
     mime "^2.5.2"
 
-electron-rebuild@3.2.3:
+electron-rebuild@^3.2.3:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/electron-rebuild/-/electron-rebuild-3.2.3.tgz#2c0b06b7b1a5240fec96f1d368d04222e2590c3d"
   integrity sha512-9oxNmKlDCaf651c+yJWCDIBpF6A9aY+wQtasLEeR5AsPYPuOKEX6xHnC2+WgCLOC94JEpCZznecyC84fbwZq4A==
@@ -1520,7 +1520,7 @@ electron-rebuild@3.2.3:
     tar "^6.0.5"
     yargs "^17.0.1"
 
-electron@15.2.0:
+electron@^15.2.0:
   version "15.2.0"
   resolved "https://registry.yarnpkg.com/electron/-/electron-15.2.0.tgz#3068099d1e5c625d1708487de519c59d7c0a8e6e"
   integrity sha512-kg0JdlsVbJgD/hO/A7o9VH8U44pQWkIsyt/sALxH6g8CiHQxMujLn2JfB2gyUfHXPT7m8vD4Z+CurS2KodEsWw==
@@ -4255,7 +4255,7 @@ url-parse-lax@^3.0.0:
   dependencies:
     prepend-http "^2.0.0"
 
-usb@1.8.0:
+usb@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/usb/-/usb-1.8.0.tgz#aec44c61558e618c699a2cbd31c86e3dc7f64d87"
   integrity sha512-lA0q2tjDEAq1YUsW6nQ+asw92TtFrQ8rhMd11jAoFhK3xItZUupJ7npZDSmVOpQqQhhdFmX/YciqyywupA/wOQ==
