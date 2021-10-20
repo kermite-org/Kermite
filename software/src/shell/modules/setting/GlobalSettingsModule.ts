@@ -3,7 +3,6 @@ import {
   globalSettingsLoadingSchema,
   IGlobalSettings,
 } from '~/shared';
-import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { applicationStorage } from '~/shell/base';
 import { checkLocalRepositoryFolder } from '~/shell/loaders/LocalResourceHelper';
 import {
@@ -21,12 +20,6 @@ const globalSettingsModuleHelpers = {
         console.warn('invalid local repository folder setting');
         globalSettings.localProjectRootFolderPath = '';
       }
-    }
-    if (
-      !featureFlags.allowEditLocalProject &&
-      globalSettings.globalProjectSpec?.origin === 'local'
-    ) {
-      globalSettings.globalProjectSpec = undefined;
     }
   },
   fixGlobalSettingsOnEdit(globalSettings: IGlobalSettings) {

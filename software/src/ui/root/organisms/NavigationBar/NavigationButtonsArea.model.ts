@@ -1,4 +1,3 @@
-import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { appUi, texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
@@ -67,9 +66,7 @@ const itemsSource: NavigationItemSource[] = [
     pageName: 'project',
     iconSpec: 'fa fa-globe',
     hint: 'project edit',
-    isAvailable: () =>
-      featureFlags.allowEditLocalProject &&
-      uiReaders.isLocalProjectSelectedForEdit,
+    isAvailable: () => uiReaders.isLocalProjectSelectedForEdit,
   },
   {
     pagePath: '/projectSelection',

@@ -6,6 +6,7 @@ import {
   IProjectPackageInfo,
   IResourceOrigin,
 } from '~/shared';
+import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { appEnv } from '~/shell/base';
 import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
 import { createEventPort } from '~/shell/funcs';
@@ -17,19 +18,42 @@ import { FirmwareUpdateSchemeAtMegaCaterina } from '~/shell/services/firmwareUpd
 import { FirmwareUpdateSchemeAtMegaDfu } from '~/shell/services/firmwareUpdate/flashSchemeAtmegaDfu/FlashSchemeAtMegaDfu';
 import { FirmwareUpdateSchemeRp_Mac } from '~/shell/services/firmwareUpdate/flashSchemeRp/FlashSchemeRp_Mac';
 import { FirmwareUpdateSchemeRp_Windows } from '~/shell/services/firmwareUpdate/flashSchemeRp/FlashSchemeRp_Windows';
-import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
+import {
+  IFirmwareBinaryFileSpec,
+  IFirmwareUpdateScheme,
+} from '~/shell/services/firmwareUpdate/types';
 
 const FirmwareUpdateSchemeRp =
   appEnv.platform === 'win32'
     ? FirmwareUpdateSchemeRp_Windows
     : FirmwareUpdateSchemeRp_Mac;
 
+class FirmwareUpdateSchemeDummy implements IFirmwareUpdateScheme {
+  resetDeviceDetectionStatus() {}
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async updateDeviceDetection() {
+    return undefined;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async flashFirmware(
+    _detectedDeviceSig: string,
+    _firmwareFilePath: string,
+  ): Promise<'ok' | string> {
+    throw new Error('firmware flash dummy implementation invoked');
+  }
+}
+
+const FirmwareUpdateSchemeAtMegaDfuImpl =
+  featureFlags.supportFirmwareUpdateSchemeAvrDfu
+    ? FirmwareUpdateSchemeAtMegaDfu
+    : FirmwareUpdateSchemeDummy;
 export class FirmwareUpdateService {
   private timerWrapper = new IntervalTimerWrapper();
 
   private schemeAtMegaCaterina = new FirmwareUpdateSchemeAtMegaCaterina();
   private schemeRp = new FirmwareUpdateSchemeRp();
-  private schemeAtMegaDfu = new FirmwareUpdateSchemeAtMegaDfu();
+  private schemeAtMegaDfu = new FirmwareUpdateSchemeAtMegaDfuImpl();
 
   private pluggedAvrCaterinaComPortName: string | undefined;
   private pluggedRp2040Uf2DriveName: string | undefined;
