@@ -257,7 +257,7 @@ export namespace FlashCommander {
       await executeFlashCommandSequence(serial, sourceBlocks);
       logger.log(`#### firmware upload complete`);
       return 'ok';
-    } catch (err) {
+    } catch (err: any) {
       logger.log(`#### an error occurred while writing firmware`);
       logger.log(`error: ${err.stack}`);
       if (serial) {

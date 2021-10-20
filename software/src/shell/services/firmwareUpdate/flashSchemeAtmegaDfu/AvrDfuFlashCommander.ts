@@ -48,7 +48,7 @@ export async function avrDfuFlashCommander_flashFirmware(
     await flashFirmwareImpl(hexFilePath);
     logger.log(`#### firmware upload complete`);
     return 'ok';
-  } catch (err) {
+  } catch (err: any) {
     logger.log(`#### an error occurred while writing firmware`);
     logger.log(`error: ${err.message}`);
     return logger.flush();
