@@ -13,3 +13,11 @@ export const fallbackLayoutGeneratorOptions: ILayoutGeneratorOptions = {
   invertY: false,
   wrapX: -1,
 };
+
+export type IDraftLayoutLabelEntityPinType = 'itself' | 'row' | 'column';
+
+export type IDraftLayoutLabelEntity = {
+  keyId: string;
+  pinType: IDraftLayoutLabelEntityPinType;
+  pinName: string;
+};
