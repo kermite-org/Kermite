@@ -52,7 +52,7 @@
     "node-fetch": "^3.0.0",
     "node-hid": "^2.1.1",
     "serialport": "^9.2.4",
-    "usb": "1.8.0"
+    "usb": "^1.8.0"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
@@ -65,9 +65,9 @@
     "@typescript-eslint/parser": "^5.1.0",
     "child_process": "^1.0.2",
     "cross-env": "^7.0.3",
-    "electron": "15.2.0",
+    "electron": "^15.2.0",
     "electron-builder": "^22.13.1",
-    "electron-rebuild": "3.2.3",
+    "electron-rebuild": "^3.2.3",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard-with-typescript": "^21.0.1",
