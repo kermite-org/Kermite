@@ -34,19 +34,19 @@ export const LayoutGeneratorOptionsPart: FC = () => {
             setValue={valueChangeHandler('placementOrigin')}
           />
         </FieldRow>
-        <FieldRow title="invert key indices X">
+        <FieldRow title="invert column placement">
           <ToggleSwitch
             checked={layoutOptions.invertX}
             onChange={valueChangeHandler('invertX')}
           />
         </FieldRow>
-        <FieldRow title="invert key indices X right" qxIf={isOddSplit}>
+        <FieldRow title="invert column placement right" qxIf={isOddSplit}>
           <ToggleSwitch
             checked={layoutOptions.invertXR}
             onChange={valueChangeHandler('invertXR')}
           />
         </FieldRow>
-        <FieldRow title="invert key indices Y" qxIf={false}>
+        <FieldRow title="invert row placement" qxIf={false}>
           <ToggleSwitch
             checked={layoutOptions.invertY}
             onChange={valueChangeHandler('invertY')}
