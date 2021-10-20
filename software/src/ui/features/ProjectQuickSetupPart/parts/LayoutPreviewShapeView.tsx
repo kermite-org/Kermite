@@ -18,7 +18,7 @@ export const LayoutPreviewShapeView: FC<Props> = ({
   holdKeyIndices,
 }) => {
   const dpiScale = 2;
-  const marginRatio = 0.1;
+  const marginRatio = 0;
   const baseStrokeWidth = 0.3;
 
   const fillColor = '#54566f';

@@ -20,10 +20,14 @@ function createLayoutFromFirmwareSpecForDisplayDesign(
     spec,
     layoutOptions,
   );
-  return [
-    DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design),
-    labelEntities,
-  ];
+
+  const displayDesign =
+    DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(design);
+
+  displayDesign.displayArea.width += 40;
+  displayDesign.displayArea.height += 10;
+
+  return [displayDesign, labelEntities];
 }
 
 export function useLayoutConfigurationSectionModel() {
