@@ -6,7 +6,6 @@ import {
   IResourceOrigin,
   sortOrderBy,
 } from '~/shared';
-import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { globalSettingsWriter, uiReaders } from '~/ui/store/base';
 import { createSimpleSelector2 } from '~/ui/utils';
@@ -53,7 +52,7 @@ const readers = {
     return state.tabResourceOrigin;
   },
   get canSelectResourceOrigin(): boolean {
-    return featureFlags.allowEditLocalProject && uiReaders.isDeveloperMode;
+    return uiReaders.isDeveloperMode;
   },
   get sourceProjectItems(): IProjectKeyboardListProjectItem[] {
     return sourceProjectItemsSelector();
