@@ -12,6 +12,6 @@ export const CoordOriginMark: FC = () => (
 const style = css`
   > line {
     stroke: #f08;
-    stroke-width: 2px;
+    stroke-width: 1px;
   }
 `;
