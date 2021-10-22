@@ -1,17 +1,24 @@
 import { css, FC, jsx } from 'qx';
-import { generateNumberSequence as seq } from '~/shared';
 import {
+  generateNumberSequence as seq,
+  IKermiteStandardKeyboardSpec,
+} from '~/shared';
+import {
+  svgImage_boardProMicro,
   svgImage_boardProMicroRp2040,
-  svgImage_boardProMicroRpiPico,
+  svgImage_boardRpiPico,
 } from '~/ui/constants';
+import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
+import { useMemoEx } from '~/ui/utils';
 
 type IBoardImageSig = 'proMicro' | 'proMicroRp2040' | 'rpiPico';
 
 const svgImagesMap: { [key in IBoardImageSig]: JSX.Element } = {
-  proMicro: svgImage_boardProMicroRp2040,
+  proMicro: svgImage_boardProMicro,
   proMicroRp2040: svgImage_boardProMicroRp2040,
-  rpiPico: svgImage_boardProMicroRpiPico,
+  rpiPico: svgImage_boardRpiPico,
 };
 
 type IBoardPinAssignsData = {
@@ -21,6 +28,10 @@ type IBoardPinAssignsData = {
   boardImageSig: IBoardImageSig;
   pinsRowOffset: number;
   pinNames: string[];
+};
+
+type IBoardPinAssignsDataEx = IBoardPinAssignsData & {
+  pinFunctionNames: string[];
 };
 
 const boardAssignsData_proMicro: IBoardPinAssignsData = {
@@ -92,7 +103,7 @@ const boardAssignsData_proMicroRp2040: IBoardPinAssignsData = {
 };
 
 const boardAssignsData_rpiPico: IBoardPinAssignsData = {
-  unitPixels: 12,
+  unitPixels: 13,
   boardUnitWidth: 8,
   boardUnitHeight: 21,
   pinsRowOffset: 1,
@@ -133,7 +144,7 @@ const boardAssignsData_rpiPico: IBoardPinAssignsData = {
     'GND',
     'GP28',
     'AVREF',
-    '3V3_OUT',
+    '3V3OUT',
     '3V3_EN',
     'GND',
     'VSYS',
@@ -166,7 +177,7 @@ function renderPins(
   });
 }
 
-const BoardPinAssignsView: FC<{ data: IBoardPinAssignsData }> = ({
+const BoardPinAssignsView: FC<{ data: IBoardPinAssignsDataEx }> = ({
   data: {
     unitPixels,
     boardImageSig,
@@ -174,15 +185,22 @@ const BoardPinAssignsView: FC<{ data: IBoardPinAssignsData }> = ({
     boardUnitHeight,
     pinsRowOffset,
     pinNames,
+    pinFunctionNames,
   },
 }) => {
   const nu = (n: number) => `${n * unitPixels}px`;
   const numPins = pinNames.length;
-  const pinsNamesLeft = pinNames.slice(0, numPins / 2);
-  const pinsNamesRight = pinNames.slice(numPins / 2, numPins).reverse();
+  const half = numPins / 2;
+  const pinsNamesLeft = pinNames.slice(0, half);
+  const pinsNamesRight = pinNames.slice(half, numPins).reverse();
+  const pinsFunctionNamesLeft = pinFunctionNames.slice(0, half);
+  const pinsFunctionNamesRight = pinFunctionNames
+    .slice(half, numPins)
+    .reverse();
+
   const gridStyle = css`
     display: grid;
-    grid-template-columns: ${[4, 3, boardUnitWidth, 3, 4].map(nu).join(' ')};
+    grid-template-columns: ${[3, 3, boardUnitWidth, 3, 3].map(nu).join(' ')};
     grid-template-rows: ${seq(boardUnitHeight).fill(1).map(nu).join(' ')};
   `;
   const boardCellStyle = css`
@@ -192,18 +210,134 @@ const BoardPinAssignsView: FC<{ data: IBoardPinAssignsData }> = ({
   return (
     <div class={gridStyle}>
       <div class={boardCellStyle}>{svgImagesMap[boardImageSig]}</div>
+      {...renderPins(pinsFunctionNamesLeft, pinsRowOffset, 1, unitPixels)}
       {...renderPins(pinsNamesLeft, pinsRowOffset, 2, unitPixels)}
       {...renderPins(pinsNamesRight, pinsRowOffset, 4, unitPixels)}
+      {...renderPins(pinsFunctionNamesRight, pinsRowOffset, 5, unitPixels)}
     </div>
   );
 };
 
+function pushPinFunctionName(
+  base: IBoardPinAssignsDataEx,
+  pinName: string,
+  pinFunctionName: string,
+) {
+  const pinIndex = base.pinNames.findIndex((it) => it === pinName);
+  if (pinIndex >= 0) {
+    base.pinFunctionNames[pinIndex] = pinFunctionName;
+  }
+}
+
+function pushPinFunctionNames(
+  base: IBoardPinAssignsDataEx,
+  pins: string[],
+  prefix: string,
+  indexRoot: number = 0,
+) {
+  pins.forEach((pinName, i) => {
+    const pinFunctionName = `${prefix}${i + indexRoot}`;
+    pushPinFunctionName(base, pinName, pinFunctionName);
+  });
+}
+
+function pushEncoderPinFunctionNames(
+  base: IBoardPinAssignsDataEx,
+  pins: string[],
+  prefix: string,
+  indexRoot: number = 0,
+) {
+  pins.forEach((pinName, i) => {
+    const encoderIndex = (i / 2) >> 0;
+    const role = i % 2 >> 0 === 0 ? 'a' : 'b';
+    const pinFunctionName = `${prefix}${encoderIndex + indexRoot}${role}`;
+    pushPinFunctionName(base, pinName, pinFunctionName);
+  });
+}
+
+function createBoardAssignsDataEx(
+  base: IBoardPinAssignsData,
+): IBoardPinAssignsDataEx {
+  return { ...base, pinFunctionNames: base.pinNames.map(() => '') };
+}
+
+function createBoardAssignsData(
+  firmwareConfig: IKermiteStandardKeyboardSpec,
+): IBoardPinAssignsDataEx | undefined {
+  const {
+    useBoardLedsProMicroAvr,
+    useBoardLedsProMicroRp,
+    useBoardLedsRpiPico,
+    useMatrixKeyScanner,
+    matrixColumnPins,
+    matrixRowPins,
+    useDirectWiredKeyScanner,
+    directWiredPins,
+    useEncoder,
+    encoderPins,
+    singleWireSignalPin,
+    useLighting,
+    lightingPin,
+    useDebugUart,
+  } = firmwareConfig;
+  const { baseFirmwareType } = firmwareConfig;
+  const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
+  const mcuType = getMcuType(baseFirmwareType);
+
+  let source: IBoardPinAssignsData | undefined;
+  if (mcuType === 'avr' && useBoardLedsProMicroAvr) {
+    source = boardAssignsData_proMicro;
+  }
+  if (mcuType === 'rp' && useBoardLedsProMicroRp) {
+    source = boardAssignsData_proMicroRp2040;
+  }
+  if (mcuType === 'rp' && useBoardLedsRpiPico) {
+    source = boardAssignsData_rpiPico;
+  }
+  if (!source) {
+    return undefined;
+  }
+
+  const base = createBoardAssignsDataEx(source);
+
+  const isSplit = getIsSplit(firmwareConfig.baseFirmwareType);
+  if (useMatrixKeyScanner && matrixColumnPins && matrixRowPins) {
+    pushPinFunctionNames(base, matrixColumnPins, 'col');
+    pushPinFunctionNames(base, matrixRowPins, 'row');
+  }
+  if (useDirectWiredKeyScanner && directWiredPins) {
+    pushPinFunctionNames(base, directWiredPins, 'dw');
+  }
+  if (useEncoder && encoderPins) {
+    pushEncoderPinFunctionNames(base, encoderPins, 'enc');
+  }
+  if (isSplit && singleWireSignalPin) {
+    pushPinFunctionName(base, singleWireSignalPin, 'swire');
+  }
+  if (useLighting && lightingPin) {
+    pushPinFunctionName(base, lightingPin, 'rgbled');
+  }
+  if (useDebugUart) {
+    if (mcuType === 'avr') {
+      pushPinFunctionName(base, 'PD3', 'debug_tx');
+    }
+    if (mcuType === 'rp') {
+      pushPinFunctionName(base, 'GP0', 'debug_tx');
+    }
+  }
+  return base;
+}
+
 export const ControllerPinAssignsSection: FC = () => {
+  const boardAssignsData = useMemoEx(createBoardAssignsData, [
+    projectQuickSetupStore.state.firmwareConfig,
+  ]);
   return (
-    <SectionFrame title="Pin Assign View" contentClassName={style}>
-      <BoardPinAssignsView data={boardAssignsData_proMicro} />
-      {/* <BoardPinAssignsView data={boardAssignsData_proMicroRp2040} /> */}
-      {/* <BoardPinAssignsView data={boardAssignsData_rpiPico} /> */}
+    <SectionFrame title="Board Pin Assigns View" contentClassName={style}>
+      <div>
+        {boardAssignsData && <BoardPinAssignsView data={boardAssignsData} />}
+        {!boardAssignsData && <div>N/A</div>}
+      </div>
     </SectionFrame>
   );
 };
