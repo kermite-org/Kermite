@@ -5,7 +5,7 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base
 import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
 import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
-import { FirmwareFlashPanel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashPanel/view';
+import { FirmwareFlashPart } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashPart/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 
@@ -54,7 +54,7 @@ export const ProjectQuickSetupPart: FC = () => {
         <DeviceAutoConnectionSection class="connection-section" />
         <CreateProfileButton />
       </div>
-      <FirmwareFlashPanel />
+      <FirmwareFlashPart />
     </div>
   );
 };

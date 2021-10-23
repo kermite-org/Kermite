@@ -3,10 +3,11 @@ import {
   checkDeviceBootloaderMatch,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
+  IProjectPackageInfo,
+  IStandardBaseFirmwareType,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm, showCommandOutputLogModal } from '~/ui/components';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { uiActions } from '~/ui/store';
 
 type FirmwareUpdatePhase = 'WaitingReset' | 'WaitingUploadOrder' | 'Uploading';
@@ -16,6 +17,10 @@ const state = new (class {
   deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
     detected: false,
   };
+
+  projectInfo?: IProjectPackageInfo;
+  firmwareName?: string;
+  baseFirmwareType?: IStandardBaseFirmwareType;
 })();
 
 const readers = {
@@ -27,10 +32,9 @@ const readers = {
     );
   },
   get canFlashFirmwareToDetectedDevice(): boolean {
-    if (state.deviceDetectionStatus.detected) {
-      const { firmwareConfig } = projectQuickSetupStore.state;
+    if (state.deviceDetectionStatus.detected && state.baseFirmwareType) {
       const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
-        firmwareConfig.baseFirmwareType,
+        state.baseFirmwareType,
       );
       return (
         !!targetDevice &&
@@ -69,9 +73,10 @@ const actions = {
   async uploadFirmware() {
     if (
       state.phase === 'WaitingUploadOrder' &&
-      state.deviceDetectionStatus.detected
+      state.deviceDetectionStatus.detected &&
+      state.projectInfo
     ) {
-      const projectInfo = projectQuickSetupStore.readers.emitDraftProjectInfo();
+      const { projectInfo } = state;
       const firmwareName = 'default';
       state.phase = 'Uploading';
       uiActions.setLoading();
@@ -96,7 +101,17 @@ const actions = {
   },
 };
 
-export function useFirmwareFlashPanelModel() {
+export function standardFirmwareFlashPartModel_configure(
+  projectInfo: IProjectPackageInfo,
+  firmwareName: string,
+  baseFirmwareType: IStandardBaseFirmwareType,
+) {
+  state.projectInfo = projectInfo;
+  state.firmwareName = firmwareName;
+  state.baseFirmwareType = baseFirmwareType;
+}
+
+export function useStandardFirmwareFlashPartModel() {
   useEffect(
     () =>
       ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
