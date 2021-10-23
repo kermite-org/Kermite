@@ -54,7 +54,10 @@ const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareVariationId, firmwareName } = constants;
     const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
-    const layout = createLayoutFromFirmwareSpec(firmwareConfig, layoutOptions);
+    const [layout] = createLayoutFromFirmwareSpec(
+      firmwareConfig,
+      layoutOptions,
+    );
     const projectInfo = projectQuickSetupStoreHelpers.createDraftPackageInfo({
       projectId,
       keyboardName,
