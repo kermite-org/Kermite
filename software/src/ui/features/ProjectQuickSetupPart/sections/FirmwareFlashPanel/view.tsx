@@ -1,29 +1,24 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/base';
-import { GeneralButton } from '~/ui/components';
+import { texts, uiTheme } from '~/ui/base';
+import { ClosableOverlay, GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useFirmwareFlashSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/model';
+import { useFirmwareFlashPanelModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashPanel/model';
 
-export const FirmwareFlashSection: FC = () => {
+export const FirmwareFlashPanelImpl: FC = () => {
   const {
     phase,
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton,
-  } = useFirmwareFlashSectionModel();
+  } = useFirmwareFlashPanelModel();
 
   const {
-    state: { isConfigValid },
+    actions: { closeFirmwareFlashPanel },
   } = projectQuickSetupStore;
 
   return (
-    <SectionFrame
-      title="Firmware Upload"
-      class={style}
-      inactive={!isConfigValid}
-    >
-      <div>
+    <ClosableOverlay close={closeFirmwareFlashPanel}>
+      <div css={panelStyle}>
         {phase === 'WaitingReset' && <div>reset device to flash firmware</div>}
 
         {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
@@ -57,10 +52,17 @@ export const FirmwareFlashSection: FC = () => {
           </div>
         )}
       </div>
-    </SectionFrame>
+    </ClosableOverlay>
   );
 };
 
-const style = css`
-  height: 100%;
+const panelStyle = css`
+  padding: 20px;
+  background: ${uiTheme.colors.clPageBackground};
+  border: solid 1px ${uiTheme.colors.clPrimary};
 `;
+
+export const FirmwareFlashPanel: FC = () => {
+  const { isFirmwareFlashPanelOpen } = projectQuickSetupStore.state;
+  return <FirmwareFlashPanelImpl qxIf={isFirmwareFlashPanelOpen} />;
+};

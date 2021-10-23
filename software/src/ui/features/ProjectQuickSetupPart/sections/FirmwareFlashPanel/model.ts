@@ -96,7 +96,7 @@ const actions = {
   },
 };
 
-export function useFirmwareFlashSectionModel() {
+export function useFirmwareFlashPanelModel() {
   useEffect(
     () =>
       ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
