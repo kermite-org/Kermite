@@ -279,6 +279,7 @@ function createBoardAssignsData(
     useLighting,
     lightingPin,
     useDebugUart,
+    useLcd,
   } = firmwareConfig;
   const { baseFirmwareType } = firmwareConfig;
   const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
@@ -323,6 +324,16 @@ function createBoardAssignsData(
     }
     if (mcuType === 'rp') {
       pushPinFunctionName(base, 'GP0', 'debug_tx');
+    }
+  }
+  if (useLcd) {
+    if (mcuType === 'avr') {
+      pushPinFunctionName(base, 'PD1', 'oled_sda');
+      pushPinFunctionName(base, 'PD0', 'oled_scl');
+    }
+    if (mcuType === 'rp') {
+      pushPinFunctionName(base, 'GP2', 'oled_sda');
+      pushPinFunctionName(base, 'GP3', 'oled_scl');
     }
   }
   return base;
