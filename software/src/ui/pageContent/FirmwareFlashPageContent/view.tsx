@@ -1,4 +1,4 @@
-import { css, FC, jsx, useEffect } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { uiTheme } from '~/ui/base';
 import { useDeviceAutoConnectionEffects } from '~/ui/pageContent/FirmwareFlashPageContent/hooks';
@@ -15,13 +15,9 @@ export const FirmwareFlashPageContent: FC<Props> = ({
   projectInfo,
   fixedFirmwareVariationId,
 }) => {
-  useEffect(
-    () =>
-      firmwareFlashPageContentStore.actions.configure(
-        projectInfo,
-        firmwareVariationId,
-      ),
-    [],
+  firmwareFlashPageContentStore.effects.useConfigureStore(
+    projectInfo,
+    fixedFirmwareVariationId,
   );
   useDeviceAutoConnectionEffects();
   const firmwareVariationId = fixedFirmwareVariationId!; // todo: use by selector

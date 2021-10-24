@@ -1,3 +1,4 @@
+import { useEffect } from 'qx';
 import { fallbackProjectPackageInfo, IProjectPackageInfo } from '~/shared';
 
 type IState = {
@@ -22,19 +23,21 @@ const readers = {
   },
 };
 
-const actions = {
-  configure(
+const effects = {
+  useConfigureStore(
     projectInfo: IProjectPackageInfo,
     firmwareVariationId: string | undefined,
   ) {
-    state.projectInfo = projectInfo;
-    state.fixedFirmwareVariationId = firmwareVariationId;
-    state.selectedFirmwareVariationId = firmwareVariationId;
+    useEffect(() => {
+      state.projectInfo = projectInfo;
+      state.fixedFirmwareVariationId = firmwareVariationId;
+      state.selectedFirmwareVariationId = firmwareVariationId;
+    }, [projectInfo, firmwareVariationId]);
   },
 };
 
 export const firmwareFlashPageContentStore = {
   state,
   readers,
-  actions,
+  effects,
 };
