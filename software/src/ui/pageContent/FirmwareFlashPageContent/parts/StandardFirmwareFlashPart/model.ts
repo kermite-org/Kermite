@@ -68,15 +68,15 @@ const actions = {
     if (
       state.phase === 'WaitingUploadOrder' &&
       state.deviceDetectionStatus.detected &&
-      state.projectInfo
+      state.projectInfo &&
+      state.firmwareVariationId
     ) {
       const { projectInfo, firmwareVariationId } = state;
-      const firmwareName = 'default';
       state.phase = 'Uploading';
       uiActions.setLoading();
       const res = await ipcAgent.async.firmup_writeStandardFirmwareDirect(
         projectInfo,
-        firmwareName,
+        firmwareVariationId,
       );
       uiActions.clearLoading();
       if (res === 'ok') {
