@@ -8,6 +8,7 @@ import {
 type IState = {
   projectInfo: IProjectPackageInfo;
   fixedFirmwareVariationId: string | undefined;
+  selectedFirmwareVariationId: string | undefined;
   isConnectionValid: boolean;
   isCommunicationIndicatorActive: boolean;
 };
@@ -15,6 +16,7 @@ type IState = {
 const state: IState = {
   projectInfo: fallbackProjectPackageInfo,
   fixedFirmwareVariationId: undefined,
+  selectedFirmwareVariationId: undefined,
   isConnectionValid: false,
   isCommunicationIndicatorActive: false,
 };
