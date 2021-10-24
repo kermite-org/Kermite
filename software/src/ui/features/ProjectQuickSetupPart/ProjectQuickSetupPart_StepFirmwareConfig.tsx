@@ -34,7 +34,6 @@ const CreateProfileButton: FC = () => {
 };
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
-  projectQuickSetupStore.effects.useEditDataPersistence();
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
   return (
     <div class={style}>

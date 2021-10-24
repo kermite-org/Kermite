@@ -5,7 +5,6 @@ import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPar
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
-  projectQuickSetupStore.effects.useEditDataPersistence();
   const projectInfo = useMemo(
     () => projectQuickSetupStore.readers.emitDraftProjectInfo(),
     [],

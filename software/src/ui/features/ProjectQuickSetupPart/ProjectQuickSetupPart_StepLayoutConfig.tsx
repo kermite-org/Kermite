@@ -1,11 +1,9 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view2';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 
 export const ProjectQuickSetupPart_StepLayoutConfig: FC = () => {
-  projectQuickSetupStore.effects.useEditDataPersistence();
   return (
     <div class={style}>
       <h1>Layout Configuration</h1>
