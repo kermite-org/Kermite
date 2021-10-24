@@ -5,7 +5,7 @@ import { uiState } from '~/ui/store';
 
 export type IAutoConnectionTargetDeviceSpec = {
   projectId: string;
-  firmwareVariationId: string;
+  firmwareVariationId: string | undefined;
 };
 
 export function useDeviceAutoConnectionConnectionStatus(
@@ -13,11 +13,19 @@ export function useDeviceAutoConnectionConnectionStatus(
 ): boolean {
   const { projectId, firmwareVariationId } = targetDeviceSpec;
   const deviceStatus = uiState.core.deviceStatus;
-  const isConnectionValid =
-    deviceStatus.isConnected &&
-    deviceStatus.deviceAttrs.projectId === projectId &&
-    deviceStatus.deviceAttrs.variationId === firmwareVariationId;
-  return isConnectionValid;
+
+  if (firmwareVariationId) {
+    return (
+      deviceStatus.isConnected &&
+      deviceStatus.deviceAttrs.projectId === projectId &&
+      deviceStatus.deviceAttrs.variationId === firmwareVariationId
+    );
+  } else {
+    return (
+      deviceStatus.isConnected &&
+      deviceStatus.deviceAttrs.projectId === projectId
+    );
+  }
 }
 
 export function useDeviceKeyEventIndicatorModel(holdMs: number): boolean {
@@ -49,9 +57,10 @@ export function useDeviceAutoConnectionAutoConnectFunction(
     uiState.core.deviceSelectionStatus;
 
   useEffect(() => {
-    const targetDevice = allDeviceInfos.find(
-      (it) =>
-        it.projectId === projectId && it.variationId === firmwareVariationId,
+    const targetDevice = allDeviceInfos.find((it) =>
+      firmwareVariationId
+        ? it.projectId === projectId && it.variationId === firmwareVariationId
+        : it.projectId === projectId,
     );
     if (targetDevice && targetDevice.path !== currentDevicePath) {
       ipcAgent.async.device_connectToDevice(targetDevice.path);

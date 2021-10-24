@@ -3,7 +3,7 @@ import {
   useDeviceAutoConnectionAutoConnectFunction,
   useDeviceAutoConnectionConnectionStatus,
   useDeviceKeyEventIndicatorModel,
-} from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/hooks';
+} from '~/ui/pageContent/FirmwareFlashPageContent/hooks';
 
 type IDeviceAutoConnectionSectionModel = {
   isConnectionValid: boolean;
