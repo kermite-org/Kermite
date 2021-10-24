@@ -60,6 +60,12 @@ const cssGlobal = css`
     cursor: pointer;
     outline: none;
   }
+
+  h1,
+  h2 {
+    font-size: 18px;
+    font-weight: normal;
+  }
 `;
 applyGlobalStyle(cssGlobal);
 

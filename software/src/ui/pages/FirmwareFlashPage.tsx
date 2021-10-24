@@ -3,8 +3,12 @@ import { uiTheme } from '~/ui/base';
 
 export const FirmwareFlashPage: FC = () => (
   <div class={style}>
-    <div class="panel">Device Connection Status</div>
-    <div class="panel firmware-flash-panel">Flash Firmware</div>
+    <div class="panel">
+      <h2> Device Connection Status</h2>
+    </div>
+    <div class="panel firmware-flash-panel">
+      <h2>Flash Firmware</h2>
+    </div>
   </div>
 );
 
