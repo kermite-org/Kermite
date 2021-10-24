@@ -1,10 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useDeviceAutoConnectionSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/model';
+import { useDeviceAutoConnectionPartModel } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/model';
 
-export const DeviceAutoConnectionSection_Deprecated: FC = () => {
+export const DeviceAutoConnectionPart: FC = () => {
   const { isConnectionValid, isCommunicationIndicatorActive } =
-    useDeviceAutoConnectionSectionModel();
+    useDeviceAutoConnectionPartModel();
 
   return (
     <SectionFrame title="Device Connection">

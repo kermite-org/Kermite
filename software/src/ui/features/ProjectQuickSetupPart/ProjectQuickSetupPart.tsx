@@ -3,7 +3,7 @@ import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
-import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
+import { DeviceAutoConnectionSection_Deprecated } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
 import { FirmwareFlashPart } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashPart/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
@@ -51,7 +51,7 @@ export const ProjectQuickSetupPart: FC = () => {
       </div>
       <div class="bottom-row">
         <FirmwareFlashPanelButton />
-        <DeviceAutoConnectionSection class="connection-section" />
+        <DeviceAutoConnectionSection_Deprecated class="connection-section" />
         <CreateProfileButton />
       </div>
       <FirmwareFlashPart />
