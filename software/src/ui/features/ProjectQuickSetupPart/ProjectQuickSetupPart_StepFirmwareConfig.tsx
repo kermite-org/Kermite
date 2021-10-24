@@ -3,9 +3,7 @@ import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
-import { DeviceAutoConnectionSection_Deprecated } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
-import { FirmwareFlashPart } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashPart/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 
@@ -53,10 +51,8 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
       {/* DEPRECATED */}
       <div class="bottom-row" qxIf={false}>
         <FirmwareFlashPanelButton />
-        <DeviceAutoConnectionSection_Deprecated class="connection-section" />
         <CreateProfileButton />
       </div>
-      <FirmwareFlashPart />
     </div>
   );
 };
