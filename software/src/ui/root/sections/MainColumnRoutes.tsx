@@ -36,7 +36,6 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
-        {pageSpec.type === 'projectQuickSetup' && <ProjectQuickSetupPage />}
       </div>
     );
   }
@@ -55,7 +54,7 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectResource' && <ProjectResourcePage />}
-      {pagePath === '/projectQuickSetup' && <ProjectQuickSetupPage />}
+      {pagePath.startsWith('/projectQuickSetup') && <ProjectQuickSetupPage />}
     </div>
   );
 };

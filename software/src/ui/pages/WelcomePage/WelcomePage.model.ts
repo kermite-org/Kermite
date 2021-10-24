@@ -35,7 +35,7 @@ export function useWelcomePageModel(): WelcomePageModel {
 
   const { openSetupNavigationPanel } = uiActions;
   const showProjectQuickSetupPage = () =>
-    uiActions.navigateTo({ type: 'projectQuickSetup' });
+    uiActions.navigateTo('/projectQuickSetup/step1');
 
   const isDarkTheme = currentThemeKey === 'dark';
   const setDarkTheme = (isDark: boolean) =>
