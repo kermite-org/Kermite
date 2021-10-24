@@ -8,6 +8,7 @@ type Props = {
   projectInfo: IProjectPackageInfo;
   firmwareVariationId: string;
 };
+
 export const StandardFirmwareFlashPart: FC<Props> = ({
   projectInfo,
   firmwareVariationId,

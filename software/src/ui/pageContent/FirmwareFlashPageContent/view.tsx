@@ -1,10 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { useDeviceAutoConnectionEffects } from '~/ui/pageContent/FirmwareFlashPageContent/hooks';
 import { DeviceAutoConnectionPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/view';
-import { firmwareFlashPageContentStore } from '~/ui/pageContent/FirmwareFlashPageContent/store';
 
 type Props = {
   projectInfo: IProjectPackageInfo;
@@ -15,18 +13,16 @@ export const FirmwareFlashPageContent: FC<Props> = ({
   projectInfo,
   fixedFirmwareVariationId,
 }) => {
-  firmwareFlashPageContentStore.effects.useConfigureStore(
-    projectInfo,
-    fixedFirmwareVariationId,
-  );
-  useDeviceAutoConnectionEffects();
   const firmwareVariationId = fixedFirmwareVariationId!; // todo: use by selector
   return (
     <div class={style}>
       <div class="row first-row">
         <div class="panel device-connection-panel">
           <h2>Device Connection Status</h2>
-          <DeviceAutoConnectionPart />
+          <DeviceAutoConnectionPart
+            projectInfo={projectInfo}
+            firmwareVariationId={firmwareVariationId}
+          />
         </div>
         <div class="panel keystate-preview-panel">
           <h2>KeyState Preview</h2>

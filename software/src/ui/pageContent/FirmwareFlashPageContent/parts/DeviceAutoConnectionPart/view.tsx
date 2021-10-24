@@ -1,12 +1,20 @@
 import { css, FC, jsx } from 'qx';
+import { IProjectPackageInfo } from '~/shared';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { firmwareFlashPageContentStore } from '~/ui/pageContent/FirmwareFlashPageContent/store';
+import { useDeviceAutoConnectionEffects } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/hooks';
 
-export const DeviceAutoConnectionPart: FC = () => {
-  const {
-    state: { isConnectionValid, isCommunicationIndicatorActive },
-    readers: { keyboardName },
-  } = firmwareFlashPageContentStore;
+type Props = {
+  projectInfo: IProjectPackageInfo;
+  firmwareVariationId: string;
+};
+
+export const DeviceAutoConnectionPart: FC<Props> = ({
+  projectInfo,
+  firmwareVariationId,
+}) => {
+  const { isConnectionValid, isCommunicationIndicatorActive } =
+    useDeviceAutoConnectionEffects(projectInfo.projectId, firmwareVariationId);
+  const { keyboardName } = projectInfo;
 
   return (
     <SectionFrame title="Device Connection">
