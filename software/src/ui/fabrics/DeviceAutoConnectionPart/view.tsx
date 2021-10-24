@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
+import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/DeviceAutoConnectionPart/hooks';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useDeviceAutoConnectionEffects } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/hooks';
 
 type Props = {
   projectInfo: IProjectPackageInfo;

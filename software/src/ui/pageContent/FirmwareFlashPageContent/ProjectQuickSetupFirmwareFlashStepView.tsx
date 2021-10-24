@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { uiTheme } from '~/ui/base';
-import { DeviceAutoConnectionPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/view';
-import { StandardFirmwareFlashPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/view';
+import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
+import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
 
 type Props = {
   projectInfo: IProjectPackageInfo;

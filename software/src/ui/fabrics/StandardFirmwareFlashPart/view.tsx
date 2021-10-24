@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
-import { useStandardFirmwareFlashPartModel } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/model';
+import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/StandardFirmwareFlashPart/model';
 
 type Props = {
   projectInfo: IProjectPackageInfo;
