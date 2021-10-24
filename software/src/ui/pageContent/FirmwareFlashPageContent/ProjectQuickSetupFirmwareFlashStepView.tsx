@@ -6,14 +6,14 @@ import { StandardFirmwareFlashPart } from '~/ui/pageContent/FirmwareFlashPageCon
 
 type Props = {
   projectInfo: IProjectPackageInfo;
-  fixedFirmwareVariationId: string | undefined;
+  fixedFirmwareVariationId: string;
 };
 
-export const FirmwareFlashPageContent: FC<Props> = ({
+export const ProjectQuickSetupFirmwareFlashStepView: FC<Props> = ({
   projectInfo,
   fixedFirmwareVariationId,
 }) => {
-  const firmwareVariationId = fixedFirmwareVariationId!; // todo: use by selector
+  const firmwareVariationId = fixedFirmwareVariationId;
   return (
     <div class={style}>
       <div class="row first-row">

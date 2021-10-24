@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { FirmwareFlashPageContent } from '~/ui/pageContent/FirmwareFlashPageContent/view';
+import { ProjectQuickSetupFirmwareFlashStepView } from '~/ui/pageContent/FirmwareFlashPageContent/ProjectQuickSetupFirmwareFlashStepView';
 import { uiReaders } from '~/ui/store';
 
 export const FirmwareFlashPage: FC = () => {
@@ -7,9 +7,9 @@ export const FirmwareFlashPage: FC = () => {
     (it) => it.projectKey === uiReaders.globalProjectKey,
   )!;
   return (
-    <FirmwareFlashPageContent
+    <ProjectQuickSetupFirmwareFlashStepView
       projectInfo={projectInfo}
-      fixedFirmwareVariationId={undefined}
+      fixedFirmwareVariationId=""
     />
   );
 };

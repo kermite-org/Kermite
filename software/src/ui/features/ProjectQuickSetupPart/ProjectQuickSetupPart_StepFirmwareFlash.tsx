@@ -1,6 +1,6 @@
 import { FC, jsx, useMemo } from 'qx';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { FirmwareFlashPageContent } from '~/ui/pageContent/FirmwareFlashPageContent/view';
+import { ProjectQuickSetupFirmwareFlashStepView } from '~/ui/pageContent/FirmwareFlashPageContent/ProjectQuickSetupFirmwareFlashStepView';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   projectQuickSetupStore.effects.useEditDataPersistence();
@@ -9,7 +9,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
     [],
   );
   return (
-    <FirmwareFlashPageContent
+    <ProjectQuickSetupFirmwareFlashStepView
       projectInfo={projectInfo}
       fixedFirmwareVariationId="01"
     />
