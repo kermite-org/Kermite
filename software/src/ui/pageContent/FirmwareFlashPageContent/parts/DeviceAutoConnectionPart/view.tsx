@@ -1,10 +1,12 @@
 import { css, FC, jsx } from 'qx';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useDeviceAutoConnectionPartModel } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/model';
+import { firmwareFlashPageContentStore } from '~/ui/pageContent/FirmwareFlashPageContent/store';
 
 export const DeviceAutoConnectionPart: FC = () => {
-  const { isConnectionValid, isCommunicationIndicatorActive } =
-    useDeviceAutoConnectionPartModel();
+  const {
+    state: { isConnectionValid, isCommunicationIndicatorActive },
+    readers: { keyboardName },
+  } = firmwareFlashPageContentStore;
 
   return (
     <SectionFrame title="Device Connection">
@@ -19,6 +21,7 @@ export const DeviceAutoConnectionPart: FC = () => {
             ]}
           />
         </div>
+        <div>{keyboardName}</div>
       </div>
     </SectionFrame>
   );
