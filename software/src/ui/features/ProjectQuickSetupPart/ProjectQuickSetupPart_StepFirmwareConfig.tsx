@@ -35,8 +35,9 @@ const CreateProfileButton: FC = () => {
   );
 };
 
-export const ProjectQuickSetupPart: FC = () => {
-  projectQuickSetupStore.executeEffectsOnRender();
+export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
+  projectQuickSetupStore.effects.useEditDataPersistence();
+  projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
   return (
     <div class={style}>
       <div class="top-row">
@@ -49,7 +50,8 @@ export const ProjectQuickSetupPart: FC = () => {
           <ControllerPinAssignsSection />
         </div>
       </div>
-      <div class="bottom-row">
+      {/* DEPRECATED */}
+      <div class="bottom-row" qxIf={false}>
         <FirmwareFlashPanelButton />
         <DeviceAutoConnectionSection_Deprecated class="connection-section" />
         <CreateProfileButton />
@@ -63,6 +65,7 @@ const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: ${uiTheme.colors.clPanelBox};
 
   > .top-row {
     flex-shrink: 0;

@@ -138,47 +138,47 @@ const actions = {
 };
 
 const effects = {
-  editDataPersistenceEffect() {
-    const storageKey = 'projectQuickSetupEditData';
-    const loadedData = UiLocalStorage.readItem(storageKey);
-    if (loadedData) {
-      copyObjectProps(state, loadedData);
-    }
-    actions.loadFirmwareConfigToEditor();
+  useEditDataPersistence() {
+    useEffect(() => {
+      const storageKey = 'projectQuickSetupEditData';
+      const loadedData = UiLocalStorage.readItem(storageKey);
+      if (loadedData) {
+        copyObjectProps(state, loadedData);
+      }
+      actions.loadFirmwareConfigToEditor();
 
-    return () => {
-      const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
-      const persistData = {
-        projectId,
-        keyboardName,
-        firmwareConfig,
-        layoutOptions,
+      return () => {
+        const { projectId, keyboardName, firmwareConfig, layoutOptions } =
+          state;
+        const persistData = {
+          projectId,
+          keyboardName,
+          firmwareConfig,
+          layoutOptions,
+        };
+        UiLocalStorage.writeItem(storageKey, persistData);
       };
-      UiLocalStorage.writeItem(storageKey, persistData);
-    };
+    }, []);
+  },
+  useReflectEditFirmwareConfigToStore() {
+    const { isModified, isValid, editValues } =
+      StandardFirmwareEditor_ExposedModel;
+    useEffect(() => {
+      if (isModified && isValid && state.firmwareConfig !== editValues) {
+        actions.writeFirmwareConfig(editValues);
+        state.isConfigValid = true;
+      }
+      if (!isValid) {
+        state.isConfigValid = false;
+      }
+    }, [editValues]);
   },
 };
-
-function executeEffectsOnRender() {
-  useEffect(effects.editDataPersistenceEffect, []);
-
-  const { isModified, isValid, editValues } =
-    StandardFirmwareEditor_ExposedModel;
-  useEffect(() => {
-    if (isModified && isValid && state.firmwareConfig !== editValues) {
-      actions.writeFirmwareConfig(editValues);
-      state.isConfigValid = true;
-    }
-    if (!isValid) {
-      state.isConfigValid = false;
-    }
-  }, [editValues]);
-}
 
 export const projectQuickSetupStore = {
   constants,
   state,
   readers,
   actions,
-  executeEffectsOnRender,
+  effects,
 };
