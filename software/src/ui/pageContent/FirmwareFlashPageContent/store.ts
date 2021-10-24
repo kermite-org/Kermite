@@ -1,26 +1,20 @@
-import { useEffect } from 'qx';
 import { fallbackProjectPackageInfo, IProjectPackageInfo } from '~/shared';
 import {
-  IAutoConnectionTargetDeviceSpec,
   useDeviceAutoConnectionAutoConnectFunction,
   useDeviceAutoConnectionConnectionStatus,
   useDeviceKeyEventIndicatorModel,
 } from '~/ui/pageContent/FirmwareFlashPageContent/hooks';
-import { projectPackagesReader } from '~/ui/store';
 
 type IState = {
-  targetDeviceSpec: IAutoConnectionTargetDeviceSpec;
   projectInfo: IProjectPackageInfo;
+  firmwareVariationId: string | undefined;
   isConnectionValid: boolean;
   isCommunicationIndicatorActive: boolean;
 };
 
 const state: IState = {
-  targetDeviceSpec: {
-    projectId: '',
-    firmwareVariationId: '',
-  },
   projectInfo: fallbackProjectPackageInfo,
+  firmwareVariationId: undefined,
   isConnectionValid: false,
   isCommunicationIndicatorActive: false,
 };
@@ -31,15 +25,17 @@ const readers = {
   },
 };
 
-function configure(targetDeviceSpec: IAutoConnectionTargetDeviceSpec) {
-  useEffect(() => {
-    state.targetDeviceSpec = targetDeviceSpec;
-    state.projectInfo =
-      projectPackagesReader.findProjectInfo(
-        undefined,
-        targetDeviceSpec.projectId,
-      ) || fallbackProjectPackageInfo;
-  }, [targetDeviceSpec]);
+function configure(
+  projectInfo: IProjectPackageInfo,
+  firmwareVariationId: string | undefined,
+) {
+  state.projectInfo = projectInfo;
+  state.firmwareVariationId = firmwareVariationId;
+
+  const targetDeviceSpec = {
+    projectId: projectInfo.projectId,
+    firmwareVariationId,
+  };
 
   useDeviceAutoConnectionAutoConnectFunction(targetDeviceSpec);
   const isConnectionValid =

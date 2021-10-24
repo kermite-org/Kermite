@@ -4,11 +4,9 @@ import { FirmwareFlashPageContent } from '~/ui/pageContent/FirmwareFlashPageCont
 import { uiReaders } from '~/ui/store';
 
 export const FirmwareFlashPage: FC = () => {
-  const targetDeviceSpec = {
-    projectId: uiReaders.globalProjectId || '',
-    firmwareVariationId: undefined,
-  };
-  firmwareFlashPageContentStore.configure(targetDeviceSpec);
-
+  const projectInfo = uiReaders.allProjectPackageInfos.find(
+    (it) => it.projectKey === uiReaders.globalProjectKey,
+  )!;
+  firmwareFlashPageContentStore.configure(projectInfo, undefined);
   return <FirmwareFlashPageContent />;
 };
