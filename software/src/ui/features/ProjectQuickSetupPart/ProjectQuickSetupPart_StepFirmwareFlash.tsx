@@ -21,9 +21,6 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
             firmwareVariationId={firmwareVariationId}
           />
         </div>
-        <div class="panel keystate-preview-panel">
-          <h2>KeyState Preview</h2>
-        </div>
       </div>
       <div class="row second-row">
         <div class="panel firmware-flash-panel">
@@ -52,7 +49,7 @@ const style = css`
     gap: 5px;
 
     &.first-row {
-      min-height: 250px;
+      min-height: 240px;
     }
 
     &.second-row {
@@ -64,11 +61,7 @@ const style = css`
       padding: 7px;
 
       &.device-connection-panel {
-        width: 50%;
-      }
-
-      &.keystate-preview-panel {
-        width: 50%;
+        width: 100%;
       }
 
       &.firmware-flash-panel {
