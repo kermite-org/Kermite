@@ -2,8 +2,8 @@ import { css, FC, jsx, useEffect } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { ClosableOverlay } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { standardFirmwareFlashPartModel_configure } from '~/ui/features/StandardFirmwareFlashPart/model';
-import { StandardFirmwareFlashPart } from '~/ui/features/StandardFirmwareFlashPart/view';
+import { standardFirmwareFlashPartModel_configure } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/model';
+import { StandardFirmwareFlashPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/view';
 
 export const FirmwareFlashPart: FC = () => {
   const { isFirmwareFlashPanelOpen } = projectQuickSetupStore.state;

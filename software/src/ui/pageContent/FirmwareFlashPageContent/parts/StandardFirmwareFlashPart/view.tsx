@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
-import { useStandardFirmwareFlashPartModel } from '~/ui/features/StandardFirmwareFlashPart/model';
+import { useStandardFirmwareFlashPartModel } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/model';
 
 export const StandardFirmwareFlashPart: FC = () => {
   const {
