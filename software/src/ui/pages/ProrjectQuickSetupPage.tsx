@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { Link } from '~/ui/base';
-import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features';
+import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareFlash';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { uiReaders } from '~/ui/store';
