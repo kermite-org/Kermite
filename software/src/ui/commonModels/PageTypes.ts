@@ -11,7 +11,8 @@ export type PagePaths =
   | '/projectSelection'
   | '/home'
   | '/projectResource'
-  | '/projectQuickSetup';
+  | '/projectQuickSetup'
+  | '/firmwareFlash';
 
 export type IPageSpec_ProjectLayoutEdit = {
   type: 'projectLayoutEdit';
