@@ -1,9 +1,9 @@
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import {
   useDeviceAutoConnectionAutoConnectFunction,
   useDeviceAutoConnectionConnectionStatus,
   useDeviceKeyEventIndicatorModel,
-} from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupHooks';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+} from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/hooks';
 
 type IDeviceAutoConnectionSectionModel = {
   isConnectionValid: boolean;
