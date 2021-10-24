@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { DeviceAutoConnectionPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/view';
+import { StandardFirmwareFlashPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/view';
 
 export const FirmwareFlashPageContent: FC = () => (
   <div class={style}>
@@ -16,6 +17,7 @@ export const FirmwareFlashPageContent: FC = () => (
     <div class="row second-row">
       <div class="panel firmware-flash-panel">
         <h2>Flash Firmware</h2>
+        <StandardFirmwareFlashPart />
       </div>
       <div class="panel parameters-panel">
         <h2>Parameters</h2>
