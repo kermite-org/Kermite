@@ -1,9 +1,4 @@
 import { fallbackProjectPackageInfo, IProjectPackageInfo } from '~/shared';
-import {
-  useDeviceAutoConnectionAutoConnectFunction,
-  useDeviceAutoConnectionConnectionStatus,
-  useDeviceKeyEventIndicatorModel,
-} from '~/ui/pageContent/FirmwareFlashPageContent/hooks';
 
 type IState = {
   projectInfo: IProjectPackageInfo;
@@ -27,28 +22,19 @@ const readers = {
   },
 };
 
-function configure(
-  projectInfo: IProjectPackageInfo,
-  firmwareVariationId: string | undefined,
-) {
-  state.projectInfo = projectInfo;
-  state.fixedFirmwareVariationId = firmwareVariationId;
-
-  const targetDeviceSpec = {
-    projectId: projectInfo.projectId,
-    firmwareVariationId,
-  };
-
-  useDeviceAutoConnectionAutoConnectFunction(targetDeviceSpec);
-  const isConnectionValid =
-    useDeviceAutoConnectionConnectionStatus(targetDeviceSpec);
-  const isIndicatorActive = useDeviceKeyEventIndicatorModel(200);
-  state.isConnectionValid = isConnectionValid;
-  state.isCommunicationIndicatorActive = isConnectionValid && isIndicatorActive;
-}
+const actions = {
+  configure(
+    projectInfo: IProjectPackageInfo,
+    firmwareVariationId: string | undefined,
+  ) {
+    state.projectInfo = projectInfo;
+    state.fixedFirmwareVariationId = firmwareVariationId;
+    state.selectedFirmwareVariationId = firmwareVariationId;
+  },
+};
 
 export const firmwareFlashPageContentStore = {
   state,
   readers,
-  configure,
+  actions,
 };

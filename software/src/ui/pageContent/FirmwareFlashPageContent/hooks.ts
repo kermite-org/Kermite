@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'qx';
 import { IRealtimeKeyboardEvent } from '~/shared';
 import { appUi, ipcAgent } from '~/ui/base';
+import { firmwareFlashPageContentStore } from '~/ui/pageContent/FirmwareFlashPageContent/store';
 import { uiState } from '~/ui/store';
 
-export type IAutoConnectionTargetDeviceSpec = {
+type IAutoConnectionTargetDeviceSpec = {
   projectId: string;
   firmwareVariationId: string | undefined;
 };
 
-export function useDeviceAutoConnectionConnectionStatus(
+function useDeviceAutoConnectionConnectionStatus(
   targetDeviceSpec: IAutoConnectionTargetDeviceSpec,
 ): boolean {
   const { projectId, firmwareVariationId } = targetDeviceSpec;
@@ -28,7 +29,7 @@ export function useDeviceAutoConnectionConnectionStatus(
   }
 }
 
-export function useDeviceKeyEventIndicatorModel(holdMs: number): boolean {
+function useDeviceKeyEventIndicatorModel(holdMs: number): boolean {
   const [indicatorState, setIndicatorState] = useState(false);
 
   const keyEventsHandler = (event: IRealtimeKeyboardEvent) => {
@@ -48,7 +49,7 @@ export function useDeviceKeyEventIndicatorModel(holdMs: number): boolean {
   return indicatorState;
 }
 
-export function useDeviceAutoConnectionAutoConnectFunction(
+function useDeviceAutoConnectionAutoConnectFunction(
   targetDeviceSpec: IAutoConnectionTargetDeviceSpec,
 ) {
   const { projectId, firmwareVariationId } = targetDeviceSpec;
@@ -69,4 +70,22 @@ export function useDeviceAutoConnectionAutoConnectFunction(
       ipcAgent.async.device_connectToDevice('');
     }
   }, [allDeviceInfos, currentDevicePath, projectId, firmwareVariationId]);
+}
+
+export function useDeviceAutoConnectionEffects() {
+  const { state } = firmwareFlashPageContentStore;
+  const {
+    projectInfo: { projectId },
+    selectedFirmwareVariationId,
+  } = state;
+  const targetDeviceSpec = {
+    projectId,
+    firmwareVariationId: selectedFirmwareVariationId,
+  };
+  useDeviceAutoConnectionAutoConnectFunction(targetDeviceSpec);
+  const isConnectionValid =
+    useDeviceAutoConnectionConnectionStatus(targetDeviceSpec);
+  const isIndicatorActive = useDeviceKeyEventIndicatorModel(200);
+  state.isConnectionValid = isConnectionValid;
+  state.isCommunicationIndicatorActive = isConnectionValid && isIndicatorActive;
 }
