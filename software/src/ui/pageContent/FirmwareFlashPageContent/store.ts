@@ -7,14 +7,14 @@ import {
 
 type IState = {
   projectInfo: IProjectPackageInfo;
-  firmwareVariationId: string | undefined;
+  fixedFirmwareVariationId: string | undefined;
   isConnectionValid: boolean;
   isCommunicationIndicatorActive: boolean;
 };
 
 const state: IState = {
   projectInfo: fallbackProjectPackageInfo,
-  firmwareVariationId: undefined,
+  fixedFirmwareVariationId: undefined,
   isConnectionValid: false,
   isCommunicationIndicatorActive: false,
 };
@@ -30,7 +30,7 @@ function configure(
   firmwareVariationId: string | undefined,
 ) {
   state.projectInfo = projectInfo;
-  state.firmwareVariationId = firmwareVariationId;
+  state.fixedFirmwareVariationId = firmwareVariationId;
 
   const targetDeviceSpec = {
     projectId: projectInfo.projectId,
