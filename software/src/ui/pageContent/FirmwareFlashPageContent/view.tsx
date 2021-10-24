@@ -1,14 +1,16 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
+import { DeviceAutoConnectionPart } from '~/ui/pageContent/FirmwareFlashPageContent/parts/DeviceAutoConnectionPart/view';
 
 export const FirmwareFlashPageContent: FC = () => (
   <div class={style}>
     <div class="row first-row">
       <div class="panel device-connection-panel">
-        <h2> Device Connection Status</h2>
+        <h2>Device Connection Status</h2>
+        <DeviceAutoConnectionPart />
       </div>
       <div class="panel keystate-preview-panel">
-        <h2> KeyState Preview</h2>
+        <h2>KeyState Preview</h2>
       </div>
     </div>
     <div class="row second-row">
