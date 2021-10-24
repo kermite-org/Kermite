@@ -2,6 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { Link } from '~/ui/base';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareFlash';
+import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepLayoutConfig';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { uiReaders } from '~/ui/store';
 
@@ -13,6 +14,8 @@ const ProjectQuickSetupPartRoot: FC = () => {
   } else if (subPath === 'step2') {
     return <ProjectQuickSetupPart_StepFirmwareFlash />;
   } else if (subPath === 'step3') {
+    return <ProjectQuickSetupPart_StepLayoutConfig />;
+  } else if (subPath === 'step4') {
     return <AssignerPage />;
   }
   return null;
