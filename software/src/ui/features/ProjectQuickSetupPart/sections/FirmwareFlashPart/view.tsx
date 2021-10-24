@@ -12,13 +12,8 @@ export const FirmwareFlashPart: FC = () => {
   } = projectQuickSetupStore;
   useEffect(() => {
     const projectInfo = projectQuickSetupStore.readers.emitDraftProjectInfo();
-    const firmwareName = 'default';
-    const { baseFirmwareType } = projectQuickSetupStore.state.firmwareConfig;
-    standardFirmwareFlashPartModel_configure(
-      projectInfo,
-      firmwareName,
-      baseFirmwareType,
-    );
+    const firmwareVariationId = '01';
+    standardFirmwareFlashPartModel_configure(projectInfo, firmwareVariationId);
   }, []);
   return (
     <ClosableOverlay
