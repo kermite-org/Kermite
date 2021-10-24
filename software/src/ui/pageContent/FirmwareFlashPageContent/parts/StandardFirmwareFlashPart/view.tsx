@@ -1,15 +1,23 @@
 import { css, FC, jsx } from 'qx';
+import { IProjectPackageInfo } from '~/shared';
 import { texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { useStandardFirmwareFlashPartModel } from '~/ui/pageContent/FirmwareFlashPageContent/parts/StandardFirmwareFlashPart/model';
 
-export const StandardFirmwareFlashPart: FC = () => {
+type Props = {
+  projectInfo: IProjectPackageInfo;
+  firmwareVariationId: string;
+};
+export const StandardFirmwareFlashPart: FC<Props> = ({
+  projectInfo,
+  firmwareVariationId,
+}) => {
   const {
     phase,
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton,
-  } = useStandardFirmwareFlashPartModel();
+  } = useStandardFirmwareFlashPartModel(projectInfo, firmwareVariationId);
 
   return (
     <div css={style}>

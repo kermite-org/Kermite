@@ -116,19 +116,19 @@ function getFirmwareTargetDeviceType(
   }
 }
 
-export function standardFirmwareFlashPartModel_configure(
+export function useStandardFirmwareFlashPartModel(
   projectInfo: IProjectPackageInfo,
   firmwareVariationId: string,
 ) {
-  state.projectInfo = projectInfo;
-  state.firmwareVariationId = firmwareVariationId;
-  state.targetDeviceType = getFirmwareTargetDeviceType(
-    projectInfo,
-    firmwareVariationId,
-  );
-}
+  useEffect(() => {
+    state.projectInfo = projectInfo;
+    state.firmwareVariationId = firmwareVariationId;
+    state.targetDeviceType = getFirmwareTargetDeviceType(
+      projectInfo,
+      firmwareVariationId,
+    );
+  }, [projectInfo, firmwareVariationId]);
 
-export function useStandardFirmwareFlashPartModel() {
   useEffect(
     () =>
       ipcAgent.events.firmup_deviceDetectionEvents.subscribe(
