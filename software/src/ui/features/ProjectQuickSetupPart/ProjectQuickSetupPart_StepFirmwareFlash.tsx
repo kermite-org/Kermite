@@ -1,10 +1,32 @@
-import { css, FC, jsx, useMemo } from 'qx';
+import { css, FC, jsx, QxChildren, useMemo } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view2';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
+
+const SectionPanel: FC<{ title: string; children?: QxChildren }> = ({
+  title,
+  children,
+}) => {
+  const style = css`
+    background: ${uiTheme.colors.clPanelBox};
+    padding: 7px;
+    border: solid 1px ${uiTheme.colors.clPrimary};
+
+    > h2 {
+      font-size: 16px;
+    }
+    overflow-y: auto;
+  `;
+  return (
+    <div class={style}>
+      <h2>{title}</h2>
+      {children}
+    </div>
+  );
+};
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   const projectInfo = useMemo(
@@ -15,30 +37,31 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   return (
     <div class={style}>
       <div class="row first-row">
-        <div class="panel device-connection-panel">
-          <h2>Device Connection Status</h2>
+        <SectionPanel
+          title="Device Connection Status"
+          class="device-connection-panel"
+        >
           <DeviceAutoConnectionPart
             projectInfo={projectInfo}
             firmwareVariationId={firmwareVariationId}
           />
-        </div>
-        <div class="panel layout-config-panel">
-          <h1>Layout Configuration</h1>
+        </SectionPanel>
+        <SectionPanel title="Layout Preview" class="layout-config-panel">
           <LayoutConfigurationSectionRawContent class="layout-view" />
           <LayoutGeneratorOptionsPart class="options-part" />
-        </div>
+        </SectionPanel>
       </div>
       <div class="row second-row">
-        <div class="panel firmware-flash-panel">
-          <h2>Flash Firmware</h2>
+        <SectionPanel title="Flash Firmware" class="firmware-flash-panel">
           <StandardFirmwareFlashPart
             projectInfo={projectInfo}
             firmwareVariationId={firmwareVariationId}
           />
-        </div>
-        <div class="panel parameters-panel">
-          <h2>Parameters</h2>
-        </div>
+        </SectionPanel>
+        <SectionPanel
+          title="Parameters"
+          class="panel parameters-panel"
+        ></SectionPanel>
       </div>
     </div>
   );
@@ -48,11 +71,9 @@ const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
 
   > .row {
     display: flex;
-    gap: 5px;
 
     &.first-row {
       min-height: 40%;
@@ -62,36 +83,29 @@ const style = css`
       flex-grow: 1;
     }
 
-    > .panel {
-      background: ${uiTheme.colors.clPanelBox};
-      padding: 7px;
+    > .device-connection-panel {
+      width: 50%;
+    }
 
-      &.device-connection-panel {
-        width: 50%;
+    > .layout-config-panel {
+      width: 50%;
+
+      > .layout-view {
+        margin-top: 5px;
+        height: 200px;
       }
 
-      &.layout-config-panel {
-        width: 50%;
-
-        > .layout-view {
-          margin-top: 10px;
-          height: 200px;
-        }
-
-        > .options-part {
-          margin-top: 20px;
-        }
-      }
-
-      &.firmware-flash-panel {
-        width: 55%;
-      }
-
-      &.parameters-panel {
-        width: 45%;
+      > .options-part {
+        margin-top: 15px;
       }
     }
-  }
 
-  padding: 5px;
+    > .firmware-flash-panel {
+      width: 55%;
+    }
+
+    > .parameters-panel {
+      width: 45%;
+    }
+  }
 `;
