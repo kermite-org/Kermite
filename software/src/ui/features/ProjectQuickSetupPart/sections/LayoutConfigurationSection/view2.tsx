@@ -16,5 +16,5 @@ export const LayoutConfigurationSectionRawContent: FC = () => {
 };
 
 const style = css`
-  height: 400px;
+  height: 200px;
 `;

@@ -3,6 +3,8 @@ import { uiTheme } from '~/ui/base';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view2';
+import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   const projectInfo = useMemo(
@@ -20,8 +22,10 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
             firmwareVariationId={firmwareVariationId}
           />
         </div>
-        <div class="panel device-attributes-panel">
-          <h2>Device Attributes</h2>
+        <div class="panel layout-config-panel">
+          <h1>Layout Configuration</h1>
+          <LayoutConfigurationSectionRawContent class="layout-view" />
+          <LayoutGeneratorOptionsPart class="options-part" />
         </div>
       </div>
       <div class="row second-row">
@@ -66,8 +70,16 @@ const style = css`
         width: 50%;
       }
 
-      &.device-attributes-panel {
+      &.layout-config-panel {
         width: 50%;
+
+        > .layout-view {
+          margin-top: 10px;
+        }
+
+        > .options-part {
+          margin-top: 20px;
+        }
       }
 
       &.firmware-flash-panel {
