@@ -7,18 +7,18 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { uiReaders } from '~/ui/store';
 
-const helpers = {
-  getCurrentStep(): 'step1' | 'step2' | 'step3' | 'step4' {
+const readers = {
+  get currentStep(): 'step1' | 'step2' | 'step3' | 'step4' {
     return uiReaders.pagePath.split('/')[2] as any;
   },
-  getCurrentStepNumber(): number {
-    return parseInt(helpers.getCurrentStep());
+  get currentStepNumber(): number {
+    return parseInt(readers.currentStep);
   },
 };
 
 const ProjectQuickSetupPartRoot: FC = () => {
   projectQuickSetupStore.effects.useEditDataPersistence();
-  const step = helpers.getCurrentStep();
+  const { currentStep: step } = readers;
   if (step === 'step1') {
     return <ProjectQuickSetupPart_StepFirmwareConfig />;
   } else if (step === 'step2') {
