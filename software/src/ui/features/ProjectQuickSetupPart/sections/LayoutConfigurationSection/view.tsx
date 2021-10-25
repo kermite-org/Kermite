@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { LayoutPreviewShapeView } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
+import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
 import { useLayoutConfigurationSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/model';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 

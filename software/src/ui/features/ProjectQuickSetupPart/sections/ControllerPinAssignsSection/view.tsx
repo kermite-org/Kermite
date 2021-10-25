@@ -10,7 +10,7 @@ import {
 } from '~/ui/constants';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
+import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
 import { useMemoEx } from '~/ui/utils';
 
 type IBoardImageSig = 'proMicro' | 'proMicroRp2040' | 'rpiPico';

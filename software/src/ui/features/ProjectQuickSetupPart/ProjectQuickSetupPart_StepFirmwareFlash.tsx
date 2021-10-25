@@ -1,32 +1,10 @@
-import { css, FC, jsx, QxChildren, useMemo } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { css, FC, jsx, useMemo } from 'qx';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
 import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view2';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
-
-const SectionPanel: FC<{ title: string; children?: QxChildren }> = ({
-  title,
-  children,
-}) => {
-  const style = css`
-    background: ${uiTheme.colors.clPanelBox};
-    padding: 7px;
-    border: solid 1px ${uiTheme.colors.clPrimary};
-
-    > h2 {
-      font-size: 16px;
-    }
-    overflow-y: auto;
-  `;
-  return (
-    <div class={style}>
-      <h2>{title}</h2>
-      {children}
-    </div>
-  );
-};
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   const projectInfo = useMemo(
