@@ -49,7 +49,11 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
           <StandardFirmwareEditor />
         </SectionPanel>
         <div class="right-column">
-          <SectionPanel title="Layout Preview" class="layout-config-section">
+          <SectionPanel
+            title="Layout Preview"
+            class="layout-config-section"
+            qxIf={false}
+          >
             <LayoutConfigurationSection configurable={false} />
           </SectionPanel>
           <SectionPanel
@@ -85,11 +89,11 @@ const style = css`
     display: flex;
 
     > .firmware-config-section {
-      width: 55%;
+      flex-grow: 1;
       overflow-y: scroll;
     }
     > .right-column {
-      width: 45%;
+      width: 40%;
       overflow-y: scroll;
       display: flex;
       flex-direction: column;

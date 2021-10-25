@@ -24,7 +24,11 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
             firmwareVariationId={firmwareVariationId}
           />
         </SectionPanel>
-        <SectionPanel title="Layout Preview" class="layout-config-panel">
+        <SectionPanel
+          title="Layout Preview"
+          class="layout-config-panel"
+          qxIf={false}
+        >
           <LayoutConfigurationSectionRawContent class="layout-view" />
           <LayoutGeneratorOptionsPart class="options-part" />
         </SectionPanel>
@@ -39,6 +43,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
         <SectionPanel
           title="Parameters"
           class="panel parameters-panel"
+          qxIf={false}
         ></SectionPanel>
       </div>
     </div>
@@ -62,7 +67,7 @@ const style = css`
     }
 
     > .device-connection-panel {
-      width: 50%;
+      width: 100%;
     }
 
     > .layout-config-panel {
@@ -79,7 +84,7 @@ const style = css`
     }
 
     > .firmware-flash-panel {
-      width: 55%;
+      width: 100%;
     }
 
     > .parameters-panel {
