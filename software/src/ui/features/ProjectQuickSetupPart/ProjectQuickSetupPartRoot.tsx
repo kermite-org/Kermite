@@ -1,4 +1,5 @@
-import { FC, jsx } from 'qx';
+import { css, FC, jsx } from 'qx';
+import { Link } from '~/ui/base';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepLayoutConfig';
@@ -6,7 +7,7 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { uiReaders } from '~/ui/store';
 
-export const ProjectQuickSetupPartRoot: FC = () => {
+const ProjectQuickSetupPartRoot: FC = () => {
   projectQuickSetupStore.effects.useEditDataPersistence();
   const { pagePath } = uiReaders;
   const subPath = pagePath.split('/')[2];
@@ -21,3 +22,37 @@ export const ProjectQuickSetupPartRoot: FC = () => {
   }
   return null;
 };
+
+const StepBar: FC = () => {
+  const style = css`
+    display: flex;
+    gap: 10px;
+    padding: 0 10px;
+
+    > div {
+      cursor: pointer;
+    }
+  `;
+  return (
+    <div css={style}>
+      <Link to="/home">home</Link>
+      <Link to="/projectQuickSetup/step1">step1</Link>
+      <Link to="/projectQuickSetup/step2">step2</Link>
+      <Link to="/projectQuickSetup/step3">step3</Link>
+      <Link to="/projectQuickSetup/step4">step4</Link>
+    </div>
+  );
+};
+
+export const ProjectQuickSetupPageImpl: FC = () => (
+  <div className={style}>
+    <StepBar />
+    <ProjectQuickSetupPartRoot />
+  </div>
+);
+
+const style = css`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
