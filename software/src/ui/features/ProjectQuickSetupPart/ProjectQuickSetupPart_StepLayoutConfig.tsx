@@ -20,6 +20,7 @@ const style = css`
 
   > .layout-view {
     margin-top: 10px;
+    height: 300px;
   }
 
   > .options-part {

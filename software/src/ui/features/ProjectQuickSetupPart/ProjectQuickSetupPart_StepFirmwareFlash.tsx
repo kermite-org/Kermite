@@ -75,6 +75,7 @@ const style = css`
 
         > .layout-view {
           margin-top: 10px;
+          height: 200px;
         }
 
         > .options-part {
