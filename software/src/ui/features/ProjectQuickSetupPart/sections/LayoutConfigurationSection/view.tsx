@@ -24,6 +24,7 @@ export const LayoutConfigurationSection: FC<{ configurable: boolean }> = ({
         labelEntities={labelEntities}
         holdKeyIndices={holdKeyIndices}
         class="shape-view"
+        showLabels={configurable}
       />
       <LayoutGeneratorOptionsPart class="options-part" qxIf={configurable} />
     </div>
@@ -38,6 +39,7 @@ export const LayoutConfigurationSectionRawContent: FC = () => {
       keyboardDesign={design}
       labelEntities={labelEntities}
       holdKeyIndices={holdKeyIndices}
+      showLabels={true}
     />
   );
 };

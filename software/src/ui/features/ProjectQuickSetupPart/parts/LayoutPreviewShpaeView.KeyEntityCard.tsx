@@ -7,12 +7,14 @@ type Props = {
   keyEntity: IDisplayKeyEntity;
   labelEntities: IDraftLayoutLabelEntity[];
   isHold: boolean;
+  showLabels: boolean;
 };
 
 export const LayoutPreviewKeyEntityCard: FC<Props> = ({
   keyEntity,
   labelEntities,
   isHold,
+  showLabels,
 }) => {
   const ke = keyEntity;
   const pos = { x: ke.x, y: ke.y, r: ke.angle || 0 };
@@ -28,10 +30,10 @@ export const LayoutPreviewKeyEntityCard: FC<Props> = ({
         css={cssKeyShape}
         className={isHold && '--hold'}
       />
-      <text css={cssKeyText} x={0} y={0}>
+      <text css={cssKeyText} x={0} y={0} qxIf={showLabels}>
         {keyIndex}
       </text>
-      <g>
+      <g qxIf={showLabels}>
         {labelEntities.map((le) => (
           <text
             key={le.pinType}

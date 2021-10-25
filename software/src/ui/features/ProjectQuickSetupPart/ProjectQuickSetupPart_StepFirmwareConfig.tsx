@@ -50,7 +50,7 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
         </SectionPanel>
         <div class="right-column">
           <SectionPanel title="Layout Preview" class="layout-config-section">
-            <LayoutConfigurationSection configurable={true} />
+            <LayoutConfigurationSection configurable={false} />
           </SectionPanel>
           <SectionPanel
             title="Board Pin Assigns View"
