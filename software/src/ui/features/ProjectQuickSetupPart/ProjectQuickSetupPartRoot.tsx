@@ -32,14 +32,18 @@ const StepBar: FC = () => {
     > div {
       cursor: pointer;
     }
+
+    > :last-child {
+      margin-left: auto;
+    }
   `;
   return (
     <div css={style}>
-      <Link to="/home">home</Link>
       <Link to="/projectQuickSetup/step1">step1</Link>
       <Link to="/projectQuickSetup/step2">step2</Link>
       <Link to="/projectQuickSetup/step3">step3</Link>
       <Link to="/projectQuickSetup/step4">step4</Link>
+      <Link to="/home">x</Link>
     </div>
   );
 };
