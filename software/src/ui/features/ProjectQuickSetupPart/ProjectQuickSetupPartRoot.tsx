@@ -7,17 +7,25 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { uiReaders } from '~/ui/store';
 
+const helpers = {
+  getCurrentStep(): 'step1' | 'step2' | 'step3' | 'step4' {
+    return uiReaders.pagePath.split('/')[2] as any;
+  },
+  getCurrentStepNumber(): number {
+    return parseInt(helpers.getCurrentStep());
+  },
+};
+
 const ProjectQuickSetupPartRoot: FC = () => {
   projectQuickSetupStore.effects.useEditDataPersistence();
-  const { pagePath } = uiReaders;
-  const subPath = pagePath.split('/')[2];
-  if (subPath === 'step1') {
+  const step = helpers.getCurrentStep();
+  if (step === 'step1') {
     return <ProjectQuickSetupPart_StepFirmwareConfig />;
-  } else if (subPath === 'step2') {
+  } else if (step === 'step2') {
     return <ProjectQuickSetupPart_StepFirmwareFlash />;
-  } else if (subPath === 'step3') {
+  } else if (step === 'step3') {
     return <ProjectQuickSetupPart_StepLayoutConfig />;
-  } else if (subPath === 'step4') {
+  } else if (step === 'step4') {
     return <AssignerPage />;
   }
   return null;
@@ -25,7 +33,9 @@ const ProjectQuickSetupPartRoot: FC = () => {
 
 const StepBar: FC = () => {
   const style = css`
+    height: 30px;
     display: flex;
+    align-items: center;
     gap: 10px;
     padding: 0 10px;
 
@@ -48,10 +58,27 @@ const StepBar: FC = () => {
   );
 };
 
+const DirectionBar: FC = () => {
+  const style = css`
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  `;
+  return (
+    <div css={style}>
+      <button>back</button>
+      <button>next</button>
+    </div>
+  );
+};
+
 export const ProjectQuickSetupPageImpl: FC = () => (
   <div className={style}>
     <StepBar />
     <ProjectQuickSetupPartRoot />
+    <DirectionBar />
   </div>
 );
 
