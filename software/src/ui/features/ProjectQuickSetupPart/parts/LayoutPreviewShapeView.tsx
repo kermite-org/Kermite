@@ -4,7 +4,7 @@ import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
 import { IDraftLayoutLabelEntity } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { CoordOriginMark } from '~/ui/features/ProjectQuickSetupPart/parts/CoordOriginMark';
-import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShpaeView.KeyEntityCard';
+import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView.KeyEntityCard';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
