@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { isNumberInRange } from '~/shared';
 import { Link } from '~/ui/base';
-import { GeneralButton } from '~/ui/components';
+import { SetupNavigationStepShiftButton } from '~/ui/components';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepLayoutConfig';
@@ -53,16 +53,20 @@ const actions = {
   gotoStep(step: IProjectQuickSetupStep) {
     uiActions.navigateTo(`/projectQuickSetup/${step}`);
   },
-  handleBackButton() {
+  cancelSteps() {
+    uiActions.navigateTo('/home');
+  },
+  completeSteps() {
+    uiActions.navigateTo('/assigner');
+  },
+  shiftStepPrevious() {
     const { currentStep } = readers;
     const previousStep = helpers.shiftStep(currentStep, -1);
     if (previousStep) {
       actions.gotoStep(previousStep);
-    } else {
-      uiActions.navigateTo('/home');
     }
   },
-  async handleNextButton() {
+  async shiftStepNext() {
     const { currentStep } = readers;
     if (currentStep === 'step1') {
       actions.gotoStep('step2');
@@ -71,8 +75,6 @@ const actions = {
     } else if (currentStep === 'step3') {
       await projectQuickSetupStore.actions.createProfile();
       actions.gotoStep('step4');
-    } else if (currentStep === 'step4') {
-      uiActions.navigateTo('/assigner');
     }
   },
 };
@@ -133,7 +135,8 @@ const WizardFooterBar: FC = () => {
   const isFirstStep = currentStep === 'step1';
   const isFinalStep = currentStep === 'step4';
 
-  const { handleBackButton, handleNextButton } = actions;
+  const { cancelSteps, shiftStepPrevious, shiftStepNext, completeSteps } =
+    actions;
 
   const style = css`
     height: 40px;
@@ -144,12 +147,33 @@ const WizardFooterBar: FC = () => {
   `;
   return (
     <div css={style}>
-      <GeneralButton onClick={handleBackButton}>
-        {isFirstStep ? 'cancel' : 'back'}
-      </GeneralButton>
-      <GeneralButton onClick={handleNextButton} disabled={!canGoNext}>
-        {!isFinalStep ? 'next' : 'complete'}
-      </GeneralButton>
+      <SetupNavigationStepShiftButton
+        onClick={cancelSteps}
+        text="cancel"
+        qxIf={isFirstStep}
+        small={true}
+      />
+      <SetupNavigationStepShiftButton
+        onClick={shiftStepPrevious}
+        text="back"
+        qxIf={!isFirstStep}
+        small={true}
+      />
+
+      <SetupNavigationStepShiftButton
+        onClick={shiftStepNext}
+        text="next"
+        disabled={!canGoNext}
+        qxIf={!isFinalStep}
+        small={true}
+      />
+      <SetupNavigationStepShiftButton
+        onClick={completeSteps}
+        text="complete"
+        disabled={!canGoNext}
+        qxIf={isFinalStep}
+        small={true}
+      />
     </div>
   );
 };
