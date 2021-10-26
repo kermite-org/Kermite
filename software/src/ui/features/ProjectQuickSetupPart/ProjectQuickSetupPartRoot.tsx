@@ -38,6 +38,15 @@ const readers = {
   get currentStepNumber(): number {
     return parseInt(readers.currentStep);
   },
+  get canGoNext(): boolean {
+    const { currentStep } = readers;
+    const { isConfigValid } = projectQuickSetupStore.state;
+    if (currentStep === 'step1') {
+      return isConfigValid;
+    } else {
+      return true;
+    }
+  },
 };
 
 const actions = {
@@ -120,7 +129,7 @@ const WizardTopBar: FC = () => {
 };
 
 const WizardFooterBar: FC = () => {
-  const { currentStep } = readers;
+  const { currentStep, canGoNext } = readers;
   const isFirstStep = currentStep === 'step1';
   const isFinalStep = currentStep === 'step4';
 
@@ -138,7 +147,7 @@ const WizardFooterBar: FC = () => {
       <GeneralButton onClick={handleBackButton}>
         {isFirstStep ? 'cancel' : 'back'}
       </GeneralButton>
-      <GeneralButton onClick={handleNextButton}>
+      <GeneralButton onClick={handleNextButton} disabled={!canGoNext}>
         {!isFinalStep ? 'next' : 'complete'}
       </GeneralButton>
     </div>
