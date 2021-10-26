@@ -44,6 +44,28 @@ const actions = {
   gotoStep(step: IProjectQuickSetupStep) {
     uiActions.navigateTo(`/projectQuickSetup/${step}`);
   },
+  handleBackButton() {
+    const { currentStep } = readers;
+    const previousStep = helpers.shiftStep(currentStep, -1);
+    if (previousStep) {
+      actions.gotoStep(previousStep);
+    } else {
+      uiActions.navigateTo('/home');
+    }
+  },
+  async handleNextButton() {
+    const { currentStep } = readers;
+    if (currentStep === 'step1') {
+      actions.gotoStep('step2');
+    } else if (currentStep === 'step2') {
+      actions.gotoStep('step3');
+    } else if (currentStep === 'step3') {
+      await projectQuickSetupStore.actions.createProfile();
+      actions.gotoStep('step4');
+    } else if (currentStep === 'step4') {
+      uiActions.navigateTo('/assigner');
+    }
+  },
 };
 
 const ProjectQuickSetupPartRoot: FC = () => {
@@ -102,27 +124,7 @@ const WizardFooterBar: FC = () => {
   const isFirstStep = currentStep === 'step1';
   const isFinalStep = currentStep === 'step4';
 
-  const onBackButton = () => {
-    const previousStep = helpers.shiftStep(currentStep, -1);
-    if (previousStep) {
-      actions.gotoStep(previousStep);
-    } else {
-      uiActions.navigateTo('/home');
-    }
-  };
-
-  const onNextButton = async () => {
-    if (currentStep === 'step1') {
-      actions.gotoStep('step2');
-    } else if (currentStep === 'step2') {
-      actions.gotoStep('step3');
-    } else if (currentStep === 'step3') {
-      await projectQuickSetupStore.actions.createProfile();
-      actions.gotoStep('step4');
-    } else if (currentStep === 'step4') {
-      uiActions.navigateTo('/assigner');
-    }
-  };
+  const { handleBackButton, handleNextButton } = actions;
 
   const style = css`
     height: 40px;
@@ -133,10 +135,10 @@ const WizardFooterBar: FC = () => {
   `;
   return (
     <div css={style}>
-      <GeneralButton onClick={onBackButton}>
+      <GeneralButton onClick={handleBackButton}>
         {isFirstStep ? 'cancel' : 'back'}
       </GeneralButton>
-      <GeneralButton onClick={onNextButton}>
+      <GeneralButton onClick={handleNextButton}>
         {!isFinalStep ? 'next' : 'complete'}
       </GeneralButton>
     </div>
