@@ -2,6 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { isNumberInRange } from '~/shared';
 import { Link } from '~/ui/base';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
+import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepLayoutConfig';
@@ -37,6 +38,15 @@ const readers = {
   },
   get currentStepNumber(): number {
     return parseInt(readers.currentStep);
+  },
+  canGoToStep(_step: IProjectQuickSetupStep): boolean {
+    const { currentStep } = readers;
+    const { isConfigValid } = projectQuickSetupStore.state;
+    if (currentStep === 'step1') {
+      return isConfigValid;
+    } else {
+      return true;
+    }
   },
   get canGoNext(): boolean {
     const { currentStep } = readers;
@@ -95,13 +105,14 @@ const ProjectQuickSetupPartRoot: FC = () => {
 };
 
 const WizardTopBar: FC = () => {
-  const { currentStep } = readers;
+  const { currentStep, canGoToStep } = readers;
+  const { gotoStep } = actions;
   const instructionText = stepInstructionMap[currentStep];
   const style = css`
-    height: 30px;
+    height: 34px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
     padding: 0 10px 0 5px;
 
     > div {
@@ -121,10 +132,19 @@ const WizardTopBar: FC = () => {
       <div>
         {currentStep}: {instructionText}
       </div>
-      <Link to="/projectQuickSetup/step1">step1</Link>
-      <Link to="/projectQuickSetup/step2">step2</Link>
-      <Link to="/projectQuickSetup/step3">step3</Link>
-      <Link to="/projectQuickSetup/step4">step4</Link>
+      {[1, 2, 3, 4].map((i) => {
+        const step = `step${i}` as IProjectQuickSetupStep;
+        const isCurrentStep = step === currentStep;
+        return (
+          <SetupNavigationStepButton
+            key={i}
+            text={`step${i}`}
+            active={isCurrentStep}
+            handler={() => gotoStep(step)}
+            disabled={!isCurrentStep && !canGoToStep(step)}
+          />
+        );
+      })}
       <Link to="/home">x</Link>
     </div>
   );
