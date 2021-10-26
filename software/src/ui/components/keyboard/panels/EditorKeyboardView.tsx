@@ -35,6 +35,7 @@ export const EditorKeyboardView: FC<Props> = ({
       <EditKeyUnitCardsPart
         cards={cards}
         showLayerDefaultAssign={showLayerDefaultAssign}
+        showOutline={design.outlineShapes.length === 0}
       />
     </KeyboardSvgFrameWithAutoScaler>
   );
@@ -43,6 +44,7 @@ export const EditorKeyboardView: FC<Props> = ({
 const EditKeyUnitCardsPart = (props: {
   cards: IEditKeyUnitCardViewModel[];
   showLayerDefaultAssign: boolean;
+  showOutline: boolean;
 }) => (
   <g>
     {props.cards.map((keyUnit) => (
@@ -50,6 +52,7 @@ const EditKeyUnitCardsPart = (props: {
         keyUnit={keyUnit}
         key={keyUnit.keyUnitId}
         showLayerDefaultAssign={props.showLayerDefaultAssign}
+        showOutline={props.showOutline}
       />
     ))}
   </g>
