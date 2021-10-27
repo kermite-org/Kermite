@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { ILayerListBoxPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';
 import { LayerCard } from '~/ui/editors/ProfileEditor/ui_editor_layerManagement/views/LayersListBoxPart.LayerCard';
 
@@ -21,7 +21,7 @@ export const LayersListBoxPart: FC<Props> = ({ vm }) => {
 const style = css`
   height: 240px;
   overflow-y: scroll;
-  border: solid 1px ${uiTheme.colors.clPrimary};
+  border: solid 1px ${colors.clPrimary};
   margin: 0 5px;
   padding: 4px;
 `;

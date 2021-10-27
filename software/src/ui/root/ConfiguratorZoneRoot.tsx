@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { appUi, uiTheme } from '~/ui/base';
+import { appUi, colors } from '~/ui/base';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { SetupNavigationFrame } from '~/ui/features';
@@ -43,8 +43,8 @@ export const ConfiguratorZoneRoot: FC = () => {
 };
 
 const cssWindowContent = css`
-  background: ${uiTheme.colors.clPageBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clPageBackground};
+  color: ${colors.clMainText};
   height: 100%;
   display: flex;
 

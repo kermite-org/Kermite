@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { texts, uiTheme } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 import { ILayerListViewModel } from '~/ui/editors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';
 
 type Props = {
@@ -24,10 +24,10 @@ const style = css`
   padding: 3px;
   cursor: pointer;
   user-select: none;
-  color: ${uiTheme.colors.clMainText};
+  color: ${colors.clMainText};
 
   &[data-current] {
-    background: ${uiTheme.colors.clSelectHighlight};
+    background: ${colors.clSelectHighlight};
   }
 
   &:hover {

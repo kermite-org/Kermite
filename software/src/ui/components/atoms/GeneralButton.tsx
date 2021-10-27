@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { Icon } from '~/ui/components/atoms/Icon';
 
 type IGeneralButtonSize = 'unit' | 'unitSquare' | 'large';
@@ -40,8 +40,8 @@ export const GeneralButton: FC<Props> = ({
 );
 
 const style = css`
-  background: ${uiTheme.colors.clPrimary};
-  color: ${uiTheme.colors.clDecal};
+  background: ${colors.clPrimary};
+  color: ${colors.clDecal};
   border-radius: ${uiTheme.controlBorderRadius}px;
   font-size: 15px;
   padding: 2px 4px;

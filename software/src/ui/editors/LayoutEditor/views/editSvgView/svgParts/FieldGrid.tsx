@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
 import { makeIntegersRange } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { editReader } from '~/ui/editors/LayoutEditor/models';
 import {
   getGroupOuterSvgTransformSpec,
@@ -46,8 +46,8 @@ export const FieldGrid: FC = () => {
             y2={y}
             stroke={
               showAxis && y === 0
-                ? uiTheme.colors.clLayouterAxis
-                : uiTheme.colors.clLayouterGrid
+                ? colors.clLayouterAxis
+                : colors.clLayouterGrid
             }
             stroke-width={0.5}
           />
@@ -63,8 +63,8 @@ export const FieldGrid: FC = () => {
             y2={bottom}
             stroke={
               showAxis && x === 0
-                ? uiTheme.colors.clLayouterAxis
-                : uiTheme.colors.clLayouterGrid
+                ? colors.clLayouterAxis
+                : colors.clLayouterGrid
             }
             stroke-width={0.5}
           />

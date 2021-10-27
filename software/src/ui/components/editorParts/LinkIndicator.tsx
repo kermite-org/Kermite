@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { texts, uiTheme } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 
 type Props = {
   isActive: boolean;
@@ -20,7 +20,7 @@ const style = css`
   opacity: 0.5;
 
   &[data-active] {
-    color: ${uiTheme.colors.clLinkIndicator};
+    color: ${colors.clLinkIndicator};
     opacity: 1;
   }
 `;

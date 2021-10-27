@@ -1,7 +1,7 @@
 import { css, jsx } from 'qx';
 import { IMappingEntry } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
-import { FcWithClassName, uiTheme } from '~/ui/base';
+import { colors, FcWithClassName } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
 import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
@@ -158,8 +158,8 @@ const style = css`
     height: calc(100% - 40px);
     max-height: 700px;
     padding: 15px 20px;
-    border: solid 1px ${uiTheme.colors.clPrimary};
-    background: ${uiTheme.colors.clPanelBox};
+    border: solid 1px ${colors.clPrimary};
+    background: ${colors.clPanelBox};
     display: flex;
     flex-direction: column;
 

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 type Props = {
   text: string;
@@ -39,10 +39,10 @@ export const KeyTextLabel: FC<Props> = ({
 );
 
 const style = css`
-  fill: ${uiTheme.colors.clKeyUnitLegend};
+  fill: ${colors.clKeyUnitLegend};
 
   &[data-is-weak] {
-    fill: ${uiTheme.colors.clKeyUnitLegendWeak};
+    fill: ${colors.clKeyUnitLegendWeak};
   }
 
   pointer-events: none;

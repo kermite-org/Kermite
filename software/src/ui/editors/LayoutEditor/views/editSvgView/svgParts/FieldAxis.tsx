@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { editReader } from '~/ui/editors/LayoutEditor/models';
 import { getWorldViewBounds } from '~/ui/editors/LayoutEditor/views/editSvgView/CoordHelpers';
 
@@ -19,7 +19,7 @@ export const FieldAxis: FC = () => {
         y1={0}
         x2={right}
         y2={0}
-        stroke={uiTheme.colors.clLayouterAxis}
+        stroke={colors.clLayouterAxis}
         stroke-width={0.5}
       />
       <line
@@ -27,7 +27,7 @@ export const FieldAxis: FC = () => {
         y1={top}
         x2={0}
         y2={bottom}
-        stroke={uiTheme.colors.clLayouterAxis}
+        stroke={colors.clLayouterAxis}
         stroke-width={0.5}
       />
     </g>

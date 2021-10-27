@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { texts, uiTheme, IEditKeyUnitCardViewModel } from '~/ui/base';
+import { texts, uiTheme, IEditKeyUnitCardViewModel, colors } from '~/ui/base';
 import { KeyTextLabel } from '~/ui/components/keyboard/keyUnitCards/EditKeyUnitCard.KeyTextLabel';
 import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
 
@@ -79,17 +79,17 @@ export const EditKeyUnitCard: FC<Props> = ({
 
 const keyUnitShapeStyle = css`
   cursor: pointer;
-  fill: ${uiTheme.colors.clKeyUnitFace};
+  fill: ${colors.clKeyUnitFace};
 
   &.--with-outline {
-    stroke: ${uiTheme.colors.clKeyboardBodyFace};
+    stroke: ${colors.clKeyboardBodyFace};
   }
 
   &[data-current] {
-    fill: ${uiTheme.colors.clSelectHighlight};
+    fill: ${colors.clSelectHighlight};
   }
   &[data-hold] {
-    fill: ${uiTheme.colors.clHoldHighlight};
+    fill: ${colors.clHoldHighlight};
   }
   &:hover {
     opacity: 0.7;

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
@@ -77,7 +77,7 @@ const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: ${uiTheme.colors.clPanelBox};
+  background: ${colors.clPanelBox};
 
   > .top-row {
     flex-shrink: 0;
@@ -111,6 +111,6 @@ const style = css`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: solid 1px ${uiTheme.colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
   }
 `;

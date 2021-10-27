@@ -1,6 +1,6 @@
 import { css, FC, jsx, useState } from 'qx';
 import { fallbackProjectProfileEntry, IProjectProfileEntry } from '~/shared';
-import { uiConfiguration, uiTheme } from '~/ui/base';
+import { colors, uiConfiguration } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/components';
 import {
@@ -61,8 +61,8 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
 };
 
 const style = css`
-  background: ${uiTheme.colors.clPageBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clPageBackground};
+  color: ${colors.clMainText};
   height: 100%;
   display: flex;
   flex-direction: column;

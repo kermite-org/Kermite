@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
@@ -22,6 +22,6 @@ export const ProjectKeyEntityCard: FC<Props> = ({ keyEntity }) => {
 };
 
 const cssKeyShape = css`
-  fill: ${uiTheme.colors.projectKeyboard_keyFill};
-  stroke: ${uiTheme.colors.projectKeyboard_keyEdge};
+  fill: ${colors.projectKeyboard_keyFill};
+  stroke: ${colors.projectKeyboard_keyEdge};
 `;

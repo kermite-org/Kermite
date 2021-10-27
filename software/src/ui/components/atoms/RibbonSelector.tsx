@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme, ISelectorOption } from '~/ui/base';
+import { uiTheme, ISelectorOption, colors } from '~/ui/base';
 
 interface Props {
   options: ISelectorOption[];
@@ -43,9 +43,9 @@ const style = (buttonWidth: number) => css`
   display: flex;
 
   > .strip {
-    border: solid 1px ${uiTheme.colors.clPrimary};
-    background: ${uiTheme.colors.clControlBase};
-    color: ${uiTheme.colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
+    background: ${colors.clControlBase};
+    color: ${colors.clPrimary};
     border-radius: ${uiTheme.controlBorderRadius}px;
     width: ${buttonWidth ? `${buttonWidth}px` : 'inherit'};
     height: ${uiTheme.unitHeight}px;
@@ -64,8 +64,8 @@ const style = (buttonWidth: number) => css`
     }
 
     &[data-active] {
-      background: ${uiTheme.colors.clPrimary};
-      color: ${uiTheme.colors.clDecal};
+      background: ${colors.clPrimary};
+      color: ${colors.clDecal};
       > .text {
         opacity: 1;
       }

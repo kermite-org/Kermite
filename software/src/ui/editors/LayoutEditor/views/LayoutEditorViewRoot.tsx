@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { EditMenuBar } from '~/ui/editors/LayoutEditor/views/editMenuBar/EditMenuBar';
 import { EditSvgViewContainer } from '~/ui/editors/LayoutEditor/views/editSvgView';
 import { EditorSideColumnContent } from '~/ui/editors/LayoutEditor/views/sidePanels';
@@ -23,7 +23,7 @@ export const LayoutEditorViewRoot = () => {
 };
 
 const style = css`
-  color: ${uiTheme.colors.clMainText};
+  color: ${colors.clMainText};
 
   height: 100%;
   overflow: hidden;
@@ -33,7 +33,7 @@ const style = css`
 
   > .topRow {
     padding: 6px 6px 0;
-    /* background: ${uiTheme.colors.clPanelBox}; */
+    /* background: ${colors.clPanelBox}; */
     /* margin-bottom: 5px; */
     flex-shrink: 0;
   }
@@ -47,12 +47,12 @@ const style = css`
       flex-grow: 1;
       display: flex;
       border: solid 1px #777;
-      /* background: ${uiTheme.colors.clPanelBox}; */
-      /* border: solid 1px ${uiTheme.colors.clPrimary}; */
+      /* background: ${colors.clPanelBox}; */
+      /* border: solid 1px ${colors.clPrimary}; */
     }
 
     > .sideColumn {
-      /* background: ${uiTheme.colors.clPanelBox}; */
+      /* background: ${colors.clPanelBox}; */
       margin-left: 6px;
       width: 230px;
       /* サイドパネルの内容の高さが多いときに、編集領域のサイズがこれにつられて

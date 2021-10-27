@@ -103,6 +103,7 @@ export const uiTheme = {
   unitHeight: 26,
   controlBorderRadius: 0,
   commonTransitionSpec: '0.15s ease',
-  // colors: themeColorsDark, // debug
-  colors: themeColors[uiThemeConfigLoader.loadThemeKey()],
 };
+
+// colors: themeColorsDark, // debug
+export const colors = themeColors[uiThemeConfigLoader.loadThemeKey()];

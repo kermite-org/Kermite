@@ -1,5 +1,5 @@
 import { css, FC, jsx, QxChildren } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 export const SectionFrame: FC<{
   title: string;
@@ -8,7 +8,7 @@ export const SectionFrame: FC<{
   contentClassName?: string;
 }> = ({ title, children, inactive, contentClassName }) => {
   const style = css`
-    border: solid 1px ${uiTheme.colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
     padding: 5px;
 
     &.--inactive {
@@ -29,9 +29,9 @@ export const SectionPanel: FC<{ title: string; children?: QxChildren }> = ({
   children,
 }) => {
   const style = css`
-    background: ${uiTheme.colors.clPanelBox};
+    background: ${colors.clPanelBox};
     padding: 7px;
-    border: solid 1px ${uiTheme.colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
 
     > h2 {
       font-size: 16px;
