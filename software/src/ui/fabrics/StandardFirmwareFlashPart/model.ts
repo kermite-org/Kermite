@@ -116,10 +116,18 @@ function getFirmwareTargetDeviceType(
   }
 }
 
+type IStandardFirmwareFlashPartModel = {
+  phase: FirmwareUpdatePhase;
+  detectedDeviceSig: string | undefined;
+  canFlashFirmwareToDetectedDevice: boolean;
+  onWriteButton(): void;
+  targetDeviceType: IFirmwareTargetDevice | undefined;
+};
+
 export function useStandardFirmwareFlashPartModel(
   projectInfo: IProjectPackageInfo,
   firmwareVariationId: string,
-) {
+): IStandardFirmwareFlashPartModel {
   useEffect(() => {
     state.projectInfo = projectInfo;
     state.firmwareVariationId = firmwareVariationId;
@@ -143,5 +151,6 @@ export function useStandardFirmwareFlashPartModel(
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton: uploadFirmware,
+    targetDeviceType: state.targetDeviceType,
   };
 }

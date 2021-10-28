@@ -19,10 +19,14 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton,
+    targetDeviceType,
   } = useStandardFirmwareFlashPartModel(projectInfo, firmwareVariationId);
 
   return (
     <div css={style}>
+      <div qxIf={!!targetDeviceType} class="target-mcu-text">
+        mcu: {targetDeviceType}
+      </div>
       <div class="image-box">{svgImage_resetByHand}</div>
       <div class="text-part">
         {phase === 'WaitingReset' && <div>reset device to flash firmware</div>}
@@ -63,13 +67,17 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
 };
 
 const style = css`
-  padding: 30px 20px;
+  > .target-mcu-text {
+    margin-top: 10px;
+  }
 
   > .image-box {
+    margin: 20px 0;
     width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #fff;
     border: solid 1px #aaa;
     border-radius: 6px;
     overflow: hidden;
