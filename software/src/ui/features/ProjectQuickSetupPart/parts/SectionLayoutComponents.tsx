@@ -45,3 +45,34 @@ export const SectionPanel: FC<{ title: string; children?: QxChildren }> = ({
     </div>
   );
 };
+
+export const SectionPanelWithCenterContent: FC<{
+  title: string;
+  children?: QxChildren;
+  contentWidth: number;
+}> = ({ title, children, contentWidth }) => {
+  const style = css`
+    background: ${colors.clPanelBox};
+    border: solid 1px ${colors.clPrimary};
+    display: flex;
+    justify-content: center;
+    > .content {
+      width: ${contentWidth}px;
+      padding: 7px;
+
+      > h2 {
+        font-size: 16px;
+      }
+    }
+
+    overflow-y: auto;
+  `;
+  return (
+    <div class={style}>
+      <div class="content">
+        <h2>{title}</h2>
+        {children}
+      </div>
+    </div>
+  );
+};

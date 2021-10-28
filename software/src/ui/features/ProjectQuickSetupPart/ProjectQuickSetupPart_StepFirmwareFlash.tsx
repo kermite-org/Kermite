@@ -2,7 +2,10 @@ import { css, FC, jsx, useMemo } from 'qx';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
+import {
+  SectionPanel,
+  SectionPanelWithCenterContent,
+} from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
 import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 
@@ -12,18 +15,20 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
     [],
   );
   const firmwareVariationId = '01';
+  const contentWidth = 500;
   return (
     <div class={style}>
       <div class="row first-row">
-        <SectionPanel
+        <SectionPanelWithCenterContent
           title="Device Connection Status"
           class="device-connection-panel"
+          contentWidth={contentWidth}
         >
           <DeviceAutoConnectionPart
             projectInfo={projectInfo}
             firmwareVariationId={firmwareVariationId}
           />
-        </SectionPanel>
+        </SectionPanelWithCenterContent>
         <SectionPanel
           title="Layout Preview"
           class="layout-config-panel"
@@ -34,12 +39,16 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
         </SectionPanel>
       </div>
       <div class="row second-row">
-        <SectionPanel title="Flash Firmware" class="firmware-flash-panel">
+        <SectionPanelWithCenterContent
+          title="Flash Firmware"
+          class="firmware-flash-panel"
+          contentWidth={contentWidth}
+        >
           <StandardFirmwareFlashPart
             projectInfo={projectInfo}
             firmwareVariationId={firmwareVariationId}
           />
-        </SectionPanel>
+        </SectionPanelWithCenterContent>
         <SectionPanel
           title="Parameters"
           class="panel parameters-panel"
