@@ -43,7 +43,7 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
         />
       </div>
       <div class="status-text-part">
-        {isConnectionValid ? 'Device Connected' : 'No Device Available'}
+        {isConnectionValid ? 'Connected' : 'No Device Available'}
       </div>
     </div>
   );
