@@ -103,7 +103,7 @@ const style = css`
   }
 
   > .status-text-part {
-    margin-top: 10px;
+    margin-top: 5px;
     display: flex;
     justify-content: center;
     font-size: 32px;
