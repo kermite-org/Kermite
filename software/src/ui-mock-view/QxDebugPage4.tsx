@@ -1,28 +1,4 @@
-import { FC, jsx, useState } from 'qx';
-
-type IContextProvider<T> = FC<{ value: T; children: any }>;
-
-type IContext<T> = {
-  value: T;
-  Provider: IContextProvider<T>;
-};
-
-function createContext<T>(defaultValue: T): IContext<T> {
-  let sourceValue = defaultValue;
-  return {
-    get value() {
-      return sourceValue;
-    },
-    Provider: ({ value, children }) => {
-      sourceValue = value;
-      return children[0];
-    },
-  };
-}
-
-function useContext<T>(context: IContext<T>): T {
-  return context.value;
-}
+import { createContext, FC, jsx, useContext, useState } from 'qx';
 
 // ----------
 
