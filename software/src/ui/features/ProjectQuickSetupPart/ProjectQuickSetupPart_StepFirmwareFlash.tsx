@@ -12,7 +12,7 @@ import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   const projectInfo = useMemo(
     () => projectQuickSetupStore.readers.emitDraftProjectInfo(),
-    [],
+    [projectQuickSetupStore.state.firmwareConfig],
   );
   const firmwareVariationId = '01';
   const contentWidth = 500;
