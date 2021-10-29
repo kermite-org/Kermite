@@ -4,6 +4,7 @@ import {
   compareObjectByJsonStringify,
   copyObjectProps,
   fallbackStandardKeyboardSpec,
+  getNextFirmwareId,
   IKermiteStandardKeyboardSpec,
   IProjectLayoutEntry,
   IProjectPackageInfo,
@@ -24,13 +25,13 @@ import {
 } from '~/ui/store';
 
 const constants = {
-  firmwareVariationId: '01',
   firmwareName: 'default',
 };
 
 type IState = {
   projectId: string;
   keyboardName: string;
+  firmwareVariationId: string;
   firmwareConfig: IKermiteStandardKeyboardSpec;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
@@ -42,6 +43,7 @@ function createDefaultState(): IState {
   return {
     projectId: '',
     keyboardName: '',
+    firmwareVariationId: '',
     firmwareConfig: fallbackStandardKeyboardSpec,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
@@ -54,8 +56,14 @@ const state: IState = createDefaultState();
 
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
-    const { firmwareVariationId, firmwareName } = constants;
-    const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
+    const { firmwareName } = constants;
+    const {
+      projectId,
+      keyboardName,
+      firmwareVariationId,
+      firmwareConfig,
+      layoutOptions,
+    } = state;
     const [layout] = createLayoutFromFirmwareSpec(
       firmwareConfig,
       layoutOptions,
@@ -83,6 +91,8 @@ const readers = {
 const actions = {
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
+    state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+    state.firmwareVariationId = getNextFirmwareId([]);
     actions.loadFirmwareConfigToEditor();
   },
   loadFirmwareConfigToEditor() {
@@ -94,12 +104,16 @@ const actions = {
   setKeyboardName(keyboardName: string) {
     state.keyboardName = keyboardName;
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+    state.firmwareVariationId = getNextFirmwareId([]);
   },
   writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
-      state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+      const currentFirmwareId = state.firmwareVariationId;
+      state.firmwareVariationId = getNextFirmwareId(
+        (currentFirmwareId && [currentFirmwareId]) || [],
+      );
     }
   },
   writeLayoutOption<K extends keyof ILayoutGeneratorOptions>(
@@ -148,11 +162,17 @@ const effects = {
       actions.loadFirmwareConfigToEditor();
 
       return () => {
-        const { projectId, keyboardName, firmwareConfig, layoutOptions } =
-          state;
+        const {
+          projectId,
+          keyboardName,
+          firmwareVariationId,
+          firmwareConfig,
+          layoutOptions,
+        } = state;
         const persistData = {
           projectId,
           keyboardName,
+          firmwareVariationId,
           firmwareConfig,
           layoutOptions,
         };

@@ -14,7 +14,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
     () => projectQuickSetupStore.readers.emitDraftProjectInfo(),
     [projectQuickSetupStore.state.firmwareConfig],
   );
-  const firmwareVariationId = '01';
+  const { firmwareVariationId } = projectQuickSetupStore.state;
   const contentWidth = 500;
   return (
     <div class={style}>
