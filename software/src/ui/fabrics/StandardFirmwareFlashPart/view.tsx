@@ -1,8 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
 import { texts } from '~/ui/base';
+import { useModalDisplayStateModel } from '~/ui/commonModels';
 import { GeneralButton } from '~/ui/components';
 import { svgImage_resetByHand } from '~/ui/constants';
+import { BoardResetInstructionPanel } from '~/ui/fabrics/StandardFirmwareFlashPart/BoardResetInstructionPanel/view';
 import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/StandardFirmwareFlashPart/model';
 
 type Props = {
@@ -22,13 +24,21 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     targetDeviceType,
   } = useStandardFirmwareFlashPartModel(projectInfo, firmwareVariationId);
 
+  const {
+    isOpen: isPanelOpen,
+    open: openPanel,
+    close: closePanel,
+  } = useModalDisplayStateModel();
+
   return (
     <div css={style}>
       <div class="top-row">
         <div class="target-mcu-text">
           {targetDeviceType && `mcu: ${targetDeviceType}`}
         </div>
-        <div class="how-to-reset">how to reset</div>
+        <div class="how-to-reset" onClick={openPanel}>
+          how to reset
+        </div>
       </div>
 
       <div class="image-box">{svgImage_resetByHand}</div>
@@ -66,6 +76,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
           </div>
         )}
       </div>
+      <BoardResetInstructionPanel isOpen={isPanelOpen} close={closePanel} />
     </div>
   );
 };
