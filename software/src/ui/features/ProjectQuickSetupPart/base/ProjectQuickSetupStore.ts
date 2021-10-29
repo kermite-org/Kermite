@@ -151,13 +151,27 @@ const actions = {
   },
 };
 
+type IPersistData = {
+  revision: string;
+  projectId: string;
+  keyboardName: string;
+  firmwareVariationId: string;
+  firmwareConfig: IKermiteStandardKeyboardSpec;
+  layoutOptions: ILayoutGeneratorOptions;
+};
+const persistDataRevision = 'QPS1';
+
 const effects = {
   useEditDataPersistence() {
     useEffect(() => {
       const storageKey = 'projectQuickSetupEditData';
-      const loadedData = UiLocalStorage.readItem(storageKey);
+      const loadedData = UiLocalStorage.readItem<IPersistData>(storageKey);
       if (loadedData) {
-        copyObjectProps(state, loadedData);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { revision, ...attrs } = loadedData;
+        if (revision === persistDataRevision) {
+          copyObjectProps(state, attrs);
+        }
       }
       actions.loadFirmwareConfigToEditor();
 
@@ -169,7 +183,8 @@ const effects = {
           firmwareConfig,
           layoutOptions,
         } = state;
-        const persistData = {
+        const persistData: IPersistData = {
+          revision: persistDataRevision,
           projectId,
           keyboardName,
           firmwareVariationId,
