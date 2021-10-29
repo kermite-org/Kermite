@@ -34,8 +34,9 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     <div css={style}>
       <div class="top-row">
         <div class="target-mcu-text">
-          {targetDeviceType && `mcu: ${targetDeviceType}`}
+          {targetDeviceType && `target mcu: ${targetDeviceType}`}
         </div>
+
         <div class="how-to-reset" onClick={openPanel}>
           how to reset
         </div>
@@ -46,7 +47,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
         {phase === 'WaitingReset' && <div>reset device to flash firmware</div>}
 
         {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
-          <div>
+          <div class="row">
             <div>
               {texts.label_device_firmwareUpdate_deviceDetected.replace(
                 '{DEVICE_NAME}',
@@ -57,6 +58,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
               <GeneralButton
                 onClick={onWriteButton}
                 text={texts.label_device_firmwareUpdate_writeButton}
+                class="btn"
               />
             )}
           </div>
@@ -83,12 +85,14 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
 
 const style = css`
   > .top-row {
+    width: 300px;
+    margin: 0 auto;
     margin-top: 10px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     > .how-to-reset {
+      margin-left: auto;
       color: #999;
       text-decoration: underline;
       cursor: pointer;
@@ -96,7 +100,7 @@ const style = css`
   }
 
   > .image-box {
-    margin: 20px 0;
+    margin: 20px auto;
     width: 300px;
     display: flex;
     justify-content: center;
@@ -108,6 +112,16 @@ const style = css`
   }
 
   > .text-part {
+    width: 300px;
+    margin: 0 auto;
     margin-top: 15px;
+
+    > .row {
+      display: flex;
+
+      > .btn {
+        flex-shrink: 0;
+      }
+    }
   }
 `;
