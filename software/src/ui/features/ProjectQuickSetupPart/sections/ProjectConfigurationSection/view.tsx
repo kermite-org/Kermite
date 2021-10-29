@@ -13,7 +13,11 @@ export const ProjectConfigurationSection: FC = () => {
       <div class="edit-part">
         <div className="field-name">Keyboard Name</div>
         <div>
-          <GeneralInput value={keyboardName} setValue={setKeyboardName} />
+          <GeneralInput
+            value={keyboardName}
+            setValue={setKeyboardName}
+            width={200}
+          />
         </div>
       </div>
       <div>
