@@ -3,9 +3,9 @@ import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   copyObjectProps,
-  fallbackStandardKeyboardSpec,
+  fallbackStandardFirmwareConfig,
   getNextFirmwareId,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   IProjectLayoutEntry,
   IProjectPackageInfo,
   IStandardFirmwareEntry,
@@ -32,7 +32,7 @@ type IState = {
   projectId: string;
   keyboardName: string;
   variationId: string;
-  firmwareConfig: IKermiteStandardKeyboardSpec;
+  firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
@@ -44,7 +44,7 @@ function createDefaultState(): IState {
     projectId: '',
     keyboardName: '',
     variationId: '',
-    firmwareConfig: fallbackStandardKeyboardSpec,
+    firmwareConfig: fallbackStandardFirmwareConfig,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
     isConnectionValid: false,
@@ -106,7 +106,7 @@ const actions = {
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
     state.variationId = getNextFirmwareId([]);
   },
-  writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
+  writeFirmwareConfig(data: IStandardFirmwareConfig) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
@@ -156,7 +156,7 @@ type IPersistData = {
   projectId: string;
   keyboardName: string;
   variationId: string;
-  firmwareConfig: IKermiteStandardKeyboardSpec;
+  firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
 };
 const persistDataRevision = 'QPS2';

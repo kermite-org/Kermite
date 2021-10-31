@@ -1,7 +1,7 @@
 import {
   DisplayKeyboardDesignLoader,
   IDisplayKeyboardDesign,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
 } from '~/shared';
 import { useHoldKeyIndices } from '~/ui/commonModels';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
@@ -11,7 +11,7 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/stor
 import { useMemoEx } from '~/ui/utils';
 
 function createLayoutFromFirmwareSpecForDisplayDesign(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
   layoutOptions: ILayoutGeneratorOptions,
 ): [IDisplayKeyboardDesign, IDraftLayoutLabelEntity[]] {
   const [design, labelEntities] = createLayoutFromFirmwareSpec(

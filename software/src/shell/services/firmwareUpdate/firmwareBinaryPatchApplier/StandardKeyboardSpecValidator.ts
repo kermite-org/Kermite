@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboardSpec, isNumberInRange } from '~/shared';
+import { IStandardFirmwareConfig, isNumberInRange } from '~/shared';
 
 const checkMatrixPins = (
   rowsPins: string[] | undefined,
@@ -36,7 +36,7 @@ const checkLightingNumLeds2 = (num: number | undefined) =>
   num !== undefined ? isNumberInRange(num, 1, 256) : true;
 
 export function checkStandardKeyboardSpec(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
 ): boolean {
   const {
     baseFirmwareType: fw,

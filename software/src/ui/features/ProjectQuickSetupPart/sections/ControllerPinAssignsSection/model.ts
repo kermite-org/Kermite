@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareConfig } from '~/shared';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import {
   boardAssignsData_proMicro,
@@ -54,7 +54,7 @@ function createBoardAssignsDataEx(
 }
 
 export function createBoardAssignsData(
-  firmwareConfig: IKermiteStandardKeyboardSpec,
+  firmwareConfig: IStandardFirmwareConfig,
 ): IBoardPinAssignsDataEx | undefined {
   const {
     useBoardLedsProMicroAvr,

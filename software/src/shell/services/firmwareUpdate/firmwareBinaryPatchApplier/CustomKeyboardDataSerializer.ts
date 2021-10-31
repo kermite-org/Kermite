@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareConfig } from '~/shared';
 import { PinNameToPinNumberMap } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/DataTables';
 import {
   convertArrayElementsToBytes,
@@ -38,7 +38,7 @@ export function serializeCommonKeyboardMetadata(
 }
 
 export function serializeCustomKeyboardSpec_Unified(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
 ): number[] {
   if (!checkStandardKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
@@ -98,7 +98,7 @@ export function serializeCustomKeyboardSpec_Unified(
 
 // Symmetrical Split
 export function serializeCustomKeyboardSpec_Split(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
 ): number[] {
   if (!checkStandardKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
@@ -167,7 +167,7 @@ export function serializeCustomKeyboardSpec_Split(
 
 // Asymmetrical Split
 export function serializeCustomKeyboardSpec_OddSplit(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
 ): number[] {
   if (!checkStandardKeyboardSpec(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);

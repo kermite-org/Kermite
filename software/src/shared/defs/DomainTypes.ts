@@ -33,7 +33,7 @@ export type IStandardBaseFirmwareType =
   | 'AvrOddSplit'
   | 'RpOddSplit';
 
-export type IKermiteStandardKeyboardSpec = {
+export type IStandardFirmwareConfig = {
   baseFirmwareType: IStandardBaseFirmwareType;
   useBoardLedsProMicroAvr?: boolean;
   useBoardLedsProMicroRp?: boolean;
@@ -73,7 +73,7 @@ export interface IStandardFirmwareEntry {
   type: 'standard';
   variationId: string;
   firmwareName: string;
-  standardFirmwareConfig: IKermiteStandardKeyboardSpec;
+  standardFirmwareConfig: IStandardFirmwareConfig;
 }
 
 export interface ICustomFirmwareEntry {

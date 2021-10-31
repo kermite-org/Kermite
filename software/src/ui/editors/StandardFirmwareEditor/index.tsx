@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareConfig } from '~/shared';
 import { appUi } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
 import { standardFirmwareEditorComponents } from '~/ui/editors/StandardFirmwareEditor/components';
@@ -17,7 +17,7 @@ export const StandardFirmwareEditor_ExposedModel = {
   get canSave(): boolean {
     return standardFirmwareEditStore.readers.canSave;
   },
-  get editValues(): IKermiteStandardKeyboardSpec {
+  get editValues(): IStandardFirmwareConfig {
     return standardFirmwareEditStore.state.editValues;
   },
   loadFirmwareConfig(

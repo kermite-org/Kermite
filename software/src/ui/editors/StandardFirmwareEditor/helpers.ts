@@ -3,7 +3,7 @@ import {
   flattenArray,
   generateNumberSequence,
   getObjectKeys,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   isNumberInRange,
   IStandardBaseFirmwareType,
 } from '~/shared';
@@ -134,8 +134,8 @@ export const standardFirmwareEditModelHelpers = {
     );
   },
   cleanupFirmwareConfig(
-    data: IKermiteStandardKeyboardSpec,
-  ): IKermiteStandardKeyboardSpec {
+    data: IStandardFirmwareConfig,
+  ): IStandardFirmwareConfig {
     getObjectKeys(data).forEach((key) => {
       const value = data[key];
       if (value === false || (Array.isArray(value) && value.length === 0)) {
@@ -203,8 +203,8 @@ export const standardFirmwareEditModelHelpers = {
     };
   },
   fixEditValuesOnModify(
-    editValues: IKermiteStandardKeyboardSpec,
-    diff: Partial<IKermiteStandardKeyboardSpec>,
+    editValues: IStandardFirmwareConfig,
+    diff: Partial<IStandardFirmwareConfig>,
   ) {
     const { baseFirmwareType } = editValues;
 
