@@ -1,38 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
-import { GeneralButton } from '~/ui/components';
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
 import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
-
-const FirmwareFlashPanelButton: FC = () => {
-  const { isConfigValid } = projectQuickSetupStore.state;
-  return (
-    <GeneralButton
-      size="large"
-      disabled={!isConfigValid}
-      onClick={projectQuickSetupStore.actions.openFirmwareFlashPanel}
-    >
-      Flash Firmware
-    </GeneralButton>
-  );
-};
-
-const CreateProfileButton: FC = () => {
-  const { isConfigValid } = projectQuickSetupStore.state;
-  return (
-    <GeneralButton
-      size="large"
-      disabled={!isConfigValid}
-      onClick={projectQuickSetupStore.actions.createProfile}
-    >
-      Create Profile
-    </GeneralButton>
-  );
-};
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
@@ -63,11 +36,6 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
             <ControllerPinAssignsSection />
           </SectionPanel>
         </div>
-      </div>
-      {/* DEPRECATED */}
-      <div class="bottom-row" qxIf={false}>
-        <FirmwareFlashPanelButton />
-        <CreateProfileButton />
       </div>
     </div>
   );
