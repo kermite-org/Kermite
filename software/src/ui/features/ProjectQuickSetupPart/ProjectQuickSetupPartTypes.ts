@@ -1,3 +1,5 @@
+export type IProjectQuickSetupStep = 'step1' | 'step2' | 'step3' | 'step4';
+
 export type ILayoutGeneratorOptions = {
   placementOrigin: 'topLeft' | 'center';
   invertX: boolean;
