@@ -1,4 +1,4 @@
-import { IStandardFirmwareConfig } from '~/shared';
+import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
 import { PinNameToPinNumberMap } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/DataTables';
 import {
   convertArrayElementsToBytes,
@@ -15,6 +15,23 @@ function mapPinNameToPinNumber(pinName: string | undefined): number {
     throw new Error(`invalid pinName ${pinName}`);
   }
   return pinNumber;
+}
+
+function mapBoardTypeToCode(
+  boardType: IStandardFirmwareBoardType | undefined,
+): number {
+  if (!boardType) {
+    return 0;
+  }
+  return (
+    {
+      ChipAtMega32U4: 1,
+      ProMicro: 2,
+      ChipRP2040: 3,
+      ProMicroRP2040: 4,
+      RpiPico: 5,
+    }[boardType] || 0
+  );
 }
 
 export function serializeCommonKeyboardMetadata(
@@ -77,9 +94,8 @@ export function serializeCustomKeyboardSpec_Unified(
   );
 
   return convertArrayElementsToBytes([
-    spec.useBoardLedsProMicroAvr,
-    spec.useBoardLedsProMicroRp,
-    spec.useBoardLedsRpiPico,
+    mapBoardTypeToCode(spec.boardType),
+    spec.useBoardLeds,
     spec.useDebugUart,
     spec.useMatrixKeyScanner,
     spec.useDirectWiredKeyScanner,
@@ -140,9 +156,8 @@ export function serializeCustomKeyboardSpec_Split(
   );
 
   return convertArrayElementsToBytes([
-    spec.useBoardLedsProMicroAvr,
-    spec.useBoardLedsProMicroRp,
-    spec.useBoardLedsRpiPico,
+    mapBoardTypeToCode(spec.boardType),
+    spec.useBoardLeds,
     spec.useDebugUart,
     spec.useMatrixKeyScanner,
     spec.useDirectWiredKeyScanner,
@@ -227,9 +242,8 @@ export function serializeCustomKeyboardSpec_OddSplit(
   );
 
   return convertArrayElementsToBytes([
-    spec.useBoardLedsProMicroAvr,
-    spec.useBoardLedsProMicroRp,
-    spec.useBoardLedsRpiPico,
+    mapBoardTypeToCode(spec.boardType),
+    spec.useBoardLeds,
     spec.useDebugUart,
     spec.useMatrixKeyScanner,
     spec.useDirectWiredKeyScanner,
