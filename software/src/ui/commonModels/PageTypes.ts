@@ -14,6 +14,7 @@ export type PagePaths =
   | '/projectQuickSetup/step1'
   | '/projectQuickSetup/step2'
   | '/projectQuickSetup/step3'
+  | '/projectQuickSetup/step4'
   | '/firmwareFlash';
 
 export type IPageSpec_ProjectLayoutEdit = {

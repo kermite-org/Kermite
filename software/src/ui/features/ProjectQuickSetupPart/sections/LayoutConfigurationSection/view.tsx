@@ -1,33 +1,45 @@
 import { css, FC, jsx } from 'qx';
 import { LayoutPreviewShapeView } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
 import { useLayoutConfigurationSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/model';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 
-export const LayoutConfigurationSection: FC = () => {
+export const LayoutConfigurationSection: FC<{ configurable: boolean }> = ({
+  configurable,
+}) => {
   const { design, labelEntities, holdKeyIndices } =
     useLayoutConfigurationSectionModel();
+  const style = css`
+    > .shape-view {
+      height: 200px;
+    }
+
+    > .options-part {
+      margin-top: 10px;
+    }
+  `;
   return (
-    <SectionFrame title="Layout Preview" contentClassName={style}>
+    <div class={style}>
       <LayoutPreviewShapeView
         keyboardDesign={design}
         labelEntities={labelEntities}
         holdKeyIndices={holdKeyIndices}
         class="shape-view"
+        showLabels={configurable}
       />
-      <LayoutGeneratorOptionsPart class="options-part" />
-    </SectionFrame>
+      <LayoutGeneratorOptionsPart class="options-part" qxIf={configurable} />
+    </div>
   );
 };
 
-const style = css`
-  padding: 0 5px;
-  > .shape-view {
-    margin-top: 10px;
-    height: 200px;
-  }
-
-  > .options-part {
-    margin-top: 10px;
-  }
-`;
+export const LayoutConfigurationSectionRawContent: FC = () => {
+  const { design, labelEntities, holdKeyIndices } =
+    useLayoutConfigurationSectionModel();
+  return (
+    <LayoutPreviewShapeView
+      keyboardDesign={design}
+      labelEntities={labelEntities}
+      holdKeyIndices={holdKeyIndices}
+      showLabels={true}
+    />
+  );
+};

@@ -10,7 +10,6 @@ import {
 } from '~/ui/constants';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
 import { useMemoEx } from '~/ui/utils';
 
 type IBoardImageSig = 'proMicro' | 'proMicroRp2040' | 'rpiPico';
@@ -344,15 +343,9 @@ export const ControllerPinAssignsSection: FC = () => {
     projectQuickSetupStore.state.firmwareConfig,
   ]);
   return (
-    <SectionFrame title="Board Pin Assigns View" contentClassName={style}>
-      <div>
-        {boardAssignsData && <BoardPinAssignsView data={boardAssignsData} />}
-        {!boardAssignsData && <div>N/A</div>}
-      </div>
-    </SectionFrame>
+    <div>
+      {boardAssignsData && <BoardPinAssignsView data={boardAssignsData} />}
+      {!boardAssignsData && <div>N/A</div>}
+    </div>
   );
 };
-
-const style = css`
-  padding: 0 5px;
-`;

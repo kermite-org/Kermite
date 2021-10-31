@@ -2,20 +2,20 @@ import { css, FC, jsx, styled } from 'qx';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
 type Props = {
-  className?: string;
   onClick?: () => void;
   text: string;
   disabled?: boolean;
+  small?: boolean;
 };
 
 export const SetupNavigationStepShiftButton: FC<Props> = ({
-  className,
   onClick,
   text,
   disabled,
+  small,
 }) => (
   <ButtonBase
-    className={className}
+    className={(small && '--small') || undefined}
     onClick={onClick}
     extraCss={buttonStyle}
     disabled={disabled}
@@ -31,6 +31,11 @@ const buttonStyle = css`
   font-size: 16px;
   width: 90px;
   height: 32px;
+
+  &.--small {
+    width: 70px;
+    height: 28px;
+  }
 
   &:hover {
     background: #adf;

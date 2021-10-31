@@ -1,9 +1,10 @@
 import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
+import { StandardFirmwareEditor } from '~/ui/editors';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
 import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
-import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 
@@ -34,7 +35,6 @@ const CreateProfileButton: FC = () => {
 };
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
-  projectQuickSetupStore.effects.useEditDataPersistence();
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
   return (
     <div class={style}>
@@ -42,10 +42,26 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
         <ProjectConfigurationSection />
       </div>
       <div class="main-row">
-        <FirmwareConfigurationSection class="firmware-config-section" />
+        <SectionPanel
+          title="Firmware Configuration"
+          class="firmware-config-section"
+        >
+          <StandardFirmwareEditor />
+        </SectionPanel>
         <div class="right-column">
-          <LayoutConfigurationSection class="layout-config-section" />
-          <ControllerPinAssignsSection />
+          <SectionPanel
+            title="Layout Preview"
+            class="layout-config-section"
+            qxIf={false}
+          >
+            <LayoutConfigurationSection configurable={false} />
+          </SectionPanel>
+          <SectionPanel
+            title="Board Pin Assigns View"
+            class="board-pin-assigns-section"
+          >
+            <ControllerPinAssignsSection />
+          </SectionPanel>
         </div>
       </div>
       {/* DEPRECATED */}
@@ -73,12 +89,18 @@ const style = css`
     display: flex;
 
     > .firmware-config-section {
-      width: 55%;
+      flex-grow: 1;
       overflow-y: scroll;
     }
     > .right-column {
-      width: 45%;
+      width: 40%;
       overflow-y: scroll;
+      display: flex;
+      flex-direction: column;
+
+      > .board-pin-assigns-section {
+        flex-grow: 1;
+      }
     }
   }
 
