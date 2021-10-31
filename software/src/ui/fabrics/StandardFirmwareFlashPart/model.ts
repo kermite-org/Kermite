@@ -19,7 +19,7 @@ const state = new (class {
   };
 
   projectInfo?: IProjectPackageInfo;
-  firmwareVariationId?: string;
+  variationId?: string;
   targetDeviceType?: IFirmwareTargetDevice;
 })();
 
@@ -69,14 +69,14 @@ const actions = {
       state.phase === 'WaitingUploadOrder' &&
       state.deviceDetectionStatus.detected &&
       state.projectInfo &&
-      state.firmwareVariationId
+      state.variationId
     ) {
-      const { projectInfo, firmwareVariationId } = state;
+      const { projectInfo, variationId } = state;
       state.phase = 'Uploading';
       uiActions.setLoading();
       const res = await ipcAgent.async.firmup_writeStandardFirmwareDirect(
         projectInfo,
-        firmwareVariationId,
+        variationId,
       );
       uiActions.clearLoading();
       if (res === 'ok') {
@@ -97,10 +97,10 @@ const actions = {
 
 function getFirmwareTargetDeviceType(
   projectInfo: IProjectPackageInfo,
-  firmwareVariationId: string,
+  variationId: string,
 ): IFirmwareTargetDevice | undefined {
   const firmwareEntry = projectInfo.firmwares.find(
-    (it) => it.variationId === firmwareVariationId,
+    (it) => it.variationId === variationId,
   );
   if (firmwareEntry) {
     if (firmwareEntry.type === 'standard') {
@@ -126,16 +126,16 @@ type IStandardFirmwareFlashPartModel = {
 
 export function useStandardFirmwareFlashPartModel(
   projectInfo: IProjectPackageInfo,
-  firmwareVariationId: string,
+  variationId: string,
 ): IStandardFirmwareFlashPartModel {
   useEffect(() => {
     state.projectInfo = projectInfo;
-    state.firmwareVariationId = firmwareVariationId;
+    state.variationId = variationId;
     state.targetDeviceType = getFirmwareTargetDeviceType(
       projectInfo,
-      firmwareVariationId,
+      variationId,
     );
-  }, [projectInfo, firmwareVariationId]);
+  }, [projectInfo, variationId]);
 
   useEffect(
     () =>

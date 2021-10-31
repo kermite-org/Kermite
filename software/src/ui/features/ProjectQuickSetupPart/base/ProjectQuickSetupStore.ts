@@ -31,7 +31,7 @@ const constants = {
 type IState = {
   projectId: string;
   keyboardName: string;
-  firmwareVariationId: string;
+  variationId: string;
   firmwareConfig: IKermiteStandardKeyboardSpec;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
@@ -43,7 +43,7 @@ function createDefaultState(): IState {
   return {
     projectId: '',
     keyboardName: '',
-    firmwareVariationId: '',
+    variationId: '',
     firmwareConfig: fallbackStandardKeyboardSpec,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
@@ -60,7 +60,7 @@ const readers = {
     const {
       projectId,
       keyboardName,
-      firmwareVariationId,
+      variationId,
       firmwareConfig,
       layoutOptions,
     } = state;
@@ -75,7 +75,7 @@ const readers = {
     const firmwareEntry: IStandardFirmwareEntry = {
       type: 'standard',
       firmwareName,
-      variationId: firmwareVariationId,
+      variationId,
       standardFirmwareConfig: firmwareConfig,
     };
     const layoutEntry: IProjectLayoutEntry = {
@@ -92,7 +92,7 @@ const actions = {
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
-    state.firmwareVariationId = getNextFirmwareId([]);
+    state.variationId = getNextFirmwareId([]);
     actions.loadFirmwareConfigToEditor();
   },
   loadFirmwareConfigToEditor() {
@@ -104,14 +104,14 @@ const actions = {
   setKeyboardName(keyboardName: string) {
     state.keyboardName = keyboardName;
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
-    state.firmwareVariationId = getNextFirmwareId([]);
+    state.variationId = getNextFirmwareId([]);
   },
   writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
-      const currentFirmwareId = state.firmwareVariationId;
-      state.firmwareVariationId = getNextFirmwareId(
+      const currentFirmwareId = state.variationId;
+      state.variationId = getNextFirmwareId(
         (currentFirmwareId && [currentFirmwareId]) || [],
       );
     }
@@ -155,11 +155,11 @@ type IPersistData = {
   revision: string;
   projectId: string;
   keyboardName: string;
-  firmwareVariationId: string;
+  variationId: string;
   firmwareConfig: IKermiteStandardKeyboardSpec;
   layoutOptions: ILayoutGeneratorOptions;
 };
-const persistDataRevision = 'QPS1';
+const persistDataRevision = 'QPS2';
 
 const effects = {
   useEditDataPersistence() {
@@ -179,7 +179,7 @@ const effects = {
         const {
           projectId,
           keyboardName,
-          firmwareVariationId,
+          variationId,
           firmwareConfig,
           layoutOptions,
         } = state;
@@ -187,7 +187,7 @@ const effects = {
           revision: persistDataRevision,
           projectId,
           keyboardName,
-          firmwareVariationId,
+          variationId,
           firmwareConfig,
           layoutOptions,
         };

@@ -155,13 +155,13 @@ export class FirmwareUpdateService {
   async writeFirmware(
     origin: IResourceOrigin,
     projectId: string,
-    firmwareName: string,
+    variationId: string,
     firmwareOrigin: IFirmwareOriginEx,
   ): Promise<'ok' | string> {
     const binarySpec = await firmwareFileLoader_loadFirmwareFile(
       origin,
       projectId,
-      firmwareName,
+      variationId,
       firmwareOrigin,
     );
     return await this.writeFirmwareImpl(binarySpec);
@@ -169,11 +169,11 @@ export class FirmwareUpdateService {
 
   async writeStandardFirmwareDirect(
     packageInfo: IProjectPackageInfo,
-    firmwareVariationId: string,
+    variationId: string,
   ): Promise<'ok' | string> {
     const binarySpec = await firmwareFileLoader_loadFirmwareFileByPackageInfo(
       packageInfo,
-      firmwareVariationId,
+      variationId,
       'online',
     );
     return await this.writeFirmwareImpl(binarySpec);

@@ -33,13 +33,13 @@ export interface IAppIpcContract {
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
-      firmwareName: string,
+      variationId: string,
       firmwareOrigin: IFirmwareOriginEx,
     ): Promise<string>;
 
     firmup_writeStandardFirmwareDirect(
       packageInfo: IProjectPackageInfo,
-      firmwareVariationId: string,
+      variationId: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
