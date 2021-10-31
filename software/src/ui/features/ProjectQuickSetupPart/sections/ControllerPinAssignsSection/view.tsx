@@ -9,7 +9,7 @@ import {
   svgImage_boardRpiPico,
 } from '~/ui/constants';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 import { useMemoEx } from '~/ui/utils';
 
 type IBoardImageSig = 'proMicro' | 'proMicroRp2040' | 'rpiPico';

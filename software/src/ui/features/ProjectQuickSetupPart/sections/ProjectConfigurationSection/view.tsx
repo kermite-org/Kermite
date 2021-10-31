@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { GeneralButton, GeneralInput } from '~/ui/components';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectConfigurationSection: FC = () => {
   const { keyboardName } = projectQuickSetupStore.state;
