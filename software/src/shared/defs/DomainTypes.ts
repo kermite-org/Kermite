@@ -33,11 +33,17 @@ export type IStandardBaseFirmwareType =
   | 'AvrOddSplit'
   | 'RpOddSplit';
 
+export type IStandardFirmwareBoardType =
+  | 'ChipAtMega32U4'
+  | 'ProMicro'
+  | 'ChipRP2040'
+  | 'ProMicroRP2040'
+  | 'RpiPico';
+
 export type IStandardFirmwareConfig = {
   baseFirmwareType: IStandardBaseFirmwareType;
-  useBoardLedsProMicroAvr?: boolean;
-  useBoardLedsProMicroRp?: boolean;
-  useBoardLedsRpiPico?: boolean;
+  boardType?: IStandardFirmwareBoardType;
+  useBoardLeds?: boolean;
   useDebugUart?: boolean;
   useMatrixKeyScanner?: boolean;
   matrixRowPins?: string[];
