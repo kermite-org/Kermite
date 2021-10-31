@@ -23,10 +23,10 @@ export interface IStandardFirmwareEditPresenter {
 const constants = {
   baseFirmwareTypeOptions: [
     'AvrUnified',
-    'RpUnified',
     'AvrSplit',
-    'RpSplit',
     'AvrOddSplit',
+    'RpUnified',
+    'RpSplit',
     'RpOddSplit',
   ].map(makePlainSelectorOption),
   boardTypeOptionsAvr: ['ProMicro', 'ChipAtMega32U4'].map(

@@ -65,16 +65,19 @@ export const StandardFirmwareEditor: FC = () => {
               options={baseFirmwareTypeOptions}
               value={editValues.baseFirmwareType}
               setValue={valueChangeHandler('baseFirmwareType')}
+              width={150}
             />
           </FieldItem>
-          <FieldItem title="board type" qxIf={isBoardSpecified}>
+          <FieldItem title="board type">
             <GeneralSelector
               options={boardTypeOptions}
               value={editValues.boardType}
               setValue={valueChangeHandler('boardType')}
+              width={150}
             />
           </FieldItem>
           <ToggleFieldRow
+            qxIf={isBoardSpecified}
             label="use board LEDs"
             fieldKey="useBoardLeds"
             editValues={editValues}
