@@ -2,6 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
 import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
 import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/view';
@@ -22,7 +23,10 @@ export const ProjectQuickSetupPart: FC = () => {
       </div>
       <div class="main-row">
         <FirmwareConfigurationSection class="firmware-config-section" />
-        <LayoutConfigurationSection class="layout-config-section" />
+        <div class="right-column">
+          <LayoutConfigurationSection class="layout-config-section" />
+          <ControllerPinAssignsSection />
+        </div>
       </div>
       <div class="bottom-row">
         <FirmwareFlashSection class="flash-section" />
@@ -59,7 +63,7 @@ const style = css`
       width: 55%;
       overflow-y: scroll;
     }
-    > .layout-config-section {
+    > .right-column {
       width: 45%;
       overflow-y: scroll;
     }

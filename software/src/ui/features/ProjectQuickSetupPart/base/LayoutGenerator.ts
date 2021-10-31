@@ -106,27 +106,29 @@ function placeKeyEntitiesSet(
       1,
     );
     design.keyEntities.push(...keys);
-    columnPins.forEach((pin, ix) => {
+    columnPins.forEach((pin, i) => {
+      let ix = i;
       if (invertIndicesX) {
         ix = nx - 1 - ix;
       }
-      const le = makeLabelEntity(keys[ix].keyId, 'column', pin);
+      const le = makeLabelEntity(keys[ix].keyId, 'column', `col${i}`);
       labelEntities.push(le);
     });
-    rowPins.forEach((pin, iy) => {
+    rowPins.forEach((pin, i) => {
+      let iy = i;
       if (invertIndicesY) {
         iy = ny - 1 - iy;
       }
       if (!isSplit) {
         const ki = iy * nx;
-        const le = makeLabelEntity(keys[ki].keyId, 'rowL', pin);
+        const le = makeLabelEntity(keys[ki].keyId, 'rowL', `row${i}`);
         labelEntities.push(le);
       } else {
         const ki = iy * nx + (nx - 1);
         const le = makeLabelEntity(
           keys[ki].keyId,
           dir === -1 ? 'rowL' : 'rowR',
-          pin,
+          `row${i}`,
         );
         labelEntities.push(le);
       }
@@ -151,7 +153,7 @@ function placeKeyEntitiesSet(
     );
     design.keyEntities.push(...keys);
     directPins.forEach((pin, i) => {
-      const le = makeLabelEntity(keys[i].keyId, 'itself', pin);
+      const le = makeLabelEntity(keys[i].keyId, 'itself', `dw${i}`);
       labelEntities.push(le);
     });
     keyIndexBase += keys.length;
@@ -179,7 +181,10 @@ function placeKeyEntitiesSet(
     );
     design.keyEntities.push(...keys);
     encoderPins.forEach((pin, i) => {
-      const le = makeLabelEntity(keys[i].keyId, 'itself', pin);
+      const encIndex = (i / 2) >> 0;
+      const encPinMode = i % 2 === 0 ? 'a' : 'b';
+      const pinFunctionName = `enc${encIndex}${encPinMode}`;
+      const le = makeLabelEntity(keys[i].keyId, 'itself', pinFunctionName);
       labelEntities.push(le);
     });
     keyIndexBase += keys.length;
