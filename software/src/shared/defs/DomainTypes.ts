@@ -42,7 +42,7 @@ export type IStandardFirmwareBoardType =
 
 export type IStandardFirmwareConfig = {
   baseFirmwareType: IStandardBaseFirmwareType;
-  boardType?: IStandardFirmwareBoardType;
+  boardType: IStandardFirmwareBoardType;
   useBoardLeds?: boolean;
   useDebugUart?: boolean;
   useMatrixKeyScanner?: boolean;

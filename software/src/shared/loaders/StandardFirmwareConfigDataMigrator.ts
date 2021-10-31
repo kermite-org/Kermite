@@ -24,4 +24,8 @@ export function migrateStandardFirmwareConfig(
     spec.boardType = 'RpiPico';
     spec.useBoardLeds = true;
   }
+  if (!spec.boardType) {
+    const isAvr = spec.baseFirmwareType.includes('Avr');
+    spec.boardType = isAvr ? 'ProMicro' : 'ProMicroRP2040';
+  }
 }

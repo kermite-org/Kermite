@@ -13,6 +13,7 @@ import { fallbackPersistProfileData } from '~/shared/defs/ProfileData';
 
 export const fallbackStandardFirmwareConfig: IStandardFirmwareConfig = {
   baseFirmwareType: 'AvrUnified',
+  boardType: 'ProMicro',
 };
 
 export const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {
