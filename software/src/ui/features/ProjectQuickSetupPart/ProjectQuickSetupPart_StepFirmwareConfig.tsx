@@ -3,19 +3,39 @@ import { uiTheme } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
-import { DeviceAutoConnectionSection } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/view';
 import { FirmwareConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareConfigurationSection/view';
-import { FirmwareFlashSection } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 
-function getCreateProfileButtonAvailability() {
+const FirmwareFlashPanelButton: FC = () => {
   const { isConfigValid } = projectQuickSetupStore.state;
-  return isConfigValid;
-}
+  return (
+    <GeneralButton
+      size="large"
+      disabled={!isConfigValid}
+      onClick={projectQuickSetupStore.actions.openFirmwareFlashPanel}
+    >
+      Flash Firmware
+    </GeneralButton>
+  );
+};
 
-export const ProjectQuickSetupPart: FC = () => {
-  projectQuickSetupStore.executeEffectsOnRender();
+const CreateProfileButton: FC = () => {
+  const { isConfigValid } = projectQuickSetupStore.state;
+  return (
+    <GeneralButton
+      size="large"
+      disabled={!isConfigValid}
+      onClick={projectQuickSetupStore.actions.createProfile}
+    >
+      Create Profile
+    </GeneralButton>
+  );
+};
+
+export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
+  projectQuickSetupStore.effects.useEditDataPersistence();
+  projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
   return (
     <div class={style}>
       <div class="top-row">
@@ -28,18 +48,10 @@ export const ProjectQuickSetupPart: FC = () => {
           <ControllerPinAssignsSection />
         </div>
       </div>
-      <div class="bottom-row">
-        <FirmwareFlashSection class="flash-section" />
-        <DeviceAutoConnectionSection class="connection-section" />
-        <div class="actions-section">
-          <GeneralButton
-            size="large"
-            disabled={!getCreateProfileButtonAvailability()}
-            onClick={projectQuickSetupStore.actions.createProfile}
-          >
-            Create Profile
-          </GeneralButton>
-        </div>
+      {/* DEPRECATED */}
+      <div class="bottom-row" qxIf={false}>
+        <FirmwareFlashPanelButton />
+        <CreateProfileButton />
       </div>
     </div>
   );
@@ -49,6 +61,7 @@ const style = css`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: ${uiTheme.colors.clPanelBox};
 
   > .top-row {
     flex-shrink: 0;
@@ -72,15 +85,10 @@ const style = css`
   > .bottom-row {
     flex-shrink: 0;
     height: 80px;
+    padding: 0 15px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border: solid 1px ${uiTheme.colors.clPrimary};
-
-    > .flash-section {
-    }
-
-    > .actions-section {
-      padding: 10px;
-    }
   }
 `;

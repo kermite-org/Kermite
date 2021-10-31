@@ -1,29 +1,30 @@
 import { css, FC, jsx } from 'qx';
+import { IProjectPackageInfo } from '~/shared';
 import { texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useFirmwareFlashSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/FirmwareFlashSection/model';
+import { svgImage_resetByHand } from '~/ui/constants';
+import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/StandardFirmwareFlashPart/model';
 
-export const FirmwareFlashSection: FC = () => {
+type Props = {
+  projectInfo: IProjectPackageInfo;
+  firmwareVariationId: string;
+};
+
+export const StandardFirmwareFlashPart: FC<Props> = ({
+  projectInfo,
+  firmwareVariationId,
+}) => {
   const {
     phase,
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton,
-  } = useFirmwareFlashSectionModel();
-
-  const {
-    state: { isConfigValid },
-  } = projectQuickSetupStore;
+  } = useStandardFirmwareFlashPartModel(projectInfo, firmwareVariationId);
 
   return (
-    <SectionFrame
-      title="Firmware Upload"
-      class={style}
-      inactive={!isConfigValid}
-    >
-      <div>
+    <div css={style}>
+      <div class="image-box">{svgImage_resetByHand}</div>
+      <div class="text-part">
         {phase === 'WaitingReset' && <div>reset device to flash firmware</div>}
 
         {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
@@ -57,10 +58,24 @@ export const FirmwareFlashSection: FC = () => {
           </div>
         )}
       </div>
-    </SectionFrame>
+    </div>
   );
 };
 
 const style = css`
-  height: 100%;
+  padding: 30px 20px;
+
+  > .image-box {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px #aaa;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  > .text-part {
+    margin-top: 15px;
+  }
 `;

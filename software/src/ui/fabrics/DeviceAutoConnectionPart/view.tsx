@@ -1,10 +1,20 @@
 import { css, FC, jsx } from 'qx';
+import { IProjectPackageInfo } from '~/shared';
+import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/DeviceAutoConnectionPart/hooks';
 import { SectionFrame } from '~/ui/features/ProjectQuickSetupPart/parts/SectionFrame';
-import { useDeviceAutoConnectionSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/DeviceAutoConnectionSection/model';
 
-export const DeviceAutoConnectionSection: FC = () => {
+type Props = {
+  projectInfo: IProjectPackageInfo;
+  firmwareVariationId: string;
+};
+
+export const DeviceAutoConnectionPart: FC<Props> = ({
+  projectInfo,
+  firmwareVariationId,
+}) => {
   const { isConnectionValid, isCommunicationIndicatorActive } =
-    useDeviceAutoConnectionSectionModel();
+    useDeviceAutoConnectionEffects(projectInfo.projectId, firmwareVariationId);
+  const { keyboardName } = projectInfo;
 
   return (
     <SectionFrame title="Device Connection">
@@ -19,6 +29,7 @@ export const DeviceAutoConnectionSection: FC = () => {
             ]}
           />
         </div>
+        <div>{keyboardName}</div>
       </div>
     </SectionFrame>
   );

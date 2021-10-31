@@ -3,11 +3,12 @@ import {
   checkDeviceBootloaderMatch,
   getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
+  IFirmwareTargetDevice,
+  IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm, showCommandOutputLogModal } from '~/ui/components';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { uiActions } from '~/ui/store';
+import { uiActions, uiReaders } from '~/ui/store';
 
 type FirmwareUpdatePhase = 'WaitingReset' | 'WaitingUploadOrder' | 'Uploading';
 
@@ -16,6 +17,10 @@ const state = new (class {
   deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
     detected: false,
   };
+
+  projectInfo?: IProjectPackageInfo;
+  firmwareVariationId?: string;
+  targetDeviceType?: IFirmwareTargetDevice;
 })();
 
 const readers = {
@@ -27,17 +32,10 @@ const readers = {
     );
   },
   get canFlashFirmwareToDetectedDevice(): boolean {
-    if (state.deviceDetectionStatus.detected) {
-      const { firmwareConfig } = projectQuickSetupStore.state;
-      const targetDevice = getFirmwareTargetDeviceFromBaseFirmwareType(
-        firmwareConfig.baseFirmwareType,
-      );
-      return (
-        !!targetDevice &&
-        checkDeviceBootloaderMatch(
-          state.deviceDetectionStatus.bootloaderType,
-          targetDevice,
-        )
+    if (state.deviceDetectionStatus.detected && state.targetDeviceType) {
+      return checkDeviceBootloaderMatch(
+        state.deviceDetectionStatus.bootloaderType,
+        state.targetDeviceType,
       );
     }
     return false;
@@ -69,15 +67,16 @@ const actions = {
   async uploadFirmware() {
     if (
       state.phase === 'WaitingUploadOrder' &&
-      state.deviceDetectionStatus.detected
+      state.deviceDetectionStatus.detected &&
+      state.projectInfo &&
+      state.firmwareVariationId
     ) {
-      const projectInfo = projectQuickSetupStore.readers.emitDraftProjectInfo();
-      const firmwareName = 'default';
+      const { projectInfo, firmwareVariationId } = state;
       state.phase = 'Uploading';
       uiActions.setLoading();
       const res = await ipcAgent.async.firmup_writeStandardFirmwareDirect(
         projectInfo,
-        firmwareName,
+        firmwareVariationId,
       );
       uiActions.clearLoading();
       if (res === 'ok') {
@@ -96,7 +95,40 @@ const actions = {
   },
 };
 
-export function useFirmwareFlashSectionModel() {
+function getFirmwareTargetDeviceType(
+  projectInfo: IProjectPackageInfo,
+  firmwareVariationId: string,
+): IFirmwareTargetDevice | undefined {
+  const firmwareEntry = projectInfo.firmwares.find(
+    (it) => it.variationId === firmwareVariationId,
+  );
+  if (firmwareEntry) {
+    if (firmwareEntry.type === 'standard') {
+      return getFirmwareTargetDeviceFromBaseFirmwareType(
+        firmwareEntry.standardFirmwareConfig.baseFirmwareType,
+      );
+    } else {
+      const customFirmwareInfo = uiReaders.allCustomFirmwareInfos.find(
+        (it) => it.firmwareId,
+      );
+      return customFirmwareInfo?.targetDevice;
+    }
+  }
+}
+
+export function useStandardFirmwareFlashPartModel(
+  projectInfo: IProjectPackageInfo,
+  firmwareVariationId: string,
+) {
+  useEffect(() => {
+    state.projectInfo = projectInfo;
+    state.firmwareVariationId = firmwareVariationId;
+    state.targetDeviceType = getFirmwareTargetDeviceType(
+      projectInfo,
+      firmwareVariationId,
+    );
+  }, [projectInfo, firmwareVariationId]);
+
   useEffect(
     () =>
       ipcAgent.events.firmup_deviceDetectionEvents.subscribe(

@@ -21,7 +21,7 @@ export const ConfiguratorZoneRoot: FC = () => {
     >
       <div css={cssWindowContent}>
         <NavigationColumn
-          disabled={uiReaders.subPageVisible}
+          disabled={uiReaders.blockerPageVisible}
           class="side-bar"
         />
         {showSetupNavigation ? (

@@ -58,7 +58,9 @@ export const uiReaders = {
       (info) => info.projectKey === globalProjectKey && info.origin === 'local',
     );
   },
-  get subPageVisible(): boolean {
-    return !!uiState.pageSpec;
+  get blockerPageVisible(): boolean {
+    return (
+      !!uiState.pageSpec || uiReaders.pagePath.startsWith('/projectQuickSetup')
+    );
   },
 };

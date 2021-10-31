@@ -35,6 +35,7 @@ type IState = {
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
+  isFirmwareFlashPanelOpen: boolean;
 };
 
 function createDefaultState(): IState {
@@ -45,6 +46,7 @@ function createDefaultState(): IState {
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
     isConnectionValid: false,
+    isFirmwareFlashPanelOpen: false,
   };
 }
 
@@ -54,7 +56,10 @@ const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareVariationId, firmwareName } = constants;
     const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
-    const layout = createLayoutFromFirmwareSpec(firmwareConfig, layoutOptions);
+    const [layout] = createLayoutFromFirmwareSpec(
+      firmwareConfig,
+      layoutOptions,
+    );
     const projectInfo = projectQuickSetupStoreHelpers.createDraftPackageInfo({
       projectId,
       keyboardName,
@@ -124,50 +129,56 @@ const actions = {
     });
     uiActions.navigateTo('/assigner');
   },
-};
-
-const effects = {
-  editDataPersistenceEffect() {
-    const storageKey = 'projectQuickSetupEditData';
-    const loadedData = UiLocalStorage.readItem(storageKey);
-    if (loadedData) {
-      copyObjectProps(state, loadedData);
-    }
-    actions.loadFirmwareConfigToEditor();
-
-    return () => {
-      const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
-      const persistData = {
-        projectId,
-        keyboardName,
-        firmwareConfig,
-        layoutOptions,
-      };
-      UiLocalStorage.writeItem(storageKey, persistData);
-    };
+  openFirmwareFlashPanel() {
+    state.isFirmwareFlashPanelOpen = true;
+  },
+  closeFirmwareFlashPanel() {
+    state.isFirmwareFlashPanelOpen = false;
   },
 };
 
-function executeEffectsOnRender() {
-  useEffect(effects.editDataPersistenceEffect, []);
+const effects = {
+  useEditDataPersistence() {
+    useEffect(() => {
+      const storageKey = 'projectQuickSetupEditData';
+      const loadedData = UiLocalStorage.readItem(storageKey);
+      if (loadedData) {
+        copyObjectProps(state, loadedData);
+      }
+      actions.loadFirmwareConfigToEditor();
 
-  const { isModified, isValid, editValues } =
-    StandardFirmwareEditor_ExposedModel;
-  useEffect(() => {
-    if (isModified && isValid && state.firmwareConfig !== editValues) {
-      actions.writeFirmwareConfig(editValues);
-      state.isConfigValid = true;
-    }
-    if (!isValid) {
-      state.isConfigValid = false;
-    }
-  }, [editValues]);
-}
+      return () => {
+        const { projectId, keyboardName, firmwareConfig, layoutOptions } =
+          state;
+        const persistData = {
+          projectId,
+          keyboardName,
+          firmwareConfig,
+          layoutOptions,
+        };
+        UiLocalStorage.writeItem(storageKey, persistData);
+      };
+    }, []);
+  },
+  useReflectEditFirmwareConfigToStore() {
+    const { isModified, isValid, editValues } =
+      StandardFirmwareEditor_ExposedModel;
+    useEffect(() => {
+      if (isModified && isValid && state.firmwareConfig !== editValues) {
+        actions.writeFirmwareConfig(editValues);
+        state.isConfigValid = true;
+      }
+      if (!isValid) {
+        state.isConfigValid = false;
+      }
+    }, [editValues]);
+  },
+};
 
 export const projectQuickSetupStore = {
   constants,
   state,
   readers,
   actions,
-  executeEffectsOnRender,
+  effects,
 };
