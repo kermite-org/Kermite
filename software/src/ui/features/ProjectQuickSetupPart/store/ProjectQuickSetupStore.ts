@@ -5,11 +5,12 @@ import {
   copyObjectProps,
   fallbackStandardFirmwareConfig,
   getNextFirmwareId,
-  IStandardFirmwareConfig,
   IProjectLayoutEntry,
   IProjectPackageInfo,
+  IStandardFirmwareConfig,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { migrateStandardFirmwareConfig } from '~/shared/loaders';
 import { UiLocalStorage } from '~/ui/base';
 import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import {
@@ -169,6 +170,7 @@ const effects = {
       if (loadedData) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { revision, ...attrs } = loadedData;
+        migrateStandardFirmwareConfig(attrs.firmwareConfig);
         if (revision === persistDataRevision) {
           copyObjectProps(state, attrs);
         }

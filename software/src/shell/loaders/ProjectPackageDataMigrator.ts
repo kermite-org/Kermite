@@ -3,6 +3,7 @@ import {
   IProjectFirmwareEntry,
   IProjectPackageFileContent,
 } from '~/shared';
+import { migrateStandardFirmwareConfig } from '~/shared/loaders';
 import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
 import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
 
@@ -42,6 +43,10 @@ export function migrateProjectPackageData(
       };
       if (!firmware.firmwareName && firmware.variationName) {
         firmware.firmwareName = firmware.variationName;
+      }
+
+      if (firmware.type === 'standard') {
+        migrateStandardFirmwareConfig(firmware.standardFirmwareConfig);
       }
     });
   }

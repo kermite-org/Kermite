@@ -4,3 +4,4 @@ export * from './ExtendedKeyShapes';
 export * from './PlacementUnitHelper';
 export * from './ProfileDataConverter';
 export * from './SchemaValidationHelper';
+export * from './StandardFirmwareConfigDataMigrator';
