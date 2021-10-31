@@ -37,7 +37,7 @@ const buttonStyle = css`
     height: 28px;
   }
 
-  &:hover {
+  &:not(.disabled):hover {
     background: #adf;
     opacity: 1;
     transition: all 0.3s;
