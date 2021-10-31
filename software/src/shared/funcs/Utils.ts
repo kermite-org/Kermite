@@ -449,6 +449,6 @@ export function optInArrayItem<T>(item: T | undefined | false): T[] {
   return item ? [item] : [];
 }
 
-export function isIncluded<T>(value: T, source: T[]) {
-  return source.includes(value);
+export function isIncluded<T>(value: T) {
+  return (...source: T[]) => source.includes(value);
 }

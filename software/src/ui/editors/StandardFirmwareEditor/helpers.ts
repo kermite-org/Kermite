@@ -6,6 +6,7 @@ import {
   IStandardFirmwareConfig,
   isNumberInRange,
   IStandardBaseFirmwareType,
+  isIncluded,
 } from '~/shared';
 import {
   IStandardFirmwareEditErrors,
@@ -144,9 +145,8 @@ export const standardFirmwareEditModelHelpers = {
     });
     const {
       baseFirmwareType,
-      useBoardLedsProMicroAvr,
-      useBoardLedsProMicroRp,
-      useBoardLedsRpiPico,
+      boardType,
+      useBoardLeds,
       useDebugUart,
       useMatrixKeyScanner,
       useDirectWiredKeyScanner,
@@ -173,9 +173,8 @@ export const standardFirmwareEditModelHelpers = {
 
     return {
       baseFirmwareType,
-      useBoardLedsProMicroAvr,
-      useBoardLedsProMicroRp,
-      useBoardLedsRpiPico,
+      boardType,
+      useBoardLeds,
       useDebugUart,
       useMatrixKeyScanner,
       useDirectWiredKeyScanner,
@@ -206,7 +205,7 @@ export const standardFirmwareEditModelHelpers = {
     editValues: IStandardFirmwareConfig,
     diff: Partial<IStandardFirmwareConfig>,
   ) {
-    const { baseFirmwareType } = editValues;
+    const { baseFirmwareType, boardType } = editValues;
 
     const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
     const isAvr = getMcuType(baseFirmwareType) === 'avr';
@@ -214,27 +213,31 @@ export const standardFirmwareEditModelHelpers = {
     const isSplit = getIsSplit(baseFirmwareType);
 
     if (isAvr) {
-      editValues.useBoardLedsProMicroRp = false;
-      editValues.useBoardLedsRpiPico = false;
+      if (!isIncluded(boardType)('ChipAtMega32U4', 'ProMicro')) {
+        editValues.boardType = 'ProMicro';
+      }
     }
     if (isRp) {
-      editValues.useBoardLedsProMicroAvr = false;
+      if (!isIncluded(boardType)('ChipRP2040', 'ProMicroRP2040', 'RpiPico')) {
+        editValues.boardType = 'ProMicroRP2040';
+      }
     }
     if (diff.baseFirmwareType) {
       // editValues.matrixRowPins = undefined;
       // editValues.matrixColumnPins = undefined;
-    }
-    if (diff.useBoardLedsProMicroRp) {
-      editValues.useBoardLedsRpiPico = false;
-    }
-    if (diff.useBoardLedsRpiPico) {
-      editValues.useBoardLedsProMicroRp = false;
     }
     if (isAvr && editValues.useLighting) {
       editValues.lightingPin = 'PD3';
     }
     if (isAvr && isSplit) {
       editValues.useLcd = false;
+    }
+    const isChip = isIncluded(editValues.boardType)(
+      'ChipAtMega32U4',
+      'ChipRP2040',
+    );
+    if (isChip && editValues.useBoardLeds) {
+      editValues.useBoardLeds = false;
     }
   },
   validateEditValues(

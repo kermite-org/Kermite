@@ -34,11 +34,13 @@ export const StandardFirmwareEditor_ExposedModel = {
 export const StandardFirmwareEditor: FC = () => {
   const {
     baseFirmwareTypeOptions,
+    boardTypeOptions,
     editValues,
     isAvr,
     isRp,
     isSplit,
     isOddSplit,
+    isBoardSpecified,
     availablePinsText,
     fieldErrors,
     totalError,
@@ -65,23 +67,17 @@ export const StandardFirmwareEditor: FC = () => {
               setValue={valueChangeHandler('baseFirmwareType')}
             />
           </FieldItem>
+          <FieldItem title="board type" qxIf={isBoardSpecified}>
+            <GeneralSelector
+              options={boardTypeOptions}
+              value={editValues.boardType}
+              setValue={valueChangeHandler('boardType')}
+            />
+          </FieldItem>
           <ToggleFieldRow
-            label="use board LEDs ProMicro"
-            fieldKey="useBoardLedsProMicroAvr"
+            label="use board LEDs"
+            fieldKey="useBoardLeds"
             editValues={editValues}
-            qxIf={isAvr}
-          />
-          <ToggleFieldRow
-            label="use board LEDs ProMicro RP2040"
-            fieldKey="useBoardLedsProMicroRp"
-            editValues={editValues}
-            qxIf={isRp}
-          />
-          <ToggleFieldRow
-            label="use board LEDs RPi Pico"
-            fieldKey="useBoardLedsRpiPico"
-            editValues={editValues}
-            qxIf={isRp}
           />
           <ToggleFieldRow
             fieldKey="useMatrixKeyScanner"
