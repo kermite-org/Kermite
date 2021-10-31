@@ -1,5 +1,6 @@
 import { css, FC, jsx, styled } from 'qx';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
+import { multiClasses } from '~/ui/utils';
 
 type Props = {
   onClick?: () => void;
@@ -15,9 +16,8 @@ export const SetupNavigationStepShiftButton: FC<Props> = ({
   small,
 }) => (
   <ButtonBase
-    className={(small && '--small') || undefined}
+    className={multiClasses(buttonStyle, small && '--small')}
     onClick={onClick}
-    extraCss={buttonStyle}
     disabled={disabled}
   >
     {text}

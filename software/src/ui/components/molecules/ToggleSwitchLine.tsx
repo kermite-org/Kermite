@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { ToggleSwitch } from '~/ui/components/atoms/ToggleSwitch';
 
 interface Props {
@@ -39,7 +39,7 @@ const style = css`
   gap: 5px;
 
   > span {
-    color: ${uiTheme.colors.clPrimary};
+    color: ${colors.clPrimary};
     font-size: 15px;
   }
 

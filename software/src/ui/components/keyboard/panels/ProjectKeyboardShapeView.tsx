@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { getKeyboardSvgViewBoxSpec } from '~/ui/base/UiDomainHelpers';
 import { ProjectKeyEntityCard } from '~/ui/components/keyboard/keyUnitCards';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody';
@@ -15,8 +15,8 @@ export const ProjectKeyboardShapeView: FC<Props> = ({
   keyboardDesign,
 }) => {
   const baseStrokeWidth = 0.5;
-  const bodyFillColor = uiTheme.colors.projectKeyboard_bodyFill;
-  const bodyStrokeColor = uiTheme.colors.projectKeyboard_bodyEdge;
+  const bodyFillColor = colors.projectKeyboard_bodyFill;
+  const bodyStrokeColor = colors.projectKeyboard_bodyEdge;
   const { displayArea, keyEntities, outlineShapes } = keyboardDesign;
   return (
     <div css={cssKeyboardShapeView} className={className}>

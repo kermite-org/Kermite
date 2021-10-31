@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 interface Props {
   className?: string;
@@ -24,9 +24,9 @@ export const CheckBox: FC<Props> = ({
 );
 
 const style = css`
-  border: solid 1px ${uiTheme.colors.clPrimary};
-  background: ${uiTheme.colors.clControlBase};
-  color: ${uiTheme.colors.clDecal};
+  border: solid 1px ${colors.clPrimary};
+  background: ${colors.clControlBase};
+  color: ${colors.clDecal};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@ const style = css`
   }
 
   &.--checked {
-    background: ${uiTheme.colors.clPrimary};
+    background: ${colors.clPrimary};
     > .mark {
       visibility: visible;
     }

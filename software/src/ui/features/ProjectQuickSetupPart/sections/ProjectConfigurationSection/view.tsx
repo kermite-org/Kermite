@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { GeneralButton, GeneralInput } from '~/ui/components';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 
@@ -24,7 +24,7 @@ export const ProjectConfigurationSection: FC = () => {
 };
 
 const style = css`
-  border: solid 1px ${uiTheme.colors.clPrimary};
+  border: solid 1px ${colors.clPrimary};
   display: flex;
   justify-content: space-between;
   align-items: center;

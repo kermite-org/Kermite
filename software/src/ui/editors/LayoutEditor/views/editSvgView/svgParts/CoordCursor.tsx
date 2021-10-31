@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { editReader } from '~/ui/editors/LayoutEditor/models';
 import { applyCoordSnapping } from '~/ui/editors/LayoutEditor/models/EditorHelper';
 
@@ -22,7 +22,7 @@ export const CoordCursor: FC = () => {
         y1={my}
         x2={mx + d}
         y2={my}
-        stroke={uiTheme.colors.clLayouterAxis}
+        stroke={colors.clLayouterAxis}
         stroke-width={sw}
       />
       <line
@@ -30,7 +30,7 @@ export const CoordCursor: FC = () => {
         y1={my - d}
         x2={mx}
         y2={my + d}
-        stroke={uiTheme.colors.clLayouterAxis}
+        stroke={colors.clLayouterAxis}
         stroke-width={sw}
       />
     </g>

@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
-import { uiTheme, IEditKeyUnitCardViewModel } from '~/ui/base';
+import { IEditKeyUnitCardViewModel, colors } from '~/ui/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { EditKeyUnitCard } from '~/ui/components/keyboard/keyUnitCards/EditKeyUnitCard';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
@@ -16,7 +16,7 @@ export const EditorKeyboardView: FC<Props> = ({
   showLayerDefaultAssign,
   design,
 }) => {
-  const bodyFillColor = uiTheme.colors.clKeyboardBodyFace;
+  const bodyFillColor = colors.clKeyboardBodyFace;
   const dpiScale = 2;
   const marginRatio = 0.06;
   const baseStrokeWidth = 0.3;

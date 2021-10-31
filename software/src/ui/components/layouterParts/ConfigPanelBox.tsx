@@ -1,5 +1,5 @@
 import { FC, jsx, css, useState, QxChildren } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { Icon } from '~/ui/components/atoms';
 
 type Props = {
@@ -40,9 +40,9 @@ const style = css`
     display: flex;
     align-items: center;
 
-    background: ${uiTheme.colors.clPrimary};
-    border: solid 1px ${uiTheme.colors.clPrimary};
-    color: ${uiTheme.colors.clDecal};
+    background: ${colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
+    color: ${colors.clDecal};
     padding: 2px 0;
     padding-left: 3px;
     font-size: 16px;
@@ -67,7 +67,7 @@ const style = css`
   }
 
   > .body {
-    border: solid 1px ${uiTheme.colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
     border-top: none;
     padding: 6px 8px;
     > * + * {

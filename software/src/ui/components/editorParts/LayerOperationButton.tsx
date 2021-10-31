@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 type Props = {
   icon: string;
@@ -40,5 +40,5 @@ const style = css`
     opacity: 0.3;
     /* pointer-events: none; */
   }
-  color: ${uiTheme.colors.clMainText};
+  color: ${colors.clMainText};
 `;

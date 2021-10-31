@@ -1,5 +1,5 @@
 import { css, FC, jsx, QxChildren } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 type Props = {
   pageTitle?: string;
@@ -23,8 +23,8 @@ export const CommonPageFrame: FC<Props> = ({
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clBackground};
+  color: ${colors.clMainText};
   height: 100%;
   padding: 20px;
   display: flex;

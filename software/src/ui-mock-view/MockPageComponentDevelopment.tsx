@@ -1,5 +1,5 @@
 import { jsx, FC, css, styled, useState } from 'qx';
-import { ISelectorOption, uiTheme } from '~/ui/base';
+import { colors, ISelectorOption } from '~/ui/base';
 import {
   GeneralButton,
   GeneralInput,
@@ -15,8 +15,8 @@ import {
 
 const cssRoot = css`
   height: 100%;
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clForeground};
+  background: ${colors.clBackground};
+  color: ${colors.clForeground};
   padding: 10px;
   > * + * {
     margin-top: 5px;
@@ -24,7 +24,7 @@ const cssRoot = css`
 `;
 
 const Header = styled.div`
-  color: ${uiTheme.colors.clPrimary};
+  color: ${colors.clPrimary};
   font-size: 18px;
 `;
 

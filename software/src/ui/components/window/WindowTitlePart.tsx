@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 export const WindowTitlePart: FC = () => {
   return (
@@ -21,7 +21,7 @@ const style = css`
     color: #fff;
 
     &.K {
-      color: ${uiTheme.colors.clSpecialAccent};
+      color: ${colors.clSpecialAccent};
     }
   }
 `;

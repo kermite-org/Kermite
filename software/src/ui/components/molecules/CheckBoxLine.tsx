@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { CheckBox } from '~/ui/components/atoms';
 
 interface Props {
@@ -32,7 +32,7 @@ const style = css`
   display: flex;
   align-items: center;
   > .inner {
-    color: ${uiTheme.colors.clPrimary};
+    color: ${colors.clPrimary};
     display: flex;
     align-items: center;
     font-size: 15px;
