@@ -2,9 +2,9 @@ import { css, FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
-import { IDraftLayoutLabelEntity } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { CoordOriginMark } from '~/ui/features/ProjectQuickSetupPart/parts/CoordOriginMark';
-import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView.KeyEntityCard';
+import { CoordOriginMark } from '~/ui/fabrics/LayoutPreviewShapeView/CoordOriginMark';
+import { LayoutPreviewKeyEntityCard } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeView.KeyEntityCard';
+import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;

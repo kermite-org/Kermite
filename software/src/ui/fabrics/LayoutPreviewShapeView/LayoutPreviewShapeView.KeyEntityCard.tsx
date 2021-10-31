@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
 import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
-import { IDraftLayoutLabelEntity } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
 
 type Props = {
   keyEntity: IDisplayKeyEntity;
