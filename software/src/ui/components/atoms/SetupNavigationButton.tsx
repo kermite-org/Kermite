@@ -1,4 +1,4 @@
-import { css, FC, jsx, styled } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 import { multiClasses } from '~/ui/utils';
 
@@ -42,9 +42,4 @@ const buttonStyle = css`
     opacity: 1;
     transition: all 0.3s;
   }
-`;
-
-export const OnboadingStepShiftButtonDummy = styled.div`
-  width: 90px;
-  height: 32px;
 `;
