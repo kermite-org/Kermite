@@ -229,6 +229,9 @@ export const standardFirmwareEditModelHelpers = {
     if (isAvr && editValues.useLighting) {
       editValues.lightingPin = 'PD3';
     }
+    if (isRp && !editValues.useLighting && editValues.lightingPin === 'PD3') {
+      editValues.lightingPin = undefined;
+    }
     if (isAvr && isSplit) {
       editValues.useLcd = false;
     }
