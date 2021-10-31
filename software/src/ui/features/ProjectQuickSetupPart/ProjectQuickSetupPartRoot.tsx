@@ -3,10 +3,10 @@ import { isNumberInRange } from '~/shared';
 import { colors, Link } from '~/ui/base';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
 import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
-import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
-import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareFlash';
-import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepLayoutConfig';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
+import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepFirmwareConfig';
+import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepFirmwareFlash';
+import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepLayoutConfig';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { uiActions, uiReaders } from '~/ui/store';
 
