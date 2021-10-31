@@ -14,7 +14,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
     () => projectQuickSetupStore.readers.emitDraftProjectInfo(),
     [projectQuickSetupStore.state.firmwareConfig],
   );
-  const { firmwareVariationId } = projectQuickSetupStore.state;
+  const { variationId } = projectQuickSetupStore.state;
   const contentWidth = 500;
   return (
     <div class={style}>
@@ -26,7 +26,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
         >
           <DeviceAutoConnectionPart
             projectInfo={projectInfo}
-            firmwareVariationId={firmwareVariationId}
+            variationId={variationId}
           />
         </SectionPanelWithCenterContent>
         <SectionPanel
@@ -46,7 +46,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
         >
           <StandardFirmwareFlashPart
             projectInfo={projectInfo}
-            firmwareVariationId={firmwareVariationId}
+            variationId={variationId}
           />
         </SectionPanelWithCenterContent>
         <SectionPanel

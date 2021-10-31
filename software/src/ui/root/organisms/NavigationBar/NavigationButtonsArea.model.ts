@@ -66,6 +66,7 @@ const itemsSource: NavigationItemSource[] = [
     pageName: 'flash',
     iconSpec: 'fa fa-microchip',
     hint: texts.hint_sideMenu_app_firmwareUpdate,
+    isAvailable: () => false,
   },
   {
     pagePath: '/projectResource',
