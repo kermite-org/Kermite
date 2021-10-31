@@ -6,7 +6,7 @@ import {
   padByteArray,
   stringToEmbedBytes,
 } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
-import { checkStandardKeyboardSpec } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/StandardKeyboardSpecValidator';
+import { checkStandardFirmwareConfigData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/StandardFirmwareConfigValidator';
 import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
 
 function mapPinNameToPinNumber(pinName: string | undefined): number {
@@ -57,7 +57,7 @@ export function serializeCommonKeyboardMetadata(
 export function serializeCustomKeyboardSpec_Unified(
   spec: IStandardFirmwareConfig,
 ): number[] {
-  if (!checkStandardKeyboardSpec(spec)) {
+  if (!checkStandardFirmwareConfigData(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
   }
   let numMatrixRows = 0;
@@ -116,7 +116,7 @@ export function serializeCustomKeyboardSpec_Unified(
 export function serializeCustomKeyboardSpec_Split(
   spec: IStandardFirmwareConfig,
 ): number[] {
-  if (!checkStandardKeyboardSpec(spec)) {
+  if (!checkStandardFirmwareConfigData(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
   }
   let numMatrixRows = 0;
@@ -184,7 +184,7 @@ export function serializeCustomKeyboardSpec_Split(
 export function serializeCustomKeyboardSpec_OddSplit(
   spec: IStandardFirmwareConfig,
 ): number[] {
-  if (!checkStandardKeyboardSpec(spec)) {
+  if (!checkStandardFirmwareConfigData(spec)) {
     throw new Error(`invalid keyboard spec ${JSON.stringify(spec)}`);
   }
   let numMatrixRows = 0;
