@@ -285,7 +285,7 @@ export async function firmwareFileLoader_loadFirmwareFileByPackageInfo(
 export async function firmwareFileLoader_loadFirmwareFile(
   origin: IResourceOrigin,
   projectId: string,
-  firmwareName: string,
+  variationId: string,
   firmwareOrigin: IFirmwareOriginEx,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
   const packageInfos = coreState.allProjectPackageInfos;
@@ -297,7 +297,7 @@ export async function firmwareFileLoader_loadFirmwareFile(
   }
   return await firmwareFileLoader_loadFirmwareFileByPackageInfo(
     packageInfo,
-    firmwareName,
+    variationId,
     firmwareOrigin,
   );
 }

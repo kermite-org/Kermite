@@ -33,7 +33,7 @@ export interface IAppIpcContract {
     firmup_uploadFirmware(
       origin: IResourceOrigin,
       projectId: string,
-      firmwareName: string,
+      variationId: string,
       firmwareOrigin: IFirmwareOriginEx,
     ): Promise<string>;
 

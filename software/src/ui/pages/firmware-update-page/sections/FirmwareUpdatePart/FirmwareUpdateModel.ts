@@ -47,11 +47,11 @@ const helpers = {
           const projectOriginText =
             info.origin === 'local' ? '(local-package) ' : '';
           const { projectKey, keyboardName } = info;
-          const { firmwareName } = firmware;
+          const { firmwareName, variationId } = firmware;
           if (firmware.type === 'standard') {
             return [
               {
-                value: `${projectKey}:${firmwareName}:unspecified`,
+                value: `${projectKey}:${variationId}:unspecified`,
                 label: `${projectOriginText} ${keyboardName} ${firmwareName}`,
               },
             ];
@@ -64,7 +64,7 @@ const helpers = {
               const firmwareOriginText =
                 (firmwareOrigin === 'localBuild' && '(local-build)') || '';
               return {
-                value: `${projectKey}:${firmwareName}:${firmwareOrigin}`,
+                value: `${projectKey}:${variationId}:${firmwareOrigin}`,
                 label: `${projectOriginText} ${keyboardName} ${firmwareName} ${firmwareOriginText}`,
               };
             });
@@ -77,7 +77,7 @@ const helpers = {
 };
 
 const state = new (class {
-  currentProjectFirmwareSpec: string = ''; // `${projectKey}:${firmwareName}:${firmwareOrigin}`
+  currentProjectFirmwareSpec: string = ''; // `${projectKey}:${variationId}:${firmwareOrigin}`
   phase: FirmwareUpdatePhase = 'WaitingReset';
   firmwareUploadResult: string | undefined = undefined;
   deviceDetectionStatus: IBootloaderDeviceDetectionStatus = {
@@ -130,13 +130,13 @@ const readers = {
   get canFlashSelectedFirmwareToDetectedDevice(): boolean {
     if (state.deviceDetectionStatus.detected) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [projectKey, firmwareName, _firmwareOrigin] =
+      const [projectKey, variationId, _firmwareOrigin] =
         state.currentProjectFirmwareSpec.split(':');
       const projectInfo = readers.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
       const firmwareInfo = projectInfo?.firmwares.find(
-        (f) => f.firmwareName === firmwareName,
+        (f) => f.variationId === variationId,
       );
       if (firmwareInfo) {
         const targetDevice =
@@ -187,18 +187,18 @@ const actions = {
       state.phase === 'WaitingUploadOrder' &&
       state.deviceDetectionStatus.detected
     ) {
-      const [projectKey, firmwareName, firmwareOrigin] =
+      const [projectKey, variationId, firmwareOrigin] =
         state.currentProjectFirmwareSpec.split(':');
-      const info = readers.projectInfosWithFirmware.find((it) =>
+      const projectInfo = readers.projectInfosWithFirmware.find((it) =>
         it.projectKey.startsWith(projectKey),
       );
-      if (info) {
+      if (projectInfo) {
         state.phase = 'Uploading';
         uiActions.setLoading();
         const res = await ipcAgent.async.firmup_uploadFirmware(
-          info.origin,
-          info.projectId,
-          firmwareName,
+          projectInfo.origin,
+          projectInfo.projectId,
+          variationId,
           firmwareOrigin as IFirmwareOriginEx,
         );
         uiActions.clearLoading();
