@@ -9,12 +9,12 @@ import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/StandardFirmware
 
 type Props = {
   projectInfo: IProjectPackageInfo;
-  firmwareVariationId: string;
+  variationId: string;
 };
 
 export const StandardFirmwareFlashPart: FC<Props> = ({
   projectInfo,
-  firmwareVariationId,
+  variationId,
 }) => {
   const {
     phase,
@@ -22,7 +22,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     canFlashFirmwareToDetectedDevice,
     onWriteButton,
     targetDeviceType,
-  } = useStandardFirmwareFlashPartModel(projectInfo, firmwareVariationId);
+  } = useStandardFirmwareFlashPartModel(projectInfo, variationId);
 
   const {
     isOpen: isPanelOpen,

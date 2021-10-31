@@ -9,15 +9,15 @@ const { SvgIllustPc, SvgIllustThunder, SvgIllustMcu } =
 
 type Props = {
   projectInfo: IProjectPackageInfo;
-  firmwareVariationId: string;
+  variationId: string;
 };
 
 export const DeviceAutoConnectionPart: FC<Props> = ({
   projectInfo,
-  firmwareVariationId,
+  variationId,
 }) => {
   const { isConnectionValid, isCommunicationIndicatorActive } =
-    useDeviceAutoConnectionEffects(projectInfo.projectId, firmwareVariationId);
+    useDeviceAutoConnectionEffects(projectInfo.projectId, variationId);
   const { keyboardName } = projectInfo;
 
   return (

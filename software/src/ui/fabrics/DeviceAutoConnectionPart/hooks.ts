@@ -5,7 +5,7 @@ import { uiState } from '~/ui/store';
 
 type IAutoConnectionTargetDeviceSpec = {
   projectId: string;
-  firmwareVariationId: string | undefined;
+  variationId: string | undefined;
 };
 
 type IDeviceAutoConnectionEffectsResult = {
@@ -16,14 +16,14 @@ type IDeviceAutoConnectionEffectsResult = {
 function useDeviceAutoConnectionConnectionStatus(
   targetDeviceSpec: IAutoConnectionTargetDeviceSpec,
 ): boolean {
-  const { projectId, firmwareVariationId } = targetDeviceSpec;
+  const { projectId, variationId } = targetDeviceSpec;
   const deviceStatus = uiState.core.deviceStatus;
 
-  if (firmwareVariationId) {
+  if (variationId) {
     return (
       deviceStatus.isConnected &&
       deviceStatus.deviceAttrs.projectId === projectId &&
-      deviceStatus.deviceAttrs.variationId === firmwareVariationId
+      deviceStatus.deviceAttrs.variationId === variationId
     );
   } else {
     return (
@@ -56,15 +56,15 @@ function useDeviceKeyEventIndicatorModel(holdMs: number): boolean {
 function useDeviceAutoConnectionAutoConnectFunction(
   targetDeviceSpec: IAutoConnectionTargetDeviceSpec,
 ) {
-  const { projectId, firmwareVariationId } = targetDeviceSpec;
+  const { projectId, variationId } = targetDeviceSpec;
 
   const { allDeviceInfos, currentDevicePath } =
     uiState.core.deviceSelectionStatus;
 
   useEffect(() => {
     const targetDevice = allDeviceInfos.find((it) =>
-      firmwareVariationId
-        ? it.projectId === projectId && it.variationId === firmwareVariationId
+      variationId
+        ? it.projectId === projectId && it.variationId === variationId
         : it.projectId === projectId,
     );
     if (targetDevice && targetDevice.path !== currentDevicePath) {
@@ -73,14 +73,14 @@ function useDeviceAutoConnectionAutoConnectFunction(
     if (!targetDevice && !currentDevicePath) {
       ipcAgent.async.device_connectToDevice('');
     }
-  }, [allDeviceInfos, currentDevicePath, projectId, firmwareVariationId]);
+  }, [allDeviceInfos, currentDevicePath, projectId, variationId]);
 }
 
 export function useDeviceAutoConnectionEffects(
   projectId: string,
-  firmwareVariationId: string,
+  variationId: string,
 ): IDeviceAutoConnectionEffectsResult {
-  const targetDeviceSpec = { projectId, firmwareVariationId };
+  const targetDeviceSpec = { projectId, variationId };
   useDeviceAutoConnectionAutoConnectFunction(targetDeviceSpec);
   const isConnectionValid =
     useDeviceAutoConnectionConnectionStatus(targetDeviceSpec);

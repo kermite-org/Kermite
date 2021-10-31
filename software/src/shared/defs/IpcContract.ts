@@ -39,7 +39,7 @@ export interface IAppIpcContract {
 
     firmup_writeStandardFirmwareDirect(
       packageInfo: IProjectPackageInfo,
-      firmwareVariationId: string,
+      variationId: string,
     ): Promise<string>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;

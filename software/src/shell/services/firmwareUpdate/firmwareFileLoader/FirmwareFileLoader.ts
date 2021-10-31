@@ -229,11 +229,11 @@ async function loadFirmwareFileBytes_CustomLocalBuild(
 
 export async function loadFirmwareFileBytes(
   packageInfo: IProjectPackageInfo,
-  firmwareVariationId: string,
+  variationId: string,
   firmwareOrigin: IFirmwareOriginEx,
 ): Promise<IFirmwareFetchResultWithTargetDevice | undefined> {
   const firmwareEntry = packageInfo.firmwares.find(
-    (it) => it.variationId === firmwareVariationId,
+    (it) => it.variationId === variationId,
   );
   if (firmwareEntry?.type === 'standard') {
     return await loadFirmwareFileBytes_Standard(packageInfo, firmwareEntry);
@@ -256,12 +256,12 @@ export async function loadFirmwareFileBytes(
 
 export async function firmwareFileLoader_loadFirmwareFileByPackageInfo(
   packageInfo: IProjectPackageInfo,
-  firmwareVariationId: string,
+  variationId: string,
   firmwareOrigin: IFirmwareOriginEx,
 ): Promise<IFirmwareBinaryFileSpec | undefined> {
   const loadResult = await loadFirmwareFileBytes(
     packageInfo,
-    firmwareVariationId,
+    variationId,
     firmwareOrigin,
   );
   if (!loadResult) {
