@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { IGeneralMenuItem, uiTheme } from '~/ui/base';
+import { colors, IGeneralMenuItem } from '~/ui/base';
 import { GeneralButtonMenu, OperationButtonWithIcon } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
 import { ILayoutManagerEditTarget } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
@@ -59,7 +59,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
 };
 
 const style = css`
-  color: ${uiTheme.colors.clMainText};
+  color: ${colors.clMainText};
 
   padding: 6px;
   padding-bottom: 0;
@@ -82,7 +82,7 @@ const style = css`
 
     > .targetDisplayArea {
       flex-grow: 1;
-      border: solid 1px ${uiTheme.colors.clPrimary};
+      border: solid 1px ${colors.clPrimary};
       display: flex;
       align-items: center;
       padding: 0 5px;

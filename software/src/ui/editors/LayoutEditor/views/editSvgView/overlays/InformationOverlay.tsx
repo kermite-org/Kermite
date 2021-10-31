@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { editReader } from '~/ui/editors/LayoutEditor/models';
 
 export const InformationOverlay: FC = () => {
@@ -16,6 +16,6 @@ const style = css`
   bottom: 0;
   left: 0;
   pointer-events: none;
-  color: ${uiTheme.colors.clPrimary};
+  color: ${colors.clPrimary};
   margin: 1px 4px;
 `;

@@ -4,6 +4,7 @@ import {
   compareObjectByJsonStringify,
   copyObjectProps,
   fallbackStandardKeyboardSpec,
+  getNextFirmwareId,
   IKermiteStandardKeyboardSpec,
   IProjectLayoutEntry,
   IProjectPackageInfo,
@@ -24,27 +25,30 @@ import {
 } from '~/ui/store';
 
 const constants = {
-  firmwareVariationId: '01',
   firmwareName: 'default',
 };
 
 type IState = {
   projectId: string;
   keyboardName: string;
+  firmwareVariationId: string;
   firmwareConfig: IKermiteStandardKeyboardSpec;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
+  isFirmwareFlashPanelOpen: boolean;
 };
 
 function createDefaultState(): IState {
   return {
     projectId: '',
     keyboardName: '',
+    firmwareVariationId: '',
     firmwareConfig: fallbackStandardKeyboardSpec,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
     isConnectionValid: false,
+    isFirmwareFlashPanelOpen: false,
   };
 }
 
@@ -52,9 +56,18 @@ const state: IState = createDefaultState();
 
 const readers = {
   emitDraftProjectInfo(): IProjectPackageInfo {
-    const { firmwareVariationId, firmwareName } = constants;
-    const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
-    const layout = createLayoutFromFirmwareSpec(firmwareConfig, layoutOptions);
+    const { firmwareName } = constants;
+    const {
+      projectId,
+      keyboardName,
+      firmwareVariationId,
+      firmwareConfig,
+      layoutOptions,
+    } = state;
+    const [layout] = createLayoutFromFirmwareSpec(
+      firmwareConfig,
+      layoutOptions,
+    );
     const projectInfo = projectQuickSetupStoreHelpers.createDraftPackageInfo({
       projectId,
       keyboardName,
@@ -78,6 +91,8 @@ const readers = {
 const actions = {
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
+    state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+    state.firmwareVariationId = getNextFirmwareId([]);
     actions.loadFirmwareConfigToEditor();
   },
   loadFirmwareConfigToEditor() {
@@ -89,12 +104,16 @@ const actions = {
   setKeyboardName(keyboardName: string) {
     state.keyboardName = keyboardName;
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+    state.firmwareVariationId = getNextFirmwareId([]);
   },
   writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
-      state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
+      const currentFirmwareId = state.firmwareVariationId;
+      state.firmwareVariationId = getNextFirmwareId(
+        (currentFirmwareId && [currentFirmwareId]) || [],
+      );
     }
   },
   writeLayoutOption<K extends keyof ILayoutGeneratorOptions>(
@@ -124,50 +143,77 @@ const actions = {
     });
     uiActions.navigateTo('/assigner');
   },
-};
-
-const effects = {
-  editDataPersistenceEffect() {
-    const storageKey = 'projectQuickSetupEditData';
-    const loadedData = UiLocalStorage.readItem(storageKey);
-    if (loadedData) {
-      copyObjectProps(state, loadedData);
-    }
-    actions.loadFirmwareConfigToEditor();
-
-    return () => {
-      const { projectId, keyboardName, firmwareConfig, layoutOptions } = state;
-      const persistData = {
-        projectId,
-        keyboardName,
-        firmwareConfig,
-        layoutOptions,
-      };
-      UiLocalStorage.writeItem(storageKey, persistData);
-    };
+  openFirmwareFlashPanel() {
+    state.isFirmwareFlashPanelOpen = true;
+  },
+  closeFirmwareFlashPanel() {
+    state.isFirmwareFlashPanelOpen = false;
   },
 };
 
-function executeEffectsOnRender() {
-  useEffect(effects.editDataPersistenceEffect, []);
+type IPersistData = {
+  revision: string;
+  projectId: string;
+  keyboardName: string;
+  firmwareVariationId: string;
+  firmwareConfig: IKermiteStandardKeyboardSpec;
+  layoutOptions: ILayoutGeneratorOptions;
+};
+const persistDataRevision = 'QPS1';
 
-  const { isModified, isValid, editValues } =
-    StandardFirmwareEditor_ExposedModel;
-  useEffect(() => {
-    if (isModified && isValid && state.firmwareConfig !== editValues) {
-      actions.writeFirmwareConfig(editValues);
-      state.isConfigValid = true;
-    }
-    if (!isValid) {
-      state.isConfigValid = false;
-    }
-  }, [editValues]);
-}
+const effects = {
+  useEditDataPersistence() {
+    useEffect(() => {
+      const storageKey = 'projectQuickSetupEditData';
+      const loadedData = UiLocalStorage.readItem<IPersistData>(storageKey);
+      if (loadedData) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { revision, ...attrs } = loadedData;
+        if (revision === persistDataRevision) {
+          copyObjectProps(state, attrs);
+        }
+      }
+      actions.loadFirmwareConfigToEditor();
+
+      return () => {
+        const {
+          projectId,
+          keyboardName,
+          firmwareVariationId,
+          firmwareConfig,
+          layoutOptions,
+        } = state;
+        const persistData: IPersistData = {
+          revision: persistDataRevision,
+          projectId,
+          keyboardName,
+          firmwareVariationId,
+          firmwareConfig,
+          layoutOptions,
+        };
+        UiLocalStorage.writeItem(storageKey, persistData);
+      };
+    }, []);
+  },
+  useReflectEditFirmwareConfigToStore() {
+    const { isModified, isValid, editValues } =
+      StandardFirmwareEditor_ExposedModel;
+    useEffect(() => {
+      if (isModified && isValid && state.firmwareConfig !== editValues) {
+        actions.writeFirmwareConfig(editValues);
+        state.isConfigValid = true;
+      }
+      if (!isValid) {
+        state.isConfigValid = false;
+      }
+    }, [editValues]);
+  },
+};
 
 export const projectQuickSetupStore = {
   constants,
   state,
   readers,
   actions,
-  executeEffectsOnRender,
+  effects,
 };

@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 type Props = {
   text: string;
@@ -32,10 +32,10 @@ const style = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${uiTheme.colors.clAssignCardFace};
-  color: ${uiTheme.colors.clAssignCardText};
+  background: ${colors.clAssignCardFace};
+  color: ${colors.clAssignCardText};
 
   &[data-current] {
-    background: ${uiTheme.colors.clSelectHighlight};
+    background: ${colors.clSelectHighlight};
   }
 `;

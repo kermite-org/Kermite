@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { degToRad, getIsoEnterSvgPathSpecText, getKeySize } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { IPosition, startDragSession } from '~/ui/editors/LayoutEditor/common';
 import {
   editMutations,
@@ -45,8 +45,8 @@ export function startKeyEntityDragOperation(
 
 const cssKeyRect = css`
   stroke-width: 0.5;
-  fill: ${uiTheme.colors.clLayouterKeyFace};
-  stroke: ${uiTheme.colors.clLayouterKeyEdge};
+  fill: ${colors.clLayouterKeyFace};
+  stroke: ${colors.clLayouterKeyEdge};
   cursor: pointer;
 
   &[data-selected] {
@@ -69,7 +69,7 @@ const cssText = css`
   dominant-baseline: central;
   user-select: none;
   pointer-events: none;
-  fill: ${uiTheme.colors.clLayouterKeyLegend};
+  fill: ${colors.clLayouterKeyLegend};
   &[data-selected] {
     fill: #4bb;
   }

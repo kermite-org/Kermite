@@ -7,11 +7,6 @@ import {
 import { uiState } from '~/ui/store';
 
 export const projectQuickSetupStoreHelpers = {
-  getNextVariationId(current: string): string {
-    const count = parseInt(current);
-    const nextCount = (count + 1) % 100;
-    return nextCount.toString().padStart(2, '0');
-  },
   generateUniqueProjectId(): string {
     const existingProjectIds = uniqueArrayItems(
       uiState.core.allProjectPackageInfos.map((it) => it.projectId),

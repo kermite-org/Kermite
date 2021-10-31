@@ -36,6 +36,8 @@ const themeColorsDark = {
   projectKeyboard_bodyEdge: '#004',
   projectKeyboard_keyFill: '#eee',
   projectKeyboard_keyEdge: '#004',
+
+  wizardHorizontalBar: '#fd7',
 };
 
 const themeColorsLight = {
@@ -74,6 +76,9 @@ const themeColorsLight = {
   projectKeyboard_bodyEdge: '#004',
   projectKeyboard_keyFill: '#eee',
   projectKeyboard_keyEdge: '#004',
+
+  wizardHorizontalBar: '#fd7',
+  // wizardHorizontalBar: '#ddd',
 };
 
 type IThemeColorSet = { [key in keyof typeof themeColorsDark]: string };
@@ -103,6 +108,7 @@ export const uiTheme = {
   unitHeight: 26,
   controlBorderRadius: 0,
   commonTransitionSpec: '0.15s ease',
-  // colors: themeColorsDark, // debug
-  colors: themeColors[uiThemeConfigLoader.loadThemeKey()],
 };
+
+// colors: themeColorsDark, // debug
+export const colors = themeColors[uiThemeConfigLoader.loadThemeKey()];

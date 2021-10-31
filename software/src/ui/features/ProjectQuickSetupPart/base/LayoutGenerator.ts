@@ -7,7 +7,19 @@ import {
   IStandardBaseFirmwareType,
   splitBytesN,
 } from '~/shared';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+import {
+  IDraftLayoutLabelEntity,
+  IDraftLayoutLabelEntityPinType,
+  ILayoutGeneratorOptions,
+} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+
+function makeLabelEntity(
+  keyId: string,
+  pinType: IDraftLayoutLabelEntityPinType,
+  pinName: string,
+): IDraftLayoutLabelEntity {
+  return { keyId, pinType, pinName };
+}
 
 const unifiedKeyboardTypes: IStandardBaseFirmwareType[] = [
   'AvrUnified',
@@ -66,45 +78,73 @@ function makeMatrixKeyEntities(
 
 function placeKeyEntitiesSet(
   design: IPersistKeyboardDesign,
-  nxMatrixKeys: number,
-  nyMatrixKeys: number,
-  numDirectKeys: number,
-  numEncoderKeys: number,
+  labelEntities: IDraftLayoutLabelEntity[],
+  columnPins: string[],
+  rowPins: string[],
+  directPins: string[],
+  encoderPins: string[],
   wrapX: number,
-  invertX: boolean,
-  invertY: boolean,
+  invertIndicesX: boolean,
+  invertIndicesY: boolean,
   keyIndexBase: number,
   isSplit: boolean,
   dir: number,
 ) {
   let mainKeyBlockHeight = 0;
-  if (nxMatrixKeys > 0 && nyMatrixKeys > 0) {
-    const nx = nxMatrixKeys;
-    const ny = nyMatrixKeys;
+  if (columnPins.length > 0 && rowPins.length > 0) {
+    const nx = columnPins.length;
+    const ny = rowPins.length;
     const keys = makeMatrixKeyEntities(
       nx * ny,
       nx,
       0,
-      invertX,
-      invertY,
+      invertIndicesX,
+      invertIndicesY,
       keyIndexBase,
       isSplit,
       dir,
       1,
     );
     design.keyEntities.push(...keys);
+    columnPins.forEach((pin, i) => {
+      let ix = i;
+      if (invertIndicesX) {
+        ix = nx - 1 - ix;
+      }
+      const le = makeLabelEntity(keys[ix].keyId, 'column', `col${i}`);
+      labelEntities.push(le);
+    });
+    rowPins.forEach((pin, i) => {
+      let iy = i;
+      if (invertIndicesY) {
+        iy = ny - 1 - iy;
+      }
+      if (!isSplit) {
+        const ki = iy * nx;
+        const le = makeLabelEntity(keys[ki].keyId, 'rowL', `row${i}`);
+        labelEntities.push(le);
+      } else {
+        const ki = iy * nx + (nx - 1);
+        const le = makeLabelEntity(
+          keys[ki].keyId,
+          dir === -1 ? 'rowL' : 'rowR',
+          `row${i}`,
+        );
+        labelEntities.push(le);
+      }
+    });
     keyIndexBase += keys.length;
     mainKeyBlockHeight = ny;
   }
-  if (numDirectKeys > 0) {
-    const num = numDirectKeys;
+  if (directPins.length > 0) {
+    const num = directPins.length;
     const nx = wrapX;
     const offsetY = mainKeyBlockHeight;
     const keys = makeMatrixKeyEntities(
       num,
       nx,
       offsetY,
-      invertX,
+      invertIndicesX,
       false,
       keyIndexBase,
       isSplit,
@@ -112,23 +152,28 @@ function placeKeyEntitiesSet(
       1,
     );
     design.keyEntities.push(...keys);
+    keys.forEach((key) => {
+      const i = key.keyIndex! - keyIndexBase;
+      const le = makeLabelEntity(key.keyId, 'itself', `dw${i}`);
+      labelEntities.push(le);
+    });
     keyIndexBase += keys.length;
     if (!mainKeyBlockHeight) {
       mainKeyBlockHeight = Math.ceil(num / nx);
     }
   }
-  if (numEncoderKeys > 0) {
-    const num = numEncoderKeys;
+  if (encoderPins.length > 0) {
+    const num = encoderPins.length;
     const nx = wrapX;
     let offsetY = 0;
     if (mainKeyBlockHeight) {
-      offsetY = -1;
+      offsetY = -1.5;
     }
     const keys = makeMatrixKeyEntities(
       num,
       nx,
       offsetY,
-      invertX,
+      invertIndicesX,
       false,
       keyIndexBase,
       isSplit,
@@ -136,6 +181,14 @@ function placeKeyEntitiesSet(
       -1,
     );
     design.keyEntities.push(...keys);
+    keys.forEach((key) => {
+      const i = key.keyIndex! - keyIndexBase;
+      const encIndex = (i / 2) >> 0;
+      const encPinMode = i % 2 === 0 ? 'a' : 'b';
+      const pinFunctionName = `enc${encIndex}${encPinMode}`;
+      const le = makeLabelEntity(key.keyId, 'itself', pinFunctionName);
+      labelEntities.push(le);
+    });
     keyIndexBase += keys.length;
   }
 }
@@ -175,8 +228,9 @@ function fixCoordOrigin(design: IPersistKeyboardDesign, isCentered: boolean) {
 export function createLayoutFromFirmwareSpec(
   spec: IKermiteStandardKeyboardSpec,
   layoutOptions: ILayoutGeneratorOptions,
-): IPersistKeyboardDesign {
+): [IPersistKeyboardDesign, IDraftLayoutLabelEntity[]] {
   const design = createFallbackPersistKeyboardDesign();
+  const labelEntities: IDraftLayoutLabelEntity[] = [];
   const { placementOrigin, invertX, invertXR, invertY } = layoutOptions;
   const isCentered = placementOrigin === 'center';
   if (isCentered) {
@@ -187,34 +241,33 @@ export function createLayoutFromFirmwareSpec(
   const isEvenSplit = evenSplitKeyboardTypes.includes(spec.baseFirmwareType);
   const isOddSplit = oddSplitKeyboardTypes.includes(spec.baseFirmwareType);
 
-  const nxMatrixKeys =
-    (spec.useMatrixKeyScanner && spec.matrixColumnPins?.length) || 0;
-  const nyMatrixKeys =
-    (spec.useMatrixKeyScanner && spec.matrixRowPins?.length) || 0;
-  const numDirectKeys =
-    (spec.useDirectWiredKeyScanner && spec.directWiredPins?.length) || 0;
   const wrapX = 4;
-  const numEncoderKeys = (spec.useEncoder && spec.encoderPins?.length) || 0;
 
-  const nxMatrixKeysR =
-    (spec.useMatrixKeyScanner && spec.matrixColumnPinsR?.length) || 0;
-  const nyMatrixKeysR =
-    (spec.useMatrixKeyScanner && spec.matrixRowPinsR?.length) || 0;
-  const numDirectKeysR =
-    (spec.useDirectWiredKeyScanner && spec.directWiredPinsR?.length) || 0;
-  const numEncoderKeysR = (spec.useEncoder && spec.encoderPinsR?.length) || 0;
+  const columnPins = (spec.useMatrixKeyScanner && spec.matrixColumnPins) || [];
+  const rowPins = (spec.useMatrixKeyScanner && spec.matrixRowPins) || [];
+  const directPins =
+    (spec.useDirectWiredKeyScanner && spec.directWiredPins) || [];
+  const encoderPins = (spec.useEncoder && spec.encoderPins) || [];
+
+  const columnPinsR =
+    (spec.useMatrixKeyScanner && spec.matrixColumnPinsR) || [];
+  const rowPinsR = (spec.useMatrixKeyScanner && spec.matrixRowPinsR) || [];
+  const directPinsR =
+    (spec.useDirectWiredKeyScanner && spec.directWiredPinsR) || [];
+  const encoderPinsR = (spec.useEncoder && spec.encoderPinsR) || [];
 
   const keyIndexBaseL = 0;
   const keyIndexBaseR =
-    nxMatrixKeys * nyMatrixKeys + numDirectKeys + numEncoderKeys;
+    columnPins.length * rowPins.length + directPins.length + encoderPins.length;
 
   if (isUnified) {
     placeKeyEntitiesSet(
       design,
-      nxMatrixKeys,
-      nyMatrixKeys,
-      numDirectKeys,
-      numEncoderKeys,
+      labelEntities,
+      columnPins,
+      rowPins,
+      directPins,
+      encoderPins,
       wrapX,
       invertX,
       invertY,
@@ -226,12 +279,13 @@ export function createLayoutFromFirmwareSpec(
   if (isEvenSplit) {
     placeKeyEntitiesSet(
       design,
-      nxMatrixKeys,
-      nyMatrixKeys,
-      numDirectKeys,
-      numEncoderKeys,
+      labelEntities,
+      columnPins,
+      rowPins,
+      directPins,
+      encoderPins,
       wrapX,
-      !invertX,
+      invertX,
       invertY,
       keyIndexBaseL,
       true,
@@ -240,10 +294,11 @@ export function createLayoutFromFirmwareSpec(
 
     placeKeyEntitiesSet(
       design,
-      nxMatrixKeys,
-      nyMatrixKeys,
-      numDirectKeys,
-      numEncoderKeys,
+      labelEntities,
+      columnPins,
+      rowPins,
+      directPins,
+      encoderPins,
       wrapX,
       invertX,
       invertY,
@@ -255,12 +310,13 @@ export function createLayoutFromFirmwareSpec(
   if (isOddSplit) {
     placeKeyEntitiesSet(
       design,
-      nxMatrixKeys,
-      nyMatrixKeys,
-      numDirectKeys,
-      numEncoderKeys,
+      labelEntities,
+      columnPins,
+      rowPins,
+      directPins,
+      encoderPins,
       wrapX,
-      !invertX,
+      invertX,
       invertY,
       keyIndexBaseL,
       true,
@@ -269,10 +325,11 @@ export function createLayoutFromFirmwareSpec(
 
     placeKeyEntitiesSet(
       design,
-      nxMatrixKeysR,
-      nyMatrixKeysR,
-      numDirectKeysR,
-      numEncoderKeysR,
+      labelEntities,
+      columnPinsR,
+      rowPinsR,
+      directPinsR,
+      encoderPinsR,
       wrapX,
       invertXR,
       invertY,
@@ -284,5 +341,5 @@ export function createLayoutFromFirmwareSpec(
 
   fixCoordOrigin(design, isCentered);
 
-  return design;
+  return [design, labelEntities];
 }

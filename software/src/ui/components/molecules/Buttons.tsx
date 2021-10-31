@@ -1,5 +1,5 @@
 import { jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { ButtonBase, Icon } from '~/ui/components/atoms';
 
 export const SmallSymbolicActionButton = (props: {
@@ -10,7 +10,7 @@ export const SmallSymbolicActionButton = (props: {
   const style = css`
     width: 20px;
     height: 20px;
-    color: ${uiTheme.colors.clPrimary};
+    color: ${colors.clPrimary};
     font-size: 20px;
   `;
   return (
@@ -32,7 +32,7 @@ export const OperationButtonWithIcon = (props: {
   hint?: string;
 }) => {
   const style = css`
-    color: ${uiTheme.colors.clPrimary};
+    color: ${colors.clPrimary};
     font-size: 20px;
     font-weight: bold;
     > i {
@@ -58,7 +58,7 @@ export const OperationButtonOnlyIcon = (props: {
   icon: string;
 }) => {
   const style = css`
-    color: ${uiTheme.colors.clPrimary};
+    color: ${colors.clPrimary};
     font-size: 28px;
   `;
   return (

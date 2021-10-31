@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { TestInputArea } from '~/ui/editors/ProfileEditor/ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from '~/ui/editors/ProfileEditor/ui_editor_assignsSection';
@@ -56,13 +56,13 @@ const localStyleConstants = {
 };
 
 const { editorPartMargin: mm, panelBoxBorderRadius } = localStyleConstants;
-const { clPanelBox } = uiTheme.colors;
+const { clPanelBox } = colors;
 
 const cssKeyAssignEditView = css`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  color: ${uiTheme.colors.clMainText};
+  color: ${colors.clMainText};
 
   > div {
     margin-left: ${mm};

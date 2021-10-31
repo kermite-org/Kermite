@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/editors';
 import { ProfileConfigurationModalLayer } from '~/ui/editors/ProfileEditor/ui_modal_profileConfiguration';
 import { updateProfileDataSourceHandling } from '~/ui/pages/assigner-page/models';
@@ -31,7 +31,7 @@ const style = css`
     flex-shrink: 0;
     display: flex;
     justify-content: space-between;
-    background: ${uiTheme.colors.clPanelBox};
+    background: ${colors.clPanelBox};
     height: 40px;
     align-items: center;
 

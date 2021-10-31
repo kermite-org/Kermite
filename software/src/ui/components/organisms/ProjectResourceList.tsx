@@ -3,7 +3,7 @@ import {
   decodeProjectResourceItemKey,
   IProjectResourceItemType,
 } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
@@ -99,7 +99,7 @@ const ResourceItemsBlock = (props: {
 
 const style = css`
   border: solid 1px #888;
-  color: ${uiTheme.colors.clAltText};
+  color: ${colors.clAltText};
   padding: 10px;
   height: 100%;
 
@@ -124,7 +124,7 @@ const style = css`
           background: #0bd2;
         }
         &.--selected {
-          background: ${uiTheme.colors.clSelectHighlight};
+          background: ${colors.clSelectHighlight};
         }
 
         transition: ${uiTheme.commonTransitionSpec};

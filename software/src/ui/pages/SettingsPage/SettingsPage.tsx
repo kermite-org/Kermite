@@ -1,5 +1,5 @@
 import { css, jsx } from 'qx';
-import { texts, uiTheme } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 import {
   CheckBoxLine,
   GeneralButton,
@@ -104,8 +104,8 @@ export const SettingsPage = () => {
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clBackground};
+  color: ${colors.clMainText};
   height: 100%;
   padding: 20px;
   position: relative;

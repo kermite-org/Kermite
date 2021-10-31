@@ -1,4 +1,5 @@
 import { css, FC, jsx, QxNode } from 'qx';
+import { colors } from '~/ui/base';
 import {
   Icon,
   SetupNavigationStepShiftButton,
@@ -79,6 +80,7 @@ const style = css`
     height: 110px;
     padding: 10px 15px;
     position: relative;
+    background: ${colors.wizardHorizontalBar};
 
     > .step-list {
     }
@@ -110,6 +112,7 @@ const style = css`
   > .bottom-bar {
     flex-shrink: 0;
     height: 50px;
+    background: ${colors.wizardHorizontalBar};
     display: flex;
     justify-content: center;
     align-items: center;

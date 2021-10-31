@@ -7,8 +7,6 @@ export const profilesOperationReader = {
   get CanWriteKeyMappingToDevice(): boolean {
     const { deviceStatus, globalSettings, allProjectPackageInfos } = uiReaders;
     const { developerMode, allowCrossKeyboardKeyMappingWrite } = globalSettings;
-    const { profileEditSource } = profilesReader;
-    const isInternalProfile = profileEditSource.type === 'InternalProfile';
     const isDeviceConnected = deviceStatus.isConnected;
 
     const refProjectId = assignerModel.profileData.projectId;
@@ -33,9 +31,9 @@ export const profilesOperationReader = {
       );
 
     if (developerMode && allowCrossKeyboardKeyMappingWrite) {
-      return isInternalProfile && isDeviceConnected;
+      return isDeviceConnected;
     } else {
-      return isInternalProfile && isDeviceConnected && isProjectMatched;
+      return isDeviceConnected && isProjectMatched;
     }
   },
   get canSaveProfile(): boolean {

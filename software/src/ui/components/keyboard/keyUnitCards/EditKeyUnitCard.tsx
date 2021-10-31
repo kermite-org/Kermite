@@ -1,11 +1,12 @@
 import { css, FC, jsx } from 'qx';
-import { texts, uiTheme, IEditKeyUnitCardViewModel } from '~/ui/base';
+import { texts, uiTheme, IEditKeyUnitCardViewModel, colors } from '~/ui/base';
 import { KeyTextLabel } from '~/ui/components/keyboard/keyUnitCards/EditKeyUnitCard.KeyTextLabel';
 import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
   keyUnit: IEditKeyUnitCardViewModel;
   showLayerDefaultAssign: boolean;
+  showOutline: boolean;
 };
 
 export const EditKeyUnitCard: FC<Props> = ({
@@ -23,6 +24,7 @@ export const EditKeyUnitCard: FC<Props> = ({
     shiftHold,
   },
   showLayerDefaultAssign,
+  showOutline,
 }) => {
   const textShown = isLayerFallback ? showLayerDefaultAssign : true;
 
@@ -43,7 +45,10 @@ export const EditKeyUnitCard: FC<Props> = ({
     >
       <KeyUnitShape
         shape={shape}
-        css={style}
+        classNames={[
+          keyUnitShapeStyle,
+          (showOutline && '--with-outline') || undefined,
+        ]}
         data-current={isCurrent}
         data-hold={isHold}
         onMouseDown={onMouseDown}
@@ -72,15 +77,19 @@ export const EditKeyUnitCard: FC<Props> = ({
   );
 };
 
-const style = css`
+const keyUnitShapeStyle = css`
   cursor: pointer;
-  fill: ${uiTheme.colors.clKeyUnitFace};
+  fill: ${colors.clKeyUnitFace};
+
+  &.--with-outline {
+    stroke: ${colors.clKeyboardBodyFace};
+  }
 
   &[data-current] {
-    fill: ${uiTheme.colors.clSelectHighlight};
+    fill: ${colors.clSelectHighlight};
   }
   &[data-hold] {
-    fill: ${uiTheme.colors.clHoldHighlight};
+    fill: ${colors.clHoldHighlight};
   }
   &:hover {
     opacity: 0.7;

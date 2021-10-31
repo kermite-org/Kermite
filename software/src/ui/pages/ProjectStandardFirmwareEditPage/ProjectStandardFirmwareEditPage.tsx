@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { IPageSpec_ProjectStandardFirmwareEdit } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/components';
 import { StandardFirmwareEditor } from '~/ui/editors';
@@ -32,8 +32,8 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clBackground};
+  color: ${colors.clMainText};
   height: 100%;
   > .content {
     padding: 15px;

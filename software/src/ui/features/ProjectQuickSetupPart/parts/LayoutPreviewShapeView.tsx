@@ -2,20 +2,25 @@ import { css, FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
+import { IDraftLayoutLabelEntity } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { CoordOriginMark } from '~/ui/features/ProjectQuickSetupPart/parts/CoordOriginMark';
-import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShpaeView.KeyEntityCard';
+import { LayoutPreviewKeyEntityCard } from '~/ui/features/ProjectQuickSetupPart/parts/LayoutPreviewShapeView.KeyEntityCard';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
+  labelEntities: IDraftLayoutLabelEntity[];
   holdKeyIndices: number[];
+  showLabels: boolean;
 };
 
 export const LayoutPreviewShapeView: FC<Props> = ({
   keyboardDesign,
+  labelEntities,
   holdKeyIndices,
+  showLabels,
 }) => {
   const dpiScale = 2;
-  const marginRatio = 0.1;
+  const marginRatio = 0;
   const baseStrokeWidth = 0.3;
 
   const fillColor = '#54566f';
@@ -37,8 +42,12 @@ export const LayoutPreviewShapeView: FC<Props> = ({
           {keyboardDesign.keyEntities.map((ke) => (
             <LayoutPreviewKeyEntityCard
               keyEntity={ke}
+              labelEntities={labelEntities.filter(
+                (it) => it.keyId === ke.keyId,
+              )}
               key={ke.keyId}
               isHold={holdKeyIndices.includes(ke.keyIndex)}
+              showLabels={showLabels}
             />
           ))}
         </g>

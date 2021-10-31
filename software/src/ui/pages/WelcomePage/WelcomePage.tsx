@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
@@ -80,8 +80,8 @@ export const WelcomePage: FC = () => {
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clBackground};
+  color: ${colors.clMainText};
   height: 100%;
   padding: 10px;
 

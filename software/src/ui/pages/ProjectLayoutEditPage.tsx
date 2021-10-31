@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
-import { uiConfiguration, uiTheme } from '~/ui/base';
+import { colors, uiConfiguration } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/components';
 import {
@@ -61,8 +61,8 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clBackground};
+  color: ${colors.clMainText};
   height: 100%;
   display: flex;
   flex-direction: column;

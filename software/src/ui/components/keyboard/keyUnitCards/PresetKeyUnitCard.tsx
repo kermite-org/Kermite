@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme, IPresetKeyUnitViewModel } from '~/ui/base';
+import { colors, IPresetKeyUnitViewModel } from '~/ui/base';
 import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
@@ -44,6 +44,6 @@ const cssKeyShape = css`
 
 const cssKeyText = css`
   font-size: 5px;
-  fill: ${uiTheme.colors.clAltText};
+  fill: ${colors.clAltText};
   text-anchor: middle;
 `;

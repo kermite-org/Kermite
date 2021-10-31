@@ -1,6 +1,6 @@
 import { qxGlobal } from './qxGlobal';
 
-type IEffectFunc = () => void | (() => void);
+type IEffectFunc = () => void | (() => void) | Promise<void>;
 
 type IStateSetValue<T> = (value: T | ((arg: T) => T)) => void;
 interface IHookStateHolder<T> {
@@ -164,9 +164,9 @@ export function endHooks() {
 }
 
 export function flushHookEffects(target: IHookInstance, all: boolean = false) {
-  const holders = (all
-    ? target.holders
-    : target.pendingEffectHolders) as IHookEffectHolder[];
+  const holders = (
+    all ? target.holders : target.pendingEffectHolders
+  ) as IHookEffectHolder[];
   holders.forEach((holder) => {
     if (holder.cleanupFunc) {
       holder.cleanupFunc();

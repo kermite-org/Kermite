@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { GlobalHintDisplayText, uiTheme } from '~/ui/base';
+import { colors, GlobalHintDisplayText } from '~/ui/base';
 import { GlobalHintIconButton } from '~/ui/components';
 import { commitUiSettings, uiState } from '~/ui/store';
 
@@ -18,7 +18,7 @@ export const GlobalHintDisplay: FC = () => {
 
 const style = css`
   font-size: 14px;
-  color: ${uiTheme.colors.clDecal};
+  color: ${colors.clDecal};
   display: flex;
   align-items: center;
   > :nth-child(2) {

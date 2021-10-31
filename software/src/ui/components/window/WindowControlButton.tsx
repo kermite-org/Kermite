@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 
 type Props = {
   icon: string;
@@ -26,9 +26,9 @@ const style = css`
   cursor: pointer;
   width: 40px;
   height: 30px;
-  color: ${uiTheme.colors.clWindowButtonFace};
+  color: ${colors.clWindowButtonFace};
   &:hover {
-    background: ${uiTheme.colors.clWindowButtonHoverBack};
+    background: ${colors.clWindowButtonHoverBack};
   }
   -webkit-app-region: no-drag;
   &[data-disabled] {

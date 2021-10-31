@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { ConfigSubHeader } from '~/ui/components/layouterParts';
 import { editMutations } from '~/ui/editors/LayoutEditor/models';
@@ -69,7 +69,7 @@ const cssHeaderRow = css`
 
 const cssListFrame = css`
   margin-top: 2px;
-  /* border: solid 1px ${uiTheme.colors.clPrimary}; */
+  /* border: solid 1px ${colors.clPrimary}; */
   display: flex;
   flex-wrap: wrap;
 `;
@@ -78,16 +78,16 @@ const cssTransGroupListItemCard = css`
   width: 24px;
   height: 24px;
   margin: 2px;
-  border: solid 1px ${uiTheme.colors.clPrimary};
-  color: ${uiTheme.colors.clPrimary};
+  border: solid 1px ${colors.clPrimary};
+  color: ${colors.clPrimary};
   display: flex;
   justify-content: center;
   align-items: center;
 
   cursor: pointer;
   &[data-active] {
-    background: ${uiTheme.colors.clPrimary};
-    color: ${uiTheme.colors.clDecal};
+    background: ${colors.clPrimary};
+    color: ${colors.clDecal};
   }
 `;
 
