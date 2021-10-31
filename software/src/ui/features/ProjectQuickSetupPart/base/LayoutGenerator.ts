@@ -152,8 +152,9 @@ function placeKeyEntitiesSet(
       1,
     );
     design.keyEntities.push(...keys);
-    directPins.forEach((pin, i) => {
-      const le = makeLabelEntity(keys[i].keyId, 'itself', `dw${i}`);
+    keys.forEach((key) => {
+      const i = key.keyIndex! - keyIndexBase;
+      const le = makeLabelEntity(key.keyId, 'itself', `dw${i}`);
       labelEntities.push(le);
     });
     keyIndexBase += keys.length;
@@ -180,11 +181,12 @@ function placeKeyEntitiesSet(
       -1,
     );
     design.keyEntities.push(...keys);
-    encoderPins.forEach((pin, i) => {
+    keys.forEach((key) => {
+      const i = key.keyIndex! - keyIndexBase;
       const encIndex = (i / 2) >> 0;
       const encPinMode = i % 2 === 0 ? 'a' : 'b';
       const pinFunctionName = `enc${encIndex}${encPinMode}`;
-      const le = makeLabelEntity(keys[i].keyId, 'itself', pinFunctionName);
+      const le = makeLabelEntity(key.keyId, 'itself', pinFunctionName);
       labelEntities.push(le);
     });
     keyIndexBase += keys.length;

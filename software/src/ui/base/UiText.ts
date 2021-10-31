@@ -22,4 +22,6 @@ export const uiTextConfigLoader = {
   },
 };
 
-export const texts = textSources[uiTextConfigLoader.loadLanguageKey()];
+export const languageKey = uiTextConfigLoader.loadLanguageKey();
+
+export const texts = textSources[languageKey];

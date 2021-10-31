@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { isNumberInRange } from '~/shared';
-import { Link } from '~/ui/base';
+import { colors, Link } from '~/ui/base';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
 import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPart_StepFirmwareConfig';
@@ -114,6 +114,7 @@ const WizardTopBar: FC = () => {
     align-items: center;
     gap: 5px;
     padding: 0 10px 0 5px;
+    background: ${colors.wizardHorizontalBar};
 
     > div {
       cursor: pointer;
@@ -164,6 +165,7 @@ const WizardFooterBar: FC = () => {
     justify-content: center;
     align-items: center;
     gap: 20px;
+    background: ${colors.wizardHorizontalBar};
   `;
   return (
     <div css={style}>

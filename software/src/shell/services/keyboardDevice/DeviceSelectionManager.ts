@@ -80,6 +80,7 @@ export class DeviceSelectionManager {
           );
           console.log(`device opened: ${deviceSig}`);
           device.onClosed(() => {
+            this.updateEnumeration();
             this.setStatus({ currentDevicePath: 'none' });
             console.log(`device closed: ${deviceSig}`);
           });
