@@ -7,11 +7,11 @@ import {
   IStandardBaseFirmwareType,
   splitBytesN,
 } from '~/shared';
+import { ILayoutGeneratorOptions } from '~/ui/base';
 import {
   IDraftLayoutLabelEntity,
   IDraftLayoutLabelEntityPinType,
 } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 
 function makeLabelEntity(
   keyId: string,

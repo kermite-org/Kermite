@@ -12,13 +12,13 @@ import {
   validateResourceName,
 } from '~/shared';
 import { migrateStandardFirmwareConfig } from '~/shared/loaders';
-import { UiLocalStorage } from '~/ui/base';
-import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
-import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import {
   fallbackLayoutGeneratorOptions,
   ILayoutGeneratorOptions,
-} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+  UiLocalStorage,
+} from '~/ui/base';
+import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStoreHelpers';
 import {
   dispatchCoreAction,

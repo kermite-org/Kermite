@@ -1,7 +1,6 @@
 import { IStandardFirmwareConfig } from '~/shared';
-import { makePlainSelectorOption } from '~/ui/base';
+import { ILayoutGeneratorOptions, makePlainSelectorOption } from '~/ui/base';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 
 export type IWriteLayoutOptionFunc = <K extends keyof ILayoutGeneratorOptions>(
   key: K,
