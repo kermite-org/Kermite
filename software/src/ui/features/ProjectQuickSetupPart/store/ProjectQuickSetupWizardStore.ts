@@ -35,7 +35,7 @@ const readers = {
   },
   get canGoNext(): boolean {
     const { currentStep } = readers;
-    if (currentStep === 'step4') {
+    if (currentStep === 'step3') {
       return true;
     }
     const nextStep = helpers.shiftStep(currentStep, 1);
@@ -45,7 +45,7 @@ const readers = {
 
 const actions = {
   async shiftStepTo(step: IProjectQuickSetupStep) {
-    if (step === 'step4') {
+    if (step === 'step3') {
       await projectQuickSetupStore.actions.createProfile();
     }
     uiActions.navigateTo(`/projectQuickSetup/${step}`);

@@ -13,7 +13,6 @@ const stepInstructionMap: { [step in IProjectQuickSetupStep]: string } = {
   step1: 'Firmware Configuration',
   step2: 'Device Setup',
   step3: 'Layout Template Settings',
-  step4: 'Profile Setup',
 };
 
 export const WizardTopBar: FC<Props> = ({
@@ -27,7 +26,7 @@ export const WizardTopBar: FC<Props> = ({
       <div>
         {currentStep}: {instructionText}
       </div>
-      {[1, 2, 3, 4].map((i) => {
+      {[1, 2, 3].map((i) => {
         const step = `step${i}` as IProjectQuickSetupStep;
         const isCurrentStep = step === currentStep;
         return (

@@ -11,7 +11,7 @@ type Props = {
 
 export const WizardFooterBar: FC<Props> = ({ currentStep, canGoNext }) => {
   const isFirstStep = currentStep === 'step1';
-  const isFinalStep = currentStep === 'step4';
+  const isFinalStep = currentStep === 'step3';
 
   const { cancelSteps, shiftStepPrevious, shiftStepNext, completeSteps } =
     projectQuickSetupWizardStore.actions;

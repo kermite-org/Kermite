@@ -3,7 +3,6 @@ import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/Proj
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepLayoutConfig';
-import { AssignerPage } from '~/ui/pages/assigner-page';
 
 type Props = {
   currentStep: IProjectQuickSetupStep;
@@ -16,8 +15,6 @@ export const WizardMainContent: FC<Props> = ({ currentStep }) => {
     return <ProjectQuickSetupPart_StepFirmwareFlash />;
   } else if (currentStep === 'step3') {
     return <ProjectQuickSetupPart_StepLayoutConfig />;
-  } else if (currentStep === 'step4') {
-    return <AssignerPage />;
   }
   return null;
 };
