@@ -4,9 +4,9 @@ import {
   IStandardFirmwareConfig,
 } from '~/shared';
 import { useHoldKeyIndices } from '~/ui/commonModels';
+import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/store/LayoutGenerator';
 import { useMemoEx } from '~/ui/utils';
 
 function createLayoutFromFirmwareSpecForDisplayDesign(
