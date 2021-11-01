@@ -1,7 +1,7 @@
 import {
   createFallbackPersistKeyboardDesign,
   generateNumberSequence,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
@@ -226,7 +226,7 @@ function fixCoordOrigin(design: IPersistKeyboardDesign, isCentered: boolean) {
 }
 
 export function createLayoutFromFirmwareSpec(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
   layoutOptions: ILayoutGeneratorOptions,
 ): [IPersistKeyboardDesign, IDraftLayoutLabelEntity[]] {
   const design = createFallbackPersistKeyboardDesign();

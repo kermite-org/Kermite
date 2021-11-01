@@ -1,7 +1,7 @@
 import {
   ICustomFirmwareEntry,
   IDeviceSelectionStatus,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   IKeyboardDeviceInfo,
   IProjectLayoutEntry,
   IProjectPackageInfo,
@@ -11,15 +11,16 @@ import {
 import { createFallbackPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
 import { fallbackPersistProfileData } from '~/shared/defs/ProfileData';
 
-export const fallbackStandardKeyboardSpec: IKermiteStandardKeyboardSpec = {
+export const fallbackStandardFirmwareConfig: IStandardFirmwareConfig = {
   baseFirmwareType: 'AvrUnified',
+  boardType: 'ProMicro',
 };
 
 export const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {
   type: 'standard',
   variationId: '',
   firmwareName: '',
-  standardFirmwareConfig: fallbackStandardKeyboardSpec,
+  standardFirmwareConfig: fallbackStandardFirmwareConfig,
 };
 
 export const fallbackCustomFirmwareEntry: ICustomFirmwareEntry = {

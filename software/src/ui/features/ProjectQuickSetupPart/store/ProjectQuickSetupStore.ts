@@ -3,13 +3,14 @@ import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   copyObjectProps,
-  fallbackStandardKeyboardSpec,
+  fallbackStandardFirmwareConfig,
   getNextFirmwareId,
-  IKermiteStandardKeyboardSpec,
   IProjectLayoutEntry,
   IProjectPackageInfo,
+  IStandardFirmwareConfig,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { migrateStandardFirmwareConfig } from '~/shared/loaders';
 import { UiLocalStorage } from '~/ui/base';
 import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import {
@@ -32,7 +33,7 @@ type IState = {
   projectId: string;
   keyboardName: string;
   variationId: string;
-  firmwareConfig: IKermiteStandardKeyboardSpec;
+  firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
@@ -44,7 +45,7 @@ function createDefaultState(): IState {
     projectId: '',
     keyboardName: '',
     variationId: '',
-    firmwareConfig: fallbackStandardKeyboardSpec,
+    firmwareConfig: fallbackStandardFirmwareConfig,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
     isConnectionValid: false,
@@ -106,7 +107,7 @@ const actions = {
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
     state.variationId = getNextFirmwareId([]);
   },
-  writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
+  writeFirmwareConfig(data: IStandardFirmwareConfig) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
@@ -156,7 +157,7 @@ type IPersistData = {
   projectId: string;
   keyboardName: string;
   variationId: string;
-  firmwareConfig: IKermiteStandardKeyboardSpec;
+  firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
 };
 const persistDataRevision = 'QPS2';
@@ -169,6 +170,7 @@ const effects = {
       if (loadedData) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { revision, ...attrs } = loadedData;
+        migrateStandardFirmwareConfig(attrs.firmwareConfig);
         if (revision === persistDataRevision) {
           copyObjectProps(state, attrs);
         }

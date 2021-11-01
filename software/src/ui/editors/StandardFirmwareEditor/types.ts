@@ -1,9 +1,9 @@
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareConfig } from '~/shared';
 
-export type IStandardFirmwareEditValues = IKermiteStandardKeyboardSpec;
+export type IStandardFirmwareEditValues = IStandardFirmwareConfig;
 
 export type IStandardFirmwareEditErrors = {
-  [key in keyof IKermiteStandardKeyboardSpec]?: string;
+  [key in keyof IStandardFirmwareConfig]?: string;
 };
 
 export type IStandardFirmwareMcuType = 'avr' | 'rp';

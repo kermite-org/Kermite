@@ -1,5 +1,5 @@
 import { css, FC, jsx, useMemo } from 'qx';
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareConfig } from '~/shared';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { uiReaders } from '~/ui/store';
 
@@ -29,7 +29,7 @@ export const FirmwareDetailView: FC<Props> = ({ firmwareName }) => {
 };
 
 const StandardFirmwareDetailView: FC<{
-  config: IKermiteStandardKeyboardSpec;
+  config: IStandardFirmwareConfig;
 }> = ({ config }) => {
   return (
     <div>

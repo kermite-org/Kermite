@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import {
   boardAssignsData_proMicro,
@@ -53,13 +53,22 @@ function createBoardAssignsDataEx(
   return { ...base, pinFunctionNames: base.pinNames.map(() => '') };
 }
 
+const boardTypeToAssignsDataSourceMap: Record<
+  IStandardFirmwareBoardType,
+  IBoardPinAssignsData | undefined
+> = {
+  ChipAtMega32U4: undefined,
+  ProMicro: boardAssignsData_proMicro,
+  ChipRP2040: undefined,
+  ProMicroRP2040: boardAssignsData_proMicroRp2040,
+  RpiPico: boardAssignsData_rpiPico,
+};
+
 export function createBoardAssignsData(
-  firmwareConfig: IKermiteStandardKeyboardSpec,
+  firmwareConfig: IStandardFirmwareConfig,
 ): IBoardPinAssignsDataEx | undefined {
   const {
-    useBoardLedsProMicroAvr,
-    useBoardLedsProMicroRp,
-    useBoardLedsRpiPico,
+    boardType,
     useMatrixKeyScanner,
     matrixColumnPins,
     matrixRowPins,
@@ -77,16 +86,7 @@ export function createBoardAssignsData(
   const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
   const mcuType = getMcuType(baseFirmwareType);
 
-  let source: IBoardPinAssignsData | undefined;
-  if (mcuType === 'avr' && useBoardLedsProMicroAvr) {
-    source = boardAssignsData_proMicro;
-  }
-  if (mcuType === 'rp' && useBoardLedsProMicroRp) {
-    source = boardAssignsData_proMicroRp2040;
-  }
-  if (mcuType === 'rp' && useBoardLedsRpiPico) {
-    source = boardAssignsData_rpiPico;
-  }
+  const source = boardType && boardTypeToAssignsDataSourceMap[boardType];
   if (!source) {
     return undefined;
   }

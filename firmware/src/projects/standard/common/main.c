@@ -11,11 +11,19 @@
 #include "km0/visualizer/oledDisplay.h"
 #include "km0/visualizer/rgbLighting.h"
 #include "km0/wrapper/generalKeyboard.h"
+
+enum {
+  BoardType_None = 0,
+  BoardType_ChipAtMega32U4 = 1,
+  BoardType_ProMicro = 2,
+  BoardType_ChipRP2040 = 3,
+  BoardType_ProMicroRP2040 = 4,
+  BoardType_RpiPico = 5
+};
 typedef struct {
   uint8_t dataHeader[5];
-  bool useBoardLedsProMicroAvr;
-  bool useBoardLedsProMicroRp;
-  bool useBoardLedsRpiPico;
+  uint8_t boardType;
+  bool useBoardLeds;
   bool useDebugUart;
   bool useMatrixKeyScanner;
   bool useDirectWiredKeyScanner;
@@ -33,9 +41,8 @@ typedef struct {
 
 KermiteKeyboardDefinitionData defs = {
   .dataHeader = { '$', 'K', 'M', 'D', 'F' },
-  .useBoardLedsProMicroAvr = false,
-  .useBoardLedsProMicroRp = false,
-  .useBoardLedsRpiPico = false,
+  .boardType = 0,
+  .useBoardLeds = false,
   .useDebugUart = false,
   .useMatrixKeyScanner = false,
   .useDirectWiredKeyScanner = false,
@@ -54,14 +61,16 @@ KermiteKeyboardDefinitionData defs = {
 static EncoderConfig encoderConfigs[3] = { 0 };
 
 int main() {
-  if (defs.useBoardLedsProMicroAvr) {
-    boardIoImpl_setupLeds_proMicroAvr();
-  }
-  if (defs.useBoardLedsProMicroRp) {
-    boardIoImpl_setupLeds_proMicroRp();
-  }
-  if (defs.useBoardLedsRpiPico) {
-    boardIoImpl_setupLeds_rpiPico();
+  if (defs.useBoardLeds) {
+    if (defs.boardType == BoardType_ProMicro) {
+      boardIoImpl_setupLeds_proMicroAvr();
+    }
+    if (defs.boardType == BoardType_ProMicroRP2040) {
+      boardIoImpl_setupLeds_proMicroRp();
+    }
+    if (defs.boardType == BoardType_RpiPico) {
+      boardIoImpl_setupLeds_rpiPico();
+    }
   }
   if (defs.useDebugUart) {
     debugUart_initialize(38400);

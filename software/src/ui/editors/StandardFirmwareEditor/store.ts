@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { fallbackStandardKeyboardSpec } from '~/shared';
+import { fallbackStandardFirmwareConfig } from '~/shared';
 import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import {
   IStandardFirmwareEditErrors,
@@ -16,8 +16,8 @@ type IStandardFirmwareEditState = {
 
 const state: IStandardFirmwareEditState = {
   isNewConfig: false,
-  originalValues: fallbackStandardKeyboardSpec,
-  editValues: fallbackStandardKeyboardSpec,
+  originalValues: fallbackStandardFirmwareConfig,
+  editValues: fallbackStandardFirmwareConfig,
 };
 
 const selectors = {
