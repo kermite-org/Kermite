@@ -3,14 +3,13 @@ import { colors } from '~/ui/base';
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
 import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
-import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
+import { LayoutConfigurationSectionContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
-
-  const { firmwareConfig } = projectQuickSetupStore.state;
+  const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
   return (
     <div class={style}>
       <div class="top-row">
@@ -29,7 +28,10 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
             class="layout-config-section"
             qxIf={false}
           >
-            <LayoutConfigurationSection configurable={false} />
+            <LayoutConfigurationSectionContent
+              firmwareConfig={firmwareConfig}
+              layoutOptions={layoutOptions}
+            />
           </SectionPanel>
           <SectionPanel
             title="Board Pin Assigns View"

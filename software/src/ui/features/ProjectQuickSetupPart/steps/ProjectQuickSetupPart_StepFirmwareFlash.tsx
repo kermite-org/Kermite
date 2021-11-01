@@ -5,8 +5,6 @@ import {
   SectionPanel,
   SectionPanelWithCenterContent,
 } from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
-import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
-import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
@@ -16,6 +14,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   );
   const { variationId } = projectQuickSetupStore.state;
   const contentWidth = 500;
+
   return (
     <div class={style}>
       <div class="row first-row">
@@ -29,14 +28,6 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
             variationId={variationId}
           />
         </SectionPanelWithCenterContent>
-        <SectionPanel
-          title="Layout Preview"
-          class="layout-config-panel"
-          qxIf={false}
-        >
-          <LayoutConfigurationSectionRawContent class="layout-view" />
-          <LayoutGeneratorOptionsPart class="options-part" />
-        </SectionPanel>
       </div>
       <div class="row second-row">
         <SectionPanelWithCenterContent

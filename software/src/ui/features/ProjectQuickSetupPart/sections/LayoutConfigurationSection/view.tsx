@@ -1,39 +1,15 @@
-import { css, FC, jsx } from 'qx';
+import { FC, jsx } from 'qx';
+import { IStandardFirmwareConfig } from '~/shared';
 import { LayoutPreviewShapeView } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeView';
+import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { useLayoutConfigurationSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/model';
-import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
 
-export const LayoutConfigurationSection: FC<{ configurable: boolean }> = ({
-  configurable,
-}) => {
+export const LayoutConfigurationSectionContent: FC<{
+  firmwareConfig: IStandardFirmwareConfig;
+  layoutOptions: ILayoutGeneratorOptions;
+}> = ({ firmwareConfig, layoutOptions }) => {
   const { design, labelEntities, holdKeyIndices } =
-    useLayoutConfigurationSectionModel();
-  const style = css`
-    > .shape-view {
-      height: 200px;
-    }
-
-    > .options-part {
-      margin-top: 10px;
-    }
-  `;
-  return (
-    <div class={style}>
-      <LayoutPreviewShapeView
-        keyboardDesign={design}
-        labelEntities={labelEntities}
-        holdKeyIndices={holdKeyIndices}
-        class="shape-view"
-        showLabels={configurable}
-      />
-      <LayoutGeneratorOptionsPart class="options-part" qxIf={configurable} />
-    </div>
-  );
-};
-
-export const LayoutConfigurationSectionRawContent: FC = () => {
-  const { design, labelEntities, holdKeyIndices } =
-    useLayoutConfigurationSectionModel();
+    useLayoutConfigurationSectionModel(firmwareConfig, layoutOptions);
   return (
     <LayoutPreviewShapeView
       keyboardDesign={design}
