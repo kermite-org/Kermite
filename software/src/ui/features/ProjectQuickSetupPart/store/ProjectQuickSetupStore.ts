@@ -39,6 +39,7 @@ type IState = {
   isConfigValid: boolean;
   isConnectionValid: boolean;
   isFirmwareFlashPanelOpen: boolean;
+  rawEditValues: IStandardFirmwareConfig;
 };
 
 function createDefaultState(): IState {
@@ -51,6 +52,7 @@ function createDefaultState(): IState {
     isConfigValid: true,
     isConnectionValid: false,
     isFirmwareFlashPanelOpen: false,
+    rawEditValues: fallbackStandardFirmwareConfig,
   };
 }
 
@@ -212,6 +214,7 @@ const effects = {
       if (!isValid) {
         state.isConfigValid = false;
       }
+      state.rawEditValues = editValues;
     }, [editValues]);
   },
 };

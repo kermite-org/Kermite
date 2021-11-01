@@ -10,7 +10,8 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/stor
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
-  const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
+  const { firmwareConfig, layoutOptions, rawEditValues } =
+    projectQuickSetupStore.state;
   const { resetConfigurations } = projectQuickSetupStore.actions;
   const { keyboardName } = projectQuickSetupStore.state;
   const { keyboardNameValidationError } = projectQuickSetupStore.readers;
@@ -47,7 +48,7 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
             title="Board Pin Assigns View"
             class="board-pin-assigns-section"
           >
-            <ControllerPinAssignsSection firmwareConfig={firmwareConfig} />
+            <ControllerPinAssignsSection firmwareConfig={rawEditValues} />
           </WizardSectionPanel>
         </div>
       </div>
