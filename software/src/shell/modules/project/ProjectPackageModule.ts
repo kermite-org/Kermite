@@ -54,7 +54,7 @@ const projectPackageModuleHelper = {
 
 export const projectPackageModule = createCoreModule({
   async project_loadAllProjectPackages() {
-    remoteResourceUpdater_updateRemoteProjectPackages();
+    await remoteResourceUpdater_updateRemoteProjectPackages();
     const allProjectPackageInfos =
       await projectPackageProvider.getAllProjectPackageInfos();
     commitCoreState({ allProjectPackageInfos });
