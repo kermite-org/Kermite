@@ -20,11 +20,7 @@ import {
 import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
 import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStoreHelpers';
-import {
-  dispatchCoreAction,
-  globalSettingsWriter,
-  uiActions,
-} from '~/ui/store';
+import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
 
 const constants = {
   firmwareName: 'default',
@@ -148,7 +144,6 @@ const actions = {
         presetSpec: { type: 'blank', layoutName: 'default' },
       },
     });
-    uiActions.navigateTo('/assigner');
   },
   openFirmwareFlashPanel() {
     state.isFirmwareFlashPanelOpen = true;
