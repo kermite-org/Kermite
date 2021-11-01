@@ -1,9 +1,9 @@
 import { css, FC, jsx } from 'qx';
+import { WizardFooterBar } from '~/ui/features/ProjectQuickSetupPart/frames/WizardFooterBar';
+import { WizardMainContent } from '~/ui/features/ProjectQuickSetupPart/frames/WizardMainContent';
+import { WizardTopBar } from '~/ui/features/ProjectQuickSetupPart/frames/WizardTopBar';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupWizardStore';
-import { WizardFooterBar } from '~/ui/features/ProjectQuickSetupPart/wizard/WizardFooterBar';
-import { WizardMainContent } from '~/ui/features/ProjectQuickSetupPart/wizard/WizardMainContent';
-import { WizardTopBar } from '~/ui/features/ProjectQuickSetupPart/wizard/WizardTopBar';
 
 export const ProjectQuickSetupPageImpl: FC = () => {
   projectQuickSetupStore.effects.useEditDataPersistence();
