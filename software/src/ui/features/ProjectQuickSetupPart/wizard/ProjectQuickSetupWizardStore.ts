@@ -25,21 +25,17 @@ const readers = {
   },
   canGoToStep(_step: IProjectQuickSetupStep): boolean {
     const { currentStep } = readers;
-    const { isConfigValid } = projectQuickSetupStore.state;
+    const { isConfigValid, keyboardName } = projectQuickSetupStore.state;
     if (currentStep === 'step1') {
-      return isConfigValid;
+      return isConfigValid && !!keyboardName;
     } else {
       return true;
     }
   },
   get canGoNext(): boolean {
     const { currentStep } = readers;
-    const { isConfigValid } = projectQuickSetupStore.state;
-    if (currentStep === 'step1') {
-      return isConfigValid;
-    } else {
-      return true;
-    }
+    const nextStep = helpers.shiftStep(currentStep, 1);
+    return (nextStep && readers.canGoToStep(nextStep)) || false;
   },
 };
 
