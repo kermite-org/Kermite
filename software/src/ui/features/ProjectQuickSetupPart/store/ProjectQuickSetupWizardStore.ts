@@ -25,50 +25,40 @@ const readers = {
   },
   canGoToStep(_step: IProjectQuickSetupStep): boolean {
     const { currentStep } = readers;
-    const { isConfigValid } = projectQuickSetupStore.state;
     if (currentStep === 'step1') {
-      return isConfigValid;
+      const { isConfigValid, keyboardName } = projectQuickSetupStore.state;
+      const { keyboardNameValidationError } = projectQuickSetupStore.readers;
+      return isConfigValid && !!keyboardName && !keyboardNameValidationError;
     } else {
       return true;
     }
   },
   get canGoNext(): boolean {
     const { currentStep } = readers;
-    const { isConfigValid } = projectQuickSetupStore.state;
-    if (currentStep === 'step1') {
-      return isConfigValid;
-    } else {
+    if (currentStep === 'step3') {
       return true;
     }
+    const nextStep = helpers.shiftStep(currentStep, 1);
+    return (nextStep && readers.canGoToStep(nextStep)) || false;
   },
 };
 
 const actions = {
-  gotoStep(step: IProjectQuickSetupStep) {
+  shiftStepTo(step: IProjectQuickSetupStep) {
     uiActions.navigateTo(`/projectQuickSetup/${step}`);
   },
-  cancelSteps() {
-    uiActions.navigateTo('/home');
-  },
-  completeSteps() {
-    uiActions.navigateTo('/assigner');
-  },
-  shiftStepPrevious() {
+  async shiftStep(dir: number) {
     const { currentStep } = readers;
-    const previousStep = helpers.shiftStep(currentStep, -1);
-    if (previousStep) {
-      actions.gotoStep(previousStep);
-    }
-  },
-  async shiftStepNext() {
-    const { currentStep } = readers;
-    if (currentStep === 'step1') {
-      actions.gotoStep('step2');
-    } else if (currentStep === 'step2') {
-      actions.gotoStep('step3');
-    } else if (currentStep === 'step3') {
+    if (currentStep === 'step1' && dir === -1) {
+      uiActions.navigateTo('/home');
+    } else if (currentStep === 'step3' && dir === 1) {
       await projectQuickSetupStore.actions.createProfile();
-      actions.gotoStep('step4');
+      uiActions.navigateTo('/assigner');
+    } else {
+      const nextStep = helpers.shiftStep(readers.currentStep, dir);
+      if (nextStep) {
+        actions.shiftStepTo(nextStep);
+      }
     }
   },
 };

@@ -1,4 +1,4 @@
-import { IBoardPinAssignsData } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/types';
+import { IBoardPinAssignsData } from '~/ui/fabrics/ControllerPinAssignsSection/types';
 
 export const boardAssignsData_proMicro: IBoardPinAssignsData = {
   unitPixels: 18,

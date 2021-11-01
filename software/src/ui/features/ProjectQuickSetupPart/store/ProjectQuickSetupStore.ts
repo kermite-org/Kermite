@@ -9,21 +9,18 @@ import {
   IProjectPackageInfo,
   IStandardFirmwareConfig,
   IStandardFirmwareEntry,
+  validateResourceName,
 } from '~/shared';
 import { migrateStandardFirmwareConfig } from '~/shared/loaders';
-import { UiLocalStorage } from '~/ui/base';
-import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import {
   fallbackLayoutGeneratorOptions,
   ILayoutGeneratorOptions,
-} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/store/LayoutGenerator';
+  UiLocalStorage,
+} from '~/ui/base';
+import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStoreHelpers';
-import {
-  dispatchCoreAction,
-  globalSettingsWriter,
-  uiActions,
-} from '~/ui/store';
+import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
 
 const constants = {
   firmwareName: 'default',
@@ -38,6 +35,7 @@ type IState = {
   isConfigValid: boolean;
   isConnectionValid: boolean;
   isFirmwareFlashPanelOpen: boolean;
+  rawEditValues: IStandardFirmwareConfig;
 };
 
 function createDefaultState(): IState {
@@ -50,12 +48,16 @@ function createDefaultState(): IState {
     isConfigValid: true,
     isConnectionValid: false,
     isFirmwareFlashPanelOpen: false,
+    rawEditValues: fallbackStandardFirmwareConfig,
   };
 }
 
 const state: IState = createDefaultState();
 
 const readers = {
+  get keyboardNameValidationError(): string | undefined {
+    return validateResourceName(state.keyboardName, 'keyboard name');
+  },
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareName } = constants;
     const {
@@ -142,7 +144,6 @@ const actions = {
         presetSpec: { type: 'blank', layoutName: 'default' },
       },
     });
-    uiActions.navigateTo('/assigner');
   },
   openFirmwareFlashPanel() {
     state.isFirmwareFlashPanelOpen = true;
@@ -208,6 +209,7 @@ const effects = {
       if (!isValid) {
         state.isConfigValid = false;
       }
+      state.rawEditValues = editValues;
     }, [editValues]);
   },
 };

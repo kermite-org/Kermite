@@ -3,19 +3,18 @@ import {
   IDisplayKeyboardDesign,
   IStandardFirmwareConfig,
 } from '~/shared';
+import { ILayoutGeneratorOptions } from '~/ui/base';
 import { useHoldKeyIndices } from '~/ui/commonModels';
+import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/store/LayoutGenerator';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 import { useMemoEx } from '~/ui/utils';
 
 function createLayoutFromFirmwareSpecForDisplayDesign(
-  spec: IStandardFirmwareConfig,
+  firmwareConfig: IStandardFirmwareConfig,
   layoutOptions: ILayoutGeneratorOptions,
 ): [IDisplayKeyboardDesign, IDraftLayoutLabelEntity[]] {
   const [design, labelEntities] = createLayoutFromFirmwareSpec(
-    spec,
+    firmwareConfig,
     layoutOptions,
   );
 
@@ -30,8 +29,10 @@ function createLayoutFromFirmwareSpecForDisplayDesign(
   return [displayDesign, labelEntities];
 }
 
-export function useLayoutConfigurationSectionModel() {
-  const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
+export function useLayoutConfigurationSectionModel(
+  firmwareConfig: IStandardFirmwareConfig,
+  layoutOptions: ILayoutGeneratorOptions,
+) {
   const [design, labelEntities] = useMemoEx(
     createLayoutFromFirmwareSpecForDisplayDesign,
     [firmwareConfig, layoutOptions],

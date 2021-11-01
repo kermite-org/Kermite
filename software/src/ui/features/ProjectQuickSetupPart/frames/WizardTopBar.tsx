@@ -2,25 +2,31 @@ import { css, FC, jsx } from 'qx';
 import { colors, Link } from '~/ui/base';
 import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
 import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/wizard/ProjectQuickSetupWizardStore';
+
+type Props = {
+  currentStep: IProjectQuickSetupStep;
+  canGoToStep(step: IProjectQuickSetupStep): boolean;
+  shiftStepTo(step: IProjectQuickSetupStep): void;
+};
 
 const stepInstructionMap: { [step in IProjectQuickSetupStep]: string } = {
   step1: 'Firmware Configuration',
   step2: 'Device Setup',
   step3: 'Layout Template Settings',
-  step4: 'Profile Setup',
 };
 
-export const WizardTopBar: FC = () => {
-  const { currentStep, canGoToStep } = projectQuickSetupWizardStore.readers;
-  const { gotoStep } = projectQuickSetupWizardStore.actions;
+export const WizardTopBar: FC<Props> = ({
+  currentStep,
+  canGoToStep,
+  shiftStepTo,
+}) => {
   const instructionText = stepInstructionMap[currentStep];
   return (
     <div css={style}>
       <div>
         {currentStep}: {instructionText}
       </div>
-      {[1, 2, 3, 4].map((i) => {
+      {[1, 2, 3].map((i) => {
         const step = `step${i}` as IProjectQuickSetupStep;
         const isCurrentStep = step === currentStep;
         return (
@@ -28,7 +34,7 @@ export const WizardTopBar: FC = () => {
             key={i}
             text={`step${i}`}
             active={isCurrentStep}
-            handler={() => gotoStep(step)}
+            handler={() => shiftStepTo(step)}
             disabled={!isCurrentStep && !canGoToStep(step)}
           />
         );

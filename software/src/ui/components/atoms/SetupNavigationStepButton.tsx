@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
+import { uiTheme } from '~/ui/base';
 
 type Props = {
   handler?: () => void;
@@ -14,17 +14,23 @@ export const SetupNavigationStepButton: FC<Props> = ({
   disabled,
   active,
 }) => (
-  <ButtonBase
-    className={(active && '--active') || undefined}
+  <button
+    classNames={[style, active && '--active']}
     onClick={handler}
-    extraCss={style}
     disabled={disabled}
   >
     {text}
-  </ButtonBase>
+  </button>
 );
 
 const style = css`
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: ${uiTheme.commonTransitionSpec};
   background: #def;
   border: solid 1px #47a;
   color: #47a;
@@ -32,14 +38,17 @@ const style = css`
   width: 60px;
   height: 24px;
 
-  transition: all 0.15s;
+  &.--active {
+    background: #adf;
+  }
 
   &:hover {
     background: #adf;
-    opacity: 1;
   }
 
-  &.--active {
-    background: #adf;
+  &:disabled {
+    pointer-events: none;
+    cursor: inherit;
+    opacity: 0.5;
   }
 `;
