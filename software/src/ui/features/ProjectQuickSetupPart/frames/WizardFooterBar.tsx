@@ -13,35 +13,22 @@ export const WizardFooterBar: FC<Props> = ({ currentStep, canGoNext }) => {
   const isFirstStep = currentStep === 'step1';
   const isFinalStep = currentStep === 'step3';
 
-  const { cancelSteps, shiftStepPrevious, shiftStepNext, completeSteps } =
-    projectQuickSetupWizardStore.actions;
+  const { shiftStep } = projectQuickSetupWizardStore.actions;
+
+  const backText = isFirstStep ? 'cancel' : 'back';
+  const nextText = isFinalStep ? 'complete' : 'next';
 
   return (
     <div css={style}>
       <SetupNavigationStepShiftButton
-        onClick={cancelSteps}
-        text="cancel"
-        qxIf={isFirstStep}
+        onClick={() => shiftStep(-1)}
+        text={backText}
         small={true}
       />
       <SetupNavigationStepShiftButton
-        onClick={shiftStepPrevious}
-        text="back"
-        qxIf={!isFirstStep}
-        small={true}
-      />
-      <SetupNavigationStepShiftButton
-        onClick={shiftStepNext}
-        text="next"
+        onClick={() => shiftStep(1)}
+        text={nextText}
         disabled={!canGoNext}
-        qxIf={!isFinalStep}
-        small={true}
-      />
-      <SetupNavigationStepShiftButton
-        onClick={completeSteps}
-        text="complete"
-        disabled={!canGoNext}
-        qxIf={isFinalStep}
         small={true}
       />
     </div>

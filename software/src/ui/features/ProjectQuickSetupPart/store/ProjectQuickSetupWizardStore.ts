@@ -44,28 +44,21 @@ const readers = {
 };
 
 const actions = {
-  async shiftStepTo(step: IProjectQuickSetupStep) {
-    if (step === 'step3') {
-      await projectQuickSetupStore.actions.createProfile();
-    }
+  shiftStepTo(step: IProjectQuickSetupStep) {
     uiActions.navigateTo(`/projectQuickSetup/${step}`);
   },
-  cancelSteps() {
-    uiActions.navigateTo('/home');
-  },
-  completeSteps() {
-    uiActions.navigateTo('/assigner');
-  },
-  shiftStepPrevious() {
-    const previousStep = helpers.shiftStep(readers.currentStep, -1);
-    if (previousStep) {
-      actions.shiftStepTo(previousStep);
-    }
-  },
-  async shiftStepNext() {
-    const nextStep = helpers.shiftStep(readers.currentStep, 1);
-    if (nextStep) {
-      await actions.shiftStepTo(nextStep);
+  async shiftStep(dir: number) {
+    const { currentStep } = readers;
+    if (currentStep === 'step1' && dir === -1) {
+      uiActions.navigateTo('/home');
+    } else if (currentStep === 'step3' && dir === 1) {
+      await projectQuickSetupStore.actions.createProfile();
+      uiActions.navigateTo('/assigner');
+    } else {
+      const nextStep = helpers.shiftStep(readers.currentStep, dir);
+      if (nextStep) {
+        actions.shiftStepTo(nextStep);
+      }
     }
   },
 };
