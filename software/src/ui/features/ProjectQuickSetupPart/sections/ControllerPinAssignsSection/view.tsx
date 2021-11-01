@@ -1,5 +1,8 @@
 import { css, FC, jsx } from 'qx';
-import { generateNumberSequence as seq } from '~/shared';
+import {
+  generateNumberSequence as seq,
+  IStandardFirmwareConfig,
+} from '~/shared';
 import {
   svgImage_boardProMicro,
   svgImage_boardProMicroRp2040,
@@ -10,7 +13,6 @@ import {
   IBoardImageSig,
   IBoardPinAssignsDataEx,
 } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/types';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 import { useMemoEx } from '~/ui/utils';
 
 function renderPins(
@@ -85,10 +87,10 @@ const BoardPinAssignsView: FC<{ data: IBoardPinAssignsDataEx }> = ({
   );
 };
 
-export const ControllerPinAssignsSection: FC = () => {
-  const boardAssignsData = useMemoEx(createBoardAssignsData, [
-    projectQuickSetupStore.state.firmwareConfig,
-  ]);
+export const ControllerPinAssignsSection: FC<{
+  firmwareConfig: IStandardFirmwareConfig;
+}> = ({ firmwareConfig }) => {
+  const boardAssignsData = useMemoEx(createBoardAssignsData, [firmwareConfig]);
   return (
     <div>
       {boardAssignsData && <BoardPinAssignsView data={boardAssignsData} />}

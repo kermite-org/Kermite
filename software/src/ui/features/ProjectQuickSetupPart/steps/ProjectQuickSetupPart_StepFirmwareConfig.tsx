@@ -9,6 +9,8 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/stor
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
+
+  const { firmwareConfig } = projectQuickSetupStore.state;
   return (
     <div class={style}>
       <div class="top-row">
@@ -33,7 +35,7 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
             title="Board Pin Assigns View"
             class="board-pin-assigns-section"
           >
-            <ControllerPinAssignsSection />
+            <ControllerPinAssignsSection firmwareConfig={firmwareConfig} />
           </SectionPanel>
         </div>
       </div>
