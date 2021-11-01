@@ -1,19 +1,29 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
+import { GeneralButton } from '~/ui/components';
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
 import { LayoutConfigurationSectionContent } from '~/ui/fabrics/LayoutConfigurationSection/view';
 import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
-import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
+import { ProjectKeyboardNameEditPart } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectKeyboardNameEditPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
   const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
+  const { resetConfigurations } = projectQuickSetupStore.actions;
+  const { keyboardName } = projectQuickSetupStore.state;
+  const { keyboardNameValidationError } = projectQuickSetupStore.readers;
+  const { setKeyboardName } = projectQuickSetupStore.actions;
   return (
     <div class={style}>
       <div class="top-row">
-        <ProjectConfigurationSection />
+        <ProjectKeyboardNameEditPart
+          keyboardName={keyboardName}
+          setKeyboardName={setKeyboardName}
+          validationError={keyboardNameValidationError}
+        />
+        <GeneralButton onClick={resetConfigurations}>reset</GeneralButton>
       </div>
       <div class="main-row">
         <SectionPanel
@@ -53,6 +63,11 @@ const style = css`
 
   > .top-row {
     flex-shrink: 0;
+    border: solid 1px ${colors.clPrimary};
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
   }
 
   > .main-row {
