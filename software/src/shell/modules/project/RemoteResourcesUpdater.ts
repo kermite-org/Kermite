@@ -63,6 +63,9 @@ export async function remoteResourceUpdater_updateRemoteProjectPackages() {
     'data/remote_projects',
   );
   await fsxEnsureFolderExists(remotePackagesFolderPath);
+
+  console.log('update remote project packages');
+
   const localDigestMap = await loadLocalDigestMap(remotePackagesFolderPath);
   const remoteDigestMap = await loadRemoteDigestMap(onlineResourcesBaseUrl);
 
@@ -88,12 +91,12 @@ export async function remoteResourceUpdater_updateRemoteProjectPackages() {
     }),
   );
   if (updatedFileNames.length === 0 && removedFileNames.length === 0) {
-    console.log('project packages are up to date');
+    console.log('all project packages are up to date');
   }
   if (updatedFileNames.length > 0) {
     console.log(`${updatedFileNames.length} project packages updated`);
   }
   if (removedFileNames.length > 0) {
-    console.log(`${updatedFileNames.length} project packages removed`);
+    console.log(`${removedFileNames.length} project packages removed`);
   }
 }
