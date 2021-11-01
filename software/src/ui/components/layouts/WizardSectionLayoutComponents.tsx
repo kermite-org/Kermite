@@ -48,14 +48,17 @@ export const WizardSectionPanelWithCenterContent: FC<{
   title: string;
   children?: QxChildren;
   contentWidth: number;
-}> = ({ title, children, contentWidth }) => {
+  contentHeight: number;
+}> = ({ title, children, contentWidth, contentHeight }) => {
   const style = css`
     background: ${colors.clPanelBox};
     border: solid 1px ${colors.clPrimary};
     display: flex;
     justify-content: center;
+    align-items: center;
     > .content {
       width: ${contentWidth}px;
+      height: ${contentHeight}px;
       padding: 7px;
 
       > h2 {
