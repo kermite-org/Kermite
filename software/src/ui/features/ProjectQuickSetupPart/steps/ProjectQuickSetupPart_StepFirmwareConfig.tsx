@@ -1,11 +1,11 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
+import { WizardSectionPanel } from '~/ui/components/layouts';
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
 import { LayoutConfigurationSectionContent } from '~/ui/fabrics/LayoutConfigurationSection/view';
 import { ProjectKeyboardNameEditPart } from '~/ui/fabrics/ProjectKeyboardNameEditPart/view';
-import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
@@ -26,14 +26,14 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
         <GeneralButton onClick={resetConfigurations}>reset</GeneralButton>
       </div>
       <div class="main-row">
-        <SectionPanel
+        <WizardSectionPanel
           title="Firmware Configuration"
           class="firmware-config-section"
         >
           <StandardFirmwareEditor />
-        </SectionPanel>
+        </WizardSectionPanel>
         <div class="right-column">
-          <SectionPanel
+          <WizardSectionPanel
             title="Layout Preview"
             class="layout-config-section"
             qxIf={false}
@@ -42,13 +42,13 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
               firmwareConfig={firmwareConfig}
               layoutOptions={layoutOptions}
             />
-          </SectionPanel>
-          <SectionPanel
+          </WizardSectionPanel>
+          <WizardSectionPanel
             title="Board Pin Assigns View"
             class="board-pin-assigns-section"
           >
             <ControllerPinAssignsSection firmwareConfig={firmwareConfig} />
-          </SectionPanel>
+          </WizardSectionPanel>
         </div>
       </div>
     </div>

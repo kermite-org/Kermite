@@ -1,10 +1,10 @@
 import { css, FC, jsx, useMemo } from 'qx';
+import {
+  WizardSectionPanel,
+  WizardSectionPanelWithCenterContent,
+} from '~/ui/components/layouts';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
-import {
-  SectionPanel,
-  SectionPanelWithCenterContent,
-} from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
@@ -18,7 +18,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   return (
     <div class={style}>
       <div class="row first-row">
-        <SectionPanelWithCenterContent
+        <WizardSectionPanelWithCenterContent
           title="Device Connection Status"
           class="device-connection-panel"
           contentWidth={contentWidth}
@@ -27,10 +27,10 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
             projectInfo={projectInfo}
             variationId={variationId}
           />
-        </SectionPanelWithCenterContent>
+        </WizardSectionPanelWithCenterContent>
       </div>
       <div class="row second-row">
-        <SectionPanelWithCenterContent
+        <WizardSectionPanelWithCenterContent
           title="Flash Firmware"
           class="firmware-flash-panel"
           contentWidth={contentWidth}
@@ -39,12 +39,12 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
             projectInfo={projectInfo}
             variationId={variationId}
           />
-        </SectionPanelWithCenterContent>
-        <SectionPanel
+        </WizardSectionPanelWithCenterContent>
+        <WizardSectionPanel
           title="Parameters"
           class="panel parameters-panel"
           qxIf={false}
-        ></SectionPanel>
+        ></WizardSectionPanel>
       </div>
     </div>
   );
