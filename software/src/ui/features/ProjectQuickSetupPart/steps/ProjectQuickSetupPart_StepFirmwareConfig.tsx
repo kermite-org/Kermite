@@ -4,8 +4,8 @@ import { GeneralButton } from '~/ui/components';
 import { StandardFirmwareEditor } from '~/ui/editors';
 import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
 import { LayoutConfigurationSectionContent } from '~/ui/fabrics/LayoutConfigurationSection/view';
+import { ProjectKeyboardNameEditPart } from '~/ui/fabrics/ProjectKeyboardNameEditPart/view';
 import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
-import { ProjectKeyboardNameEditPart } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectKeyboardNameEditPart/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
