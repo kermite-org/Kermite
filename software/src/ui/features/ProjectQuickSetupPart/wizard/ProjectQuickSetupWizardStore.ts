@@ -25,9 +25,10 @@ const readers = {
   },
   canGoToStep(_step: IProjectQuickSetupStep): boolean {
     const { currentStep } = readers;
-    const { isConfigValid, keyboardName } = projectQuickSetupStore.state;
     if (currentStep === 'step1') {
-      return isConfigValid && !!keyboardName;
+      const { isConfigValid, keyboardName } = projectQuickSetupStore.state;
+      const { keyboardNameValidationError } = projectQuickSetupStore.readers;
+      return isConfigValid && !!keyboardName && !keyboardNameValidationError;
     } else {
       return true;
     }

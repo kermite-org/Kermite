@@ -5,6 +5,7 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/stor
 
 export const ProjectConfigurationSection: FC = () => {
   const { keyboardName } = projectQuickSetupStore.state;
+  const { keyboardNameValidationError } = projectQuickSetupStore.readers;
   const { setKeyboardName, resetConfigurations } =
     projectQuickSetupStore.actions;
 
@@ -12,13 +13,12 @@ export const ProjectConfigurationSection: FC = () => {
     <div class={style}>
       <div class="edit-part">
         <div className="field-name">Keyboard Name</div>
-        <div>
-          <GeneralInput
-            value={keyboardName}
-            setValue={setKeyboardName}
-            width={200}
-          />
-        </div>
+        <GeneralInput
+          value={keyboardName}
+          setValue={setKeyboardName}
+          width={200}
+        />
+        <div class="error">{keyboardNameValidationError}</div>
       </div>
       <div>
         <GeneralButton onClick={resetConfigurations}>reset</GeneralButton>
@@ -40,6 +40,10 @@ const style = css`
 
     > .field-name {
       margin-right: 10px;
+    }
+
+    > .error {
+      color: red;
     }
   }
 `;

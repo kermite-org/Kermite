@@ -9,6 +9,7 @@ import {
   IProjectPackageInfo,
   IStandardFirmwareConfig,
   IStandardFirmwareEntry,
+  validateResourceName,
 } from '~/shared';
 import { migrateStandardFirmwareConfig } from '~/shared/loaders';
 import { UiLocalStorage } from '~/ui/base';
@@ -56,6 +57,9 @@ function createDefaultState(): IState {
 const state: IState = createDefaultState();
 
 const readers = {
+  get keyboardNameValidationError(): string | undefined {
+    return validateResourceName(state.keyboardName, 'keyboard name');
+  },
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareName } = constants;
     const {
