@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { StandardFirmwareEditor } from '~/ui/editors';
+import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
 import { SectionPanel } from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
-import { ControllerPinAssignsSection } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/view';
 import { LayoutConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { ProjectConfigurationSection } from '~/ui/features/ProjectQuickSetupPart/sections/ProjectConfigurationSection/view';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';

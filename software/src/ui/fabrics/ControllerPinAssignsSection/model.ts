@@ -4,11 +4,11 @@ import {
   boardAssignsData_proMicro,
   boardAssignsData_proMicroRp2040,
   boardAssignsData_rpiPico,
-} from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/data';
+} from '~/ui/fabrics/ControllerPinAssignsSection/data';
 import {
   IBoardPinAssignsData,
   IBoardPinAssignsDataEx,
-} from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/types';
+} from '~/ui/fabrics/ControllerPinAssignsSection/types';
 
 function pushPinFunctionName(
   base: IBoardPinAssignsDataEx,

@@ -8,11 +8,11 @@ import {
   svgImage_boardProMicroRp2040,
   svgImage_boardRpiPico,
 } from '~/ui/constants';
-import { createBoardAssignsData } from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/model';
+import { createBoardAssignsData } from '~/ui/fabrics/ControllerPinAssignsSection/model';
 import {
   IBoardImageSig,
   IBoardPinAssignsDataEx,
-} from '~/ui/features/ProjectQuickSetupPart/sections/ControllerPinAssignsSection/types';
+} from '~/ui/fabrics/ControllerPinAssignsSection/types';
 import { useMemoEx } from '~/ui/utils';
 
 function renderPins(
