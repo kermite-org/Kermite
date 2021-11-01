@@ -1,11 +1,11 @@
 import { css, FC, jsx, QxChild } from 'qx';
 import { IStandardFirmwareConfig } from '~/shared';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import {
   IWriteLayoutOptionFunc,
   useLayoutGeneratorOptionsPartModel,
-} from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/model';
+} from '~/ui/fabrics/LayoutGeneratorOptionsPart/model';
+import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 
 type Props = {
   firmwareConfig: IStandardFirmwareConfig;

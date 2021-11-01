@@ -1,8 +1,8 @@
 import { FC, jsx } from 'qx';
 import { IStandardFirmwareConfig } from '~/shared';
+import { useLayoutConfigurationSectionModel } from '~/ui/fabrics/LayoutConfigurationSection/model';
 import { LayoutPreviewShapeView } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeView';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { useLayoutConfigurationSectionModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/model';
 
 export const LayoutConfigurationSectionContent: FC<{
   firmwareConfig: IStandardFirmwareConfig;
