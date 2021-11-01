@@ -13,7 +13,7 @@ const stepInstructionMap: { [step in IProjectQuickSetupStep]: string } = {
 
 export const WizardTopBar: FC = () => {
   const { currentStep, canGoToStep } = projectQuickSetupWizardStore.readers;
-  const { gotoStep } = projectQuickSetupWizardStore.actions;
+  const { shiftStepTo } = projectQuickSetupWizardStore.actions;
   const instructionText = stepInstructionMap[currentStep];
   return (
     <div css={style}>
@@ -28,7 +28,7 @@ export const WizardTopBar: FC = () => {
             key={i}
             text={`step${i}`}
             active={isCurrentStep}
-            handler={() => gotoStep(step)}
+            handler={() => shiftStepTo(step)}
             disabled={!isCurrentStep && !canGoToStep(step)}
           />
         );

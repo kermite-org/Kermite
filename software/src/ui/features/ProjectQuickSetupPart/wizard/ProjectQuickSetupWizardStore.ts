@@ -41,7 +41,10 @@ const readers = {
 };
 
 const actions = {
-  gotoStep(step: IProjectQuickSetupStep) {
+  async shiftStepTo(step: IProjectQuickSetupStep) {
+    if (step === 'step4') {
+      await projectQuickSetupStore.actions.createProfile();
+    }
     uiActions.navigateTo(`/projectQuickSetup/${step}`);
   },
   cancelSteps() {
@@ -51,21 +54,15 @@ const actions = {
     uiActions.navigateTo('/assigner');
   },
   shiftStepPrevious() {
-    const { currentStep } = readers;
-    const previousStep = helpers.shiftStep(currentStep, -1);
+    const previousStep = helpers.shiftStep(readers.currentStep, -1);
     if (previousStep) {
-      actions.gotoStep(previousStep);
+      actions.shiftStepTo(previousStep);
     }
   },
   async shiftStepNext() {
-    const { currentStep } = readers;
-    if (currentStep === 'step1') {
-      actions.gotoStep('step2');
-    } else if (currentStep === 'step2') {
-      actions.gotoStep('step3');
-    } else if (currentStep === 'step3') {
-      await projectQuickSetupStore.actions.createProfile();
-      actions.gotoStep('step4');
+    const nextStep = helpers.shiftStep(readers.currentStep, 1);
+    if (nextStep) {
+      await actions.shiftStepTo(nextStep);
     }
   },
 };
