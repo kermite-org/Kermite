@@ -35,6 +35,9 @@ const readers = {
   },
   get canGoNext(): boolean {
     const { currentStep } = readers;
+    if (currentStep === 'step4') {
+      return true;
+    }
     const nextStep = helpers.shiftStep(currentStep, 1);
     return (nextStep && readers.canGoToStep(nextStep)) || false;
   },
