@@ -1,3 +1,5 @@
+export type IProjectQuickSetupStep = 'step1' | 'step2' | 'step3' | 'step4';
+
 export type ILayoutGeneratorOptions = {
   placementOrigin: 'topLeft' | 'center';
   invertX: boolean;
@@ -12,16 +14,4 @@ export const fallbackLayoutGeneratorOptions: ILayoutGeneratorOptions = {
   invertXR: false,
   invertY: false,
   wrapX: -1,
-};
-
-export type IDraftLayoutLabelEntityPinType =
-  | 'itself'
-  | 'rowL'
-  | 'rowR'
-  | 'column';
-
-export type IDraftLayoutLabelEntity = {
-  keyId: string;
-  pinType: IDraftLayoutLabelEntityPinType;
-  pinName: string;
 };

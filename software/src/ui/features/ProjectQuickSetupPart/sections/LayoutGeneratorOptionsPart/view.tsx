@@ -1,8 +1,8 @@
 import { css, FC, jsx, QxChild } from 'qx';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import { useLayoutGeneratorOptionsPartModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/model';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 const FieldRow: FC<{ title: string; children: QxChild }> = ({
   title,

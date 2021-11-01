@@ -1,13 +1,13 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
 import {
   SectionPanel,
   SectionPanelWithCenterContent,
-} from '~/ui/features/ProjectQuickSetupPart/parts/SectionLayoutComponents';
+} from '~/ui/features/ProjectQuickSetupPart/components/SectionLayoutComponents';
 import { LayoutConfigurationSectionRawContent } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutConfigurationSection/view';
 import { LayoutGeneratorOptionsPart } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/view';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   const projectInfo = useMemo(
