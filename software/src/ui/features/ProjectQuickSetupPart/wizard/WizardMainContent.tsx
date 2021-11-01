@@ -1,19 +1,22 @@
 import { FC, jsx } from 'qx';
+import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupPart/steps/ProjectQuickSetupPart_StepLayoutConfig';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/wizard/ProjectQuickSetupWizardStore';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 
-export const WizardMainContent: FC = () => {
-  const { currentStep: step } = projectQuickSetupWizardStore.readers;
-  if (step === 'step1') {
+type Props = {
+  currentStep: IProjectQuickSetupStep;
+};
+
+export const WizardMainContent: FC<Props> = ({ currentStep }) => {
+  if (currentStep === 'step1') {
     return <ProjectQuickSetupPart_StepFirmwareConfig />;
-  } else if (step === 'step2') {
+  } else if (currentStep === 'step2') {
     return <ProjectQuickSetupPart_StepFirmwareFlash />;
-  } else if (step === 'step3') {
+  } else if (currentStep === 'step3') {
     return <ProjectQuickSetupPart_StepLayoutConfig />;
-  } else if (step === 'step4') {
+  } else if (currentStep === 'step4') {
     return <AssignerPage />;
   }
   return null;

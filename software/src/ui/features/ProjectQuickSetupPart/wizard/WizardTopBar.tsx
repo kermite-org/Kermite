@@ -2,7 +2,12 @@ import { css, FC, jsx } from 'qx';
 import { colors, Link } from '~/ui/base';
 import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
 import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/wizard/ProjectQuickSetupWizardStore';
+
+type Props = {
+  currentStep: IProjectQuickSetupStep;
+  canGoToStep(step: IProjectQuickSetupStep): boolean;
+  shiftStepTo(step: IProjectQuickSetupStep): void;
+};
 
 const stepInstructionMap: { [step in IProjectQuickSetupStep]: string } = {
   step1: 'Firmware Configuration',
@@ -11,9 +16,11 @@ const stepInstructionMap: { [step in IProjectQuickSetupStep]: string } = {
   step4: 'Profile Setup',
 };
 
-export const WizardTopBar: FC = () => {
-  const { currentStep, canGoToStep } = projectQuickSetupWizardStore.readers;
-  const { shiftStepTo } = projectQuickSetupWizardStore.actions;
+export const WizardTopBar: FC<Props> = ({
+  currentStep,
+  canGoToStep,
+  shiftStepTo,
+}) => {
   const instructionText = stepInstructionMap[currentStep];
   return (
     <div css={style}>

@@ -1,10 +1,15 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/wizard/ProjectQuickSetupWizardStore';
+import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupWizardStore';
 
-export const WizardFooterBar: FC = () => {
-  const { currentStep, canGoNext } = projectQuickSetupWizardStore.readers;
+type Props = {
+  currentStep: IProjectQuickSetupStep;
+  canGoNext: boolean;
+};
+
+export const WizardFooterBar: FC<Props> = ({ currentStep, canGoNext }) => {
   const isFirstStep = currentStep === 'step1';
   const isFinalStep = currentStep === 'step4';
 
