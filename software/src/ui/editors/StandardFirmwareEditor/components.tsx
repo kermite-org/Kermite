@@ -1,9 +1,12 @@
 import { css, FC, jsx, QxChildren } from 'qx';
-import { ExtractKeysWithType } from '~/shared';
 import { GeneralInput, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditor_fieldValueConverters } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import { standardFirmwareEditStore } from '~/ui/editors/StandardFirmwareEditor/store';
 import {
+  IFlagFieldKey,
+  IIntegerFieldKey,
+  IMultiplePinsFieldKey,
+  ISinglePinFieldKey,
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
 } from '~/ui/editors/StandardFirmwareEditor/types';
@@ -47,26 +50,6 @@ function valueChangeHandler<K extends keyof IStandardFirmwareEditValues>(
     standardFirmwareEditStore.actions.commitValue(key, value);
   };
 }
-
-type IFlagFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  boolean
->;
-
-type ISinglePinsFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  string
->;
-
-type IMultiplePinsFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  string[]
->;
-
-type IIntegerFieldKey = ExtractKeysWithType<
-  Required<IStandardFirmwareEditValues>,
-  number
->;
 
 const ToggleFieldRow: FC<{
   label: string;
@@ -115,7 +98,7 @@ const IntegerFieldRow: FC<{
 
 const SinglePinFieldRow: FC<{
   label: string;
-  fieldKey: ISinglePinsFieldKey;
+  fieldKey: ISinglePinFieldKey;
   editValues: IStandardFirmwareEditValues;
   fieldErrors: IStandardFirmwareEditErrors;
   availabilityKey?: IFlagFieldKey;
