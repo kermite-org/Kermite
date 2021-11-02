@@ -7,8 +7,11 @@ import {
   isNumberInRange,
   IStandardBaseFirmwareType,
   isIncluded,
+  compareArray,
 } from '~/shared';
 import {
+  IMultiplePinsFieldKey,
+  ISinglePinFieldKey,
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
   IStandardFirmwareMcuType,
@@ -26,6 +29,8 @@ const acceptableAvrEncoderPrimaryPins = [0, 1, 2, 3, 4, 5, 6, 7].map(
 const acceptableAvrSingleWirePins = ['PD0', 'PD2'];
 
 const availablePinsRp = generateNumberSequence(30).map((i) => 'GP' + i);
+
+const availablePinsAll = [...availablePinsAvr, ...availablePinsRp];
 
 const subHelpers = {
   validatePin(
@@ -99,6 +104,33 @@ const subHelpers = {
     if (!isNumberInRange(value, min, max)) {
       return `value should be in range ${min}~${max}`;
     }
+  },
+  autoFixPin(pin: string): string {
+    const valid = availablePinsAll.includes(pin);
+    if (!valid) {
+      const candidates = [
+        pin.replace(/['"]/g, ''),
+        `P${pin}`,
+        pin.toUpperCase(),
+        `P${pin}`.toUpperCase(),
+      ];
+      for (const candidate of candidates) {
+        if (availablePinsAll.includes(candidate)) {
+          return candidate;
+        }
+      }
+    }
+    return pin;
+  },
+  autoFixPins(pins: string[]): string[] {
+    const valid = pins.every((pin) => availablePinsAll.includes(pin)) || false;
+    if (!valid) {
+      const fixedPins = pins.map((pin) => subHelpers.autoFixPin(pin));
+      if (!compareArray(pins, fixedPins)) {
+        return fixedPins;
+      }
+    }
+    return pins;
   },
 };
 
@@ -208,8 +240,9 @@ export const standardFirmwareEditModelHelpers = {
     const { baseFirmwareType, boardType } = editValues;
 
     const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
-    const isAvr = getMcuType(baseFirmwareType) === 'avr';
-    const isRp = getMcuType(baseFirmwareType) === 'rp';
+    const mcuType = getMcuType(baseFirmwareType);
+    const isAvr = mcuType === 'avr';
+    const isRp = mcuType === 'rp';
     const isSplit = getIsSplit(baseFirmwareType);
 
     if (isAvr) {
@@ -242,6 +275,29 @@ export const standardFirmwareEditModelHelpers = {
     if (isChip && editValues.useBoardLeds) {
       editValues.useBoardLeds = false;
     }
+
+    function fixPin<K extends ISinglePinFieldKey>(key: K) {
+      const diffValue = diff[key];
+      if (diffValue) {
+        editValues[key] = subHelpers.autoFixPin(diffValue) as any;
+      }
+    }
+    function fixPins<K extends IMultiplePinsFieldKey>(key: K) {
+      const diffValue = diff[key];
+      if (diffValue) {
+        editValues[key] = subHelpers.autoFixPins(diffValue);
+      }
+    }
+    fixPins('matrixRowPins');
+    fixPins('matrixColumnPins');
+    fixPins('matrixColumnPinsR');
+    fixPins('matrixColumnPinsR');
+    fixPins('directWiredPins');
+    fixPins('directWiredPinsR');
+    fixPins('encoderPins');
+    fixPins('encoderPinsR');
+    fixPin('lightingPin');
+    fixPin('singleWireSignalPin');
   },
   validateEditValues(
     editValues: IStandardFirmwareEditValues,
