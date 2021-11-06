@@ -1,15 +1,14 @@
 import {
-  ModifierVirtualKey,
-  VirtualKeyTexts,
-  systemActionToLabelTextMap,
-  systemActionAssignSelectionSource,
   encodeSingleModifierVirtualKey,
+  ModifierVirtualKey,
+  systemActionAssignSelectionSource,
+  systemActionToLabelTextMap,
   VirtualKey,
-  SystemAction,
+  VirtualKeyTexts,
 } from '~/shared';
 import { IOperationCardViewModel, texts } from '~/ui/base';
-import { systemActionNoteTexts } from '~/ui/editors/ProfileEditor/constants/KeyAssignNoteTexts';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
+import { getSystemActionNote } from '~/ui/editors/ProfileEditor/models/KeyAssignNoteTexts';
 import {
   virtualKeyGroupsTable2,
   virtualKeyGroupsTable3,
@@ -83,13 +82,6 @@ export interface IOperationEditPartViewModel {
   layerCallEntries: IOperationCardViewModel[];
   systemActionEntries: IOperationCardViewModel[];
   virtualKeyEntryGroups2: IOperationCardViewModel[][];
-}
-
-function getSystemActionNote(sa: SystemAction): string {
-  if (systemActionNoteTexts[sa]) {
-    return `${systemActionToLabelTextMap[sa]}: ${systemActionNoteTexts[sa]}`;
-  }
-  return '';
 }
 
 function makeVirtualKeyEntryGroup(

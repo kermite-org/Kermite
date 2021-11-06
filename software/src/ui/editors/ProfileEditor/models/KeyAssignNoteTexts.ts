@@ -1,4 +1,8 @@
-import { PartialRecord, SystemAction } from '~/shared';
+import {
+  PartialRecord,
+  SystemAction,
+  systemActionToLabelTextMap,
+} from '~/shared';
 import { languageKey } from '~/ui/base';
 
 const systemActionNoteTextsJa: PartialRecord<SystemAction, string> = {
@@ -33,5 +37,12 @@ const systemActionNoteTextsEn: PartialRecord<SystemAction, string> = {
   RoutingChannelNext: 'Toggle the routing channel.',
 };
 
-export const systemActionNoteTexts =
+const systemActionNoteTexts =
   languageKey === 'english' ? systemActionNoteTextsEn : systemActionNoteTextsJa;
+
+export function getSystemActionNote(sa: SystemAction): string {
+  if (systemActionNoteTexts[sa]) {
+    return `${systemActionToLabelTextMap[sa]}: ${systemActionNoteTexts[sa]}`;
+  }
+  return '';
+}
