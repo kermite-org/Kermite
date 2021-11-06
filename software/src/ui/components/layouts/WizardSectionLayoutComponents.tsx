@@ -30,16 +30,22 @@ export const WizardSectionPanel: FC<{ title: string; children?: QxChildren }> =
       background: ${colors.clPanelBox};
       padding: 7px;
       border: solid 1px ${colors.clPrimary};
+      display: flex;
+      flex-direction: column;
 
       > h2 {
         font-size: 16px;
+        flex-shrink: 0;
       }
-      overflow-y: auto;
+
+      > div {
+        flex-grow: 1;
+      }
     `;
     return (
       <div class={style}>
         <h2>{title}</h2>
-        {children}
+        <div>{children}</div>
       </div>
     );
   };

@@ -37,7 +37,6 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
           <WizardSectionPanel
             title="Layout Preview"
             class="layout-config-section"
-            qxIf={false}
           >
             <LayoutConfigurationSectionContent
               firmwareConfig={firmwareConfig}
@@ -82,9 +81,12 @@ const style = css`
     }
     > .right-column {
       width: 40%;
-      overflow-y: scroll;
       display: flex;
       flex-direction: column;
+
+      > .layout-config-section {
+        height: 200px;
+      }
 
       > .board-pin-assigns-section {
         flex-grow: 1;
