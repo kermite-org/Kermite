@@ -31,8 +31,6 @@ yarn start
 - Typescript
 - Electron
 - estrella ... esbuildをラップしたモジュールバンドラ
-- petit-dom ... 仮想DOMライブラリ
-- goober ... CSS in JS ライブラリ
 - node-hid ... RawHIDによる通信に使用
 - node-serialport ... ファームウェア書き込みに使用
 
