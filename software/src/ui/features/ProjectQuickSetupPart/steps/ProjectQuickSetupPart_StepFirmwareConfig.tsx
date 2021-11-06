@@ -10,8 +10,7 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/stor
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
-  const { firmwareConfig, layoutOptions, rawEditValues } =
-    projectQuickSetupStore.state;
+  const { layoutOptions, rawEditValues } = projectQuickSetupStore.state;
   const { resetConfigurations } = projectQuickSetupStore.actions;
   const { keyboardName } = projectQuickSetupStore.state;
   const { keyboardNameValidationError } = projectQuickSetupStore.readers;
@@ -35,12 +34,13 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
         </WizardSectionPanel>
         <div class="right-column">
           <WizardSectionPanel
-            title="Layout Preview"
+            title="Keys Preview"
             class="layout-config-section"
           >
             <LayoutConfigurationSectionContent
-              firmwareConfig={firmwareConfig}
+              firmwareConfig={rawEditValues}
               layoutOptions={layoutOptions}
+              showLabels={false}
             />
           </WizardSectionPanel>
           <WizardSectionPanel

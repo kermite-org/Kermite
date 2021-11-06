@@ -14,6 +14,7 @@ export const ProjectQuickSetupPart_StepLayoutConfig: FC = () => {
         class="layout-view"
         firmwareConfig={firmwareConfig}
         layoutOptions={layoutOptions}
+        showLabels={true}
       />
       <LayoutGeneratorOptionsPart
         class="options-part"

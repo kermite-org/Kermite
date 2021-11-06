@@ -51,7 +51,7 @@ export const LayoutPreviewShapeView: FC<Props> = ({
             />
           ))}
         </g>
-        <CoordOriginMark />
+        <CoordOriginMark qxIf={showLabels} />
       </KeyboardSvgFrameWithAutoScaler>
     </div>
   );
