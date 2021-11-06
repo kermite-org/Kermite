@@ -1,7 +1,7 @@
-import { SystemAction } from '~/shared';
+import { PartialRecord, SystemAction } from '~/shared';
 import { languageKey } from '~/ui/base';
 
-const systemActionNoteTextsJa: { [key in SystemAction]?: string } = {
+const systemActionNoteTextsJa: PartialRecord<SystemAction, string> = {
   GlowToggle: 'バックライトのon/offを切り替えます。',
   GlowPatternRoll: 'バックライトのパターンを切り替えます。',
   GlowColorPrev: 'バックライトの色の指定を1つ前に戻します。',
@@ -17,7 +17,7 @@ const systemActionNoteTextsJa: { [key in SystemAction]?: string } = {
   RoutingChannelNext: 'ルーティングチャネルをトグルで切り替えます。',
 };
 
-const systemActionNoteTextsEn: { [key in SystemAction]?: string } = {
+const systemActionNoteTextsEn: PartialRecord<SystemAction, string> = {
   GlowToggle: 'Toggle the backlight on and off.',
   GlowPatternRoll: 'Toggle the backlight pattern.',
   GlowColorPrev: 'Shift the backlight color specification previous.',
