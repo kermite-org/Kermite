@@ -44,7 +44,7 @@ On the linked site, follow the link from 'MingW-W64-builds' to download the file
 On the option setting screen that comes up during installation, set `x86_64` for Architecture. You can leave the other options as default.
 Once installed, add PATH to `C:\Program Files\mingw-w64\<version>\mingw64\bin`.
 
-## Check the build.
+## Check the build
 
 Open a command prompt in `Kermite/firmware`.
 

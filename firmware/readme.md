@@ -4,7 +4,7 @@
 This is firmware for DIY keyboard using ProMicro.
 
 ## Preparation of development environment
-## AVR
+### AVR
 
 Following tools are required to build AVR firmware.
 
@@ -28,7 +28,7 @@ For more information about build environment, please refer to the following docu
 
 ## Importing dependent code
 
-Since the dependent code is placed in an external repository, import them by the commands below.
+Since the dependent code is placed in an external repository, import them by the command below.
 
 ```
 git submodule update --init
@@ -36,8 +36,9 @@ git submodule update --init
 
 ## Build
 
-The following commands are supposed to be executed in this folder.
+Following commands in this document are supposed to be executed in this folder.
 
+To Build a firmware, execute
 ```
   make <project_path>:<variation_name>:build
 ```
@@ -62,7 +63,7 @@ Press the reset button on your keyboard twice and then execute the following com
 
 ## How to find out which virtual COM port the bootloader uses.
 
-## Windows
+### Windows
 
 Open the device manager and press the reset button on your keyboard twice to find them. You can find them under Ports (COM and LPT).
 
@@ -77,7 +78,7 @@ Press the reset button on your keyboard twice, and in the terminal, type
 to find them.
 
 ## Flash (RP2040)
-## Drag-and-drop firmware upload (Windows, MacOS)
+### Drag-and-drop firmware upload (Windows, MacOS)
 Press the reset button while holding down the BOOTSEL button on the board to enter bootloader mode.
 
 Kermite's firmware for the RP2040 has pico_bootsel_via_double_reset built in, which allows you to enter bootloader mode by quickly pressing the reset button twice (without having to press the BOOTSEL button) after the second time.
@@ -88,11 +89,11 @@ Reset the board to BOOTSEL mode. A removable media will be mounted with a path l
 ```
 RP2040_UF2_TARGET_DRIVE_PATH = D:
 ```
-Open a terminal and run
+Open a terminal and run the command to copy the uf2 file to the drive.
+
 ```
   make <project_path>:<variation_name>:flash
 ```
-to copy the uf2 file to the drive.
 
 ### Flash by commands (MacOS)
 Reset the board to BOOTSEL mode. A removable media named RPI-RP2 will be mounted. No special configuration is required. In a terminal, type the command below to copy the uf2 file to the drive.

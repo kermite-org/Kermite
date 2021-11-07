@@ -5,7 +5,7 @@ Utility software for writing key mapping to firmware.
 
 ## How to build
 
-## Dependency environment
+### Dependency environment
 
 The following are required to build and run
 
@@ -14,6 +14,7 @@ The following are required to build and run
 - node-gyp
 
 It uses native modules such as `node-hid` and `node-serialport`, and requires an environment (`GCC`, `Make`, `Python`, etc.) to build C source code with `node-gyp`. Use `windows-build-tools` on Windows or `xcode-select` on MacOS to install it.
+
 ### Installation
 
 ```
