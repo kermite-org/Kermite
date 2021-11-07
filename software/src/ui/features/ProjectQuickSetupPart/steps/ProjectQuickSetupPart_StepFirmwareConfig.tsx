@@ -10,8 +10,7 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/stor
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();
-  const { firmwareConfig, layoutOptions, rawEditValues } =
-    projectQuickSetupStore.state;
+  const { layoutOptions, rawEditValues } = projectQuickSetupStore.state;
   const { resetConfigurations } = projectQuickSetupStore.actions;
   const { keyboardName } = projectQuickSetupStore.state;
   const { keyboardNameValidationError } = projectQuickSetupStore.readers;
@@ -35,13 +34,13 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
         </WizardSectionPanel>
         <div class="right-column">
           <WizardSectionPanel
-            title="Layout Preview"
+            title="Keys Preview"
             class="layout-config-section"
-            qxIf={false}
           >
             <LayoutConfigurationSectionContent
-              firmwareConfig={firmwareConfig}
+              firmwareConfig={rawEditValues}
               layoutOptions={layoutOptions}
+              showLabels={false}
             />
           </WizardSectionPanel>
           <WizardSectionPanel
@@ -82,9 +81,12 @@ const style = css`
     }
     > .right-column {
       width: 40%;
-      overflow-y: scroll;
       display: flex;
       flex-direction: column;
+
+      > .layout-config-section {
+        height: 200px;
+      }
 
       > .board-pin-assigns-section {
         flex-grow: 1;

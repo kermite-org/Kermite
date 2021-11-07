@@ -7,7 +7,8 @@ import { LayoutPreviewShapeView } from '~/ui/fabrics/LayoutPreviewShapeView/Layo
 export const LayoutConfigurationSectionContent: FC<{
   firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
-}> = ({ firmwareConfig, layoutOptions }) => {
+  showLabels: boolean;
+}> = ({ firmwareConfig, layoutOptions, showLabels }) => {
   const { design, labelEntities, holdKeyIndices } =
     useLayoutConfigurationSectionModel(firmwareConfig, layoutOptions);
   return (
@@ -15,7 +16,7 @@ export const LayoutConfigurationSectionContent: FC<{
       keyboardDesign={design}
       labelEntities={labelEntities}
       holdKeyIndices={holdKeyIndices}
-      showLabels={true}
+      showLabels={showLabels}
     />
   );
 };
