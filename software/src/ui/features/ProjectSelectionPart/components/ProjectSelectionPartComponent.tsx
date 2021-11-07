@@ -6,10 +6,10 @@ import {
 } from '~/ui/base';
 import {
   GeneralButtonMenu,
-  ProjectKeyboardList,
   RadioButtonLine,
   RibbonSelector,
 } from '~/ui/components';
+import { ProjectKeyboardList } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList';
 
 type Props = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];

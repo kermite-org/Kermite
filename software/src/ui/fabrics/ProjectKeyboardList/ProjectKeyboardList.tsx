@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectKeyboardListCard } from '~/ui/components/organisms/ProjectKeyboardList/ProjectKeyboardList.Card';
+import { ProjectKeyboardListCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.Card';
 
 type Props = {
   className?: string;

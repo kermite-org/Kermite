@@ -11,9 +11,9 @@ import {
   ProjectKeyboardShapeViewExamples,
   NavigationStepListExamples,
   ToggleSwitchLineExamples,
-  ProjectKeyboardListExamples,
 } from '~/ui/components';
 import { RouterHeaderBarExamples } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar.visor';
+import { ProjectKeyboardListExamples } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.visor';
 import { fieldSetter } from '~/ui/utils';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;

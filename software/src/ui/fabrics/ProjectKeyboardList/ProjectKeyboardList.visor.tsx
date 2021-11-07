@@ -1,12 +1,12 @@
 import { jsx } from 'qx';
 import { DisplayKeyboardDesignLoader } from '~/shared';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectKeyboardList } from '~/ui/components/organisms/ProjectKeyboardList/ProjectKeyboardList';
 import {
   exampleData_persistKeyboardDesign_astelia,
   exampleData_persistKeyboardDesign_miniversRev2,
   exampleData_persistKeyboardDesign_shiro,
 } from '~/ui/constants';
+import { ProjectKeyboardList } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList';
 
 const convertDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign;
 
