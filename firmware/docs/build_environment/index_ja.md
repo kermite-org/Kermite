@@ -22,11 +22,11 @@ Windows, Macでの環境構築手順を示します。
 同等の環境を用意できれば他の構成でも問題ありません。avr-gccのバージョンに注意してください。
 ## Windowsでの環境構築
 
-[Windowsでの環境構築](./win1_default.md)
+[Windowsでの環境構築](./win1_default_ja.md)
 
-[OSの環境をなるべく汚染しない構成](./win2_clean.md)
+[OSの環境をなるべく汚染しない構成](./win2_clean_ja.md)
 
 その他、MSYSやWSLによる構成が考えられます(現在未検証です)
 ## MacOSでの環境構築
 
-[MacOSでの環境構築](./mac_homebrew.md)
+[MacOSでの環境構築](./mac_homebrew_ja.md)

@@ -24,7 +24,7 @@ ProMicroを使用した自作キーボード向けのファームウェアです
 
 環境構築の詳細については、以下のドキュメントを参照してください。
 
-[環境構築の手順](./docs/build_environment/index.md)
+[環境構築の手順](./docs/build_environment/index_ja.md)
 
 
 ## 依存コードの取り込み
@@ -111,4 +111,4 @@ Cのソースを編集する際に、VSCodeのステータスバーの右端に�
 
 ## 個別のキーボード向けの対応ファームウェア実装方法
 
-[未対応のキーボードを対応する場合(開発者向け)](./docs/developer_guide.md)
+[未対応のキーボードを対応する場合(開発者向け)](./docs/developer_guide_ja.md)
