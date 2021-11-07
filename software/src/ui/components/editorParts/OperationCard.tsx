@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { IOperationCardViewModel, uiTheme } from '~/ui/base';
+import { colors, IOperationCardViewModel, uiTheme } from '~/ui/base';
 
 type Props = {
   model: IOperationCardViewModel;
@@ -26,8 +26,8 @@ export const OperationCard: FC<Props> = ({
 const style = css`
   min-width: 28px;
   height: 28px;
-  background: ${uiTheme.colors.clAssignCardFace};
-  color: ${uiTheme.colors.clAssignCardText};
+  background: ${colors.clAssignCardFace};
+  color: ${colors.clAssignCardText};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,7 +36,7 @@ const style = css`
   font-size: '12px';
 
   &[data-current] {
-    background: ${uiTheme.colors.clSelectHighlight};
+    background: ${colors.clSelectHighlight};
   }
 
   &[data-disabled] {

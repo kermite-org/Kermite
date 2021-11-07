@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { reflectValue } from '~/ui/utils';
 
 interface Props {
@@ -49,9 +49,9 @@ export const GeneralInput: FC<Props> = ({
 
 const style = (width: number = 100) => css`
   display: block;
-  background: ${uiTheme.colors.clControlBase};
-  border: solid 1px ${uiTheme.colors.clPrimary};
-  color: ${uiTheme.colors.clControlText};
+  background: ${colors.clControlBase};
+  border: solid 1px ${colors.clPrimary};
+  color: ${colors.clControlText};
   border-radius: ${uiTheme.controlBorderRadius}px;
   /* min-width: 100px; */
   height: ${uiTheme.unitHeight}px;
@@ -73,6 +73,6 @@ const style = (width: number = 100) => css`
   }
 
   &[data-invalid] {
-    background: ${uiTheme.colors.clInvalidInput};
+    background: ${colors.clInvalidInput};
   }
 `;

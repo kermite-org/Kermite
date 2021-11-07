@@ -64,7 +64,7 @@ export class AppError<T extends keyof IAppErrorsSource> extends Error {
   type: T;
   params: IAppErrorsSource[T];
 
-  constructor(type: T, params: IAppErrorsSource[T], original?: Error) {
+  constructor(type: T, params: IAppErrorsSource[T], original?: any) {
     super(original?.message || type);
     this.type = type;
     this.params = params;

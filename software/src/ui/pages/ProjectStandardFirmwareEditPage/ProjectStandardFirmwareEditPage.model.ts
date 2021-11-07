@@ -2,9 +2,9 @@ import { useInlineEffect } from 'qx';
 import {
   encodeProjectResourceItemKey,
   fallbackStandardFirmwareEntry,
-  fallbackStandardKeyboardSpec,
+  fallbackStandardFirmwareConfig,
   getNextFirmwareId,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   IStandardFirmwareEntry,
 } from '~/shared';
 import { modalConfirm } from '~/ui/components';
@@ -20,7 +20,7 @@ import { resourceManagementUtils } from '~/ui/utils';
 
 export interface IProjectStandardFirmwareEditPageModel {
   editFirmwareName: string;
-  standardFirmwareConfig: IKermiteStandardKeyboardSpec;
+  standardFirmwareConfig: IStandardFirmwareConfig;
   canSave: boolean;
   saveHandler(): void;
   backHandler(): void;
@@ -71,7 +71,7 @@ const actions = {
         type: 'standard',
         variationId: newVariationId,
         firmwareName: '',
-        standardFirmwareConfig: fallbackStandardKeyboardSpec,
+        standardFirmwareConfig: fallbackStandardFirmwareConfig,
       };
     }
   },

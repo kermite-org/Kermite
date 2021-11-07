@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { ISelectorOption, uiTheme } from '~/ui/base';
+import { colors, ISelectorOption, uiTheme } from '~/ui/base';
 
 interface Props {
   options: ISelectorOption[];
@@ -52,9 +52,9 @@ export const GeneralSelector: FC<Props> = ({
 
 const style = (width: number | undefined) => css`
   display: block;
-  border: solid 1px ${uiTheme.colors.clPrimary};
-  background: ${uiTheme.colors.clControlBase};
-  color: ${uiTheme.colors.clControlText};
+  border: solid 1px ${colors.clPrimary};
+  background: ${colors.clControlBase};
+  color: ${colors.clControlText};
   border-radius: ${uiTheme.controlBorderRadius}px;
   height: ${uiTheme.unitHeight}px;
   width: ${width ? `${width}px` : 'inherit'};

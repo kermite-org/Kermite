@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 type Props = {
   className?: string;
@@ -30,8 +30,8 @@ const style = css`
   width: 40px;
   height: 20px;
   overflow: hidden;
-  background: ${uiTheme.colors.clControlBase};
-  border: solid 1px ${uiTheme.colors.clPrimary};
+  background: ${colors.clControlBase};
+  border: solid 1px ${colors.clPrimary};
   border-radius: 4px;
   cursor: pointer;
   outline: none;
@@ -45,14 +45,14 @@ const style = css`
     width: 14px;
     height: 14px;
     margin: 1px;
-    border: solid 1px ${uiTheme.colors.clPrimary};
+    border: solid 1px ${colors.clPrimary};
     border-radius: 4px;
     transition: all 0.2s;
   }
 
   &:checked:after {
     left: 20px;
-    background: ${uiTheme.colors.clPrimary};
+    background: ${colors.clPrimary};
   }
 
   &:hover {

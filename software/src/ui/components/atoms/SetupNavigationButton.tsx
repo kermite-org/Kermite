@@ -1,23 +1,23 @@
-import { css, FC, jsx, styled } from 'qx';
+import { css, FC, jsx } from 'qx';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
+import { multiClasses } from '~/ui/utils';
 
 type Props = {
-  className?: string;
   onClick?: () => void;
   text: string;
   disabled?: boolean;
+  small?: boolean;
 };
 
 export const SetupNavigationStepShiftButton: FC<Props> = ({
-  className,
   onClick,
   text,
   disabled,
+  small,
 }) => (
   <ButtonBase
-    className={className}
+    className={multiClasses(buttonStyle, small && '--small')}
     onClick={onClick}
-    extraCss={buttonStyle}
     disabled={disabled}
   >
     {text}
@@ -32,14 +32,14 @@ const buttonStyle = css`
   width: 90px;
   height: 32px;
 
-  &:hover {
+  &.--small {
+    width: 70px;
+    height: 28px;
+  }
+
+  &:not(.disabled):hover {
     background: #adf;
     opacity: 1;
     transition: all 0.3s;
   }
-`;
-
-export const OnboadingStepShiftButtonDummy = styled.div`
-  width: 90px;
-  height: 32px;
 `;

@@ -119,9 +119,15 @@ export function getNextFirmwareId(existingIds: string[]): string {
   if (!allNumbers.every((it) => isFinite(it))) {
     throw new Error('invalid firmware variation ids detected');
   }
-  const newNumber = allNumbers.length > 0 ? Math.max(...allNumbers) + 1 : 0;
-  if (newNumber >= 100) {
-    throw new Error('firmware id reaches to 100');
+  let newNumber = -1;
+  for (let i = 0; i < 100; i++) {
+    newNumber = (Math.random() * 100) >> 0;
+    if (!allNumbers.includes(newNumber)) {
+      break;
+    }
+  }
+  if (newNumber === -1) {
+    throw new Error('failed to generate firmware id');
   }
   return `00${newNumber.toString()}`.slice(-2);
 }

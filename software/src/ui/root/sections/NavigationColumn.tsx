@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'qx';
-import { appUi, uiTheme } from '~/ui/base';
+import { appUi, colors } from '~/ui/base';
 import { GlobalMenuPart, NavigationButtonsArea } from '~/ui/root/organisms';
 
 type Props = {
@@ -19,7 +19,7 @@ export const NavigationColumn: FC<Props> = ({ disabled }) => (
 const style = css`
   width: 55px;
   position: relative;
-  background: ${uiTheme.colors.clNavigationColumn};
+  background: ${colors.clNavigationColumn};
 
   > .base {
     display: flex;

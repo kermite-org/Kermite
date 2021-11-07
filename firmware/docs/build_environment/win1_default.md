@@ -1,51 +1,55 @@
-# Windowsでの環境構築
 
-## ツールの導入
+## Setup the build environment in Windows
 
-以下のツールを導入します。それぞれファイルを取得してパスを通してください。
-ファイルの名前は2021年5月時点のものです。バージョンが更新されている場合は新しいものを選んでください。
-### AVR-GCC, Makeなど
-| ツール   | [AVR-GCC 11.1.0 for Windows 32 and 64 bit](https://blog.zakkemble.net/avr-gcc-builds/)   | 
+## Install the tools
+
+Install the following tools. Please get the files and add PATH to them respectively.
+The names of the files are as of May 2021. If the version has been updated, please choose the newer one.
+### AVR-GCC, Make, etc.
+| Tools | [AVR-GCC 11.1.0 for Windows 32 and 64 bit](https://blog.zakkemble.net/avr-gcc-builds/) 
 | -------- | :------------------------------------------ | 
-| ファイル | avr-gcc-11.1.0-x64-windows.zip             | 
-| 導入方法 | DL, 解凍, binにパスを通す        | 
+| file | avr-gcc-11.1.0-x64-windows.zip | 
+| How to install | DL, unzip, add bin to PATH 
 
-Zak Kemble氏のブログで提供されているAVR-GCCのWindows向けのバイナリを使用します。Make, avr-gcc, avrdudeなど、AVRの開発に必要なツール一式が含まれています。
+Use the AVR-GCC binary for Windows provided on Zak Kemble's blog, which includes a complete set of tools for AVR development, including Make, avr-gcc, and avrdude.
 
 ### GNU ARM Toolchain
-| ツール   | [GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)    | 
+| Tools | [GNU Arm Embedded Toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu) | 
 | -------- | :------------------------------------------ | 
-| ファイル | gcc-arm-none-eabi-10-2020-q4-major-win32.zip            | 
-| 導入方法 | DL, 解凍, binにパスを通す        | 
+| file | gcc-arm-none-eabi-10-2020-q4-major-win32.zip | 
+| How to install | DL, unzip, add bin to PATH
 
-ARMの公式サイトからコンパイラをダウンロードして導入します。
+Download and install the compiler from the official ARM website.
 
 ### CoreUtils for Windows
-| ツール   | [CoreUtils for Windows](http://gnuwin32.sourceforge.net/packages/coreutils.htm)    | 
+| Tools | [CoreUtils for Windows](http://gnuwin32.sourceforge.net/packages/coreutils.htm) 
 | -------- | :------------------------------------------ | 
-| ファイル | coreutils-5.3.0.exe           | 
-| 導入方法 | DL, インストール, binにパスを通す        | 
+| File | coreutils-5.3.0.exe 
+| How to install | DL, install, add bin to PATH
 
-Unix互換の`rm`や`mkdir`などのコマンドが必要なため導入します。
-インストーラでのインストール後、`C:\Program Files\GnuWin32\bin`にパスを通します。
+Install Unix compatible commands such as `rm` and `mkdir` as they are required.
+After installing with the installer, add PATH to `C:\Program Files\GnuWin32\bin`.
 
-(※)CoreUtilsの代わりに[GOW](https://github.com/bmatzelle/gow)を使っても良いです。
+(*)You can also use [GOW](https://github.com/bmatzelle/gow) instead of CoreUtils.
 
 
 ### MinGW
-| ツール   | [mingw-w64](http://mingw-w64.org/doku.php/download)    | 
+| tools | [mingw-w64](http://mingw-w64.org/doku.php/download) |
 | -------- | :------------------------------------------ | 
-| ファイル | mingw-w64-install.exe          | 
-| 導入方法 | DL, インストール, binにパスを通す        | 
+| File | mingw-w64-install.exe 
+| How to install | DL, install, add bin to PATH
 
-RP2040向けのファームウェアをビルドする場合に必要です。AVRの場合は不要です。
-リンク先のサイトの、'MingW-W64-builds'からリンクをたどってファイルをダウンロードします。
-インストール時に出るオプションを設定する画面で、Architectureを`x86_64`にします。その他の項目はデフォルトのままでよいでしょう。
-インストールができたら, `C:\Program Files\mingw-w64\<バージョン>\mingw64\bin`にパスを通します。
+This is required if you are building firmware for the RP2040; it is not required for the AVR.
+On the linked site, follow the link from 'MingW-W64-builds' to download the file.
+On the option setting screen that comes up during installation, set `x86_64` for Architecture. You can leave the other options as default.
+Once installed, add PATH to `C:\Program Files\mingw-w64\<version>\mingw64\bin`.
 
-## ビルドの確認
+## Check the build
 
-`Kermite/firmware`でコマンドプロンプトを開きます。
+Open a command prompt in `Kermite/firmware`.
+
+Make sure that each tool is available by using commands like
+
 ```
 > where make
 > where mkdir.exe
@@ -56,11 +60,13 @@ RP2040向けのファームウェアをビルドする場合に必要です。AV
 > g++ -v
 > avrdude -v
 ```
-などのコマンドで、各ツールが使えるようになっていることを確認します。
+
+Make sure that you can build the project with commands like
 
 ```
 > make clean
 > make astelia:atmega:build
 > make proto/minivers:rev2_rp:build
 ```
-などのコマンドで、プロジェクトをビルドできることを確認します。
+
+

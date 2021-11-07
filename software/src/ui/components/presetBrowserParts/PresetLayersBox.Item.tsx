@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
@@ -23,7 +23,7 @@ export const PresetLayersBoxItem: FC<Props> = ({
 );
 
 const style = css`
-  color: ${uiTheme.colors.clAltText};
+  color: ${colors.clAltText};
   padding: 0 4px;
   user-select: none;
   cursor: pointer;

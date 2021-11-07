@@ -33,9 +33,7 @@ export function useWelcomePageModel(): WelcomePageModel {
   const isLanguageJapanese = currentLanguage === 'japanese';
   const setLanguageJapanese = () => changeLanguage('japanese');
 
-  const { openSetupNavigationPanel } = uiActions;
-  const showProjectQuickSetupPage = () =>
-    uiActions.navigateTo({ type: 'projectQuickSetup' });
+  const { openSetupNavigationPanel, showProjectQuickSetupPage } = uiActions;
 
   const isDarkTheme = currentThemeKey === 'dark';
   const setDarkTheme = (isDark: boolean) =>

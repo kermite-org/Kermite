@@ -1,4 +1,3 @@
-import { featureFlags } from '~/shared/defs/FeatureFlags';
 import { appUi, texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
@@ -63,13 +62,18 @@ const itemsSource: NavigationItemSource[] = [
     hint: texts.hint_sideMenu_app_firmwareUpdate,
   },
   {
+    pagePath: '/firmwareFlash',
+    pageName: 'flash',
+    iconSpec: 'fa fa-microchip',
+    hint: texts.hint_sideMenu_app_firmwareUpdate,
+    isAvailable: () => false,
+  },
+  {
     pagePath: '/projectResource',
     pageName: 'project',
     iconSpec: 'fa fa-globe',
     hint: 'project edit',
-    isAvailable: () =>
-      featureFlags.allowEditLocalProject &&
-      uiReaders.isLocalProjectSelectedForEdit,
+    isAvailable: () => uiReaders.isLocalProjectSelectedForEdit,
   },
   {
     pagePath: '/projectSelection',

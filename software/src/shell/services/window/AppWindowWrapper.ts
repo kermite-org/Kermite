@@ -103,7 +103,6 @@ export class AppWindowWrapper implements IAppWindowWrapper {
         nodeIntegration: false,
         contextIsolation: true,
         webSecurity: true,
-        worldSafeExecuteJavaScript: true,
         preload: preloadFilePath,
       },
     };

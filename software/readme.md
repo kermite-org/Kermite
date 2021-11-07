@@ -1,46 +1,45 @@
-# Kermite ユーティリティソフトウェア
+# Kermite Utility Software
 
-## 概要
-ファームウェアに配列を書き込むためのユーティリティソフトウェアです。
+## Overview
+Utility software for writing key mapping to firmware.
 
-## ビルド/実行方法
+## How to build
 
-### 依存環境
+### Dependency environment
 
-ビルドや実行には以下が必要です
+The following are required to build and run
 
 - Node.js
 - yarn
 - node-gyp
 
-`node-hid`, `node-serialport`などのネイティブモジュールを使用しており、`node-gyp`でC言語のソースコードをビルドするための環境(`GCC`, `Make`, `Python`など)が必要です。Windowsの場合`windows-build-tools`, MacOSの場合`xcode-select`を使って導入してください。
-### 導入
+It uses native modules such as `node-hid` and `node-serialport`, and requires an environment (`GCC`, `Make`, `Python`, etc.) to build C source code with `node-gyp`. Use `windows-build-tools` on Windows or `xcode-select` on MacOS to install it.
+
+### Installation
 
 ```
 yarn install
 ```
 
-### 実行
+### Start debug
 
 ```
 yarn start
 ```
-## 技術要素
+## Technical elements
 
-以下の言語/フレームワーク/ライブラリなどを使用しています。
+We use the following languages/frameworks/libraries etc.
 - Typescript
 - Electron
-- estrella ... esbuildをラップしたモジュールバンドラ
-- petit-dom ... 仮想DOMライブラリ
-- goober ... CSS in JS ライブラリ
-- node-hid ... RawHIDによる通信に使用
-- node-serialport ... ファームウェア書き込みに使用
+- estrella ... Module bundler wrapping esbuild
+- node-hid ... Used for communication with RawHID
+- node-serialport ... Used for writing firmware
 
-## IDEの設定
+## IDE configuration
 
-VSCodeの場合、`.vscode`フォルダにある`settings.example.json`と`launch.example.json`をコピーして`settings.json`と`launch.json`を追加して下さい。
+For VSCode, copy `settings.example.json` and `launch.example.json` in `.vscode` folder save them as `settings.json` and `launch.json`.
 
-以下の拡張機能の使用を推奨します。
+The use of the following extensions is recommended
 * ESLint
 * Prettier
 * vscode-styled-components

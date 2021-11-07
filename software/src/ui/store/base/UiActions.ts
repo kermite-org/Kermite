@@ -34,6 +34,10 @@ export const uiActions = {
   closeSetupNavigationPanel() {
     commitUiSettings({ showSetupNavigationPanel: false });
   },
+  showProjectQuickSetupPage() {
+    commitUiSettings({ showSetupNavigationPanel: false });
+    uiActions.navigateTo('/projectQuickSetup/step1');
+  },
   setGlobalProjectSpec(spec: IGlobalProjectSpec) {
     globalSettingsWriter.writeValue('globalProjectSpec', spec);
   },

@@ -26,7 +26,7 @@ const PageRoot = () => {
       {/* <QxDebugPage /> */}
       {/* <QxDebugPage2 /> */}
       {/* <QxDebugPage3 /> */}
-      {/* <QxDebugPage4 /> */}
+      <QxDebugPage4 />
       {/* <QxDebugPage5 /> */}
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
@@ -41,7 +41,7 @@ const PageRoot = () => {
       {/* <ShortCssDevPage /> */}
       {/* <ComponentCatalogPage /> */}
       {/* <SvgScalingDevPage /> */}
-      <SpaLayoutDebugPage />
+      {/* <SpaLayoutDebugPage /> */}
     </div>
   );
 };

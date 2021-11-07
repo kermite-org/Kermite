@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { IKermiteStandardKeyboardSpec } from '~/shared';
+import { IStandardFirmwareConfig } from '~/shared';
 import { appUi } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
 import { standardFirmwareEditorComponents } from '~/ui/editors/StandardFirmwareEditor/components';
@@ -17,7 +17,7 @@ export const StandardFirmwareEditor_ExposedModel = {
   get canSave(): boolean {
     return standardFirmwareEditStore.readers.canSave;
   },
-  get editValues(): IKermiteStandardKeyboardSpec {
+  get editValues(): IStandardFirmwareConfig {
     return standardFirmwareEditStore.state.editValues;
   },
   loadFirmwareConfig(
@@ -34,11 +34,13 @@ export const StandardFirmwareEditor_ExposedModel = {
 export const StandardFirmwareEditor: FC = () => {
   const {
     baseFirmwareTypeOptions,
+    boardTypeOptions,
     editValues,
     isAvr,
     isRp,
     isSplit,
     isOddSplit,
+    isBoardSpecified,
     availablePinsText,
     fieldErrors,
     totalError,
@@ -63,25 +65,22 @@ export const StandardFirmwareEditor: FC = () => {
               options={baseFirmwareTypeOptions}
               value={editValues.baseFirmwareType}
               setValue={valueChangeHandler('baseFirmwareType')}
+              width={150}
+            />
+          </FieldItem>
+          <FieldItem title="board type">
+            <GeneralSelector
+              options={boardTypeOptions}
+              value={editValues.boardType}
+              setValue={valueChangeHandler('boardType')}
+              width={150}
             />
           </FieldItem>
           <ToggleFieldRow
-            label="use board LEDs ProMicro"
-            fieldKey="useBoardLedsProMicroAvr"
+            qxIf={isBoardSpecified}
+            label="use board LEDs"
+            fieldKey="useBoardLeds"
             editValues={editValues}
-            qxIf={isAvr}
-          />
-          <ToggleFieldRow
-            label="use board LEDs ProMicro RP2040"
-            fieldKey="useBoardLedsProMicroRp"
-            editValues={editValues}
-            qxIf={isRp}
-          />
-          <ToggleFieldRow
-            label="use board LEDs RPi Pico"
-            fieldKey="useBoardLedsRpiPico"
-            editValues={editValues}
-            qxIf={isRp}
           />
           <ToggleFieldRow
             fieldKey="useMatrixKeyScanner"

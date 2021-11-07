@@ -1,6 +1,6 @@
 import {
   compareArray,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   IStandardBaseFirmwareType,
 } from '~/shared';
 import {
@@ -56,7 +56,7 @@ function checkCustomDataBytesValueRange(bytes: number[]) {
 
 const specSerializerFunctionMap: {
   [key in IStandardBaseFirmwareType]: (
-    spec: IKermiteStandardKeyboardSpec,
+    spec: IStandardFirmwareConfig,
     meta: IStandardKeyboardInjectedMetaData,
   ) => number[];
 } = {
@@ -72,7 +72,7 @@ export function applyFirmwareBinaryPatch(
   buffer: Uint8Array,
   firmwareBinaryFormat: 'hex' | 'uf2',
   meta: IStandardKeyboardInjectedMetaData,
-  targetKeyboardSpec?: IKermiteStandardKeyboardSpec,
+  firmwareConfig?: IStandardFirmwareConfig,
 ): Uint8Array {
   const patchFileContentFn =
     firmwareBinaryFormat === 'uf2' ? patchUf2FileContent : patchHexFileContent;
@@ -83,10 +83,10 @@ export function applyFirmwareBinaryPatch(
     const metaDataLocation = getCustomDataLocation(binaryBytes, 'metadata');
     replaceArrayContent(binaryBytes, metaDataLocation, metaDataBytes);
 
-    if (targetKeyboardSpec) {
+    if (firmwareConfig) {
       const specSerializerFunc =
-        specSerializerFunctionMap[targetKeyboardSpec.baseFirmwareType];
-      const customDataBytes = specSerializerFunc(targetKeyboardSpec, meta);
+        specSerializerFunctionMap[firmwareConfig.baseFirmwareType];
+      const customDataBytes = specSerializerFunc(firmwareConfig, meta);
       checkCustomDataBytesValueRange(customDataBytes);
       const definitionDataLocation = getCustomDataLocation(
         binaryBytes,

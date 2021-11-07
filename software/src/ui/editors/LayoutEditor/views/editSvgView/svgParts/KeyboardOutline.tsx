@@ -1,6 +1,6 @@
 import { jsx, css } from 'qx';
 import { degToRad } from '~/shared';
-import { makeCssColor, uiTheme } from '~/ui/base';
+import { colors, makeCssColor, uiTheme } from '~/ui/base';
 import { IPosition, startDragSession } from '~/ui/editors/LayoutEditor/common';
 import {
   editReader,
@@ -29,7 +29,7 @@ const cssOutlinePoint = css`
   }
 
   &[data-selected] {
-    stroke: ${uiTheme.colors.clPrimary};
+    stroke: ${colors.clPrimary};
   }
 
   &:hover {

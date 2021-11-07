@@ -1,5 +1,5 @@
 import { FC, jsx, css } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors, uiTheme } from '~/ui/base';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
 interface Props {
@@ -31,8 +31,8 @@ const style = (buttonWidth: number | undefined) => css`
   width: ${buttonWidth ? `${buttonWidth}px` : 'inherit'};
   height: ${uiTheme.unitHeight}px;
   font-size: 15px;
-  color: ${uiTheme.colors.clPrimary};
-  border: solid 1px ${uiTheme.colors.clPrimary};
+  color: ${colors.clPrimary};
+  border: solid 1px ${colors.clPrimary};
 
   &:not(.active) {
     > span {
@@ -41,8 +41,8 @@ const style = (buttonWidth: number | undefined) => css`
   }
 
   &.active {
-    background: ${uiTheme.colors.clPrimary};
-    color: ${uiTheme.colors.clDecal};
+    background: ${colors.clPrimary};
+    color: ${colors.clDecal};
   }
 
   &.disabled {

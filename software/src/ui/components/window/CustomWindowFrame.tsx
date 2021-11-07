@@ -1,5 +1,5 @@
 import { jsx, css, QxNode, FC } from 'qx';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 
 type Props = {
   children: QxNode;
@@ -37,6 +37,6 @@ const style = css`
   > .status-bar {
     flex-shrink: 0;
     height: 28px;
-    background: ${uiTheme.colors.clWindowBar};
+    background: ${colors.clWindowBar};
   }
 `;

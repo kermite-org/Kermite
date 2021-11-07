@@ -1,3 +1,4 @@
+import { createContext, useContext } from 'qx/contextApi';
 import {
   applyGlobalStyle,
   css,
@@ -14,7 +15,7 @@ import {
   useState,
 } from './hookImpl';
 import { qxGlobal } from './qxGlobal';
-import { render as vdomCoreRender, jsx, VNode } from './qxinternal_qxcore';
+import { jsx, render as vdomCoreRender, VNode } from './qxinternal_qxcore';
 import { setShortCssProcessor } from './shortCss';
 
 export {
@@ -30,6 +31,8 @@ export {
   useEffect,
   useInlineEffect,
   useRef,
+  createContext,
+  useContext,
 };
 
 export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;
@@ -76,7 +79,7 @@ export function render(
 
     // const options = { directives: { ref: domRefDirective } };
     // vdomCoreRender(renderFn() as VNode, parentDomNode!, options);
-    vdomCoreRender((renderFn() as any) as VNode, parentDomNode!);
+    vdomCoreRender(renderFn() as any as VNode, parentDomNode!);
     const t1 = performance.now();
     if (0) {
       const dur = t1 - t0;

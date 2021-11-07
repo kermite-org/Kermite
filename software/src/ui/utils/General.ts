@@ -17,3 +17,9 @@ export function withStopPropagation(handler: (e: Event) => void) {
     e.stopPropagation();
   };
 }
+
+export function multiClasses(
+  ...classNames: (string | undefined | false)[]
+): string {
+  return classNames.filter((it) => !!it).join(' ');
+}

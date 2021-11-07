@@ -4,7 +4,7 @@ import {
   getNextFirmwareId,
   ICustomFirmwareEntry,
 } from '~/shared';
-import { uiTheme } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { RouteHeaderBar } from '~/ui/components';
 import {
   CustomFirmwareEditor,
@@ -69,8 +69,8 @@ export const ProjectCustomFirmwareCreatePage: FC = () => {
 };
 
 const style = css`
-  background: ${uiTheme.colors.clBackground};
-  color: ${uiTheme.colors.clMainText};
+  background: ${colors.clBackground};
+  color: ${colors.clMainText};
   height: 100%;
   > .content {
     padding: 15px;

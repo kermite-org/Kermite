@@ -12,6 +12,7 @@ import {
   SettingsPage,
   WelcomePage,
 } from '~/ui/pages';
+import { FirmwareFlashPage } from '~/ui/pages/FirmwareFlashPage';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
@@ -35,7 +36,6 @@ export const MainColumnRoutes: FC = () => {
         {pageSpec.type === 'projectStandardFirmwareEdit' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
-        {pageSpec.type === 'projectQuickSetup' && <ProjectQuickSetupPage />}
       </div>
     );
   }
@@ -47,13 +47,14 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/layoutEditor' && <LayoutManagerPageComponent />}
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
+      {pagePath === '/firmwareFlash' && <FirmwareFlashPage />}
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
       {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
       {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectResource' && <ProjectResourcePage />}
-      {pagePath === '/projectQuickSetup' && <ProjectQuickSetupPage />}
+      {pagePath.startsWith('/projectQuickSetup') && <ProjectQuickSetupPage />}
     </div>
   );
 };

@@ -3,22 +3,21 @@ import { IIpcContractBase } from './IpcContractBase';
 
 type IErrorHandler = (error: any) => void;
 export interface IIpcMainAgent<T extends IIpcContractBase> {
-  setWebContents(webContents: Electron.webContents): void;
+  setWebContents(webContents: Electron.WebContents): void;
   setErrorHandler(errorHandler: IErrorHandler): void;
   supplySyncHandlers(handlers: T['sync']): void;
   supplyAsyncHandlers(handlers: T['async']): void;
-  supplySubscriptionHandlers(
-    handlers: {
-      [K in keyof T['events']]: (
-        cb: (value: T['events'][K]) => void,
-      ) => () => void;
-    },
-  ): void;
+  supplySubscriptionHandlers(handlers: {
+    [K in keyof T['events']]: (
+      cb: (value: T['events'][K]) => void,
+    ) => () => void;
+  }): void;
 }
 
 export class IpcMainAgent<T extends IIpcContractBase>
-  implements IIpcMainAgent<T> {
-  private webContents: Electron.webContents | undefined;
+  implements IIpcMainAgent<T>
+{
+  private webContents: Electron.WebContents | undefined;
 
   private errorHandler: IErrorHandler = console.error;
 
@@ -58,13 +57,11 @@ export class IpcMainAgent<T extends IIpcContractBase>
 
   private unsubMap: { [key: string]: any } = {};
 
-  supplySubscriptionHandlers(
-    handlers: {
-      [K in keyof T['events']]: (
-        cb: (value: T['events'][K]) => void,
-      ) => () => void;
-    },
-  ) {
+  supplySubscriptionHandlers(handlers: {
+    [K in keyof T['events']]: (
+      cb: (value: T['events'][K]) => void,
+    ) => () => void;
+  }) {
     // let num = 0;
     for (const propKey in handlers) {
       const handler = handlers[propKey]!;

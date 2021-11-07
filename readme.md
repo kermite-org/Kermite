@@ -1,74 +1,70 @@
 # Kermite
 
-## 概要
+## Overview
 
-自作キーボード用のソフトウェアです。MCU上で動くファームウェアと、キーマッピングを設定するためのユーティリティソフトがあります。ProMicro(マイコンボード)を使用した自作キーボードに対応しています。
+Kermite is a software for DIY keyboards, which includes firmware to run on MCU and utility software to configure key mappings. It supports DIY keyboards using ProMicro (microcontroller board).
 
-<img src=https://i.gyazo.com/dd06a2d9e1c98815cd69394911a5a29b.png width="240px"/>
+## Features
+### Key Mapping Configuration
 
-## 機能
-### キーマッピングの変更
+The key mapping can be visually changed using the utility software. The configuration is stored in the MCU's internal data storage area.
 
-ユーティリティソフトを使用してキーマッピングを視覚的に変更できます。キーマッピングはMCU内蔵のデータ保存領域に格納されます。
+### Firmware Programming
 
-### ファームウェアの書き込み
+The utility software has an ability to write firmware to the MCU.  Firmwares for supporting keyboards are included in the app.
+### Real-time Keyboard View
 
-ユーティリティソフトに、MCUにファームウェアを書き込む機能があります。対応キーボードのファームウェアは事前にビルドされたものを利用できます。
-### レイヤ状態のリアルタイム表示
+There is a function to display the layer status of the keyboard you are using in real time. When typing, you can check the key mapping on the currently active layer on the display.
+## Operating Environment
 
-使用しているキーボードのレイヤ状態をリアルタイムに表示する機能があります。文字入力時に、画面を見て現在アクティブなレイヤ上のキーマッピングを確認できます。
-## 動作環境
-
-### ハードウェア/ファームウェア
-- ProMicroやATMega32u4,RP2040を使用しているキーボード
-- キーボードのモデル毎に対応ファームウェアの実装が必要です
-
-### ユーティリティソフト
-- Mac OS 10.15 Catalina
+### Hardware/Firmware
+- Keyboard using ProMicro or ATMega32u4, RP2040
+### Utility Software
 - Windows 10
+- Mac OS 10.15 Catalina
+## Folder Structure
 
-## フォルダ構成
+. /firmware ... Firmware.
 
-./firmware ...ファーウェアです。
+. /software ... Utility software that runs on a PC. It can also be used to design the keyboard layout without the device.
 
-./software ...PC上で動作するユーティリティソフトです。デバイスがなくても配列の検討などに利用できます。
+## Development Environment
 
-## 開発環境
-
-### ファームウェア
+### Firmware
 - AVR ATMega32u4, Raspberry Pi RP2040
-- C言語, avr-gcc, arm-none-eabi-gcc, GNU Make
+- avr-gcc, arm-none-eabi-gcc, GNU Make
 
-### ユーティリティソフト
+### Utility Software
 - Electron
 - Typescript
 
-## 導入方法
+## How to Install
 
-現在安定版の正式なリリースはまだありません。
+Currently there are no official stable releases yet.
 
-開発中のアルファ版を公開しています。機能の評価やデバッグにご協力いただける方は、[こちら](https://github.com/kermite-org/Kermite/releases)からインストーラをダウンロードしてご利用ください。概ね毎週末に更新しています。
+We are releasing alpha versions that are under development. If you would like to help evaluate and debug the features, please download the installer from [here](https://github.com/kermite-org/Kermite/releases) and use it. It is updated approximately every weekend.
 
-使い方は以下のドキュメントを参照してください。
+## How to Use
+For instructions, please refer to the following document. 
 
-[ユーティリティソフトの使い方](./document/usage/tutorial.md)
+[How to use the utility software](./document/usage/tutorial.md) (Japanese)
 
-## 開発状況
-キー入力やレイヤなどの基本的な機能は実装がおおよそ固まりました。現在周辺部品(LCD,RGBLEDなど)の対応を進めています。またユーティリティソフトの改修を行っています。2021年の夏頃にリリースする予定です。
-## その他
-[KermiteServer](https://dev.server.kermite.org/) プロファイルを投稿できるサーバーです。(試験運用中)
+## Development status
+The implementation of basic functions such as key input and layers has completed. We are now working on improving features of utility software.
+We are planning to make beta-release in the 4Q of 2021.
+## Others
+[KermiteServer](https://dev.server.kermite.org/) A server to post profiles. (Under test operation)
 
-[Firmwave Build Status](https://app.kermite.org/firmware-stats/) 対応ファームウェアのビルド状況です
+[Firmwave Build Status](https://app.kermite.org/firmware-stats/) Build status of supported firmware.
 
-[Project Id Generator](https://app.kermite.org/krs/generator/) ファームウェアを新しく作る際に必要なProjectIdのジェネレータです
+[Project Id Generator](https://app.kermite.org/krs/generator/) A generator for ProjectId, which is required when creating new firmware.
 
-## 連絡先
+## Contact
 https://discord.gg/PNpEn3Z2kT
 
-Discordのサーバです。バグ報告や機能の相談などはこちらでご相談ください。
+Discord server
 
-(2021/7/25 更新)
-Discordの招待のリンクが一時的なものになっていたため、リンクを作り直しました。
-## ライセンス
-MITライセンスです。
+If you have any bug reports or feature consultations, please contact us here.
+## License
+MIT license.
 
