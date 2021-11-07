@@ -1,82 +1,80 @@
-# Kermite ファームウェア 開発者向け資料
+# Kermite Firmware Developer's Documentation
 
-このドキュメントでは、個別のキーボード向けのファームウェアを作成する場合に必要な情報をまとめています。
+This document contains all the information you need to create firmware for individual keyboards.
 
-## ファームウェアのフォルダ階層
+## Firmware folder hierarchy
 <pre>
 src
-├── modules
-└── projects
-    ├── __stencils
-    ├── keyboard1
-    ├── keyboard2
-    ├── dev
-    │   ├── keyboard3
-    │   ├── keyboard4
-    ├── study
-    │   ├── keyboard5
-    │   └── keyboard6
-    └── ...
+├─ modules
+└─ projects
+    ├─ __stencils
+    ├─ keyboard1
+    ├─ keyboard2
+    ├─ dev
+    │ ├─ keyboard3
+    │ ├─ keyboard4
+    ├─ study
+    │ ├─ keyboard5
+    │ └─ keyboard6
+    └─ ...
 </pre>
-`Kermite/firmware`の`src`配下では以下のようなフォルダ構成になっています。
-* `modules`以下では共通で使われるキーボードの機能を提供しています。
-* `projects`以下に各キーボードの実装を配置しています。
-  * キット開発者による公式の実装は`projects`直下に配置
-  * `projects/__stencils`には各プロジェクトから利用する雛形のコードが置いてあります。
-  * `projects/dev`にはデバッグ用のプロジェクトがあります。CIでのビルドからは除外されます。
-  * `projects/study`にはモジュール開発用の実験コードを置いています。
+Under `src` of `Kermite/firmware`, the folder structure is as follows.
+* Under `modules`, commonly used keyboard functions are provided.
+* Under `projects`, implementations of each keyboard are placed.
+  * Official implementations by kit developers are placed directly under `projects`.
+  * `projects/__stencils` contains template code for use by each project.
+  * `projects/dev` contains projects for debugging, excluded from CI builds.
+  * `projects/study` contains experimental code for module development.
 
-新たなキーボードのプロジェクトを追加する場合、`projects`以下にキーボード名でフォルダを作ってコードや設定ファイルを配置してください。
+If you want to add a new keyboard project, please create a folder under `projects` with the keyboard name and place code and configuration files there.
 
-## プロジェクトの内容構成
+## Keyboard project folder structure
 
-各キーボードのファームウェア実装のことをプロジェクトと呼んでいます。プロジェクトは以下のようなファイルで構成されます。
+The firmware implementation of each keyboard is called a project. A project consists of the following files.
 
 <pre>
   keyboard1
-  ├── variation1
-  │   ├── config.h
-  │   └── rules.mk
-  ├── default.layout.json
-  ├── default.profile.json
-  └── project.json
+  ├─ variation1
+  │ ├─ config.h
+  │ └─ rules.mk
+  ├─ default.layout.json
+  ├─ default.profile.json
+  └─ project.json
 </pre>
 
-keyboard1,variation1,profile1などには任意の名前を指定できます。
-keyboard1がプロジェクト名です。プロジェクトは複数のファームウェア実装を持つことができ、それらをバリエーションと呼んでいます。
+You can specify any name for keyboard1, variation1, profile1, etc.
+keyboard1 is the project name. A project can have multiple firmware implementations, which we call variations.
 
-| ファイル名 |　説明 |
+| filename | description |
 | :--- | :--- |
-| config.h | ファームウェア内で参照する値を定義します。 |
-| rules.mk | ビルド時に親のMakefileから呼ばれます。 | 
-| *.layout.json | キーの配置とキーボードの外形を定義します。 |
-| *.profile.json | プリセットプロファイルです。 | 
-| project.json | プロジェクト固有の情報を記述します。 | 
+| config.h | Defines the values to be referenced in the firmware. |
+| rules.mk | Called from the parent Makefile at build time. |
+| *.layout.json | Defines the key layout and the outline of the keyboard. |
+| project.json | Describes project-specific information. |
 
-(※) レイアウトやプリセットのJSONは、ユーティリティソフトを使って作成できます。
+(*) JSON for layouts and presets can be created using utility software.
 
-## プロジェクトID
-各プロジェクトは、英数字8桁の重複しないIDを持っています。このIDはマイコンのROMに格納され、ユーティリティソフトがキーボードを検出した際に品種を判定するために使用されます。新しいプロジェクトを作成する場合、以下のジェネレータで生成してください。
+## Project ID
+Each project has an alphanumeric 8-digit, non-overlapping ID. This ID is stored in the microcontroller's ROM and is used by the utility software to determine the type of the keyboard when it is detected. If you want to create a new project, please use the following generator to get it.
 
 https://kermite-org.github.io/KermiteResourceStore/generator
 
 
 
-## ブランチ構成, リポジトリ構成
-ファームウェアの共通モジュールやユーティリティソフトウェアの実装を`master`ブランチ,`develop`ブランチで行っています。
+## Branch Configuration, Repository Configuration
+The common firmware modules and utility software are implemented in the `master` and `develop` branches.
 
-これとは別に各キーボードのファームウェア対応用の`variants`ブランチがあります。`variants`ブランチにマージされたファームウェアのソースコードはCI(github actions)でビルドされ、ビルドされたバイナリが
-<a href="https://github.com/kermite-org/KermiteResourceStore">KermiteResourceStore</a>
-リポジトリに保存されます。Kermiteのユーティリティソフトは、実行時にこのリポジトリから最新のファームウェアや各キーボードのレイアウト定義を取得します。(実際にはgithubのサーバに負荷をかけないように、このリポジトリをpullして内容を公開しているwebサーバから取得されます。)
+Apart from this, there is a `variants` branch for each keyboard firmware application. The source code of the firmware merged into the `variants` branch is built by CI (github actions), and the built binary is stored in the
+<a href="https://github.com/kermite-org/KermiteResourceStore" mce_href="https://github.com/kermite-org/KermiteResourceStore">KermiteResourceStore</a>
+Kermite utility software retrieves the latest firmware and layout definitions for each keyboard from this repository at runtime. Kermite utility software will fetch the latest firmware and layout definitions for each keyboard from this repository at runtime. (Actually, to avoid overloading the github server, this repository is pulled from the web server that publishes the contents.)
 
-新たにキーボードの対応を行った場合、`variants`ブランチに向けてPRを作成してください。PRが`variants`ブランチにマージされた時点でユーティリティソフトから対象のプロジェクトが利用できるようになります。
+If you have new keyboard support, please create a PR for the `variants` branch, and the target project will be available from the utility software when the PR is merged into the `variants` branch.
 
-## リポジトリ運用方針
+## Repository Operation Policy
 
-以下は暫定のものです。
+The following is tentative.
 
-- ファームウェアはキーボードの作者本人(や、共同開発者)のみ追加できるものとします。
-- 海外製のキーボードをどうするかは現在検討中です。
-- キットとしてリリースしていないキーボードや、個人的に作ったキーボードのファームウェアは、`projects/proto`以下に配置してください。
-- プロジェクトのIDは、ジェネレータで生成した値を使用してください。
-- KermiteはMITライセンスのため、GPLのコードは取り込めません。
+- Only the author (or co-developer) of the keyboard can add firmware.
+- Firmware for keyboards that have not been released as a kit, or keyboards that you have personally made, should be placed under `projects/proto`.
+- The ID of the project should be the value obtained by the generator.
+- Kermite is under MIT license, so GPL code cannot be imported.

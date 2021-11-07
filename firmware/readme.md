@@ -1,114 +1,117 @@
-# Kermite ファームウェア
-## 概要
+# Kermite Firmware
+## Overview
 
-ProMicroを使用した自作キーボード向けのファームウェアです。
+This is firmware for DIY keyboard using ProMicro.
 
-## 開発環境の準備
+## Preparation of development environment
 ### AVR
 
-ビルドには
+Following tools are required to build AVR firmware.
 
 - GNU Make
 - AVR 8-bit Toolchain (avr-gcc)
 
-が必要です。
+Use avrdude to write the firmware to the microcontroller.
 
-ファームウェアのマイコンへの書き込みに avrdude を使用します。
 ### RP2040
+
+Following tools are required to build RP2040 firmware.
 
 - GNU Make
 - GNU ARM Embedded Toolcahin (arm-none-eabi-gcc)
 - GNU GCC (g++)
 
-が必要です
+For more information about build environment, please refer to the following document
 
-環境構築の詳細については、以下のドキュメントを参照してください。
-
-[環境構築の手順](./docs/build_environment/index.md)
+[Instructions for preparing build environment](./docs/build_environment/index.md)
 
 
-## 依存コードの取り込み
+## Importing dependent code
 
-依存コードを外部リポジトリに置いているため、
+Since the dependent code is placed in an external repository, import them by the command below.
+
 ```
 git submodule update --init
 ```
-で取り込んでください。
-## ビルド
 
-以下に記述してあるコマンドはこのフォルダをカレントディレクトリにして実行します。
+## Build
 
+Following commands in this document are supposed to be executed in this folder.
+
+To Build a firmware, execute
 ```
   make <project_path>:<variation_name>:build
 ```
 
-`<project_path>`には`src/projects`以下にあるプロジェクトのフォルダパスを指定します。`<variaton_name>`にはプロジェクトのサブフォルダで、ファームウェアのソースコードを格納しているフォルダ名を指定します。
+For `<project_path>`, specify the folder path of the project under `src/projects`. `<variaton_name>` is the name of a subfolder of the project that contains the source code for the firmware.
 
-例
+Example
 ```
   make astelia:atmega:build
 ```
 
-## 書き込み (AVR)
+## Flash (AVR)
 
-`Makefile.user.example` を `Makefile.user` にコピーしておきます。
-`Makefile.user` の `COM_PORT` で ProMicro のブートローダの仮想 COM ポートを指定しておきます。仮想 COM ポートがわからない場合、ブートローダが使用する仮想 COM ポートの調べ方(後述)を参考にしてください。
+Copy `Makefile.user.example` to `Makefile.user`.
+In `Makefile.user`, specify the virtual COM port of the ProMicro bootloader in `COM_PORT`. If you don't know the virtual COM port, please refer to How to find out the virtual COM port used by the bootloader (see below).
 
-キーボードのリセットボタンを 2 回押して、以下のコマンドを実行します。
+Press the reset button on your keyboard twice and then execute the following command.
 
 ```
   make <project_path>:<variation_name>:flash
 ```
 
-## ブートローダが使用する仮想 COM ポートの調べ方
+## How to find out which virtual COM port the bootloader uses.
 
 ### Windows
 
-デバイスマネージャを開き、キーボードのリセットボタンを 2 回押して、それらしきものを探します。ポート(COM と LPT)以下にあります。
+Open the device manager and press the reset button on your keyboard twice to find them. You can find them under Ports (COM and LPT).
 
 ### MacOS
 
-キーボードのリセットボタンを 2 回押して、ターミナルで
+Press the reset button on your keyboard twice, and in the terminal, type
 
 ```
   ls -l /dev/tty.usb*
 ```
 
-を打ってそれらしきものを探します。
+to find them.
 
-## 書き込み (RP2040)
-### ドラッグ&ドロップによる書き込み(Windows, MacOS共通)
-ボードのBOOTSELボタンを押しながらリセットボタンを押して、ブートローダモードにします。RPI-RP2のような名前のリムーバブルメディアがマウントされます。build/<プロジェクトパス>/<プロジェクト名>.uf2をドライブにドラッグ&ドロップします。
+## Flash (RP2040)
+### Drag-and-drop firmware upload (Windows, MacOS)
+Press the reset button while holding down the BOOTSEL button on the board to enter bootloader mode.
 
-KermiteのRP2040用ファームウェアにはpico_bootsel_via_double_resetが組み込んであり、２回目以降は(BOOTSELボタンを押さなくても)リセットボタンを素早く2回押すことでブートローダモードに入れるようになります。
+Kermite's firmware for the RP2040 has pico_bootsel_via_double_reset built in, which allows you to enter bootloader mode by quickly pressing the reset button twice (without having to press the BOOTSEL button) after the second time.
 
-### コマンドでの書き込み(Windows)
+### Flash by commands (Windows)
 
-ボードをBOOTSELモードにリセットします。D:\RPI-RP2のようなパスでリムーバブルメディアがマウントされます。D:のようなドライブレターの部分をMakefile.userで以下のように指定します。
+Reset the board to BOOTSEL mode. A removable media will be mounted with a path like D:\RPI-RP2. specify the drive letter part like D: in Makefile.user as follows.
 ```
 RP2040_UF2_TARGET_DRIVE_PATH = D:
 ```
-ターミナルを開いて、
+Open a terminal and run the command to copy the uf2 file to the drive.
+
 ```
   make <project_path>:<variation_name>:flash
 ```
-を実行するとuf2ファイルがドライブにコピーされます。
 
-### コマンドでの書き込み(MacOS)
-ボードをBOOTSELモードにリセットします。RPI-RP2という名前のリムーバブルメディアがマウントされます。設定は特に必要ありません。ターミナルで
-``` 
+### Flash by commands (MacOS)
+Reset the board to BOOTSEL mode. A removable media named RPI-RP2 will be mounted. No special configuration is required. In a terminal, type the command below to copy the uf2 file to the drive.
+
+```
   make <project_path>:<variation_name>:flash
 ```
-を実行するとuf2ファイルがドライブにコピーされます。
-## IDE の設定
-
-VSCode を使う場合, `C/C++`拡張機能を導入します。
 
 
-`.vscode`フォルダにある`c_cpp_properties.json.example`と`settings.json.example`を`.example`を外した名前に複製し、環境に応じて調整してください。`c_cpp_properties.json` 内でコンパイラのパスを設定すると、エディタ上での補完やエラー表示が適切に機能するようになります。
+## Configure the IDE
 
-Cのソースを編集する際に、VSCodeのステータスバーの右端に、現在の設定が`ConfigAVR`または`ConfigRP`として表示されます。AVRのコードを編集する際は`ConfigAVR`,RP2040のコードを編集する際は`ConfigRP`にしてください。VSCodeが文法をチェックする際に使用しているコンパイラやインクルードパスが切り替わります。
+If you use VSCode, install the `C/C++` extension.
 
-## 個別のキーボード向けの対応ファームウェア実装方法
 
-[未対応のキーボードを対応する場合(開発者向け)](./docs/developer_guide.md)
+Copy `c_cpp_properties.json.example` and `settings.json.example` in the `.vscode` folder to a name without `.example` and arrange them according to your environment. Setting the compiler path in `c_cpp_properties.json` will make the completion and error display in the editor work properly.
+
+When editing C source code, the current setting will be displayed as `ConfigAVR` or `ConfigRP` on the right side of the VSCode status bar. The compiler and include path used by VSCode to check the grammar will be switched.
+
+## How to implement supported firmware for individual keyboards
+
+[How to make firmware for your own keyboards (for developers)](./docs/developer_guide.md)
