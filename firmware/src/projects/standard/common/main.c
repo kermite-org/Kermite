@@ -62,13 +62,13 @@ static EncoderConfig encoderConfigs[3] = { 0 };
 
 int main() {
   if (defs.useBoardLeds) {
-    if (defs.boardType == BoardType_ProMicro) {
+    if (defs.boardType == BoardType_ProMicro && boardIoImpl_setupLeds_proMicroAvr) {
       boardIoImpl_setupLeds_proMicroAvr();
     }
-    if (defs.boardType == BoardType_ProMicroRP2040) {
+    if (defs.boardType == BoardType_ProMicroRP2040 && boardIoImpl_setupLeds_proMicroRp) {
       boardIoImpl_setupLeds_proMicroRp();
     }
-    if (defs.boardType == BoardType_RpiPico) {
+    if (defs.boardType == BoardType_RpiPico && boardIoImpl_setupLeds_rpiPico) {
       boardIoImpl_setupLeds_rpiPico();
     }
   }
