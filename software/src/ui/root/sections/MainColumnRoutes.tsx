@@ -13,6 +13,7 @@ import {
   WelcomePage,
 } from '~/ui/pages';
 import { FirmwareFlashPage } from '~/ui/pages/FirmwareFlashPage';
+import { ProfileSetupWizardPage } from '~/ui/pages/ProfileSetupWizardPage';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
@@ -54,6 +55,7 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectResource' && <ProjectResourcePage />}
+      {pagePath.startsWith('/profileSetup') && <ProfileSetupWizardPage />}
       {pagePath.startsWith('/projectQuickSetup') && <ProjectQuickSetupPage />}
     </div>
   );

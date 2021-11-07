@@ -12,10 +12,10 @@ export const WelcomePage: FC = () => {
     setLanguageEnglish,
     isLanguageJapanese,
     setLanguageJapanese,
-    openSetupNavigationPanel,
+    showProfileSetupWizard,
     isDarkTheme,
     setDarkTheme,
-    showProjectQuickSetupPage,
+    showProjectQuickSetupWizard,
     isDeveloperMode,
     setDeveloperMode,
   } = useWelcomePageModel();
@@ -43,7 +43,7 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            onClick={openSetupNavigationPanel}
+            onClick={showProfileSetupWizard}
           >
             セットアップナビゲーションを表示
           </WelcomePageButton>
@@ -51,7 +51,7 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            onClick={showProjectQuickSetupPage}
+            onClick={showProjectQuickSetupWizard}
             qxIf={isDeveloperMode}
           >
             プロジェクトクイックセットアップ

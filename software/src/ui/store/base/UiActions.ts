@@ -29,13 +29,17 @@ export const uiActions = {
     commitUiState({ pageModalSpec: undefined });
   },
   openSetupNavigationPanel() {
-    commitUiSettings({ showSetupNavigationPanel: true });
+    throw new Error('deprecated');
+    // commitUiSettings({ showSetupNavigationPanel: true });
   },
   closeSetupNavigationPanel() {
-    commitUiSettings({ showSetupNavigationPanel: false });
+    throw new Error('deprecated');
+    // commitUiSettings({ showSetupNavigationPanel: false });
   },
-  showProjectQuickSetupPage() {
-    commitUiSettings({ showSetupNavigationPanel: false });
+  showProfileSetupWizard() {
+    uiActions.navigateTo('/profileSetup/step1');
+  },
+  showProjectQuickSetupWizard() {
     uiActions.navigateTo('/projectQuickSetup/step1');
   },
   setGlobalProjectSpec(spec: IGlobalProjectSpec) {
