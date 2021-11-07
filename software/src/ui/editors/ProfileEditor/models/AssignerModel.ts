@@ -73,10 +73,7 @@ const readers = {
     return state.dualModeEditTargetOperationSig;
   },
   get isUserProfileEditorView(): boolean {
-    return (
-      uiReaders.pagePath === '/assigner' ||
-      uiReaders.pagePath === '/projectQuickSetup/step4'
-    );
+    return uiReaders.pagePath === '/assigner';
   },
 
   get profileAssignType(): IProfileAssignType {
