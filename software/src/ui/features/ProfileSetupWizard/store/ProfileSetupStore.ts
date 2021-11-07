@@ -4,12 +4,12 @@ import { UiLocalStorage } from '~/ui/base';
 import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
 
 type IState = {
-  projectId: string;
+  targetProjectKey: string;
 };
 
 function createDefaultState(): IState {
   return {
-    projectId: '',
+    targetProjectKey: '',
   };
 }
 
@@ -18,6 +18,9 @@ const state: IState = createDefaultState();
 const readers = {};
 
 const actions = {
+  setTargetProjectKey(projectKey: string) {
+    state.targetProjectKey = projectKey;
+  },
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
   },
@@ -43,7 +46,7 @@ const actions = {
 
 type IPersistData = {
   revision: string;
-  projectId: string;
+  targetProjectKey: string;
 };
 const persistDataRevision = 'profileSetupEditDataV1';
 
@@ -61,10 +64,10 @@ const effects = {
       }
 
       return () => {
-        const { projectId } = state;
+        const { targetProjectKey } = state;
         const persistData: IPersistData = {
           revision: persistDataRevision,
-          projectId,
+          targetProjectKey,
         };
         UiLocalStorage.writeItem(storageKey, persistData);
       };
