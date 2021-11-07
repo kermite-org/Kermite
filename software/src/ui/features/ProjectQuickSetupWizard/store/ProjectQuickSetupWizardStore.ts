@@ -1,5 +1,5 @@
 import { isNumberInRange } from '~/shared';
-import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupWizard/ProjectQuickSetupTypes';
+import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
 

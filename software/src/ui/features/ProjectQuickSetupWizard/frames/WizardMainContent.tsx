@@ -1,5 +1,5 @@
 import { FC, jsx } from 'qx';
-import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupWizard/ProjectQuickSetupTypes';
+import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepLayoutConfig';
