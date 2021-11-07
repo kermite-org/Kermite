@@ -34,7 +34,6 @@ type IState = {
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
-  isFirmwareFlashPanelOpen: boolean;
   rawEditValues: IStandardFirmwareConfig;
 };
 
@@ -47,7 +46,6 @@ function createDefaultState(): IState {
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
     isConnectionValid: false,
-    isFirmwareFlashPanelOpen: false,
     rawEditValues: fallbackStandardFirmwareConfig,
   };
 }
@@ -144,12 +142,6 @@ const actions = {
         presetSpec: { type: 'blank', layoutName: 'default' },
       },
     });
-  },
-  openFirmwareFlashPanel() {
-    state.isFirmwareFlashPanelOpen = true;
-  },
-  closeFirmwareFlashPanel() {
-    state.isFirmwareFlashPanelOpen = false;
   },
 };
 
