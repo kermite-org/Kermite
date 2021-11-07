@@ -1,7 +1,9 @@
 import { css, FC, jsx } from 'qx';
-import { WizardFooterBar } from '~/ui/features/ProjectQuickSetupWizard/frames/WizardFooterBar';
-import { WizardMainContent } from '~/ui/features/ProjectQuickSetupWizard/frames/WizardMainContent';
-import { WizardTopBar } from '~/ui/features/ProjectQuickSetupWizard/frames/WizardTopBar';
+import { WizardFooterBar } from '~/ui/featureComponents/WizardFooterBar';
+import { WizardTopBar } from '~/ui/featureComponents/WizardTopBar';
+import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareConfig';
+import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareFlash';
+import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepLayoutConfig';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupWizardStore';
 
@@ -18,7 +20,9 @@ export const ProjectQuickSetupWizard: FC = () => {
         canGoToStep={canGoToStep}
         shiftStepTo={shiftStepTo}
       />
-      <WizardMainContent currentStep={currentStep} />
+      {currentStep === 'step1' && <ProjectQuickSetupPart_StepFirmwareConfig />}
+      {currentStep === 'step2' && <ProjectQuickSetupPart_StepFirmwareFlash />}
+      {currentStep === 'step3' && <ProjectQuickSetupPart_StepLayoutConfig />}
       <WizardFooterBar currentStep={currentStep} canGoNext={canGoNext} />
     </div>
   );
