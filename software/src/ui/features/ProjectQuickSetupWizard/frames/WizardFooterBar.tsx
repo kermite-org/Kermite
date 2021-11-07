@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
-import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupWizardStore';
+import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupWizard/ProjectQuickSetupTypes';
+import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupWizardStore';
 
 type Props = {
   currentStep: IProjectQuickSetupStep;

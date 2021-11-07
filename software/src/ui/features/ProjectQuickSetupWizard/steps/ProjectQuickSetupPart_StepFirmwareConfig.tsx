@@ -6,7 +6,7 @@ import { StandardFirmwareEditor } from '~/ui/editors';
 import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
 import { LayoutConfigurationSectionContent } from '~/ui/fabrics/LayoutConfigurationSection/view';
 import { ProjectKeyboardNameEditPart } from '~/ui/fabrics/ProjectKeyboardNameEditPart/view';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();

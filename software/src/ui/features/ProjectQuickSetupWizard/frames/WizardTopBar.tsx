@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { colors, Link } from '~/ui/base';
 import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
-import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+import { IProjectQuickSetupStep } from '~/ui/features/ProjectQuickSetupWizard/ProjectQuickSetupTypes';
 
 type Props = {
   currentStep: IProjectQuickSetupStep;

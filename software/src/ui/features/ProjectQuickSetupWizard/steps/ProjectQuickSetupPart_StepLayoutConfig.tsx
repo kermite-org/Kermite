@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { LayoutConfigurationSectionContent } from '~/ui/fabrics/LayoutConfigurationSection/view';
 import { LayoutGeneratorOptionsPart } from '~/ui/fabrics/LayoutGeneratorOptionsPart/view';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepLayoutConfig: FC = () => {
   const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;
