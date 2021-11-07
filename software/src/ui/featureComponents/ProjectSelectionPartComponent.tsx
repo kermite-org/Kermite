@@ -15,10 +15,11 @@ type Props = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];
   projectKey: string;
   setProjectKey(projectKey: string): void;
-  canSelectResourceOrigin: boolean;
-  resourceOriginSelectorSource: ISelectorSource;
-  isMenuButtonVisible: boolean;
-  menuItems: IGeneralMenuItem[];
+  canSelectResourceOrigin?: boolean;
+  resourceOriginSelectorSource?: ISelectorSource;
+  isMenuButtonVisible?: boolean;
+  menuItems?: IGeneralMenuItem[];
+  showNoSelectionOption?: boolean;
 };
 
 export const ProjectSelectionPartComponent: FC<Props> = ({
@@ -29,15 +30,17 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
   resourceOriginSelectorSource,
   isMenuButtonVisible,
   menuItems,
+  showNoSelectionOption,
 }) => (
   <div css={style}>
     <div className="top-row">
-      <GeneralButtonMenu menuItems={menuItems} qxIf={isMenuButtonVisible} />
+      {isMenuButtonVisible && menuItems && (
+        <GeneralButtonMenu menuItems={menuItems} />
+      )}
       <div qxIf={!isMenuButtonVisible} />
-      <RibbonSelector
-        {...resourceOriginSelectorSource}
-        qxIf={canSelectResourceOrigin}
-      />
+      {canSelectResourceOrigin && resourceOriginSelectorSource && (
+        <RibbonSelector {...resourceOriginSelectorSource} />
+      )}
     </div>
     <ProjectKeyboardList
       className="keyboard-list"
@@ -45,7 +48,7 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
       currentProjectKey={projectKey}
       setCurrentProjectKey={setProjectKey}
     />
-    <div className="bottom-row">
+    <div className="bottom-row" qxIf={showNoSelectionOption}>
       <RadioButtonLine
         checked={projectKey === ''}
         onClick={() => setProjectKey('')}
