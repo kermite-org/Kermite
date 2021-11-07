@@ -1,48 +1,41 @@
 import { css, FC, jsx } from 'qx';
 import { colors, Link } from '~/ui/base';
-import { IProjectQuickSetupStep } from '~/ui/commonModels';
-import { SetupNavigationStepButton } from '~/ui/components/atoms/SetupNavigationStepButton';
+import { SetupNavigationStepButton } from '~/ui/components';
 
 type Props = {
-  currentStep: IProjectQuickSetupStep;
-  canGoToStep(step: IProjectQuickSetupStep): boolean;
-  shiftStepTo(step: IProjectQuickSetupStep): void;
-};
-
-const stepInstructionMap: { [step in IProjectQuickSetupStep]: string } = {
-  step1: 'Firmware Configuration',
-  step2: 'Device Setup',
-  step3: 'Layout Template Settings',
+  steps: string[];
+  currentStep: string;
+  canGoToStep(step: string): boolean;
+  shiftStepTo(step: string): void;
+  stepInstructionTextMap: Record<string, string>;
 };
 
 export const WizardTopBar: FC<Props> = ({
+  steps,
   currentStep,
   canGoToStep,
   shiftStepTo,
-}) => {
-  const instructionText = stepInstructionMap[currentStep];
-  return (
-    <div css={style}>
-      <div>
-        {currentStep}: {instructionText}
-      </div>
-      {[1, 2, 3].map((i) => {
-        const step = `step${i}` as IProjectQuickSetupStep;
-        const isCurrentStep = step === currentStep;
-        return (
-          <SetupNavigationStepButton
-            key={i}
-            text={`step${i}`}
-            active={isCurrentStep}
-            handler={() => shiftStepTo(step)}
-            disabled={!isCurrentStep && !canGoToStep(step)}
-          />
-        );
-      })}
-      <Link to="/home">x</Link>
+  stepInstructionTextMap,
+}) => (
+  <div css={style}>
+    <div>
+      {currentStep}: {stepInstructionTextMap[currentStep]}
     </div>
-  );
-};
+    {steps.map((step) => {
+      const isCurrentStep = step === currentStep;
+      return (
+        <SetupNavigationStepButton
+          key={step}
+          text={step}
+          active={isCurrentStep}
+          handler={() => shiftStepTo(step)}
+          disabled={!isCurrentStep && !canGoToStep(step)}
+        />
+      );
+    })}
+    <Link to="/home">x</Link>
+  </div>
+);
 
 const style = css`
   height: 34px;

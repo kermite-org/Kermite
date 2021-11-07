@@ -1,22 +1,24 @@
 import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
-import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupWizardStore';
 
 type Props = {
-  currentStep: IProjectQuickSetupStep;
+  currentStep: string;
   canGoNext: boolean;
+  firstStep: string;
+  finalStep: string;
+  shiftStep: (dir: number) => void;
 };
 
-export const WizardFooterBar: FC<Props> = ({ currentStep, canGoNext }) => {
-  const isFirstStep = currentStep === 'step1';
-  const isFinalStep = currentStep === 'step3';
-
-  const { shiftStep } = projectQuickSetupWizardStore.actions;
-
-  const backText = isFirstStep ? 'cancel' : 'back';
-  const nextText = isFinalStep ? 'complete' : 'next';
+export const WizardFooterBar: FC<Props> = ({
+  currentStep,
+  canGoNext,
+  firstStep,
+  finalStep,
+  shiftStep,
+}) => {
+  const backText = currentStep === firstStep ? 'cancel' : 'back';
+  const nextText = currentStep === finalStep ? 'complete' : 'next';
 
   return (
     <div css={style}>
