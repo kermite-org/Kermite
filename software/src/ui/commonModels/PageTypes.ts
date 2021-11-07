@@ -52,3 +52,5 @@ export type IPageSpec =
 export type IPageModelSpec = never;
 
 export type IProjectQuickSetupStep = 'step1' | 'step2' | 'step3';
+
+export type IProfileSetupStep = 'step1' | 'step2' | 'step3';
