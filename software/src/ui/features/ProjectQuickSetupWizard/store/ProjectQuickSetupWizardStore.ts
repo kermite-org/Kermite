@@ -9,7 +9,7 @@ const helpers = {
     dir: number,
   ): IProjectQuickSetupStep | undefined {
     const nextStepNumber = parseInt(step.replace('step', ''), 10) + dir;
-    if (isNumberInRange(nextStepNumber, 1, 4)) {
+    if (isNumberInRange(nextStepNumber, 1, 3)) {
       return `step${nextStepNumber}` as IProjectQuickSetupStep;
     }
     return undefined;
