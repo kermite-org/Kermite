@@ -1,17 +1,17 @@
 import {
   createFallbackPersistKeyboardDesign,
   generateNumberSequence,
-  IKermiteStandardKeyboardSpec,
+  IStandardFirmwareConfig,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignRealKeyEntity,
   IStandardBaseFirmwareType,
   splitBytesN,
 } from '~/shared';
+import { ILayoutGeneratorOptions } from '~/ui/base';
 import {
   IDraftLayoutLabelEntity,
   IDraftLayoutLabelEntityPinType,
-  ILayoutGeneratorOptions,
-} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
+} from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
 
 function makeLabelEntity(
   keyId: string,
@@ -226,7 +226,7 @@ function fixCoordOrigin(design: IPersistKeyboardDesign, isCentered: boolean) {
 }
 
 export function createLayoutFromFirmwareSpec(
-  spec: IKermiteStandardKeyboardSpec,
+  spec: IStandardFirmwareConfig,
   layoutOptions: ILayoutGeneratorOptions,
 ): [IPersistKeyboardDesign, IDraftLayoutLabelEntity[]] {
   const design = createFallbackPersistKeyboardDesign();

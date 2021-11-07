@@ -1,32 +1,32 @@
-# Kermite ファームウェア 開発環境構築
+# Kermite firmware Development environment setup
 
-## 必要なもの
+## What you need
 
-| ツール | 説明 |
+| Tools | Description
 |:--|:--|
-| GNU Make | プロジェクトのビルドに必要です |
-| avr-gcc | AVRのソースコードのビルドに使用します。 |
-| avrdude | AVRマイコンへのファームウェア書き込みに使用します。 |
-| arm-none-eabi-gcc | RP2040のソースコードのビルドに使用します。 |
-| g++ | RP2040のユーティリティ(`pioasm`, `elf2uf2`)のビルドに使用します。|
+| GNU Make | Required to build the project.
+| avr-gcc | Used to build firmware for AVR.
+| avrdude | Used to write firmware to AVR microcontroller.
+| arm-none-eabi-gcc | Used to build firmware for RP2040.
+| g++ | Used to build utilities (`pioasm`, `elf2uf2`) for RP2040.
 
-### 備考
+### Remarks.
 
-* avr-gccはversion8.1以上が必要です。古いバージョンではビルドエラーが出ます。
-* Windowsの場合、Unix互換のコマンドを用意する必要があります。Unix互換の`sh.exe`, `rm.exe`, `mkdir.exe`などが必要です。
+* avr-gcc requires version 8.1 or higher. Old versions will cause build errors.
+* For Windows, you need to prepare Unix-compatible commands such as `sh.exe`, `rm.exe`, and `mkdir.exe`.
 
 
-## 環境構築
+## Environment setup
 
-Windows, Macでの環境構築手順を示します。
-同等の環境を用意できれば他の構成でも問題ありません。avr-gccのバージョンに注意してください。
-## Windowsでの環境構築
+This section shows how to build the environment on Windows and Mac.
 
-[Windowsでの環境構築](./win1_default.md)
+## Building the environment on Windows
 
-[OSの環境をなるべく汚染しない構成](./win2_clean.md)
+[Building the environment on Windows](./win1_default.md)
 
-その他、MSYSやWSLによる構成が考えられます(現在未検証です)
-## MacOSでの環境構築
+[Configuration with as little contamination of the OS environment as possible](./win2_clean.md)
 
-[MacOSでの環境構築](./mac_homebrew.md)
+Other possible configurations include MSYS and WSL (currently untested).
+## Building the environment on MacOS
+
+[Building the environment on MacOS](./mac_homebrew.md)

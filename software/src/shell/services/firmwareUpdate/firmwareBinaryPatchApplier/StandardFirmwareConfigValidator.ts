@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboardSpec, isNumberInRange } from '~/shared';
+import { IStandardFirmwareConfig, isNumberInRange } from '~/shared';
 
 const checkMatrixPins = (
   rowsPins: string[] | undefined,
@@ -35,14 +35,13 @@ const checkEncoderPins2 = (pins: string[] | undefined, isSplit: boolean) =>
 const checkLightingNumLeds2 = (num: number | undefined) =>
   num !== undefined ? isNumberInRange(num, 1, 256) : true;
 
-export function checkStandardKeyboardSpec(
-  spec: IKermiteStandardKeyboardSpec,
+export function checkStandardFirmwareConfigData(
+  spec: IStandardFirmwareConfig,
 ): boolean {
   const {
     baseFirmwareType: fw,
-    useBoardLedsProMicroAvr,
-    useBoardLedsProMicroRp,
-    useBoardLedsRpiPico,
+    boardType,
+    useBoardLeds,
     useMatrixKeyScanner,
     useDirectWiredKeyScanner,
     useEncoder,
@@ -72,14 +71,24 @@ export function checkStandardKeyboardSpec(
   const isOddSplit = fw === 'AvrOddSplit' || fw === 'RpOddSplit';
 
   if (isAvr) {
-    if (useBoardLedsProMicroRp || useBoardLedsRpiPico) {
+    if (
+      boardType === 'ChipRP2040' ||
+      boardType === 'ProMicroRP2040' ||
+      boardType === 'RpiPico'
+    ) {
       return false;
     }
   } else if (isRp) {
-    if (useBoardLedsProMicroAvr) {
+    if (boardType === 'ChipAtMega32U4' || boardType === 'ProMicro') {
       return false;
     }
   } else {
+    return false;
+  }
+  if (
+    useBoardLeds &&
+    (boardType === 'ChipAtMega32U4' || boardType === 'ChipRP2040')
+  ) {
     return false;
   }
 

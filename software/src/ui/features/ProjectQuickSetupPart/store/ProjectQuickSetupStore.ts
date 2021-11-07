@@ -3,26 +3,24 @@ import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   copyObjectProps,
-  fallbackStandardKeyboardSpec,
+  fallbackStandardFirmwareConfig,
   getNextFirmwareId,
-  IKermiteStandardKeyboardSpec,
   IProjectLayoutEntry,
   IProjectPackageInfo,
+  IStandardFirmwareConfig,
   IStandardFirmwareEntry,
+  validateResourceName,
 } from '~/shared';
-import { UiLocalStorage } from '~/ui/base';
-import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
+import { migrateStandardFirmwareConfig } from '~/shared/loaders';
 import {
   fallbackLayoutGeneratorOptions,
   ILayoutGeneratorOptions,
-} from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { createLayoutFromFirmwareSpec } from '~/ui/features/ProjectQuickSetupPart/base/LayoutGenerator';
-import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStoreHelpers';
-import {
-  dispatchCoreAction,
-  globalSettingsWriter,
-  uiActions,
-} from '~/ui/store';
+  UiLocalStorage,
+} from '~/ui/base';
+import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
+import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupPart/store/ProjectQuickSetupStoreHelpers';
+import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
 
 const constants = {
   firmwareName: 'default',
@@ -32,11 +30,12 @@ type IState = {
   projectId: string;
   keyboardName: string;
   variationId: string;
-  firmwareConfig: IKermiteStandardKeyboardSpec;
+  firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
   isConnectionValid: boolean;
   isFirmwareFlashPanelOpen: boolean;
+  rawEditValues: IStandardFirmwareConfig;
 };
 
 function createDefaultState(): IState {
@@ -44,17 +43,21 @@ function createDefaultState(): IState {
     projectId: '',
     keyboardName: '',
     variationId: '',
-    firmwareConfig: fallbackStandardKeyboardSpec,
+    firmwareConfig: fallbackStandardFirmwareConfig,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
     isConnectionValid: false,
     isFirmwareFlashPanelOpen: false,
+    rawEditValues: fallbackStandardFirmwareConfig,
   };
 }
 
 const state: IState = createDefaultState();
 
 const readers = {
+  get keyboardNameValidationError(): string | undefined {
+    return validateResourceName(state.keyboardName, 'keyboard name');
+  },
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareName } = constants;
     const {
@@ -106,7 +109,7 @@ const actions = {
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
     state.variationId = getNextFirmwareId([]);
   },
-  writeFirmwareConfig(data: IKermiteStandardKeyboardSpec) {
+  writeFirmwareConfig(data: IStandardFirmwareConfig) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
@@ -141,7 +144,6 @@ const actions = {
         presetSpec: { type: 'blank', layoutName: 'default' },
       },
     });
-    uiActions.navigateTo('/assigner');
   },
   openFirmwareFlashPanel() {
     state.isFirmwareFlashPanelOpen = true;
@@ -156,7 +158,7 @@ type IPersistData = {
   projectId: string;
   keyboardName: string;
   variationId: string;
-  firmwareConfig: IKermiteStandardKeyboardSpec;
+  firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
 };
 const persistDataRevision = 'QPS2';
@@ -169,6 +171,7 @@ const effects = {
       if (loadedData) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { revision, ...attrs } = loadedData;
+        migrateStandardFirmwareConfig(attrs.firmwareConfig);
         if (revision === persistDataRevision) {
           copyObjectProps(state, attrs);
         }
@@ -206,6 +209,7 @@ const effects = {
       if (!isValid) {
         state.isConfigValid = false;
       }
+      state.rawEditValues = editValues;
     }, [editValues]);
   },
 };

@@ -1,8 +1,17 @@
 import { css, FC, jsx, QxChild } from 'qx';
+import { IStandardFirmwareConfig } from '~/shared';
+import { ILayoutGeneratorOptions } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
-import { ILayoutGeneratorOptions } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPartTypes';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupPart/base/ProjectQuickSetupStore';
-import { useLayoutGeneratorOptionsPartModel } from '~/ui/features/ProjectQuickSetupPart/sections/LayoutGeneratorOptionsPart/model';
+import {
+  IWriteLayoutOptionFunc,
+  useLayoutGeneratorOptionsPartModel,
+} from '~/ui/fabrics/LayoutGeneratorOptionsPart/model';
+
+type Props = {
+  firmwareConfig: IStandardFirmwareConfig;
+  layoutOptions: ILayoutGeneratorOptions;
+  writeLayoutOption: IWriteLayoutOptionFunc;
+};
 
 const FieldRow: FC<{ title: string; children: QxChild }> = ({
   title,
@@ -14,15 +23,13 @@ const FieldRow: FC<{ title: string; children: QxChild }> = ({
   </div>
 );
 
-function valueChangeHandler<K extends keyof ILayoutGeneratorOptions>(key: K) {
-  return (value: ILayoutGeneratorOptions[K]) => {
-    projectQuickSetupStore.actions.writeLayoutOption(key, value);
-  };
-}
-
-export const LayoutGeneratorOptionsPart: FC = () => {
-  const { isOddSplit, layoutOptions, placementModeOptions } =
-    useLayoutGeneratorOptionsPartModel();
+export const LayoutGeneratorOptionsPart: FC<Props> = ({
+  firmwareConfig,
+  layoutOptions,
+  writeLayoutOption,
+}) => {
+  const { isOddSplit, placementModeOptions, valueChangeHandler } =
+    useLayoutGeneratorOptionsPartModel(firmwareConfig, writeLayoutOption);
 
   return (
     <div class={style}>

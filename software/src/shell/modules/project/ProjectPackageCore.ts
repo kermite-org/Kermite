@@ -6,9 +6,8 @@ import {
   IResourceOrigin,
   validateResourceName,
 } from '~/shared';
-import { appConfig, appEnv } from '~/shell/base';
+import { appEnv } from '~/shell/base';
 import {
-  fetchJson,
   fsExistsSync,
   fsxDeleteFile,
   fsxEnsureFolderExists,
@@ -26,7 +25,7 @@ const configs = {
   debugUseLocalRepositoryPackages: false,
 };
 if (appEnv.isDevelopment) {
-  configs.debugUseLocalRepositoryPackages = true;
+  // configs.debugUseLocalRepositoryPackages = true;
 }
 
 function convertPackageFileContentToPackageInfo(
@@ -103,41 +102,18 @@ async function loadDraftProjectPackageFile(
   return undefined;
 }
 
-type IIndexContent = {
-  files: Record<string, string>;
-};
-
 let cachedRemotePackages: IProjectPackageInfo[] | undefined;
 
 async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  if (cachedRemotePackages) {
-    return cachedRemotePackages;
+  if (!cachedRemotePackages) {
+    const remotePackagesLocalFolderPath = appEnv.resolveUserDataFilePath(
+      'data/remote_projects',
+    );
+    cachedRemotePackages = await loadProjectPackageFiles(
+      remotePackagesLocalFolderPath,
+      'online',
+    );
   }
-  const { onlineResourcesBaseUrl } = appConfig;
-
-  const indexContent = (await fetchJson(
-    `${onlineResourcesBaseUrl}/index.json`,
-  )) as IIndexContent;
-  const origin = 'online' as const;
-
-  const targetPaths = Object.keys(indexContent.files).filter((it) =>
-    it.endsWith('.kmpkg.json'),
-  );
-  cachedRemotePackages = await Promise.all(
-    targetPaths.map(async (path) => {
-      const data = (await fetchJson(
-        `${onlineResourcesBaseUrl}/${path}`,
-      )) as IProjectPackageFileContent;
-      migrateProjectPackageData(data);
-      const packageName = pathBasename(path, '.kmpkg.json');
-      return convertPackageFileContentToPackageInfo(
-        data,
-        origin,
-        packageName,
-        true,
-      );
-    }),
-  );
   return cachedRemotePackages;
 }
 

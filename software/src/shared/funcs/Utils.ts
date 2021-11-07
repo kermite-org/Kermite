@@ -448,3 +448,7 @@ export function getMatched(text: string, pattern: RegExp): string | undefined {
 export function optInArrayItem<T>(item: T | undefined | false): T[] {
   return item ? [item] : [];
 }
+
+export function isIncluded<T>(value: T) {
+  return (...source: T[]) => source.includes(value);
+}

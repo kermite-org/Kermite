@@ -1,13 +1,17 @@
 import {
-  ModifierVirtualKey,
-  VirtualKeyTexts,
-  systemActionToLabelTextMap,
-  systemActionAssignSelectionSource,
   encodeSingleModifierVirtualKey,
+  ModifierVirtualKey,
+  systemActionAssignSelectionSource,
+  systemActionToLabelTextMap,
   VirtualKey,
+  VirtualKeyTexts,
 } from '~/shared';
 import { IOperationCardViewModel, texts } from '~/ui/base';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
+import {
+  getKeyAssignNote,
+  getSystemActionNote,
+} from '~/ui/editors/ProfileEditor/models/KeyAssignNoteTexts';
 import {
   virtualKeyGroupsTable2,
   virtualKeyGroupsTable3,
@@ -103,7 +107,7 @@ function makeVirtualKeyEntryGroup(
     //   (isDualSecondary &&
     //     modifierVirtualKeys.includes(vk as ModifierVirtualKey)),
     isEnabled: true,
-    hint: texts.hint_assigner_assigns_keyInput,
+    hint: getKeyAssignNote(vk),
   }));
 }
 
@@ -194,7 +198,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
           payloadValue: 0,
         }),
       isEnabled: true,
-      hint: '',
+      hint: getSystemActionNote(sa),
     }));
 
   return {
