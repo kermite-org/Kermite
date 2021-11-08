@@ -3,9 +3,11 @@ import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { WizardSectionPanel } from '~/ui/components/layouts';
 import { StandardFirmwareEditor } from '~/ui/editors';
-import { ControllerPinAssignsSection } from '~/ui/fabrics/ControllerPinAssignsSection/view';
-import { LayoutConfigurationSectionContent } from '~/ui/fabrics/LayoutConfigurationSection/view';
-import { ProjectKeyboardNameEditPart } from '~/ui/fabrics/ProjectKeyboardNameEditPart/view';
+import {
+  ControllerPinAssignsSection,
+  LayoutConfigurationSectionContent,
+  ProjectKeyboardNameEditPart,
+} from '~/ui/fabrics';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {

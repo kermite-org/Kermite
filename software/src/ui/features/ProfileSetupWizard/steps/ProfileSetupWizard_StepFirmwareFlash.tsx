@@ -3,8 +3,10 @@ import { IProjectPackageInfo } from '~/shared';
 import { colors, ISelectorSource } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
-import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
-import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
+import {
+  DeviceAutoConnectionPart,
+  StandardFirmwareFlashPart,
+} from '~/ui/fabrics';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 
 type IFirmwareFlashStepModel = {

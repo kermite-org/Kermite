@@ -9,7 +9,7 @@ import {
 } from '~/shared';
 import { colors, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { KeyboardProfileSelector } from '~/ui/components';
-import { PresetKeyboardSection } from '~/ui/fabrics/PresetKeyboardSection/view';
+import { PresetKeyboardSection } from '~/ui/fabrics';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 
 function makePresetOptions(

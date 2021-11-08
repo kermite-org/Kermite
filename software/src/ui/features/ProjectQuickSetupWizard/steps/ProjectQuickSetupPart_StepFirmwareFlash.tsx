@@ -1,7 +1,9 @@
 import { css, FC, jsx, useMemo } from 'qx';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
-import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
-import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
+import {
+  DeviceAutoConnectionPart,
+  StandardFirmwareFlashPart,
+} from '~/ui/fabrics';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {

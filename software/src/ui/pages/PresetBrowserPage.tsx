@@ -1,8 +1,7 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
-import { PresetKeyboardSection } from '~/ui/fabrics/PresetKeyboardSection/view';
-import { PresetSelectionSection } from '~/ui/fabrics/PresetSelectionSection/view';
+import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
 import { usePresetSelectionModel } from '~/ui/features/PresetBrowser/models';
 
 export const PresetBrowserPage: FC = () => {

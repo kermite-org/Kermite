@@ -1,5 +1,5 @@
 import { css, FC, jsx, useMemo } from 'qx';
-import { PresetKeyboardViewWrapper } from '~/ui/fabrics/PresetKeyboardViewWrapper/view';
+import { PresetKeyboardViewWrapper } from '~/ui/fabrics';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { uiReaders } from '~/ui/store';
 
