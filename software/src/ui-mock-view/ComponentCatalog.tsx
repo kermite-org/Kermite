@@ -7,11 +7,13 @@ import {
   GeneralSelectorExamples,
   SetupNavigationPullTabExamples,
   ToggleSwitchExamples,
-  PreviewKeyboardShapeViewExamples,
-  ProjectKeyboardShapeViewExamples,
   NavigationStepListExamples,
   ToggleSwitchLineExamples,
 } from '~/ui/components';
+import {
+  PreviewKeyboardShapeViewExamples,
+  ProjectKeyboardShapeViewExamples,
+} from '~/ui/elements';
 import { ProjectKeyboardListExamples } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.visor';
 import { RouterHeaderBarExamples } from '~/ui/featureComponents';
 import { fieldSetter } from '~/ui/utils';

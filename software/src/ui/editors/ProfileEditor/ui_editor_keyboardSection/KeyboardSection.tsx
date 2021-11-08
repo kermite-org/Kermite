@@ -1,9 +1,9 @@
 import { css, FC, jsx } from 'qx';
 import { usePlayerModel } from '~/ui/commonModels';
-import { EditorKeyboardView } from '~/ui/components/keyboard';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
 import { ProfileSetupNavigationCardView } from '~/ui/editors/ProfileEditor/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
+import { EditorKeyboardView } from '~/ui/elements/keyboard';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { LayerStateView } from './LayerStateView';
 

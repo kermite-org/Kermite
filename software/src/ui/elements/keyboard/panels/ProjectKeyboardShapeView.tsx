@@ -2,8 +2,8 @@ import { css, FC, jsx } from 'qx';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { colors } from '~/ui/base';
 import { getKeyboardSvgViewBoxSpec } from '~/ui/base/UiDomainHelpers';
-import { ProjectKeyEntityCard } from '~/ui/components/keyboard/keyUnitCards';
-import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody';
+import { ProjectKeyEntityCard } from '~/ui/elements/keyboard/keyUnitCards';
+import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody';
 
 type Props = {
   className?: string;

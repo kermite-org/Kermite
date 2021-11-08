@@ -1,7 +1,7 @@
 import { jsx, css, QxChildren, FC } from 'qx';
 import { IDisplayArea } from '~/shared';
-import { KeyboardSvgFrame } from '~/ui/components/keyboard/frames/KeyboardSvgFrame';
-import { ScalerBox } from '~/ui/components/keyboard/frames/ScalerBox';
+import { KeyboardSvgFrame } from '~/ui/elements/keyboard/frames/KeyboardSvgFrame';
+import { ScalerBox } from '~/ui/elements/keyboard/frames/ScalerBox';
 
 type Props = {
   displayArea: IDisplayArea;

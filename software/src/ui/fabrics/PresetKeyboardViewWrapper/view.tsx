@@ -1,6 +1,6 @@
 import { FC, jsx } from 'qx';
 import { IProfileData } from '~/shared';
-import { PresetKeyboardView } from '~/ui/components';
+import { PresetKeyboardView } from '~/ui/elements';
 import { usePresetKeyboardViewWrapperModel } from '~/ui/fabrics/PresetKeyboardViewWrapper/model';
 
 export const PresetKeyboardViewWrapper: FC<{ profileData: IProfileData }> = ({

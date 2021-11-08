@@ -1,8 +1,8 @@
 import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
 import { IEditKeyUnitCardViewModel } from '~/ui/base';
 import { IPlayerModel } from '~/ui/commonModels';
-import { getAssignEntryTexts } from '~/ui/components/keyboard';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
+import { getAssignEntryTexts } from '~/ui/elements/keyboard';
 import { uiActions, uiState } from '~/ui/store';
 
 export interface IEditKeyUnitCardPartViewModel {

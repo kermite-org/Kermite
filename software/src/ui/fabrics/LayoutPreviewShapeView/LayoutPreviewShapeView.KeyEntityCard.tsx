@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
-import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
+import { KeyUnitShape } from '~/ui/elements/keyboard/keyUnitCards/KeyUnitShape';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
 
 type Props = {

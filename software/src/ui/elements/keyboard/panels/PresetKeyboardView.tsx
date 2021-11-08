@@ -1,9 +1,9 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
-import { PresetKeyUnitCard } from '~/ui/components/keyboard/keyUnitCards/PresetKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
+import { PresetKeyUnitCard } from '~/ui/elements/keyboard/keyUnitCards/PresetKeyUnitCard';
+import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
 
 type Props = {
   keyUnits: IPresetKeyUnitViewModel[];

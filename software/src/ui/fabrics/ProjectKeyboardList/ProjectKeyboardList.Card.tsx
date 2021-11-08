@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectKeyboardShapeView } from '~/ui/components/keyboard/panels';
+import { ProjectKeyboardShapeView } from '~/ui/elements/keyboard/panels';
 
 type Props = {
   project: IProjectKeyboardListProjectItem;

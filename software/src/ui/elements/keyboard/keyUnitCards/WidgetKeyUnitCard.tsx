@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'qx';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/base';
-import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
+import { KeyUnitShape } from '~/ui/elements/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
   keyUnit: IWidgetKeyUnitCardViewModel;

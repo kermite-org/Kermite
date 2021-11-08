@@ -5,7 +5,7 @@ import {
   getDisplayKeyboardDesignSingleCached,
 } from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
-import { makePresetKeyUnitViewModels } from '~/ui/components/keyboard';
+import { makePresetKeyUnitViewModels } from '~/ui/elements/keyboard';
 
 export interface IPresetKeyboardViewWrapperModel {
   keyUnits: IPresetKeyUnitViewModel[];

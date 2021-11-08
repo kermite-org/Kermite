@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'qx';
 import { IDisplayKeyEntity } from '~/shared';
 import { colors } from '~/ui/base';
-import { KeyUnitShape } from '~/ui/components/keyboard/keyUnitCards/KeyUnitShape';
+import { KeyUnitShape } from '~/ui/elements/keyboard/keyUnitCards/KeyUnitShape';
 
 type Props = {
   keyEntity: IDisplayKeyEntity;

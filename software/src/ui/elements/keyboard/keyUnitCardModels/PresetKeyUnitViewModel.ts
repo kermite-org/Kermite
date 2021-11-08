@@ -10,7 +10,7 @@ import {
   getAssignForKeyUnitWithLayerFallback,
   getAssignEntryTexts,
   getAssignForKeyUnitInInitialLayerStack,
-} from '~/ui/components/keyboard/keyUnitCardModels/KeyUnitCardViewModelCommon';
+} from '~/ui/elements/keyboard/keyUnitCardModels/KeyUnitCardViewModelCommon';
 
 function createPresetKeyUnitViewModel(
   ke: IDisplayKeyEntity,

@@ -3,7 +3,7 @@ import { ICustomKeyUnitViewModelBase } from '~/ui/base';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitWithLayerFallback,
-} from '~/ui/components/keyboard/keyUnitCardModels/KeyUnitCardViewModelCommon';
+} from '~/ui/elements/keyboard/keyUnitCardModels/KeyUnitCardViewModelCommon';
 
 export function makeCustomKeyUnitViewModels<
   TCustomKeyUnitViewModel extends ICustomKeyUnitViewModelBase,
