@@ -1,24 +1,21 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/base';
+import { ISelectorSource, texts } from '~/ui/base';
 import {
+  GeneralButton,
   KeyboardProfileSelector,
   KeyboardProjectSelector,
-  GeneralButton,
 } from '~/ui/components';
-import { IPresetSelectionSectionViewModel } from '~/ui/features/PresetBrowser/viewModels';
 
 type Props = {
-  viewModel: IPresetSelectionSectionViewModel;
+  projectSelectorSource: ISelectorSource;
+  presetSelectorSource: ISelectorSource;
+  handleCreateProfileButton: () => void;
 };
 
 export const PresetSelectionSection: FC<Props> = ({
-  viewModel: {
-    projectSelectorSource,
-    isLinkButtonActive,
-    linkButtonHandler,
-    presetSelectorSource,
-    editPresetButtonHandler,
-  },
+  projectSelectorSource,
+  presetSelectorSource,
+  handleCreateProfileButton,
 }) => (
   <div css={style}>
     <div class="selectorsPart">
@@ -26,8 +23,6 @@ export const PresetSelectionSection: FC<Props> = ({
         <div>{texts.label_presetBrowser_selectionTitle_keyboard}</div>
         <KeyboardProjectSelector
           selectorSource={projectSelectorSource}
-          isLinkButtonActive={isLinkButtonActive}
-          linkButtonHandler={linkButtonHandler}
           hint={texts.hint_presetBrowser_selection_keyboard}
         />
       </div>
@@ -43,7 +38,7 @@ export const PresetSelectionSection: FC<Props> = ({
       text={texts.label_presetBrowser_createProfileButton}
       hint={texts.hint_presetBrowser_createProfileButton}
       size="large"
-      onClick={editPresetButtonHandler}
+      onClick={handleCreateProfileButton}
     />
   </div>
 );

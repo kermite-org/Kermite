@@ -2,19 +2,19 @@ import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection } from '~/ui/fabrics/PresetKeyboardSection/view';
-import {
-  PresetSelectionSection,
-  usePresetSelectionModel,
-  usePresetSelectionSectionViewModel,
-} from '~/ui/features/PresetBrowser';
+import { PresetSelectionSection } from '~/ui/fabrics/PresetSelectionSection/view';
+import { usePresetSelectionModel } from '~/ui/features/PresetBrowser/models';
 
 export const PresetBrowserPage: FC = () => {
-  const model = usePresetSelectionModel();
-  const presetSelectionSectionViewModel =
-    usePresetSelectionSectionViewModel(model);
+  const {
+    projectSelectorSource,
+    presetSelectorSource,
+    editSelectedProjectPreset,
+    loadedProfileData,
+  } = usePresetSelectionModel();
   const noPresets =
-    model.projectSelectorSource.options.length === 1 &&
-    model.presetSelectorSource.options.length === 0;
+    projectSelectorSource.options.length === 1 &&
+    presetSelectorSource.options.length === 0;
   return (
     <CommonPageFrame pageTitle={texts.label_presetBrowser_pageTitle}>
       <div css={style}>
@@ -22,9 +22,11 @@ export const PresetBrowserPage: FC = () => {
         {!noPresets && (
           <div>
             <PresetSelectionSection
-              viewModel={presetSelectionSectionViewModel}
+              projectSelectorSource={projectSelectorSource}
+              presetSelectorSource={presetSelectorSource}
+              handleCreateProfileButton={editSelectedProjectPreset}
             />
-            <PresetKeyboardSection profileData={model.loadedProfileData} />
+            <PresetKeyboardSection profileData={loadedProfileData} />
           </div>
         )}
       </div>
