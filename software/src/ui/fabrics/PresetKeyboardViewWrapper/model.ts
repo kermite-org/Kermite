@@ -7,25 +7,20 @@ import {
 import { IPresetKeyUnitViewModel } from '~/ui/base';
 import { makePresetKeyUnitViewModels } from '~/ui/components/keyboard';
 
-export interface IPresetKeyboardViewModel {
+export interface IPresetKeyboardViewWrapperModel {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
 }
 
-export function usePresetKeyboardViewModel(
+export function usePresetKeyboardViewWrapperModel(
   profileData: IProfileData,
-  currentLayerId: string,
-): IPresetKeyboardViewModel {
+): IPresetKeyboardViewWrapperModel {
   const displayDesign = getDisplayKeyboardDesignSingleCached(
     profileData.keyboardDesign,
   );
   return {
-    keyUnits: makePresetKeyUnitViewModels(
-      profileData,
-      displayDesign,
-      currentLayerId,
-    ),
+    keyUnits: makePresetKeyUnitViewModels(profileData, displayDesign, ''),
     displayArea: displayDesign.displayArea,
     outlineShapes: displayDesign.outlineShapes,
   };
