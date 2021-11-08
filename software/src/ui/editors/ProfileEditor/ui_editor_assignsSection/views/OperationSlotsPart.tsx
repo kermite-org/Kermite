@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'qx';
-import { OperationCard, OperationSlotCard } from '~/ui/components';
 import { IPlainOperationEditCardsViewModel } from '~/ui/editors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
 import { IOperationSlotsPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';
+import { OperationCard, OperationSlotCard } from '~/ui/elements';
 
 type Props = {
   operationSlotsVM: IOperationSlotsPartViewModel;

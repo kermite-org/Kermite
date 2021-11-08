@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'qx';
 import { texts } from '~/ui/base';
-import { LayerOperationButton } from '~/ui/components';
 import { ILayerManagementPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersManagementPartViewModel';
+import { LayerOperationButton } from '~/ui/elements';
 
 type Props = {
   vm: ILayerManagementPartViewModel;

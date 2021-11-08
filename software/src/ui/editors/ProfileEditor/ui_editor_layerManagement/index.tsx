@@ -1,8 +1,8 @@
 import { jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { SectionHeaderText } from '~/ui/components';
 import { makeLayerListBoxPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';
 import { makeLayerManagementPartViewModel } from '~/ui/editors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersManagementPartViewModel';
+import { SectionHeaderText } from '~/ui/elements';
 import { LayerManagementPart } from './views/LayerManagementPart';
 import { LayersListBoxPart } from './views/LayersListBoxPart';
 

@@ -5,12 +5,12 @@ import {
   ClosableOverlay,
   CommonDialogFrame,
   createModal,
-  cssCommonPropertiesTable,
   DialogButton,
   DialogButtonsRow,
   DialogContentRow,
   GeneralSelector,
 } from '~/ui/components';
+import { cssCommonPropertiesTable } from '~/ui/elements';
 import { projectPackagesReader } from '~/ui/store';
 import { fieldSetter, useMemoEx } from '~/ui/utils';
 

@@ -1,7 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { CheckBoxLine, ConfigurationButton } from '~/ui/components';
+import { CheckBoxLine } from '~/ui/components';
 import { assignerModel } from '~/ui/editors/ProfileEditor/models/AssignerModel';
+import { ConfigurationButton } from '~/ui/elements';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { commitUiSettings, commitUiState, uiState } from '~/ui/store';
 

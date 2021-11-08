@@ -1,10 +1,10 @@
 import { jsx, css, FC } from 'qx';
-import { OperationCard, OperationLayerOptionSelector } from '~/ui/components';
 import {
   IPlainOperationEditCardsViewModel,
   IOperationEditPartViewModel,
 } from '~/ui/editors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
 import { IOperationLayerOptionEditViewModel } from '~/ui/editors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationLayerOptionEditViewModel';
+import { OperationCard, OperationLayerOptionSelector } from '~/ui/elements';
 
 type Props = {
   plainOperationEditCardsVM: IPlainOperationEditCardsViewModel;
