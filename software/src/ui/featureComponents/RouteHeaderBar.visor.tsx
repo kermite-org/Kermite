@@ -1,5 +1,5 @@
 import { jsx } from 'qx';
-import { RouteHeaderBar } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar';
+import { RouteHeaderBar } from '~/ui/featureComponents';
 
 export const RouterHeaderBarExamples = {
   default: () => (

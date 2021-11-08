@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'qx';
-import { LinkButton } from '~/ui/components/utils/LinkButton';
+import { LinkButton } from '~/ui/components';
 
 type Props = {
   className?: string;
