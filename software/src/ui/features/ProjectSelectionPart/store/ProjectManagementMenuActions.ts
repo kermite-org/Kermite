@@ -1,7 +1,7 @@
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { callProjectSelectionModal } from '~/ui/featureModals';
+import { callProjectSelectionModal } from '~/ui/elements/featureModals';
 import { projectPackagesReader } from '~/ui/store/ProjectPackages';
 import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';

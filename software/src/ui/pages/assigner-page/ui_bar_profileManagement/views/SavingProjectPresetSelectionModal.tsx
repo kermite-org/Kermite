@@ -5,7 +5,7 @@ import { modalConfirm, modalError } from '~/ui/components';
 import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
-} from '~/ui/featureModals';
+} from '~/ui/elements/featureModals';
 import { profilesActions } from '~/ui/pages/assigner-page/models';
 import { IProfileManagementPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
