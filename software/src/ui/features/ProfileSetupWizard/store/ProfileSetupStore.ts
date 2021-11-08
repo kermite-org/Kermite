@@ -12,6 +12,7 @@ import {
   dispatchCoreAction,
   globalSettingsWriter,
   projectPackagesReader,
+  uiState,
 } from '~/ui/store';
 
 type IState = {
@@ -42,6 +43,16 @@ const readers = {
     return (
       projectPackagesReader.findProjectInfo(origin, projectId) ||
       fallbackProjectPackageInfo
+    );
+  },
+  get isTargetDeviceConnected(): boolean {
+    const deviceStatus = uiState.core.deviceStatus;
+    const { targetProjectKey, variationId } = state;
+    const { projectId } = getOriginAndProjectIdFromProjectKey(targetProjectKey);
+    return (
+      deviceStatus.isConnected &&
+      deviceStatus.deviceAttrs.projectId === projectId &&
+      deviceStatus.deviceAttrs.variationId === variationId
     );
   },
 };

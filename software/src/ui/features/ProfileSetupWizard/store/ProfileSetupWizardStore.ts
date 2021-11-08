@@ -23,11 +23,11 @@ const readers = {
   get currentStepNumber(): number {
     return parseInt(readers.currentStep);
   },
-  canGoToStep(_step: IProfileSetupStep): boolean {
-    const { targetProjectKey } = profileSetupStore.state;
-    const { currentStep } = readers;
-    if (currentStep === 'step1') {
-      return !!targetProjectKey;
+  canGoToStep(targetStep: IProfileSetupStep): boolean {
+    if (targetStep === 'step2') {
+      return !!profileSetupStore.state.targetProjectKey;
+    } else if (targetStep === 'step3') {
+      return profileSetupStore.readers.isTargetDeviceConnected;
     } else {
       return true;
     }
