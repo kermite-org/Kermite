@@ -5,6 +5,7 @@ import {
   IPageSpec,
   PagePaths,
 } from '~/ui/commonModels/PageTypes';
+import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { globalSettingsWriter } from '~/ui/store/base/GlobalSettings';
 import { commitUiSettings, commitUiState } from '~/ui/store/base/UiState';
 
@@ -37,6 +38,7 @@ export const uiActions = {
     // commitUiSettings({ showSetupNavigationPanel: false });
   },
   showProfileSetupWizard() {
+    profileSetupStore.actions.clearPersistState();
     uiActions.navigateTo('/profileSetup/step1');
   },
   showProjectQuickSetupWizard() {

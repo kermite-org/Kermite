@@ -30,6 +30,10 @@ function createDefaultState(): IState {
 
 const state: IState = createDefaultState();
 
+const constants = {
+  persistDataStorageKey: 'profileSetupWizardData',
+};
+
 const readers = {
   get targetProjectInfo(): IProjectPackageInfo {
     const { origin, projectId } = getOriginAndProjectIdFromProjectKey(
@@ -58,7 +62,9 @@ const actions = {
   setPresetKey(presetKey: string) {
     state.presetKey = presetKey;
   },
-  resetConfigurations() {
+  clearPersistState() {
+    const storageKey = constants.persistDataStorageKey;
+    UiLocalStorage.removeItem(storageKey);
     copyObjectProps(state, createDefaultState());
   },
   async createProfile() {
@@ -89,8 +95,8 @@ type IPersistData = {
 
 const effects = {
   useEditDataPersistence() {
+    const storageKey = constants.persistDataStorageKey;
     useEffect(() => {
-      const storageKey = 'profileSetupWizardData';
       const revision = 'v1';
       const loadedData = UiLocalStorage.readItem<IPersistData>(storageKey);
       if (loadedData) {
