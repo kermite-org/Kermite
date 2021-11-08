@@ -45,7 +45,7 @@ export const WelcomePage: FC = () => {
             className="button"
             onClick={showProfileSetupWizard}
           >
-            セットアップナビゲーションを表示
+            プロファイル作成ウィザード
           </WelcomePageButton>
         </div>
         <div className="row">
