@@ -1,5 +1,6 @@
 import { isNumberInRange } from '~/shared';
 import { IProfileSetupStep } from '~/ui/commonModels';
+import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
 
 const helpers = {
@@ -44,13 +45,13 @@ const actions = {
   shiftStepTo(step: IProfileSetupStep) {
     uiActions.navigateTo(`/profileSetup/${step}`);
   },
-  shiftStep(dir: number) {
+  async shiftStep(dir: number) {
     const { currentStep } = readers;
     if (currentStep === 'step1' && dir === -1) {
       uiActions.navigateTo('/home');
     } else if (currentStep === 'step3' && dir === 1) {
-      // await projectQuickSetupStore.actions.createProfile();
-      // uiActions.navigateTo('/assigner');
+      await profileSetupStore.actions.createProfile();
+      uiActions.navigateTo('/assigner');
     } else {
       const nextStep = helpers.shiftStep(readers.currentStep, dir);
       if (nextStep) {

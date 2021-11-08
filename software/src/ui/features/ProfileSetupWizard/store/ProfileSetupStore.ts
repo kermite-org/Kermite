@@ -4,6 +4,7 @@ import {
   createPresetKey,
   fallbackProjectPackageInfo,
   getOriginAndProjectIdFromProjectKey,
+  getPresetSpecFromPresetKey,
   IProjectPackageInfo,
 } from '~/shared';
 import { UiLocalStorage } from '~/ui/base';
@@ -61,20 +62,19 @@ const actions = {
     copyObjectProps(state, createDefaultState());
   },
   async createProfile() {
-    const projectInfo = fallbackProjectPackageInfo; // development dummy
-    const { projectId } = projectInfo;
-    await dispatchCoreAction({
-      project_saveLocalProjectPackageInfo: projectInfo,
-    });
+    const { targetProjectKey, presetKey } = state;
+    const { origin, projectId } =
+      getOriginAndProjectIdFromProjectKey(targetProjectKey);
     await globalSettingsWriter.writeValue('globalProjectSpec', {
-      origin: 'local',
+      origin,
       projectId,
     });
+    const presetSpec = getPresetSpecFromPresetKey(presetKey);
     await dispatchCoreAction({
       profile_createProfileUnnamed: {
-        targetProjectOrigin: 'local',
+        targetProjectOrigin: origin,
         targetProjectId: projectId,
-        presetSpec: { type: 'blank', layoutName: 'default' },
+        presetSpec,
       },
     });
   },
