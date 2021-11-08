@@ -1,11 +1,9 @@
 import { useState } from 'qx';
 import { validateResourceName } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import {
-  IProjectAttachmentFileSelectorModalModel,
-  modalError,
-} from '~/ui/components';
+import { modalError } from '~/ui/components';
 import { LayoutEditorCore } from '~/ui/editors';
+import { IProjectAttachmentFileSelectorModalModel } from '~/ui/featureModals';
 import { layoutManagerActions } from '~/ui/pages/layout-editor-page/models/LayoutManagerActions';
 import { ILayoutManagerModalState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';

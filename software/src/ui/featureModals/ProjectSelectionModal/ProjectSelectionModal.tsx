@@ -1,7 +1,7 @@
 import { jsx, useLocal } from 'qx';
 import { ISelectorOption } from '~/ui/base';
-import { ProjectSelectionModalContent } from '~/ui/components/modals/ProjectSelectionModal/ProjectSelectionModal.content';
 import { createModal } from '~/ui/components/overlay';
+import { ProjectSelectionModalContent } from '~/ui/featureModals/ProjectSelectionModal/ProjectSelectionModal.content';
 
 type ModalProps = {
   modalTitle: string;
