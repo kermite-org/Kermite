@@ -5,11 +5,13 @@ import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
 
 type IState = {
   targetProjectKey: string;
+  variationId: string;
 };
 
 function createDefaultState(): IState {
   return {
     targetProjectKey: '',
+    variationId: '',
   };
 }
 
@@ -20,6 +22,9 @@ const readers = {};
 const actions = {
   setTargetProjectKey(projectKey: string) {
     state.targetProjectKey = projectKey;
+  },
+  setVariationId(variationId: string) {
+    state.variationId = variationId;
   },
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
@@ -47,27 +52,27 @@ const actions = {
 type IPersistData = {
   revision: string;
   targetProjectKey: string;
+  variationId: string;
 };
-const persistDataRevision = 'profileSetupEditDataV1';
 
 const effects = {
   useEditDataPersistence() {
     useEffect(() => {
-      const storageKey = 'profileSetupEditData';
+      const storageKey = 'profileSetupWizardData';
+      const revision = 'v1';
       const loadedData = UiLocalStorage.readItem<IPersistData>(storageKey);
       if (loadedData) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { revision } = loadedData;
-        if (revision === persistDataRevision) {
+        if (loadedData.revision === revision) {
           copyObjectProps(state, loadedData);
         }
       }
 
       return () => {
-        const { targetProjectKey } = state;
+        const { targetProjectKey, variationId } = state;
         const persistData: IPersistData = {
-          revision: persistDataRevision,
+          revision,
           targetProjectKey,
+          variationId,
         };
         UiLocalStorage.writeItem(storageKey, persistData);
       };
