@@ -1,16 +1,17 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
+import { PresetKeyboardSection } from '~/ui/fabrics/PresetKeyboardSection/view';
 import {
-  usePresetBrowserViewModel,
   PresetSelectionSection,
-  PresetKeyboardSection,
   usePresetSelectionModel,
+  usePresetSelectionSectionViewModel,
 } from '~/ui/features/PresetBrowser';
 
 export const PresetBrowserPage: FC = () => {
   const model = usePresetSelectionModel();
-  const viewModel = usePresetBrowserViewModel(model);
+  const presetSelectionSectionViewModel =
+    usePresetSelectionSectionViewModel(model);
   const noPresets =
     model.projectSelectorSource.options.length === 1 &&
     model.presetSelectorSource.options.length === 0;
@@ -21,11 +22,9 @@ export const PresetBrowserPage: FC = () => {
         {!noPresets && (
           <div>
             <PresetSelectionSection
-              viewModel={viewModel.presetSelectionSectionViewModel}
+              viewModel={presetSelectionSectionViewModel}
             />
-            <PresetKeyboardSection
-              viewModel={viewModel.presetKeyboardSectionViewModel}
-            />
+            <PresetKeyboardSection profileData={model.loadedProfileData} />
           </div>
         )}
       </div>

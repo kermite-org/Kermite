@@ -9,10 +9,7 @@ import {
 } from '~/shared';
 import { colors, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { KeyboardProfileSelector } from '~/ui/components';
-import {
-  PresetKeyboardSection,
-  usePresetKeyboardSectionViewModel,
-} from '~/ui/features/PresetBrowser';
+import { PresetKeyboardSection } from '~/ui/fabrics/PresetKeyboardSection/view';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 
 function makePresetOptions(
@@ -37,7 +34,6 @@ export function useProfileDataLoaded(
   return useMemo(() => {
     if (presetKey) {
       const presetSpec = getPresetSpecFromPresetKey(presetKey);
-
       if (presetSpec.type === 'preset') {
         const profile = projectInfo.profiles.find(
           (profile) => profile.profileName === presetSpec.presetName,
@@ -83,8 +79,6 @@ function usePresetSelectionStepModel(): PresetSelectionStepModel {
 export const ProfileSetupWizard_StepPresetSelection: FC = () => {
   const { presetSelectorSource, loadedProfileData } =
     usePresetSelectionStepModel();
-  const keyboardSectionVm =
-    usePresetKeyboardSectionViewModel(loadedProfileData);
   return (
     <div css={style}>
       <div class="selectors-part">
@@ -95,7 +89,7 @@ export const ProfileSetupWizard_StepPresetSelection: FC = () => {
         />
       </div>
       <div class="keyboard-part">
-        <PresetKeyboardSection viewModel={keyboardSectionVm} />
+        <PresetKeyboardSection profileData={loadedProfileData} />
       </div>
     </div>
   );
