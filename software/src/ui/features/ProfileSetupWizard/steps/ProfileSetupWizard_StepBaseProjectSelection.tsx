@@ -6,7 +6,7 @@ import {
   sortOrderBy,
 } from '~/shared';
 import { colors, IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectSelectionPartComponent } from '~/ui/featureComponents/ProjectSelectionPartComponent';
+import { ProjectSelectionPartComponent } from '~/ui/fabrics';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiReaders } from '~/ui/store';
 
