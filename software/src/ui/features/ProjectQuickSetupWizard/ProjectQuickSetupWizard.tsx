@@ -1,7 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectQuickSetupStep } from '~/ui/commonModels';
-import { WizardFooterBar } from '~/ui/featureComponents/WizardFooterBar';
-import { WizardTopBar } from '~/ui/featureComponents/WizardTopBar';
+import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareConfig';
 import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareFlash';
 import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepLayoutConfig';

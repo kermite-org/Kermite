@@ -1,7 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { IProfileSetupStep } from '~/ui/commonModels';
-import { WizardFooterBar } from '~/ui/featureComponents/WizardFooterBar';
-import { WizardTopBar } from '~/ui/featureComponents/WizardTopBar';
+import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
 import { ProfileSetupWizard_StepBaseProfileSelection } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepBaseProjectSelection';
 import { ProfileSetupWizard_StepFirmwareFlash } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepFirmwareFlash';
 import { ProfileSetupWizard_StepPresetSelection } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepPresetSelection';

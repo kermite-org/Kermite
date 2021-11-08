@@ -9,7 +9,7 @@ import {
   CustomFirmwareEditor,
   CustomFirmwareEditor_OutputPropsSupplier,
 } from '~/ui/editors';
-import { RouteHeaderBar } from '~/ui/featureComponents';
+import { RouteHeaderBar } from '~/ui/elements/frames';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';

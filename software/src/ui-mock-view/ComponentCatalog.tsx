@@ -14,8 +14,8 @@ import {
   PreviewKeyboardShapeViewExamples,
   ProjectKeyboardShapeViewExamples,
 } from '~/ui/elements';
+import { RouterHeaderBarExamples } from '~/ui/elements/frames';
 import { ProjectKeyboardListExamples } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.visor';
-import { RouterHeaderBarExamples } from '~/ui/featureComponents';
 import { fieldSetter } from '~/ui/utils';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;

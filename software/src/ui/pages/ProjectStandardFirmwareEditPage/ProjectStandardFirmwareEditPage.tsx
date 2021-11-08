@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { IPageSpec_ProjectStandardFirmwareEdit } from '~/ui/commonModels';
 import { StandardFirmwareEditor } from '~/ui/editors';
-import { RouteHeaderBar } from '~/ui/featureComponents';
+import { RouteHeaderBar } from '~/ui/elements/frames';
 import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 
 type Props = {

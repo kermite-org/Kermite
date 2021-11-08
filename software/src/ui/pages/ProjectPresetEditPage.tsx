@@ -6,7 +6,7 @@ import {
   AssignerGeneralComponent,
   AssignerGeneralComponent_OutputPropsSupplier,
 } from '~/ui/editors';
-import { RouteHeaderBar } from '~/ui/featureComponents';
+import { RouteHeaderBar } from '~/ui/elements/frames';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
 
 type Props = {

@@ -7,7 +7,7 @@ import {
   LayoutEditorGeneralComponent_OutputPropsSupplier,
   LayoutEditorCore,
 } from '~/ui/editors';
-import { RouteHeaderBar } from '~/ui/featureComponents';
+import { RouteHeaderBar } from '~/ui/elements/frames';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
 import { useMemoEx } from '~/ui/utils';
 
