@@ -1,14 +1,14 @@
 import { useEffect } from 'qx';
 import {
   checkDeviceBootloaderMatch,
-  getFirmwareTargetDeviceFromBaseFirmwareType,
   IBootloaderDeviceDetectionStatus,
   IFirmwareTargetDevice,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
+import { getFirmwareTargetDeviceType } from '~/ui/commonModels';
 import { modalConfirm, showCommandOutputLogModal } from '~/ui/components';
-import { uiActions, uiReaders } from '~/ui/store';
+import { uiActions } from '~/ui/store';
 
 type FirmwareUpdatePhase = 'WaitingReset' | 'WaitingUploadOrder' | 'Uploading';
 
@@ -94,27 +94,6 @@ const actions = {
     }
   },
 };
-
-function getFirmwareTargetDeviceType(
-  projectInfo: IProjectPackageInfo,
-  variationId: string,
-): IFirmwareTargetDevice | undefined {
-  const firmwareEntry = projectInfo.firmwares.find(
-    (it) => it.variationId === variationId,
-  );
-  if (firmwareEntry) {
-    if (firmwareEntry.type === 'standard') {
-      return getFirmwareTargetDeviceFromBaseFirmwareType(
-        firmwareEntry.standardFirmwareConfig.baseFirmwareType,
-      );
-    } else {
-      const customFirmwareInfo = uiReaders.allCustomFirmwareInfos.find(
-        (it) => it.firmwareId,
-      );
-      return customFirmwareInfo?.targetDevice;
-    }
-  }
-}
 
 type IStandardFirmwareFlashPartModel = {
   phase: FirmwareUpdatePhase;
