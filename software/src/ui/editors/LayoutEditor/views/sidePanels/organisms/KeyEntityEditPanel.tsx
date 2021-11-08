@@ -1,8 +1,11 @@
 import { jsx, css, FC } from 'qx';
 import { HFlex, GeneralSelector } from '~/ui/components';
-import { ConfigVStack, ConfigPanelBox } from '~/ui/components/layouterParts';
-import { GeneralConfigTextEditRow } from '~/ui/components/layouterParts/GeneralConfigTextEditRow';
 import { useKeyEntityEditPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/KeyEntityEditPanel.model';
+import {
+  ConfigVStack,
+  ConfigPanelBox,
+  GeneralConfigTextEditRow,
+} from '~/ui/elements';
 
 export const KeyEntityEditPanel: FC = () => {
   const { keyEntityAttrsVm: vm } = useKeyEntityEditPanelModel();

@@ -1,13 +1,13 @@
 import { FC, jsx } from 'qx';
 import { HFlex, GeneralSelector } from '~/ui/components';
+import { useOutlineEditPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/OutlineEditPanel.model';
 import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
   ConfigPanelBox,
   GeneralConfigTextEditRow,
-} from '~/ui/components/layouterParts';
-import { useOutlineEditPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/OutlineEditPanel.model';
+} from '~/ui/elements';
 
 export const OutlineEditPanel: FC = () => {
   const {

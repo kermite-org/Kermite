@@ -1,14 +1,14 @@
 import { FC, jsx } from 'qx';
 import { HFlex, CheckBox } from '~/ui/components';
+import { useTransGroupEditPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/TransGroupEditPanel.model';
+import { TransGroupListPart } from '~/ui/editors/LayoutEditor/views/sidePanels/organisms/TransGroupListPart';
 import {
   ConfigSubContent,
   ConfigSubHeader,
   ConfigVStack,
   ConfigPanelBox,
   GeneralConfigTextEditRow,
-} from '~/ui/components/layouterParts';
-import { useTransGroupEditPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/TransGroupEditPanel.model';
-import { TransGroupListPart } from '~/ui/editors/LayoutEditor/views/sidePanels/organisms/TransGroupListPart';
+} from '~/ui/elements';
 
 export const TransGroupEditPanel: FC = () => {
   const { vmX, vmY, vmAngle, currentGroupId, vmMirror } =

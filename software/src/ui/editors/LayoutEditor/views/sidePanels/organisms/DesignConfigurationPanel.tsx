@@ -1,15 +1,15 @@
 import { jsx, css } from 'qx';
 import { ICommonSelectorViewModel } from '~/ui/base';
 import { RibbonSelector } from '~/ui/components';
+import { useDesignConfigurationPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/DesignConfigurationPanel.model';
+import { IConfigTextEditModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/slots/ConfigTextEditModel';
 import {
   ConfigRow,
   ConfigSubContent,
   ConfigSubHeader,
   ConfigPanelBox,
   GeneralConfigTextEditRow,
-} from '~/ui/components/layouterParts';
-import { useDesignConfigurationPanelModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/DesignConfigurationPanel.model';
-import { IConfigTextEditModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/slots/ConfigTextEditModel';
+} from '~/ui/elements';
 
 const cssErrorText = css`
   color: red;

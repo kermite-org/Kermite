@@ -1,6 +1,5 @@
 export * from './atoms';
 export * from './keyboard';
-export * from './layouterParts';
 export * from './modals';
 export * from './molecules';
 export * from './overlay';

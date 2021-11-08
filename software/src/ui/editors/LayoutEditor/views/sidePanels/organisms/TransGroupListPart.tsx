@@ -1,9 +1,9 @@
 import { jsx, css, FC } from 'qx';
 import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
-import { ConfigSubHeader } from '~/ui/components/layouterParts';
 import { editMutations } from '~/ui/editors/LayoutEditor/models';
 import { useTransGroupListPartModel } from '~/ui/editors/LayoutEditor/views/sidePanels/models/TransGroupListPanel.model';
+import { ConfigSubHeader } from '~/ui/elements';
 
 export const TransGroupListPart: FC = () => {
   const { canAddGroup, canDeleteGroup, addGroup, deleteGroup, groupItems } =
