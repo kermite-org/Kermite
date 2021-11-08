@@ -1,18 +1,20 @@
 import { css, FC, jsx } from 'qx';
 import { IProjectPackageInfo } from '~/shared';
-import { colors, ISelectorSource } from '~/ui/base';
-import { GeneralSelector } from '~/ui/components';
+import { colors, IFirmwareVariationSelectorItem } from '~/ui/base';
+import { getFirmwareTargetDeviceType } from '~/ui/commonModels';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
 import {
   DeviceAutoConnectionPart,
   StandardFirmwareFlashPart,
 } from '~/ui/fabrics';
+import { FirmwareVariationSelector } from '~/ui/fabrics/FirmwareVariationSelector/view';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 
 type IFirmwareFlashStepModel = {
   projectInfo: IProjectPackageInfo;
   variationId: string;
-  variationSelectorSource: ISelectorSource;
+  variationSelectorItems: IFirmwareVariationSelectorItem[];
+  setVariationId: (value: string) => void;
 };
 
 function useFirmwareFlashStepModel(): IFirmwareFlashStepModel {
@@ -21,29 +23,32 @@ function useFirmwareFlashStepModel(): IFirmwareFlashStepModel {
 
   const { targetProjectInfo: projectInfo } = profileSetupStore.readers;
 
-  const variationSelectorSource = {
-    options: projectInfo.firmwares.map((it) => ({
-      value: it.variationId,
-      label: it.firmwareName,
-    })),
-    value: variationId,
-    setValue: setVariationId,
-  };
+  const variationSelectorItems = projectInfo.firmwares.map((it) => ({
+    variationId: it.variationId,
+    variationName: it.firmwareName,
+    mcuType: getFirmwareTargetDeviceType(projectInfo, it.variationId)!,
+  }));
   return {
     projectInfo,
     variationId,
-    variationSelectorSource,
+    variationSelectorItems,
+    setVariationId,
   };
 }
 
 export const ProfileSetupWizard_StepFirmwareFlash: FC = () => {
-  const { projectInfo, variationId, variationSelectorSource } =
+  const { projectInfo, variationId, variationSelectorItems, setVariationId } =
     useFirmwareFlashStepModel();
   return (
     <div class={style}>
       <div class="top-row">
         <div class="label">Firmware Variation</div>
-        <GeneralSelector {...variationSelectorSource} width={150} />
+        <FirmwareVariationSelector
+          items={variationSelectorItems}
+          variationId={variationId}
+          setVariationId={setVariationId}
+          class="selector"
+        />
       </div>
       <div class="main-row">
         <WizardSectionPanelWithCenterContent
@@ -83,11 +88,9 @@ const style = css`
     border: solid 1px ${colors.clPrimary};
     flex-shrink: 0;
     padding: 10px;
-    display: flex;
-    align-items: center;
 
-    > .label {
-      margin-right: 10px;
+    > .selector {
+      margin-top: 5px;
     }
   }
 
