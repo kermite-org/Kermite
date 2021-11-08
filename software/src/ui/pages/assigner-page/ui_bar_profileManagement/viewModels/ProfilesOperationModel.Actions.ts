@@ -3,7 +3,7 @@ import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
-import { assignerModel } from '~/ui/editors';
+import { assignerModel } from '~/ui/featureEditors';
 import {
   profilesActions,
   profilesReader,

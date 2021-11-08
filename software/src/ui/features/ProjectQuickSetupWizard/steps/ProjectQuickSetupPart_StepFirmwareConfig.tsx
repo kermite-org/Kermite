@@ -2,12 +2,12 @@ import { css, FC, jsx } from 'qx';
 import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { WizardSectionPanel } from '~/ui/components/layouts';
-import { StandardFirmwareEditor } from '~/ui/editors';
 import {
   ControllerPinAssignsSection,
   LayoutConfigurationSectionContent,
   ProjectKeyboardNameEditPart,
 } from '~/ui/fabrics';
+import { StandardFirmwareEditor } from '~/ui/featureEditors';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {

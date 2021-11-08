@@ -18,7 +18,7 @@ import {
   UiLocalStorage,
 } from '~/ui/base';
 import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
-import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/featureEditors';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStoreHelpers';
 import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
 
