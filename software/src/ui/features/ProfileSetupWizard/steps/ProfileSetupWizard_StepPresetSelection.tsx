@@ -104,10 +104,10 @@ const style = css`
   > .selectors-part {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
   }
 
   > .keyboard-part {
-    margin-top: 10px;
+    margin-top: 15px;
   }
 `;
