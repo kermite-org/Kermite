@@ -24,9 +24,10 @@ const readers = {
     return parseInt(readers.currentStep);
   },
   canGoToStep(_step: IProfileSetupStep): boolean {
+    const { targetProjectKey } = profileSetupStore.state;
     const { currentStep } = readers;
     if (currentStep === 'step1') {
-      return true;
+      return !!targetProjectKey;
     } else {
       return true;
     }
