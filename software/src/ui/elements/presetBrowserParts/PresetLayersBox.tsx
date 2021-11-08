@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
-import { PresetLayersBoxItem } from '~/ui/components/presetBrowserParts/PresetLayersBox.Item';
+import { PresetLayersBoxItem } from '~/ui/elements/presetBrowserParts/PresetLayersBox.Item';
 
 type Props = {
   className?: string;

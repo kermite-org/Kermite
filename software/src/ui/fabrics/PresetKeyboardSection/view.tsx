@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
 import { IProfileData } from '~/shared';
 import { texts } from '~/ui/base';
-import { PresetLayersBox } from '~/ui/components';
 import { PresetKeyboardView } from '~/ui/components/keyboard';
+import { PresetLayersBox } from '~/ui/elements';
 import { usePresetKeyboardSectionModel } from '~/ui/fabrics/PresetKeyboardSection/model';
 
 type Props = {
