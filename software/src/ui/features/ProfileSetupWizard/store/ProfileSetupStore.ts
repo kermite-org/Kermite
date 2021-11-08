@@ -17,7 +17,17 @@ function createDefaultState(): IState {
 
 const state: IState = createDefaultState();
 
-const readers = {};
+const readers = {
+  get targetProjectInfo(): IProjectPackageInfo {
+    const { origin, projectId } = getOriginAndProjectIdFromProjectKey(
+      state.targetProjectKey,
+    );
+    return (
+      projectPackagesReader.findProjectInfo(origin, projectId) ||
+      fallbackProjectPackageInfo
+    );
+  },
+};
 
 const actions = {
   setTargetProjectKey(projectKey: string) {

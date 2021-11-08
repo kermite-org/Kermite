@@ -1,16 +1,11 @@
 import { css, FC, jsx } from 'qx';
-import {
-  fallbackProjectPackageInfo,
-  getOriginAndProjectIdFromProjectKey,
-  IProjectPackageInfo,
-} from '~/shared';
+import { IProjectPackageInfo } from '~/shared';
 import { colors, ISelectorSource } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
 import { DeviceAutoConnectionPart } from '~/ui/fabrics/DeviceAutoConnectionPart/view';
 import { StandardFirmwareFlashPart } from '~/ui/fabrics/StandardFirmwareFlashPart/view';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
-import { projectPackagesReader } from '~/ui/store';
 
 type IFirmwareFlashStepModel = {
   projectInfo: IProjectPackageInfo;
@@ -19,14 +14,10 @@ type IFirmwareFlashStepModel = {
 };
 
 function useFirmwareFlashStepModel(): IFirmwareFlashStepModel {
-  const { targetProjectKey, variationId } = profileSetupStore.state;
+  const { variationId } = profileSetupStore.state;
   const { setVariationId } = profileSetupStore.actions;
 
-  const { origin, projectId } =
-    getOriginAndProjectIdFromProjectKey(targetProjectKey);
-  const projectInfo =
-    projectPackagesReader.findProjectInfo(origin, projectId) ||
-    fallbackProjectPackageInfo;
+  const { targetProjectInfo: projectInfo } = profileSetupStore.readers;
 
   const variationSelectorSource = {
     options: projectInfo.firmwares.map((it) => ({
