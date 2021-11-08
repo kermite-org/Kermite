@@ -1,17 +1,29 @@
 import { useEffect } from 'qx';
-import { copyObjectProps, fallbackProjectPackageInfo } from '~/shared';
+import {
+  copyObjectProps,
+  createPresetKey,
+  fallbackProjectPackageInfo,
+  getOriginAndProjectIdFromProjectKey,
+  IProjectPackageInfo,
+} from '~/shared';
 import { UiLocalStorage } from '~/ui/base';
-import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
+import {
+  dispatchCoreAction,
+  globalSettingsWriter,
+  projectPackagesReader,
+} from '~/ui/store';
 
 type IState = {
   targetProjectKey: string;
   variationId: string;
+  presetKey: string;
 };
 
 function createDefaultState(): IState {
   return {
     targetProjectKey: '',
     variationId: '',
+    presetKey: '',
   };
 }
 
@@ -32,9 +44,18 @@ const readers = {
 const actions = {
   setTargetProjectKey(projectKey: string) {
     state.targetProjectKey = projectKey;
+    const projectInfo = readers.targetProjectInfo;
+    state.variationId = projectInfo.firmwares[0]?.variationId || '';
+    state.presetKey = createPresetKey(
+      'blank',
+      projectInfo.layouts[0]?.layoutName,
+    );
   },
   setVariationId(variationId: string) {
     state.variationId = variationId;
+  },
+  setPresetKey(presetKey: string) {
+    state.presetKey = presetKey;
   },
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
@@ -63,6 +84,7 @@ type IPersistData = {
   revision: string;
   targetProjectKey: string;
   variationId: string;
+  presetKey: string;
 };
 
 const effects = {
@@ -78,11 +100,12 @@ const effects = {
       }
 
       return () => {
-        const { targetProjectKey, variationId } = state;
+        const { targetProjectKey, variationId, presetKey } = state;
         const persistData: IPersistData = {
           revision,
           targetProjectKey,
           variationId,
+          presetKey,
         };
         UiLocalStorage.writeItem(storageKey, persistData);
       };
