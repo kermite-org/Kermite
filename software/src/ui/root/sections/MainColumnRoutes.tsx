@@ -49,7 +49,6 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
       {pagePath === '/firmwareFlash' && <FirmwareFlashPage />}
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
-      {pagePath === '/presetBrowser2' && <div>deprecated</div>}
       {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}

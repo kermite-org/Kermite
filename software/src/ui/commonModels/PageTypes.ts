@@ -5,7 +5,6 @@ export type PagePaths =
   | '/shapePreview'
   | '/firmwareUpdate'
   | '/presetBrowser'
-  | '/presetBrowser2'
   | '/settings'
   | '/widget'
   | '/projectSelection'
