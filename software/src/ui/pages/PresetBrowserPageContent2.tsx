@@ -4,7 +4,7 @@ import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
 import { usePresetSelectionModel2 } from '~/ui/features/PresetBrowser/models';
 
-export const PresetBrowserPage2: FC = () => {
+export const PresetBrowserPageContent2: FC = () => {
   const {
     projectSelectorSource,
     presetSelectorSource,

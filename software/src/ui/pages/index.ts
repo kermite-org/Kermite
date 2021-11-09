@@ -1,5 +1,5 @@
-export * from './PresetBrowserPage';
-export * from './PresetBrowserPage2';
+export * from './PresetBrowserPageContent';
+export * from './PresetBrowserPageContent2';
 export * from './ProjectCustomFirmwareCreatePage';
 export * from './ProjectLayoutEditPage';
 export * from './ProjectPresetEditPage';

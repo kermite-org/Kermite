@@ -1,7 +1,7 @@
 import { FC, jsx } from 'qx';
 import {
-  PresetBrowserPage,
-  PresetBrowserPage2,
+  PresetBrowserPageContent,
+  PresetBrowserPageContent2,
   ProjectCustomFirmwareCreatePage,
   ProjectLayoutEditPage,
   ProjectPresetEditPage,
@@ -49,8 +49,8 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/shapePreview' && <ShapePreviewPage />}
       {pagePath === '/firmwareUpdate' && <FirmwareUpdatePage />}
       {pagePath === '/firmwareFlash' && <FirmwareFlashPage />}
-      {pagePath === '/presetBrowser' && <PresetBrowserPage />}
-      {pagePath === '/presetBrowser2' && <PresetBrowserPage2 />}
+      {pagePath === '/presetBrowser' && <PresetBrowserPageContent />}
+      {pagePath === '/presetBrowser2' && <PresetBrowserPageContent2 />}
       {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
       {pagePath === '/home' && <WelcomePage />}
