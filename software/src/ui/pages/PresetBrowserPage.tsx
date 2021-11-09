@@ -7,7 +7,10 @@ import { usePersistState2 } from '~/ui/utils';
 
 type IPresetSource = 'central' | 'userProfiles';
 
-export const PresetBrowserPage: FC = () => {
+export const PresetBrowserPage: FC = () => <PresetBrowserPageContent />;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const PresetBrowserPage_SourceSelectable: FC = () => {
   const [sourceValue, setSourceValue] = usePersistState2<IPresetSource>(
     'preset-browser-source',
     'central',
