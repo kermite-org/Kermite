@@ -22,6 +22,7 @@ export const PresetBrowserPageContent2: FC = () => {
               projectSelectorSource={projectSelectorSource}
               presetSelectorSource={presetSelectorSource}
               handleCreateProfileButton={editSelectedProjectPreset}
+              cansSelectProject={true}
             />
             <PresetKeyboardSection profileData={loadedProfileData} />
             <CustomContent />

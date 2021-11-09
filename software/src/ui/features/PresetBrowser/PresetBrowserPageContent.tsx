@@ -2,15 +2,16 @@ import { css, FC, jsx } from 'qx';
 import { texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
-import { usePresetSelectionModel } from '~/ui/features/PresetBrowser/models';
+import { usePresetSelectionModel3 } from '~/ui/features/PresetBrowser/models/PresetSelectionModel3';
 
 export const PresetBrowserPageContent: FC = () => {
   const {
     projectSelectorSource,
     presetSelectorSource,
-    editSelectedProjectPreset,
+    createProfile,
     loadedProfileData,
-  } = usePresetSelectionModel();
+    canSelectProject,
+  } = usePresetSelectionModel3();
   const noPresets =
     projectSelectorSource.options.length === 1 &&
     presetSelectorSource.options.length === 0;
@@ -23,7 +24,8 @@ export const PresetBrowserPageContent: FC = () => {
             <PresetSelectionSection
               projectSelectorSource={projectSelectorSource}
               presetSelectorSource={presetSelectorSource}
-              handleCreateProfileButton={editSelectedProjectPreset}
+              handleCreateProfileButton={createProfile}
+              cansSelectProject={canSelectProject}
             />
             <PresetKeyboardSection profileData={loadedProfileData} />
           </div>
@@ -35,6 +37,6 @@ export const PresetBrowserPageContent: FC = () => {
 
 const style = css`
   > div > * + * {
-    margin-top: 10px;
+    margin-top: 15px;
   }
 `;
