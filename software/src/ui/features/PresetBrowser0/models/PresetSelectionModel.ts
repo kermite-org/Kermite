@@ -2,9 +2,9 @@ import { useEffect, useLocal, useMemo } from 'qx';
 import { IPresetSpec, IProjectPackageInfo } from '~/shared';
 import { createPresetKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { getSelectionValueCorrected, ISelectorOption } from '~/ui/base';
-import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/features/PresetBrowser/models/ProfileCreator';
-import { useProfileDataLoaded } from '~/ui/features/PresetBrowser/models/ProfileDataLoader';
-import { IPresetSelectionModel } from '~/ui/features/PresetBrowser/models/types';
+import { editSelectedProjectPreset as editSelectedProjectPresetOriginal } from '~/ui/features/PresetBrowser0/models/ProfileCreator';
+import { useProfileDataLoaded } from '~/ui/features/PresetBrowser0/models/ProfileDataLoader';
+import { IPresetSelectionModel } from '~/ui/features/PresetBrowser0/models/types';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
 import { fieldSetter } from '~/ui/utils';
 

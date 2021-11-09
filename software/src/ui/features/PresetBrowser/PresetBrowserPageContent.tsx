@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'qx';
-import { texts } from '~/ui/base';
+import { ipcAgent, texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
-import { usePresetSelectionModel3 } from '~/ui/features/PresetBrowser/models/PresetSelectionModel3';
+import { usePresetSelectionModel } from '~/ui/features/PresetBrowser/PresetSelectionModel';
 
 export const PresetBrowserPageContent: FC = () => {
   const {
@@ -10,24 +10,22 @@ export const PresetBrowserPageContent: FC = () => {
     presetSelectorSource,
     createProfile,
     loadedProfileData,
-    canSelectProject,
-  } = usePresetSelectionModel3();
-  const noPresets =
-    projectSelectorSource.options.length === 1 &&
-    presetSelectorSource.options.length === 0;
+    isNoPresets,
+  } = usePresetSelectionModel();
   return (
     <CommonPageFrame pageTitle={texts.label_presetBrowser_pageTitle}>
       <div css={style}>
-        {noPresets && <div>No Presets Available</div>}
-        {!noPresets && (
+        {isNoPresets && <div>No Presets Available</div>}
+        {!isNoPresets && (
           <div>
             <PresetSelectionSection
               projectSelectorSource={projectSelectorSource}
               presetSelectorSource={presetSelectorSource}
               handleCreateProfileButton={createProfile}
-              cansSelectProject={canSelectProject}
+              cansSelectProject={true}
             />
             <PresetKeyboardSection profileData={loadedProfileData} />
+            <KermiteServerLinkPart />
           </div>
         )}
       </div>
@@ -40,3 +38,28 @@ const style = css`
     margin-top: 15px;
   }
 `;
+
+const KermiteServerLinkPart: FC = () => {
+  const style = css`
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    .link {
+      color: blue;
+      cursor: pointer;
+    }
+  `;
+  const onClick = () => {
+    ipcAgent.async.platform_openUrlInDefaultBrowser(
+      'https://dev.server.kermite.org/',
+    );
+  };
+  return (
+    <div css={style}>
+      User profiles are served on &nbsp;
+      <span className="link" onClick={onClick}>
+        KermiteServer
+      </span>
+    </div>
+  );
+};

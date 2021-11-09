@@ -26,6 +26,7 @@ type IPresetSelectionModel = {
   loadedProfileData: IProfileData;
   createProfile(): void;
   canSelectProject: boolean;
+  isNoPresets: boolean;
 };
 
 type IProjectItem = {
@@ -244,7 +245,7 @@ const actions = {
   },
 };
 
-export function usePresetSelectionModel3(): IPresetSelectionModel {
+export function usePresetSelectionModel(): IPresetSelectionModel {
   useEffect(actions.initialize, []);
 
   const {
@@ -257,8 +258,6 @@ export function usePresetSelectionModel3(): IPresetSelectionModel {
   } = state;
 
   const { setProjectKey, setPresetKey, createProfile } = actions;
-
-  const canSelectProject = uiReaders.globalProjectKey === '';
 
   const projectSelectorSource: ISelectorSource = {
     options: allProjectItems.map(helpers.createProjectSelectorOption),
@@ -275,11 +274,17 @@ export function usePresetSelectionModel3(): IPresetSelectionModel {
     setValue: setPresetKey,
   };
 
+  const canSelectProject = uiReaders.globalProjectKey === '';
+
+  const isNoPresets =
+    !canSelectProject && presetSelectorSource.options.length === 0;
+
   return {
     projectSelectorSource,
     presetSelectorSource,
     loadedProfileData,
     createProfile,
     canSelectProject,
+    isNoPresets,
   };
 }
