@@ -153,7 +153,7 @@ export function validateResourceName(
 ): string | undefined {
   if (
     // eslint-disable-next-line no-misleading-character-class
-    resourceName.match(/[/./\\:*?"<>|\u3000\u0e49]/) ||
+    resourceName.match(/[./\\:*?"<>|\u3000\u0e49\u0e47\u0e14\u0e2a]/) ||
     resourceName.match(/^\s+$/)
   ) {
     return `${resourceName} is not a valid ${resourceTypeNameText}.`;
