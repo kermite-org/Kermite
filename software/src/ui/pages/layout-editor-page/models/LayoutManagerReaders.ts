@@ -1,5 +1,5 @@
 import { ILayoutEditSource } from '~/shared';
-import { LayoutEditorCore } from '~/ui/editors';
+import { LayoutEditorCore } from '~/ui/featureEditors';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,

@@ -21,3 +21,4 @@ export * from './ToggleButton';
 export * from './ToggleSwitch';
 export * from './ToggleSwitch.visor';
 export * from './WelcomePageButton';
+export * from './SetupNavigationStepButton';

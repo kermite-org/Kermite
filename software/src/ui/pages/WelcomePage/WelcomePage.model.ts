@@ -15,10 +15,10 @@ interface WelcomePageModel {
   setLanguageEnglish(): void;
   isLanguageJapanese: boolean;
   setLanguageJapanese(): void;
-  openSetupNavigationPanel(): void;
+  showProfileSetupWizard(): void;
   isDarkTheme: boolean;
   setDarkTheme(isDark: boolean): void;
-  showProjectQuickSetupPage(): void;
+  showProjectQuickSetupWizard(): void;
   isDeveloperMode: boolean;
   setDeveloperMode(value: boolean): void;
 }
@@ -33,7 +33,7 @@ export function useWelcomePageModel(): WelcomePageModel {
   const isLanguageJapanese = currentLanguage === 'japanese';
   const setLanguageJapanese = () => changeLanguage('japanese');
 
-  const { openSetupNavigationPanel, showProjectQuickSetupPage } = uiActions;
+  const { showProfileSetupWizard, showProjectQuickSetupWizard } = uiActions;
 
   const isDarkTheme = currentThemeKey === 'dark';
   const setDarkTheme = (isDark: boolean) =>
@@ -49,10 +49,10 @@ export function useWelcomePageModel(): WelcomePageModel {
     setLanguageEnglish,
     isLanguageJapanese,
     setLanguageJapanese,
-    openSetupNavigationPanel,
+    showProfileSetupWizard,
     isDarkTheme,
     setDarkTheme,
-    showProjectQuickSetupPage,
+    showProjectQuickSetupWizard,
     isDeveloperMode,
     setDeveloperMode,
   };

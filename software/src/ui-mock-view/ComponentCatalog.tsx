@@ -7,13 +7,15 @@ import {
   GeneralSelectorExamples,
   SetupNavigationPullTabExamples,
   ToggleSwitchExamples,
-  PreviewKeyboardShapeViewExamples,
-  ProjectKeyboardShapeViewExamples,
   NavigationStepListExamples,
   ToggleSwitchLineExamples,
-  ProjectKeyboardListExamples,
 } from '~/ui/components';
-import { RouterHeaderBarExamples } from '~/ui/components/organisms/RouteHeaderBar/RouteHeaderBar.visor';
+import {
+  PreviewKeyboardShapeViewExamples,
+  ProjectKeyboardShapeViewExamples,
+} from '~/ui/elements';
+import { RouterHeaderBarExamples } from '~/ui/elements/frames';
+import { ProjectKeyboardListExamples } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.visor';
 import { fieldSetter } from '~/ui/utils';
 
 type IVisualEntry = Record<string, FC | JSX.Element>;

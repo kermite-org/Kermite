@@ -1,5 +1,5 @@
 import { IPresetSpec, IProfileEntry, IResourceOrigin } from '~/shared';
-import { assignerModel } from '~/ui/editors';
+import { assignerModel } from '~/ui/featureEditors';
 import { dispatchCoreAction } from '~/ui/store';
 
 export const profilesActions = {

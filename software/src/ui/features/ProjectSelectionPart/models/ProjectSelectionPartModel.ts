@@ -17,6 +17,7 @@ type IProjectSelectionPageModel = {
   resourceOriginSelectorSource: ISelectorSource;
   isMenuButtonVisible: boolean;
   menuItems: IGeneralMenuItem[];
+  showNoSelectionOption: boolean;
 };
 
 export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
@@ -41,5 +42,6 @@ export function useProjectSelectionPartModel(): IProjectSelectionPageModel {
     resourceOriginSelectorSource,
     isMenuButtonVisible: tabResourceOrigin === 'local',
     menuItems: createProjectManagementMenuItems(),
+    showNoSelectionOption: true,
   };
 }

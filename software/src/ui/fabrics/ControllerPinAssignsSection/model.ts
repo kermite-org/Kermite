@@ -1,5 +1,4 @@
 import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
-import { standardFirmwareEditModelHelpers } from '~/ui/editors/StandardFirmwareEditor/helpers';
 import {
   boardAssignsData_proMicro,
   boardAssignsData_proMicroRp2040,
@@ -9,6 +8,7 @@ import {
   IBoardPinAssignsData,
   IBoardPinAssignsDataEx,
 } from '~/ui/fabrics/ControllerPinAssignsSection/types';
+import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
 
 function pushPinFunctionName(
   base: IBoardPinAssignsDataEx,

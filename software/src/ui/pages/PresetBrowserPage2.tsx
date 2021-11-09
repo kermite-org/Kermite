@@ -1,17 +1,17 @@
 import { css, FC, jsx } from 'qx';
 import { ipcAgent, texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
-import {
-  usePresetBrowserViewModel,
-  PresetSelectionSection,
-  PresetKeyboardSection,
-  usePresetSelectionModel2,
-} from '~/ui/features/PresetBrowser';
+import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
+import { usePresetSelectionModel2 } from '~/ui/features/PresetBrowser/models';
 
 export const PresetBrowserPage2: FC = () => {
-  const model = usePresetSelectionModel2();
-  const viewModel = usePresetBrowserViewModel(model);
-  const noPresets = model.projectSelectorSource.options.length === 0;
+  const {
+    projectSelectorSource,
+    presetSelectorSource,
+    editSelectedProjectPreset,
+    loadedProfileData,
+  } = usePresetSelectionModel2();
+  const noPresets = projectSelectorSource.options.length === 0;
   return (
     <CommonPageFrame pageTitle={texts.label_presetBrowser2_pageTitle}>
       <div css={style}>
@@ -19,11 +19,11 @@ export const PresetBrowserPage2: FC = () => {
         {!noPresets && (
           <div>
             <PresetSelectionSection
-              viewModel={viewModel.presetSelectionSectionViewModel}
+              projectSelectorSource={projectSelectorSource}
+              presetSelectorSource={presetSelectorSource}
+              handleCreateProfileButton={editSelectedProjectPreset}
             />
-            <PresetKeyboardSection
-              viewModel={viewModel.presetKeyboardSectionViewModel}
-            />
+            <PresetKeyboardSection profileData={loadedProfileData} />
             <CustomContent />
           </div>
         )}

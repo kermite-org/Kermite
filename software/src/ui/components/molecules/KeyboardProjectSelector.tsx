@@ -4,8 +4,8 @@ import { GeneralButton, GeneralSelector } from '~/ui/components/atoms';
 
 interface Props {
   selectorSource: ISelectorSource;
-  isLinkButtonActive: boolean;
-  linkButtonHandler(): void;
+  isLinkButtonActive?: boolean;
+  linkButtonHandler?(): void;
   hint?: string;
 }
 

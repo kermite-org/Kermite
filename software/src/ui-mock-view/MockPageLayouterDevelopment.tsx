@@ -3,7 +3,7 @@ import {
   loadLocalStorageKeyboardDesignOrDefault,
   saveLocalStorageKeyboardDesign,
 } from '~/ui-mock-view/LocalStoragePersistKeyboardDesign';
-import { LayoutEditorCore } from '~/ui/editors';
+import { LayoutEditorCore } from '~/ui/featureEditors';
 
 export const MockPageLayoutEditorDevelopment = () => {
   useEffect(() => {
