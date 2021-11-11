@@ -25,8 +25,8 @@ const PageRoot = () => {
     <div style={{ height: '100%' }}>
       {/* <QxDebugPage /> */}
       {/* <QxDebugPage2 /> */}
-      {/* <QxDebugPage3 /> */}
-      <QxDebugPage4 />
+      <QxDebugPage3 />
+      {/* <QxDebugPage4 /> */}
       {/* <QxDebugPage5 /> */}
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
