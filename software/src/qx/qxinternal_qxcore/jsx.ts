@@ -94,6 +94,11 @@ export function jsx(
     return null;
   }
 
+  if ((tagType as any) === Fragment) {
+    const children = convertChildren(props.children || argsChildren);
+    return { vtype: 'vFragment', children };
+  }
+
   qxInterposeProps(props, tagType);
 
   if (typeof tagType === 'function') {
@@ -108,3 +113,5 @@ export function jsx(
       : createVElement(tagType, props, children);
   return vnode;
 }
+
+export function Fragment() {}

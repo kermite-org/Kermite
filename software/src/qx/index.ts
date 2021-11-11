@@ -15,7 +15,12 @@ import {
   useState,
 } from './hookImpl';
 import { qxGlobal } from './qxGlobal';
-import { jsx, render as vdomCoreRender, VNode } from './qxinternal_qxcore';
+import {
+  jsx,
+  render as vdomCoreRender,
+  VNode,
+  Fragment,
+} from './qxinternal_qxcore';
 import { setShortCssProcessor } from './shortCss';
 
 export {
@@ -33,6 +38,7 @@ export {
   useRef,
   createContext,
   useContext,
+  Fragment,
 };
 
 export type FC<T extends {} = {}> = (props: T) => JSX.Element | null;

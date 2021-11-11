@@ -29,6 +29,12 @@ export type IVElement = {
   dom?: Element;
 };
 
+export type IVFragment = {
+  vtype: 'vFragment';
+  children: IVNode[];
+  dom?: Element;
+};
+
 export type IProps = {
   [key: string]: any;
 };
@@ -61,4 +67,4 @@ export type IVComponent = {
   parentDom?: Node;
 };
 
-export type IVNode = IVBlank | IVText | IVElement | IVComponent;
+export type IVNode = IVBlank | IVText | IVElement | IVComponent | IVFragment;

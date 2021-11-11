@@ -12,6 +12,7 @@
     "lib": ["dom", "esnext"],
     "jsx": "react",
     "jsxFactory": "jsx",
+    "jsxFragmentFactory": "Fragment",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
