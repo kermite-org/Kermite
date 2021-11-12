@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx, Fragment } from 'qx';
 import {
   generateNumberSequence as seq,
   IStandardFirmwareConfig,
@@ -95,9 +95,9 @@ export const ControllerPinAssignsSection: FC<{
 }> = ({ firmwareConfig }) => {
   const boardAssignsData = useMemoEx(createBoardAssignsData, [firmwareConfig]);
   return (
-    <div>
+    <>
       {boardAssignsData && <BoardPinAssignsView data={boardAssignsData} />}
       {!boardAssignsData && <div>N/A</div>}
-    </div>
+    </>
   );
 };

@@ -2,7 +2,7 @@ import { mount, patch } from 'qx/qxinternal_qxcore/qxcore';
 import { IVNode } from 'qx/qxinternal_qxcore/types';
 
 export { IVNode as VNode } from './types';
-export { jsx } from './jsx';
+export { jsx, Fragment } from './jsx';
 
 let prevVDom: IVNode;
 

@@ -52,6 +52,9 @@ export function mount(
       ) || createVBlank(null);
     vnode.state.renderRes = renderRes;
     dom = mount(parentDom, renderRes, insertBeforeTarget);
+  } else if (vnode.vtype === 'vFragment') {
+    dom = parentDom;
+    vnode.children.forEach((vnode) => mount(dom, vnode, insertBeforeTarget));
   } else {
     throw new Error(`invalid vnode ${vnode}`);
   }
@@ -74,6 +77,9 @@ function unmount(parentDom: Node, oldVNode: IVNode) {
     unmount(parentDom, oldVNode.state.renderRes!);
     oldVNode.state.renderRes = undefined;
     oldVNode.componentWrapper.unmount(oldVNode.state.componentState!);
+  } else if (oldVNode.vtype === 'vFragment') {
+    const dom = oldVNode.dom!;
+    oldVNode.children.forEach((vnode) => unmount(dom, vnode));
   } else {
     throw new Error(`invalid vnode ${oldVNode}`);
   }
@@ -173,6 +179,10 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
         (dom as any)[key] = newValue;
       }
     });
+  } else if (newVNode.vtype === 'vFragment' && oldVNode.vtype === 'vFragment') {
+    const dom = oldVNode.dom!;
+    patchChildren(dom, newVNode.children, oldVNode.children);
+    newVNode.dom = dom;
   } else if (
     newVNode.vtype !== oldVNode.vtype ||
     (oldVNode.vtype === 'vElement' &&
@@ -182,7 +192,12 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
       newVNode.vtype === 'vComponent' &&
       newVNode.componentWrapper !== oldVNode.componentWrapper)
   ) {
-    const nextSibling = oldVNode.dom?.nextSibling || null;
+    let nextSibling = oldVNode.dom?.nextSibling || null;
+    if (oldVNode.vtype === 'vFragment') {
+      nextSibling =
+        oldVNode.children[oldVNode.children.length - 1].dom?.nextSibling ||
+        null;
+    }
     unmount(parentDom, oldVNode);
     mount(parentDom, newVNode, nextSibling);
   } else {
