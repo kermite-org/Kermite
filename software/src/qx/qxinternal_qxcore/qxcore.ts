@@ -192,7 +192,12 @@ export function patch(parentDom: Node, newVNode: IVNode, oldVNode: IVNode) {
       newVNode.vtype === 'vComponent' &&
       newVNode.componentWrapper !== oldVNode.componentWrapper)
   ) {
-    const nextSibling = oldVNode.dom?.nextSibling || null;
+    let nextSibling = oldVNode.dom?.nextSibling || null;
+    if (oldVNode.vtype === 'vFragment') {
+      nextSibling =
+        oldVNode.children[oldVNode.children.length - 1].dom?.nextSibling ||
+        null;
+    }
     unmount(parentDom, oldVNode);
     mount(parentDom, newVNode, nextSibling);
   } else {

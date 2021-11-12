@@ -13,6 +13,7 @@ const TestComponent1 = () => {
   if (count % 2 === 0) {
     return null;
   }
+  console.log('tc1');
   return <div>tc11</div>;
 };
 
@@ -20,6 +21,8 @@ const TestComponent2 = () => {
   if (count % 2 === 0) {
     return null;
   }
+  console.log('tc2');
+
   return (
     <>
       <div>tc21</div>
