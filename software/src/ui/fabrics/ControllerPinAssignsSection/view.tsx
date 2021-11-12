@@ -57,7 +57,7 @@ const BoardPinAssignsView: FC<{ data: IBoardPinAssignsDataEx }> = ({
     pinFunctionNames,
   },
 }) => {
-  const nu = (n: number) => `${n * unitPixels}px`;
+  const nu = (n: number) => `${(n * unitPixels) >> 0}px`;
   const numPins = pinNames.length;
   const half = numPins / 2;
   const pinsNamesLeft = pinNames.slice(0, half);
@@ -67,9 +67,12 @@ const BoardPinAssignsView: FC<{ data: IBoardPinAssignsDataEx }> = ({
     .slice(half, numPins)
     .reverse();
 
+  const col_w = 3.5;
   const gridStyle = css`
     display: grid;
-    grid-template-columns: ${[3, 3, boardUnitWidth, 3, 3].map(nu).join(' ')};
+    grid-template-columns: ${[col_w, col_w, boardUnitWidth, col_w, col_w]
+      .map(nu)
+      .join(' ')};
     grid-template-rows: ${seq(boardUnitHeight).fill(1).map(nu).join(' ')};
   `;
   const boardCellStyle = css`
