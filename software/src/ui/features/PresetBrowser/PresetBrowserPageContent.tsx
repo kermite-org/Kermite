@@ -2,29 +2,30 @@ import { css, FC, jsx } from 'qx';
 import { ipcAgent, texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
-import { usePresetSelectionModel2 } from '~/ui/features/PresetBrowser/models';
+import { usePresetSelectionModel } from '~/ui/features/PresetBrowser/PresetSelectionModel';
 
-export const PresetBrowserPage2: FC = () => {
+export const PresetBrowserPageContent: FC = () => {
   const {
     projectSelectorSource,
     presetSelectorSource,
-    editSelectedProjectPreset,
+    createProfile,
     loadedProfileData,
-  } = usePresetSelectionModel2();
-  const noPresets = projectSelectorSource.options.length === 0;
+    isNoPresets,
+  } = usePresetSelectionModel();
   return (
-    <CommonPageFrame pageTitle={texts.label_presetBrowser2_pageTitle}>
+    <CommonPageFrame pageTitle={texts.label_presetBrowser_pageTitle}>
       <div css={style}>
-        {noPresets && <div>No Presets Available</div>}
-        {!noPresets && (
+        {isNoPresets && <div>No Presets Available</div>}
+        {!isNoPresets && (
           <div>
             <PresetSelectionSection
               projectSelectorSource={projectSelectorSource}
               presetSelectorSource={presetSelectorSource}
-              handleCreateProfileButton={editSelectedProjectPreset}
+              handleCreateProfileButton={createProfile}
+              cansSelectProject={true}
             />
             <PresetKeyboardSection profileData={loadedProfileData} />
-            <CustomContent />
+            <KermiteServerLinkPart />
           </div>
         )}
       </div>
@@ -34,15 +35,15 @@ export const PresetBrowserPage2: FC = () => {
 
 const style = css`
   > div > * + * {
-    margin-top: 10px;
+    margin-top: 15px;
   }
 `;
 
-const CustomContent: FC = () => {
+const KermiteServerLinkPart: FC = () => {
   const style = css`
     margin-top: 10px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     .link {
       color: blue;
       cursor: pointer;
@@ -55,7 +56,7 @@ const CustomContent: FC = () => {
   };
   return (
     <div css={style}>
-      Profiles served on &nbsp;
+      User profiles are served on &nbsp;
       <span className="link" onClick={onClick}>
         KermiteServer
       </span>

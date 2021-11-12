@@ -146,7 +146,6 @@ export const textSourceEnglish = {
   label_assigner_confirmModal_loadProfile_modalMessage:
     'Unsaved changes will be lost. Are you ok?',
   label_presetBrowser_pageTitle: 'Preset Browser',
-  label_presetBrowser2_pageTitle: 'User Preset Browser',
   label_presetBrowser_selectionTitle_keyboard: 'Keyboard',
   label_presetBrowser_selectionTitle_preset: 'Preset',
   label_presetBrowser_createProfileButton: 'Create Profile',
@@ -399,7 +398,6 @@ export const textSourceJapanese = {
   label_assigner_confirmModal_loadProfile_modalMessage:
     '保存されていない変更は破棄されます。よろしいですか。',
   label_presetBrowser_pageTitle: 'プリセットブラウザ',
-  label_presetBrowser2_pageTitle: 'ユーザープリセットブラウザ',
   label_presetBrowser_selectionTitle_keyboard: 'キーボード',
   label_presetBrowser_selectionTitle_preset: 'プリセット',
   label_presetBrowser_createProfileButton: 'プロファイルを作成',

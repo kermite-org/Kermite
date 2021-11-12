@@ -10,16 +10,18 @@ type Props = {
   projectSelectorSource: ISelectorSource;
   presetSelectorSource: ISelectorSource;
   handleCreateProfileButton: () => void;
+  cansSelectProject: boolean;
 };
 
 export const PresetSelectionSection: FC<Props> = ({
   projectSelectorSource,
   presetSelectorSource,
   handleCreateProfileButton,
+  cansSelectProject,
 }) => (
   <div css={style}>
     <div class="selectorsPart">
-      <div className="selectorBlock">
+      <div className="selectorBlock" qxIf={cansSelectProject}>
         <div>{texts.label_presetBrowser_selectionTitle_keyboard}</div>
         <KeyboardProjectSelector
           selectorSource={projectSelectorSource}

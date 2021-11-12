@@ -48,6 +48,24 @@ export function usePersistState<T extends {}>(key: string, initialValue: T) {
   return value;
 }
 
+export function usePersistState2<T>(
+  key: string,
+  initialValue: T,
+): [T, (value: T) => void] {
+  const [value, setValue] = useState(initialValue);
+  const storageKey = `usePersistState2__${key}`;
+  useEffect(() => {
+    const savedValue = UiLocalStorage.readItem<T>(storageKey);
+    if (savedValue !== undefined) {
+      setValue(savedValue);
+    }
+    return () => {
+      UiLocalStorage.writeItem(storageKey, value);
+    };
+  }, []);
+  return [value, setValue];
+}
+
 export function useEventSource<T extends {}>(
   source: { subscribe: (listener: (value: Partial<T>) => void) => () => void },
   initialValue: T,
