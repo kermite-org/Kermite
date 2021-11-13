@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { SlotTriggerDisplay } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/views/SlotTriggerDisplay';
 import { makeAssignEditSectionViewModel } from './viewModels/AssignEditSectionViewModel';
 import { OperationEditPart } from './views/OperationEditPart';

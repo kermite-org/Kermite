@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { colors, texts } from '~/ui/base';
 import { LinkIndicator } from '~/ui/elements';
 import { makeDeviceControlSectionViewModel } from '~/ui/pages/assigner-page/ui_bar_deviceControlSection/DeviceControlSectionViewModel';

@@ -1,4 +1,4 @@
-import { jsx, useInlineEffect, useLocal, useMemo } from 'qx';
+import { jsx, useInlineEffect, useLocal, useMemo } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {

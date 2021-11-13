@@ -1,4 +1,4 @@
-import { jsx, useLocal } from 'qx';
+import { jsx, useLocal } from 'alumina';
 import { ISelectorOption } from '~/ui/base';
 import { createModal } from '~/ui/components/overlay';
 import { ProjectSelectionModalContent } from '~/ui/elements/featureModals/ProjectSelectionModal/ProjectSelectionModal.content';

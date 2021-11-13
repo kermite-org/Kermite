@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 
 export const SvgScalingDevPage: FC = () => {
   return (

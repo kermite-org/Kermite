@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { WizardSectionPanel } from '~/ui/components/layouts';

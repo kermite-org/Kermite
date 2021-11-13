@@ -1,4 +1,4 @@
-import { css } from 'qx';
+import { css } from 'alumina';
 
 export const cssCommonPropertiesTable = css`
   tr {

@@ -1,4 +1,4 @@
-import { css, FC, jsx, styled } from 'qx';
+import { css, FC, jsx, styled } from 'alumina';
 
 type Props = {
   className?: string;

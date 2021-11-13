@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { OperationCard, OperationLayerOptionSelector } from '~/ui/elements';
 import {
   IPlainOperationEditCardsViewModel,

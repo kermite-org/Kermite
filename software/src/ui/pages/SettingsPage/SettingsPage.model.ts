@@ -1,4 +1,4 @@
-import { useEffect, useLocal } from 'qx';
+import { useEffect, useLocal } from 'alumina';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
 import {
   commitUiSettings,

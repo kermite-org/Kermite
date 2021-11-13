@@ -1,4 +1,4 @@
-import { rerender } from 'qx';
+import { rerender } from 'alumina';
 import {
   editMutations,
   editReader,

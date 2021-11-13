@@ -1,4 +1,4 @@
-import { styled } from 'qx';
+import { styled } from 'alumina';
 
 export const ConfigSubHeader = styled.div`
   margin-bottom: 4px;

@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 
 function findSpecificDatasetValueFromParents(
   el: HTMLElement,

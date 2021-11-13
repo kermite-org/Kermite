@@ -1,4 +1,4 @@
-import { jsx, css, useLocal, FC } from 'qx';
+import { jsx, css, useLocal, FC } from 'alumina';
 import { appUi } from '~/ui/base';
 
 export const DebugOverlay: FC = () => {

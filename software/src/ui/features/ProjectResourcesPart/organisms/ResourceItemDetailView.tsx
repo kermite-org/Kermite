@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { decodeProjectResourceItemKey } from '~/shared';
 import { GeneralButton } from '~/ui/components';
 import { FirmwareDetailView } from '~/ui/features/ProjectResourcesPart/organisms/FirmwareDetailView';

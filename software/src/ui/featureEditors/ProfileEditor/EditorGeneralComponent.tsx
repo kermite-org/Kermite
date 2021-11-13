@@ -1,4 +1,4 @@
-import { css, FC, jsx, useEffect } from 'qx';
+import { css, FC, jsx, useEffect } from 'alumina';
 import { IPersistProfileData, ProfileDataConverter } from '~/shared';
 import { KeyAssignEditView } from '~/ui/featureEditors/ProfileEditor/KeyAssignEditView';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';

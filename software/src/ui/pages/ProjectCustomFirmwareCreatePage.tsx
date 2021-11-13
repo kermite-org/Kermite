@@ -1,4 +1,4 @@
-import { css, FC, jsx, useLocal } from 'qx';
+import { css, FC, jsx, useLocal } from 'alumina';
 import {
   encodeProjectResourceItemKey,
   getNextFirmwareId,

@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { texts } from '~/ui/base';
 import { LayerOperationButton } from '~/ui/elements';
 import { ILayerManagementPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersManagementPartViewModel';

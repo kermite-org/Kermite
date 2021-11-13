@@ -7,7 +7,7 @@ import {
   useEffect,
   QxNode,
   FC,
-} from 'qx';
+} from 'alumina';
 
 type Props = {
   contentWidth: number;

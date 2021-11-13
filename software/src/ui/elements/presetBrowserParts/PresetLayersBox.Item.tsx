@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors, uiTheme } from '~/ui/base';
 import { withStopPropagation } from '~/ui/utils';
 

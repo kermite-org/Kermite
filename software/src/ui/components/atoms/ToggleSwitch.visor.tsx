@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { ToggleSwitch } from '~/ui/components/atoms/ToggleSwitch';
 
 const outerDivStyle =

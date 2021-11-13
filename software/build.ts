@@ -16,7 +16,7 @@ const gooberCssAutoLabelPlugin: IPlugin = {
     build.onLoad({ filter: /\.tsx$/ }, async (args) => {
       // gooberのcss変数定義を見つけて、変数名をlabelとしてスタイル定義に挿入する
       let text = await fs.promises.readFile(args.path, 'utf8');
-      if (text.includes('qx')) {
+      if (text.includes('alumina')) {
         text = text
           .replace(/const (.*) = css`/g, 'const $1 = css` label: $1;')
           .replace(

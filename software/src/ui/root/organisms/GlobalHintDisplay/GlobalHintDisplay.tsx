@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors, GlobalHintDisplayText } from '~/ui/base';
 import { GlobalHintIconButton } from '~/ui/components';
 import { commitUiSettings, uiState } from '~/ui/store';

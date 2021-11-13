@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { texts } from '~/ui/base';
 import { reflectValue } from '~/ui/utils';
 

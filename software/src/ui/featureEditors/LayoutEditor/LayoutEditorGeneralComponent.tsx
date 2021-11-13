@@ -1,4 +1,4 @@
-import { FC, jsx, useEffect } from 'qx';
+import { FC, jsx, useEffect } from 'alumina';
 import { IPersistKeyboardDesign } from '~/shared';
 import { LayoutEditorCore } from '~/ui/featureEditors/LayoutEditor/LayoutEditorCore';
 

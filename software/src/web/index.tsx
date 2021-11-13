@@ -1,4 +1,4 @@
-import { applyGlobalStyle, css, FC, jsx, render, rerender } from 'qx';
+import { applyGlobalStyle, css, FC, jsx, render, rerender } from 'alumina';
 import { debounce } from '~/shared';
 import { DeviceDevelopmentPage } from '~/web/DeviceDevelopmentPage';
 

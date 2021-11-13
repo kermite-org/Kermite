@@ -1,4 +1,4 @@
-import { FC, jsx, css } from 'qx';
+import { FC, jsx, css } from 'alumina';
 import { colors, uiTheme } from '~/ui/base';
 import { ToggleSwitch } from '~/ui/components/atoms/ToggleSwitch';
 

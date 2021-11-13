@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { DisplayKeyboardDesignLoader } from '~/shared';
 import { exampleData_persistKeyboardDesign_astelia } from '~/ui/constants';
 import { PreviewKeyboardShapeView } from '~/ui/elements/keyboard/panels/PreviewKeyboardShapeView';

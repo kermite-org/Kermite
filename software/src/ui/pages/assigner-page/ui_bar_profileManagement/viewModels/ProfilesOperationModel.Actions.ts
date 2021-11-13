@@ -1,4 +1,4 @@
-import { asyncRerender } from 'qx';
+import { asyncRerender } from 'alumina';
 import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';

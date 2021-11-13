@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { CommonPageFrame, GeneralSelector } from '~/ui/components';
 import { PreviewKeyboardShapeView } from '~/ui/elements/keyboard';
 import { useShapePreviewPageModel } from '~/ui/pages/shape-preview-page/models';

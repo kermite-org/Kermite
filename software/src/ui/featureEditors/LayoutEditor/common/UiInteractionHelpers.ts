@@ -1,4 +1,4 @@
-import { asyncRerender, rerender } from 'qx';
+import { asyncRerender, rerender } from 'alumina';
 
 export function getRelativeMousePosition(e: MouseEvent) {
   const el = e.currentTarget as HTMLElement;

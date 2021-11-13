@@ -1,4 +1,4 @@
-import { FC, jsx, css, useState, QxChildren } from 'qx';
+import { FC, jsx, css, useState, QxChildren } from 'alumina';
 import { colors } from '~/ui/base';
 import { Icon } from '~/ui/components/atoms';
 

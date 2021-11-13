@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 import { ISelectorOption, texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components/atoms/FlatListSelector';
 import { ClosableOverlay } from '~/ui/components/modals/CommonDialogParts';

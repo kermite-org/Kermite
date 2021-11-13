@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 
 export const svgImage_boardProMicro = (
   <svg

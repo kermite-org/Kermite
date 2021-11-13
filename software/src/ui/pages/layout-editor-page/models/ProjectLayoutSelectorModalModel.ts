@@ -1,4 +1,4 @@
-import { useState } from 'qx';
+import { useState } from 'alumina';
 import { validateResourceName } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import { modalError } from '~/ui/components';

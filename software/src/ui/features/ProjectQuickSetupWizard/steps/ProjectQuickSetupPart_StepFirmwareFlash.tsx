@@ -1,4 +1,4 @@
-import { css, FC, jsx, useMemo } from 'qx';
+import { css, FC, jsx, useMemo } from 'alumina';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
 import {
   DeviceAutoConnectionPart,

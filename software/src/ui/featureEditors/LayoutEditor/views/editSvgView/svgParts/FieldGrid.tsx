@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { makeIntegersRange } from '~/shared';
 import { colors } from '~/ui/base';
 import { editReader } from '~/ui/featureEditors/LayoutEditor/models';

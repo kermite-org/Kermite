@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';

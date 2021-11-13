@@ -1,4 +1,4 @@
-import { css, jsx } from 'qx';
+import { css, jsx } from 'alumina';
 import { FcWithClassName } from '~/ui/base';
 import { NavigationButton } from '~/ui/components';
 import { useNavigationButtonsAreaModel } from '~/ui/root/organisms/NavigationBar/NavigationButtonsArea.model';

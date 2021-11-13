@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IProfileData } from '~/shared';
 import { texts } from '~/ui/base';
 import { PresetLayersBox } from '~/ui/elements';

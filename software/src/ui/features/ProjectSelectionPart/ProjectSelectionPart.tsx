@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { ProjectSelectionPartComponent } from '~/ui/fabrics';
 import { useProjectSelectionPartModel } from '~/ui/features/ProjectSelectionPart/models/ProjectSelectionPartModel';
 

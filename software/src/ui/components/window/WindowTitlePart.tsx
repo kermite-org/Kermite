@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { colors } from '~/ui/base';
 
 export const WindowTitlePart: FC = () => {

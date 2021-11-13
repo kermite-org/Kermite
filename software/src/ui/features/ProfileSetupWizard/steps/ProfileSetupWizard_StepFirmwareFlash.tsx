@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
 import { colors, IFirmwareVariationSelectorItem } from '~/ui/base';
 import { getFirmwareTargetDeviceType } from '~/ui/commonModels';

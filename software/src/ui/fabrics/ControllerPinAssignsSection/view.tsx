@@ -1,4 +1,4 @@
-import { css, FC, jsx, Fragment } from 'qx';
+import { css, FC, jsx, Fragment } from 'alumina';
 import {
   generateNumberSequence as seq,
   IStandardFirmwareConfig,

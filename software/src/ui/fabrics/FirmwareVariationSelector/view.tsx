@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IFirmwareTargetDevice } from '~/shared';
 import { IFirmwareVariationSelectorItem } from '~/ui/base';
 import { SvgIcon_McuSquare } from '~/ui/constants';

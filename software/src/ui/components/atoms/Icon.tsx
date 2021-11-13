@@ -1,4 +1,4 @@
-import { FC, jsx, css } from 'qx';
+import { FC, jsx, css } from 'alumina';
 
 interface Props {
   spec: string;

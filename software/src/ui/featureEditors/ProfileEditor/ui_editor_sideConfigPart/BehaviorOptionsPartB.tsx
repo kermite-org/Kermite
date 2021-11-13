@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { ConfigurationButton } from '~/ui/elements';

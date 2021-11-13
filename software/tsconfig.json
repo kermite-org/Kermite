@@ -19,8 +19,6 @@
     "noEmit": true,
     "baseUrl": "./src",
     "paths": {
-      "qx": ["./qx"],
-      "qx/*": ["./qx/*"],
       "~/*": ["./*"]
     }
   },

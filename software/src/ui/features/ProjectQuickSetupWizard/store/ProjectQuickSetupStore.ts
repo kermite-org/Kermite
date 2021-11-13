@@ -1,5 +1,5 @@
+import { useEffect } from 'alumina';
 import produce from 'immer';
-import { useEffect } from 'qx';
 import {
   compareObjectByJsonStringify,
   copyObjectProps,

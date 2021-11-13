@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IProfileSetupStep } from '~/ui/commonModels';
 import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
 import { ProfileSetupWizard_StepBaseProfileSelection } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepBaseProjectSelection';

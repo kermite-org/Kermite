@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors, Link } from '~/ui/base';
 import { SetupNavigationStepButton } from '~/ui/components';
 

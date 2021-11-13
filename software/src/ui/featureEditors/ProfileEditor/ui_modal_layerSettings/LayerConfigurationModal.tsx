@@ -1,4 +1,4 @@
-import { css, jsx } from 'qx';
+import { css, jsx } from 'alumina';
 import {
   encodeSingleModifierVirtualKey,
   ILayerDefaultScheme,

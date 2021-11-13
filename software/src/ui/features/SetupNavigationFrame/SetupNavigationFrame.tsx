@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxNode } from 'qx';
+import { css, FC, jsx, QxNode } from 'alumina';
 import { colors } from '~/ui/base';
 import {
   Icon,

@@ -1,4 +1,4 @@
-import { css, FC, jsx, useMemo } from 'qx';
+import { css, FC, jsx, useMemo } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { uiReaders } from '~/ui/store';

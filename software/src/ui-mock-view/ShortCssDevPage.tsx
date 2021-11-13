@@ -1,4 +1,4 @@
-import { jsx, setShortCssProcessor, css } from 'qx';
+import { jsx, setShortCssProcessor, css } from 'alumina';
 import { shortCssProcessor } from '~/ui/base';
 
 const cssRoot = css`

@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { PreviewKeyEntityCard } from '~/ui/elements/keyboard/keyUnitCards/PreviewKeyUnitCard';

@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { IDisplayKeyboardDesign, linerInterpolateValue } from '~/shared';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';

@@ -1,4 +1,4 @@
-import { jsx, css, useLocal, QxNode, QxChildren } from 'qx';
+import { jsx, css, useLocal, QxNode, QxChildren } from 'alumina';
 
 export function ClosableOverlay(props: {
   close: () => void;

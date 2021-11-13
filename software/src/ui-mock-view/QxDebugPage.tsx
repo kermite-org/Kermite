@@ -1,4 +1,4 @@
-import { jsx, QxChild, QxChildren, css, useLocal, useEffect } from 'qx';
+import { jsx, QxChild, QxChildren, css, useLocal, useEffect } from 'alumina';
 
 const Hello = () => <div>hello</div>;
 

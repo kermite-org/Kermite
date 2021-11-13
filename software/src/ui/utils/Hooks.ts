@@ -1,4 +1,4 @@
-import { useLocal, useState, useEffect, useMemo } from 'qx';
+import { useLocal, useState, useEffect, useMemo } from 'alumina';
 import { cloneObject, copyObjectProps } from '~/shared';
 import { UiLocalStorage } from '~/ui/base';
 

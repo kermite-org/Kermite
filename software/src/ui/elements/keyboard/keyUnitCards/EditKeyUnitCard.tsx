@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { texts, uiTheme, IEditKeyUnitCardViewModel, colors } from '~/ui/base';
 import { KeyTextLabel } from '~/ui/elements/keyboard/keyUnitCards/EditKeyUnitCard.KeyTextLabel';
 import { KeyUnitShape } from '~/ui/elements/keyboard/keyUnitCards/KeyUnitShape';

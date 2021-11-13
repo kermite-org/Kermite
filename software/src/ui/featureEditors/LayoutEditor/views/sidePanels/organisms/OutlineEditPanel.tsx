@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { HFlex, GeneralSelector } from '~/ui/components';
 import {
   ConfigSubContent,

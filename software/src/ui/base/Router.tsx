@@ -1,4 +1,4 @@
-import { FC, jsx, QxNode, rerender } from 'qx';
+import { FC, jsx, QxNode, rerender } from 'alumina';
 
 export namespace router {
   let chainingHashInEventCallback = false;

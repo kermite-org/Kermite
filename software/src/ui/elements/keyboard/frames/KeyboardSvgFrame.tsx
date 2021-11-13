@@ -1,4 +1,4 @@
-import { jsx, css, QxChildren, FC } from 'qx';
+import { jsx, css, QxChildren, FC } from 'alumina';
 import { IDisplayArea } from '~/shared';
 import { getKeyboardSvgViewBoxSpec } from '~/ui/base';
 

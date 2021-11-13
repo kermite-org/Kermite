@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/featureEditors';
 import { ProfileConfigurationModalLayer } from '~/ui/featureEditors/ProfileEditor/ui_modal_profileConfiguration';

@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { IPageSpec_ProjectStandardFirmwareEdit } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/elements/frames';

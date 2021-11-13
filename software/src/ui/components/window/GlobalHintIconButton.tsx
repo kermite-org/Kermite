@@ -1,4 +1,4 @@
-import { FC, jsx, css } from 'qx';
+import { FC, jsx, css } from 'alumina';
 import { texts } from '~/ui/base';
 import { ButtonBase, Icon } from '~/ui/components/atoms';
 

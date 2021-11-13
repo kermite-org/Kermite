@@ -1,4 +1,4 @@
-import { jsx, css, useLocal, FC } from 'qx';
+import { jsx, css, useLocal, FC } from 'alumina';
 import { IGeneralMenuItem, uiTheme } from '~/ui/base';
 import { GeneralButtonMenuButton } from '~/ui/components/molecules/GeneralButtonMenu.Button';
 
