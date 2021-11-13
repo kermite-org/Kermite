@@ -596,6 +596,11 @@ ajv@^6.10.0, ajv@^6.12.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+alumina@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.2.tgz#1162e282f230f6605cb7edca7dc7a95f05b07a14"
+  integrity sha512-Vw+vXPB58/15lJ3CtYymGat3CmMBvNaXj5rJnhFmk05bdg3HuHna1IGvsbnlkgQ1X0JOKHN1/5gQZHrinlJprg==
+
 ansi-align@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/ansi-align/-/ansi-align-3.0.1.tgz#0cdf12e111ace773a86e9a1fad1225c43cb19a59"
