@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { GeneralInput } from '~/ui/components';
 
 type Props = {

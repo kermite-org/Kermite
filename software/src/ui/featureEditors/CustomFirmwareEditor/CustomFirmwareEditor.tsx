@@ -1,4 +1,4 @@
-import { css, FC, jsx, useInlineEffect } from 'qx';
+import { css, FC, jsx, useInlineEffect } from 'alumina';
 import { GeneralSelector } from '~/ui/components';
 import {
   customFirmwareEditorModel,

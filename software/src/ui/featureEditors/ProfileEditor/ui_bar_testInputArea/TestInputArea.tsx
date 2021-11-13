@@ -1,4 +1,4 @@
-import { css, FC, jsx, useLocal } from 'qx';
+import { css, FC, jsx, useLocal } from 'alumina';
 import { texts } from '~/ui/base';
 import { GeneralInput, GeneralButton } from '~/ui/components';
 import { makeTestInputAreaViewModel } from '~/ui/featureEditors/ProfileEditor/ui_bar_testInputArea/TestInputAreaViewModel';

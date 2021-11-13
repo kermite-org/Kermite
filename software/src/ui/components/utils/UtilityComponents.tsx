@@ -1,4 +1,4 @@
-import { styled } from 'qx';
+import { styled } from 'alumina';
 
 export const HFlex = styled.div`
   display: flex;

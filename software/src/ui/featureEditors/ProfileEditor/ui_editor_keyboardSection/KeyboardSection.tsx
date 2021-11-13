@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { usePlayerModel } from '~/ui/commonModels';
 import { EditorKeyboardView } from '~/ui/elements/keyboard';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';

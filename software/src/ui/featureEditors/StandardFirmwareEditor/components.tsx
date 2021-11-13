@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChildren } from 'qx';
+import { css, FC, jsx, QxChildren } from 'alumina';
 import { GeneralInput, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditor_fieldValueConverters } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
 import { standardFirmwareEditStore } from '~/ui/featureEditors/StandardFirmwareEditor/store';

@@ -1,4 +1,4 @@
-import { jsx, asyncRerender, css, useRef, FC } from 'qx';
+import { jsx, asyncRerender, css, useRef, FC } from 'alumina';
 import {
   editReader,
   editMutations,

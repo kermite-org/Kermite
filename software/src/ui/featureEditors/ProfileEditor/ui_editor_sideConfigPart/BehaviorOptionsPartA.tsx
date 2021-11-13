@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { ISelectorOption, texts } from '~/ui/base';
 import { RibbonSelector } from '~/ui/components';
 import { profilesReader } from '~/ui/pages/assigner-page/models';

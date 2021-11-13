@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { ipcAgent, texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';

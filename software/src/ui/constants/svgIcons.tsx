@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 
 export const SvgIcon_McuSquare: FC = () => (
   <svg

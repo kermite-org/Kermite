@@ -1,4 +1,4 @@
-import { useLocal } from 'qx';
+import { useLocal } from 'alumina';
 import { texts } from '~/ui/base';
 import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
 import { IProfileManagementPartViewModel } from './ProfilesOperationModel';

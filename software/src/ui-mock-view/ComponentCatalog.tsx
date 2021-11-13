@@ -1,4 +1,4 @@
-import { css, FC, jsx, useEffect, useLocal } from 'qx';
+import { css, FC, jsx, useEffect, useLocal } from 'alumina';
 import {
   FlatListSelector,
   CheckBoxExamples,

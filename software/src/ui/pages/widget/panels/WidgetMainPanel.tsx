@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { WidgetSvgKeyboardView } from '~/ui/elements/keyboard';
 import { useWidgetMainPanelModel } from '~/ui/pages/widget/models/WidgetMainPanelModel';
 import { WidgetControlButtonsBox } from '~/ui/pages/widget/organisms/WidgetControlButtonsBox';

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'qx';
+import { useState, useEffect } from 'alumina';
 import {
   IDisplayArea,
   IDisplayOutlineShape,

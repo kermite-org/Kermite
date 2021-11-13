@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { jsx, render, rerender } from 'qx';
+import { jsx, render, rerender } from 'alumina';
 import { debounce } from '~/shared';
 import { ComponentCatalogPage } from '~/ui-mock-view/ComponentCatalog';
 import { initializeCss } from '~/ui-mock-view/CssInitializer';

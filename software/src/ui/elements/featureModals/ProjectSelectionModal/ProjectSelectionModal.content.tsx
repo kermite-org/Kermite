@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { ISelectorOption } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components/atoms';
 import {

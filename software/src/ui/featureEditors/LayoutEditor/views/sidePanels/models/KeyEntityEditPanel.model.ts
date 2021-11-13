@@ -1,4 +1,4 @@
-import { useLocal } from 'qx';
+import { useLocal } from 'alumina';
 import { ICommonSelectorViewModel } from '~/ui/base';
 import { useClosureModel } from '~/ui/featureEditors/LayoutEditor/common';
 import {

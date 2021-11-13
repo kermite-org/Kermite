@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
 import { DesignConfigurationPanel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/DesignConfigurationPanel';
 import { KeyEntityEditPanel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/KeyEntityEditPanel';

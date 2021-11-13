@@ -1,4 +1,4 @@
-import { useEffect } from 'qx';
+import { useEffect } from 'alumina';
 import {
   checkDeviceBootloaderMatch,
   IBootloaderDeviceDetectionStatus,

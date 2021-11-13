@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { reflectValue } from '~/ui/utils';
 
 interface Props {

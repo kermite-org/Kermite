@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 import { colors } from '~/ui/base';
 import { EditMenuBar } from '~/ui/featureEditors/LayoutEditor/views/editMenuBar/EditMenuBar';
 import { EditSvgViewContainer } from '~/ui/featureEditors/LayoutEditor/views/editSvgView';

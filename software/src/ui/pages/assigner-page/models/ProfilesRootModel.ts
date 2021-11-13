@@ -1,4 +1,4 @@
-import { useEffect } from 'qx';
+import { useEffect } from 'alumina';
 import { assignerModel } from '~/ui/featureEditors';
 import { profilesReader } from '~/ui/pages/assigner-page/models/ProfilesReader';
 import { dispatchCoreAction } from '~/ui/store';

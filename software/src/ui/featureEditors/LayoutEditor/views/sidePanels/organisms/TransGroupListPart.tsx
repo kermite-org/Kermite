@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { ConfigSubHeader } from '~/ui/elements';

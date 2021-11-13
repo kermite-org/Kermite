@@ -1,5 +1,5 @@
+import { useMemo } from 'alumina';
 import produce from 'immer';
-import { useMemo } from 'qx';
 import {
   fallbackProjectPackageInfo,
   getOriginAndProjectIdFromProjectKey,

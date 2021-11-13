@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChildren } from 'qx';
+import { css, FC, jsx, QxChildren } from 'alumina';
 import { colors } from '~/ui/base';
 
 type Props = {

@@ -1,4 +1,4 @@
-import { FC, jsx, Fragment } from 'qx';
+import { FC, jsx, Fragment } from 'alumina';
 
 let count = 0;
 const Counter = () => {

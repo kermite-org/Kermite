@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 import { degToRad } from '~/shared';
 import { colors, makeCssColor, uiTheme } from '~/ui/base';
 import {

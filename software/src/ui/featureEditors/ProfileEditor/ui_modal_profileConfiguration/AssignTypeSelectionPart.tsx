@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { IProfileAssignType } from '~/shared';
 import { texts } from '~/ui/base';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';

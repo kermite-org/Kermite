@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { OperationCard, OperationSlotCard } from '~/ui/elements';
 import { IPlainOperationEditCardsViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
 import { IOperationSlotsPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';

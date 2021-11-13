@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardShapeView } from '~/ui/elements/keyboard/panels';
 

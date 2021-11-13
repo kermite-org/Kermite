@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { appUi } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';

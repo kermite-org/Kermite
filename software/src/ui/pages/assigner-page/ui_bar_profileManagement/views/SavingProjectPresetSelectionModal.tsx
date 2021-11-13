@@ -1,4 +1,4 @@
-import { jsx, useState } from 'qx';
+import { jsx, useState } from 'alumina';
 import { validateResourceName, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
 import { modalConfirm, modalError } from '~/ui/components';

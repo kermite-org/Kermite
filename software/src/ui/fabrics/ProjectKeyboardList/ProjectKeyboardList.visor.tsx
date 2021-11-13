@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { DisplayKeyboardDesignLoader } from '~/shared';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import {

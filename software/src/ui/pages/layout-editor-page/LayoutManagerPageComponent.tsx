@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { LayoutEditorCore } from '~/ui/featureEditors';
 import { LayoutManagerTopBarTemplate } from '~/ui/pages/layout-editor-page/templates/LayoutManagerTopBarTemplate';

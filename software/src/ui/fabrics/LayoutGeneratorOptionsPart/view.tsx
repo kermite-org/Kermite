@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChild } from 'qx';
+import { css, FC, jsx, QxChild } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { ILayoutGeneratorOptions } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';

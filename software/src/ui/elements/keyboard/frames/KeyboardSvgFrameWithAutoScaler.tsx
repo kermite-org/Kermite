@@ -1,4 +1,4 @@
-import { jsx, css, QxChildren, FC } from 'qx';
+import { jsx, css, QxChildren, FC } from 'alumina';
 import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui/elements/keyboard/frames/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui/elements/keyboard/frames/ScalerBox';

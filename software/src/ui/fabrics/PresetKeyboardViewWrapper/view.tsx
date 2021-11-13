@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { IProfileData } from '~/shared';
 import { PresetKeyboardView } from '~/ui/elements';
 import { usePresetKeyboardViewWrapperModel } from '~/ui/fabrics/PresetKeyboardViewWrapper/model';

@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { colors } from '~/ui/base';
 import { getKeyboardSvgViewBoxSpec } from '~/ui/base/UiDomainHelpers';

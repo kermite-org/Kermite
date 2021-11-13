@@ -1,4 +1,4 @@
-import { useInlineEffect } from 'qx';
+import { useInlineEffect } from 'alumina';
 import {
   encodeProjectResourceItemKey,
   fallbackStandardFirmwareEntry,

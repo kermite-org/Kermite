@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { HFlex, GeneralSelector } from '~/ui/components';
 import {
   ConfigVStack,

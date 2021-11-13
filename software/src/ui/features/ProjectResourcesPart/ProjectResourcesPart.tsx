@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { GeneralButtonMenu } from '~/ui/components';
 import { ProjectResourceList } from '~/ui/fabrics/ProjectResourceList';
 import { useProjectResourcePageModel } from '~/ui/features/ProjectResourcesPart/models/ProjectResourcePageModel';

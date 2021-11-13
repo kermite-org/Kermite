@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
 import { TestInputArea } from '~/ui/featureEditors/ProfileEditor/ui_bar_testInputArea/TestInputArea';

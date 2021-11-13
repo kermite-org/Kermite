@@ -1,4 +1,4 @@
-import { css, FC, jsx, useLocal } from 'qx';
+import { css, FC, jsx, useLocal } from 'alumina';
 import { IPrimaryDefaultTrigger, ISecondaryDefaultTrigger } from '~/shared';
 import { texts } from '~/ui/base';
 import { GeneralInput } from '~/ui/components';

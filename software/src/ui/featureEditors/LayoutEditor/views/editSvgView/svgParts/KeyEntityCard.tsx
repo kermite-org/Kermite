@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 import { degToRad, getIsoEnterSvgPathSpecText, getKeySize } from '~/shared';
 import { colors, uiTheme } from '~/ui/base';
 import {

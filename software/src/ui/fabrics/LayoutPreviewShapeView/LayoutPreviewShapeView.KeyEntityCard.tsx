@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { IDisplayKeyEntity } from '~/shared';
 import { KeyUnitShape } from '~/ui/elements/keyboard/keyUnitCards/KeyUnitShape';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';

@@ -1,4 +1,4 @@
-import { css, FC, jsx, useState } from 'qx';
+import { css, FC, jsx, useState } from 'alumina';
 import { fallbackProjectProfileEntry, IProjectProfileEntry } from '~/shared';
 import { colors, uiConfiguration } from '~/ui/base';
 import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';

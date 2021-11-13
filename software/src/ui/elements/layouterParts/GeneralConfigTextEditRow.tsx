@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { GeneralInput } from '~/ui/components/atoms';
 import { styleWidthSpec } from '~/ui/components/utils';
 

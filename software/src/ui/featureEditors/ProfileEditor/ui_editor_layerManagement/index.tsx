@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { SectionHeaderText } from '~/ui/elements';
 import { makeLayerListBoxPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';

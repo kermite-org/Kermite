@@ -1,4 +1,4 @@
-import { jsx, FC } from 'qx';
+import { jsx, FC } from 'alumina';
 import { IDisplayKeyShape } from '~/shared';
 
 type Props = Omit<JSX.SVGAttributes, 'shape'> & {
