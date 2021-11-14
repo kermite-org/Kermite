@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { GeneralButton } from '~/ui/components/atoms/GeneralButton';
 
 export const GeneralButtonExamples = {

@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { CheckBoxLine } from '~/ui/components';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models';
 import { fieldSetter } from '~/ui/utils';

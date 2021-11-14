@@ -1,8 +1,8 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { IPageSpec_ProjectStandardFirmwareEdit } from '~/ui/commonModels';
-import { RouteHeaderBar } from '~/ui/components';
-import { StandardFirmwareEditor } from '~/ui/editors';
+import { RouteHeaderBar } from '~/ui/elements/frames';
+import { StandardFirmwareEditor } from '~/ui/featureEditors';
 import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 
 type Props = {

@@ -1,11 +1,9 @@
-import { useState } from 'qx';
+import { useState } from 'alumina';
 import { validateResourceName } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
-import {
-  IProjectAttachmentFileSelectorModalModel,
-  modalError,
-} from '~/ui/components';
-import { LayoutEditorCore } from '~/ui/editors';
+import { modalError } from '~/ui/components';
+import { IProjectAttachmentFileSelectorModalModel } from '~/ui/elements/featureModals';
+import { LayoutEditorCore } from '~/ui/featureEditors';
 import { layoutManagerActions } from '~/ui/pages/layout-editor-page/models/LayoutManagerActions';
 import { ILayoutManagerModalState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { layoutManagerHelpers } from '~/ui/pages/layout-editor-page/models/LayoutManagerHelpers';

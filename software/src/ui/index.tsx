@@ -1,4 +1,4 @@
-import { jsx, render } from 'qx';
+import { jsx, render } from 'alumina';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui/base';
 import { SiteRoot } from '~/ui/root/SiteRoot';

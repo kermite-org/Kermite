@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
+import { FC, jsx } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { ILayoutGeneratorOptions } from '~/ui/base';
 import { useLayoutConfigurationSectionModel } from '~/ui/fabrics/LayoutConfigurationSection/model';

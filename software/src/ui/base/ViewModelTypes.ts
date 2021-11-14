@@ -1,4 +1,8 @@
-import { IDisplayKeyboardDesign, IDisplayKeyShape } from '~/shared';
+import {
+  IDisplayKeyboardDesign,
+  IDisplayKeyShape,
+  IFirmwareTargetDevice,
+} from '~/shared';
 
 export interface ICustomKeyUnitViewModelBase {
   keyUnitId: string;
@@ -78,4 +82,10 @@ export interface IProjectKeyboardListProjectItem {
   projectKey: string;
   keyboardName: string;
   design: IDisplayKeyboardDesign;
+}
+
+export interface IFirmwareVariationSelectorItem {
+  variationId: string;
+  variationName: string;
+  mcuType: IFirmwareTargetDevice;
 }

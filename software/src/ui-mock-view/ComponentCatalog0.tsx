@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 import { ISelectorOption } from '~/ui/base';
 import { GeneralSelector, GeneralButton } from '~/ui/components/atoms';
 

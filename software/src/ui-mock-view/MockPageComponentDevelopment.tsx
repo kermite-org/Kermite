@@ -1,4 +1,4 @@
-import { jsx, FC, css, styled, useState } from 'qx';
+import { jsx, FC, css, styled, useState } from 'alumina';
 import { colors, ISelectorOption } from '~/ui/base';
 import {
   GeneralButton,

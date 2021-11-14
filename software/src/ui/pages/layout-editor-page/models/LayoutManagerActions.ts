@@ -5,7 +5,7 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { LayoutEditorCore, assignerModel } from '~/ui/editors';
+import { LayoutEditorCore, assignerModel } from '~/ui/featureEditors';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,

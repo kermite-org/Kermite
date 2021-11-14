@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 
 export const WidgetWindowActiveChrome: FC = () => (
   <div css={style}>

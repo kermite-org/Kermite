@@ -1,4 +1,4 @@
-import { jsx, css, QxNode, FC } from 'qx';
+import { jsx, css, QxNode, FC } from 'alumina';
 
 type Props = {
   children: QxNode;

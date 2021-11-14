@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { GlobalHintDisplay } from '~/ui/root/organisms';
 
 export const WindowStatusBarSection: FC = () => (

@@ -1,6 +1,9 @@
 import { duplicateObjectByJsonStringifyParse, ICheckerEx } from '~/shared';
 
 export namespace UiLocalStorage {
+  export function removeItem(key: string) {
+    localStorage.removeItem(key);
+  }
   export function writeItem<T>(key: string, value: T) {
     const text = JSON.stringify(value);
     localStorage.setItem(key, text);

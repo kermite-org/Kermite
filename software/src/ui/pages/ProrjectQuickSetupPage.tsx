@@ -1,4 +1,4 @@
-import { FC, jsx } from 'qx';
-import { ProjectQuickSetupPageImpl } from '~/ui/features/ProjectQuickSetupPart/ProjectQuickSetupPageImpl';
+import { FC, jsx } from 'alumina';
+import { ProjectQuickSetupWizard } from '~/ui/features/ProjectQuickSetupWizard/ProjectQuickSetupWizard';
 
-export const ProjectQuickSetupPage: FC = () => <ProjectQuickSetupPageImpl />;
+export const ProjectQuickSetupPage: FC = () => <ProjectQuickSetupWizard />;

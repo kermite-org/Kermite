@@ -1,4 +1,4 @@
-import { css, jsx } from 'qx';
+import { css, jsx } from 'alumina';
 import { colors, texts } from '~/ui/base';
 import {
   CheckBoxLine,

@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 
 interface Props<T extends string | number> {
   items: T[];

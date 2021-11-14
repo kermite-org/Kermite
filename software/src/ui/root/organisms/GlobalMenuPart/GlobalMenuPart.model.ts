@@ -1,4 +1,4 @@
-import { useLocal } from 'qx';
+import { useLocal } from 'alumina';
 import { texts, appUi } from '~/ui/base';
 import {
   useThemeSelectionModel,

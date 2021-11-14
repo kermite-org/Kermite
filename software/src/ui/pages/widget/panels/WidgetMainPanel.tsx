@@ -1,5 +1,5 @@
-import { jsx, css, FC } from 'qx';
-import { WidgetSvgKeyboardView } from '~/ui/components/keyboard';
+import { jsx, css, FC } from 'alumina';
+import { WidgetSvgKeyboardView } from '~/ui/elements/keyboard';
 import { useWidgetMainPanelModel } from '~/ui/pages/widget/models/WidgetMainPanelModel';
 import { WidgetControlButtonsBox } from '~/ui/pages/widget/organisms/WidgetControlButtonsBox';
 import { siteModel } from '~/ui/store';

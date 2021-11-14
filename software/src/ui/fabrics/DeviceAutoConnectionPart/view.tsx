@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
 import { deviceAutoConnectionPartAssets } from '~/ui/fabrics/DeviceAutoConnectionPart/assets';
 import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/DeviceAutoConnectionPart/hooks';

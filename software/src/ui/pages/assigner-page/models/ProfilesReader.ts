@@ -18,10 +18,7 @@ export const profilesReader = {
     }
   },
   get isEditProfileAvailable() {
-    if (
-      uiReaders.pagePath === '/assigner' ||
-      uiReaders.pagePath === '/projectQuickSetup/step4'
-    ) {
+    if (uiReaders.pagePath === '/assigner') {
       const { profileEditSource } = uiState.core;
       return profileEditSource.type !== 'NoEditProfileAvailable';
     } else {

@@ -1,4 +1,4 @@
-import { useEffect } from 'qx';
+import { useEffect } from 'alumina';
 import { fallbackProfileData, IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, IWidgetKeyUnitCardViewModel } from '~/ui/base';
 import { usePlayerModel } from '~/ui/commonModels';

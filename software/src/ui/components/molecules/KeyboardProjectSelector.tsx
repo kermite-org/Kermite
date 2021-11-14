@@ -1,11 +1,11 @@
-import { jsx, css, FC } from 'qx';
+import { jsx, css, FC } from 'alumina';
 import { ISelectorSource, texts } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components/atoms';
 
 interface Props {
   selectorSource: ISelectorSource;
-  isLinkButtonActive: boolean;
-  linkButtonHandler(): void;
+  isLinkButtonActive?: boolean;
+  linkButtonHandler?(): void;
   hint?: string;
 }
 

@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components/atoms/GeneralSelector';
 

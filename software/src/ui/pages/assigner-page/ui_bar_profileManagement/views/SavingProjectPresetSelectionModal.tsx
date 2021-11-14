@@ -1,12 +1,11 @@
-import { jsx, useState } from 'qx';
+import { jsx, useState } from 'alumina';
 import { validateResourceName, IProjectPackageInfo } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
+import { modalConfirm, modalError } from '~/ui/components';
 import {
   IProjectAttachmentFileSelectorModalModel,
-  modalConfirm,
-  modalError,
   ProjectAttachmentFileSelectorModal,
-} from '~/ui/components';
+} from '~/ui/elements/featureModals';
 import { profilesActions } from '~/ui/pages/assigner-page/models';
 import { IProfileManagementPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { projectPackagesReader, uiReaders } from '~/ui/store';

@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { languageKey } from '~/ui/base';
 import { ClosableOverlay } from '~/ui/components';
 import { boardResetInstructionPanelAssets } from '~/ui/fabrics/StandardFirmwareFlashPart/BoardResetInstructionPanel/assets';

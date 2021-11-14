@@ -1,4 +1,4 @@
-import { asyncRerender, jsx } from 'qx';
+import { asyncRerender, jsx } from 'alumina';
 
 export namespace ForegroundModalLayerDomain {
   type JsxElement = any;
@@ -40,7 +40,7 @@ export namespace ForegroundModalLayerDomain {
   export function createModal<
     T extends ModalSource<any, any>,
     S = ArgumentTypes<T>[0],
-    D = ArgumentTypes<ArgumentTypes<ReturnType<T>>[0]['close']>[0]
+    D = ArgumentTypes<ArgumentTypes<ReturnType<T>>[0]['close']>[0],
   >(source: T): (params: S) => Promise<D> {
     return (params: S) => modalModel.openModal(source(params));
   }

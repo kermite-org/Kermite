@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { WidgetWindowActiveChrome, WidgetWindowFrame } from '~/ui/components';
 import { WidgetMainPanel } from '~/ui/pages/widget/panels/WidgetMainPanel';
 import { siteModel } from '~/ui/store';

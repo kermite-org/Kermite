@@ -5,7 +5,6 @@ export type PagePaths =
   | '/shapePreview'
   | '/firmwareUpdate'
   | '/presetBrowser'
-  | '/presetBrowser2'
   | '/settings'
   | '/widget'
   | '/projectSelection'
@@ -14,7 +13,9 @@ export type PagePaths =
   | '/projectQuickSetup/step1'
   | '/projectQuickSetup/step2'
   | '/projectQuickSetup/step3'
-  | '/projectQuickSetup/step4'
+  | '/profileSetup/step1'
+  | '/profileSetup/step2'
+  | '/profileSetup/step3'
   | '/firmwareFlash';
 
 export type IPageSpec_ProjectLayoutEdit = {
@@ -48,3 +49,7 @@ export type IPageSpec =
   | IPageSpec_ProjectStandardFirmwareEdit;
 
 export type IPageModelSpec = never;
+
+export type IProjectQuickSetupStep = 'step1' | 'step2' | 'step3';
+
+export type IProfileSetupStep = 'step1' | 'step2' | 'step3';

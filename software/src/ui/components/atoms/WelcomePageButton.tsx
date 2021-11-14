@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChildren } from 'qx';
+import { css, FC, jsx, QxChildren } from 'alumina';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
 type Props = {

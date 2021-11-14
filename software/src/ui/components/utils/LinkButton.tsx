@@ -1,4 +1,4 @@
-import { FC, jsx, QxNode } from 'qx';
+import { FC, jsx, QxNode } from 'alumina';
 import { uiActions } from '~/ui/store';
 
 type Props = {
