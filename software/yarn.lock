@@ -596,10 +596,10 @@ ajv@^6.10.0, ajv@^6.12.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alumina@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.5.tgz#28b89104609100182a53dfd5cf70694be697c134"
-  integrity sha512-FD9fmAEcQfCkXscXfr12TDNdlQ3urYE9Cm5Zs+BwL+f4RUVMH0PnEaKAfwPbqVSpWam+MnXfKWaK0A8DTq5Lyg==
+alumina@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.6.tgz#55e872746f8a62de5b38bc40110236eaa1e83a1b"
+  integrity sha512-8geUW3eXAZsIsrkSZMWkrhnaQcJJDcKDJimPKlRPIthMaEB0xXUDEALRy9F5ooHqZRjWRBNc/ZbfnMmcg0ux5g==
 
 ansi-align@^3.0.0:
   version "3.0.1"
