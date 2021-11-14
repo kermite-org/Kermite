@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChild } from 'alumina';
+import { css, FC, jsx, AluminaChild } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { ILayoutGeneratorOptions } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
@@ -13,7 +13,7 @@ type Props = {
   writeLayoutOption: IWriteLayoutOptionFunc;
 };
 
-const FieldRow: FC<{ title: string; children: QxChild }> = ({
+const FieldRow: FC<{ title: string; children: AluminaChild }> = ({
   title,
   children,
 }) => (

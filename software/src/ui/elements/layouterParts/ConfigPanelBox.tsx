@@ -1,10 +1,10 @@
-import { FC, jsx, css, useState, QxChildren } from 'alumina';
+import { FC, jsx, css, useState, AluminaChildren } from 'alumina';
 import { colors } from '~/ui/base';
 import { Icon } from '~/ui/components/atoms';
 
 type Props = {
   headerText: string;
-  children: QxChildren;
+  children: AluminaChildren;
   canToggleOpen?: boolean;
   initialOpen?: boolean;
 };

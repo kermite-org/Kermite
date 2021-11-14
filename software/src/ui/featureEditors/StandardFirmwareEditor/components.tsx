@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { GeneralInput, ToggleSwitch } from '~/ui/components';
 import { standardFirmwareEditor_fieldValueConverters } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
 import { standardFirmwareEditStore } from '~/ui/featureEditors/StandardFirmwareEditor/store';
@@ -13,7 +13,7 @@ import {
 
 const FieldItem: FC<{
   title: string;
-  children: QxChildren;
+  children: AluminaChildren;
   indent?: boolean;
 }> = ({ title, children, indent }) => {
   const styleTitleCell = css`

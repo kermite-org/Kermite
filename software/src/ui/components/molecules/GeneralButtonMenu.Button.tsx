@@ -1,9 +1,9 @@
-import { jsx, css, QxNode, FC } from 'alumina';
+import { jsx, css, AluminaNode, FC } from 'alumina';
 import { uiTheme } from '~/ui/base';
 
 type Props = {
   handler?: () => void;
-  children: QxNode;
+  children: AluminaNode;
   active?: boolean;
   disabled?: boolean;
 };

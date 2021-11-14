@@ -1,7 +1,7 @@
-import { jsx, css, QxNode, FC } from 'alumina';
+import { jsx, css, AluminaNode, FC } from 'alumina';
 
 type Props = {
-  children: QxNode;
+  children: AluminaNode;
   dpiScale: number;
 };
 

@@ -1,10 +1,10 @@
-import { FC, jsx, QxNode } from 'alumina';
+import { FC, jsx, AluminaNode } from 'alumina';
 import { uiActions } from '~/ui/store';
 
 type Props = {
   className?: string;
   to?: string;
-  children?: QxNode;
+  children?: AluminaNode;
   extraCss?: string;
 };
 export const LinkButton: FC<Props> = ({

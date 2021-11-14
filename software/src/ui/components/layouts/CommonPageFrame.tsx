@@ -1,9 +1,9 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { colors } from '~/ui/base';
 
 type Props = {
   pageTitle?: string;
-  children: QxChildren;
+  children: AluminaChildren;
   className?: string;
 };
 

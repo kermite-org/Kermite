@@ -1,11 +1,11 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
 type Props = {
   className?: string;
   onClick?: () => void;
   active?: boolean;
-  children?: QxChildren;
+  children?: AluminaChildren;
 };
 
 export const WelcomePageButton: FC<Props> = ({

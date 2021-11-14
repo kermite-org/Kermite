@@ -1,8 +1,8 @@
-import { jsx, css, QxNode, FC } from 'alumina';
+import { jsx, css, AluminaNode, FC } from 'alumina';
 import { colors } from '~/ui/base';
 
 type Props = {
-  children: QxNode;
+  children: AluminaNode;
   renderTitleBar: FC;
   renderStatusBar: FC;
 };

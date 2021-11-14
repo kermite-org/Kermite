@@ -1,8 +1,8 @@
-import { jsx, css, useLocal, QxNode, QxChildren } from 'alumina';
+import { jsx, css, useLocal, AluminaNode, AluminaChildren } from 'alumina';
 
 export function ClosableOverlay(props: {
   close: () => void;
-  children: QxNode;
+  children: AluminaNode;
   placeAtTop?: boolean;
 }) {
   const cssDiv = css`
@@ -96,7 +96,7 @@ export const CommonDialogFrame = (props: {
   );
 };
 
-export const DialogContentRow = (props: { children: QxChildren }) => {
+export const DialogContentRow = (props: { children: AluminaChildren }) => {
   const cssBody = css`
     margin: 10px 15px 0;
     color: #048;
@@ -114,7 +114,7 @@ export const DialogContentRow = (props: { children: QxChildren }) => {
   return <div css={cssBody}>{props.children}</div>;
 };
 
-export const DialogButtonsRow = (props: { children: QxChildren }) => {
+export const DialogButtonsRow = (props: { children: AluminaChildren }) => {
   const cssButtonsRow = css`
     margin: 10px 15px;
     display: flex;

@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 
 const Foo: FC = () => {
   const styleFoo = css`
@@ -20,7 +20,7 @@ const Foo: FC = () => {
   );
 };
 
-const Bar: FC<{ children?: QxChildren }> = ({ children }) => {
+const Bar: FC<{ children?: AluminaChildren }> = ({ children }) => {
   return <div class={baseBarStyle}>{children}</div>;
 };
 

@@ -1,9 +1,9 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { colors } from '~/ui/base';
 
 export const WizardSectionFrame: FC<{
   title: string;
-  children: QxChildren;
+  children: AluminaChildren;
   inactive?: boolean;
   contentClassName?: string;
 }> = ({ title, children, inactive, contentClassName }) => {
@@ -24,35 +24,37 @@ export const WizardSectionFrame: FC<{
   );
 };
 
-export const WizardSectionPanel: FC<{ title: string; children?: QxChildren }> =
-  ({ title, children }) => {
-    const style = css`
-      background: ${colors.clPanelBox};
-      padding: 7px;
-      border: solid 1px ${colors.clPrimary};
-      display: flex;
-      flex-direction: column;
+export const WizardSectionPanel: FC<{
+  title: string;
+  children?: AluminaChildren;
+}> = ({ title, children }) => {
+  const style = css`
+    background: ${colors.clPanelBox};
+    padding: 7px;
+    border: solid 1px ${colors.clPrimary};
+    display: flex;
+    flex-direction: column;
 
-      > h2 {
-        font-size: 16px;
-        flex-shrink: 0;
-      }
+    > h2 {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
 
-      > div {
-        flex-grow: 1;
-      }
-    `;
-    return (
-      <div class={style}>
-        <h2>{title}</h2>
-        <div>{children}</div>
-      </div>
-    );
-  };
+    > div {
+      flex-grow: 1;
+    }
+  `;
+  return (
+    <div class={style}>
+      <h2>{title}</h2>
+      <div>{children}</div>
+    </div>
+  );
+};
 
 export const WizardSectionPanelWithCenterContent: FC<{
   title: string;
-  children?: QxChildren;
+  children?: AluminaChildren;
   contentWidth: number;
   contentHeight: number;
 }> = ({ title, children, contentWidth, contentHeight }) => {

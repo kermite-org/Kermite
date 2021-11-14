@@ -1,4 +1,4 @@
-import { FC, jsx, QxNode, rerender } from 'alumina';
+import { FC, jsx, AluminaNode, rerender } from 'alumina';
 
 export namespace router {
   let chainingHashInEventCallback = false;
@@ -38,18 +38,18 @@ export function linkTo(path: string) {
   return () => router.navigateTo(path);
 }
 
-export const ALink: FC<{ to: string; children: QxNode }> = ({
+export const ALink: FC<{ to: string; children: AluminaNode }> = ({
   to,
   children,
 }) => {
   return <a href={`#${to}`}>{children}</a>;
 };
 
-export const Link: FC<{ to: string; children: QxNode; className?: string }> = ({
-  to,
-  children,
-  className,
-}) => (
+export const Link: FC<{
+  to: string;
+  children: AluminaNode;
+  className?: string;
+}> = ({ to, children, className }) => (
   <div onClick={linkTo(to)} className={className}>
     {children}
   </div>
