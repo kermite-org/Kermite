@@ -34,10 +34,7 @@ export const ResourceItemDetailView: FC<Props> = ({ selectedItemKey }) => {
         <div>
           {itemType} {itemName}
         </div>
-        <GeneralButton
-          onClick={() => editSelectedResourceItem()}
-          qxIf={canEdit}
-        >
+        <GeneralButton onClick={() => editSelectedResourceItem()} if={canEdit}>
           edit
         </GeneralButton>
       </div>

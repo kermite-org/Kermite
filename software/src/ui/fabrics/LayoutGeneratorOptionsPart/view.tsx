@@ -47,13 +47,13 @@ export const LayoutGeneratorOptionsPart: FC<Props> = ({
             onChange={valueChangeHandler('invertX')}
           />
         </FieldRow>
-        <FieldRow title="invert column placement right" qxIf={isOddSplit}>
+        <FieldRow title="invert column placement right" if={isOddSplit}>
           <ToggleSwitch
             checked={layoutOptions.invertXR}
             onChange={valueChangeHandler('invertXR')}
           />
         </FieldRow>
-        <FieldRow title="invert row placement" qxIf={false}>
+        <FieldRow title="invert row placement" if={false}>
           <ToggleSwitch
             checked={layoutOptions.invertY}
             onChange={valueChangeHandler('invertY')}

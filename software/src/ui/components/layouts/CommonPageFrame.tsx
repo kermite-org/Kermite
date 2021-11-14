@@ -14,7 +14,7 @@ export const CommonPageFrame: FC<Props> = ({
 }) => {
   return (
     <div css={style} className={className}>
-      <div className="header" qxIf={!!pageTitle}>
+      <div className="header" if={!!pageTitle}>
         {pageTitle}
       </div>
       <div className="body">{children}</div>

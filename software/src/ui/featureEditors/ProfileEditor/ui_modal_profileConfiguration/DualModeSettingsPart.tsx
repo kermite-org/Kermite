@@ -53,7 +53,7 @@ export const DualModeSettingsPart: FC = () => {
                 />
                 ms
               </div>
-              <div class="error-text" qxIf={!local.TapHoldThresholdMsValid}>
+              <div class="error-text" if={!local.TapHoldThresholdMsValid}>
                 valid range: 1~3000
               </div>
             </td>

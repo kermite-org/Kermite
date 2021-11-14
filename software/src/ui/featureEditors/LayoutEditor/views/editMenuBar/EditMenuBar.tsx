@@ -64,7 +64,7 @@ export const EditMenuBar: FC = () => {
         />
       </div>
 
-      <div class="buttonsBox" qxIf={false}>
+      <div class="buttonsBox" if={false}>
         <ToggleButton
           text="id"
           width={45}
@@ -79,7 +79,7 @@ export const EditMenuBar: FC = () => {
         />
       </div>
 
-      <div qxIf={false}>
+      <div if={false}>
         <GeneralButton onClick={resetKeyboardDesign} text="reset" />
       </div>
     </div>

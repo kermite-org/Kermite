@@ -87,7 +87,7 @@ export const CommonDialogFrame = (props: {
     <div css={cssLayerEditDialogPanel}>
       <div css={cssTitleBar}>
         <span class="titleText">{props.caption}</span>
-        <div class="closeButton" onClick={props.close} qxIf={!!props.close}>
+        <div class="closeButton" onClick={props.close} if={!!props.close}>
           <i class="fa fa-times" />
         </div>
       </div>

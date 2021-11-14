@@ -24,11 +24,11 @@ export const ConfigPanelBox: FC<Props> = ({
         <Icon spec="article" />
         <span class="caption">{headerText}</span>
         <div class="spacer" />
-        <div onClick={toggleIsOpen} class="arrowBox" qxIf={canToggleOpen}>
+        <div onClick={toggleIsOpen} class="arrowBox" if={canToggleOpen}>
           <Icon spec={isOpen ? 'expand_less' : 'expand_more'} />
         </div>
       </div>
-      <div class="body" qxIf={isOpen}>
+      <div class="body" if={isOpen}>
         {children}
       </div>
     </div>

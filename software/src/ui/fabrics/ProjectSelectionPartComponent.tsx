@@ -37,7 +37,7 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
       {isMenuButtonVisible && menuItems && (
         <GeneralButtonMenu menuItems={menuItems} />
       )}
-      <div qxIf={!isMenuButtonVisible} />
+      <div if={!isMenuButtonVisible} />
       {canSelectResourceOrigin && resourceOriginSelectorSource && (
         <RibbonSelector {...resourceOriginSelectorSource} />
       )}
@@ -48,7 +48,7 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
       currentProjectKey={projectKey}
       setCurrentProjectKey={setProjectKey}
     />
-    <div className="bottom-row" qxIf={showNoSelectionOption}>
+    <div className="bottom-row" if={showNoSelectionOption}>
       <RadioButtonLine
         checked={projectKey === ''}
         onClick={() => setProjectKey('')}

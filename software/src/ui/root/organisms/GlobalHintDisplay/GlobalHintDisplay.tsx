@@ -11,7 +11,7 @@ export const GlobalHintDisplay: FC = () => {
   return (
     <div css={style}>
       <GlobalHintIconButton isActive={showHint} onClick={toggleShowHint} />
-      <GlobalHintDisplayText qxIf={showHint} />
+      <GlobalHintDisplayText if={showHint} />
     </div>
   );
 };
