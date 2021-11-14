@@ -78,7 +78,7 @@ const SelectorTest = () => {
 const cssBase = css`
   padding: 10px;
 `;
-export const QxDebugPage = () => {
+export const AluminaDebugPage = () => {
   console.log(`render`);
   return (
     <div css={cssBase}>

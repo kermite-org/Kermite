@@ -30,7 +30,7 @@ const baseBarStyle = css`
   color: green;
 `;
 
-export const QxDebugPage5: FC = () => {
+export const AluminaDebugPage5: FC = () => {
   console.log(`render`);
   return (
     <div>
