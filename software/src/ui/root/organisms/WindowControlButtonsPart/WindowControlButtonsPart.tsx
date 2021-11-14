@@ -19,7 +19,7 @@ export const WindowControlButtonsPart: FC = () => {
   } = useWindowControlButtonsPartModel();
   return (
     <div css={style}>
-      <WindowRestartButton handler={onReloadButton} qxIf={showReloadButton} />
+      <WindowRestartButton handler={onReloadButton} if={showReloadButton} />
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={onWidgetButton}

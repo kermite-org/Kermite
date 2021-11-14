@@ -18,7 +18,7 @@ export const GeneralButtonMenu: FC<Props> = ({ menuItems, disabled }) => {
   const { isOpen, openMenu, closeMenu } = useMenuStateModel();
   return (
     <div>
-      <div css={cssMenuOverlay} onClick={closeMenu} qxIf={isOpen} />
+      <div css={cssMenuOverlay} onClick={closeMenu} if={isOpen} />
       <div css={cssMenuBase}>
         <GeneralButtonMenuButton
           handler={openMenu}
@@ -27,7 +27,7 @@ export const GeneralButtonMenu: FC<Props> = ({ menuItems, disabled }) => {
         >
           <i class="fa fa-bars" />
         </GeneralButtonMenuButton>
-        <div css={cssMenuPanel} qxIf={isOpen}>
+        <div css={cssMenuPanel} if={isOpen}>
           {menuItems.map((item, idx) =>
             item.type === 'separator' ? (
               <hr key={idx} />

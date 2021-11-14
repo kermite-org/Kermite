@@ -10,7 +10,7 @@ export const ProfileSelectionMenuPart: FC<Props> = ({
   vm: { isOpen, openMenu, closeMenu, menuItems },
 }) => (
   <div css={cssProfileSelectionMenuPart}>
-    <div css={cssOverlay} qxIf={isOpen} onClick={closeMenu} />
+    <div css={cssOverlay} if={isOpen} onClick={closeMenu} />
     <div css={cssMenuArea}>
       <div
         css={cssMenuButton}
@@ -19,13 +19,13 @@ export const ProfileSelectionMenuPart: FC<Props> = ({
       >
         <i className="fa fa-bars" />
       </div>
-      <div css={cssMenuPopup} qxIf={isOpen}>
+      <div css={cssMenuPopup} if={isOpen}>
         {menuItems.map((mi) => (
           <div
             key={mi.key}
             onMouseUp={mi.handler}
             data-hint={mi.hint}
-            qxIf={mi.enabled}
+            if={mi.enabled}
           >
             {mi.text}
           </div>

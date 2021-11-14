@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { jsx, render, rerender } from 'alumina';
 import { debounce } from '~/shared';
+import { AluminaDebugPage } from '~/ui-mock-view/AluminaDebugPage';
+import { AluminaDebugPage2 } from '~/ui-mock-view/AluminaDebugPage2';
+import { AluminaDebugPage3 } from '~/ui-mock-view/AluminaDebugPage3';
+import { AluminaDebugPage4 } from '~/ui-mock-view/AluminaDebugPage4';
+import { AluminaDebugPage5 } from '~/ui-mock-view/AluminaDebugPage5';
 import { ComponentCatalogPage } from '~/ui-mock-view/ComponentCatalog';
 import { initializeCss } from '~/ui-mock-view/CssInitializer';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
@@ -8,11 +13,6 @@ import { GooberDevelopmentPage2 } from '~/ui-mock-view/GooberDevelopmentPage2';
 import { HoverHintDevelopmentPage } from '~/ui-mock-view/HoverHintDevelopmentPage';
 import { MockPageComponentDevelopment } from '~/ui-mock-view/MockPageComponentDevelopment';
 import { MockPageLoadedDesignDrawing } from '~/ui-mock-view/MockPageLoadedDesignDrawing';
-import { QxDebugPage } from '~/ui-mock-view/QxDebugPage';
-import { QxDebugPage2 } from '~/ui-mock-view/QxDebugPage2';
-import { QxDebugPage3 } from '~/ui-mock-view/QxDebugPage3';
-import { QxDebugPage4 } from '~/ui-mock-view/QxDebugPage4';
-import { QxDebugPage5 } from '~/ui-mock-view/QxDebugPage5';
 import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
 import { SpaLayoutDebugPage } from '~/ui-mock-view/SpaLayoutDebugPage';
@@ -23,11 +23,11 @@ import { MockPageLayoutEditorDevelopment } from './MockPageLayouterDevelopment';
 const PageRoot = () => {
   return (
     <div style={{ height: '100%' }}>
-      {/* <QxDebugPage /> */}
-      {/* <QxDebugPage2 /> */}
-      <QxDebugPage3 />
-      {/* <QxDebugPage4 /> */}
-      {/* <QxDebugPage5 /> */}
+      {/* <AluminaDebugPage /> */}
+      {/* <AluminaDebugPage2 /> */}
+      <AluminaDebugPage3 />
+      {/* <AluminaDebugPage4 /> */}
+      {/* <AluminaDebugPage5 /> */}
       {/* <MockPageLayouterDevelopment /> */}
       {/* <MockPageLoadedDesignDrawing /> */}
       {/* <UiLayouterPageComponent /> */}

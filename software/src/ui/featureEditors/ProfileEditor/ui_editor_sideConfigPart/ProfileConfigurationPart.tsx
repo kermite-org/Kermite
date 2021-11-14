@@ -18,7 +18,7 @@ export const ProfileConfigurationPart = () => {
       <div>keyboard: {keyboardName}</div>
       <div
         data-hint={texts.hint_assigner_configs_assignModel}
-        qxIf={isEditProfileAvailable}
+        if={isEditProfileAvailable}
       >
         {texts.label_assigner_configs_assignModel}: {currentAssignType}
       </div>

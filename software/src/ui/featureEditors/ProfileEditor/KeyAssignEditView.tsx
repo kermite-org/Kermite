@@ -17,7 +17,7 @@ export const KeyAssignEditView: FC = () => {
     <div css={cssKeyAssignEditView}>
       <div
         css={cssEditTopBarBox}
-        qxIf={isUserProfileEditorView && uiState.settings.showTestInputArea}
+        if={isUserProfileEditorView && uiState.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>

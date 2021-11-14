@@ -29,7 +29,7 @@ export const PreviewKeyEntityCard: FC<Props> = ({
         y={-2}
         text-anchor="middle"
         dominant-baseline="center"
-        qxIf={showKeyId}
+        if={showKeyId}
       >
         {keyUnitId}
       </text>
@@ -40,7 +40,7 @@ export const PreviewKeyEntityCard: FC<Props> = ({
         y={4}
         text-anchor="middle"
         dominant-baseline="center"
-        qxIf={showKeyIndex}
+        if={showKeyIndex}
       >
         {keyIndex}
       </text>

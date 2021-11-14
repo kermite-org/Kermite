@@ -1,9 +1,9 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { colors } from '~/ui/base';
 
 type Props = {
   pageTitle?: string;
-  children: QxChildren;
+  children: AluminaChildren;
   className?: string;
 };
 
@@ -14,7 +14,7 @@ export const CommonPageFrame: FC<Props> = ({
 }) => {
   return (
     <div css={style} className={className}>
-      <div className="header" qxIf={!!pageTitle}>
+      <div className="header" if={!!pageTitle}>
         {pageTitle}
       </div>
       <div className="body">{children}</div>

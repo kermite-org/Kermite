@@ -59,7 +59,7 @@ export const EditKeyUnitCard: FC<Props> = ({
         ypos={0}
         isWeak={isLayerFallback}
         isBold={checkBold(primaryText)}
-        qxIf={textShown}
+        if={textShown}
       />
       <KeyTextLabel
         text={secondaryText}

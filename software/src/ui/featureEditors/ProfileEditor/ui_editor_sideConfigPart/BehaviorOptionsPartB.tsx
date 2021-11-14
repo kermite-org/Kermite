@@ -22,7 +22,7 @@ export const BehaviorOptionsPartB: FC = () => {
         disabled={!profilesReader.isEditProfileAvailable}
       />
 
-      <div qxIf={!isUserProfileEditorView} className="config-icons">
+      <div if={!isUserProfileEditorView} className="config-icons">
         <ConfigurationButton
           onClick={() => commitUiState({ profileConfigModalVisible: true })}
           iconSpec="fa fa-cog"

@@ -21,7 +21,7 @@ export const PresetSelectionSection: FC<Props> = ({
 }) => (
   <div css={style}>
     <div class="selectorsPart">
-      <div className="selectorBlock" qxIf={cansSelectProject}>
+      <div className="selectorBlock" if={cansSelectProject}>
         <div>{texts.label_presetBrowser_selectionTitle_keyboard}</div>
         <KeyboardProjectSelector
           selectorSource={projectSelectorSource}

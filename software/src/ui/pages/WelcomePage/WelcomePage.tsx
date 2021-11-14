@@ -52,13 +52,13 @@ export const WelcomePage: FC = () => {
           <WelcomePageButton
             className="button"
             onClick={showProjectQuickSetupWizard}
-            qxIf={isDeveloperMode}
+            if={isDeveloperMode}
           >
             プロジェクトクイックセットアップ
           </WelcomePageButton>
         </div>
       </div>
-      <div className="version-area" qxIf={!!appVersion}>
+      <div className="version-area" if={!!appVersion}>
         version: {appVersion}
       </div>
       <div className="theme-config-area">

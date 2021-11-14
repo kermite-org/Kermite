@@ -15,7 +15,7 @@ export const WidgetMainPanel: FC = () => {
       <WidgetControlButtonsBox
         className="control-buttons-box"
         vm={vm}
-        qxIf={siteModel.isWindowActive}
+        if={siteModel.isWindowActive}
       />
     </div>
   );

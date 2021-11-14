@@ -77,7 +77,7 @@ export const StandardFirmwareEditor: FC = () => {
             />
           </FieldItem>
           <ToggleFieldRow
-            qxIf={isBoardSpecified}
+            if={isBoardSpecified}
             label="use board LEDs"
             fieldKey="useBoardLeds"
             editValues={editValues}
@@ -107,7 +107,7 @@ export const StandardFirmwareEditor: FC = () => {
             availabilityKey="useMatrixKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}
-            qxIf={isOddSplit}
+            if={isOddSplit}
           />
           <MultiplePinsFieldRow
             label="row pins right"
@@ -115,7 +115,7 @@ export const StandardFirmwareEditor: FC = () => {
             availabilityKey="useMatrixKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}
-            qxIf={isOddSplit}
+            if={isOddSplit}
           />
 
           <ToggleFieldRow
@@ -136,7 +136,7 @@ export const StandardFirmwareEditor: FC = () => {
             availabilityKey="useDirectWiredKeyScanner"
             editValues={editValues}
             fieldErrors={fieldErrors}
-            qxIf={isOddSplit}
+            if={isOddSplit}
           />
           <ToggleFieldRow
             label="use encoder"
@@ -156,7 +156,7 @@ export const StandardFirmwareEditor: FC = () => {
             availabilityKey="useEncoder"
             editValues={editValues}
             fieldErrors={fieldErrors}
-            qxIf={isOddSplit}
+            if={isOddSplit}
           />
           <ToggleFieldRow
             fieldKey="useLighting"
@@ -186,7 +186,7 @@ export const StandardFirmwareEditor: FC = () => {
             fieldErrors={fieldErrors}
             availabilityKey="useLighting"
             indent={true}
-            qxIf={isOddSplit}
+            if={isOddSplit}
           />
 
           <ToggleFieldRow
@@ -201,23 +201,23 @@ export const StandardFirmwareEditor: FC = () => {
             fieldKey="singleWireSignalPin"
             editValues={editValues}
             fieldErrors={fieldErrors}
-            qxIf={isSplit}
+            if={isSplit}
           />
 
           <ToggleFieldRow
             fieldKey="useDebugUart"
             label="use debug uart"
             editValues={editValues}
-            qxIf={appUi.isDevelopment}
+            if={appUi.isDevelopment}
           />
 
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
-      <div className="total-error" qxIf={!!totalError}>
+      <div className="total-error" if={!!totalError}>
         {totalError}
       </div>
-      <div qxIf={false}>{JSON.stringify(editValues)}</div>
+      <div if={false}>{JSON.stringify(editValues)}</div>
     </div>
   );
 };

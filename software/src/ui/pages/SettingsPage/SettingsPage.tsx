@@ -71,7 +71,7 @@ export const SettingsPage = () => {
                   size="unitSquare"
                 />
               </HFlex>
-              <div style="color:red" qxIf={!isLocalRepositoryFolderPathValid}>
+              <div style="color:red" if={!isLocalRepositoryFolderPathValid}>
                 invalid source folder path
               </div>
             </div>
@@ -96,7 +96,7 @@ export const SettingsPage = () => {
         </Indent>
       </Indent>
 
-      <div className="version-area" qxIf={!!appVersionInfo}>
+      <div className="version-area" if={!!appVersionInfo}>
         application version: {appVersionInfo}
       </div>
     </div>

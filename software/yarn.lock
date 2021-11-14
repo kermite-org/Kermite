@@ -596,10 +596,10 @@ ajv@^6.10.0, ajv@^6.12.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alumina@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.3.tgz#702514156aaea4ec4f3298f1f9a0ddba4765fb73"
-  integrity sha512-l9lpBSFv2AOue6JsXiWT8JVifrx3Jgwf3xbXHhPm6Ec+gzZb9avSYcQtRk0ouO4npG3lmPXzxEtMtH4VaSGisA==
+alumina@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.6.tgz#55e872746f8a62de5b38bc40110236eaa1e83a1b"
+  integrity sha512-8geUW3eXAZsIsrkSZMWkrhnaQcJJDcKDJimPKlRPIthMaEB0xXUDEALRy9F5ooHqZRjWRBNc/ZbfnMmcg0ux5g==
 
 ansi-align@^3.0.0:
   version "3.0.1"
@@ -1954,11 +1954,6 @@ fast-diff@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
-
-fast-equals@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-2.0.3.tgz#7039b0a039909f345a2ce53f6202a14e5f392efc"
-  integrity sha512-0EMw4TTUxsMDpDkCg0rXor2gsg+npVrMIHbEhvD0HZyIhUX6AktC/yasm+qKwfyswd06Qy95ZKk8p2crTo0iPA==
 
 fast-glob@^3.1.1:
   version "3.2.7"

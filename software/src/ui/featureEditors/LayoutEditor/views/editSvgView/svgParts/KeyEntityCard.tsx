@@ -147,7 +147,7 @@ const KeyEntityCardSingle = (props: {
       <text
         y={showBoth ? -10 : 0}
         css={cssText}
-        qxIf={showKeyId && !isGhost}
+        if={showKeyId && !isGhost}
         data-selected={isSelected}
       >
         {identifierText}
@@ -155,7 +155,7 @@ const KeyEntityCardSingle = (props: {
       <text
         y={showBoth ? 10 : 0}
         css={cssText}
-        qxIf={showKeyIndex && !isGhost}
+        if={showKeyIndex && !isGhost}
         data-selected={isSelected}
       >
         {keyIndex === -1 ? '--' : keyIndex}

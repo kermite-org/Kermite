@@ -10,7 +10,7 @@ export const NavigationColumn: FC<Props> = ({ disabled }) => (
   <div css={style} className={disabled && '--disabled'}>
     <div className="base">
       <NavigationButtonsArea className="buttons-area" />
-      <GlobalMenuPart qxIf={appUi.isDevelopment} className="menu-part" />
+      <GlobalMenuPart if={appUi.isDevelopment} className="menu-part" />
     </div>
     <div className="cover" />
   </div>

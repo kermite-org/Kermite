@@ -34,7 +34,7 @@ export const ConfiguratorZoneRoot: FC = () => {
         <PageModals />
         <LoadingOverlay isLoading={uiState.isLoading} />
         <DevToolPullTab
-          qxIf={appUi.isDevelopment}
+          if={appUi.isDevelopment}
           handler={siteModel.toggleDevToolVisible}
         />
       </div>

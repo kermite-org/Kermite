@@ -51,7 +51,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
           label="save"
           disabled={!canOverwrite}
           onClick={overwriteLayout}
-          qxIf={saveButtonVisible}
+          if={saveButtonVisible}
         />
       </div>
     </div>
