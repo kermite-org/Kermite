@@ -1,4 +1,4 @@
-import { jsx, FC, QxChildren, css, styled } from 'qx';
+import { jsx, FC, QxChildren, css, styled } from 'alumina';
 
 const cssRoot = css`
   border: solid 4px orange;

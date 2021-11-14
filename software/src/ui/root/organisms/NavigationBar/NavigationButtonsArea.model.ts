@@ -43,12 +43,6 @@ const itemsSource: NavigationItemSource[] = [
     hint: texts.hint_sideMenu_app_presetBrowser,
   },
   {
-    pagePath: '/presetBrowser2',
-    pageName: 'Presets2',
-    iconSpec: 'fa fa-book',
-    hint: texts.hint_sideMenu_app_presetBrowser,
-  },
-  {
     pagePath: '/shapePreview',
     pageName: texts.label_sideMenu_app_shapePreview,
     iconSpec: 'fa fa-file-code',

@@ -60,7 +60,9 @@ export const uiReaders = {
   },
   get blockerPageVisible(): boolean {
     return (
-      !!uiState.pageSpec || uiReaders.pagePath.startsWith('/projectQuickSetup')
+      !!uiState.pageSpec ||
+      uiReaders.pagePath.startsWith('/profileSetup') ||
+      uiReaders.pagePath.startsWith('/projectQuickSetup')
     );
   },
 };

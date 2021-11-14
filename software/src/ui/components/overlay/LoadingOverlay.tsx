@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { LoadingAnimationIcon } from '~/ui/components/atoms/LoadingAnimationIcon';
 
 type Props = {

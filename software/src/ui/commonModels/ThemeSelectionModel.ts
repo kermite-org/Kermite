@@ -1,4 +1,4 @@
-import { useMemo } from 'qx';
+import { useMemo } from 'alumina';
 import { ThemeKey, uiThemeConfigLoader } from '~/ui/base';
 import { dispatchCoreAction } from '~/ui/store/base';
 

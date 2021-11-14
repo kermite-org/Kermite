@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 
 const cssLongContent = css`
   width: 200px;

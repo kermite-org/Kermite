@@ -1,4 +1,4 @@
-import { applyGlobalStyle, css } from 'qx';
+import { applyGlobalStyle, css } from 'alumina';
 
 export function initializeCss() {
   applyGlobalStyle(css`

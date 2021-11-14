@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { WidgetControlButton } from '~/ui/components';
 import { IWidgetMainPanelModel } from '~/ui/pages/widget/models/WidgetMainPanelModel';
 

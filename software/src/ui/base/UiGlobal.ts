@@ -1,4 +1,4 @@
-import { asyncRerender } from 'qx';
+import { asyncRerender } from 'alumina';
 import { debounce, IAppIpcContract } from '~/shared';
 import { getIpcRendererAgent } from '~/shared/xpc/IpcRendererAgent';
 

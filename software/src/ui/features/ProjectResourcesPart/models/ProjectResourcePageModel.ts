@@ -1,4 +1,4 @@
-import { useEffect } from 'qx';
+import { useEffect } from 'alumina';
 import { IGeneralMenuItem } from '~/ui/base';
 import { createProjectResourceMenuItems } from '~/ui/features/ProjectResourcesPart/models/ProjectResourceMenuItems';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';

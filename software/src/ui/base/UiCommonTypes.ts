@@ -1,4 +1,4 @@
-import { FC } from 'qx';
+import { FC } from 'alumina';
 
 export interface ISelectorOption {
   value: string;

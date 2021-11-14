@@ -1,4 +1,11 @@
-import { jsx, rerender, css, applyGlobalStyle, styled, useEffect } from 'qx';
+import {
+  jsx,
+  rerender,
+  css,
+  applyGlobalStyle,
+  styled,
+  useEffect,
+} from 'alumina';
 
 const cssRoot = css`
   border: solid 4px orange;

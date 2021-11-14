@@ -1,13 +1,13 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
 import { colors, uiConfiguration } from '~/ui/base';
 import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
-import { RouteHeaderBar } from '~/ui/components';
+import { RouteHeaderBar } from '~/ui/elements/frames';
 import {
   LayoutEditorGeneralComponent,
   LayoutEditorGeneralComponent_OutputPropsSupplier,
   LayoutEditorCore,
-} from '~/ui/editors';
+} from '~/ui/featureEditors';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
 import { useMemoEx } from '~/ui/utils';
 

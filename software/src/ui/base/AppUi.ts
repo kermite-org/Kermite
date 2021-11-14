@@ -1,4 +1,4 @@
-import { asyncRerender } from 'qx';
+import { asyncRerender } from 'alumina';
 
 class AppUi {
   isDevelopment = (window as any).debugConfig?.isDevelopment;

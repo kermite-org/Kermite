@@ -164,6 +164,9 @@ export class ApplicationRoot {
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 }).catch(
         reportShellError,
       );
+      const kermiteServerProjectIds =
+        await userPresetHubDataLoader.getServerProjectIds();
+      commitCoreState({ kermiteServerProjectIds });
       await profileManagerRoot.initializeAsync();
       await layoutManagerRoot.initializeAsync();
       coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);

@@ -1,4 +1,4 @@
-import { useInlineEffect } from 'qx';
+import { useInlineEffect } from 'alumina';
 import {
   encodeProjectResourceItemKey,
   fallbackStandardFirmwareEntry,
@@ -8,7 +8,7 @@ import {
   IStandardFirmwareEntry,
 } from '~/shared';
 import { modalConfirm } from '~/ui/components';
-import { StandardFirmwareEditor_ExposedModel } from '~/ui/editors';
+import { StandardFirmwareEditor_ExposedModel } from '~/ui/featureEditors';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import {
   projectPackagesReader,

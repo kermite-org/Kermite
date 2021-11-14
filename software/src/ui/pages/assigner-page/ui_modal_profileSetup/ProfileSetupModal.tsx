@@ -1,16 +1,16 @@
-import { jsx, useInlineEffect, useLocal, useMemo } from 'qx';
+import { jsx, useInlineEffect, useLocal, useMemo } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {
   ClosableOverlay,
   CommonDialogFrame,
   createModal,
-  cssCommonPropertiesTable,
   DialogButton,
   DialogButtonsRow,
   DialogContentRow,
   GeneralSelector,
 } from '~/ui/components';
+import { cssCommonPropertiesTable } from '~/ui/elements';
 import { projectPackagesReader } from '~/ui/store';
 import { fieldSetter, useMemoEx } from '~/ui/utils';
 

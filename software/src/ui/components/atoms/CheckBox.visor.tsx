@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { CheckBox } from '~/ui/components/atoms/CheckBox';
 
 let gChecked = false;

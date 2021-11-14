@@ -1,5 +1,5 @@
-import { FC, jsx } from 'qx';
-import { ProjectAttachmentFileSelectorModal } from '~/ui/components';
+import { FC, jsx } from 'alumina';
+import { ProjectAttachmentFileSelectorModal } from '~/ui/elements/featureModals';
 import { layoutManagerRootModel } from '~/ui/pages/layout-editor-page/models/LayoutManagerRootModel';
 import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/layout-editor-page/models/ProjectLayoutSelectorModalModel';
 import { LayoutManagerTopBar } from '~/ui/pages/layout-editor-page/organisms/LayoutManagerTopBar';

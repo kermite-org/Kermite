@@ -1,5 +1,5 @@
-import { useState } from 'qx';
-import { assignerModel } from '~/ui/editors';
+import { useState } from 'alumina';
+import { assignerModel } from '~/ui/featureEditors';
 import {
   profilesActions,
   profilesReader,

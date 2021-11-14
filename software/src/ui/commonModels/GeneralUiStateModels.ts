@@ -1,4 +1,4 @@
-import { useState } from 'qx';
+import { useState } from 'alumina';
 
 type ModalDisplayStateModel = {
   isOpen: boolean;

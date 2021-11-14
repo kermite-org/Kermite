@@ -5,7 +5,7 @@ import {
   setShortCssProcessor,
   useEffect,
   FC,
-} from 'qx';
+} from 'alumina';
 import {
   router,
   shortCssProcessor,

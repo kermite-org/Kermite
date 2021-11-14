@@ -1,4 +1,4 @@
-import { FC, jsx, css, useEffect } from 'qx';
+import { FC, jsx, css, useEffect } from 'alumina';
 import { Link, linkTo, router } from '~/ui/base';
 
 const cssNavBox = css`

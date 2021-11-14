@@ -42,6 +42,7 @@ export type ICoreState = {
   // layout
   layoutEditSource: ILayoutEditSource;
   loadedLayoutData: IPersistKeyboardDesign;
+  kermiteServerProjectIds: string[];
 };
 
 const defaultApplicationVersionInfo: IApplicationVersionInfo = {
@@ -87,6 +88,7 @@ export const defaultCoreState: ICoreState = {
   editProfileData: fallbackProfileData,
   layoutEditSource: fallbackLayoutEditSource,
   loadedLayoutData: createFallbackPersistKeyboardDesign(),
+  kermiteServerProjectIds: [],
 };
 
 export type ICoreAction = Partial<{

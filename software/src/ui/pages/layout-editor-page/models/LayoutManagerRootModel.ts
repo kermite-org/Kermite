@@ -1,5 +1,5 @@
-import { useEffect } from 'qx';
-import { LayoutEditorCore, assignerModel } from '~/ui/editors';
+import { useEffect } from 'alumina';
+import { LayoutEditorCore, assignerModel } from '~/ui/featureEditors';
 import { layoutManagerState } from '~/ui/pages/layout-editor-page/models/LayoutManagerBase';
 import { uiState } from '~/ui/store';
 

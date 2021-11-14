@@ -1,4 +1,4 @@
-import { useEffect } from 'qx';
+import { useEffect } from 'alumina';
 import { ipcAgent, ISelectorSource } from '~/ui/base';
 import { showCommandOutputLogModal } from '~/ui/components';
 import {

@@ -1,5 +1,5 @@
 import { standardFirmwareIds } from '~/shared';
-import { assignerModel } from '~/ui/editors';
+import { assignerModel } from '~/ui/featureEditors';
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiReaders } from '~/ui/store';
 

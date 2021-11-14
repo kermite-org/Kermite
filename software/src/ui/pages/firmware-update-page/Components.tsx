@@ -1,4 +1,4 @@
-import { styled } from 'qx';
+import { styled } from 'alumina';
 
 export const PartHeader = styled.div`
   &:before {

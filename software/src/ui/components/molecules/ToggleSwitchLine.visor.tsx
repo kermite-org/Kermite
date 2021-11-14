@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
 
 export const ToggleSwitchLineExamples = {

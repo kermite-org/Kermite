@@ -1,4 +1,4 @@
-import { jsx } from 'qx';
+import { jsx } from 'alumina';
 import { NavigationStepList } from '~/ui/components/molecules/NavigationStepList';
 import { NavigationStepListStepCard } from '~/ui/components/molecules/NavigationStepList.StepCard';
 

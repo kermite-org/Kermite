@@ -1,6 +1,5 @@
-import { css, FC, jsx, useMemo } from 'qx';
-import { PresetKeyboardView } from '~/ui/components';
-import { usePresetKeyboardViewModel } from '~/ui/features/PresetBrowser';
+import { css, FC, jsx, useMemo } from 'alumina';
+import { PresetKeyboardViewWrapper } from '~/ui/fabrics';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { uiReaders } from '~/ui/store';
 
@@ -13,10 +12,9 @@ export const PresetDetailView: FC<Props> = ({ presetName }) => {
     () => projectResourceStore.helpers.loadProfileData(presetName),
     [presetName, uiReaders.allProjectPackageInfos],
   );
-  const viewModel = usePresetKeyboardViewModel(profileData, '');
   return (
     <div css={style}>
-      <PresetKeyboardView {...viewModel} />
+      <PresetKeyboardViewWrapper profileData={profileData} />
     </div>
   );
 };

@@ -69,7 +69,7 @@ export const boardAssignsData_proMicroRp2040: IBoardPinAssignsData = {
 };
 
 export const boardAssignsData_rpiPico: IBoardPinAssignsData = {
-  unitPixels: 13,
+  unitPixels: 16,
   boardUnitWidth: 8,
   boardUnitHeight: 21,
   pinsRowOffset: 1,

@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
@@ -12,10 +12,10 @@ export const WelcomePage: FC = () => {
     setLanguageEnglish,
     isLanguageJapanese,
     setLanguageJapanese,
-    openSetupNavigationPanel,
+    showProfileSetupWizard,
     isDarkTheme,
     setDarkTheme,
-    showProjectQuickSetupPage,
+    showProjectQuickSetupWizard,
     isDeveloperMode,
     setDeveloperMode,
   } = useWelcomePageModel();
@@ -43,15 +43,15 @@ export const WelcomePage: FC = () => {
         <div className="row">
           <WelcomePageButton
             className="button"
-            onClick={openSetupNavigationPanel}
+            onClick={showProfileSetupWizard}
           >
-            セットアップナビゲーションを表示
+            プロファイル作成ウィザード
           </WelcomePageButton>
         </div>
         <div className="row">
           <WelcomePageButton
             className="button"
-            onClick={showProjectQuickSetupPage}
+            onClick={showProjectQuickSetupWizard}
             qxIf={isDeveloperMode}
           >
             プロジェクトクイックセットアップ

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import {
   PartBody,

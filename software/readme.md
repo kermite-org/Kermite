@@ -31,6 +31,7 @@ yarn start
 We use the following languages/frameworks/libraries etc.
 - Typescript
 - Electron
+- alumina ... UI framework
 - estrella ... Module bundler wrapping esbuild
 - node-hid ... Used for communication with RawHID
 - node-serialport ... Used for writing firmware

@@ -1,6 +1,6 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { GeneralButtonMenu } from '~/ui/components';
-import { ProjectResourceList } from '~/ui/components/organisms/ProjectResourceList';
+import { ProjectResourceList } from '~/ui/fabrics/ProjectResourceList';
 import { useProjectResourcePageModel } from '~/ui/features/ProjectResourcesPart/models/ProjectResourcePageModel';
 import { ResourceItemDetailView } from '~/ui/features/ProjectResourcesPart/organisms/ResourceItemDetailView';
 import { reflectValue } from '~/ui/utils';

@@ -1,15 +1,15 @@
-import { css, FC, jsx, useLocal } from 'qx';
+import { css, FC, jsx, useLocal } from 'alumina';
 import {
   encodeProjectResourceItemKey,
   getNextFirmwareId,
   ICustomFirmwareEntry,
 } from '~/shared';
 import { colors } from '~/ui/base';
-import { RouteHeaderBar } from '~/ui/components';
+import { RouteHeaderBar } from '~/ui/elements/frames';
 import {
   CustomFirmwareEditor,
   CustomFirmwareEditor_OutputPropsSupplier,
-} from '~/ui/editors';
+} from '~/ui/featureEditors';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
 import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';

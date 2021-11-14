@@ -1,4 +1,4 @@
-import { jsx, css } from 'qx';
+import { jsx, css } from 'alumina';
 import { createModal } from '~/ui/components/overlay';
 import { reflectFieldValue } from '~/ui/utils';
 import {

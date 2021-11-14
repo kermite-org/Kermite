@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components';
 import {

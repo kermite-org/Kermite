@@ -1,7 +1,7 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { IDisplayKeyboardDesign } from '~/shared';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/components/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
-import { KeyboardBodyShape } from '~/ui/components/keyboard/keyboardBody/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
+import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
 import { CoordOriginMark } from '~/ui/fabrics/LayoutPreviewShapeView/CoordOriginMark';
 import { LayoutPreviewKeyEntityCard } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeView.KeyEntityCard';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';

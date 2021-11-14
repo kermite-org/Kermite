@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'qx';
+import { css, FC, jsx } from 'alumina';
 import { Packets } from '~/shell/services/keyboardDevice/Packets';
 
 async function setupDevice() {
