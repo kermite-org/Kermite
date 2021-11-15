@@ -9,7 +9,13 @@ import {
   IServerProfileInfo,
   ProfileDataConverter,
 } from '~/shared';
-import { appUi, ipcAgent, ISelectorOption, ISelectorSource } from '~/ui/base';
+import {
+  appUi,
+  getProjectDisplayNamePrefix,
+  ipcAgent,
+  ISelectorOption,
+  ISelectorSource,
+} from '~/ui/base';
 import {
   dispatchCoreAction,
   projectPackagesReader,
@@ -32,6 +38,7 @@ type IPresetSelectionModel = {
 type IProjectItem = {
   projectKey: string; // online#${projectId} |  local#${projectId}
   origin: IResourceOrigin;
+  isDraft: boolean;
   keyboardName: string;
 };
 
@@ -87,6 +94,7 @@ const helpers = {
         projectKey: createProjectKey(it.origin, it.projectId),
         origin: it.origin,
         keyboardName: it.keyboardName,
+        isDraft: it.isDraft || false,
       }));
   },
   createProjectPresetItems(projectInfo: IProjectPackageInfo): IPresetItem[] {
@@ -116,10 +124,11 @@ const helpers = {
     };
   },
   createProjectSelectorOption(item: IProjectItem): ISelectorOption {
-    const prefix = (item.origin === 'local' && '(local) ') || '';
+    const { origin, projectKey, isDraft, keyboardName } = item;
+    const prefix = getProjectDisplayNamePrefix(origin, isDraft);
     return {
-      value: item.projectKey,
-      label: `${prefix}${item.keyboardName}`,
+      value: projectKey,
+      label: `${prefix}${keyboardName}`,
     };
   },
   createPresetSelectorOption(item: IPresetItem): ISelectorOption {

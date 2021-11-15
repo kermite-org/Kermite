@@ -1,6 +1,6 @@
 import { jsx, useInlineEffect, useLocal, useMemo } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
-import { ISelectorOption } from '~/ui/base';
+import { getProjectDisplayNamePrefix, ISelectorOption } from '~/ui/base';
 import {
   ClosableOverlay,
   CommonDialogFrame,
@@ -84,10 +84,17 @@ interface IProfileSetupModalViewModel {
 }
 
 function makeProjectOptions(infos: IProjectPackageInfo[]): ISelectorOption[] {
-  return infos.map((info) => ({
-    value: info.projectKey,
-    label: `${info.origin === 'local' ? '(local) ' : ''}${info.keyboardName}`,
-  }));
+  return infos.map((info) => {
+    const { projectKey, keyboardName } = info;
+    const prefix = getProjectDisplayNamePrefix(
+      info.origin,
+      info.isDraft || false,
+    );
+    return {
+      value: projectKey,
+      label: `${prefix}${keyboardName}`,
+    };
+  });
 }
 
 function makeLayoutOptions(
