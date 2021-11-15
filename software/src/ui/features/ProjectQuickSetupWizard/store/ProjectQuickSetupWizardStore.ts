@@ -23,12 +23,11 @@ const readers = {
   get currentStepNumber(): number {
     return parseInt(readers.currentStep);
   },
-  canGoToStep(_step: IProjectQuickSetupStep): boolean {
-    const { currentStep } = readers;
-    if (currentStep === 'step1') {
-      const { isConfigValid, keyboardName } = projectQuickSetupStore.state;
-      const { keyboardNameValidationError } = projectQuickSetupStore.readers;
-      return isConfigValid && !!keyboardName && !keyboardNameValidationError;
+  canGoToStep(targetStep: IProjectQuickSetupStep): boolean {
+    if (targetStep === 'step2') {
+      return projectQuickSetupStore.readers.isFirmwareConfigurationStepValid;
+    } else if (targetStep === 'step3') {
+      return projectQuickSetupStore.readers.isTargetDeviceConnected;
     } else {
       return true;
     }
