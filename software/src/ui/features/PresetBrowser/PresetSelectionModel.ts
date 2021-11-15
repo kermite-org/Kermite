@@ -212,13 +212,19 @@ const actions = {
     if (projectInfo) {
       state.projectPresetItems = helpers.createProjectPresetItems(projectInfo);
       state.currentPresetKey = state.projectPresetItems[0]?.presetKey || '';
-      const { projectId } = getOriginAndProjectIdFromProjectKey(projectKey);
-      helpers.fetchKermiteServerProfiles(projectId).then((userProfiles) => {
-        state.userProfileItems = userProfiles.map(
-          helpers.createUserProfileItem,
-        );
-        appUi.rerender();
-      });
+      const { origin, projectId } =
+        getOriginAndProjectIdFromProjectKey(projectKey);
+
+      if (origin === 'online') {
+        helpers.fetchKermiteServerProfiles(projectId).then((userProfiles) => {
+          state.userProfileItems = userProfiles.map(
+            helpers.createUserProfileItem,
+          );
+          appUi.rerender();
+        });
+      } else {
+        state.userProfileItems = [];
+      }
     }
     actions.updatePreviewProfileData();
   },
