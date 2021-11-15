@@ -33,7 +33,6 @@ type IState = {
   firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
-  isConnectionValid: boolean;
   rawEditValues: IStandardFirmwareConfig;
 };
 
@@ -45,7 +44,6 @@ function createDefaultState(): IState {
     firmwareConfig: fallbackStandardFirmwareConfig,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
-    isConnectionValid: false,
     rawEditValues: fallbackStandardFirmwareConfig,
   };
 }
