@@ -11,6 +11,7 @@ export const PresetBrowserPageContent: FC = () => {
     createProfile,
     loadedProfileData,
     isNoPresets,
+    canSelectProject,
   } = usePresetSelectionModel();
   return (
     <CommonPageFrame pageTitle={texts.label_presetBrowser_pageTitle}>
@@ -22,7 +23,7 @@ export const PresetBrowserPageContent: FC = () => {
               projectSelectorSource={projectSelectorSource}
               presetSelectorSource={presetSelectorSource}
               handleCreateProfileButton={createProfile}
-              cansSelectProject={true}
+              cansSelectProject={canSelectProject}
             />
             <PresetKeyboardSection profileData={loadedProfileData} />
             <KermiteServerLinkPart />

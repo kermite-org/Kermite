@@ -1,5 +1,5 @@
 import { IDisplayKeyboardDesign } from '~/shared';
-import { ISelectorSource } from '~/ui/base';
+import { getProjectDisplayNamePrefix, ISelectorSource } from '~/ui/base';
 import { useHoldKeyIndices } from '~/ui/commonModels';
 import { useKeyboardShapesModel } from '~/ui/pages/shape-preview-page/models/KeyboardShapesModel';
 import { IShapeViewPersistState } from '~/ui/pages/shape-preview-page/models/ShapeViewPersistState';
@@ -23,9 +23,10 @@ export function useShapePreviewPageModel(): IShapePreviewPageModel {
     projectSelectorSource: {
       options: shapesModel.projectInfos.map((info) => ({
         value: info.projectKey,
-        label: `${info.origin === 'local' ? '(local) ' : ''} ${
-          info.keyboardName
-        }`,
+        label: `${getProjectDisplayNamePrefix(
+          info.origin,
+          info.isDraft || false,
+        )} ${info.keyboardName}`,
       })),
       value: shapesModel.currentProjectKey,
       setValue: shapesModel.setCurrentProjectKey,
