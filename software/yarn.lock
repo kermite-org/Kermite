@@ -608,10 +608,10 @@ ajv@^6.10.0, ajv@^6.12.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alumina@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.6.tgz#55e872746f8a62de5b38bc40110236eaa1e83a1b"
-  integrity sha512-8geUW3eXAZsIsrkSZMWkrhnaQcJJDcKDJimPKlRPIthMaEB0xXUDEALRy9F5ooHqZRjWRBNc/ZbfnMmcg0ux5g==
+alumina@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.8.tgz#40a3f1b4e6fc46733b6c2da352d3814ca7caab0a"
+  integrity sha512-mHTTOKdAa1PVfITKg1cFXGHtgsMV1Aa1j6Oq8j0+WuohNSL5UBmcwYhqXBmPKBpwIhmOFplMs3e+G1vfDA5flg==
 
 ansi-align@^3.0.0:
   version "3.0.1"
