@@ -56,4 +56,5 @@ export const LayerManagementPart: FC<Props> = ({
 
 const style = css`
   display: flex;
+  gap: 4px;
 `;

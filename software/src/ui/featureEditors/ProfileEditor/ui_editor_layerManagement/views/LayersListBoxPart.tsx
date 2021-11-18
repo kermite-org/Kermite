@@ -22,6 +22,5 @@ const style = css`
   height: 240px;
   overflow-y: scroll;
   border: solid 1px ${colors.clPrimary};
-  margin: 0 5px;
   padding: 4px;
 `;
