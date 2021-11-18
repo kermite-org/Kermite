@@ -5,15 +5,15 @@ import {
   OperationButtonWithIcon,
 } from '~/ui/components';
 import { ConfigurationButton } from '~/ui/elements';
-import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
-import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
-import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import {
   BehaviorSelector,
   LayoutStandardSelector,
   MuteModeSelector,
   RoutingChannelSelector,
-} from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/ConfigSelectors';
+} from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
+import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
+import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
+import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { SavingProjectPresetSelectionModal } from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
 import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
