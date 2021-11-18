@@ -43,7 +43,7 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
       />
 
       <div class="spacer" />
-      <div class="mode-selectors-box">
+      <div class="mode-selectors-box" if={false}>
         <BehaviorSelector />
         <MuteModeSelector />
         <LayoutStandardSelector />
