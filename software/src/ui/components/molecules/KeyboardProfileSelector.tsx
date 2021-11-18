@@ -6,16 +6,18 @@ interface Props {
   selectorSource: ISelectorSource;
   hint?: string;
   disabled?: boolean;
+  width?: number;
 }
 
 export const KeyboardProfileSelector: FC<Props> = ({
   selectorSource,
   hint,
   disabled,
+  width = 240,
 }) => (
   <GeneralSelector
     {...selectorSource}
-    width={170}
+    width={width}
     hint={hint}
     forceControlled
     disabled={disabled}
