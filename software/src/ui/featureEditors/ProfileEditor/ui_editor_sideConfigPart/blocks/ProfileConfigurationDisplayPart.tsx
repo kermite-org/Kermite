@@ -4,7 +4,7 @@ import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/Assigner
 import { profilesReader } from '~/ui/pages/assigner-page/models';
 import { uiReaders } from '~/ui/store';
 
-export const ProfileConfigurationPart = () => {
+export const ProfileConfigurationDisplayPart = () => {
   const projectInfos = uiReaders.allProjectPackageInfos;
   const projectId = assignerModel.profileData.projectId;
   const info = projectInfos.find((it) => it.projectId === projectId);
@@ -27,8 +27,6 @@ export const ProfileConfigurationPart = () => {
 };
 
 const style = css`
-  padding: 5px;
-
   > * + * {
     margin-top: 5px;
   }
