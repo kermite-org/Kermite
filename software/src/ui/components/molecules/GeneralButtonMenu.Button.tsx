@@ -6,6 +6,7 @@ type Props = {
   children: AluminaNode;
   active?: boolean;
   disabled?: boolean;
+  hint?: string;
 };
 
 export const GeneralButtonMenuButton: FC<Props> = ({
@@ -13,12 +14,14 @@ export const GeneralButtonMenuButton: FC<Props> = ({
   children,
   active,
   disabled,
+  hint,
 }) => (
   <div
     css={style}
     onClick={handler}
     data-active={active}
     data-disabled={disabled}
+    data-hint={hint}
   >
     {children}
   </div>

@@ -5,6 +5,7 @@ import { GeneralButtonMenuButton } from '~/ui/components/molecules/GeneralButton
 type Props = {
   menuItems: IGeneralMenuItem[];
   disabled?: boolean;
+  hint?: string;
 };
 
 const useMenuStateModel = () => {
@@ -14,7 +15,7 @@ const useMenuStateModel = () => {
   return { isOpen: state.isOpen, openMenu, closeMenu };
 };
 
-export const GeneralButtonMenu: FC<Props> = ({ menuItems, disabled }) => {
+export const GeneralButtonMenu: FC<Props> = ({ menuItems, disabled, hint }) => {
   const { isOpen, openMenu, closeMenu } = useMenuStateModel();
   return (
     <div>
@@ -24,27 +25,32 @@ export const GeneralButtonMenu: FC<Props> = ({ menuItems, disabled }) => {
           handler={openMenu}
           active={isOpen}
           disabled={disabled}
+          hint={hint}
         >
           <i class="fa fa-bars" />
         </GeneralButtonMenuButton>
         <div css={cssMenuPanel} if={isOpen}>
-          {menuItems.map((item, idx) =>
-            item.type === 'separator' ? (
-              <hr key={idx} />
-            ) : (
-              <div
-                key={idx}
-                class="menuEntry"
-                onClick={() => {
-                  item.handler();
-                  closeMenu();
-                }}
-                data-disabled={item.disabled}
-              >
-                {item.text}
-              </div>
-            ),
-          )}
+          {menuItems
+            .filter((it) => !it.hidden)
+            .map((item, idx) =>
+              item.type === 'separator' ? (
+                <hr key={idx} />
+              ) : (
+                <div
+                  key={idx}
+                  class="menuEntry"
+                  onClick={() => {
+                    item.handler();
+                    closeMenu();
+                  }}
+                  data-disabled={item.disabled}
+                  data-hint={item.hint}
+                  data-checked={item.checked}
+                >
+                  {item.text}
+                </div>
+              ),
+            )}
         </div>
       </div>
     </div>
@@ -69,6 +75,7 @@ const cssMenuPanel = css`
   }
 
   > .menuEntry {
+    font-size: 15px;
     padding: 4px 8px;
     cursor: pointer;
 
@@ -80,6 +87,11 @@ const cssMenuPanel = css`
       cursor: inherit;
       pointer-events: none;
       opacity: 0.5;
+    }
+
+    &[data-checked]:after {
+      content: '✓';
+      margin-left: 5px;
     }
 
     transition: ${uiTheme.commonTransitionSpec};
