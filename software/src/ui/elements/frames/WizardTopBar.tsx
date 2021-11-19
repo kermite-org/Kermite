@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { colors, Link } from '~/ui/base';
-import { SetupNavigationStepButton } from '~/ui/components';
+import { Icon, SetupNavigationStepButton } from '~/ui/components';
 
 type Props = {
   steps: string[];
@@ -33,7 +33,9 @@ export const WizardTopBar: FC<Props> = ({
         />
       );
     })}
-    <Link to="/home">x</Link>
+    <Link to="/home">
+      <Icon spec="fa fa-times" size={13} />
+    </Link>
   </div>
 );
 
