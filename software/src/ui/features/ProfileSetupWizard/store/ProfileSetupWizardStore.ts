@@ -1,4 +1,5 @@
 import { isNumberInRange } from '~/shared';
+import { uiConfiguration } from '~/ui/base';
 import { IProfileSetupStep } from '~/ui/commonModels';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
@@ -27,7 +28,11 @@ const readers = {
     if (targetStep === 'step2') {
       return !!profileSetupStore.state.targetProjectKey;
     } else if (targetStep === 'step3') {
-      return profileSetupStore.readers.isTargetDeviceConnected;
+      if (uiConfiguration.checkDeviceConnectionOnWizard) {
+        return profileSetupStore.readers.isTargetDeviceConnected;
+      } else {
+        return true;
+      }
     } else {
       return true;
     }
