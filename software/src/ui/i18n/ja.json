@@ -8,6 +8,13 @@
     "developerModeOption": "開発者モード",
     "version": "バージョン"
   },
+  "wizardCommon": {
+    "buttonNext": "次へ",
+    "buttonBack": "戻る",
+    "buttonCancel": "中止",
+    "buttonComplete": "完了",
+    "step": "ステップ"
+  },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",
     "minimizeWindow": "ウインドウを最小化します。",

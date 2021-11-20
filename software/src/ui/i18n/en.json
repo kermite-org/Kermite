@@ -8,6 +8,13 @@
     "developerModeOption": "developer mode",
     "version": "version"
   },
+  "wizardCommon": {
+    "buttonNext": "next",
+    "buttonBack": "back",
+    "buttonCancel": "cancel",
+    "buttonComplete": "complete",
+    "step": "step"
+  },
   "titleBarHint": {
     "switchToWidgetView": "Switch to widget view",
     "minimizeWindow": "Minimize window",

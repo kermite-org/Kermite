@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { colors, Link } from '~/ui/base';
+import { colors, Link, texts } from '~/ui/base';
 import { Icon, SetupNavigationStepButton } from '~/ui/components';
 
 type Props = {
@@ -10,6 +10,9 @@ type Props = {
   stepInstructionTextMap: Record<string, string>;
 };
 
+const getStepText = (step: string): string =>
+  step.replace('step', texts.wizardCommon.step);
+
 export const WizardTopBar: FC<Props> = ({
   steps,
   currentStep,
@@ -19,14 +22,14 @@ export const WizardTopBar: FC<Props> = ({
 }) => (
   <div css={style}>
     <div>
-      {currentStep}: {stepInstructionTextMap[currentStep]}
+      {getStepText(currentStep)}: {stepInstructionTextMap[currentStep]}
     </div>
     {steps.map((step) => {
       const isCurrentStep = step === currentStep;
       return (
         <SetupNavigationStepButton
           key={step}
-          text={step}
+          text={getStepText(step)}
           active={isCurrentStep}
           handler={() => shiftStepTo(step)}
           disabled={!isCurrentStep && !canGoToStep(step)}
