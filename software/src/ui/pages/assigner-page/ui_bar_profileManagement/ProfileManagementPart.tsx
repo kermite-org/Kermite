@@ -1,6 +1,7 @@
 import { css, jsx } from 'alumina';
 import { FcWithClassName, texts } from '~/ui/base';
 import {
+  GeneralButtonMenu,
   KeyboardProfileSelector,
   OperationButtonWithIcon,
 } from '~/ui/components';
@@ -11,20 +12,23 @@ import {
   MuteModeSelector,
   RoutingChannelSelector,
 } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
-import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
+import { createProfileSelectionMenuItems } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuItemCreator';
 import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
 import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { SavingProjectPresetSelectionModal } from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
-import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
 export const ProfileManagementPart: FcWithClassName = ({ className }) => {
   const baseVm = makeProfilesOperationModel();
-  const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
   const { profileSelectorSource } = useProfileSelectorModel();
+  const menuItems = createProfileSelectionMenuItems(baseVm);
 
   return (
     <div css={style} className={className}>
-      <ProfileSelectionMenuPart vm={menuModel} />
+      <GeneralButtonMenu
+        menuItems={menuItems}
+        hint={texts.hint_assigner_topBar_profileOperationsMenu}
+      />
+
       <KeyboardProfileSelector
         selectorSource={profileSelectorSource}
         hint={texts.hint_assigner_topBar_selectCurrentProfile}
@@ -79,7 +83,7 @@ const style = css`
   flex-grow: 1;
   display: flex;
   align-items: center;
-  padding: 4px;
+  padding: 4px 6px;
   gap: 0 15px;
   button {
     padding: 0 4px;
