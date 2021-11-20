@@ -1,6 +1,7 @@
 import { jsx, css, useLocal, FC } from 'alumina';
 import { IGeneralMenuItem, uiTheme } from '~/ui/base';
 import { GeneralButtonMenuButton } from '~/ui/components/molecules/GeneralButtonMenu.Button';
+import { getFontAwesomeIconPseudoElementStyle } from '~/ui/utils/fontAwesomeIconStyles';
 
 type Props = {
   menuItems: IGeneralMenuItem[];
@@ -90,7 +91,8 @@ const cssMenuPanel = css`
     }
 
     &[data-checked]:after {
-      content: '✓';
+      ${getFontAwesomeIconPseudoElementStyle('check')}
+      font-size: 14px;
       margin-left: 5px;
     }
 
