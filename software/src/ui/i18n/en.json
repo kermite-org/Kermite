@@ -48,7 +48,7 @@
   "label_assigner_testInputArea_clearButton": "clear",
   "hint_assigner_testInputArea_inputField": "Test input area for typing.",
   "hint_assigner_testInputArea_clearButton": "Clear input text.",
-  "hint_assigner_keyboardView_layerStates": "Layer states: Affects current layter states of the device.",
+  "hint_assigner_keyboardView_layerStates": "Layer states: Affects current layer states of the device.",
   "hint_assigner_keyboardView_keyUnit": "Select edit target key",
   "hint_assigner_assigns_pri": "Select primary assign slot. Primary assigns are fired when key down or tap.",
   "hint_assigner_assigns_sec": "Select secondary assign slot. Secondary assigns are fired when key hold.",
