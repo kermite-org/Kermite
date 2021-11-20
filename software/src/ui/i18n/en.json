@@ -15,6 +15,16 @@
     "buttonComplete": "complete",
     "step": "step"
   },
+  "profileWizardFrame": {
+    "headerStep1KeyboardSelection": "Keyboard Product Selection",
+    "headerStep2DeviceSetup": "Device Setup",
+    "headerStep3PresetSelection": "Preset Selection"
+  },
+  "projectWizardFrame": {
+    "headerStep1FirmwareConfiguration": "Firmware Configuration",
+    "headerStep2DeviceSetup": "Device Setup",
+    "headerStep3layoutSettings": "Layout Template Settings"
+  },
   "titleBarHint": {
     "switchToWidgetView": "Switch to widget view",
     "minimizeWindow": "Minimize window",

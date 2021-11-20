@@ -15,6 +15,16 @@
     "buttonComplete": "完了",
     "step": "ステップ"
   },
+  "profileWizardFrame": {
+    "headerStep1KeyboardSelection": "キーボード定義選択",
+    "headerStep2DeviceSetup": "デバイスセットアップ",
+    "headerStep3PresetSelection": "プリセット選択"
+  },
+  "projectWizardFrame": {
+    "headerStep1FirmwareConfiguration": "ファームウェア設定",
+    "headerStep2DeviceSetup": "デバイスセットアップ",
+    "headerStep3layoutSettings": "レイアウトテンプレート設定"
+  },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",
     "minimizeWindow": "ウインドウを最小化します。",
