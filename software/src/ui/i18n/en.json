@@ -1,4 +1,13 @@
 {
+  "welcomePage": {
+    "language_english": "English",
+    "language_japanese": "Japanese",
+    "profileSetupWizardButton": "Profile Setup Wizard",
+    "projectQuickSetupWizardButton": "Project Quick Setup Wizard",
+    "darkThemeOption": "dark theme",
+    "developerModeOption": "developer mode",
+    "version": "version"
+  },
   "titleBarHint": {
     "switchToWidgetView": "Switch to widget view",
     "minimizeWindow": "Minimize window",

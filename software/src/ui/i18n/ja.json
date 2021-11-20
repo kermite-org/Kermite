@@ -1,4 +1,13 @@
 {
+  "welcomePage": {
+    "language_english": "English",
+    "language_japanese": "日本語",
+    "profileSetupWizardButton": "プロファイル作成ウィザード",
+    "projectQuickSetupWizardButton": "プロジェクトクイックセットアップ",
+    "darkThemeOption": "ダークテーマ",
+    "developerModeOption": "開発者モード",
+    "version": "バージョン"
+  },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",
     "minimizeWindow": "ウインドウを最小化します。",
