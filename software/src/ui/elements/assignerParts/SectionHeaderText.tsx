@@ -5,10 +5,16 @@ type Props = {
   text: string;
   icon: string;
   hint?: string;
+  xOffset?: number;
 };
 
-export const SectionHeaderText: FC<Props> = ({ text, icon, hint }) => (
-  <div css={style} data-hint={hint}>
+export const SectionHeaderText: FC<Props> = ({
+  text,
+  icon,
+  hint,
+  xOffset = 0,
+}) => (
+  <div css={style} data-hint={hint} style={{ marginLeft: `${xOffset}px` }}>
     <Icon spec={icon} size={20} />
     <span>{text}</span>
   </div>
@@ -17,6 +23,5 @@ export const SectionHeaderText: FC<Props> = ({ text, icon, hint }) => (
 const style = css`
   display: flex;
   align-items: center;
-  padding: 6px 4px 4px;
   font-size: 18px;
 `;

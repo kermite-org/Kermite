@@ -4,10 +4,10 @@ import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/Assigner
 import { TestInputArea } from '~/ui/featureEditors/ProfileEditor/ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection';
 import { KeyboardSection } from '~/ui/featureEditors/ProfileEditor/ui_editor_keyboardSection/KeyboardSection';
-import { LayersSection } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement';
-import { BehaviorOptionsPartA } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/BehaviorOptionsPartA';
-import { BehaviorOptionsPartB } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/BehaviorOptionsPartB';
-import { ProfileConfigurationPart } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/ProfileConfigurationPart';
+import { LayersPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement';
+import { DisplaySettingsPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/panels/DisplaySettingsPanelContent';
+import { InputLogicOptionsPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/panels/InputLogicOptionsPanelContent';
+import { ProfilePropertiesPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/panels/ProfilePropertiesPanelContent';
 import { ActionRoutingPanel } from '~/ui/featureEditors/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanel';
 import { uiState } from '~/ui/store';
 
@@ -34,15 +34,17 @@ export const KeyAssignEditView: FC = () => {
         <div css={cssEditSideBarColumn}>
           {isUserProfileEditorView && (
             <div class="topPartBox">
-              <BehaviorOptionsPartA />
+              <DisplaySettingsPanelContent />
             </div>
           )}
           <div class="layersPartBox">
-            <LayersSection />
+            <LayersPanelContent />
           </div>
           <div class="restPartBox">
-            <ProfileConfigurationPart />
-            <BehaviorOptionsPartB />
+            <ProfilePropertiesPanelContent />
+          </div>
+          <div class="logicOptionsPartBox">
+            <InputLogicOptionsPanelContent />
           </div>
         </div>
       </div>
@@ -123,8 +125,10 @@ const cssEditMainColumn = css`
   }
 `;
 
+const panelPadding = '8px 10px';
+
 const cssEditSideBarColumn = css`
-  width: 220px;
+  width: 230px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -135,18 +139,26 @@ const cssEditSideBarColumn = css`
   > .topPartBox {
     background: ${clPanelBox};
     border-radius: ${panelBoxBorderRadius};
+    padding: ${panelPadding};
   }
 
   > .layersPartBox {
     background: ${clPanelBox};
     border-radius: ${panelBoxBorderRadius};
-    height: 300px;
-    flex-shrink: 0;
+    padding: ${panelPadding};
+    flex-shrink: 1;
+  }
+
+  > .logicOptionsPartBox {
+    background: ${clPanelBox};
+    border-radius: ${panelBoxBorderRadius};
+    padding: ${panelPadding};
   }
 
   > .restPartBox {
     background: ${clPanelBox};
     border-radius: ${panelBoxBorderRadius};
+    padding: ${panelPadding};
     flex-grow: 1;
   }
 `;

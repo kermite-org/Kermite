@@ -40,7 +40,6 @@ export const BehaviorOptionsPartB: FC = () => {
 };
 
 const style = css`
-  margin: 0 5px;
   > div + div {
     margin-top: 2px;
   }

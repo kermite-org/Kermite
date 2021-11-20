@@ -4,7 +4,11 @@ import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
-import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
+import {
+  CheckBoxLine,
+  DualItemsHoverSelector,
+  ToggleSwitch,
+} from '~/ui/components';
 import { keyboardBehaviorModeModule, uiReaders } from '~/ui/store';
 
 export const BehaviorSelector: FC = () => {
@@ -30,6 +34,30 @@ export const MuteModeSelector: FC = () => {
       setChecked={setMuteMode}
       disabled={!isDeviceConnected}
       text="Mute"
+    />
+  );
+};
+
+export const BehaviorSelector2: FC = () => {
+  const { isSimulatorMode, setSimulatorMode } = keyboardBehaviorModeModule;
+  const { isDeviceConnected } = uiReaders;
+  return (
+    <ToggleSwitch
+      checked={isSimulatorMode}
+      onChange={setSimulatorMode}
+      disabled={!isDeviceConnected}
+    />
+  );
+};
+
+export const MuteModeSelector2: FC = () => {
+  const { isMuteMode, setMuteMode } = keyboardBehaviorModeModule;
+  const { isDeviceConnected } = uiReaders;
+  return (
+    <ToggleSwitch
+      checked={isMuteMode}
+      onChange={setMuteMode}
+      disabled={!isDeviceConnected}
     />
   );
 };

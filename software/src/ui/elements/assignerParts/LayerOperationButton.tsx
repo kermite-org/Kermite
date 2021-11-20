@@ -34,11 +34,9 @@ const style = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 4px;
 
   &[data-disabled] {
     opacity: 0.3;
-    /* pointer-events: none; */
   }
   color: ${colors.clMainText};
 `;
