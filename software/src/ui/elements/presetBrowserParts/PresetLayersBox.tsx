@@ -20,7 +20,7 @@ export const PresetLayersBox: FC<Props> = ({
 }) => (
   <div
     css={style}
-    data-hint={texts.hint_presetBrowser_layers}
+    data-hint={texts.presetBrowserHint.layers}
     className={className}
     onClick={() => setCurrentLayerId('')}
   >

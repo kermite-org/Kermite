@@ -12,7 +12,7 @@ export const DeviceSelectionPart: FC = () => {
     useDeviceSelectionPartModel();
   return (
     <div css={style}>
-      <PartHeader>{texts.label_device_deviceSelection_sectionTitle}</PartHeader>
+      <PartHeader>{texts.deviceSelection.sectionTitle}</PartHeader>
       <PartBody className="part-body">
         {/* <div>connected keyboard: {connectedKeyboardName}</div> */}
         <FlatListSelector
@@ -21,7 +21,7 @@ export const DeviceSelectionPart: FC = () => {
           setValue={setSelectedDevicePath}
           size={5}
           className="selector"
-          hint={texts.hint_device_deviceSelection_selectionArea}
+          hint={texts.deviceSelectionHint.selectionArea}
         />
       </PartBody>
     </div>

@@ -9,8 +9,8 @@ export const ShiftCancelOptionPart: FC = () => {
   const { writeSettingsValue } = assignerModel;
   return (
     <div css={style}>
-      <label data-hint={texts.hint_assigner_profileConfigModal_shiftCancel}>
-        {texts.label_assigner_profileConfigModal_shiftCancel}
+      <label data-hint={texts.assignerProfileConfigModalHint.shiftCancel}>
+        {texts.assignerProfileConfigModal.shiftCancel}
       </label>
       <GeneralSelector
         options={['none', 'shiftLayer', 'all'].map(makePlainSelectorOption)}

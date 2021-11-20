@@ -14,7 +14,7 @@ export const PresetBrowserPageContent: FC = () => {
     canSelectProject,
   } = usePresetSelectionModel();
   return (
-    <CommonPageFrame pageTitle={texts.label_presetBrowser_pageTitle}>
+    <CommonPageFrame pageTitle={texts.presetBrowser.pageTitle}>
       <div css={style}>
         {isNoPresets && <div>No Presets Available</div>}
         {!isNoPresets && (

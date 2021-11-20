@@ -51,7 +51,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
       editOperation === undefined,
     setCurrent: () => writeEditOperation(undefined),
     isEnabled: true,
-    hint: texts.hint_assigner_assigns_none,
+    hint: texts.assignerAssignsPaletteHint.none,
   };
 
   const transparentEntry: IOperationCardViewModel = {
@@ -60,7 +60,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     isCurrent: isSlotSelected && assignEntry?.type === 'transparent',
     setCurrent: () => writeAssignEntry({ type: 'transparent' }),
     isEnabled: true,
-    hint: texts.hint_assigner_assigns_transparent,
+    hint: texts.assignerAssignsPaletteHint.transparent,
   };
 
   const blockEntry: IOperationCardViewModel = {
@@ -69,7 +69,7 @@ export function makePlainOperationEditCardsViewModel(): IPlainOperationEditCards
     isCurrent: isSlotSelected && assignEntry?.type === 'block',
     setCurrent: () => writeAssignEntry({ type: 'block' }),
     isEnabled: true,
-    hint: texts.hint_assigner_assigns_block,
+    hint: texts.assignerAssignsPaletteHint.block,
   };
 
   return {
@@ -147,7 +147,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         isCurrent,
         setCurrent,
         isEnabled: editOperation?.type === 'keyInput' && !isDualSecondary,
-        hint: texts.hint_assigner_assigns_modifiers,
+        hint: texts.assignerAssignsPaletteHint.modifiers,
       };
     });
 
@@ -167,7 +167,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
             invocationMode: 'hold',
           }),
         isEnabled: true,
-        hint: texts.hint_assigner_assigns_layers,
+        hint: texts.assignerAssignsPaletteHint.layers,
       }));
 
   const layerCallEntryClearExclusive: IOperationCardViewModel = {
@@ -180,7 +180,7 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
         targetExclusionGroup: 1,
       }),
     isEnabled: true,
-    hint: texts.hint_assigner_assigns_clearExclusiveGroup,
+    hint: texts.assignerAssignsPaletteHint.clearExclusiveGroup,
   };
 
   layerCallEntries.push(layerCallEntryClearExclusive);

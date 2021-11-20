@@ -17,10 +17,10 @@ export const ProfileConfigurationDisplayPart = () => {
     <div css={style}>
       <div>keyboard: {keyboardName}</div>
       <div
-        data-hint={texts.hint_assigner_configs_assignModel}
+        data-hint={texts.assignerConfigsHint.assignModel}
         if={isEditProfileAvailable}
       >
-        {texts.label_assigner_configs_assignModel}: {currentAssignType}
+        {texts.assignerConfigs.assignModel}: {currentAssignType}
       </div>
     </div>
   );

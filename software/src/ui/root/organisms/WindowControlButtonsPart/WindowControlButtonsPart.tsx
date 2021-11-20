@@ -23,25 +23,25 @@ export const WindowControlButtonsPart: FC = () => {
       <WindowControlButton
         icon="fa fa-feather-alt"
         onClick={onWidgetButton}
-        hint={texts.hint_titleBar_switchToWidgetView}
+        hint={texts.titleBarHint.switchToWidgetView}
         disabled={!profilesReader.isEditProfileAvailable}
       />
       <WindowControlButton
         icon="fa fa-window-minimize"
         onClick={onMinimizeButton}
-        hint={texts.hint_titleBar_minimizeWindow}
+        hint={texts.titleBarHint.minimizeWindow}
       />
       <WindowControlButton
         icon={
           !isWindowMaximized ? 'fa fa-window-maximize' : 'fa fa-window-restore'
         }
         onClick={onMaximizeButton}
-        hint={texts.hint_titleBar_maximizeWindow}
+        hint={texts.titleBarHint.maximizeWindow}
       />
       <WindowControlButton
         icon="fa fa-times"
         onClick={onCloseButton}
-        hint={texts.hint_titleBar_closeApplication}
+        hint={texts.titleBarHint.closeApplication}
       />
     </div>
   );

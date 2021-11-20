@@ -28,7 +28,7 @@ export const PresetKeyboardSection: FC<Props> = ({ profileData }) => {
         />
       </div>
       <div class="layersPart">
-        <h3>{texts.label_presetBrowser_layers}</h3>
+        <h3>{texts.presetBrowser.layers}</h3>
         <PresetLayersBox
           layers={layers}
           currentLayerId={currentLayerId}

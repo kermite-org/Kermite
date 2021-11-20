@@ -13,12 +13,12 @@ export const BehaviorOptionsPartB: FC = () => {
   return (
     <div css={style}>
       <CheckBoxLine
-        text={texts.label_assigner_configs_showFallbackAssigns}
+        text={texts.assignerConfigs.showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
         setChecked={(value) =>
           commitUiSettings({ showLayerDefaultAssign: value })
         }
-        hint={texts.hint_assigner_configs_showFallbackAssigns}
+        hint={texts.assignerConfigsHint.showFallbackAssigns}
         disabled={!profilesReader.isEditProfileAvailable}
       />
 
@@ -26,7 +26,7 @@ export const BehaviorOptionsPartB: FC = () => {
         <ConfigurationButton
           onClick={() => commitUiState({ profileConfigModalVisible: true })}
           iconSpec="fa fa-cog"
-          data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
+          data-hint={texts.assignerTopBarHint.profileConfigurationButton}
           disabled={!profilesReader.isEditProfileAvailable}
         />
         <ConfigurationButton

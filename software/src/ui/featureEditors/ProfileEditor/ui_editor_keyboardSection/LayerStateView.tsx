@@ -13,7 +13,7 @@ export const LayerStateView: FC<Props> = ({ playerModel }) => {
   return (
     <div
       css={cssLayerStateView}
-      data-hint={texts.hint_assigner_keyboardView_layerStates}
+      data-hint={texts.assignerKeyboardViewHint.layerStates}
       if={visible}
     >
       {playerModel.layerStackItems.map((la) => {

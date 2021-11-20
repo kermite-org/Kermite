@@ -53,7 +53,7 @@ export const ProfileConfigurationModalLayer: FC = () => {
   return (
     <ClosableOverlay close={closeModal}>
       <CommonDialogFrame
-        caption={texts.label_assigner_profileConfigModal_modalTitle}
+        caption={texts.assignerProfileConfigModal.modalTitle}
         close={closeModal}
       >
         <div css={cssDialogContent}>

@@ -35,12 +35,10 @@ export const DualModeSettingsPart: FC = () => {
           <tr>
             <td
               data-hint={
-                texts.hint_assigner_profileConfigModal_dualMode_tapHoldThreshold
+                texts.assignerProfileConfigModalHint.dualMode_tapHoldThreshold
               }
             >
-              {
-                texts.label_assigner_profileConfigModal_dualMode_tapHoldThreshold
-              }
+              {texts.assignerProfileConfigModal.dualMode_tapHoldThreshold}
             </td>
             <td>
               <div class="tapholdms-edit-cell">
@@ -61,12 +59,10 @@ export const DualModeSettingsPart: FC = () => {
           <tr>
             <td
               data-hint={
-                texts.hint_assigner_profileConfigModal_dualMode_useInterruptHold
+                texts.assignerProfileConfigModalHint.dualMode_useInterruptHold
               }
             >
-              {
-                texts.label_assigner_profileConfigModal_dualMode_useInterruptHold
-              }
+              {texts.assignerProfileConfigModal.dualMode_useInterruptHold}
             </td>
             <td>
               <input
@@ -99,12 +95,11 @@ export const DualModeSettingsPart2: FC = () => {
           <tr>
             <td
               data-hint={
-                texts.hint_assigner_profileConfigModal_dualMode_primaryDefaultTrigger
+                texts.assignerProfileConfigModalHint
+                  .dualMode_primaryDefaultTrigger
               }
             >
-              {
-                texts.label_assigner_profileConfigModal_dualMode_primaryDefaultTrigger
-              }
+              {texts.assignerProfileConfigModal.dualMode_primaryDefaultTrigger}
             </td>
             <td>
               <select
@@ -122,7 +117,8 @@ export const DualModeSettingsPart2: FC = () => {
           <tr>
             <td>
               {
-                texts.label_assigner_profileConfigModal_dualMode_secondaryDefaultTrigger
+                texts.assignerProfileConfigModal
+                  .dualMode_secondaryDefaultTrigger
               }
             </td>
             <td>

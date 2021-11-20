@@ -26,18 +26,18 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
     <div css={style} className={className}>
       <GeneralButtonMenu
         menuItems={menuItems}
-        hint={texts.hint_assigner_topBar_profileOperationsMenu}
+        hint={texts.assignerTopBarHint.profileOperationsMenu}
       />
 
       <KeyboardProfileSelector
         selectorSource={profileSelectorSource}
-        hint={texts.hint_assigner_topBar_selectCurrentProfile}
+        hint={texts.assignerTopBarHint.selectCurrentProfile}
         disabled={!baseVm.isEditProfileAvailable}
       />
       <ConfigurationButton
         onClick={baseVm.openConfiguration}
         iconSpec="fa fa-cog"
-        data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
+        data-hint={texts.assignerTopBarHint.profileConfigurationButton}
         disabled={!baseVm.isEditProfileAvailable}
       />
       <ConfigurationButton
@@ -59,15 +59,15 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
           onClick={baseVm.onSaveButton}
           disabled={!baseVm.canSave}
           icon="save"
-          label={texts.label_assigner_topBar_saveAssignsButton}
-          hint={texts.hint_assigner_topBar_saveAssignsButton}
+          label={texts.assignerTopBar.saveAssignsButton}
+          hint={texts.assignerTopBarHint.saveAssignsButton}
         />
         <OperationButtonWithIcon
           onClick={baseVm.onWriteButton}
           disabled={!baseVm.canWrite}
           icon="double_arrow"
-          label={texts.label_assigner_topBar_writeAssignsButton}
-          hint={texts.hint_assigner_topBar_writeAssignsButton}
+          label={texts.assignerTopBar.writeAssignsButton}
+          hint={texts.assignerTopBarHint.writeAssignsButton}
         />
       </div>
 

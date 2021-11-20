@@ -41,7 +41,7 @@ export const EditKeyUnitCard: FC<Props> = ({
     <g
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
-      data-hint={texts.hint_assigner_keyboardView_keyUnit}
+      data-hint={texts.assignerKeyboardViewHint.keyUnit}
     >
       <KeyUnitShape
         shape={shape}

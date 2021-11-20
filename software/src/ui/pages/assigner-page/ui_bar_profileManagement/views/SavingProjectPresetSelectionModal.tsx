@@ -94,8 +94,7 @@ function makeProjectAttachmentFileSelectorViewModel_Loading(
     currentProjectKey: currentProject?.projectKey || '',
     setCurrentProjectKey: () => {},
     currentProjectKeyboardName: currentProject?.keyboardName || '',
-    attachmentFileTypeHeader:
-      texts.label_projectAttachmentFileSelectionModal_preset,
+    attachmentFileTypeHeader: texts.projectAttachmentFileSelectionModal.preset,
     attachmentFileNameOptions: presetNameOptions,
     currentAttachmentFileName: currentPresetName,
     setCurrentAttachmentFileName: setCurrentPresetName,
@@ -147,8 +146,7 @@ function makeProjectAttachmentFileSelectorViewModel_Saving(
   };
 
   return {
-    titleText:
-      texts.label_projectAttachmentFileSelectionModal_savePreset_modalTitle,
+    titleText: texts.projectAttachmentFileSelectionModal.savePreset_modalTitle,
     closeModal: baseVm.closeModal,
     selectorSize: 7,
     canSelectProject: false,
@@ -156,8 +154,7 @@ function makeProjectAttachmentFileSelectorViewModel_Saving(
     currentProjectKey: currentProject?.projectKey || '',
     setCurrentProjectKey: () => {},
     currentProjectKeyboardName: currentProject?.keyboardName || '',
-    attachmentFileTypeHeader:
-      texts.label_projectAttachmentFileSelectionModal_preset,
+    attachmentFileTypeHeader: texts.projectAttachmentFileSelectionModal.preset,
     attachmentFileNameOptions: presetNameOptions,
     currentAttachmentFileName: currentPresetName,
     setCurrentAttachmentFileName: setCurrentPresetName,

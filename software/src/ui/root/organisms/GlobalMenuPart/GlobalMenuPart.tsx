@@ -11,7 +11,7 @@ export const GlobalMenuPart: FcWithClassName = ({ className }) => {
         <div
           className="menuButton"
           onMouseDown={openMenu}
-          data-hint={texts.hint_globalMenuButton}
+          data-hint={texts.globalMenuHint.globalMenuButton}
         >
           <i className="fa fa-bars" />
         </div>

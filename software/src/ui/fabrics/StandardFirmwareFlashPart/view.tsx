@@ -49,7 +49,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
         {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
           <div class="row">
             <div>
-              {texts.label_device_firmwareUpdate_deviceDetected.replace(
+              {texts.deviceFirmwareUpdate.deviceDetected.replace(
                 '{DEVICE_NAME}',
                 detectedDeviceSig,
               )}
@@ -57,7 +57,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
             {canFlashFirmwareToDetectedDevice && (
               <GeneralButton
                 onClick={onWriteButton}
-                text={texts.label_device_firmwareUpdate_writeButton}
+                text={texts.deviceFirmwareUpdate.writeButton}
                 class="btn"
               />
             )}
@@ -74,7 +74,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
 
         {phase === 'Uploading' && (
           <div>
-            <div>{texts.label_device_firmwareUpdate_writing}</div>
+            <div>{texts.deviceFirmwareUpdate.writing}</div>
           </div>
         )}
       </div>

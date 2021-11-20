@@ -109,7 +109,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
       };
       const editValues = await callLayerConfigurationModal({
         sourceValues,
-        caption: texts.label_assigner_layerModal_modalTitleEdit,
+        caption: texts.assignerLayerModal.modalTitleEdit,
         isRootLayer: !isCurrentLayerCustom,
       });
       if (editValues) {
@@ -126,7 +126,7 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
           exclusionGroup: 0,
           initialActive: false,
         },
-        caption: texts.label_assigner_layerModal_modalTitleAdd,
+        caption: texts.assignerLayerModal.modalTitleAdd,
         isRootLayer: false,
       });
       if (layerAttrs?.layerName) {

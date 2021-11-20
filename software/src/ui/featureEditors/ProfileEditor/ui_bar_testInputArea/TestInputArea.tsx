@@ -11,11 +11,11 @@ export const TestInputArea: FC = () => {
         value={vm.text}
         setValue={vm.setText}
         width={300}
-        hint={texts.hint_assigner_testInputArea_inputField}
+        hint={texts.assignerTestInputAreaHint.inputField}
       />
       <GeneralButton
-        text={texts.label_assigner_testInputArea_clearButton}
-        hint={texts.hint_assigner_testInputArea_clearButton}
+        text={texts.assignerTestInputArea.clearButton}
+        hint={texts.assignerTestInputAreaHint.clearButton}
         onClick={vm.clearText}
       />
     </div>
