@@ -35,7 +35,8 @@ const style = css`
   border: solid 1px #47a;
   color: #47a;
   font-size: 16px;
-  width: 60px;
+  min-width: 60px;
+  padding: 0 5px;
   height: 24px;
 
   &.--active {

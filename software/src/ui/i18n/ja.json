@@ -1,4 +1,61 @@
 {
+  "welcomePage": {
+    "language_english": "English",
+    "language_japanese": "日本語",
+    "profileSetupWizardButton": "プロファイル作成ウィザード",
+    "projectQuickSetupWizardButton": "プロジェクトクイックセットアップ",
+    "darkThemeOption": "ダークテーマ",
+    "developerModeOption": "開発者モード",
+    "version": "バージョン"
+  },
+  "wizardCommon": {
+    "buttonNext": "次へ",
+    "buttonBack": "戻る",
+    "buttonCancel": "中止",
+    "buttonComplete": "完了",
+    "step": "ステップ"
+  },
+  "profileWizardFrame": {
+    "headerStep1KeyboardSelection": "キーボード定義選択",
+    "headerStep2DeviceSetup": "デバイスセットアップ",
+    "headerStep3PresetSelection": "プリセット選択"
+  },
+  "projectWizardFrame": {
+    "headerStep1FirmwareConfiguration": "ファームウェア設定",
+    "headerStep2DeviceSetup": "デバイスセットアップ",
+    "headerStep3layoutSettings": "レイアウトテンプレート設定"
+  },
+  "firmwareVariationSelectionSection": {
+    "sectionHeader": "ファームウェア選択"
+  },
+  "deviceAutoConnectionSection": {
+    "sectionHeader": "デバイス状態",
+    "targetKeyboard": "対象キーボード",
+    "status_connected": "接続されています",
+    "status_noDeviceAvailable": "デバイスがありません"
+  },
+  "firmwareFlashSection": {
+    "sectionHeader": "ファームウェア書き込み",
+    "targetMcu": "対象MCU",
+    "howToReset": "リセット方法",
+    "resetDeviceToFlashFirmware": "ファームウェアを書き込むためには、デバイスをリセットしてください",
+    "deviceIncompatible": "認識されたデバイスが書込み対象のファームウェアと互換性がありません。",
+    "modalSuccessTitle": "ファームウェア書込み",
+    "modalSuccessMessage": "書き込みに成功しました。",
+    "modalOperationCommandLogTitle": "エラーログ"
+  },
+  "standardFirmwareConfiguration": {
+    "keyboardName": "キーボード名",
+    "headerFirmwareConfiguration": "ファームウェア設定",
+    "headerKeysPreview": "キー配置プレビュー",
+    "headerBoardAssignsView": "ボードピンアサイン",
+    "buttonReset": "リセット"
+  },
+  "layoutGeneratorConfiguration": {
+    "headerLayoutConfiguration": "レイアウト設定",
+    "keyPlacementAnchor": "キー配置アンカー",
+    "invertColumnPlacement": "列を反転"
+  },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",
     "minimizeWindow": "ウインドウを最小化します。",

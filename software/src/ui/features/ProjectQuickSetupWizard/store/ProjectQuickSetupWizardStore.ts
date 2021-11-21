@@ -1,4 +1,5 @@
 import { isNumberInRange } from '~/shared';
+import { uiConfiguration } from '~/ui/base';
 import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
@@ -27,7 +28,11 @@ const readers = {
     if (targetStep === 'step2') {
       return projectQuickSetupStore.readers.isFirmwareConfigurationStepValid;
     } else if (targetStep === 'step3') {
-      return projectQuickSetupStore.readers.isTargetDeviceConnected;
+      if (uiConfiguration.checkDeviceConnectionOnWizard) {
+        return projectQuickSetupStore.readers.isTargetDeviceConnected;
+      } else {
+        return true;
+      }
     } else {
       return true;
     }

@@ -1,6 +1,6 @@
 import { css, FC, jsx, AluminaChild } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
-import { ILayoutGeneratorOptions } from '~/ui/base';
+import { ILayoutGeneratorOptions, texts } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import {
   IWriteLayoutOptionFunc,
@@ -34,14 +34,16 @@ export const LayoutGeneratorOptionsPart: FC<Props> = ({
   return (
     <div class={style}>
       <div class="props-table">
-        <FieldRow title="key placement anchor">
+        <FieldRow title={texts.layoutGeneratorConfiguration.keyPlacementAnchor}>
           <RibbonSelector
             options={placementModeOptions}
             value={layoutOptions.placementOrigin}
             setValue={valueChangeHandler('placementOrigin')}
           />
         </FieldRow>
-        <FieldRow title="invert column placement">
+        <FieldRow
+          title={texts.layoutGeneratorConfiguration.invertColumnPlacement}
+        >
           <ToggleSwitch
             checked={layoutOptions.invertX}
             onChange={valueChangeHandler('invertX')}
