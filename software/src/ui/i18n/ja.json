@@ -25,6 +25,25 @@
     "headerStep2DeviceSetup": "デバイスセットアップ",
     "headerStep3layoutSettings": "レイアウトテンプレート設定"
   },
+  "firmwareVariationSelectionSection": {
+    "sectionHeader": "ファームウェア選択"
+  },
+  "deviceAutoConnectionSection": {
+    "sectionHeader": "デバイス状態",
+    "targetKeyboard": "対象キーボード",
+    "status_connected": "接続されています",
+    "status_noDeviceAvailable": "デバイスがありません"
+  },
+  "firmwareFlashSection": {
+    "sectionHeader": "ファームウェア書き込み",
+    "targetMcu": "対象MCU",
+    "howToReset": "リセット方法",
+    "resetDeviceToFlashFirmware": "ファームウェアを書き込むためには、デバイスをリセットしてください",
+    "deviceIncompatible": "認識されたデバイスが書込み対象のファームウェアと互換性がありません。",
+    "modalSuccessTitle": "ファームウェア書込み",
+    "modalSuccessMessage": "書き込みに成功しました。",
+    "modalOperationCommandLogTitle": "エラーログ"
+  },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",
     "minimizeWindow": "ウインドウを最小化します。",

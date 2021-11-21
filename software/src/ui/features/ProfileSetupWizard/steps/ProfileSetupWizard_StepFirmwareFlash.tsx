@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
-import { colors, IFirmwareVariationSelectorItem } from '~/ui/base';
+import { colors, IFirmwareVariationSelectorItem, texts } from '~/ui/base';
 import { getFirmwareTargetDeviceType } from '~/ui/commonModels';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
 import {
@@ -42,7 +42,9 @@ export const ProfileSetupWizard_StepFirmwareFlash: FC = () => {
   return (
     <div class={style}>
       <div class="top-row">
-        <div class="label">Firmware Variation</div>
+        <div class="label">
+          {texts.firmwareVariationSelectionSection.sectionHeader}
+        </div>
         <FirmwareVariationSelector
           items={variationSelectorItems}
           variationId={variationId}
@@ -52,7 +54,7 @@ export const ProfileSetupWizard_StepFirmwareFlash: FC = () => {
       </div>
       <div class="main-row">
         <WizardSectionPanelWithCenterContent
-          title="Device Connection Status"
+          title={texts.deviceAutoConnectionSection.sectionHeader}
           class="connection-panel"
           contentWidth={450}
           contentHeight={400}
@@ -63,7 +65,7 @@ export const ProfileSetupWizard_StepFirmwareFlash: FC = () => {
           />
         </WizardSectionPanelWithCenterContent>
         <WizardSectionPanelWithCenterContent
-          title="Flash Firmware"
+          title={texts.firmwareFlashSection.sectionHeader}
           class="flash-panel"
           contentWidth={400}
           contentHeight={400}

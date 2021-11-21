@@ -1,5 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
+import { texts } from '~/ui/base';
 import { deviceAutoConnectionPartAssets } from '~/ui/fabrics/DeviceAutoConnectionPart/assets';
 import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/DeviceAutoConnectionPart/hooks';
 import { multiClasses } from '~/ui/utils';
@@ -20,6 +21,10 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
     useDeviceAutoConnectionEffects(projectInfo.projectId, variationId);
   const { keyboardName } = projectInfo;
 
+  const connectionStatusText = isConnectionValid
+    ? texts.deviceAutoConnectionSection.status_connected
+    : texts.deviceAutoConnectionSection.status_noDeviceAvailable;
+
   return (
     <div class={style}>
       <div className="indicators">
@@ -31,7 +36,9 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
           ]}
         />
       </div>
-      <div class="keyboard-name-text">target keyboard: {keyboardName}</div>
+      <div class="keyboard-name-text">
+        {texts.deviceAutoConnectionSection.targetKeyboard}: {keyboardName}
+      </div>
 
       <div class="illust-area">
         <SvgIllustPc class="pc" />
@@ -42,9 +49,7 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
           class={multiClasses('mcu', isConnectionValid && '--active')}
         />
       </div>
-      <div class="status-text-part">
-        {isConnectionValid ? 'Connected' : 'No Device Available'}
-      </div>
+      <div class="status-text-part">{connectionStatusText}</div>
     </div>
   );
 };

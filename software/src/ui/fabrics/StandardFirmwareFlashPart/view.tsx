@@ -34,17 +34,20 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     <div css={style}>
       <div class="top-row">
         <div class="target-mcu-text">
-          {targetDeviceType && `target mcu: ${targetDeviceType}`}
+          {targetDeviceType &&
+            `${texts.firmwareFlashSection.targetMcu}: ${targetDeviceType}`}
         </div>
 
         <div class="how-to-reset" onClick={openPanel}>
-          how to reset
+          {texts.firmwareFlashSection.howToReset}
         </div>
       </div>
 
       <div class="image-box">{svgImage_resetByHand}</div>
       <div class="text-part">
-        {phase === 'WaitingReset' && <div>reset device to flash firmware</div>}
+        {phase === 'WaitingReset' && (
+          <div>{texts.firmwareFlashSection.resetDeviceToFlashFirmware}</div>
+        )}
 
         {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
           <div class="row">
@@ -68,7 +71,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
           detectedDeviceSig &&
           !canFlashFirmwareToDetectedDevice && (
             <div className="note">
-              Selected firmware is not supposed to be flashed into this device.
+              {texts.firmwareFlashSection.deviceIncompatible}
             </div>
           )}
 

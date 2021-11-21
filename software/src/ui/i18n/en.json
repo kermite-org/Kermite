@@ -25,6 +25,25 @@
     "headerStep2DeviceSetup": "Device Setup",
     "headerStep3layoutSettings": "Layout Template Settings"
   },
+  "firmwareVariationSelectionSection": {
+    "sectionHeader": "Firmware Variation"
+  },
+  "deviceAutoConnectionSection": {
+    "sectionHeader": "Device Connection Status",
+    "targetKeyboard": "target keyboard",
+    "status_connected": "Connected",
+    "status_noDeviceAvailable": "No Device Available"
+  },
+  "firmwareFlashSection": {
+    "sectionHeader": "Flash Firmware",
+    "targetMcu": "target mcu",
+    "howToReset": "how to reset",
+    "resetDeviceToFlashFirmware": "reset device to flash firmware",
+    "deviceIncompatible": "Detected device is not compatible to the target firmware.",
+    "modalSuccessTitle": "Firmware Flash",
+    "modalSuccessMessage": "Write succeeded.",
+    "modalOperationCommandLogTitle": "Operation Command Log"
+  },
   "titleBarHint": {
     "switchToWidgetView": "Switch to widget view",
     "minimizeWindow": "Minimize window",
