@@ -53,16 +53,16 @@ export const ProfileConfigurationModalLayer: FC = () => {
   return (
     <ClosableOverlay close={closeModal}>
       <CommonDialogFrame
-        caption={texts.label_assigner_profileConfigModal_modalTitle}
+        caption={texts.assignerProfileConfigModal.modalTitle}
         close={closeModal}
       >
         <div css={cssDialogContent}>
-          <KeyboardProjectSelectionPart qxIf={showProjectSelectionUi} />
+          <KeyboardProjectSelectionPart if={showProjectSelectionUi} />
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
           <AdvancedOptionSwitchPart />
-          <DualModeSettingsPart2 qxIf={showAdvancedOptions} />
-          <ShiftCancelOptionPart qxIf={showAdvancedOptions} />
+          <DualModeSettingsPart2 if={showAdvancedOptions} />
+          <ShiftCancelOptionPart if={showAdvancedOptions} />
         </div>
       </CommonDialogFrame>
     </ClosableOverlay>

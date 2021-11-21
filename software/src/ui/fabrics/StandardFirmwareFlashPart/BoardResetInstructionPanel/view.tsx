@@ -47,7 +47,7 @@ export const BoardResetInstructionPanel: FC<Props> = ({ isOpen, close }) => {
   const texts = languageKey === 'japanese' ? textSourceJa : textSourceEn;
 
   return (
-    <ClosableOverlay close={close} qxIf={isOpen}>
+    <ClosableOverlay close={close} if={isOpen}>
       <div class={panelStyle}>
         <div class="top-row">
           <h2>{texts.panelTitle}</h2>

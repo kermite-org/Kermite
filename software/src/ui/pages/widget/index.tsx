@@ -9,7 +9,7 @@ export const WidgetZoneRoot: FC = () => {
       <WidgetWindowFrame>
         <WidgetMainPanel />
       </WidgetWindowFrame>
-      <WidgetWindowActiveChrome qxIf={siteModel.isWindowActive} />
+      <WidgetWindowActiveChrome if={siteModel.isWindowActive} />
     </div>
   );
 };

@@ -30,10 +30,10 @@ export const SettingsPage = () => {
 
   return (
     <div css={style}>
-      <div>{texts.label_settings_pageTitle}</div>
+      <div>{texts.settings.pageTitle}</div>
 
       <Indent>
-        <div>{texts.label_settings_header_resources}</div>
+        <div>{texts.settings.header_resources}</div>
         <Indent>
           <CheckBoxLine
             text="Developer Mode"
@@ -42,8 +42,8 @@ export const SettingsPage = () => {
           />
           <Indent>
             <CheckBoxLine
-              text={texts.label_settings_configUseLocalProjectResources}
-              hint={texts.hint_settings_configUseLocalProjectResources}
+              text={texts.settings.configUseLocalProjectResources}
+              hint={texts.settingsHint.configUseLocalProjectResources}
               checked={flagUseLocalResources}
               setChecked={setFlagUseLocalResources}
               disabled={!flagDeveloperMode}
@@ -54,7 +54,7 @@ export const SettingsPage = () => {
                   !canChangeLocalRepositoryFolderPath && 'text-disabled'
                 }
               >
-                {texts.label_settings_configKermiteRootDirectory}
+                {texts.settings.configKermiteRootDirectory}
               </div>
               <HFlex>
                 <GeneralInput
@@ -62,7 +62,7 @@ export const SettingsPage = () => {
                   disabled={!canChangeLocalRepositoryFolderPath}
                   readOnly={true}
                   width={350}
-                  hint={texts.hint_settings_configKermiteRootDirectory}
+                  hint={texts.settingsHint.configKermiteRootDirectory}
                 />
                 <GeneralButton
                   onClick={handleSelectLocalRepositoryFolder}
@@ -71,7 +71,7 @@ export const SettingsPage = () => {
                   size="unitSquare"
                 />
               </HFlex>
-              <div style="color:red" qxIf={!isLocalRepositoryFolderPathValid}>
+              <div style="color:red" if={!isLocalRepositoryFolderPathValid}>
                 invalid source folder path
               </div>
             </div>
@@ -84,19 +84,19 @@ export const SettingsPage = () => {
           </Indent>
         </Indent>
 
-        <div>{texts.label_settings_header_userInterface}</div>
+        <div>{texts.settings.header_userInterface}</div>
         <Indent>
-          <div>{texts.label_settings_configUiScaling}</div>
+          <div>{texts.settings.configUiScaling}</div>
           <RibbonSelector
             options={uiScalingOptions}
             value={uiScalingSelectionValue}
             setValue={setUiScalingSelectionValue}
-            hint={texts.hint_settings_configUiScaling}
+            hint={texts.settingsHint.configUiScaling}
           />
         </Indent>
       </Indent>
 
-      <div className="version-area" qxIf={!!appVersionInfo}>
+      <div className="version-area" if={!!appVersionInfo}>
         application version: {appVersionInfo}
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { colors } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 import { SetupNavigationStepShiftButton } from '~/ui/components';
 
 type Props = {
@@ -17,8 +17,14 @@ export const WizardFooterBar: FC<Props> = ({
   finalStep,
   shiftStep,
 }) => {
-  const backText = currentStep === firstStep ? 'cancel' : 'back';
-  const nextText = currentStep === finalStep ? 'complete' : 'next';
+  const backText =
+    currentStep === firstStep
+      ? texts.wizardCommon.buttonCancel
+      : texts.wizardCommon.buttonBack;
+  const nextText =
+    currentStep === finalStep
+      ? texts.wizardCommon.buttonComplete
+      : texts.wizardCommon.buttonNext;
 
   return (
     <div css={style}>

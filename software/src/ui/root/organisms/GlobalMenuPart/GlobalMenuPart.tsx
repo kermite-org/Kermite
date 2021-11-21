@@ -6,16 +6,16 @@ export const GlobalMenuPart: FcWithClassName = ({ className }) => {
   const { isOpen, openMenu, closeMenu, menuItems } = useGlobalMenuPartModel();
   return (
     <div css={style} className={className}>
-      <div className="overlay" qxIf={isOpen} onClick={closeMenu} />
+      <div className="overlay" if={isOpen} onClick={closeMenu} />
       <div className="menuArea">
         <div
           className="menuButton"
           onMouseDown={openMenu}
-          data-hint={texts.hint_globalMenuButton}
+          data-hint={texts.globalMenuHint.globalMenuButton}
         >
           <i className="fa fa-bars" />
         </div>
-        <div className="menuPopup" qxIf={isOpen}>
+        <div className="menuPopup" if={isOpen}>
           {menuItems.map((mi) => (
             <div key={mi.key} onMouseUp={mi.handler} data-hint={mi.hint}>
               {mi.active ? '✓' : ''} {mi.text}

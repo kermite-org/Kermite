@@ -21,7 +21,7 @@ export const ProjectResourcesPart: FC = () => {
         <GeneralButtonMenu menuItems={menuItems} />
         <div className="keyboard-name-part">{keyboardName}</div>
       </div>
-      <div qxIf={false}>
+      <div if={false}>
         <label>
           <span>keyboard name</span>
           <input
@@ -45,7 +45,7 @@ export const ProjectResourcesPart: FC = () => {
         <div className="right-column">
           <ResourceItemDetailView
             selectedItemKey={selectedItemKey}
-            qxIf={!!selectedItemKey}
+            if={!!selectedItemKey}
           />
         </div>
       </div>

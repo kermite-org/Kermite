@@ -49,7 +49,7 @@ export const PreviewKeyboardShapeView: FC<Props> = ({
         />
         <PreviewDisplayAreaBox
           displayArea={keyboardDesign.displayArea}
-          qxIf={showBoundingBox}
+          if={showBoundingBox}
         />
       </KeyboardSvgFrameWithAutoScaler>
     </div>

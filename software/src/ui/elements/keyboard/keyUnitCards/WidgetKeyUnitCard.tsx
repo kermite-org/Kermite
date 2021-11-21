@@ -45,7 +45,7 @@ export const WidgetKeyUnitCard: FC<Props> = ({
       font-weight={getFontWeight(primaryText, shiftHold)}
       text-anchor="middle"
       dominant-baseline="center"
-      qxIf={!isLayerFallback}
+      if={!isLayerFallback}
     >
       {primaryText}
     </text>
@@ -58,7 +58,7 @@ export const WidgetKeyUnitCard: FC<Props> = ({
       font-weight={getFontWeight(secondaryText, shiftHold)}
       text-anchor="middle"
       dominant-baseline="center"
-      qxIf={!isLayerFallback}
+      if={!isLayerFallback}
     >
       {secondaryText}
     </text>
@@ -71,7 +71,7 @@ export const WidgetKeyUnitCard: FC<Props> = ({
       font-weight={getFontWeight(tertiaryText, shiftHold)}
       text-anchor="middle"
       dominant-baseline="center"
-      qxIf={!isLayerFallback}
+      if={!isLayerFallback}
     >
       {tertiaryText}
     </text>

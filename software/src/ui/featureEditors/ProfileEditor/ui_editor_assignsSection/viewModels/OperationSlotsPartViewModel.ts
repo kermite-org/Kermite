@@ -19,9 +19,13 @@ type ISlotSource = {
 };
 
 const slotsSource: ISlotSource[] = [
-  { sig: 'pri', text: 'primary', hint: texts.hint_assigner_assigns_pri },
-  { sig: 'sec', text: 'secondary', hint: texts.hint_assigner_assigns_sec },
-  { sig: 'ter', text: 'tertiary', hint: texts.hint_assigner_assigns_ter },
+  { sig: 'pri', text: 'primary', hint: texts.assignerAssignsPaletteHint.pri },
+  {
+    sig: 'sec',
+    text: 'secondary',
+    hint: texts.assignerAssignsPaletteHint.sec,
+  },
+  { sig: 'ter', text: 'tertiary', hint: texts.assignerAssignsPaletteHint.ter },
 ];
 
 export function makeOperationSlotsPartViewModel(): IOperationSlotsPartViewModel {

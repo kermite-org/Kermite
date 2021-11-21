@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'alumina';
+import { texts } from '~/ui/base';
 import { IProfileSetupStep } from '~/ui/commonModels';
 import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
 import { ProfileSetupWizard_StepBaseProfileSelection } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepBaseProjectSelection';
@@ -8,9 +9,9 @@ import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/Profil
 import { profileSetupWizardStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupWizardStore';
 
 const stepInstructionMap: Record<IProfileSetupStep, string> = {
-  step1: 'Keyboard Product Selection',
-  step2: 'Device Setup',
-  step3: 'Preset Selection',
+  step1: texts.profileWizardFrame.headerStep1KeyboardSelection,
+  step2: texts.profileWizardFrame.headerStep2DeviceSetup,
+  step3: texts.profileWizardFrame.headerStep3PresetSelection,
 };
 
 export const ProfileSetupWizard: FC = () => {

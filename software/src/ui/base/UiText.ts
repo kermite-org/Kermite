@@ -1,6 +1,8 @@
-import { textSourceEnglish, textSourceJapanese } from '~/ui/base/UiTextData';
+import { cloneObject, copyObjectPropsRecursive } from '~/shared';
+import textSourceEnglish from '../i18n/en.json';
+import textSourceJapanese from '../i18n/ja.json';
 
-type ITextSource = { [key in keyof typeof textSourceEnglish]: string };
+type ITextSource = typeof textSourceEnglish;
 
 export type ILanguageKey = 'english' | 'japanese';
 
@@ -24,4 +26,7 @@ export const uiTextConfigLoader = {
 
 export const languageKey = uiTextConfigLoader.loadLanguageKey();
 
-export const texts = textSources[languageKey];
+const activeTextSource = cloneObject(textSourceEnglish);
+copyObjectPropsRecursive(activeTextSource, textSources[languageKey]);
+
+export const texts = activeTextSource;

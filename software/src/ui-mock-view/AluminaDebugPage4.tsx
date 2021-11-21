@@ -40,6 +40,6 @@ const ContextApiDevelopment: FC = () => {
   );
 };
 
-export const QxDebugPage4: FC = () => {
+export const AluminaDebugPage4: FC = () => {
   return <ContextApiDevelopment />;
 };

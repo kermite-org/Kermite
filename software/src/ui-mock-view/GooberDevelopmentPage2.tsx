@@ -1,4 +1,4 @@
-import { jsx, FC, QxChildren, css, styled } from 'alumina';
+import { jsx, FC, AluminaChildren, css, styled } from 'alumina';
 
 const cssRoot = css`
   border: solid 4px orange;
@@ -73,7 +73,7 @@ const UserNameView: FC<IUserNameViewProps> = ({ userName }) => {
   return <div>hello {userName}</div>;
 };
 
-const Frame0: FC<{ children?: QxChildren }> = ({ children }) => {
+const Frame0: FC<{ children?: AluminaChildren }> = ({ children }) => {
   // console.log({ children });
   return <div style={{ border: 'solid 1px purple' }}>{children}</div>;
 };

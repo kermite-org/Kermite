@@ -26,40 +26,40 @@ function createMenuItems(): IGlobalMenuItem[] {
   const menuItems: IGlobalMenuItem[] = [
     {
       key: 'miThemeLight',
-      text: texts.label_globalMenu_theme_light,
+      text: texts.globalMenu.theme_light,
       handler() {
         themeSelectionModel.changeTheme('light');
       },
       active: themeSelectionModel.currentThemeKey === 'light',
-      hint: texts.hint_globalMenu_theme_light,
+      hint: texts.globalMenuHint.theme_light,
     },
     {
       key: 'miThemeDark',
-      text: texts.label_globalMenu_theme_dark,
+      text: texts.globalMenu.theme_dark,
       handler() {
         themeSelectionModel.changeTheme('dark');
       },
       active: themeSelectionModel.currentThemeKey === 'dark',
-      hint: texts.hint_globalMenu_theme_dark,
+      hint: texts.globalMenuHint.theme_dark,
     },
 
     {
       key: 'miLanguageEnglish',
-      text: texts.label_globalMenu_language_english,
+      text: texts.globalMenu.language_english,
       handler() {
         languageSelectionModel.changeLanguage('english');
       },
       active: languageSelectionModel.currentLanguage === 'english',
-      hint: texts.hint_globalMenu_language_english,
+      hint: texts.globalMenuHint.language_english,
     },
     {
       key: 'miLanguageJapanese',
-      text: texts.label_globalMenu_language_japanese,
+      text: texts.globalMenu.language_japanese,
       handler() {
         languageSelectionModel.changeLanguage('japanese');
       },
       active: languageSelectionModel.currentLanguage === 'japanese',
-      hint: texts.hint_globalMenu_language_japanese,
+      hint: texts.globalMenuHint.language_japanese,
     },
   ];
 

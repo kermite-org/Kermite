@@ -22,15 +22,15 @@ export const PresetKeyUnitCard: FC<Props> = ({
     key={keyUnitId}
   >
     <KeyUnitShape shape={shape} css={cssKeyShape} />
-    <text css={cssKeyText} x={0} y={-2} qxIf={!isLayerFallback}>
+    <text css={cssKeyText} x={0} y={-2} if={!isLayerFallback}>
       {primaryText}
     </text>
 
-    <text css={cssKeyText} x={0} y={4} qxIf={!isLayerFallback}>
+    <text css={cssKeyText} x={0} y={4} if={!isLayerFallback}>
       {secondaryText}
     </text>
 
-    <text css={cssKeyText} x={4} y={-6} qxIf={!isLayerFallback}>
+    <text css={cssKeyText} x={4} y={-6} if={!isLayerFallback}>
       {tertiaryText}
     </text>
   </g>

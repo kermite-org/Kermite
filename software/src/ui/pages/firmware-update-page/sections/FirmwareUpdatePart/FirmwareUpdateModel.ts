@@ -8,7 +8,12 @@ import {
   IProjectFirmwareEntry,
   IProjectPackageInfo,
 } from '~/shared';
-import { ipcAgent, ISelectorOption, ISelectorSource } from '~/ui/base';
+import {
+  getProjectDisplayNamePrefix2,
+  ipcAgent,
+  ISelectorOption,
+  ISelectorSource,
+} from '~/ui/base';
 import { modalAlert } from '~/ui/components';
 import { projectPackagesReader, uiActions, uiReaders } from '~/ui/store';
 
@@ -44,8 +49,10 @@ const helpers = {
     return projectInfosWithFirmware
       .map((info) =>
         info.firmwares.map((firmware) => {
-          const projectOriginText =
-            info.origin === 'local' ? '(local-package) ' : '';
+          const projectOriginText = getProjectDisplayNamePrefix2(
+            info.origin,
+            info.isDraft || false,
+          );
           const { projectKey, keyboardName } = info;
           const { firmwareName, variationId } = firmware;
           if (firmware.type === 'standard') {

@@ -18,9 +18,9 @@ export const KeyEntityEditPanel: FC = () => {
           {...vm.vmKeyId}
           labelWidth={80}
           inputWidth={60}
-          qxIf={vm.showManualEditKeyId}
+          if={vm.showManualEditKeyId}
         />
-        <div css={cssErrorText} qxIf={vm.showManualEditKeyId}>
+        <div css={cssErrorText} if={vm.showManualEditKeyId}>
           {vm.vmKeyId.errorText}
         </div>
         {vm.slots.map((slot, index) => (
@@ -42,7 +42,7 @@ export const KeyEntityEditPanel: FC = () => {
           <span style={{ width: '80px' }}>groupId</span>
           <GeneralSelector {...vm.vmGroupId} width={80} />
         </HFlex>
-        <div qxIf={!!vm.errorText} css={cssErrorText}>
+        <div if={!!vm.errorText} css={cssErrorText}>
           {vm.errorText}
         </div>
       </ConfigVStack>

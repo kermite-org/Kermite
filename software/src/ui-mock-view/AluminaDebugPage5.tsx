@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxChildren } from 'alumina';
+import { css, FC, jsx, AluminaChildren } from 'alumina';
 
 const Foo: FC = () => {
   const styleFoo = css`
@@ -20,7 +20,7 @@ const Foo: FC = () => {
   );
 };
 
-const Bar: FC<{ children?: QxChildren }> = ({ children }) => {
+const Bar: FC<{ children?: AluminaChildren }> = ({ children }) => {
   return <div class={baseBarStyle}>{children}</div>;
 };
 
@@ -30,7 +30,7 @@ const baseBarStyle = css`
   color: green;
 `;
 
-export const QxDebugPage5: FC = () => {
+export const AluminaDebugPage5: FC = () => {
   console.log(`render`);
   return (
     <div>

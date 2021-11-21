@@ -9,7 +9,7 @@ const options: ISelectorOption[] = [
   { label: 'LIVE', value: 'live' },
 ];
 
-export const BehaviorOptionsPartA: FC = () => {
+export const LayerDisplayModePart: FC = () => {
   const value = uiState.settings.showLayersDynamic ? 'live' : 'edit';
 
   const setValue = (value: 'edit' | 'live') => {
@@ -23,7 +23,7 @@ export const BehaviorOptionsPartA: FC = () => {
         options={options}
         value={value}
         setValue={setValue}
-        hint={texts.hint_assigner_configs_showLayersDynamic}
+        hint={texts.assignerConfigsHint.showLayersDynamic}
         className="selector"
         disabled={!profilesReader.isEditProfileAvailable}
       />
@@ -32,8 +32,6 @@ export const BehaviorOptionsPartA: FC = () => {
 };
 
 const style = css`
-  padding: 10px;
-
   > .selector {
     margin-top: 5px;
   }

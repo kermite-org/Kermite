@@ -21,10 +21,10 @@ export const FirmwareUpdatePart: FC = () => {
 
   return (
     <div css={style}>
-      <PartHeader>{texts.label_device_firmwareUpdate_sectionTitle}</PartHeader>
+      <PartHeader>{texts.deviceFirmwareUpdate.sectionTitle}</PartHeader>
       <PartBody className="part-body">
         <div className="operationAlert">
-          {texts.label_device_firmwareUpdate_operationAlertText}
+          {texts.deviceFirmwareUpdate.operationAlertText}
         </div>
 
         <div className="mainRow">
@@ -32,19 +32,19 @@ export const FirmwareUpdatePart: FC = () => {
             {...firmwareSelectorSource}
             width={350}
             disabled={!canSelectTargetFirmware}
-            hint={texts.label_device_firmwareUpdate_projectSelector}
+            hint={texts.deviceFirmwareUpdate.projectSelector}
           />
         </div>
 
         <div className="statusRow">
           {phase === 'WaitingReset' && (
-            <div>{texts.label_device_firmwareUpdate_usageText}</div>
+            <div>{texts.deviceFirmwareUpdate.usageText}</div>
           )}
 
           {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
             <div>
               <div>
-                {texts.label_device_firmwareUpdate_deviceDetected.replace(
+                {texts.deviceFirmwareUpdate.deviceDetected.replace(
                   '{DEVICE_NAME}',
                   detectedDeviceSig,
                 )}
@@ -52,7 +52,7 @@ export const FirmwareUpdatePart: FC = () => {
               {canFlashSelectedFirmwareToDetectedDevice && (
                 <GeneralButton
                   onClick={onWriteButton}
-                  text={texts.label_device_firmwareUpdate_writeButton}
+                  text={texts.deviceFirmwareUpdate.writeButton}
                 />
               )}
             </div>
@@ -70,16 +70,16 @@ export const FirmwareUpdatePart: FC = () => {
 
           {phase === 'Uploading' && (
             <div>
-              <div>{texts.label_device_firmwareUpdate_writing}</div>
+              <div>{texts.deviceFirmwareUpdate.writing}</div>
             </div>
           )}
 
           {phase === 'UploadSuccess' && (
             <div>
-              <div>{texts.label_device_firmwareUpdate_success}</div>
+              <div>{texts.deviceFirmwareUpdate.success}</div>
               <GeneralButton
                 onClick={onResetButton}
-                text={texts.label_device_firmwareUpdate_doneButton}
+                text={texts.deviceFirmwareUpdate.doneButton}
               />
             </div>
           )}
@@ -87,15 +87,15 @@ export const FirmwareUpdatePart: FC = () => {
           {phase === 'UploadFailure' && (
             <div>
               <span style={{ color: 'red' }}>
-                {texts.label_device_firmwareUpdate_failure}
+                {texts.deviceFirmwareUpdate.failure}
               </span>
               <GeneralButton
                 onClick={onLogButton}
-                text={texts.label_device_firmwareUpdate_logButton}
+                text={texts.deviceFirmwareUpdate.logButton}
               />
               <GeneralButton
                 onClick={onResetButton}
-                text={texts.label_device_firmwareUpdate_doneButton}
+                text={texts.deviceFirmwareUpdate.doneButton}
               />
             </div>
           )}

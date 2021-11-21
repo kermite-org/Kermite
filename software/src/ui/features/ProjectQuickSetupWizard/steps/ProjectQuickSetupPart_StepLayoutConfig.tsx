@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { colors } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 import {
   LayoutConfigurationSectionContent,
   LayoutGeneratorOptionsPart,
@@ -11,7 +11,7 @@ export const ProjectQuickSetupPart_StepLayoutConfig: FC = () => {
   const { writeLayoutOption } = projectQuickSetupStore.actions;
   return (
     <div class={style}>
-      <h1>Layout Configuration</h1>
+      <h1>{texts.layoutGeneratorConfiguration.headerLayoutConfiguration}</h1>
       <LayoutConfigurationSectionContent
         class="layout-view"
         firmwareConfig={firmwareConfig}

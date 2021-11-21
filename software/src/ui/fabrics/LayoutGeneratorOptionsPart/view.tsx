@@ -1,6 +1,6 @@
-import { css, FC, jsx, QxChild } from 'alumina';
+import { css, FC, jsx, AluminaChild } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
-import { ILayoutGeneratorOptions } from '~/ui/base';
+import { ILayoutGeneratorOptions, texts } from '~/ui/base';
 import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import {
   IWriteLayoutOptionFunc,
@@ -13,7 +13,7 @@ type Props = {
   writeLayoutOption: IWriteLayoutOptionFunc;
 };
 
-const FieldRow: FC<{ title: string; children: QxChild }> = ({
+const FieldRow: FC<{ title: string; children: AluminaChild }> = ({
   title,
   children,
 }) => (
@@ -34,26 +34,28 @@ export const LayoutGeneratorOptionsPart: FC<Props> = ({
   return (
     <div class={style}>
       <div class="props-table">
-        <FieldRow title="key placement anchor">
+        <FieldRow title={texts.layoutGeneratorConfiguration.keyPlacementAnchor}>
           <RibbonSelector
             options={placementModeOptions}
             value={layoutOptions.placementOrigin}
             setValue={valueChangeHandler('placementOrigin')}
           />
         </FieldRow>
-        <FieldRow title="invert column placement">
+        <FieldRow
+          title={texts.layoutGeneratorConfiguration.invertColumnPlacement}
+        >
           <ToggleSwitch
             checked={layoutOptions.invertX}
             onChange={valueChangeHandler('invertX')}
           />
         </FieldRow>
-        <FieldRow title="invert column placement right" qxIf={isOddSplit}>
+        <FieldRow title="invert column placement right" if={isOddSplit}>
           <ToggleSwitch
             checked={layoutOptions.invertXR}
             onChange={valueChangeHandler('invertXR')}
           />
         </FieldRow>
-        <FieldRow title="invert row placement" qxIf={false}>
+        <FieldRow title="invert row placement" if={false}>
           <ToggleSwitch
             checked={layoutOptions.invertY}
             onChange={valueChangeHandler('invertY')}

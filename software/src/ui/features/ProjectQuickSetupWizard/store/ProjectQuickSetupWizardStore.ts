@@ -1,4 +1,5 @@
 import { isNumberInRange } from '~/shared';
+import { uiConfiguration } from '~/ui/base';
 import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
@@ -23,12 +24,15 @@ const readers = {
   get currentStepNumber(): number {
     return parseInt(readers.currentStep);
   },
-  canGoToStep(_step: IProjectQuickSetupStep): boolean {
-    const { currentStep } = readers;
-    if (currentStep === 'step1') {
-      const { isConfigValid, keyboardName } = projectQuickSetupStore.state;
-      const { keyboardNameValidationError } = projectQuickSetupStore.readers;
-      return isConfigValid && !!keyboardName && !keyboardNameValidationError;
+  canGoToStep(targetStep: IProjectQuickSetupStep): boolean {
+    if (targetStep === 'step2') {
+      return projectQuickSetupStore.readers.isFirmwareConfigurationStepValid;
+    } else if (targetStep === 'step3') {
+      if (uiConfiguration.checkDeviceConnectionOnWizard) {
+        return projectQuickSetupStore.readers.isTargetDeviceConnected;
+      } else {
+        return true;
+      }
     } else {
       return true;
     }

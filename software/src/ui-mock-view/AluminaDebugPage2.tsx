@@ -29,7 +29,7 @@ const CounterCard: FC = () => {
   );
 };
 
-export const QxDebugPage2: FC = () => {
+export const AluminaDebugPage2: FC = () => {
   console.log(`render`);
   return (
     <div css={cssBase}>

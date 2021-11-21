@@ -61,9 +61,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
           <div css={cssProjectLayoutContent}>
             <div class="primaryRow">
               <div class="column listColumn">
-                <div>
-                  {texts.label_projectAttachmentFileSelectionModal_project}
-                </div>
+                <div>{texts.projectAttachmentFileSelectionModal.project}</div>
                 <FlatListSelector
                   options={projectOptions}
                   value={currentProjectKey}

@@ -11,7 +11,7 @@ export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();
   return (
     <div css={style}>
-      <PartHeader>{texts.label_device_deviceInfo_sectionTitle}</PartHeader>
+      <PartHeader>{texts.deviceInformation.sectionTitle}</PartHeader>
       <PartBody>
         {tableData && (
           <div>

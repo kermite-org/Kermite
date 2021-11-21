@@ -1,4 +1,4 @@
-import { css, FC, jsx, QxNode } from 'alumina';
+import { css, FC, jsx, AluminaNode } from 'alumina';
 import { colors } from '~/ui/base';
 import {
   Icon,
@@ -9,7 +9,7 @@ import { useSetupNavigationFrameModel } from './SetupNavigationFrame.model';
 
 type Props = {
   className?: string;
-  children: QxNode;
+  children: AluminaNode;
 };
 
 export const SetupNavigationFrame: FC<Props> = ({ className, children }) => {
@@ -46,23 +46,23 @@ export const SetupNavigationFrame: FC<Props> = ({ className, children }) => {
       <div className="content-row">{children}</div>
       <div className="bottom-bar">
         <SetupNavigationStepShiftButton
-          qxIf={currentStep === 0}
+          if={currentStep === 0}
           text="キャンセル"
           onClick={closePanel}
         />
         <SetupNavigationStepShiftButton
           onClick={shiftStepBack}
-          qxIf={canShiftStepBack}
+          if={canShiftStepBack}
           text="戻る"
         />
         <SetupNavigationStepShiftButton
           onClick={shiftStepForward}
-          qxIf={canShiftStepForward}
+          if={canShiftStepForward}
           text="次へ"
         />
         <SetupNavigationStepShiftButton
           onClick={completeSteps}
-          qxIf={canCompleteSteps}
+          if={canCompleteSteps}
           text="完了"
         />
       </div>

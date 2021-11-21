@@ -152,7 +152,7 @@ const OutlinePoint = (props: {
         width={d * 2}
         height={d * 2}
         css={cssOutlinePoint}
-        qxIf={visible}
+        if={visible}
         data-editable={editable}
         data-selected={isSelected}
         onMouseDown={onMouseDown}
@@ -259,7 +259,7 @@ export const KeyboardOutlineShapeViewSingle = (props: {
       {isDrawing && (
         <polyline points={pointsSpec} css={cssKeyboardOutlineShapeView} />
       )}
-      <g qxIf={canSplitLine}>
+      <g if={canSplitLine}>
         {vmLines.map((vm) => (
           <HittestLine key={vm.dstPointIndex} vm={vm} isMirror={isMirror} />
         ))}
