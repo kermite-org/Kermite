@@ -8,7 +8,6 @@ export * from './UiDomainHelpers';
 export * from './UiGlobal';
 export * from './UiLocalStorage';
 export * from './UiText';
-export * from './UiTextData';
 export * from './UiTheme';
 export * from './ViewModelTypes';
 export * from './UiConfiguration';

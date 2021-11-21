@@ -37,7 +37,7 @@ const themeColorsDark = {
   projectKeyboard_keyFill: '#eee',
   projectKeyboard_keyEdge: '#004',
 
-  wizardHorizontalBar: '#fd7',
+  wizardHorizontalBar: '#a1e744',
 };
 
 const themeColorsLight = {

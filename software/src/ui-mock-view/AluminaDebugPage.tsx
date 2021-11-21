@@ -1,8 +1,15 @@
-import { jsx, QxChild, QxChildren, css, useLocal, useEffect } from 'alumina';
+import {
+  jsx,
+  AluminaChild,
+  AluminaChildren,
+  css,
+  useLocal,
+  useEffect,
+} from 'alumina';
 
 const Hello = () => <div>hello</div>;
 
-const Frame = (props: { children?: QxChildren }) => {
+const Frame = (props: { children?: AluminaChildren }) => {
   const frameStyle = css`
     border: solid 1px blue;
     padding: 4px;
@@ -10,7 +17,7 @@ const Frame = (props: { children?: QxChildren }) => {
   return <div css={frameStyle}>{props.children}</div>;
 };
 
-const Frame1 = (props: { children: QxChild }) => {
+const Frame1 = (props: { children: AluminaChild }) => {
   const frameStyle = css`
     border: solid 1px red;
     padding: 4px;
@@ -71,7 +78,7 @@ const SelectorTest = () => {
 const cssBase = css`
   padding: 10px;
 `;
-export const QxDebugPage = () => {
+export const AluminaDebugPage = () => {
   console.log(`render`);
   return (
     <div css={cssBase}>

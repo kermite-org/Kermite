@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { colors } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
@@ -30,14 +30,14 @@ export const WelcomePage: FC = () => {
             active={isLanguageEnglish}
             onClick={setLanguageEnglish}
           >
-            English
+            {texts.welcomePage.language_english}
           </WelcomePageButton>
           <WelcomePageButton
             className="button"
             active={isLanguageJapanese}
             onClick={setLanguageJapanese}
           >
-            日本語
+            {texts.welcomePage.language_japanese}
           </WelcomePageButton>
         </div>
         <div className="row">
@@ -45,32 +45,32 @@ export const WelcomePage: FC = () => {
             className="button"
             onClick={showProfileSetupWizard}
           >
-            プロファイル作成ウィザード
+            {texts.welcomePage.profileSetupWizardButton}
           </WelcomePageButton>
         </div>
         <div className="row">
           <WelcomePageButton
             className="button"
             onClick={showProjectQuickSetupWizard}
-            qxIf={isDeveloperMode}
+            if={isDeveloperMode}
           >
-            プロジェクトクイックセットアップ
+            {texts.welcomePage.projectQuickSetupWizardButton}
           </WelcomePageButton>
         </div>
       </div>
-      <div className="version-area" qxIf={!!appVersion}>
-        version: {appVersion}
+      <div className="version-area" if={!!appVersion}>
+        {texts.welcomePage.version}: {appVersion}
       </div>
       <div className="theme-config-area">
         <ToggleSwitchLine
-          text="dark theme"
+          text={texts.welcomePage.darkThemeOption}
           checked={isDarkTheme}
           onChange={setDarkTheme}
         />
       </div>
       <div className="developer-mode-option-area">
         <CheckBoxLine
-          text="developer mode"
+          text={texts.welcomePage.developerModeOption}
           checked={isDeveloperMode}
           setChecked={setDeveloperMode}
         />

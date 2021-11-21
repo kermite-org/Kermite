@@ -47,7 +47,7 @@ const TestComponent4 = () => {
   );
 };
 
-export const QxDebugPage3: FC = () => {
+export const AluminaDebugPage3: FC = () => {
   console.log(`render`);
   return (
     <div>

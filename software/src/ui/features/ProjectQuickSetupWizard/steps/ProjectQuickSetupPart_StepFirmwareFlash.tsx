@@ -1,4 +1,5 @@
 import { css, FC, jsx, useMemo } from 'alumina';
+import { texts } from '~/ui/base';
 import { WizardSectionPanelWithCenterContent } from '~/ui/components/layouts';
 import {
   DeviceAutoConnectionPart,
@@ -16,7 +17,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   return (
     <div class={style}>
       <WizardSectionPanelWithCenterContent
-        title="Device Connection Status"
+        title={texts.deviceAutoConnectionSection.sectionHeader}
         class="connection-panel"
         contentWidth={450}
         contentHeight={400}
@@ -27,7 +28,7 @@ export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
         />
       </WizardSectionPanelWithCenterContent>
       <WizardSectionPanelWithCenterContent
-        title="Flash Firmware"
+        title={texts.firmwareFlashSection.sectionHeader}
         class="flash-panel"
         contentWidth={400}
         contentHeight={400}

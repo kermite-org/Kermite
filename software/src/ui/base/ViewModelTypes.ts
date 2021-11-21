@@ -75,8 +75,16 @@ export interface IOperationCardViewModel {
 }
 
 export type IGeneralMenuItem =
-  | { type: 'menuEntry'; text: string; handler: () => void; disabled?: boolean }
-  | { type: 'separator' };
+  | {
+      type: 'menuEntry';
+      text: string;
+      handler: () => void;
+      disabled?: boolean;
+      hidden?: boolean;
+      hint?: string;
+      checked?: boolean;
+    }
+  | { type: 'separator'; hidden?: boolean };
 
 export interface IProjectKeyboardListProjectItem {
   projectKey: string;

@@ -1,7 +1,7 @@
-import { css, FC, jsx, QxNode } from 'alumina';
+import { css, FC, jsx, AluminaNode } from 'alumina';
 
 type Props = {
-  children: QxNode;
+  children: AluminaNode;
 };
 
 export const WidgetWindowFrame: FC<Props> = ({ children }) => (

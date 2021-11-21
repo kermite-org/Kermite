@@ -21,16 +21,16 @@ export const RouteHeaderBar: FC<Props> = ({
   editMode = 'Edit',
 }) => (
   <div css={style} className={className}>
-    <LinkButton className="back-button" qxIf={!!backPagePath} to={backPagePath}>
+    <LinkButton className="back-button" if={!!backPagePath} to={backPagePath}>
       back
     </LinkButton>
-    <div className="back-button" qxIf={!!backHandler} onClick={backHandler}>
+    <div className="back-button" if={!!backHandler} onClick={backHandler}>
       back
     </div>
     <div className="title">{title}</div>
     <button
       className="save-button"
-      qxIf={!!saveHandler}
+      if={!!saveHandler}
       onClick={saveHandler}
       disabled={!canSave}
     >

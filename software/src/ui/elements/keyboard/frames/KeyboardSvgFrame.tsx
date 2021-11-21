@@ -1,11 +1,11 @@
-import { jsx, css, QxChildren, FC } from 'alumina';
+import { jsx, css, AluminaChildren, FC } from 'alumina';
 import { IDisplayArea } from '~/shared';
 import { getKeyboardSvgViewBoxSpec } from '~/ui/base';
 
 type Props = {
   displayArea: IDisplayArea;
   dpiScale: number;
-  children: QxChildren;
+  children: AluminaChildren;
   baseStrokeWidth: number;
 };
 

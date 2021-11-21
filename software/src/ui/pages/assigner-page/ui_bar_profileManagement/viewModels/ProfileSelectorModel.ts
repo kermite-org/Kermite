@@ -86,8 +86,8 @@ function makeProfileSelectionSource(
 const loadProfile = async (profileEntry: IProfileEntry) => {
   if (assignerModel.checkDirty()) {
     const ok = await modalConfirm({
-      caption: texts.label_assigner_confirmModal_loadProfile_modalTitle,
-      message: texts.label_assigner_confirmModal_loadProfile_modalMessage,
+      caption: texts.assignerConfirmModal.loadProfile_modalTitle,
+      message: texts.assignerConfirmModal.loadProfile_modalMessage,
     });
     if (!ok) {
       return;

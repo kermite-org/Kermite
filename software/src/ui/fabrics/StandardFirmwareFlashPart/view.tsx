@@ -34,22 +34,25 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     <div css={style}>
       <div class="top-row">
         <div class="target-mcu-text">
-          {targetDeviceType && `target mcu: ${targetDeviceType}`}
+          {targetDeviceType &&
+            `${texts.firmwareFlashSection.targetMcu}: ${targetDeviceType}`}
         </div>
 
         <div class="how-to-reset" onClick={openPanel}>
-          how to reset
+          {texts.firmwareFlashSection.howToReset}
         </div>
       </div>
 
       <div class="image-box">{svgImage_resetByHand}</div>
       <div class="text-part">
-        {phase === 'WaitingReset' && <div>reset device to flash firmware</div>}
+        {phase === 'WaitingReset' && (
+          <div>{texts.firmwareFlashSection.resetDeviceToFlashFirmware}</div>
+        )}
 
         {phase === 'WaitingUploadOrder' && detectedDeviceSig && (
           <div class="row">
             <div>
-              {texts.label_device_firmwareUpdate_deviceDetected.replace(
+              {texts.deviceFirmwareUpdate.deviceDetected.replace(
                 '{DEVICE_NAME}',
                 detectedDeviceSig,
               )}
@@ -57,7 +60,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
             {canFlashFirmwareToDetectedDevice && (
               <GeneralButton
                 onClick={onWriteButton}
-                text={texts.label_device_firmwareUpdate_writeButton}
+                text={texts.deviceFirmwareUpdate.writeButton}
                 class="btn"
               />
             )}
@@ -68,13 +71,13 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
           detectedDeviceSig &&
           !canFlashFirmwareToDetectedDevice && (
             <div className="note">
-              Selected firmware is not supposed to be flashed into this device.
+              {texts.firmwareFlashSection.deviceIncompatible}
             </div>
           )}
 
         {phase === 'Uploading' && (
           <div>
-            <div>{texts.label_device_firmwareUpdate_writing}</div>
+            <div>{texts.deviceFirmwareUpdate.writing}</div>
           </div>
         )}
       </div>

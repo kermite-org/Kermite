@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'alumina';
+import { texts } from '~/ui/base';
 import { GeneralInput } from '~/ui/components';
 
 type Props = {
@@ -13,7 +14,9 @@ export const ProjectKeyboardNameEditPart: FC<Props> = ({
 }) => {
   return (
     <div class={style}>
-      <div className="field-name">Keyboard Name</div>
+      <div className="field-name">
+        {texts.standardFirmwareConfiguration.keyboardName}
+      </div>
       <GeneralInput
         value={keyboardName}
         setValue={setKeyboardName}

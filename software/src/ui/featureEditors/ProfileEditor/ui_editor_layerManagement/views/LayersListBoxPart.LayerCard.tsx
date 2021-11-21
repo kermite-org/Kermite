@@ -14,7 +14,7 @@ export const LayerCard: FC<Props> = ({
     key={layerId}
     data-current={isCurrent}
     onClick={setCurrent}
-    data-hint={texts.hint_assigner_layers_layerListItems}
+    data-hint={texts.assignerLayersHint.layerListItems}
   >
     {layerName}
   </div>

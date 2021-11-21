@@ -16,16 +16,14 @@ export const CustomParametersPart: FC = () => {
   } = useCustomParametersPartModel();
   return (
     <div css={style}>
-      <PartHeader>
-        {texts.label_device_customParameters_sectionTitle}
-      </PartHeader>
+      <PartHeader>{texts.deviceCustomParameters.sectionTitle}</PartHeader>
       <PartBody className="part-body">
         {definitionUnavailable &&
-          texts.label_device_customParameters_parametersUnavailable}
+          texts.deviceCustomParameters.parametersUnavailable}
         <div className="parameters-list-outer">
           <div
             className="parameters-list"
-            data-hint={texts.hint_device_customParameters_sectionArea}
+            data-hint={texts.deviceCustomParametersHint.sectionArea}
           >
             {parameterModels.map((item) => (
               <div key={item.slotIndex} className="row">

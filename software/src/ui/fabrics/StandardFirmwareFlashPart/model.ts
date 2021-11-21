@@ -5,7 +5,7 @@ import {
   IFirmwareTargetDevice,
   IProjectPackageInfo,
 } from '~/shared';
-import { ipcAgent } from '~/ui/base';
+import { ipcAgent, texts } from '~/ui/base';
 import { getFirmwareTargetDeviceType } from '~/ui/commonModels';
 import { modalConfirm, showCommandOutputLogModal } from '~/ui/components';
 import { uiActions } from '~/ui/store';
@@ -81,12 +81,12 @@ const actions = {
       uiActions.clearLoading();
       if (res === 'ok') {
         await modalConfirm({
-          message: 'Write Succeeded',
-          caption: 'Flash Firmware',
+          message: texts.firmwareFlashSection.modalSuccessMessage,
+          caption: texts.firmwareFlashSection.modalSuccessTitle,
         });
       } else {
         await showCommandOutputLogModal({
-          caption: 'Operation Command Log',
+          caption: texts.firmwareFlashSection.modalOperationCommandLogTitle,
           logText: res,
         });
       }

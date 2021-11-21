@@ -19,8 +19,8 @@ export const AssignTypeSelectionPart: FC = () => {
 
   return (
     <div css={style}>
-      <div data-hint={texts.hint_assigner_profileConfigModal_assignModel}>
-        {texts.label_assigner_profileConfigModal_assignModel}
+      <div data-hint={texts.assignerProfileConfigModalHint.assignModel}>
+        {texts.assignerProfileConfigModal.assignModel}
       </div>
       <div>
         <select

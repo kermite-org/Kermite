@@ -4,7 +4,11 @@ import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
-import { CheckBoxLine, DualItemsHoverSelector } from '~/ui/components';
+import {
+  CheckBoxLine,
+  DualItemsHoverSelector,
+  ToggleSwitch,
+} from '~/ui/components';
 import { keyboardBehaviorModeModule, uiReaders } from '~/ui/store';
 
 export const BehaviorSelector: FC = () => {
@@ -16,7 +20,7 @@ export const BehaviorSelector: FC = () => {
       setChecked={setSimulatorMode}
       disabled={!isDeviceConnected}
       text="Simulator"
-      hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
+      hint={texts.assignerTopBarHint.keyboardBehaviorModeSelector}
     />
   );
 };
@@ -30,6 +34,30 @@ export const MuteModeSelector: FC = () => {
       setChecked={setMuteMode}
       disabled={!isDeviceConnected}
       text="Mute"
+    />
+  );
+};
+
+export const BehaviorSelector2: FC = () => {
+  const { isSimulatorMode, setSimulatorMode } = keyboardBehaviorModeModule;
+  const { isDeviceConnected } = uiReaders;
+  return (
+    <ToggleSwitch
+      checked={isSimulatorMode}
+      onChange={setSimulatorMode}
+      disabled={!isDeviceConnected}
+    />
+  );
+};
+
+export const MuteModeSelector2: FC = () => {
+  const { isMuteMode, setMuteMode } = keyboardBehaviorModeModule;
+  const { isDeviceConnected } = uiReaders;
+  return (
+    <ToggleSwitch
+      checked={isMuteMode}
+      onChange={setMuteMode}
+      disabled={!isDeviceConnected}
     />
   );
 };
@@ -49,7 +77,7 @@ export const LayoutStandardSelector: FC = () => {
       setCurrentItem={setSystemLayoutIndex}
       textDictionary={textDictionary}
       disabled={!isDeviceConnected}
-      hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
+      hint={texts.assignerTopBarHint.keyboardSystemLayoutSelector}
     />
   );
 };
@@ -69,7 +97,7 @@ export const RoutingChannelSelector: FC = () => {
       setCurrentItem={setRoutingChannel}
       textDictionary={textDictionary}
       disabled={!isDeviceConnected}
-      hint={texts.hint_assigner_topBar_routingChannelSelector}
+      hint={texts.assignerTopBarHint.routingChannelSelector}
     />
   );
 };

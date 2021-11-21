@@ -20,7 +20,7 @@ import {
 import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
 import { StandardFirmwareEditor_ExposedModel } from '~/ui/featureEditors';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStoreHelpers';
-import { dispatchCoreAction, globalSettingsWriter } from '~/ui/store';
+import { dispatchCoreAction, globalSettingsWriter, uiState } from '~/ui/store';
 
 const constants = {
   firmwareName: 'default',
@@ -33,7 +33,6 @@ type IState = {
   firmwareConfig: IStandardFirmwareConfig;
   layoutOptions: ILayoutGeneratorOptions;
   isConfigValid: boolean;
-  isConnectionValid: boolean;
   rawEditValues: IStandardFirmwareConfig;
 };
 
@@ -45,7 +44,6 @@ function createDefaultState(): IState {
     firmwareConfig: fallbackStandardFirmwareConfig,
     layoutOptions: fallbackLayoutGeneratorOptions,
     isConfigValid: true,
-    isConnectionValid: false,
     rawEditValues: fallbackStandardFirmwareConfig,
   };
 }
@@ -55,6 +53,20 @@ const state: IState = createDefaultState();
 const readers = {
   get keyboardNameValidationError(): string | undefined {
     return validateResourceName(state.keyboardName, 'keyboard name');
+  },
+  get isFirmwareConfigurationStepValid(): boolean {
+    const { isConfigValid, keyboardName } = state;
+    const { keyboardNameValidationError } = readers;
+    return isConfigValid && !!keyboardName && !keyboardNameValidationError;
+  },
+  get isTargetDeviceConnected(): boolean {
+    const deviceStatus = uiState.core.deviceStatus;
+    const { projectId, variationId } = state;
+    return (
+      deviceStatus.isConnected &&
+      deviceStatus.deviceAttrs.projectId === projectId &&
+      deviceStatus.deviceAttrs.variationId === variationId
+    );
   },
   emitDraftProjectInfo(): IProjectPackageInfo {
     const { firmwareName } = constants;

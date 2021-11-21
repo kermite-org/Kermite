@@ -1,39 +1,43 @@
 import { css, jsx } from 'alumina';
 import { FcWithClassName, texts } from '~/ui/base';
 import {
+  GeneralButtonMenu,
   KeyboardProfileSelector,
   OperationButtonWithIcon,
 } from '~/ui/components';
 import { ConfigurationButton } from '~/ui/elements';
-import { makeProfileSelectionMenuPartViewModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuPartViewModel';
-import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
-import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import {
   BehaviorSelector,
   LayoutStandardSelector,
   MuteModeSelector,
   RoutingChannelSelector,
-} from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/ConfigSelectors';
+} from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
+import { createProfileSelectionMenuItems } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectionMenuItemCreator';
+import { useProfileSelectorModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
+import { makeProfilesOperationModel } from '~/ui/pages/assigner-page/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { SavingProjectPresetSelectionModal } from '~/ui/pages/assigner-page/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
-import { ProfileSelectionMenuPart } from './views/ProfileSelectionMenu';
 
 export const ProfileManagementPart: FcWithClassName = ({ className }) => {
   const baseVm = makeProfilesOperationModel();
-  const menuModel = makeProfileSelectionMenuPartViewModel(baseVm);
   const { profileSelectorSource } = useProfileSelectorModel();
+  const menuItems = createProfileSelectionMenuItems(baseVm);
 
   return (
     <div css={style} className={className}>
-      <ProfileSelectionMenuPart vm={menuModel} />
+      <GeneralButtonMenu
+        menuItems={menuItems}
+        hint={texts.assignerTopBarHint.profileOperationsMenu}
+      />
+
       <KeyboardProfileSelector
         selectorSource={profileSelectorSource}
-        hint={texts.hint_assigner_topBar_selectCurrentProfile}
+        hint={texts.assignerTopBarHint.selectCurrentProfile}
         disabled={!baseVm.isEditProfileAvailable}
       />
       <ConfigurationButton
         onClick={baseVm.openConfiguration}
         iconSpec="fa fa-cog"
-        data-hint={texts.hint_assigner_topBar_profileConfigurationButton}
+        data-hint={texts.assignerTopBarHint.profileConfigurationButton}
         disabled={!baseVm.isEditProfileAvailable}
       />
       <ConfigurationButton
@@ -43,7 +47,7 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
       />
 
       <div class="spacer" />
-      <div class="mode-selectors-box">
+      <div class="mode-selectors-box" if={false}>
         <BehaviorSelector />
         <MuteModeSelector />
         <LayoutStandardSelector />
@@ -55,15 +59,15 @@ export const ProfileManagementPart: FcWithClassName = ({ className }) => {
           onClick={baseVm.onSaveButton}
           disabled={!baseVm.canSave}
           icon="save"
-          label={texts.label_assigner_topBar_saveAssignsButton}
-          hint={texts.hint_assigner_topBar_saveAssignsButton}
+          label={texts.assignerTopBar.saveAssignsButton}
+          hint={texts.assignerTopBarHint.saveAssignsButton}
         />
         <OperationButtonWithIcon
           onClick={baseVm.onWriteButton}
           disabled={!baseVm.canWrite}
           icon="double_arrow"
-          label={texts.label_assigner_topBar_writeAssignsButton}
-          hint={texts.hint_assigner_topBar_writeAssignsButton}
+          label={texts.assignerTopBar.writeAssignsButton}
+          hint={texts.assignerTopBarHint.writeAssignsButton}
         />
       </div>
 
@@ -79,7 +83,7 @@ const style = css`
   flex-grow: 1;
   display: flex;
   align-items: center;
-  padding: 4px;
+  padding: 4px 6px;
   gap: 0 15px;
   button {
     padding: 0 4px;

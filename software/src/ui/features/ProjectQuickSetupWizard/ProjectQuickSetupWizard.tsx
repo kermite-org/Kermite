@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'alumina';
+import { texts } from '~/ui/base';
 import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
 import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareConfig';
@@ -8,9 +9,9 @@ import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/st
 import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupWizardStore';
 
 const stepInstructionMap: Record<IProjectQuickSetupStep, string> = {
-  step1: 'Firmware Configuration',
-  step2: 'Device Setup',
-  step3: 'Layout Template Settings',
+  step1: texts.projectWizardFrame.headerStep1FirmwareConfiguration,
+  step2: texts.projectWizardFrame.headerStep2DeviceSetup,
+  step3: texts.projectWizardFrame.headerStep3layoutSettings,
 };
 
 export const ProjectQuickSetupWizard: FC = () => {

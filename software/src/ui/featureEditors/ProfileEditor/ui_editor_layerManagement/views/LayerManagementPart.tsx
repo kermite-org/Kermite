@@ -25,35 +25,36 @@ export const LayerManagementPart: FC<Props> = ({
       icon="fa fa-plus"
       enabled={canEdit}
       handler={addNewLayer}
-      hint={texts.hint_assigner_layerOps_addNewLayer}
+      hint={texts.assignerLayerOpsHint.addNewLayer}
     />
     <LayerOperationButton
       icon="fa fa-pen-square"
       enabled={canEdit}
       handler={editCurrentLayer}
-      hint={texts.hint_assigner_layerOps_editLayerProperties}
+      hint={texts.assignerLayerOpsHint.editLayerProperties}
     />
     <LayerOperationButton
       icon="fa fa-times"
       enabled={canEdit && canDeleteCurrentLayer}
       handler={deleteCurrentLayer}
-      hint={texts.hint_assigner_layerOps_deleteLayer}
+      hint={texts.assignerLayerOpsHint.deleteLayer}
     />
     <LayerOperationButton
       icon="fa fa-long-arrow-alt-up"
       enabled={canEdit && canShiftForwardCurrentLayer}
       handler={shiftForwardCurrentLayer}
-      hint={texts.hint_assigner_layerOps_bringForward}
+      hint={texts.assignerLayerOpsHint.bringForward}
     />
     <LayerOperationButton
       icon="fa fa-long-arrow-alt-down"
       enabled={canEdit && canShiftBackCurrentLayer}
       handler={shiftBackCurrentLayer}
-      hint={texts.hint_assigner_layerOps_bringBackward}
+      hint={texts.assignerLayerOpsHint.bringBackward}
     />
   </div>
 );
 
 const style = css`
   display: flex;
+  gap: 4px;
 `;

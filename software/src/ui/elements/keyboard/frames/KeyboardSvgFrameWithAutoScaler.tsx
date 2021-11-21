@@ -1,11 +1,11 @@
-import { jsx, css, QxChildren, FC } from 'alumina';
+import { jsx, css, AluminaChildren, FC } from 'alumina';
 import { IDisplayArea } from '~/shared';
 import { KeyboardSvgFrame } from '~/ui/elements/keyboard/frames/KeyboardSvgFrame';
 import { ScalerBox } from '~/ui/elements/keyboard/frames/ScalerBox';
 
 type Props = {
   displayArea: IDisplayArea;
-  children: QxChildren;
+  children: AluminaChildren;
   dpiScale: number;
   marginRatio: number;
   baseStrokeWidth: number;

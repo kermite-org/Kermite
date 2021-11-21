@@ -82,10 +82,10 @@ export const ProfileSetupWizard_StepPresetSelection: FC = () => {
   return (
     <div css={style}>
       <div class="selectors-part">
-        <div>{texts.label_presetBrowser_selectionTitle_preset}</div>
+        <div>{texts.presetBrowser.selectionTitle_preset}</div>
         <KeyboardProfileSelector
           selectorSource={presetSelectorSource}
-          hint={texts.hint_presetBrowser_selection_preset}
+          hint={texts.presetBrowserHint.selection_preset}
         />
       </div>
       <div class="keyboard-part">

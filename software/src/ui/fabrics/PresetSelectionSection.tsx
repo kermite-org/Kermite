@@ -21,24 +21,24 @@ export const PresetSelectionSection: FC<Props> = ({
 }) => (
   <div css={style}>
     <div class="selectorsPart">
-      <div className="selectorBlock" qxIf={cansSelectProject}>
-        <div>{texts.label_presetBrowser_selectionTitle_keyboard}</div>
+      <div className="selectorBlock" if={cansSelectProject}>
+        <div>{texts.presetBrowser.selectionTitle_keyboard}</div>
         <KeyboardProjectSelector
           selectorSource={projectSelectorSource}
-          hint={texts.hint_presetBrowser_selection_keyboard}
+          hint={texts.presetBrowserHint.selection_keyboard}
         />
       </div>
       <div className="selectorBlock">
-        <div>{texts.label_presetBrowser_selectionTitle_preset}</div>
+        <div>{texts.presetBrowser.selectionTitle_preset}</div>
         <KeyboardProfileSelector
           selectorSource={presetSelectorSource}
-          hint={texts.hint_presetBrowser_selection_preset}
+          hint={texts.presetBrowserHint.selection_preset}
         />
       </div>
     </div>
     <GeneralButton
-      text={texts.label_presetBrowser_createProfileButton}
-      hint={texts.hint_presetBrowser_createProfileButton}
+      text={texts.presetBrowser.createProfileButton}
+      hint={texts.presetBrowserHint.createProfileButton}
       size="large"
       onClick={handleCreateProfileButton}
     />

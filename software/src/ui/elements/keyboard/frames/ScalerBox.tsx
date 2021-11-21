@@ -5,14 +5,14 @@ import {
   useLocal,
   useRef,
   useEffect,
-  QxNode,
+  AluminaNode,
   FC,
 } from 'alumina';
 
 type Props = {
   contentWidth: number;
   contentHeight: number;
-  children: QxNode;
+  children: AluminaNode;
 };
 
 export const ScalerBox: FC<Props> = ({
