@@ -13,9 +13,9 @@ export const LayersPanelContent: FC = () => {
   return (
     <div class={style}>
       <SectionHeaderText
-        text={texts.label_assigner_layerListHeader}
+        text={texts.assignerLayers.layerListHeader}
         icon="layers"
-        hint={texts.hint_assigner_layers_layerListHeader}
+        hint={texts.assignerLayersHint.layerListHeader}
         xOffset={-2}
       />
       <LayersListBoxPart vm={layerListBoxPartViewModel} />

@@ -39,7 +39,7 @@ export const KeyboardProjectSelectionPart: FC = () => {
 
   return (
     <div css={style}>
-      <div data-hint={texts.hint_assigner_profileConfigModal_assignModel}>
+      <div data-hint={texts.assignerProfileConfigModalHint.assignModel}>
         target project
       </div>
       <div>

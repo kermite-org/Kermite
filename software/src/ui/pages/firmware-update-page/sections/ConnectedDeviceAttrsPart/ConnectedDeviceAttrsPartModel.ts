@@ -26,52 +26,46 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
   const tableData =
     deviceAttrs &&
     ([
-      [texts.label_device_deviceInfo_fieldName_port, deviceAttrs.portName],
-      [
-        texts.label_device_deviceInfo_fieldName_firmwareId,
-        deviceAttrs.firmwareId,
-      ],
+      [texts.deviceInformation.fieldName_port, deviceAttrs.portName],
+      [texts.deviceInformation.fieldName_firmwareId, deviceAttrs.firmwareId],
       ['projectId', deviceAttrs.projectId],
       ['variationId', deviceAttrs.variationId],
       [
-        texts.label_device_deviceInfo_fieldName_instanceNumber,
+        texts.deviceInformation.fieldName_instanceNumber,
         deviceAttrs.deviceInstanceCode,
       ],
-      [
-        texts.label_device_deviceInfo_fieldName_keyboardName,
-        deviceAttrs.productName,
-      ],
+      [texts.deviceInformation.fieldName_keyboardName, deviceAttrs.productName],
       ['manufacturerName', deviceAttrs.manufacturerName],
       [
-        texts.label_device_deviceInfo_fieldName_firmwareVariation,
+        texts.deviceInformation.fieldName_firmwareVariation,
         deviceAttrs.firmwareVariationName,
       ],
       [
-        texts.label_device_deviceInfo_fieldName_mcuName,
+        texts.deviceInformation.fieldName_mcuName,
         getMcuNameFromKermiteMcuCode(deviceAttrs.mcuCode),
       ],
       [
-        texts.label_device_deviceInfo_fieldName_resourceOrigin,
+        texts.deviceInformation.fieldName_resourceOrigin,
         isOriginOnline
-          ? texts.label_device_deviceInfo_value_resourceOrigin_online
-          : texts.label_device_deviceInfo_value_resourceOrigin_local,
+          ? texts.deviceInformation.value_resourceOrigin_online
+          : texts.deviceInformation.value_resourceOrigin_local,
       ],
       [
-        texts.label_device_deviceInfo_fieldName_firmwareRevision,
+        texts.deviceInformation.fieldName_firmwareRevision,
         (isOriginOnline && deviceAttrs.firmwareBuildRevision) || 'N/A',
       ],
       isOriginOnline &&
         firmwareInfo && [
-          texts.label_device_deviceInfo_fieldName_firmwareLatestRevision,
+          texts.deviceInformation.fieldName_firmwareLatestRevision,
           firmwareInfo.buildRevision,
         ],
       isOriginOnline &&
         firmwareInfo && [
-          texts.label_device_deviceInfo_fieldName_firmwareLatestTimestamp,
+          texts.deviceInformation.fieldName_firmwareLatestTimestamp,
           fixDateTimeText(firmwareInfo.buildTimestamp),
         ],
       [
-        texts.label_device_deviceInfo_fieldName_keymappingAreaSize,
+        texts.deviceInformation.fieldName_keymappingAreaSize,
         deviceAttrs.assignStorageCapacity + ' bytes',
       ],
     ].filter((a) => !!a) as [string, string][]);

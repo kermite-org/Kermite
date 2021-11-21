@@ -50,7 +50,7 @@ const inputNewProfileName = async (
     .map((it) => it.profileName);
   return await resourceManagementUtils.inputSavingResourceName({
     modalTitle,
-    modalMessage: texts.label_assigner_profileNameEditModal_newProfileName,
+    modalMessage: texts.assignerProfileNameEditModal.newProfileName,
     resourceTypeNameText: 'profile name',
     currentName,
     existingResourceNames: existingProfileNames,
@@ -61,7 +61,7 @@ const renameProfile = async () => {
   const profileEntry = profilesReader.currentProfileEntry;
   if (profileEntry) {
     const newProfileName = await inputNewProfileName(
-      texts.label_assigner_profileNameEditModal_modalTitleRename,
+      texts.assignerProfileNameEditModal.modalTitleRename,
       profileEntry.projectId,
       profileEntry.profileName,
     );
@@ -75,7 +75,7 @@ const copyProfile = async () => {
   const profileEntry = profilesReader.currentProfileEntry;
   if (profileEntry) {
     const newProfileName = await inputNewProfileName(
-      texts.label_assigner_profileNameEditModal_modalTitleCopy,
+      texts.assignerProfileNameEditModal.modalTitleCopy,
       profileEntry.projectId,
       profileEntry.profileName,
     );
@@ -89,12 +89,11 @@ const deleteProfile = async () => {
   const profileEntry = profilesReader.currentProfileEntry;
   if (profileEntry) {
     const ok = await modalConfirm({
-      message:
-        texts.label_assigner_confirmModal_deleteProfile_modalMessage.replace(
-          '{PROFILE_NAME}',
-          profileEntry.profileName,
-        ),
-      caption: texts.label_assigner_confirmModal_deleteProfile_modalTitle,
+      message: texts.assignerConfirmModal.deleteProfile_modalMessage.replace(
+        '{PROFILE_NAME}',
+        profileEntry.profileName,
+      ),
+      caption: texts.assignerConfirmModal.loadProfile_modalTitle,
     });
     if (ok) {
       profilesActions.deleteProfile();
@@ -106,7 +105,7 @@ const handleSaveUnsavedProfile = async () => {
   if (profilesReader.profileEditSource.type !== 'InternalProfile') {
     const projectId = assignerModel.profileData.projectId;
     const newProfileName = await inputNewProfileName(
-      texts.label_assigner_profileNameEditModal_modalTitleSave,
+      texts.assignerProfileNameEditModal.modalTitleSave,
       projectId,
       '',
     );

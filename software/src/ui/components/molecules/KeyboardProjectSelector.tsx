@@ -17,7 +17,7 @@ export const KeyboardProjectSelector: FC<Props> = (props) => (
       disabled={!props.isLinkButtonActive}
       onClick={props.linkButtonHandler}
       size="unitSquare"
-      hint={texts.hint_presetBrowser_projectLinkButton}
+      hint={texts.presetBrowserHint.projectLinkButton}
       if={false}
     />
   </div>

@@ -20,7 +20,7 @@ export const BehaviorSelector: FC = () => {
       setChecked={setSimulatorMode}
       disabled={!isDeviceConnected}
       text="Simulator"
-      hint={texts.hint_assigner_topBar_keyboardBehaviorModeSelector}
+      hint={texts.assignerTopBarHint.keyboardBehaviorModeSelector}
     />
   );
 };
@@ -77,7 +77,7 @@ export const LayoutStandardSelector: FC = () => {
       setCurrentItem={setSystemLayoutIndex}
       textDictionary={textDictionary}
       disabled={!isDeviceConnected}
-      hint={texts.hint_assigner_topBar_keyboardSystemLayoutSelector}
+      hint={texts.assignerTopBarHint.keyboardSystemLayoutSelector}
     />
   );
 };
@@ -97,7 +97,7 @@ export const RoutingChannelSelector: FC = () => {
       setCurrentItem={setRoutingChannel}
       textDictionary={textDictionary}
       disabled={!isDeviceConnected}
-      hint={texts.hint_assigner_topBar_routingChannelSelector}
+      hint={texts.assignerTopBarHint.routingChannelSelector}
     />
   );
 };

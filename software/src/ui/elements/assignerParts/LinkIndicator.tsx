@@ -9,7 +9,7 @@ export const LinkIndicator: FC<Props> = ({ isActive }) => (
   <div
     css={style}
     data-active={isActive}
-    data-hint={texts.hint_assigner_topBar_deviceConnectionStatus}
+    data-hint={texts.assignerTopBarHint.deviceConnectionStatus}
   >
     <i class="fa fa-link" />
   </div>

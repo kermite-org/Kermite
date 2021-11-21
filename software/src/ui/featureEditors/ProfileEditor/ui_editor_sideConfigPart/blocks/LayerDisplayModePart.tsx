@@ -23,7 +23,7 @@ export const LayerDisplayModePart: FC = () => {
         options={options}
         value={value}
         setValue={setValue}
-        hint={texts.hint_assigner_configs_showLayersDynamic}
+        hint={texts.assignerConfigsHint.showLayersDynamic}
         className="selector"
         disabled={!profilesReader.isEditProfileAvailable}
       />

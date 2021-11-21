@@ -8,50 +8,50 @@ export function createProfileSelectionMenuItems(
   return [
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_newProfile,
-      hint: texts.hint_assigner_menu_newProfile,
+      text: texts.assignerMenu.newProfile,
+      hint: texts.assignerMenuHint.newProfile,
       handler: vm.createProfile,
     },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_renameProfile,
-      hint: texts.hint_assigner_menu_renameProfile,
+      text: texts.assignerMenu.renameProfile,
+      hint: texts.assignerMenuHint.renameProfile,
       handler: vm.renameProfile,
       hidden: !vm.isCurrentProfileInternal,
     },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_copyProfile,
-      hint: texts.hint_assigner_menu_copyProfile,
+      text: texts.assignerMenu.copyProfile,
+      hint: texts.assignerMenuHint.copyProfile,
       handler: vm.copyProfile,
       hidden: !vm.isCurrentProfileInternal,
     },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_deleteProfile,
-      hint: texts.hint_assigner_menu_deleteProfile,
+      text: texts.assignerMenu.deleteProfile,
+      hint: texts.assignerMenuHint.deleteProfile,
       handler: vm.deleteProfile,
       hidden: !vm.isCurrentProfileInternal,
     },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_saveProfile,
-      hint: texts.hint_assigner_menu_saveProfile,
+      text: texts.assignerMenu.saveProfile,
+      hint: texts.assignerMenuHint.saveProfile,
       handler: vm.handleSaveUnsavedProfile,
       hidden: !vm.isMenuItemSaveEnabled,
     },
     { type: 'separator' },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_importFromFile,
-      hint: texts.hint_assigner_menu_importFromFile,
+      text: texts.assignerMenu.importFromFile,
+      hint: texts.assignerMenuHint.importFromFile,
       handler: vm.handleImportFromFile,
       hidden: !uiReaders.isDeveloperMode,
     },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_exportToFile,
-      hint: texts.hint_assigner_menu_exportToFile,
+      text: texts.assignerMenu.exportToFile,
+      hint: texts.assignerMenuHint.exportToFile,
       handler: vm.handleExportToFile,
       hidden: !(uiReaders.isDeveloperMode && vm.isEditProfileAvailable),
     },
@@ -66,8 +66,8 @@ export function createProfileSelectionMenuItems(
     },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_saveAsPreset,
-      hint: texts.hint_assigner_menu_saveAsPreset,
+      text: texts.assignerMenu.saveAsPreset,
+      hint: texts.assignerMenuHint.saveAsPreset,
       handler: vm.openSavingPresetSelectionModal,
       hidden: !(
         uiReaders.isLocalProjectSelectedForEdit && !!vm.currentProfileProjectId
@@ -76,20 +76,20 @@ export function createProfileSelectionMenuItems(
     { type: 'separator' },
     {
       type: 'menuEntry',
-      text: texts.label_assigner_menu_openUserProfilesFolder,
-      hint: texts.hint_assigner_menu_openUserProfilesFolder,
+      text: texts.assignerMenu.openUserProfilesFolder,
+      hint: texts.assignerMenuHint.openUserProfilesFolder,
       handler: vm.openUserProfilesFolder,
       hidden: !vm.isCurrentProfileInternal,
     },
     {
       type: 'menuEntry',
-      text: texts.label_globalMenu_showTestInputArea,
+      text: texts.globalMenu.showTestInputArea,
       handler: () =>
         commitUiSettings({
           showTestInputArea: !uiState.settings.showTestInputArea,
         }),
       checked: uiState.settings.showTestInputArea,
-      hint: texts.hint_globalMenu_showTestInputArea,
+      hint: texts.globalMenuHint.showTestInputArea,
     },
   ];
 }
