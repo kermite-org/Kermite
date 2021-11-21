@@ -44,6 +44,18 @@
     "modalSuccessMessage": "Write succeeded.",
     "modalOperationCommandLogTitle": "Operation Command Log"
   },
+  "standardFirmwareConfiguration": {
+    "keyboardName": "Keyboard Name",
+    "headerFirmwareConfiguration": "Firmware Configuration",
+    "headerKeysPreview": "Keys Preview",
+    "headerBoardAssignsView": "Board Assigns View",
+    "buttonReset": "reset"
+  },
+  "layoutGeneratorConfiguration": {
+    "headerLayoutConfiguration": "Layout Configuration",
+    "keyPlacementAnchor": "key placement anchor",
+    "invertColumnPlacement": "invert column placement"
+  },
   "titleBarHint": {
     "switchToWidgetView": "Switch to widget view",
     "minimizeWindow": "Minimize window",

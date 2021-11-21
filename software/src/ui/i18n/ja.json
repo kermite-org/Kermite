@@ -44,6 +44,18 @@
     "modalSuccessMessage": "書き込みに成功しました。",
     "modalOperationCommandLogTitle": "エラーログ"
   },
+  "standardFirmwareConfiguration": {
+    "keyboardName": "キーボード名",
+    "headerFirmwareConfiguration": "ファームウェア設定",
+    "headerKeysPreview": "キー配置プレビュー",
+    "headerBoardAssignsView": "ボードピンアサイン",
+    "buttonReset": "リセット"
+  },
+  "layoutGeneratorConfiguration": {
+    "headerLayoutConfiguration": "レイアウト設定",
+    "keyPlacementAnchor": "キー配置アンカー",
+    "invertColumnPlacement": "列を反転"
+  },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",
     "minimizeWindow": "ウインドウを最小化します。",

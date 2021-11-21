@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { colors } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { WizardSectionPanel } from '~/ui/components/layouts';
 import {
@@ -25,18 +25,22 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
           setKeyboardName={setKeyboardName}
           validationError={keyboardNameValidationError}
         />
-        <GeneralButton onClick={resetConfigurations}>reset</GeneralButton>
+        <GeneralButton onClick={resetConfigurations}>
+          {texts.standardFirmwareConfiguration.buttonReset}
+        </GeneralButton>
       </div>
       <div class="main-row">
         <WizardSectionPanel
-          title="Firmware Configuration"
+          title={
+            texts.standardFirmwareConfiguration.headerFirmwareConfiguration
+          }
           class="firmware-config-section"
         >
           <StandardFirmwareEditor />
         </WizardSectionPanel>
         <div class="right-column">
           <WizardSectionPanel
-            title="Keys Preview"
+            title={texts.standardFirmwareConfiguration.headerKeysPreview}
             class="layout-config-section"
           >
             <LayoutConfigurationSectionContent
@@ -46,7 +50,7 @@ export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
             />
           </WizardSectionPanel>
           <WizardSectionPanel
-            title="Board Pin Assigns View"
+            title={texts.standardFirmwareConfiguration.headerBoardAssignsView}
             class="board-pin-assigns-section"
           >
             <ControllerPinAssignsSection firmwareConfig={rawEditValues} />
