@@ -1,4 +1,5 @@
 import { cloneObject, injectObjectPropsRecursive } from '~/shared';
+import { appUi } from '~/ui/base';
 import textSourceEnglish from '../i18n/en.json';
 import textSourceJapanese from '../i18n/ja.json';
 
@@ -27,6 +28,9 @@ export const uiTextConfigLoader = {
 export const languageKey = uiTextConfigLoader.loadLanguageKey();
 
 const activeTextSource = cloneObject(textSourceEnglish) as ITextSource;
+if (appUi.isDevelopment) {
+  injectObjectPropsRecursive(activeTextSource, textSourceJapanese);
+}
 injectObjectPropsRecursive(activeTextSource, textSources[languageKey]);
 
 export const texts = activeTextSource;
