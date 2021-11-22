@@ -43,7 +43,8 @@
     "typecheck:full": "tsc -b src/*",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "incver": "npm version patch"
+    "incver": "npm version patch",
+    "test": "jest"
   },
   "dependencies": {
     "alumina": "^0.1.8",
