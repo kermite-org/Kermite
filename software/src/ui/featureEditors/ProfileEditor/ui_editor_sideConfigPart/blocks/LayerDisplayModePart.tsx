@@ -18,12 +18,12 @@ export const LayerDisplayModePart: FC = () => {
 
   return (
     <div css={style}>
-      <p>Layer Display Mode</p>
+      <p>{texts.assignerDisplaySettingsPart.layerDisplayMode}</p>
       <RibbonSelector
         options={options}
         value={value}
         setValue={setValue}
-        hint={texts.assignerProfilePropertiesPartHint.showLayersDynamic}
+        hint={texts.assignerDisplaySettingsPartHint.layerDisplayMode}
         className="selector"
         disabled={!profilesReader.isEditProfileAvailable}
       />

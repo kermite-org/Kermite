@@ -161,15 +161,21 @@
   "assignerProfilePropertiesPart": {
     "sectionHeader": "プロファイル属性",
     "keyboard": "キーボード",
-    "assignModel": "ロジックモデル",
-    "showLayersDynamic": "デバイスのレイヤを反映",
-    "showFallbackAssigns": "デフォルトアサインを表示"
+    "assignModel": "ロジックモデル"
   },
   "assignerProfilePropertiesPartHint": {
     "sectionHeader": "プロファイルの設定を表示しています。",
     "keyboard": "プロファイルが参照しているキーボード定義の名前を表示しています。",
-    "assignModel": "プロファイルのアサインモデルを表示しています。",
-    "showLayersDynamic": "デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。",
+    "assignModel": "プロファイルのアサインモデルを表示しています。"
+  },
+  "assignerDisplaySettingsPart": {
+    "sectionHeader": "表示設定",
+    "layerDisplayMode": "レイヤ表示モード",
+    "showFallbackAssigns": "デフォルトアサインを表示"
+  },
+  "assignerDisplaySettingsPartHint": {
+    "sectionHeader": "画面の表示に関連する設定を行います。",
+    "layerDisplayMode": "レイヤ表示モードを設定します。LIVEモードでは、デバイスのレイヤ状態に同期して表示されるレイヤが切り替わります。",
     "showFallbackAssigns": "レイヤのデフォルトアサインを表示します。"
   },
   "assignerDeviceSettingsPart": {

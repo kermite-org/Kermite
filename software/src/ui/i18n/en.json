@@ -162,16 +162,22 @@
   "assignerProfilePropertiesPart": {
     "sectionHeader": "Profile Properties",
     "keyboard": "keyboard",
-    "assignModel": "Logic Model",
-    "showLayersDynamic": "Show Layers Dynamic",
-    "showFallbackAssigns": "Show Fallback Assigns"
+    "assignModel": "Logic Model"
   },
   "assignerProfilePropertiesPartHint": {
     "sectionHeader": "Shows profile configuration",
     "keyboard": "Keyboard package name referenced by the profile",
-    "assignModel": "Logic model for current profile",
-    "showLayersDynamic": "Show layers synchronized to the connected keyboard device",
-    "showFallbackAssigns": "Show fallback assigns of the layer"
+    "assignModel": "Logic model for current profile"
+  },
+  "assignerDisplaySettingsPart": {
+    "sectionHeader": "Display Settings",
+    "layerDisplayMode": "Layer Display Mode",
+    "showFallbackAssigns": "Show Fallback Assigns"
+  },
+  "assignerDisplaySettingsPartHint": {
+    "sectionHeader": "Configure how the view rendered",
+    "layerDisplayMode": "Set layer display mode. In LIVE mode, active layers of the device are affected to the view in the app.",
+    "showFallbackAssigns": "Show fallback assigns of the layer."
   },
   "assignerDeviceSettingsPart": {
     "sectionHeader": "Device Settings",
