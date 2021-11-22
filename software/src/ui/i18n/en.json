@@ -306,7 +306,9 @@
     "shapePreview": "Preview",
     "firmwareUpdate": "Device",
     "settings": "Settings",
-    "projectSelection": "Keyboard"
+    "projectSelection": "Keyboard",
+    "projectResourceEdit": "Project",
+    "entrance": "Entrance"
   },
   "sideMenuAppsHint": {
     "assigner": "Edit key assigns",
@@ -314,6 +316,8 @@
     "presetBrowser": "View presets",
     "shapePreview": "Preview keyboard shapes",
     "firmwareUpdate": "Manage supported keyboard devices",
-    "settings": "Manage application settings"
+    "settings": "Manage application settings",
+    "projectResourceEdit": "Edit project resources",
+    "entrance": "Entrance view"
   }
 }

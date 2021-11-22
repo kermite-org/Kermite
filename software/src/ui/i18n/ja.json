@@ -305,7 +305,9 @@
     "shapePreview": "プレビュー",
     "firmwareUpdate": "デバイス",
     "settings": "設定",
-    "projectSelection": "キーボード"
+    "projectSelection": "キーボード",
+    "projectResourceEdit": "プロジェクト",
+    "entrance": "スタート"
   },
   "sideMenuAppsHint": {
     "assigner": "キーアサインを編集します。",
@@ -313,6 +315,9 @@
     "presetBrowser": "プリセットを閲覧します。",
     "shapePreview": "キーボードの形状を表示します。",
     "firmwareUpdate": "デバイスの管理を行います。",
-    "settings": "アプリの設定を行います。"
+    "settings": "アプリの設定を行います。",
+    "projectSelection": "キーボード定義を選択します。",
+    "projectResourceEdit": "プロジェクトリソースを編集します。",
+    "entrance": "スタート画面です。"
   }
 }
