@@ -158,12 +158,16 @@
     "bringBackward": "レイヤを後ろに移動します。",
     "bringForward": "レイヤを前に移動します。"
   },
-  "assignerConfigs": {
+  "assignerProfilePropertiesPart": {
+    "sectionHeader": "プロファイル属性",
+    "keyboard": "キーボード",
     "assignModel": "ロジックモデル",
     "showLayersDynamic": "デバイスのレイヤを反映",
     "showFallbackAssigns": "デフォルトアサインを表示"
   },
-  "assignerConfigsHint": {
+  "assignerProfilePropertiesPartHint": {
+    "sectionHeader": "プロファイルの設定を表示しています。",
+    "keyboard": "プロファイルが参照しているキーボード定義の名前を表示しています。",
     "assignModel": "プロファイルのアサインモデルを表示しています。",
     "showLayersDynamic": "デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。",
     "showFallbackAssigns": "レイヤのデフォルトアサインを表示します。"
@@ -176,6 +180,7 @@
     "routingChannel": "ルーティングチャネル"
   },
   "assignerDeviceSettingsPartHint": {
+    "sectionHeader": "デバイスで保持されているキー入力関連の設定です。",
     "simulatorMode": "キーボードをシミュレーションモードで動作させます。キー入力入力ロジックがアプリ内で処理されます。",
     "muteMode": "キーボードの出力をミュートします。",
     "systemLayout": "OSが認識するキーボードレイアウトを設定します",

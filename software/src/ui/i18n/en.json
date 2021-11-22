@@ -159,12 +159,16 @@
     "bringBackward": "Bring layer backward",
     "bringForward": "Bring layer forward"
   },
-  "assignerConfigs": {
+  "assignerProfilePropertiesPart": {
+    "sectionHeader": "Profile Properties",
+    "keyboard": "keyboard",
     "assignModel": "Logic Model",
     "showLayersDynamic": "Show Layers Dynamic",
     "showFallbackAssigns": "Show Fallback Assigns"
   },
-  "assignerConfigsHint": {
+  "assignerProfilePropertiesPartHint": {
+    "sectionHeader": "Shows profile configuration",
+    "keyboard": "Keyboard package name referenced by the profile",
     "assignModel": "Logic model for current profile",
     "showLayersDynamic": "Show layers synchronized to the connected keyboard device",
     "showFallbackAssigns": "Show fallback assigns of the layer"

@@ -15,6 +15,7 @@ export const InputLogicOptionsPanelContent: FC = () => {
         text={texts.assignerDeviceSettingsPart.sectionHeader}
         icon="keyboard"
         xOffset={-2}
+        hint={texts.assignerDeviceSettingsPartHint.sectionHeader}
       />
       <dl class="table">
         <dt>{texts.assignerDeviceSettingsPart.simulatorMode}</dt>
