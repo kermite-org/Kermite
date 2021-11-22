@@ -181,7 +181,7 @@
     "routingChannel": "Routing Channel"
   },
   "assignerDeviceSettingsPartHint": {
-    "simulatorMode": "Runs the keyboard in simulation mode. Keystroke input logic is executed in the app.",
+    "simulatorMode": "Runs the keyboard in simulation mode. Key input logic is processed by the simulator implementation on the app.",
     "muteMode": "Mute keyboard output.",
     "systemLayout": "Select keyboard layout recognized by OS.",
     "routingChannel": "Select assign routing channel."
