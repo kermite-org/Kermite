@@ -117,9 +117,6 @@
     "writeAssignsButton": "プロファイルを保存して、デバイスにキーマッピングを書き込みます。",
     "selectCurrentProfile": "プロファイルを選択します。",
     "profileConfigurationButton": "プロファイル設定ダイアログを開きます。",
-    "keyboardBehaviorModeSelector": "キーボードの動作モードを設定します。(STD: スタンドアロン動作, SIM: シミュレーション動作)",
-    "keyboardSystemLayoutSelector": "OSが認識するキーボードレイアウトを設定します",
-    "routingChannelSelector": "アサインルーティングチャネルを選択します。",
     "connectedKeyboardName": "接続しているキーボードの品種名を表示しています。",
     "deviceConnectionStatus": "キーボードの接続状態を表示しています。"
   },
@@ -170,6 +167,19 @@
     "assignModel": "プロファイルのアサインモデルを表示しています。",
     "showLayersDynamic": "デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。",
     "showFallbackAssigns": "レイヤのデフォルトアサインを表示します。"
+  },
+  "assignerDeviceSettingsPart": {
+    "sectionHeader": "デバイス設定",
+    "simulatorMode": "シミュレータモード",
+    "muteMode": "ミュートモード",
+    "systemLayout": "システムレイアウト",
+    "routingChannel": "ルーティングチャネル"
+  },
+  "assignerDeviceSettingsPartHint": {
+    "simulatorMode": "キーボードをシミュレーションモードで動作させます。キー入力入力ロジックがアプリ内で処理されます。",
+    "muteMode": "キーボードの出力をミュートします。",
+    "systemLayout": "OSが認識するキーボードレイアウトを設定します",
+    "routingChannel": "アサインルーティングチャネルを選択します。"
   },
   "assignerProfileConfigModal": {
     "modalTitle": "プロファイル設定",

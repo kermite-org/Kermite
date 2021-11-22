@@ -6,6 +6,7 @@ type Props = {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
+  hint?: string;
 };
 
 export const ToggleSwitch: FC<Props> = ({
@@ -13,6 +14,7 @@ export const ToggleSwitch: FC<Props> = ({
   checked,
   onChange,
   disabled,
+  hint,
 }) => (
   <input
     type="checkbox"
@@ -21,6 +23,7 @@ export const ToggleSwitch: FC<Props> = ({
     checked={checked}
     onChange={(e) => onChange?.(e.currentTarget.checked)}
     disabled={disabled}
+    data-hint={hint}
   />
 );
 

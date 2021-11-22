@@ -20,7 +20,6 @@ export const BehaviorSelector: FC = () => {
       setChecked={setSimulatorMode}
       disabled={!isDeviceConnected}
       text="Simulator"
-      hint={texts.assignerTopBarHint.keyboardBehaviorModeSelector}
     />
   );
 };
@@ -46,6 +45,7 @@ export const BehaviorSelector2: FC = () => {
       checked={isSimulatorMode}
       onChange={setSimulatorMode}
       disabled={!isDeviceConnected}
+      hint={texts.assignerDeviceSettingsPartHint.simulatorMode}
     />
   );
 };
@@ -58,6 +58,7 @@ export const MuteModeSelector2: FC = () => {
       checked={isMuteMode}
       onChange={setMuteMode}
       disabled={!isDeviceConnected}
+      hint={texts.assignerDeviceSettingsPartHint.muteMode}
     />
   );
 };
@@ -77,7 +78,7 @@ export const LayoutStandardSelector: FC = () => {
       setCurrentItem={setSystemLayoutIndex}
       textDictionary={textDictionary}
       disabled={!isDeviceConnected}
-      hint={texts.assignerTopBarHint.keyboardSystemLayoutSelector}
+      hint={texts.assignerDeviceSettingsPartHint.systemLayout}
     />
   );
 };
@@ -97,7 +98,7 @@ export const RoutingChannelSelector: FC = () => {
       setCurrentItem={setRoutingChannel}
       textDictionary={textDictionary}
       disabled={!isDeviceConnected}
-      hint={texts.assignerTopBarHint.routingChannelSelector}
+      hint={texts.assignerDeviceSettingsPartHint.routingChannel}
     />
   );
 };
