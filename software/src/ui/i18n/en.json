@@ -8,6 +8,14 @@
     "developerModeOption": "developer mode",
     "version": "version"
   },
+  "welcomePageHint": {
+    "language_english": "Change UI language to English.",
+    "language_japanese": "Change UI language to Japanese.",
+    "profileSetupWizardButton": "Setup a keyboard with existing project resources.",
+    "projectQuickSetupWizardButton": "Define firmware and create a profile for a new keyboard.",
+    "darkThemeOption": "Switch theme.",
+    "developerModeOption": "Toggles developer mode. keyboard projects can be edit in developer mode."
+  },
   "wizardCommon": {
     "buttonNext": "next",
     "buttonBack": "back",
