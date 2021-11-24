@@ -1,8 +1,8 @@
 import {
-  validateResourceName,
+  IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
-  IPersistProfileFileData,
+  validateResourceName,
 } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import {
@@ -12,27 +12,43 @@ import {
   fspUnlink,
   fsRmdirSync,
   fsxEnsureFolderExists,
+  fsxReaddir,
   fsxReadJsonFile,
+  fsxRenameFile,
   globAsync,
   pathBasename,
   pathDirname,
   pathJoin,
 } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
+import { coreState } from '~/shell/modules/core';
+
+function getProjectProfileFolderName(projectId: string) {
+  const { allProjectPackageInfos } = coreState;
+  const project = allProjectPackageInfos.find(
+    (it) => it.projectId === projectId,
+  );
+  if (project) {
+    return `${projectId}_${project.packageName}`;
+  } else {
+    return projectId;
+  }
+}
 
 function getProfileFilePath(profileEntry: IProfileEntry): string {
   const { projectId, profileName } = profileEntry;
+  const folderName = getProjectProfileFolderName(projectId);
   return appEnv.resolveUserDataFilePath(
-    `data/profiles/${projectId}/${profileName.toLowerCase()}.profile.json`,
+    `data/profiles/${folderName}/${profileName.toLowerCase()}.profile.json`,
   );
 }
 
 async function getProfileEntry(
   relativeFilePath: string,
-  profilesFolderPath: string,
+  profilesBaseDir: string,
 ): Promise<IProfileEntry> {
-  const projectId = pathDirname(relativeFilePath);
-  const filePath = pathJoin(profilesFolderPath, relativeFilePath);
+  const projectId = pathDirname(relativeFilePath).slice(0, 6);
+  const filePath = pathJoin(profilesBaseDir, relativeFilePath);
   const userProfileData = (await fsxReadJsonFile(
     filePath,
   )) as IPersistProfileFileData;
@@ -61,22 +77,34 @@ export const profileManagerCore = {
   async ensureProfilesDirectoryExists() {
     const dataDirPath = appEnv.resolveUserDataFilePath('data');
     await fsxEnsureFolderExists(dataDirPath);
-    const profilesDirPath = appEnv.resolveUserDataFilePath('data/profiles');
-    await fsxEnsureFolderExists(profilesDirPath);
+    const profilesBaseDir = appEnv.resolveUserDataFilePath('data/profiles');
+    await fsxEnsureFolderExists(profilesBaseDir);
+  },
+  async migrateOldProfileFolderNames() {
+    const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
+    const folderNames = await fsxReaddir(profilesBaseDir);
+    for (const folderName of folderNames) {
+      const modFolderName = getProjectProfileFolderName(folderName);
+      if (modFolderName !== folderName) {
+        const srcPath = pathJoin(profilesBaseDir, folderName);
+        const dstPath = pathJoin(profilesBaseDir, modFolderName);
+        console.log(`rename folder ${folderName} ${modFolderName}`);
+        await fsxRenameFile(srcPath, dstPath);
+      }
+    }
   },
   async listAllProfileEntries(): Promise<IProfileEntry[]> {
-    const profilesFolderPath = appEnv.resolveUserDataFilePath(`data/profiles`);
+    const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
     const relativeFilePaths = await globAsync(
       '*/*.profile.json',
-      profilesFolderPath,
+      profilesBaseDir,
     );
-    return (
-      await Promise.all(
-        relativeFilePaths.map((relPath) =>
-          getProfileEntry(relPath, profilesFolderPath),
-        ),
-      )
-    ).filter(
+    const allProfileEntries = await Promise.all(
+      relativeFilePaths.map((relPath) =>
+        getProfileEntry(relPath, profilesBaseDir),
+      ),
+    );
+    return allProfileEntries.filter(
       (it) =>
         validateResourceName(it.profileName, 'profile name') === undefined,
     );
