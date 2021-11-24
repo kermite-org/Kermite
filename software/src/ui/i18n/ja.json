@@ -8,6 +8,14 @@
     "developerModeOption": "開発者モード",
     "version": "バージョン"
   },
+  "welcomePageHint": {
+    "language_english": "UIを英語表示に切り替えます。",
+    "language_japanese": "UIを日本語表示に切り替えます。",
+    "profileSetupWizardButton": "既存のキーボードのセットアップを行います。",
+    "projectQuickSetupWizardButton": "新しいキーボードに対してファームウェアを定義してプロファイルを作成します。",
+    "darkThemeOption": "テーマを切り替えます。",
+    "developerModeOption": "開発者モードを切り替えます。開発者モードではキーボード定義を編集できます。"
+  },
   "wizardCommon": {
     "buttonNext": "次へ",
     "buttonBack": "戻る",
@@ -305,7 +313,9 @@
     "shapePreview": "プレビュー",
     "firmwareUpdate": "デバイス",
     "settings": "設定",
-    "projectSelection": "キーボード"
+    "projectSelection": "キーボード",
+    "projectResourceEdit": "プロジェクト",
+    "entrance": "スタート"
   },
   "sideMenuAppsHint": {
     "assigner": "キーアサインを編集します。",
@@ -313,6 +323,9 @@
     "presetBrowser": "プリセットを閲覧します。",
     "shapePreview": "キーボードの形状を表示します。",
     "firmwareUpdate": "デバイスの管理を行います。",
-    "settings": "アプリの設定を行います。"
+    "settings": "アプリの設定を行います。",
+    "projectSelection": "キーボード定義を選択します。",
+    "projectResourceEdit": "プロジェクトリソースを編集します。",
+    "entrance": "スタート画面です。"
   }
 }

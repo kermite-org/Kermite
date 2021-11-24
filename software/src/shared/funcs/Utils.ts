@@ -233,6 +233,16 @@ export function copyObjectPropsRecursive<T>(target: T, source: T) {
   }
 }
 
+export function injectObjectPropsRecursive<T>(target: T, source: T) {
+  for (const key in source) {
+    if (typeof source[key] === 'object' && typeof target[key] === 'object') {
+      injectObjectPropsRecursive(target[key], source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+}
+
 export function makeObjectPropsOverrideRecursive<T>(original: T, input: T): T {
   const merged: T = {} as any;
   for (const key in original) {

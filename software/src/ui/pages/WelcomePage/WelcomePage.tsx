@@ -29,6 +29,7 @@ export const WelcomePage: FC = () => {
             className="button"
             active={isLanguageEnglish}
             onClick={setLanguageEnglish}
+            hint={texts.welcomePageHint.language_english}
           >
             {texts.welcomePage.language_english}
           </WelcomePageButton>
@@ -36,6 +37,7 @@ export const WelcomePage: FC = () => {
             className="button"
             active={isLanguageJapanese}
             onClick={setLanguageJapanese}
+            hint={texts.welcomePageHint.language_japanese}
           >
             {texts.welcomePage.language_japanese}
           </WelcomePageButton>
@@ -44,6 +46,7 @@ export const WelcomePage: FC = () => {
           <WelcomePageButton
             className="button"
             onClick={showProfileSetupWizard}
+            hint={texts.welcomePageHint.profileSetupWizardButton}
           >
             {texts.welcomePage.profileSetupWizardButton}
           </WelcomePageButton>
@@ -52,6 +55,7 @@ export const WelcomePage: FC = () => {
           <WelcomePageButton
             className="button"
             onClick={showProjectQuickSetupWizard}
+            hint={texts.welcomePageHint.projectQuickSetupWizardButton}
             if={isDeveloperMode}
           >
             {texts.welcomePage.projectQuickSetupWizardButton}
@@ -66,6 +70,7 @@ export const WelcomePage: FC = () => {
           text={texts.welcomePage.darkThemeOption}
           checked={isDarkTheme}
           onChange={setDarkTheme}
+          hint={texts.welcomePageHint.darkThemeOption}
         />
       </div>
       <div className="developer-mode-option-area">
@@ -73,6 +78,7 @@ export const WelcomePage: FC = () => {
           text={texts.welcomePage.developerModeOption}
           checked={isDeveloperMode}
           setChecked={setDeveloperMode}
+          hint={texts.welcomePageHint.developerModeOption}
         />
       </div>
     </div>
