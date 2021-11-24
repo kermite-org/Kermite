@@ -15,12 +15,14 @@ export const ProfileConfigurationDisplayPart = () => {
 
   return (
     <div css={style}>
-      <div>keyboard: {keyboardName}</div>
+      <div data-hint={texts.assignerProfilePropertiesPartHint.keyboard}>
+        {texts.assignerProfilePropertiesPart.keyboard}: {keyboardName}
+      </div>
       <div
-        data-hint={texts.assignerConfigsHint.assignModel}
+        data-hint={texts.assignerProfilePropertiesPartHint.assignModel}
         if={isEditProfileAvailable}
       >
-        {texts.assignerConfigs.assignModel}: {currentAssignType}
+        {texts.assignerProfilePropertiesPart.assignModel}: {currentAssignType}
       </div>
     </div>
   );
