@@ -3,7 +3,7 @@ import {
   encodeProjectResourceItemKey,
   fallbackStandardFirmwareEntry,
   fallbackStandardFirmwareConfig,
-  getNextFirmwareId,
+  getNextFirmwareVariationId,
   IStandardFirmwareConfig,
   IStandardFirmwareEntry,
 } from '~/shared';
@@ -66,7 +66,9 @@ const actions = {
           firmwareName,
         )!;
     } else {
-      const newVariationId = getNextFirmwareId(readers.existingVariationIds);
+      const newVariationId = getNextFirmwareVariationId(
+        readers.existingVariationIds,
+      );
       store.sourceEntry = {
         type: 'standard',
         variationId: newVariationId,

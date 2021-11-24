@@ -4,7 +4,7 @@ import {
   compareObjectByJsonStringify,
   copyObjectProps,
   fallbackStandardFirmwareConfig,
-  getNextFirmwareId,
+  getNextFirmwareVariationId,
   IProjectLayoutEntry,
   IProjectPackageInfo,
   IStandardFirmwareConfig,
@@ -105,7 +105,7 @@ const actions = {
   resetConfigurations() {
     copyObjectProps(state, createDefaultState());
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
-    state.variationId = getNextFirmwareId([]);
+    state.variationId = getNextFirmwareVariationId([]);
     actions.loadFirmwareConfigToEditor();
   },
   loadFirmwareConfigToEditor() {
@@ -117,14 +117,14 @@ const actions = {
   setKeyboardName(keyboardName: string) {
     state.keyboardName = keyboardName;
     state.projectId = projectQuickSetupStoreHelpers.generateUniqueProjectId();
-    state.variationId = getNextFirmwareId([]);
+    state.variationId = getNextFirmwareVariationId([]);
   },
   writeFirmwareConfig(data: IStandardFirmwareConfig) {
     const changed = !compareObjectByJsonStringify(state.firmwareConfig, data);
     if (changed) {
       state.firmwareConfig = data;
       const currentFirmwareId = state.variationId;
-      state.variationId = getNextFirmwareId(
+      state.variationId = getNextFirmwareVariationId(
         (currentFirmwareId && [currentFirmwareId]) || [],
       );
     }
