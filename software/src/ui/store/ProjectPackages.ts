@@ -11,9 +11,10 @@ import {
   IProjectProfileEntry,
   IProjectResourceItemType,
   IResourceOrigin,
+  isNumberInRange,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { uiReaders, dispatchCoreAction, uiState } from '~/ui/store/base';
+import { dispatchCoreAction, uiReaders, uiState } from '~/ui/store/base';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -154,6 +155,19 @@ function copyItemInArray<T, K extends keyof T>(
   }
 }
 
+function shiftOrderItemInArray<T, K extends keyof T>(
+  items: T[],
+  nameFiled: K,
+  targetItemName: Extract<T[K], string>,
+  direction: -1 | 1,
+) {
+  const index = items.findIndex((it) => it[nameFiled] === targetItemName);
+  const newIndex = index + direction;
+  if (isNumberInRange(newIndex, 0, items.length - 1)) {
+    [items[index], items[newIndex]] = [items[newIndex], items[index]];
+  }
+}
+
 type IResourceItemTypeMap = {
   profile: IProjectProfileEntry;
   layout: IProjectLayoutEntry;
@@ -238,6 +252,21 @@ export const projectPackagesWriter = {
           allItems.map((it) => it.variationId),
         );
       }
+    });
+  },
+  shiftLocalProjectResourceItemOrder<T extends IProjectResourceItemType>(
+    type: T,
+    targetItemName: string,
+    direction: -1 | 1,
+  ) {
+    const { itemsField, itemNameField } = fieldNamesMap[type];
+    patchLocalEditProject((draft) => {
+      shiftOrderItemInArray<any, any>(
+        draft[itemsField],
+        itemNameField,
+        targetItemName,
+        direction,
+      );
     });
   },
 };
