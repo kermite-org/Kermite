@@ -5,7 +5,11 @@ import {
   IProjectPackageInfo,
   sortOrderBy,
 } from '~/shared';
-import { colors, IProjectKeyboardListProjectItem } from '~/ui/base';
+import {
+  colors,
+  getProjectDisplayNamePrefix,
+  IProjectKeyboardListProjectItem,
+} from '~/ui/base';
 import { ProjectSelectionPartComponent } from '~/ui/fabrics';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiReaders } from '~/ui/store';
@@ -14,14 +18,19 @@ const helpers = {
   createSourceProjectItems(
     allProjectPackageInfos: IProjectPackageInfo[],
   ): IProjectKeyboardListProjectItem[] {
-    const filteredProjects = allProjectPackageInfos.filter(
-      (info) => info.origin === 'online',
-    );
-    filteredProjects.sort(sortOrderBy((it) => it.keyboardName));
-    return filteredProjects.map((info) => ({
+    const onlineProjects = allProjectPackageInfos
+      .filter((info) => info.origin === 'online')
+      .sort(sortOrderBy((it) => it.keyboardName));
+    const localProjects = allProjectPackageInfos
+      .filter((info) => info.origin === 'local' && !info.isDraft)
+      .sort(sortOrderBy((it) => it.keyboardName));
+
+    return [...onlineProjects, ...localProjects].map((info) => ({
       projectId: info.projectId,
       projectKey: info.projectKey,
-      keyboardName: info.keyboardName,
+      keyboardName: `${getProjectDisplayNamePrefix(info.origin, false)}${
+        info.keyboardName
+      }`,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
