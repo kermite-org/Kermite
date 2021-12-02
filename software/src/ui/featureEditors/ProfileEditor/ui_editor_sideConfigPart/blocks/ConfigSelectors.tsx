@@ -1,14 +1,10 @@
 import { FC, jsx } from 'alumina';
-import { texts } from '~/ui/base';
+import { ISelectorOptionN, texts } from '~/ui/base';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
 } from '~/ui/commonModels/ParameterBasedModeModels';
-import {
-  CheckBoxLine,
-  DualItemsHoverSelector,
-  ToggleSwitch,
-} from '~/ui/components';
+import { CheckBoxLine, GeneralSelectorN, ToggleSwitch } from '~/ui/components';
 import { keyboardBehaviorModeModule, uiReaders } from '~/ui/store';
 
 export const BehaviorSelector: FC = () => {
@@ -65,18 +61,16 @@ export const MuteModeSelector2: FC = () => {
 
 export const LayoutStandardSelector: FC = () => {
   const { systemLayoutIndex, setSystemLayoutIndex } = useSystemLayoutModel();
-  const layoutIndices: number[] = [0, 1];
-  const textDictionary: { [key in number]: string } = {
-    0: 'US',
-    1: 'JIS',
-  };
   const { isDeviceConnected } = uiReaders;
+  const options: ISelectorOptionN[] = [
+    { value: 0, label: 'US' },
+    { value: 1, label: 'JIS' },
+  ];
   return (
-    <DualItemsHoverSelector
-      items={layoutIndices}
-      currentItem={systemLayoutIndex}
-      setCurrentItem={setSystemLayoutIndex}
-      textDictionary={textDictionary}
+    <GeneralSelectorN
+      options={options}
+      value={systemLayoutIndex}
+      setValue={setSystemLayoutIndex}
       disabled={!isDeviceConnected}
       hint={texts.assignerDeviceSettingsPartHint.systemLayout}
     />
@@ -85,18 +79,16 @@ export const LayoutStandardSelector: FC = () => {
 
 export const RoutingChannelSelector: FC = () => {
   const { routingChannel, setRoutingChannel } = useRoutingChannelModel();
-  const channelValues: number[] = [0, 1];
-  const textDictionary: { [key in number]: string } = {
-    0: 'Main',
-    1: 'Alter',
-  };
   const { isDeviceConnected } = uiReaders;
+  const options: ISelectorOptionN[] = [
+    { value: 0, label: 'Main' },
+    { value: 1, label: 'Alter' },
+  ];
   return (
-    <DualItemsHoverSelector
-      items={channelValues}
-      currentItem={routingChannel}
-      setCurrentItem={setRoutingChannel}
-      textDictionary={textDictionary}
+    <GeneralSelectorN
+      options={options}
+      value={routingChannel}
+      setValue={setRoutingChannel}
       disabled={!isDeviceConnected}
       hint={texts.assignerDeviceSettingsPartHint.routingChannel}
     />

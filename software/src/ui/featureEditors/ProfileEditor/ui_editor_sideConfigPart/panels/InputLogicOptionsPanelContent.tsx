@@ -44,6 +44,7 @@ const style = css`
     display: grid;
     grid-template-columns: auto auto;
     margin-top: 2px;
+    font-size: 15px;
 
     > dt {
       margin-right: 10px;
@@ -51,7 +52,7 @@ const style = css`
 
     > dt,
     dd {
-      min-height: 26px;
+      min-height: 30px;
       display: flex;
       align-items: center;
     }
