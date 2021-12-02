@@ -10,7 +10,7 @@ import {
   getProjectDisplayNamePrefix,
   IProjectKeyboardListProjectItem,
 } from '~/ui/base';
-import { ProjectSelectionPartComponent } from '~/ui/fabrics';
+import { ProjectKeyboardList } from '~/ui/fabrics';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiReaders } from '~/ui/store';
 
@@ -48,10 +48,10 @@ export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
 
   return (
     <div class={style}>
-      <ProjectSelectionPartComponent
-        sourceProjectItems={sourceProjectItems}
-        projectKey={targetProjectKey}
-        setProjectKey={setTargetProjectKey}
+      <ProjectKeyboardList
+        projectItems={sourceProjectItems}
+        currentProjectKey={targetProjectKey}
+        setCurrentProjectKey={setTargetProjectKey}
       />
     </div>
   );
