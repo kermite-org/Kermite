@@ -25,7 +25,7 @@ const PageRoot = () => {
     <div style={{ height: '100%' }}>
       {/* <AluminaDebugPage /> */}
       {/* <AluminaDebugPage2 /> */}
-      <AluminaDebugPage3 />
+      {/* <AluminaDebugPage3 /> */}
       {/* <AluminaDebugPage4 /> */}
       {/* <AluminaDebugPage5 /> */}
       {/* <MockPageLayouterDevelopment /> */}
@@ -39,7 +39,7 @@ const PageRoot = () => {
       {/* <GooberDevelopmentPage /> */}
       {/* <GooberDevelopmentPage2 /> */}
       {/* <ShortCssDevPage /> */}
-      {/* <ComponentCatalogPage /> */}
+      <ComponentCatalogPage />
       {/* <SvgScalingDevPage /> */}
       {/* <SpaLayoutDebugPage /> */}
     </div>
