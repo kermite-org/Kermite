@@ -47,6 +47,7 @@ export interface IAppIpcContract {
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
+    file_loadJsonFileContent(filePath: string): Promise<any>;
 
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 

@@ -104,6 +104,7 @@ export class ApplicationRoot {
         fileDialogLoaders.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
+      file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,
 
       platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
       global_lazyInitializeServices: () => this.lazyInitializeServices(),
