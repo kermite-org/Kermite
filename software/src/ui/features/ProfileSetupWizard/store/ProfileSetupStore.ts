@@ -2,6 +2,7 @@ import { useEffect } from 'alumina';
 import {
   copyObjectProps,
   createPresetKey,
+  createProjectKey,
   fallbackProjectPackageInfo,
   getFileBaseNameFromFilePath,
   getOriginAndProjectIdFromProjectKey,
@@ -60,49 +61,8 @@ const readers = {
   },
 };
 
-const actions = {
-  setTargetProjectKey(projectKey: string) {
-    state.targetProjectKey = projectKey;
-    const projectInfo = readers.targetProjectInfo;
-    state.variationId = projectInfo.firmwares[0]?.variationId || '';
-    state.presetKey = createPresetKey(
-      'blank',
-      projectInfo.layouts[0]?.layoutName,
-    );
-  },
-  setVariationId(variationId: string) {
-    state.variationId = variationId;
-  },
-  setPresetKey(presetKey: string) {
-    state.presetKey = presetKey;
-  },
-  clearPersistState() {
-    const storageKey = constants.persistDataStorageKey;
-    UiLocalStorage.removeItem(storageKey);
-    copyObjectProps(state, createDefaultState());
-  },
-  async createProfile() {
-    const { targetProjectKey, presetKey } = state;
-    const { origin, projectId } =
-      getOriginAndProjectIdFromProjectKey(targetProjectKey);
-    await globalSettingsWriter.writeValue('globalProjectSpec', {
-      origin,
-      projectId,
-    });
-    const presetSpec = getPresetSpecFromPresetKey(presetKey);
-    await dispatchCoreAction({
-      profile_createProfileUnnamed: {
-        targetProjectOrigin: origin,
-        targetProjectId: projectId,
-        presetSpec,
-      },
-    });
-  },
-  async handleSelectLocalPackageToImport() {
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (!filePath) {
-      return;
-    }
+const actionsImpl = {
+  async importLocalPackageFile(filePath: string) {
     if (!filePath?.endsWith('.kmpkg.json')) {
       await modalError(
         'Invalid target file. Only .kmpkg.json file can be loaded.',
@@ -150,6 +110,63 @@ const actions = {
       }
     }
     await dispatchCoreAction({ project_addLocalProjectFromFile: { filePath } });
+
+    if (
+      uiReaders.allProjectPackageInfos.find(
+        (it) => it.origin === 'local' && it.projectId === loadedProjectId,
+      )
+    ) {
+      state.targetProjectKey = createProjectKey('local', loadedProjectId);
+    }
+  },
+};
+
+const actions = {
+  setTargetProjectKey(projectKey: string) {
+    state.targetProjectKey = projectKey;
+    const projectInfo = readers.targetProjectInfo;
+    state.variationId = projectInfo.firmwares[0]?.variationId || '';
+    state.presetKey = createPresetKey(
+      'blank',
+      projectInfo.layouts[0]?.layoutName,
+    );
+  },
+  setVariationId(variationId: string) {
+    state.variationId = variationId;
+  },
+  setPresetKey(presetKey: string) {
+    state.presetKey = presetKey;
+  },
+  clearPersistState() {
+    const storageKey = constants.persistDataStorageKey;
+    UiLocalStorage.removeItem(storageKey);
+    copyObjectProps(state, createDefaultState());
+  },
+  async createProfile() {
+    const { targetProjectKey, presetKey } = state;
+    const { origin, projectId } =
+      getOriginAndProjectIdFromProjectKey(targetProjectKey);
+    await globalSettingsWriter.writeValue('globalProjectSpec', {
+      origin,
+      projectId,
+    });
+    const presetSpec = getPresetSpecFromPresetKey(presetKey);
+    await dispatchCoreAction({
+      profile_createProfileUnnamed: {
+        targetProjectOrigin: origin,
+        targetProjectId: projectId,
+        presetSpec,
+      },
+    });
+  },
+  async handleLocalPackageFileDrop(filePath: string) {
+    await actionsImpl.importLocalPackageFile(filePath);
+  },
+  async handleSelectLocalPackageToImport() {
+    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
+    if (filePath) {
+      await actionsImpl.importLocalPackageFile(filePath);
+    }
   },
 };
 

@@ -1,25 +1,66 @@
-import { css, FC, jsx } from 'alumina';
+import { css, FC, jsx, useEffect, useRef } from 'alumina';
 import { Icon } from '~/ui/components';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
   onClick: () => void;
+  onFileDrop: (filePath: string) => void;
 };
 
-export const ProjectKeyboardListProjectAddCard: FC<Props> = ({ onClick }) => (
-  <div css={style} onClick={onClick}>
-    <div className="inner">
-      <div className="frame">
-        <Icon spec="add" size={32} />
-        <div class="texts">
-          Add keyboard definition
-          <br />
-          (*.kmpkg.json)
+export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
+  onClick,
+  onFileDrop,
+}) => {
+  const refBaseDiv = useRef<HTMLElement>();
+
+  useEffect(() => {
+    const baseDiv = refBaseDiv.current!;
+
+    const onDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      baseDiv.classList.add('--drop-hover');
+    };
+
+    const onDragLeave = (e: DragEvent) => {
+      e.preventDefault();
+      baseDiv.classList.remove('--drop-hover');
+    };
+
+    const onDrop = (e: DragEvent) => {
+      e.preventDefault();
+      const file = e.dataTransfer?.files[0];
+      if (file && file.type === 'application/json') {
+        onFileDrop(file.path);
+      }
+      baseDiv.classList.remove('--drop-hover');
+    };
+
+    baseDiv.addEventListener('dragover', onDragOver);
+    baseDiv.addEventListener('dragleave', onDragLeave);
+    baseDiv.addEventListener('drop', onDrop);
+
+    return () => {
+      baseDiv.removeEventListener('dragover', onDragOver);
+      baseDiv.removeEventListener('dragleave', onDragLeave);
+      baseDiv.removeEventListener('drop', onDrop);
+    };
+  }, []);
+
+  return (
+    <div css={style} onClick={onClick} ref={refBaseDiv}>
+      <div className="inner">
+        <div className="frame">
+          <Icon spec="add" size={32} />
+          <div class="texts">
+            Add keyboard definition
+            <br />
+            (*.kmpkg.json)
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const style = css`
   ${projectKeyboardListCardCommonStyles.base};
@@ -55,5 +96,10 @@ const style = css`
     > .inner {
       background: #f6fcff;
     }
+  }
+
+  &.--drop-hover > .inner > .frame {
+    color: #0af;
+    border: dashed 3px #0af;
   }
 `;

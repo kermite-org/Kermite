@@ -41,8 +41,11 @@ const helpers = {
 
 export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
   const { targetProjectKey } = profileSetupStore.state;
-  const { setTargetProjectKey, handleSelectLocalPackageToImport } =
-    profileSetupStore.actions;
+  const {
+    setTargetProjectKey,
+    handleSelectLocalPackageToImport,
+    handleLocalPackageFileDrop,
+  } = profileSetupStore.actions;
   const sourceProjectItems = useMemo(
     () => helpers.createSourceProjectItems(uiReaders.allProjectPackageInfos),
     [uiReaders.allProjectPackageInfos],
@@ -57,6 +60,7 @@ export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
         renderAdditionalItem={() => (
           <ProjectKeyboardListProjectAddCard
             onClick={handleSelectLocalPackageToImport}
+            onFileDrop={handleLocalPackageFileDrop}
           />
         )}
       />
