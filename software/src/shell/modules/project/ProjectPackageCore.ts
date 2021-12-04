@@ -28,6 +28,19 @@ if (appEnv.isDevelopment) {
   // configs.debugUseLocalRepositoryPackages = true;
 }
 
+function checkProjectFileContentSchema(
+  data: IProjectPackageFileContent,
+): boolean {
+  return (
+    data.formatRevision === 'PKG0' &&
+    data.keyboardName !== undefined &&
+    data.projectId !== undefined &&
+    Array.isArray(data.firmwares) &&
+    Array.isArray(data.layouts) &&
+    Array.isArray(data.profiles)
+  );
+}
+
 function convertPackageFileContentToPackageInfo(
   data: IProjectPackageFileContent,
   origin: IResourceOrigin,
@@ -65,21 +78,26 @@ async function loadProjectPackageFiles(
   origin: IResourceOrigin,
 ): Promise<IProjectPackageInfo[]> {
   const packageNames = await fsxListFileBaseNames(folderPath, '.kmpkg.json');
-  return await Promise.all(
-    packageNames.map(async (packageName) => {
-      const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
-      const data = (await fsxReadJsonFile(
-        filePath,
-      )) as IProjectPackageFileContent;
-      migrateProjectPackageData(data);
-      return convertPackageFileContentToPackageInfo(
-        data,
-        origin,
-        packageName,
-        true,
-      );
-    }),
-  );
+  return (
+    await Promise.all(
+      packageNames.map(async (packageName) => {
+        const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
+        const data = (await fsxReadJsonFile(
+          filePath,
+        )) as IProjectPackageFileContent;
+        if (!checkProjectFileContentSchema(data)) {
+          return undefined;
+        }
+        migrateProjectPackageData(data);
+        return convertPackageFileContentToPackageInfo(
+          data,
+          origin,
+          packageName,
+          true,
+        );
+      }),
+    )
+  ).filter((it) => it) as IProjectPackageInfo[];
 }
 
 async function loadDraftProjectPackageFile(
@@ -89,6 +107,9 @@ async function loadDraftProjectPackageFile(
     const data = (await fsxReadJsonFile(
       filePath,
     )) as IProjectPackageFileContent;
+    if (!checkProjectFileContentSchema(data)) {
+      return undefined;
+    }
     migrateProjectPackageData(data);
     const projectInfo = convertPackageFileContentToPackageInfo(
       data,
@@ -185,8 +206,10 @@ async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
   const data = (await fsxReadJsonFile(
     sourceFilePath,
   )) as IProjectPackageFileContent;
+  if (!checkProjectFileContentSchema(data)) {
+    throw new Error('invalid package file content');
+  }
   migrateProjectPackageData(data);
-  // todo: check data schema
   const destFilePath = getUserProjectFilePath(packageName, false);
   await fsxWriteJsonFile(destFilePath, data);
 }
