@@ -4,6 +4,7 @@ import {
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
+  uniqueArrayItemsByField,
   validateResourceName,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
@@ -78,17 +79,18 @@ async function loadProjectPackageFiles(
   origin: IResourceOrigin,
 ): Promise<IProjectPackageInfo[]> {
   const packageNames = await fsxListFileBaseNames(folderPath, '.kmpkg.json');
-  return (
+  const items = (
     await Promise.all(
       packageNames.map(async (packageName) => {
         const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
         const data = (await fsxReadJsonFile(
           filePath,
         )) as IProjectPackageFileContent;
+        migrateProjectPackageData(data);
         if (!checkProjectFileContentSchema(data)) {
+          console.log(`drop package ${origin} ${packageName}`);
           return undefined;
         }
-        migrateProjectPackageData(data);
         return convertPackageFileContentToPackageInfo(
           data,
           origin,
@@ -98,6 +100,7 @@ async function loadProjectPackageFiles(
       }),
     )
   ).filter((it) => it) as IProjectPackageInfo[];
+  return uniqueArrayItemsByField(items, 'projectId');
 }
 
 async function loadDraftProjectPackageFile(
@@ -107,10 +110,10 @@ async function loadDraftProjectPackageFile(
     const data = (await fsxReadJsonFile(
       filePath,
     )) as IProjectPackageFileContent;
+    migrateProjectPackageData(data);
     if (!checkProjectFileContentSchema(data)) {
       return undefined;
     }
-    migrateProjectPackageData(data);
     const projectInfo = convertPackageFileContentToPackageInfo(
       data,
       'local',
@@ -206,10 +209,10 @@ async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
   const data = (await fsxReadJsonFile(
     sourceFilePath,
   )) as IProjectPackageFileContent;
+  migrateProjectPackageData(data);
   if (!checkProjectFileContentSchema(data)) {
     throw new Error('invalid package file content');
   }
-  migrateProjectPackageData(data);
   const destFilePath = getUserProjectFilePath(packageName, false);
   await fsxWriteJsonFile(destFilePath, data);
 }
