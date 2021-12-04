@@ -37,7 +37,7 @@ const style = css`
       justify-content: center;
       align-items: center;
 
-      color: #999;
+      color: #888;
 
       > .texts {
         margin-top: 5px;
