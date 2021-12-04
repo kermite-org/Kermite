@@ -180,6 +180,17 @@ async function deleteUserProjectPackageFileImpl(
   await fsxDeleteFile(filePath);
 }
 
+async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
+  const packageName = pathBasename(sourceFilePath, '.kmpkg.json');
+  const data = (await fsxReadJsonFile(
+    sourceFilePath,
+  )) as IProjectPackageFileContent;
+  migrateProjectPackageData(data);
+  // todo: check data schema
+  const destFilePath = getUserProjectFilePath(packageName, false);
+  await fsxWriteJsonFile(destFilePath, data);
+}
+
 export const projectPackageProvider = {
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
     if (configs.debugUseLocalRepositoryPackages) {
@@ -199,6 +210,9 @@ export const projectPackageProvider = {
   },
   async deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
     await deleteUserProjectPackageFileImpl(packageName, isDraft);
+  },
+  async importLocalProjectPackageFromFile(filePath: string) {
+    await importLocalProjectPackageFromFileImpl(filePath);
   },
   async openLocalProjectsFolder() {
     const folderPath = getUserProjectsFolderPath();

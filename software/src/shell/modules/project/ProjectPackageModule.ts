@@ -75,6 +75,10 @@ export const projectPackageModule = createCoreModule({
     const project = projectPackageModuleHelper.createLocalProject(keyboardName);
     await projectPackageModule.project_saveLocalProjectPackageInfo(project);
   },
+  async project_addLocalProjectFromFile({ filePath }) {
+    await projectPackageProvider.importLocalProjectPackageFromFile(filePath);
+    await projectPackageModuleHelper.reEnumerateAllProjectPackages();
+  },
   async project_createLocalProjectBasedOnOnlineProject({ projectId }) {
     const onlineProject = projectPackageModuleHelper.findProjectInfo(
       'online',
