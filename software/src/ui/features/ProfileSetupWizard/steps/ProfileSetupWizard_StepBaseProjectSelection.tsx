@@ -11,6 +11,7 @@ import {
   IProjectKeyboardListProjectItem,
 } from '~/ui/base';
 import { ProjectKeyboardList } from '~/ui/fabrics';
+import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.ProjectAddCard';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiReaders } from '~/ui/store';
 
@@ -40,10 +41,11 @@ const helpers = {
 
 export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
   const { targetProjectKey } = profileSetupStore.state;
-  const { setTargetProjectKey } = profileSetupStore.actions;
+  const { setTargetProjectKey, handleSelectLocalPackageToImport } =
+    profileSetupStore.actions;
   const sourceProjectItems = useMemo(
     () => helpers.createSourceProjectItems(uiReaders.allProjectPackageInfos),
-    [],
+    [uiReaders.allProjectPackageInfos],
   );
 
   return (
@@ -52,6 +54,11 @@ export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
         projectItems={sourceProjectItems}
         currentProjectKey={targetProjectKey}
         setCurrentProjectKey={setTargetProjectKey}
+        renderAdditionalItem={() => (
+          <ProjectKeyboardListProjectAddCard
+            onClick={handleSelectLocalPackageToImport}
+          />
+        )}
       />
     </div>
   );
