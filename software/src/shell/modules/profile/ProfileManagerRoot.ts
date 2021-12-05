@@ -131,6 +131,7 @@ function onCoreStateChange(partialState: Partial<ICoreState>) {
 async function initializeAsync() {
   local.globalProjectId = coreState.globalSettings.globalProjectSpec?.projectId;
   await profileManagerCore.ensureProfilesDirectoryExists();
+  await profileManagerCore.migrateOldProfileFolderNames();
   const allProfileEntries = await profileManagerCore.listAllProfileEntries();
   commitCoreState({ allProfileEntries });
   const loadedEditSource = loadInitialEditSource();

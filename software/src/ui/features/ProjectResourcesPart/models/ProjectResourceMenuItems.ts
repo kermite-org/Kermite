@@ -35,5 +35,20 @@ export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
       handler: projectResourceStore.actions.deleteSelectedResourceItem,
       disabled: !projectResourceStore.readers.isItemSelected,
     },
+    { type: 'separator' },
+    {
+      type: 'menuEntry',
+      text: 'move up',
+      handler:
+        projectResourceStore.actions.shiftSelectedResourceItemOrderBackward,
+      disabled: !projectResourceStore.readers.canShiftSelectedItemBackward,
+    },
+    {
+      type: 'menuEntry',
+      text: 'move down',
+      handler:
+        projectResourceStore.actions.shiftSelectedResourceItemOrderForward,
+      disabled: !projectResourceStore.readers.canShiftSelectedItemForward,
+    },
   ];
 }

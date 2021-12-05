@@ -1,7 +1,7 @@
 import { css, FC, jsx, useLocal } from 'alumina';
 import {
   encodeProjectResourceItemKey,
-  getNextFirmwareId,
+  getNextFirmwareVariationId,
   ICustomFirmwareEntry,
 } from '~/shared';
 import { colors } from '~/ui/base';
@@ -20,7 +20,9 @@ const helpers = {
     return projectInfo?.firmwares.map((it) => it.variationId) || [];
   },
   async saveFirmwareEntry(firmwareName: string, customFirmwareId: string) {
-    const variationId = getNextFirmwareId(helpers.getExistingVariationIds());
+    const variationId = getNextFirmwareVariationId(
+      helpers.getExistingVariationIds(),
+    );
     const newFirmwareEntry: ICustomFirmwareEntry = {
       type: 'custom',
       variationId,

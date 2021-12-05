@@ -153,7 +153,11 @@ const helpers = {
         (layout) => layout.layoutName === presetSignifier,
       );
       if (layout) {
-        return { ...fallbackProfileData, keyboardDesign: layout.data };
+        return {
+          ...fallbackProfileData,
+          keyboardDesign: layout.data,
+          projectId: projectInfo.projectId,
+        };
       }
     } else if (presetType === 'projectProfile') {
       const profile = projectInfo.profiles.find(

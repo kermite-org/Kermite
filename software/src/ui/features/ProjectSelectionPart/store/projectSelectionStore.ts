@@ -10,6 +10,10 @@ import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { globalSettingsWriter, uiReaders } from '~/ui/store/base';
 import { createSimpleSelector2 } from '~/ui/utils';
 
+const configs = {
+  showAllPackagesForNonDeveloperMode: true,
+};
+
 type IState = {
   tabResourceOrigin: IResourceOrigin;
 };
@@ -22,6 +26,7 @@ const helpers = {
   createSourceProjectItems(
     allProjectPackageInfos: IProjectPackageInfo[],
     resourceOrigin: IResourceOrigin,
+    namePrefix: string = '',
   ): IProjectKeyboardListProjectItem[] {
     const filteredProjects = allProjectPackageInfos.filter(
       (info) => info.origin === resourceOrigin,
@@ -33,18 +38,45 @@ const helpers = {
       projectId: info.projectId,
       projectKey: info.projectKey,
       keyboardName: info.isDraft
-        ? `(draft)${info.keyboardName}`
-        : info.keyboardName,
+        ? `${namePrefix}(draft)${info.keyboardName}`
+        : `${namePrefix}${info.keyboardName}`,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
     }));
   },
+  createSourceProjectItemsWrapped(
+    allProjectPackageInfos: IProjectPackageInfo[],
+    resourceOrigin: IResourceOrigin,
+    isDeveloperMode: boolean,
+  ): IProjectKeyboardListProjectItem[] {
+    if (configs.showAllPackagesForNonDeveloperMode && !isDeveloperMode) {
+      const onlineProjects = helpers.createSourceProjectItems(
+        allProjectPackageInfos,
+        'online',
+      );
+      const localProjects = helpers.createSourceProjectItems(
+        allProjectPackageInfos.filter((it) => !it.isDraft),
+        'local',
+        '(local)',
+      );
+      return [...onlineProjects, ...localProjects];
+    } else {
+      return helpers.createSourceProjectItems(
+        allProjectPackageInfos,
+        resourceOrigin,
+      );
+    }
+  },
 };
 
 const sourceProjectItemsSelector = createSimpleSelector2(
-  helpers.createSourceProjectItems,
-  () => [uiReaders.allProjectPackageInfos, state.tabResourceOrigin],
+  helpers.createSourceProjectItemsWrapped,
+  () => [
+    uiReaders.allProjectPackageInfos,
+    state.tabResourceOrigin,
+    uiReaders.isDeveloperMode,
+  ],
 );
 
 const readers = {

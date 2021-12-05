@@ -20,7 +20,7 @@ import {
 import { uiReaders, uiState } from '~/ui/store';
 import {
   changeProfileDataAssignType,
-  removeInvalidProfileAssigns,
+  checkAssignValid,
 } from './ProfileDataHelper';
 
 export type IDualModeEditTargetOperationSig = 'pri' | 'sec' | 'ter';
@@ -165,14 +165,6 @@ const readers = {
     return readers.layers.find((la) => la.layerId === layerId);
   },
 
-  checkDirtyWithCleanupSideEffect(): boolean {
-    removeInvalidProfileAssigns(state.profileData);
-    return !compareObjectByJsonStringify(
-      state.loadedProfileData,
-      state.profileData,
-    );
-  },
-
   checkDirty(): boolean {
     return !compareObjectByJsonStringify(
       state.loadedProfileData,
@@ -233,9 +225,15 @@ const actions = {
   },
 
   writeAssignEntry(assign: IAssignEntry | undefined) {
-    actions.patchEditProfileData(
-      (profileData) => (profileData.assigns[readers.slotAddress] = assign),
-    );
+    const { slotAddress } = readers;
+    const valid = checkAssignValid(assign);
+    actions.patchEditProfileData((profileData) => {
+      if (valid) {
+        profileData.assigns[slotAddress] = assign;
+      } else {
+        delete profileData.assigns[slotAddress];
+      }
+    });
   },
 
   writeEditOperation(op: IAssignOperation | undefined) {

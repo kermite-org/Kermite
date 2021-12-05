@@ -4,6 +4,7 @@ import {
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
+  uniqueArrayItemsByField,
   validateResourceName,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
@@ -26,6 +27,19 @@ const configs = {
 };
 if (appEnv.isDevelopment) {
   // configs.debugUseLocalRepositoryPackages = true;
+}
+
+function checkProjectFileContentSchema(
+  data: IProjectPackageFileContent,
+): boolean {
+  return (
+    data.formatRevision === 'PKG0' &&
+    data.keyboardName !== undefined &&
+    data.projectId !== undefined &&
+    Array.isArray(data.firmwares) &&
+    Array.isArray(data.layouts) &&
+    Array.isArray(data.profiles)
+  );
 }
 
 function convertPackageFileContentToPackageInfo(
@@ -65,21 +79,28 @@ async function loadProjectPackageFiles(
   origin: IResourceOrigin,
 ): Promise<IProjectPackageInfo[]> {
   const packageNames = await fsxListFileBaseNames(folderPath, '.kmpkg.json');
-  return await Promise.all(
-    packageNames.map(async (packageName) => {
-      const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
-      const data = (await fsxReadJsonFile(
-        filePath,
-      )) as IProjectPackageFileContent;
-      migrateProjectPackageData(data);
-      return convertPackageFileContentToPackageInfo(
-        data,
-        origin,
-        packageName,
-        true,
-      );
-    }),
-  );
+  const items = (
+    await Promise.all(
+      packageNames.map(async (packageName) => {
+        const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
+        const data = (await fsxReadJsonFile(
+          filePath,
+        )) as IProjectPackageFileContent;
+        migrateProjectPackageData(data);
+        if (!checkProjectFileContentSchema(data)) {
+          console.log(`drop package ${origin} ${packageName}`);
+          return undefined;
+        }
+        return convertPackageFileContentToPackageInfo(
+          data,
+          origin,
+          packageName,
+          true,
+        );
+      }),
+    )
+  ).filter((it) => it) as IProjectPackageInfo[];
+  return uniqueArrayItemsByField(items, 'projectId');
 }
 
 async function loadDraftProjectPackageFile(
@@ -90,6 +111,9 @@ async function loadDraftProjectPackageFile(
       filePath,
     )) as IProjectPackageFileContent;
     migrateProjectPackageData(data);
+    if (!checkProjectFileContentSchema(data)) {
+      return undefined;
+    }
     const projectInfo = convertPackageFileContentToPackageInfo(
       data,
       'local',
@@ -180,6 +204,19 @@ async function deleteUserProjectPackageFileImpl(
   await fsxDeleteFile(filePath);
 }
 
+async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
+  const packageName = pathBasename(sourceFilePath, '.kmpkg.json');
+  const data = (await fsxReadJsonFile(
+    sourceFilePath,
+  )) as IProjectPackageFileContent;
+  migrateProjectPackageData(data);
+  if (!checkProjectFileContentSchema(data)) {
+    throw new Error('invalid package file content');
+  }
+  const destFilePath = getUserProjectFilePath(packageName, false);
+  await fsxWriteJsonFile(destFilePath, data);
+}
+
 export const projectPackageProvider = {
   async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
     if (configs.debugUseLocalRepositoryPackages) {
@@ -199,6 +236,9 @@ export const projectPackageProvider = {
   },
   async deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
     await deleteUserProjectPackageFileImpl(packageName, isDraft);
+  },
+  async importLocalProjectPackageFromFile(filePath: string) {
+    await importLocalProjectPackageFromFileImpl(filePath);
   },
   async openLocalProjectsFolder() {
     const folderPath = getUserProjectsFolderPath();

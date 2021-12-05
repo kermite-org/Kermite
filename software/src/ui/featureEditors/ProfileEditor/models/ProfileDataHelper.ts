@@ -76,7 +76,7 @@ export function changeProfileDataAssignType(
   return profile;
 }
 
-function checkAssignValid(assign?: IAssignEntry): boolean {
+export function checkAssignValid(assign?: IAssignEntry): boolean {
   if (assign === undefined) {
     return false;
   }
@@ -98,19 +98,4 @@ function checkAssignValid(assign?: IAssignEntry): boolean {
   }
 
   return false;
-}
-
-export function removeInvalidProfileAssigns(profile: IProfileData) {
-  let cnt = 0;
-  const { assigns } = profile;
-  for (const key in assigns) {
-    const assign = assigns[key];
-    if (!checkAssignValid(assign)) {
-      delete assigns[key];
-      cnt++;
-    }
-  }
-  if (cnt > 0) {
-    console.log(`${cnt} invalid assigns removed`);
-  }
 }
