@@ -50,20 +50,21 @@ const projectPackageModuleHelper = {
       keyboardName,
     };
   },
+  async reEnumerateAllProjectPackages() {
+    const allProjectPackageInfos =
+      await projectPackageProvider.getAllProjectPackageInfos();
+    commitCoreState({ allProjectPackageInfos });
+  },
 };
 
 export const projectPackageModule = createCoreModule({
   async project_loadAllProjectPackages() {
     await remoteResourceUpdater_updateRemoteProjectPackages();
-    const allProjectPackageInfos =
-      await projectPackageProvider.getAllProjectPackageInfos();
-    commitCoreState({ allProjectPackageInfos });
+    await projectPackageModuleHelper.reEnumerateAllProjectPackages();
   },
   async project_saveLocalProjectPackageInfo(projectInfo) {
     await projectPackageProvider.saveLocalProjectPackageInfo(projectInfo);
-    const allProjectPackageInfos =
-      await projectPackageProvider.getAllProjectPackageInfos();
-    commitCoreState({ allProjectPackageInfos });
+    await projectPackageModuleHelper.reEnumerateAllProjectPackages();
   },
   async project_loadAllCustomFirmwareInfos() {
     const allCustomFirmwareInfos =
@@ -73,6 +74,10 @@ export const projectPackageModule = createCoreModule({
   async project_createLocalProject({ keyboardName }) {
     const project = projectPackageModuleHelper.createLocalProject(keyboardName);
     await projectPackageModule.project_saveLocalProjectPackageInfo(project);
+  },
+  async project_addLocalProjectFromFile({ filePath }) {
+    await projectPackageProvider.importLocalProjectPackageFromFile(filePath);
+    await projectPackageModuleHelper.reEnumerateAllProjectPackages();
   },
   async project_createLocalProjectBasedOnOnlineProject({ projectId }) {
     const onlineProject = projectPackageModuleHelper.findProjectInfo(
@@ -126,9 +131,7 @@ export const projectPackageModule = createCoreModule({
         packageName: newKeyboardName.toLowerCase(),
       };
       await projectPackageProvider.saveLocalProjectPackageInfo(newProject);
-      const allProjectPackageInfos =
-        await projectPackageProvider.getAllProjectPackageInfos();
-      commitCoreState({ allProjectPackageInfos });
+      await projectPackageModuleHelper.reEnumerateAllProjectPackages();
     }
   },
   async project_openLocalProjectsFolder() {

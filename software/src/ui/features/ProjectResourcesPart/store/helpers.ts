@@ -29,7 +29,6 @@ export const projectResourceHelpers = {
         encodeProjectResourceItemKey('firmware', it.firmwareName),
       ),
     ];
-    keys.sort();
     return keys;
   },
   getProfileEntry(profileName: string): IProjectProfileEntry | undefined {

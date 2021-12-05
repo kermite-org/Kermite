@@ -66,4 +66,7 @@ export const fileDialogLoaders = {
       return false;
     }
   },
+  async loadJsonFileContent(filePath: string): Promise<any | undefined> {
+    return await fsxReadJsonFile(filePath);
+  },
 };

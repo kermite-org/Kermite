@@ -5,8 +5,13 @@ import {
   IProjectPackageInfo,
   sortOrderBy,
 } from '~/shared';
-import { colors, IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectSelectionPartComponent } from '~/ui/fabrics';
+import {
+  colors,
+  getProjectDisplayNamePrefix,
+  IProjectKeyboardListProjectItem,
+} from '~/ui/base';
+import { ProjectKeyboardList } from '~/ui/fabrics';
+import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.ProjectAddCard';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiReaders } from '~/ui/store';
 
@@ -14,14 +19,19 @@ const helpers = {
   createSourceProjectItems(
     allProjectPackageInfos: IProjectPackageInfo[],
   ): IProjectKeyboardListProjectItem[] {
-    const filteredProjects = allProjectPackageInfos.filter(
-      (info) => info.origin === 'online',
-    );
-    filteredProjects.sort(sortOrderBy((it) => it.keyboardName));
-    return filteredProjects.map((info) => ({
+    const onlineProjects = allProjectPackageInfos
+      .filter((info) => info.origin === 'online')
+      .sort(sortOrderBy((it) => it.keyboardName));
+    const localProjects = allProjectPackageInfos
+      .filter((info) => info.origin === 'local' && !info.isDraft)
+      .sort(sortOrderBy((it) => it.keyboardName));
+
+    return [...onlineProjects, ...localProjects].map((info) => ({
       projectId: info.projectId,
       projectKey: info.projectKey,
-      keyboardName: info.keyboardName,
+      keyboardName: `${getProjectDisplayNamePrefix(info.origin, false)}${
+        info.keyboardName
+      }`,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
@@ -31,18 +41,28 @@ const helpers = {
 
 export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
   const { targetProjectKey } = profileSetupStore.state;
-  const { setTargetProjectKey } = profileSetupStore.actions;
+  const {
+    setTargetProjectKey,
+    handleSelectLocalPackageToImport,
+    handleLocalPackageFileDrop,
+  } = profileSetupStore.actions;
   const sourceProjectItems = useMemo(
     () => helpers.createSourceProjectItems(uiReaders.allProjectPackageInfos),
-    [],
+    [uiReaders.allProjectPackageInfos],
   );
 
   return (
     <div class={style}>
-      <ProjectSelectionPartComponent
-        sourceProjectItems={sourceProjectItems}
-        projectKey={targetProjectKey}
-        setProjectKey={setTargetProjectKey}
+      <ProjectKeyboardList
+        projectItems={sourceProjectItems}
+        currentProjectKey={targetProjectKey}
+        setCurrentProjectKey={setTargetProjectKey}
+        renderAdditionalItem={() => (
+          <ProjectKeyboardListProjectAddCard
+            onClick={handleSelectLocalPackageToImport}
+            onFileDrop={handleLocalPackageFileDrop}
+          />
+        )}
       />
     </div>
   );

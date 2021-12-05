@@ -341,6 +341,18 @@ export function forceChangeFilePathExtension(
   return filePath.replace(fileName, namePart + extension);
 }
 
+export function getFileBaseNameFromFilePath(
+  filePath: string,
+  extension?: string,
+) {
+  const fileName = filePath.replace(/^.*[\\/]/, '');
+  if (!extension) {
+    return fileName;
+  } else {
+    return fileName.replace(extension, '');
+  }
+}
+
 export function compareArray(ar0: any[], ar1: any[]): boolean {
   return (
     ar0.length === ar1.length && ar0.every((it, index) => ar1[index] === it)

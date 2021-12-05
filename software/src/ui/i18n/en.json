@@ -345,6 +345,7 @@
     "shapePreview": "Preview keyboard shapes",
     "firmwareUpdate": "Manage supported keyboard devices",
     "settings": "Manage application settings",
+    "projectSelection": "Select keyboard definition",
     "projectResourceEdit": "Edit project resources",
     "entrance": "Entrance view"
   }

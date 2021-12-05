@@ -128,7 +128,7 @@ const cssEditMainColumn = css`
 const panelPadding = '8px 10px';
 
 const cssEditSideBarColumn = css`
-  width: 230px;
+  width: 240px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;

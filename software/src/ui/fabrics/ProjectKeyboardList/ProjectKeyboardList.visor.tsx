@@ -7,6 +7,7 @@ import {
   exampleData_persistKeyboardDesign_shiro,
 } from '~/ui/constants';
 import { ProjectKeyboardList } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList';
+import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.ProjectAddCard';
 
 const convertDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign;
 
@@ -36,6 +37,9 @@ export const ProjectKeyboardListExamples = {
       projectItems={projectItems}
       currentProjectKey={curProjectKey}
       setCurrentProjectKey={(key) => (curProjectKey = key)}
+      renderAdditionalItem={() => (
+        <ProjectKeyboardListProjectAddCard onClick={() => {}} />
+      )}
     />
   ),
 };
