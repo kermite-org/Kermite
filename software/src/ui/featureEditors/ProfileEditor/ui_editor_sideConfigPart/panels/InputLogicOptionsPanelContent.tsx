@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'alumina';
+import { texts } from '~/ui/base';
 import { SectionHeaderText } from '~/ui/elements';
 import {
   BehaviorSelector2,
@@ -10,21 +11,26 @@ import {
 export const InputLogicOptionsPanelContent: FC = () => {
   return (
     <div class={style}>
-      <SectionHeaderText text="Device Settings" icon="keyboard" xOffset={-2} />
+      <SectionHeaderText
+        text={texts.assignerDeviceSettingsPart.sectionHeader}
+        icon="keyboard"
+        xOffset={-2}
+        hint={texts.assignerDeviceSettingsPartHint.sectionHeader}
+      />
       <dl class="table">
-        <dt>Simulator Mode</dt>
+        <dt>{texts.assignerDeviceSettingsPart.simulatorMode}</dt>
         <dd>
           <BehaviorSelector2 />
         </dd>
-        <dt>Mute Mode</dt>
+        <dt>{texts.assignerDeviceSettingsPart.muteMode}</dt>
         <dd>
           <MuteModeSelector2 />
         </dd>
-        <dt>System Layout</dt>
+        <dt>{texts.assignerDeviceSettingsPart.systemLayout}</dt>
         <dd>
           <LayoutStandardSelector />
         </dd>
-        <dt>Routing Channel</dt>
+        <dt>{texts.assignerDeviceSettingsPart.routingChannel}</dt>
         <dd>
           <RoutingChannelSelector />
         </dd>
@@ -38,6 +44,7 @@ const style = css`
     display: grid;
     grid-template-columns: auto auto;
     margin-top: 2px;
+    font-size: 15px;
 
     > dt {
       margin-right: 10px;
@@ -45,7 +52,7 @@ const style = css`
 
     > dt,
     dd {
-      min-height: 26px;
+      min-height: 30px;
       display: flex;
       align-items: center;
     }

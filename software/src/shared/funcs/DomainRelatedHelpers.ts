@@ -114,7 +114,7 @@ export function parseProfileEntry(profileKey: string): IProfileEntry {
   return { projectId, profileName };
 }
 
-export function getNextFirmwareId(existingIds: string[]): string {
+export function getNextFirmwareVariationId(existingIds: string[]): string {
   const allNumbers = existingIds.map((id) => parseInt(id));
   if (!allNumbers.every((it) => isFinite(it))) {
     throw new Error('invalid firmware variation ids detected');

@@ -6,6 +6,7 @@ type Props = {
   onClick?: () => void;
   active?: boolean;
   children?: AluminaChildren;
+  hint?: string;
 };
 
 export const WelcomePageButton: FC<Props> = ({
@@ -13,12 +14,14 @@ export const WelcomePageButton: FC<Props> = ({
   onClick,
   active,
   children,
+  hint,
 }) => (
   <ButtonBase
     className={className}
     onClick={onClick}
     active={active}
     extraCss={buttonStyle}
+    hint={hint}
   >
     {children}
   </ButtonBase>

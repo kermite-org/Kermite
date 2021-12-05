@@ -233,6 +233,16 @@ export function copyObjectPropsRecursive<T>(target: T, source: T) {
   }
 }
 
+export function injectObjectPropsRecursive<T>(target: T, source: T) {
+  for (const key in source) {
+    if (typeof source[key] === 'object' && typeof target[key] === 'object') {
+      injectObjectPropsRecursive(target[key], source[key]);
+    } else {
+      target[key] = source[key];
+    }
+  }
+}
+
 export function makeObjectPropsOverrideRecursive<T>(original: T, input: T): T {
   const merged: T = {} as any;
   for (const key in original) {
@@ -329,6 +339,18 @@ export function forceChangeFilePathExtension(
   const fileName = filePath.replace(/^.*[\\/]/, '');
   const namePart = fileName.split('.')[0];
   return filePath.replace(fileName, namePart + extension);
+}
+
+export function getFileBaseNameFromFilePath(
+  filePath: string,
+  extension?: string,
+) {
+  const fileName = filePath.replace(/^.*[\\/]/, '');
+  if (!extension) {
+    return fileName;
+  } else {
+    return fileName.replace(extension, '');
+  }
 }
 
 export function compareArray(ar0: any[], ar1: any[]): boolean {

@@ -100,6 +100,7 @@ export type ICoreAction = Partial<{
   project_deleteLocalProject: { projectId: string };
   project_renameLocalProject: { projectId: string; newKeyboardName: string };
   project_openLocalProjectsFolder: 1;
+  project_addLocalProjectFromFile: { filePath: string };
 
   config_loadGlobalSettings: 1;
   config_writeGlobalSettings: Partial<IGlobalSettings>;

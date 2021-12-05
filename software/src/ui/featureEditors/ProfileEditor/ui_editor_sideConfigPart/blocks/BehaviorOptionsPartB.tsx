@@ -13,12 +13,12 @@ export const BehaviorOptionsPartB: FC = () => {
   return (
     <div css={style}>
       <CheckBoxLine
-        text={texts.assignerConfigs.showFallbackAssigns}
+        text={texts.assignerDisplaySettingsPart.showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
         setChecked={(value) =>
           commitUiSettings({ showLayerDefaultAssign: value })
         }
-        hint={texts.assignerConfigsHint.showFallbackAssigns}
+        hint={texts.assignerDisplaySettingsPartHint.showFallbackAssigns}
         disabled={!profilesReader.isEditProfileAvailable}
       />
 

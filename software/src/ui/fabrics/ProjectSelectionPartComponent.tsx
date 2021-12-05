@@ -71,5 +71,6 @@ const style = css`
 
   > .bottom-row {
     margin-top: 10px;
+    display: flex;
   }
 `;

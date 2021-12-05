@@ -8,6 +8,14 @@
     "developerModeOption": "developer mode",
     "version": "version"
   },
+  "welcomePageHint": {
+    "language_english": "Change UI language to English.",
+    "language_japanese": "Change UI language to Japanese.",
+    "profileSetupWizardButton": "Setup a keyboard with existing project resources.",
+    "projectQuickSetupWizardButton": "Define firmware and create a profile for a new keyboard.",
+    "darkThemeOption": "Switch theme.",
+    "developerModeOption": "Toggles developer mode. keyboard projects can be edit in developer mode."
+  },
   "wizardCommon": {
     "buttonNext": "next",
     "buttonBack": "back",
@@ -110,9 +118,6 @@
     "writeAssignsButton": "Save edit profile and write keymapping to the device",
     "selectCurrentProfile": "Select current profile",
     "profileConfigurationButton": "Open profile configuration modal",
-    "keyboardBehaviorModeSelector": "Select keyboard behavior mode. (STD: Standalone Mode, SIM: Simulation Mode)",
-    "keyboardSystemLayoutSelector": "Select keyboard layout recognized by OS",
-    "routingChannelSelector": "Select assign routing channel",
     "connectedKeyboardName": "Connected keyboard name",
     "deviceConnectionStatus": "Device connection status"
   },
@@ -154,15 +159,38 @@
     "bringBackward": "Bring layer backward",
     "bringForward": "Bring layer forward"
   },
-  "assignerConfigs": {
-    "assignModel": "Logic Model",
-    "showLayersDynamic": "Show Layers Dynamic",
+  "assignerProfilePropertiesPart": {
+    "sectionHeader": "Profile Properties",
+    "keyboard": "keyboard",
+    "assignModel": "Logic Model"
+  },
+  "assignerProfilePropertiesPartHint": {
+    "sectionHeader": "Shows profile configuration",
+    "keyboard": "Keyboard package name referenced by the profile",
+    "assignModel": "Logic model for current profile"
+  },
+  "assignerDisplaySettingsPart": {
+    "sectionHeader": "Display Settings",
+    "layerDisplayMode": "Layer Display Mode",
     "showFallbackAssigns": "Show Fallback Assigns"
   },
-  "assignerConfigsHint": {
-    "assignModel": "Logic model for current profile",
-    "showLayersDynamic": "Show layers synchronized to the connected keyboard device",
-    "showFallbackAssigns": "Show fallback assigns of the layer"
+  "assignerDisplaySettingsPartHint": {
+    "sectionHeader": "Configure how the view rendered",
+    "layerDisplayMode": "Set layer display mode. In LIVE mode, active layers of the device are affected to the view in the app.",
+    "showFallbackAssigns": "Show fallback assigns of the layer."
+  },
+  "assignerDeviceSettingsPart": {
+    "sectionHeader": "Device Settings",
+    "simulatorMode": "Simulator Mode",
+    "muteMode": "Mute Mode",
+    "systemLayout": "System Layout",
+    "routingChannel": "Routing Channel"
+  },
+  "assignerDeviceSettingsPartHint": {
+    "simulatorMode": "Runs the keyboard in simulation mode. Key input logic is processed by the simulator implementation on the app.",
+    "muteMode": "Mute keyboard output.",
+    "systemLayout": "Select keyboard layout recognized by OS.",
+    "routingChannel": "Select assign routing channel."
   },
   "assignerProfileConfigModal": {
     "modalTitle": "profile configuration",
@@ -306,7 +334,9 @@
     "shapePreview": "Preview",
     "firmwareUpdate": "Device",
     "settings": "Settings",
-    "projectSelection": "Keyboard"
+    "projectSelection": "Keyboard",
+    "projectResourceEdit": "Project",
+    "entrance": "Entrance"
   },
   "sideMenuAppsHint": {
     "assigner": "Edit key assigns",
@@ -314,6 +344,9 @@
     "presetBrowser": "View presets",
     "shapePreview": "Preview keyboard shapes",
     "firmwareUpdate": "Manage supported keyboard devices",
-    "settings": "Manage application settings"
+    "settings": "Manage application settings",
+    "projectSelection": "Select keyboard definition",
+    "projectResourceEdit": "Edit project resources",
+    "entrance": "Entrance view"
   }
 }

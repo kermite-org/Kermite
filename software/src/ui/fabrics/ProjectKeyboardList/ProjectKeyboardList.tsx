@@ -1,4 +1,4 @@
-import { css, FC, jsx } from 'alumina';
+import { AluminaNode, css, FC, jsx } from 'alumina';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardListCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.Card';
 
@@ -7,6 +7,7 @@ type Props = {
   projectItems: IProjectKeyboardListProjectItem[];
   currentProjectKey: string;
   setCurrentProjectKey: (key: string) => void;
+  renderAdditionalItem?: () => AluminaNode;
 };
 
 export const ProjectKeyboardList: FC<Props> = ({
@@ -14,6 +15,7 @@ export const ProjectKeyboardList: FC<Props> = ({
   projectItems,
   currentProjectKey,
   setCurrentProjectKey,
+  renderAdditionalItem,
 }) => {
   return (
     <div css={style} className={className}>
@@ -25,6 +27,7 @@ export const ProjectKeyboardList: FC<Props> = ({
           setCurrent={() => setCurrentProjectKey(item.projectKey)}
         />
       ))}
+      {renderAdditionalItem?.()}
     </div>
   );
 };

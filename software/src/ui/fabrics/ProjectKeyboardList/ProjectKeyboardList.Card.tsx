@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardShapeView } from '~/ui/elements/keyboard/panels';
+import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
   project: IProjectKeyboardListProjectItem;
@@ -26,10 +27,7 @@ export const ProjectKeyboardListCard: FC<Props> = ({
 );
 
 const style = css`
-  width: 240px;
-  height: 180px;
-
-  border: solid 4px transparent;
+  ${projectKeyboardListCardCommonStyles.base};
 
   &.--current {
     border: solid 4px #4ac;
@@ -42,16 +40,12 @@ const style = css`
   }
 
   > .inner {
-    width: 100%;
-    height: 100%;
+    ${projectKeyboardListCardCommonStyles.inner};
     padding: 10px;
-    background: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 
     > .header-part {
       width: 100%;

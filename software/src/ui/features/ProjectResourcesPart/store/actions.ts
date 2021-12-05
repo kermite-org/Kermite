@@ -150,4 +150,24 @@ export const projectResourceActions = {
       projectPackagesWriter.copyLocalProjectResourceItem,
     );
   },
+  shiftSelectedResourceItemOrderBackward() {
+    const { selectedItemKey } = projectResourceReaders;
+    const { itemType, itemName } =
+      decodeProjectResourceItemKey(selectedItemKey);
+    projectPackagesWriter.shiftLocalProjectResourceItemOrder(
+      itemType,
+      itemName,
+      -1,
+    );
+  },
+  shiftSelectedResourceItemOrderForward() {
+    const { selectedItemKey } = projectResourceReaders;
+    const { itemType, itemName } =
+      decodeProjectResourceItemKey(selectedItemKey);
+    projectPackagesWriter.shiftLocalProjectResourceItemOrder(
+      itemType,
+      itemName,
+      1,
+    );
+  },
 };

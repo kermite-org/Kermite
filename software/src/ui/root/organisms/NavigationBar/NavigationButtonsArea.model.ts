@@ -64,16 +64,16 @@ const itemsSource: NavigationItemSource[] = [
   },
   {
     pagePath: '/projectResource',
-    pageName: 'project',
+    pageName: texts.sideMenuApps.projectResourceEdit,
     iconSpec: 'fa fa-globe',
-    hint: 'project edit',
+    hint: texts.sideMenuAppsHint.projectResourceEdit,
     isAvailable: () => uiReaders.isLocalProjectSelectedForEdit,
   },
   {
     pagePath: '/projectSelection',
     pageName: texts.sideMenuApps.projectSelection,
     iconSpec: 'fa fa-globe',
-    hint: 'project selection',
+    hint: texts.sideMenuAppsHint.projectSelection,
   },
   {
     pagePath: '/settings',
@@ -83,9 +83,9 @@ const itemsSource: NavigationItemSource[] = [
   },
   {
     pagePath: '/home',
-    pageName: 'entrance',
+    pageName: texts.sideMenuApps.entrance,
     iconSpec: 'fa fa-door-open',
-    hint: 'start',
+    hint: texts.sideMenuAppsHint.entrance,
   },
 ];
 

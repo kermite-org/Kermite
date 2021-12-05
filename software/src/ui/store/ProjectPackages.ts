@@ -2,6 +2,7 @@ import { useMemo } from 'alumina';
 import produce from 'immer';
 import {
   fallbackProjectPackageInfo,
+  getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
   IProjectFirmwareEntry,
@@ -10,9 +11,10 @@ import {
   IProjectProfileEntry,
   IProjectResourceItemType,
   IResourceOrigin,
+  isNumberInRange,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { uiReaders, dispatchCoreAction, uiState } from '~/ui/store/base';
+import { dispatchCoreAction, uiReaders, uiState } from '~/ui/store/base';
 
 export const projectPackagesReader = {
   getProjectInfosGlobalProjectSelectionAffected(): IProjectPackageInfo[] {
@@ -143,12 +145,26 @@ function copyItemInArray<T, K extends keyof T>(
   nameFiled: K,
   srcName: Extract<T[K], string>,
   newName: Extract<T[K], string>,
-) {
+): T | undefined {
   const index = items.findIndex((it) => it[nameFiled] === srcName);
   if (index >= 0) {
     const item = items[index];
     const copied = { ...item, [nameFiled]: newName };
     items.splice(index + 1, 0, copied);
+    return copied;
+  }
+}
+
+function shiftOrderItemInArray<T, K extends keyof T>(
+  items: T[],
+  nameFiled: K,
+  targetItemName: Extract<T[K], string>,
+  direction: -1 | 1,
+) {
+  const index = items.findIndex((it) => it[nameFiled] === targetItemName);
+  const newIndex = index + direction;
+  if (isNumberInRange(newIndex, 0, items.length - 1)) {
+    [items[index], items[newIndex]] = [items[newIndex], items[index]];
   }
 }
 
@@ -223,11 +239,33 @@ export const projectPackagesWriter = {
   ) {
     const { itemsField, itemNameField } = fieldNamesMap[type];
     patchLocalEditProject((draft) => {
-      copyItemInArray<any, any>(
+      const copied = copyItemInArray<any, any>(
         draft[itemsField],
         itemNameField,
         srcName,
         newName,
+      );
+      if (copied && type === 'firmware') {
+        const allItems = draft[itemsField] as IProjectFirmwareEntry[];
+        const item = copied as IProjectFirmwareEntry;
+        item.variationId = getNextFirmwareVariationId(
+          allItems.map((it) => it.variationId),
+        );
+      }
+    });
+  },
+  shiftLocalProjectResourceItemOrder<T extends IProjectResourceItemType>(
+    type: T,
+    targetItemName: string,
+    direction: -1 | 1,
+  ) {
+    const { itemsField, itemNameField } = fieldNamesMap[type];
+    patchLocalEditProject((draft) => {
+      shiftOrderItemInArray<any, any>(
+        draft[itemsField],
+        itemNameField,
+        targetItemName,
+        direction,
       );
     });
   },

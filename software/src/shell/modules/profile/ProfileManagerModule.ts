@@ -230,6 +230,9 @@ export const profileManagerModule = createCoreModule({
       projectId: profileData.projectId,
       profileName: newProfileName,
     };
+    if (!newProfileEntry.projectId) {
+      throw new Error('blank project id');
+    }
     if (profilesReader.hasProfileEntry(newProfileEntry)) {
       throw new Error(errorTextInvalidOperation);
     }

@@ -8,6 +8,14 @@
     "developerModeOption": "開発者モード",
     "version": "バージョン"
   },
+  "welcomePageHint": {
+    "language_english": "UIを英語表示に切り替えます。",
+    "language_japanese": "UIを日本語表示に切り替えます。",
+    "profileSetupWizardButton": "既存のキーボードのセットアップを行います。",
+    "projectQuickSetupWizardButton": "新しいキーボードに対してファームウェアを定義してプロファイルを作成します。",
+    "darkThemeOption": "テーマを切り替えます。",
+    "developerModeOption": "開発者モードを切り替えます。開発者モードではキーボード定義を編集できます。"
+  },
   "wizardCommon": {
     "buttonNext": "次へ",
     "buttonBack": "戻る",
@@ -109,9 +117,6 @@
     "writeAssignsButton": "プロファイルを保存して、デバイスにキーマッピングを書き込みます。",
     "selectCurrentProfile": "プロファイルを選択します。",
     "profileConfigurationButton": "プロファイル設定ダイアログを開きます。",
-    "keyboardBehaviorModeSelector": "キーボードの動作モードを設定します。(STD: スタンドアロン動作, SIM: シミュレーション動作)",
-    "keyboardSystemLayoutSelector": "OSが認識するキーボードレイアウトを設定します",
-    "routingChannelSelector": "アサインルーティングチャネルを選択します。",
     "connectedKeyboardName": "接続しているキーボードの品種名を表示しています。",
     "deviceConnectionStatus": "キーボードの接続状態を表示しています。"
   },
@@ -153,15 +158,39 @@
     "bringBackward": "レイヤを後ろに移動します。",
     "bringForward": "レイヤを前に移動します。"
   },
-  "assignerConfigs": {
-    "assignModel": "ロジックモデル",
-    "showLayersDynamic": "デバイスのレイヤを反映",
+  "assignerProfilePropertiesPart": {
+    "sectionHeader": "プロファイル属性",
+    "keyboard": "キーボード",
+    "assignModel": "ロジックモデル"
+  },
+  "assignerProfilePropertiesPartHint": {
+    "sectionHeader": "プロファイルの設定を表示しています。",
+    "keyboard": "プロファイルが参照しているキーボード定義の名前を表示しています。",
+    "assignModel": "プロファイルのアサインモデルを表示しています。"
+  },
+  "assignerDisplaySettingsPart": {
+    "sectionHeader": "表示設定",
+    "layerDisplayMode": "レイヤ表示モード",
     "showFallbackAssigns": "デフォルトアサインを表示"
   },
-  "assignerConfigsHint": {
-    "assignModel": "プロファイルのアサインモデルを表示しています。",
-    "showLayersDynamic": "デバイスのレイヤ状態に同期して表示するレイヤを切り替えます。",
+  "assignerDisplaySettingsPartHint": {
+    "sectionHeader": "画面の表示に関連する設定を行います。",
+    "layerDisplayMode": "レイヤ表示モードを設定します。LIVEモードでは、デバイスのレイヤ状態に同期して表示されるレイヤが切り替わります。",
     "showFallbackAssigns": "レイヤのデフォルトアサインを表示します。"
+  },
+  "assignerDeviceSettingsPart": {
+    "sectionHeader": "デバイス設定",
+    "simulatorMode": "シミュレータモード",
+    "muteMode": "ミュートモード",
+    "systemLayout": "システムレイアウト",
+    "routingChannel": "ルーティングチャネル"
+  },
+  "assignerDeviceSettingsPartHint": {
+    "sectionHeader": "デバイスで保持されているキー入力関連の設定です。",
+    "simulatorMode": "キーボードをシミュレータモードで動作させます。キー入力ロジックがアプリ内のシミュレータ実装によって処理されます。",
+    "muteMode": "キーボードの出力をミュートします。",
+    "systemLayout": "OSが認識するキーボードレイアウトを設定します",
+    "routingChannel": "アサインルーティングチャネルを選択します。"
   },
   "assignerProfileConfigModal": {
     "modalTitle": "プロファイル設定",
@@ -305,7 +334,9 @@
     "shapePreview": "プレビュー",
     "firmwareUpdate": "デバイス",
     "settings": "設定",
-    "projectSelection": "キーボード"
+    "projectSelection": "キーボード",
+    "projectResourceEdit": "プロジェクト",
+    "entrance": "スタート"
   },
   "sideMenuAppsHint": {
     "assigner": "キーアサインを編集します。",
@@ -313,6 +344,9 @@
     "presetBrowser": "プリセットを閲覧します。",
     "shapePreview": "キーボードの形状を表示します。",
     "firmwareUpdate": "デバイスの管理を行います。",
-    "settings": "アプリの設定を行います。"
+    "settings": "アプリの設定を行います。",
+    "projectSelection": "キーボード定義を選択します。",
+    "projectResourceEdit": "プロジェクトリソースを編集します。",
+    "entrance": "スタート画面です。"
   }
 }
