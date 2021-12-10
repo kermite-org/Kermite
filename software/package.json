@@ -33,7 +33,7 @@
   },
   "private": true,
   "scripts": {
-    "postinstall": "electron-rebuild --arch=arm64",
+    "postinstall": "electron-rebuild",
     "start": "ts-node build.ts -x-watch -x-exec",
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
     "build": "cross-env NODE_ENV=production ts-node build.ts -x-build",
