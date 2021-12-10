@@ -6,6 +6,9 @@
   "author": "yahiro",
   "description": "keyboard software",
   "license": "MIT",
+  "engines": {
+    "node": "14"
+  },
   "build": {
     "appId": "org.kermite.electron-app",
     "mac": {
@@ -30,7 +33,7 @@
   },
   "private": true,
   "scripts": {
-    "postinstall": "electron-rebuild",
+    "postinstall": "electron-rebuild --arch=arm64",
     "start": "ts-node build.ts -x-watch -x-exec",
     "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
     "build": "cross-env NODE_ENV=production ts-node build.ts -x-build",
