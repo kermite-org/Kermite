@@ -32,7 +32,7 @@ const config = {
   debugLoadLocalFirmware: false,
 };
 if (appEnv.isDevelopment) {
-  config.debugLoadLocalFirmware = true;
+  // config.debugLoadLocalFirmware = true;
 }
 
 type IFirmwareFetchResult = { fileName: string; data: Uint8Array };
