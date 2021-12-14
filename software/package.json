@@ -47,7 +47,8 @@
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "incver": "npm version patch",
-    "test": "jest"
+    "test": "jest",
+    "visor": "alumina-visor serve"
   },
   "dependencies": {
     "alumina": "^0.1.8",
