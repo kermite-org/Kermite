@@ -1,7 +1,7 @@
 import { jsx } from 'alumina';
 import { RouteHeaderBar } from '~/ui/elements/frames';
 
-export const RouterHeaderBarExamples = {
+export default {
   default: () => (
     <RouteHeaderBar
       title="edit project layout: default"
