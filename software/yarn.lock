@@ -1202,10 +1202,10 @@ ajv@^6.10.0, ajv@^6.12.0, ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-alumina-visor@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/alumina-visor/-/alumina-visor-0.1.3.tgz#b4452b38424adfe1758f3857dcd1d2b7e48b521f"
-  integrity sha512-01CnguvROIg3SsOJ9/QuA6X7ntBXWDKQbkeIj/h5HIK8bKh6P+1NtNKezbWmz72LxnWvwVx1jCJXTYiZ172Pig==
+alumina-visor@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/alumina-visor/-/alumina-visor-0.1.4.tgz#53ee7a926bd9d9ab78e45827b5c80b29dfce3af7"
+  integrity sha512-9syPfe9j84TRz5gqFYTwRvKNz+WbKMwTMOkPtSDrJQk0gjC7Go7PCxmOwEGk/hig8ekJY21zwiHAUgEfcdCQXw==
   dependencies:
     chokidar "^3.5.2"
     estrella "^1.4.1"
