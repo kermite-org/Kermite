@@ -15,7 +15,3 @@ export const appConfig = {
       ? 'http://localhost:5000'
       : 'https://dev.server.kermite.org',
 };
-
-export const appConfigDebug = {
-  reviewerMode: true, // todo: load from config file
-};
