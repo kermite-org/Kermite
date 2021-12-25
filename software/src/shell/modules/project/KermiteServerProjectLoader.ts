@@ -3,7 +3,6 @@ import {
   IOnlineProjectAttributes,
   IProjectPackageFileContent,
   IProjectPackageInfo,
-  uniqueArrayItemsByField,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { fsxListFileBaseNames, fsxReadJsonFile, pathJoin } from '~/shell/funcs';
@@ -40,8 +39,7 @@ function convertOnlinePackageDataToPackageInfo(
 ): IProjectPackageInfo {
   const { keyboardName } = data;
   const packageName = keyboardName.toLowerCase();
-  const origin = 'online';
-  // const origin = isAudit ? 'online_audit' : 'online';
+  const origin = isAudit ? 'online_audit' : 'online';
   return {
     ...data,
     projectKey: createProjectKey(origin, data.projectId),
@@ -95,7 +93,7 @@ async function loadProjectPackageWrapperFiles(
       }),
     )
   ).filter((it) => it) as IProjectPackageInfo[];
-  return uniqueArrayItemsByField(items, 'projectId');
+  return items;
 }
 
 let cachedRemotePackages: IProjectPackageInfo[] | undefined;

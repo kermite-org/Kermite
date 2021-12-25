@@ -14,7 +14,11 @@ export type IPresetSpec =
       presetName: string;
     };
 
-export type IResourceOrigin = 'local' | 'online';
+export type IResourceOrigin =
+  | 'local'
+  | 'online'
+  | 'local_draft'
+  | 'online_audit';
 
 export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
 
