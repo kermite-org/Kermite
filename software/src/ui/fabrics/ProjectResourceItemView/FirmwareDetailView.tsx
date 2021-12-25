@@ -1,16 +1,19 @@
 import { css, FC, jsx, useMemo } from 'alumina';
-import { IStandardFirmwareConfig } from '~/shared';
-import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
+import { IProjectPackageInfo, IStandardFirmwareConfig } from '~/shared';
 import { uiReaders } from '~/ui/store';
 
 type Props = {
+  projectInfo: IProjectPackageInfo;
   firmwareName: string;
 };
 
-export const FirmwareDetailView: FC<Props> = ({ firmwareName }) => {
+export const FirmwareDetailView: FC<Props> = ({
+  projectInfo,
+  firmwareName,
+}) => {
   const firmwareEntry = useMemo(
-    () => projectResourceStore.helpers.getFirmwareEntry(firmwareName),
-    [firmwareName, uiReaders.allProjectPackageInfos],
+    () => projectInfo.firmwares.find((it) => it.firmwareName === firmwareName),
+    [projectInfo, firmwareName],
   );
   return (
     <div css={style}>
