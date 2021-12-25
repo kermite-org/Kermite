@@ -1,36 +1,49 @@
-import * as crypto from 'crypto';
-import { createDictionaryFromKeyValues, getObjectKeys } from '~/shared';
-import { appConfig, appConfigDebug, appEnv } from '~/shell/base';
+import {
+  createDictionaryFromKeyValues,
+  getObjectKeys,
+  IProjectPackageFileContent,
+} from '~/shared';
+import { appConfig, appEnv } from '~/shell/base';
 import {
   fetchJson,
-  fetchText,
   fsxDeleteFile,
   fsxEnsureFolderExists,
-  fsxReaddir,
-  fsxReadFile,
-  fsxWriteFile,
-  pathBasename,
+  fsxListFileBaseNames,
+  fsxReadJsonFile,
+  fsxWriteJsonFile,
   pathJoin,
 } from '~/shell/funcs';
 
-function generateMd5(str: string) {
-  return crypto.createHash('md5').update(str).digest('hex');
+interface IProjectPackageWrapperFileContent {
+  projectId: string;
+  keyboardName: string;
+  data: IProjectPackageFileContent;
+  dataHash: string;
+  authorDisplayName: string;
+  authorIconUrl: string;
+  revision: number;
+  isOfficial: boolean;
 }
 
 async function loadLocalDigestMap(
   folderPath: string,
 ): Promise<Record<string, string>> {
-  const fileNames = (await fsxReaddir(folderPath)).filter((it) =>
-    it.endsWith('.kmpkg_wrapper.json'),
+  const projectKeys = await fsxListFileBaseNames(
+    folderPath,
+    '.kmpkg_wrapper.json',
   );
   return createDictionaryFromKeyValues(
     await Promise.all(
-      fileNames.map(async (fileName) => {
-        const filePath = pathJoin(folderPath, fileName);
-        const content = await fsxReadFile(filePath);
-        const md5 = generateMd5(content);
-        const packageName = pathBasename(fileName, '.kmpkg_wrapper.json');
-        return [packageName, md5] as [string, string];
+      projectKeys.map(async (projectKey) => {
+        const filePath = pathJoin(
+          folderPath,
+          `${projectKey}.kmpkg_wrapper.json`,
+        );
+        const content = (await fsxReadJsonFile(
+          filePath,
+        )) as IProjectPackageWrapperFileContent;
+        const { dataHash } = content;
+        return [projectKey, dataHash] as [string, string];
       }),
     ),
   );
@@ -42,9 +55,7 @@ type ICatalogContent = {
   rereviews: Record<string, string>;
 };
 
-async function loadRemoteDigestMap(
-  includeReviewing: boolean,
-): Promise<Record<string, string>> {
+async function loadRemoteDigestMap(): Promise<Record<string, string>> {
   const { kermiteServerUrl } = appConfig;
   const catalogContent = (await fetchJson(
     `${kermiteServerUrl}/api/packages/catalog`,
@@ -52,13 +63,82 @@ async function loadRemoteDigestMap(
 
   const { approvals, reviews, rereviews } = catalogContent;
 
-  return includeReviewing
-    ? {
-        ...approvals,
-        ...reviews,
-        ...rereviews,
-      }
-    : approvals;
+  const auditing = {
+    ...reviews,
+    ...rereviews,
+  };
+  const modAuditing = Object.fromEntries(
+    Object.entries(auditing).map(([key, value]) => [`${key}_audit`, value]),
+  );
+  return {
+    ...approvals,
+    ...modAuditing,
+  };
+}
+
+interface IUserApiResponsePartial {
+  // id: string;
+  displayName: string;
+  // comment: string;
+  // role: string;
+  // loginProvider: string;
+  // showLinkId: boolean;
+}
+
+interface IApiProjectPackageWrapperItemPartial {
+  id: string;
+  keyboardName: string;
+  projectId: string;
+  userId: string;
+  data: string; // content of .kmpkg.json
+  dataHash: string;
+  revision: number;
+  official: boolean;
+}
+interface IApiPackagesProjectsResponse {
+  approvals: IApiProjectPackageWrapperItemPartial[];
+  reviews: IApiProjectPackageWrapperItemPartial[];
+  rereviews: IApiProjectPackageWrapperItemPartial[];
+}
+
+async function fetchProjectPackageWrapperItem(
+  projectKey: string,
+): Promise<IProjectPackageWrapperFileContent> {
+  const projectId = projectKey.replace('_audit', '');
+  const isAudit = projectKey.endsWith('_audit');
+  const data = (await fetchJson(
+    `${appConfig.kermiteServerUrl}/api/packages/projects/${projectId}`,
+  )) as IApiPackagesProjectsResponse;
+  const wrapperItemsSource = isAudit
+    ? [...data.reviews, ...data.rereviews]
+    : data.approvals;
+  const wrapperItem = wrapperItemsSource[wrapperItemsSource.length - 1];
+
+  const {
+    keyboardName,
+    userId,
+    dataHash,
+    official: isOfficial,
+    revision,
+  } = wrapperItem;
+
+  const userInfo = (await fetchJson(
+    `${appConfig.kermiteServerUrl}/api/users/${userId}`,
+  )) as IUserApiResponsePartial;
+
+  const authorDisplayName = userInfo.displayName;
+  const authorIconUrl = `${appConfig.kermiteServerUrl}/api/avatar/${userId}`;
+
+  return {
+    projectId,
+    keyboardName,
+    data: JSON.parse(wrapperItem.data),
+    dataHash,
+    revision,
+    isOfficial,
+    authorDisplayName,
+    authorIconUrl,
+  };
 }
 
 async function updateRemotePackagesDifferential(
@@ -66,41 +146,41 @@ async function updateRemotePackagesDifferential(
   localDigestMap: Record<string, string>,
   remoteDigestMap: Record<string, string>,
 ) {
-  const removedProjectIds = getObjectKeys(localDigestMap).filter(
+  const removedProjectKeys = getObjectKeys(localDigestMap).filter(
     (key) => remoteDigestMap[key] === undefined,
   );
-  const updatedProjectIds = getObjectKeys(remoteDigestMap).filter(
+  const updatedProjectKeys = getObjectKeys(remoteDigestMap).filter(
     (key) => !(localDigestMap[key] === remoteDigestMap[key]),
   );
   await Promise.all(
-    removedProjectIds.map(async (projectId) => {
+    removedProjectKeys.map(async (projectKey) => {
       const filePath = pathJoin(
         remotePackagesFolderPath,
-        `${projectId}.kmpkg_wrapper.json`,
+        `${projectKey}.kmpkg_wrapper.json`,
       );
       await fsxDeleteFile(filePath);
     }),
   );
   await Promise.all(
-    updatedProjectIds.map(async (projectId) => {
-      const data = await fetchText(
-        `${appConfig.kermiteServerUrl}/api/packages/projects/${projectId}`,
+    updatedProjectKeys.map(async (projectKey) => {
+      const wrapperFileContent = await fetchProjectPackageWrapperItem(
+        projectKey,
       );
       const filePath = pathJoin(
         remotePackagesFolderPath,
-        `${projectId}.kmpkg_wrapper.json`,
+        `${projectKey}.kmpkg_wrapper.json`,
       );
-      await fsxWriteFile(filePath, data);
+      await fsxWriteJsonFile(filePath, wrapperFileContent);
     }),
   );
-  if (updatedProjectIds.length === 0 && removedProjectIds.length === 0) {
+  if (updatedProjectKeys.length === 0 && removedProjectKeys.length === 0) {
     console.log('all project packages are up to date');
   }
-  if (updatedProjectIds.length > 0) {
-    console.log(`${updatedProjectIds.length} project packages updated`);
+  if (updatedProjectKeys.length > 0) {
+    console.log(`${updatedProjectKeys.length} project packages updated`);
   }
-  if (removedProjectIds.length > 0) {
-    console.log(`${removedProjectIds.length} project packages removed`);
+  if (removedProjectKeys.length > 0) {
+    console.log(`${removedProjectKeys.length} project packages removed`);
   }
 }
 
@@ -111,10 +191,8 @@ export async function remoteResourceUpdater2_updateRemoteProjectPackages() {
   await fsxEnsureFolderExists(remotePackagesFolderPath);
   console.log('update remote project packages');
   const localDigestMap = await loadLocalDigestMap(remotePackagesFolderPath);
-  const remoteDigestMap = await loadRemoteDigestMap(
-    appConfigDebug.reviewerMode,
-  );
-  console.log({ localDigestMap, remoteDigestMap });
+  const remoteDigestMap = await loadRemoteDigestMap();
+  // console.log({ localDigestMap, remoteDigestMap });
   await updateRemotePackagesDifferential(
     remotePackagesFolderPath,
     localDigestMap,

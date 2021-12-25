@@ -5,39 +5,19 @@ import {
   IProjectPackageInfo,
   uniqueArrayItemsByField,
 } from '~/shared';
-import { appConfig, appConfigDebug, appEnv } from '~/shell/base';
-import {
-  fetchJson,
-  fsxListFileBaseNames,
-  fsxReadJsonFile,
-  pathJoin,
-} from '~/shell/funcs';
+import { appEnv } from '~/shell/base';
+import { fsxListFileBaseNames, fsxReadJsonFile, pathJoin } from '~/shell/funcs';
 import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
 
-interface IProjectPackageWrapperPackageItemPartial {
-  id: string;
-  // keyboardName: string;
-  // projectId: string;
-  userId: string;
-  data: string; // content of .kmpkg.json
-  // dataHash: string;
-  revision: number;
-  official: boolean;
-}
-
-interface IUserApiResponsePartial {
-  // id: string;
-  displayName: string;
-  // comment: string;
-  // role: string;
-  // loginProvider: string;
-  // showLinkId: boolean;
-}
-
 interface IProjectPackageWrapperFileContent {
-  approvals: IProjectPackageWrapperPackageItemPartial[];
-  reviews: IProjectPackageWrapperPackageItemPartial[];
-  rereviews: IProjectPackageWrapperPackageItemPartial[];
+  projectId: string;
+  keyboardName: string;
+  data: IProjectPackageFileContent;
+  dataHash: string;
+  authorDisplayName: string;
+  authorIconUrl: string;
+  revision: number;
+  isOfficial: boolean;
 }
 
 function checkProjectFileContentSchema(
@@ -56,10 +36,12 @@ function checkProjectFileContentSchema(
 function convertOnlinePackageDataToPackageInfo(
   data: IProjectPackageFileContent,
   onlineProjectAttributes: IOnlineProjectAttributes,
+  isAudit: boolean,
 ): IProjectPackageInfo {
   const { keyboardName } = data;
   const packageName = keyboardName.toLowerCase();
   const origin = 'online';
+  // const origin = isAudit ? 'online_audit' : 'online';
   return {
     ...data,
     projectKey: createProjectKey(origin, data.projectId),
@@ -72,54 +54,44 @@ function convertOnlinePackageDataToPackageInfo(
 
 async function loadProjectPackageWrapperFiles(
   folderPath: string,
-  reviewerMode: boolean,
 ): Promise<IProjectPackageInfo[]> {
-  const projectIds = await fsxListFileBaseNames(
+  const projectKeys = await fsxListFileBaseNames(
     folderPath,
     '.kmpkg_wrapper.json',
   );
   const items = (
     await Promise.all(
-      projectIds.map(async (projectId) => {
+      projectKeys.map(async (projectKey) => {
+        const isAudit = projectKey.endsWith('_audit');
         const filePath = pathJoin(
           folderPath,
-          `${projectId}.kmpkg_wrapper.json`,
+          `${projectKey}.kmpkg_wrapper.json`,
         );
-        const wrapperContent = (await fsxReadJsonFile(
+        const wrapperItem = (await fsxReadJsonFile(
           filePath,
         )) as IProjectPackageWrapperFileContent;
 
-        const wrapperItems = reviewerMode
-          ? [
-              ...wrapperContent.approvals,
-              ...wrapperContent.reviews,
-              ...wrapperContent.rereviews,
-            ]
-          : wrapperContent.approvals;
-        const wrapperItem = wrapperItems[wrapperItems.length - 1];
+        const packageFileContent = wrapperItem.data;
 
-        const packageFileContent = JSON.parse(
-          wrapperItem.data,
-        ) as IProjectPackageFileContent;
         migrateProjectPackageData(packageFileContent);
         if (!checkProjectFileContentSchema(packageFileContent)) {
-          console.log(`invalid online package ${projectId}`);
+          console.log(`invalid online package ${projectKey}`);
           return undefined;
         }
-        const { userId, official, revision } = wrapperItem;
 
-        const userInfo = (await fetchJson(
-          `${appConfig.kermiteServerUrl}/api/users/${userId}`,
-        )) as IUserApiResponsePartial;
-
+        const { authorDisplayName, authorIconUrl, isOfficial, revision } =
+          wrapperItem;
         const attrs: IOnlineProjectAttributes = {
-          authorDisplayName: userInfo.displayName,
-          authorIconUrl: `${appConfig.kermiteServerUrl}/api/avatar/${userId}`,
-          isOfficial: official,
+          authorDisplayName,
+          authorIconUrl,
+          isOfficial,
           revision,
         };
-
-        return convertOnlinePackageDataToPackageInfo(packageFileContent, attrs);
+        return convertOnlinePackageDataToPackageInfo(
+          packageFileContent,
+          attrs,
+          isAudit,
+        );
       }),
     )
   ).filter((it) => it) as IProjectPackageInfo[];
@@ -135,10 +107,8 @@ export async function loadKermiteServerProjectPackageInfos(): Promise<
     const remotePackagesLocalFolderPath = appEnv.resolveUserDataFilePath(
       'data/kermite_server_projects',
     );
-    const { reviewerMode } = appConfigDebug;
     cachedRemotePackages = await loadProjectPackageWrapperFiles(
       remotePackagesLocalFolderPath,
-      reviewerMode,
     );
   }
   return cachedRemotePackages;
