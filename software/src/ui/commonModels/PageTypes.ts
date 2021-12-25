@@ -16,7 +16,8 @@ export type PagePaths =
   | '/profileSetup/step1'
   | '/profileSetup/step2'
   | '/profileSetup/step3'
-  | '/firmwareFlash';
+  | '/firmwareFlash'
+  | '/projectReview';
 
 export type IPageSpec_ProjectLayoutEdit = {
   type: 'projectLayoutEdit';
