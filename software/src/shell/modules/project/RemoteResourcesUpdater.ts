@@ -57,7 +57,7 @@ async function loadRemoteDigestMap(
   );
 }
 
-export async function remoteResourceUpdater_updateRemoteProjectPackages() {
+export async function remoteResourceUpdater_updateRemoteProjectPackages_deprecated() {
   const { onlineResourcesBaseUrl } = appConfig;
   const remotePackagesFolderPath = appEnv.resolveUserDataFilePath(
     'data/remote_projects',

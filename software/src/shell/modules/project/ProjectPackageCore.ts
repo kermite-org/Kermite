@@ -21,6 +21,7 @@ import {
   pathResolve,
 } from '~/shell/funcs';
 import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
+import { loadKermiteServerProjectPackageInfos } from '~/shell/modules/project/KermiteServerProjectLoader';
 
 const configs = {
   debugUseLocalRepositoryPackages: false,
@@ -128,7 +129,9 @@ async function loadDraftProjectPackageFile(
 
 let cachedRemotePackages: IProjectPackageInfo[] | undefined;
 
-async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+async function loadRemoteProjectPackageInfos_deprecated(): Promise<
+  IProjectPackageInfo[]
+> {
   if (!cachedRemotePackages) {
     const remotePackagesLocalFolderPath = appEnv.resolveUserDataFilePath(
       'data/remote_projects',
@@ -226,7 +229,7 @@ export const projectPackageProvider = {
       ];
     } else {
       return [
-        ...(await loadRemoteProjectPackageInfos()),
+        ...(await loadKermiteServerProjectPackageInfos()),
         ...(await loadUserProjectPackageInfos()),
       ];
     }
