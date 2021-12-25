@@ -7,7 +7,7 @@ const design = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
   exampleData_persistKeyboardDesign_astelia,
 );
 
-export const ProjectKeyboardShapeViewExamples = {
+export default {
   default: () => (
     <div style="width: 200px; height: 150px; border: solid 1px #AAA">
       <ProjectKeyboardShapeView keyboardDesign={design} />

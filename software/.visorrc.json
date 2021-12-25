@@ -1,0 +1,5 @@
+{
+  "sourceFolder": "src/ui",
+  "customHtmlTemplate": "src/ui/visor-index-template.html",
+  "port": 3000
+}

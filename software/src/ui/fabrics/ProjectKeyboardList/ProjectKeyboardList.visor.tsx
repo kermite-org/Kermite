@@ -31,14 +31,17 @@ const projectItems: IProjectKeyboardListProjectItem[] = [
 
 let curProjectKey = 'proj0';
 
-export const ProjectKeyboardListExamples = {
+export default {
   default: () => (
     <ProjectKeyboardList
       projectItems={projectItems}
       currentProjectKey={curProjectKey}
       setCurrentProjectKey={(key) => (curProjectKey = key)}
       renderAdditionalItem={() => (
-        <ProjectKeyboardListProjectAddCard onClick={() => {}} />
+        <ProjectKeyboardListProjectAddCard
+          onClick={() => {}}
+          onFileDrop={() => {}}
+        />
       )}
     />
   ),

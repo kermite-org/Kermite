@@ -18,7 +18,8 @@ tsconfig.tsbuildinfo
 .node-version
 
 .~*.csv#
-
+.visor/
+.history/
 
 
 
