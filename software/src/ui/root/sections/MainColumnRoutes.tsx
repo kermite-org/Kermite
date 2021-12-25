@@ -25,16 +25,16 @@ export const MainColumnRoutes: FC = () => {
   if (pageSpec) {
     return (
       <div>
-        {pageSpec.type === 'projectLayoutEdit' && (
+        {pageSpec.type === 'projectLayoutView' && (
           <ProjectLayoutEditPage spec={pageSpec} />
         )}
-        {pageSpec.type === 'projectPresetEdit' && (
+        {pageSpec.type === 'projectPresetView' && (
           <ProjectPresetEditPage spec={pageSpec} />
         )}
         {pageSpec.type === 'projectCustomFirmwareCreate' && (
           <ProjectCustomFirmwareCreatePage />
         )}
-        {pageSpec.type === 'projectStandardFirmwareEdit' && (
+        {pageSpec.type === 'projectStandardFirmwareView' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
       </div>

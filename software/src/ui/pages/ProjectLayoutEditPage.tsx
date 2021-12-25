@@ -1,23 +1,31 @@
 import { css, FC, jsx } from 'alumina';
 import { fallbackProjectLayoutEntry, IProjectLayoutEntry } from '~/shared';
 import { colors, uiConfiguration } from '~/ui/base';
-import { IPageSpec_ProjectLayoutEdit } from '~/ui/commonModels';
+import { IPageSpec_ProjectLayoutView } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/elements/frames';
 import {
+  LayoutEditorCore,
   LayoutEditorGeneralComponent,
   LayoutEditorGeneralComponent_OutputPropsSupplier,
-  LayoutEditorCore,
 } from '~/ui/featureEditors';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
+import {
+  projectPackagesReader,
+  projectPackagesWriter,
+  uiActions,
+} from '~/ui/store';
 import { useMemoEx } from '~/ui/utils';
 
 type Props = {
-  spec: IPageSpec_ProjectLayoutEdit;
+  spec: IPageSpec_ProjectLayoutView;
 };
 
 const helpers = {
-  getSourceLayoutEntryOrCreate(layoutName: string): IProjectLayoutEntry {
-    const projectInfo = uiReaders.editTargetProject;
+  getSourceLayoutEntryOrCreate(
+    projectKey: string,
+    layoutName: string,
+  ): IProjectLayoutEntry {
+    const projectInfo =
+      projectPackagesReader.findProjectInfoByProjectKey(projectKey);
     const layoutEntry = projectInfo?.layouts.find(
       (it) => it.layoutName === layoutName,
     );
@@ -25,8 +33,11 @@ const helpers = {
   },
 };
 
-export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
+export const ProjectLayoutEditPage: FC<Props> = ({
+  spec: { projectKey, layoutName, canEdit },
+}) => {
   const sourceLayoutEntry = useMemoEx(helpers.getSourceLayoutEntryOrCreate, [
+    projectKey,
     layoutName,
   ]);
   const { isModified, emitSavingDesign } =
@@ -53,7 +64,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({ spec: { layoutName } }) => {
         title={`edit project layout: ${sourceLayoutEntry.layoutName}`}
         backPagePath="/projectResource"
         canSave={isModified}
-        saveHandler={saveHandler}
+        saveHandler={canEdit ? saveHandler : undefined}
       />
       <LayoutEditorGeneralComponent layout={sourceLayoutEntry.data} />
     </div>

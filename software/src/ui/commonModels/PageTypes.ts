@@ -19,16 +19,6 @@ export type PagePaths =
   | '/firmwareFlash'
   | '/projectReview';
 
-export type IPageSpec_ProjectLayoutEdit = {
-  type: 'projectLayoutEdit';
-  layoutName: string;
-};
-
-export type IPageSpec_ProjectPresetEdit = {
-  type: 'projectPresetEdit';
-  presetName: string;
-};
-
 export type IPageSpec_ProjectCustomFirmwareCreate = {
   type: 'projectCustomFirmwareCreate';
 };
@@ -37,17 +27,33 @@ export type IPageSpec_ProjectStandardFirmwareCreate = {
   type: 'projectStandardFirmwareCreate';
 };
 
-export type IPageSpec_ProjectStandardFirmwareEdit = {
-  type: 'projectStandardFirmwareEdit';
+export type IPageSpec_ProjectLayoutView = {
+  type: 'projectLayoutView';
+  projectKey: string;
+  layoutName: string;
+  canEdit: boolean;
+};
+
+export type IPageSpec_ProjectPresetView = {
+  type: 'projectPresetView';
+  projectKey: string;
+  presetName: string;
+  canEdit: boolean;
+};
+
+export type IPageSpec_ProjectStandardFirmwareView = {
+  type: 'projectStandardFirmwareView';
+  projectKey: string;
   firmwareName: string;
+  canEdit: boolean;
 };
 
 export type IPageSpec =
-  | IPageSpec_ProjectLayoutEdit
-  | IPageSpec_ProjectPresetEdit
   | IPageSpec_ProjectCustomFirmwareCreate
   | IPageSpec_ProjectStandardFirmwareCreate
-  | IPageSpec_ProjectStandardFirmwareEdit;
+  | IPageSpec_ProjectLayoutView
+  | IPageSpec_ProjectPresetView
+  | IPageSpec_ProjectStandardFirmwareView;
 
 export type IPageModelSpec = never;
 

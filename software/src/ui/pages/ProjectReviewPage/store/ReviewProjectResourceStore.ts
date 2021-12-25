@@ -1,5 +1,6 @@
+import { decodeProjectResourceItemKey } from '~/shared';
 import { projectResourceHelpers } from '~/ui/features/ProjectResourcesPart/store/helpers';
-import { projectPackagesReader } from '~/ui/store';
+import { projectPackagesReader, uiActions } from '~/ui/store';
 import { createSimpleSelector } from '~/ui/utils';
 
 export type IReviewProjectResourceStore = {
@@ -47,8 +48,31 @@ export function createReviewProjectResourceStore(): IReviewProjectResourceStore 
       state.selectedItemKey = '';
     },
     handleOpenDetail() {
-      const editSig = `${state.loadedProjectKey}--${state.selectedItemKey}`;
-      console.log({ editSig });
+      const { loadedProjectKey, selectedItemKey } = state;
+      const { itemType, itemName } =
+        decodeProjectResourceItemKey(selectedItemKey);
+      if (itemType === 'profile') {
+        uiActions.navigateTo({
+          type: 'projectPresetView',
+          projectKey: loadedProjectKey,
+          presetName: itemName,
+          canEdit: false,
+        });
+      } else if (itemType === 'layout') {
+        uiActions.navigateTo({
+          type: 'projectLayoutView',
+          projectKey: loadedProjectKey,
+          layoutName: itemName,
+          canEdit: false,
+        });
+      } else if (itemType === 'firmware') {
+        uiActions.navigateTo({
+          type: 'projectStandardFirmwareView',
+          projectKey: loadedProjectKey,
+          firmwareName: itemName,
+          canEdit: false,
+        });
+      }
     },
   };
 
