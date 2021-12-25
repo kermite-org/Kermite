@@ -64,7 +64,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({
         title={`edit project layout: ${sourceLayoutEntry.layoutName}`}
         backHandler={uiActions.closeSubPage}
         canSave={isModified}
-        saveHandler={canEdit ? saveHandler : undefined}
+        saveHandler={(canEdit && saveHandler) || undefined}
       />
       <LayoutEditorGeneralComponent layout={sourceLayoutEntry.data} />
     </div>

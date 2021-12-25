@@ -80,6 +80,7 @@ const itemsSource: NavigationItemSource[] = [
     pageName: 'review',
     iconSpec: 'fa fa-globe',
     hint: 'review page',
+    isAvailable: () => uiReaders.isDeveloperMode,
   },
   {
     pagePath: '/settings',
