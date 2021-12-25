@@ -127,23 +127,6 @@ async function loadDraftProjectPackageFile(
   return undefined;
 }
 
-let cachedRemotePackages: IProjectPackageInfo[] | undefined;
-
-async function loadRemoteProjectPackageInfos_deprecated(): Promise<
-  IProjectPackageInfo[]
-> {
-  if (!cachedRemotePackages) {
-    const remotePackagesLocalFolderPath = appEnv.resolveUserDataFilePath(
-      'data/remote_projects',
-    );
-    cachedRemotePackages = await loadProjectPackageFiles(
-      remotePackagesLocalFolderPath,
-      'online',
-    );
-  }
-  return cachedRemotePackages;
-}
-
 async function loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(): Promise<
   IProjectPackageInfo[]
 > {
