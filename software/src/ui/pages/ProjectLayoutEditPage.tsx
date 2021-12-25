@@ -62,7 +62,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({
     <div css={style}>
       <RouteHeaderBar
         title={`edit project layout: ${sourceLayoutEntry.layoutName}`}
-        backPagePath="/projectResource"
+        backHandler={uiActions.closeSubPage}
         canSave={isModified}
         saveHandler={canEdit ? saveHandler : undefined}
       />

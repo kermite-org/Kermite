@@ -61,7 +61,7 @@ export const ProjectPresetEditPage: FC<Props> = ({
     <div css={style}>
       <RouteHeaderBar
         title={`edit project preset: ${sourceProfileEntry.profileName}`}
-        backPagePath="/projectResource"
+        backHandler={uiActions.closeSubPage}
         canSave={canEdit && isModified}
         saveHandler={saveHandler}
       />
