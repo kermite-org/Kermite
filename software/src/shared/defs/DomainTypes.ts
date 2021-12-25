@@ -111,11 +111,19 @@ export interface IProjectPackageFileContent {
   profiles: IProjectProfileEntry[];
 }
 
+export interface IOnlineProjectAttributes {
+  isOfficial: boolean;
+  authorDisplayName: string;
+  authorIconUrl: string;
+  revision: number;
+}
+
 export type IProjectPackageInfo = {
   projectKey: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
   packageName: string;
   isDraft?: boolean;
+  onlineProjectAttributes?: IOnlineProjectAttributes;
 } & IProjectPackageFileContent;
 
 export type IFirmwareOrigin = 'localBuild' | 'online';
