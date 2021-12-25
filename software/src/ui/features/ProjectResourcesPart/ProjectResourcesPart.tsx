@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { GeneralButtonMenu } from '~/ui/components';
+import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
 import { ProjectResourceList } from '~/ui/fabrics/ProjectResourceList';
 import { useProjectResourcePageModel } from '~/ui/features/ProjectResourcesPart/models/ProjectResourcePageModel';
-import { ResourceItemDetailView } from '~/ui/features/ProjectResourcesPart/organisms/ResourceItemDetailView';
 import { reflectValue } from '~/ui/utils';
 
 export const ProjectResourcesPart: FC = () => {
@@ -14,7 +14,10 @@ export const ProjectResourcesPart: FC = () => {
     setSelectedItemKey,
     clearSelection,
     menuItems,
+    editProjectInfo,
+    openDetailView,
   } = useProjectResourcePageModel();
+
   return (
     <div css={style}>
       <div className="top-row">
@@ -43,9 +46,12 @@ export const ProjectResourcesPart: FC = () => {
           />
         </div>
         <div className="right-column">
-          <ResourceItemDetailView
+          <ProjectResourceItemView
             selectedItemKey={selectedItemKey}
             if={!!selectedItemKey}
+            projectInfo={editProjectInfo}
+            detailButtonText="edit"
+            onDetailButton={openDetailView}
           />
         </div>
       </div>
