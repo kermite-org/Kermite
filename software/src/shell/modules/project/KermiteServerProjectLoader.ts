@@ -22,7 +22,7 @@ interface IProjectPackageWrapperPackageItemPartial {
   data: string; // content of .kmpkg.json
   // dataHash: string;
   revision: number;
-  isOfficial: boolean;
+  official: boolean;
 }
 
 interface IUserApiResponsePartial {
@@ -106,7 +106,7 @@ async function loadProjectPackageWrapperFiles(
           console.log(`invalid online package ${projectId}`);
           return undefined;
         }
-        const { userId, isOfficial, revision } = wrapperItem;
+        const { userId, official, revision } = wrapperItem;
 
         const userInfo = (await fetchJson(
           `${appConfig.kermiteServerUrl}/api/users/${userId}`,
@@ -115,7 +115,7 @@ async function loadProjectPackageWrapperFiles(
         const attrs: IOnlineProjectAttributes = {
           authorDisplayName: userInfo.displayName,
           authorIconUrl: `${appConfig.kermiteServerUrl}/api/avatar/${userId}`,
-          isOfficial,
+          isOfficial: official,
           revision,
         };
 
