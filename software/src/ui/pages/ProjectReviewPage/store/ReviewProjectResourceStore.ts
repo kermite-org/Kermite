@@ -11,6 +11,7 @@ export type IReviewProjectResourceStore = {
     loadProject(projectKey: string): void;
     setSelectedItemKey(itemKey: string): void;
     clearSelection(): void;
+    handleOpenDetail(): void;
   };
 };
 
@@ -44,6 +45,10 @@ export function createReviewProjectResourceStore(): IReviewProjectResourceStore 
     },
     clearSelection() {
       state.selectedItemKey = '';
+    },
+    handleOpenDetail() {
+      const editSig = `${state.loadedProjectKey}--${state.selectedItemKey}`;
+      console.log({ editSig });
     },
   };
 

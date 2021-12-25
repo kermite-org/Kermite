@@ -1,7 +1,7 @@
 import { css, FC, jsx, useLocal } from 'alumina';
 import { CommonPageFrame } from '~/ui/components';
 import { ProjectKeyboardList, ProjectResourceList } from '~/ui/fabrics';
-import { ResourceItemDetailView } from '~/ui/features/ProjectResourcesPart/organisms/ResourceItemDetailView';
+import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
 import { createProjectReviewPageStore } from '~/ui/pages/ProjectReviewPage/store';
 import {
   projectReviewPageStoreContext,
@@ -10,10 +10,15 @@ import {
 
 const ProjectReviewPageComponent: FC = () => {
   const {
-    projectSelection: { projectItems, currentProjectKey, setCurrentProjectKey },
+    projectSelection: {
+      projectItems,
+      currentProjectKey,
+      setCurrentProjectKey,
+      selectedProjectInfo,
+    },
     projectResources: {
       readers: { resourceItemKeys, selectedItemKey },
-      actions: { setSelectedItemKey, clearSelection },
+      actions: { setSelectedItemKey, clearSelection, handleOpenDetail },
     },
   } = useProjectReviewPageStore();
 
@@ -37,9 +42,12 @@ const ProjectReviewPageComponent: FC = () => {
             />
           </div>
           <div class="right-column">
-            <ResourceItemDetailView
+            <ProjectResourceItemView
+              projectInfo={selectedProjectInfo}
               selectedItemKey={selectedItemKey}
               if={!!selectedItemKey}
+              detailButtonText="Detail"
+              onDetailButton={handleOpenDetail}
             />
           </div>
         </div>

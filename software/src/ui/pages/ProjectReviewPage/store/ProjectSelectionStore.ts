@@ -1,10 +1,16 @@
-import { createProjectKey, DisplayKeyboardDesignLoader } from '~/shared';
+import {
+  createProjectKey,
+  DisplayKeyboardDesignLoader,
+  fallbackProjectPackageInfo,
+  IProjectPackageInfo,
+} from '~/shared';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { uiReaders } from '~/ui/store';
+import { projectPackagesReader, uiReaders } from '~/ui/store';
 
 export type IProjectSelectionStore = {
   projectItems: IProjectKeyboardListProjectItem[];
   currentProjectKey: string;
+  selectedProjectInfo: IProjectPackageInfo;
   setCurrentProjectKey: (key: string) => void;
 };
 
@@ -28,6 +34,13 @@ export function createProjectSelectionStore(): IProjectSelectionStore {
     projectItems,
     get currentProjectKey() {
       return state.currentProjectKey;
+    },
+    get selectedProjectInfo() {
+      return (
+        projectPackagesReader.findProjectInfoByProjectKey(
+          state.currentProjectKey,
+        ) || fallbackProjectPackageInfo
+      );
     },
     setCurrentProjectKey(value: string) {
       state.currentProjectKey = value;
