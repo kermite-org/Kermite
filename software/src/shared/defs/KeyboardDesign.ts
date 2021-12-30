@@ -67,10 +67,10 @@ export type IDisplayKeyShape =
       width: number;
       height: number;
     }
-  | {
-      type: 'circle';
-      radius: number;
-    }
+  // | {
+  //     type: 'circle';
+  //     radius: number;
+  //   }
   | {
       type: 'polygon';
       points: { x: number; y: number }[];

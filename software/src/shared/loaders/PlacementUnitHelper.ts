@@ -45,9 +45,10 @@ export function getStdKeySize(shapeSpec: string, sizeUnit: ICoordUnit) {
 }
 
 export function getKeySize(shapeSpec: string, sizeUnit: ICoordUnit) {
-  if (shapeSpec === 'ext circle') {
-    return [18, 18];
-  } else if (shapeSpec === 'ext isoEnter') {
+  // if (shapeSpec === 'ext circle') {
+  //   return [18, 18];
+  // } else
+  if (shapeSpec === 'ext isoEnter') {
     return IsoEnterOutlineSizeSpec;
   }
   return getStdKeySize(shapeSpec, sizeUnit);
