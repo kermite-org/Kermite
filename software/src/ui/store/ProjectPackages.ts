@@ -2,6 +2,7 @@ import { useMemo } from 'alumina';
 import produce from 'immer';
 import {
   fallbackProjectPackageInfo,
+  getFileBaseNameFromFilePath,
   getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
@@ -14,6 +15,8 @@ import {
   isNumberInRange,
   IStandardFirmwareEntry,
 } from '~/shared';
+import { ipcAgent } from '~/ui/base';
+import { modalConfirm, modalError } from '~/ui/components';
 import { dispatchCoreAction, uiReaders, uiState } from '~/ui/store/base';
 
 export const projectPackagesReader = {
@@ -278,5 +281,59 @@ export const projectPackagesHooks = {
         uiReaders.allProjectPackageInfos,
       ]) || fallbackProjectPackageInfo
     );
+  },
+};
+
+export const projectPackagesActions = {
+  async importLocalPackageFile(filePath: string): Promise<string | undefined> {
+    if (!filePath?.endsWith('.kmpkg.json')) {
+      await modalError(
+        'Invalid target file. Only .kmpkg.json file can be loaded.',
+      );
+      return;
+    }
+    const packageName = getFileBaseNameFromFilePath(filePath, '.kmpkg.json');
+    const fileContent = (await ipcAgent.async.file_loadJsonFileContent(
+      filePath,
+    )) as { projectId: string };
+
+    const loadedProjectId = fileContent.projectId;
+    if (!loadedProjectId) {
+      await modalError('invalid file content');
+      return;
+    }
+
+    const existingLocalPackages = uiReaders.allProjectPackageInfos.filter(
+      (it) => it.origin === 'local' && !it.isDraft,
+    );
+
+    const sameIdPackage = existingLocalPackages.find(
+      (it) =>
+        it.projectId === loadedProjectId && it.packageName !== packageName,
+    );
+
+    if (sameIdPackage) {
+      await modalError(
+        `Cannot add package due to projectId duplication. \nLocal package ${sameIdPackage.packageName} has the same projectId as of this.`,
+      );
+      return;
+    }
+
+    const sameNamePackage = existingLocalPackages.find(
+      (it) => it.packageName === packageName,
+    );
+
+    if (sameNamePackage) {
+      const ok = await modalConfirm({
+        message: `Existing local package ${packageName} is overwritten. Are you ok?`,
+        caption: 'import local package',
+      });
+      if (!ok) {
+        return;
+      }
+    }
+    await dispatchCoreAction({ project_addLocalProjectFromFile: { filePath } });
+
+    return loadedProjectId;
   },
 };
