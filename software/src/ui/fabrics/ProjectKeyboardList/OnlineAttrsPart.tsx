@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IOnlineProjectAttributes } from '~/shared';
-import { Icon } from '~/ui/components';
+import { Icon, TooltipBalloon } from '~/ui/components';
 import { KermiteServerBase64Icon } from '~/ui/fabrics/ProjectKeyboardList/KermiteServerBase64Icon';
 
 type Props = {
@@ -15,13 +15,18 @@ export const OnlineAttrsPart: FC<Props> = ({
       <KermiteServerBase64Icon iconUrl={authorIconUrl} class="icon" />
       <div class="name">{authorDisplayName}</div>
       <div class="author-type">
-        {/* {isOfficial ? 'official' : 'volunteer'} */}
-        <div class="icon-box" if={isOfficial}>
+        <div class="icon-box icon-box-official" if={isOfficial}>
+          <TooltipBalloon class="balloon">
+            このキーボード定義は、キーボードの設計者本人によって提供されています。
+          </TooltipBalloon>
           {/* <Icon spec="fa fa-certificate" class="badge" /> */}
           <Icon spec="fa fa-certificate" class="badge" />
           <Icon spec="fa fa-check" class="check" />
         </div>
-        <div class="icon-box" if={!isOfficial}>
+        <div class="icon-box icon-box-unofficial" if={!isOfficial}>
+          <TooltipBalloon class="balloon">
+            このキーボード定義は、キーボードの設計者ではない有志のユーザが作成したものです。
+          </TooltipBalloon>
           <Icon spec="fa fa-user-friends" class="users" />
         </div>
       </div>
@@ -50,8 +55,9 @@ const style = css`
       position: relative;
       width: 24px;
       height: 24px;
+
       /* border: solid 1px blue; */
-      > * {
+      > i {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -72,6 +78,17 @@ const style = css`
       > .check {
         font-size: 13px;
         color: white;
+      }
+
+      > .balloon {
+        position: absolute;
+        left: -15px;
+        top: -55px;
+        display: none;
+      }
+
+      &:hover > .balloon {
+        display: block;
       }
     }
   }

@@ -4,7 +4,7 @@ export const TooltipBalloon = styled.div`
   border: solid 1px #888;
   background: #fff;
   color: #444;
-  width: 280px;
+  width: 260px;
   font-size: 12px;
   border-radius: 6px;
   padding: 8px;
