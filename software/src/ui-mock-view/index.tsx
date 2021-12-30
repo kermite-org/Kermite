@@ -6,7 +6,6 @@ import { AluminaDebugPage2 } from '~/ui-mock-view/AluminaDebugPage2';
 import { AluminaDebugPage3 } from '~/ui-mock-view/AluminaDebugPage3';
 import { AluminaDebugPage4 } from '~/ui-mock-view/AluminaDebugPage4';
 import { AluminaDebugPage5 } from '~/ui-mock-view/AluminaDebugPage5';
-import { ComponentCatalogPage } from '~/ui-mock-view/ComponentCatalog';
 import { initializeCss } from '~/ui-mock-view/CssInitializer';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
 import { GooberDevelopmentPage2 } from '~/ui-mock-view/GooberDevelopmentPage2';
@@ -39,9 +38,9 @@ const PageRoot = () => {
       {/* <GooberDevelopmentPage /> */}
       {/* <GooberDevelopmentPage2 /> */}
       {/* <ShortCssDevPage /> */}
-      <ComponentCatalogPage />
+      {/* <ComponentCatalogPage /> */}
       {/* <SvgScalingDevPage /> */}
-      {/* <SpaLayoutDebugPage /> */}
+      <SpaLayoutDebugPage />
     </div>
   );
 };
