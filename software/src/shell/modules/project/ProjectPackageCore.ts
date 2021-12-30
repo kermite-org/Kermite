@@ -200,6 +200,7 @@ async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
     throw new Error('invalid package file content');
   }
   const destFilePath = getUserProjectFilePath(packageName, false);
+  await fsxEnsureFolderExists(pathDirname(destFilePath));
   await fsxWriteJsonFile(destFilePath, data);
 }
 
