@@ -137,6 +137,9 @@ export const projectManagementMenuActions = {
       }
     }
   },
+  handleImportFromLocalFile() {
+    console.log('load project file here');
+  },
   handleOpenLocalProjectsFolder() {
     dispatchCoreAction({ project_openLocalProjectsFolder: 1 });
   },
