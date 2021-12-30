@@ -45,7 +45,7 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
     {
       type: 'menuEntry',
       text: 'import from file',
-      handler: projectManagementMenuActions.handleImportFromLocalFile,
+      handler: projectManagementMenuActions.handleSelectLocalPackageToImport,
     },
     {
       type: 'menuEntry',
