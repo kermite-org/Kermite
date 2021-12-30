@@ -1,15 +1,15 @@
 import { jsx } from 'alumina';
-import { TooltipBallon } from '~/ui/components/atoms/TooltipBaloon';
+import { TooltipBalloon } from '~/ui/components/atoms/TooltipBalloon';
 
 export default {
   patternA: (
-    <TooltipBallon>
+    <TooltipBalloon>
       このキーボード定義は、キーボードの設計者本人によって提供されています。
-    </TooltipBallon>
+    </TooltipBalloon>
   ),
   patternB: (
-    <TooltipBallon>
+    <TooltipBalloon>
       このキーボード定義は、キーボードの設計者ではない有志のユーザが作成したものです。
-    </TooltipBallon>
+    </TooltipBalloon>
   ),
 };

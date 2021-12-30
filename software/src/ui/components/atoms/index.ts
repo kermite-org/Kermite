@@ -16,4 +16,4 @@ export * from './ToggleButton';
 export * from './ToggleSwitch';
 export * from './WelcomePageButton';
 export * from './SetupNavigationStepButton';
-export * from './TooltipBaloon';
+export * from './TooltipBalloon';
