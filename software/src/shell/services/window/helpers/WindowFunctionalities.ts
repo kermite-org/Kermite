@@ -51,7 +51,6 @@ export function preparePreloadJsFile(preloadFilePath: string) {
   // dirty patch preload.json to expose isDevelopment
   const preloadText = fsReadFileSync(preloadFilePath, { encoding: 'utf-8' });
   const feDefines = makeDotenvVariablesForFrontend();
-  console.log({ feDefines });
   const modPreloadText = preloadText
     .replace(/isDevelopment: (true|false)/g, `isDevelopment: ${isDevelopment}`)
     .replace(`'processEnv', {}`, `'processEnv', ${JSON.stringify(feDefines)}`);
