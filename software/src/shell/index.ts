@@ -1,10 +1,7 @@
-import dotenv from 'dotenv';
 import { app } from 'electron';
 import 'source-map-support/register';
 import { ApplicationRoot } from '~/shell/ApplicationRoot';
 import { appGlobal } from '~/shell/base';
-
-dotenv.config();
 
 let appRoot: ApplicationRoot | undefined;
 

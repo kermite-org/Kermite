@@ -2,7 +2,10 @@ import childProcess from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
+import dotenv from 'dotenv';
 import { build, BuildConfig, cliopts } from 'estrella';
+
+dotenv.config();
 
 function delayMs(n: number) {
   return new Promise((resolve) => setTimeout(resolve, n));
