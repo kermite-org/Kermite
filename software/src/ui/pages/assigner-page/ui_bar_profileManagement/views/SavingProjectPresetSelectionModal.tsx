@@ -30,7 +30,7 @@ type ICoreProps = {
 function useCoreProps(baseVm: IProfileManagementPartViewModel): ICoreProps {
   const [currentPresetName, setCurrentPresetName] = useState('');
 
-  const resourceInfos = uiReaders.allProjectPackageInfos;
+  const resourceInfos = uiReaders.activeProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectKey,
