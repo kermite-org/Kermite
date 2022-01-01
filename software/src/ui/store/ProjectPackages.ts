@@ -30,7 +30,7 @@ export const projectPackagesReader = {
           (info.origin === origin || info.origin === 'online'),
       );
     } else {
-      return uiReaders.allProjectPackageInfos;
+      return uiReaders.activeProjectPackageInfos;
     }
   },
   getEditTargetProject(): IProjectPackageInfo | undefined {
