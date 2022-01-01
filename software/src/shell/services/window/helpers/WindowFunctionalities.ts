@@ -35,15 +35,26 @@ export function enumeratePagePaths(baseDir: string): string[] {
   return subPagePaths;
 }
 
+function makeDotenvVariablesForFrontend() {
+  const defines: any = {};
+  for (const key in process.env) {
+    if (key.startsWith('FE_')) {
+      defines[key] = process.env[key];
+    }
+  }
+  return defines;
+}
+
 export function preparePreloadJsFile(preloadFilePath: string) {
   const isDevelopment = process.env.NODE_ENV === 'development';
 
   // dirty patch preload.json to expose isDevelopment
   const preloadText = fsReadFileSync(preloadFilePath, { encoding: 'utf-8' });
-  const modPreloadText = preloadText.replace(
-    /isDevelopment: (true|false)/g,
-    `isDevelopment: ${isDevelopment}`,
-  );
+  const feDefines = makeDotenvVariablesForFrontend();
+  console.log({ feDefines });
+  const modPreloadText = preloadText
+    .replace(/isDevelopment: (true|false)/g, `isDevelopment: ${isDevelopment}`)
+    .replace(`'processEnv', {}`, `'processEnv', ${JSON.stringify(feDefines)}`);
   fsWriteFileSync(preloadFilePath, modPreloadText, {
     encoding: 'utf-8',
   });
