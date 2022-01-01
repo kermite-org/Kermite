@@ -8,7 +8,7 @@ import {
   callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,
 } from '~/ui/featureEditors/ProfileEditor/ui_modal_layerSettings/LayerConfigurationModal';
-import { profilesReader } from '~/ui/pages/assigner-page/models';
+import { profilesReader } from '~/ui/pages/AssignerPage/models';
 
 export interface ILayerManagementPartViewModel {
   canEdit: boolean;

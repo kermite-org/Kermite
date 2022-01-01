@@ -18,7 +18,7 @@ import {
   ForegroundModalLayerRoot,
   SiteDpiScaler,
 } from '~/ui/components';
-import { WidgetZoneRoot } from '~/ui/pages/widget';
+import { WidgetZoneRoot } from '~/ui/pages/WidgetPage';
 import { ConfiguratorZoneRoot } from '~/ui/root/ConfiguratorZoneRoot';
 import {
   commitUiState,
