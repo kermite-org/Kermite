@@ -101,7 +101,7 @@
     "react/display-name": 0,
     "react/no-unknown-property": 0,
     "react/jsx-curly-brace-presence": 2,
-    // "import/no-cycle": [1, { "maxDepth": 3, "ignoreExternal": true }],
+    "import/no-cycle": [1, { "maxDepth": 1, "ignoreExternal": true }],
     "import/order": [
       1,
       {
