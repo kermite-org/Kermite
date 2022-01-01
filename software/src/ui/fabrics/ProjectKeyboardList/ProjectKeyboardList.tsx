@@ -38,5 +38,6 @@ const style = css`
   gap: 20px;
   background: #ccc;
   padding: 20px;
+  overflow-x: hidden;
   overflow-y: auto;
 `;
