@@ -51,6 +51,11 @@ const ProjectReviewPageComponent: FC = () => {
             />
           </div>
         </div>
+
+        <div class="info-row" if={!!currentProjectKey}>
+          package revision:
+          {selectedProjectInfo.onlineProjectAttributes?.revision}
+        </div>
       </div>
     </CommonPageFrame>
   );
@@ -76,6 +81,9 @@ const style = css`
       flex-grow: 1;
       border: solid 1px #888;
     }
+  }
+  > .info-row {
+    margin-top: 5px;
   }
 `;
 
