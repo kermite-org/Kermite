@@ -30,8 +30,14 @@ const ProjectReviewPageComponent: FC = () => {
           projectItems={projectItems}
           currentProjectKey={currentProjectKey}
           setCurrentProjectKey={setCurrentProjectKey}
+          if={projectItems.length > 0}
         />
-
+        <div
+          class="keyboard-list keyboard-list-dummy"
+          if={projectItems.length === 0}
+        >
+          No auditing packages
+        </div>
         <div class="main-row">
           <div class="left-column">
             <ProjectResourceList
@@ -65,6 +71,13 @@ const style = css`
   > .keyboard-list {
     height: 220px;
   }
+
+  > .keyboard-list-dummy {
+    background: #ccc;
+    color: #444;
+    padding: 10px;
+  }
+
   > .main-row {
     margin-top: 10px;
     display: flex;
