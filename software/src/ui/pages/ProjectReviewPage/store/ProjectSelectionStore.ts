@@ -15,23 +15,28 @@ export type IProjectSelectionStore = {
 };
 
 export function createProjectSelectionStore(): IProjectSelectionStore {
-  const projectItems = uiReaders.allProjectPackageInfos
-    .filter((info) => info.origin === 'online_audit')
-    .map((info) => ({
-      projectKey: createProjectKey(info.origin, info.projectId),
-      keyboardName: `(review)${info.keyboardName}`,
-      design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
-        info.layouts[0].data,
-      ),
-      onlineProjectAttrs: info.onlineProjectAttributes,
-    }));
+  function loadProjectItems(): IProjectKeyboardListProjectItem[] {
+    return uiReaders.allProjectPackageInfos
+      .filter((info) => info.origin === 'online_audit')
+      .map((info) => ({
+        projectKey: createProjectKey(info.origin, info.projectId),
+        keyboardName: `(review)${info.keyboardName}`,
+        design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
+          info.layouts[0].data,
+        ),
+        onlineProjectAttrs: info.onlineProjectAttributes,
+      }));
+  }
+  let loadedProjectItems: IProjectKeyboardListProjectItem[] | undefined;
 
   const state = {
     currentProjectKey: '',
   };
 
   return {
-    projectItems,
+    get projectItems() {
+      return (loadedProjectItems ||= loadProjectItems());
+    },
     get currentProjectKey() {
       return state.currentProjectKey;
     },

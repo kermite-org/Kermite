@@ -1,4 +1,4 @@
-import { css, FC, jsx, useLocal } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import { CommonPageFrame } from '~/ui/components';
 import { ProjectKeyboardList, ProjectResourceList } from '~/ui/fabrics';
 import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
@@ -87,8 +87,8 @@ const style = css`
   }
 `;
 
+const store = createProjectReviewPageStore();
 export const ProjectReviewPage: FC = () => {
-  const store = useLocal(createProjectReviewPageStore);
   store.updateOnRender();
   return (
     <projectReviewPageStoreContext.Provider value={store}>
