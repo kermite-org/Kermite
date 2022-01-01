@@ -17,7 +17,7 @@ const configs = {
 };
 
 function makeCoreProps() {
-  const resourceInfos = uiReaders.allProjectPackageInfos;
+  const resourceInfos = uiReaders.activeProjectPackageInfos;
 
   const projectOptions = resourceInfos.map((info) => ({
     value: info.projectKey,
