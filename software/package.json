@@ -73,6 +73,7 @@
     "alumina-visor": "^0.1.4",
     "child_process": "^1.0.2",
     "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
     "electron": "^16.0.4",
     "electron-builder": "^22.14.5",
     "electron-rebuild": "^3.2.5",
