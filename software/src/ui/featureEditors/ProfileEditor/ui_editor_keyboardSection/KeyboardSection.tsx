@@ -4,7 +4,7 @@ import { EditorKeyboardView } from '~/ui/elements/keyboard';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
 import { makeEditKeyUnitCardsPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
 import { ProfileSetupNavigationCardView } from '~/ui/featureEditors/ProfileEditor/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
-import { profilesReader } from '~/ui/pages/assigner-page/models';
+import { profilesReader } from '~/ui/pages/AssignerPage/models';
 import { LayerStateView } from './LayerStateView';
 
 export const KeyboardSection: FC = () => {

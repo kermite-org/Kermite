@@ -3,7 +3,7 @@ import { CheckBox } from '~/ui/components/atoms/CheckBox';
 
 let gChecked = false;
 
-export const CheckBoxExamples = {
+export default {
   default: () => (
     <CheckBox checked={gChecked} setChecked={(ck) => (gChecked = ck)} />
   ),

@@ -1,5 +1,5 @@
 import { cloneObject, injectObjectPropsRecursive } from '~/shared';
-import { appUi } from '~/ui/base';
+import { appUi } from '~/ui/base/AppUi';
 import textSourceEnglish from '../i18n/en.json';
 import textSourceJapanese from '../i18n/ja.json';
 

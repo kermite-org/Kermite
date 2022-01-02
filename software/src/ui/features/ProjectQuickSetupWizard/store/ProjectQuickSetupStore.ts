@@ -52,7 +52,7 @@ const state: IState = createDefaultState();
 
 const readers = {
   get keyboardNameValidationError(): string | undefined {
-    return validateResourceName(state.keyboardName, 'keyboard name');
+    return validateResourceName(state.keyboardName, 'keyboard name', true);
   },
   get isFirmwareConfigurationStepValid(): boolean {
     const { isConfigValid, keyboardName } = state;

@@ -1,4 +1,5 @@
 import {
+  createProjectKey,
   decodeProjectResourceItemKey,
   IProjectPackageInfo,
   IProjectResourceItemType,
@@ -7,7 +8,7 @@ import { modalConfirm } from '~/ui/components';
 import { projectResourceReaders } from '~/ui/features/ProjectResourcesPart/store/readers';
 import { projectResourceState } from '~/ui/features/ProjectResourcesPart/store/state';
 import { projectPackagesWriter } from '~/ui/store/ProjectPackages';
-import { uiActions, uiReaders } from '~/ui/store/base';
+import { dispatchCoreAction, uiActions, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {
@@ -69,9 +70,16 @@ export const projectResourceActions = {
     projectPackagesWriter.saveLocalProject(newProjectInfo);
   },
   createStandardFirmware() {
+    const projectInfo = uiReaders.editTargetProject!;
+    const projectKey = createProjectKey(
+      projectInfo.origin,
+      projectInfo.projectId,
+    );
     uiActions.navigateTo({
-      type: 'projectStandardFirmwareEdit',
+      type: 'projectStandardFirmwareView',
+      projectKey,
       firmwareName: '',
+      canEdit: true,
     });
   },
   createCustomFirmware() {
@@ -79,13 +87,27 @@ export const projectResourceActions = {
   },
   editSelectedResourceItem() {
     const projectInfo = uiReaders.editTargetProject!;
+    const projectKey = createProjectKey(
+      projectInfo.origin,
+      projectInfo.projectId,
+    );
     const { selectedItemKey } = projectResourceReaders;
     const { itemType, itemName } =
       decodeProjectResourceItemKey(selectedItemKey);
     if (itemType === 'profile') {
-      uiActions.navigateTo({ type: 'projectPresetEdit', presetName: itemName });
+      uiActions.navigateTo({
+        type: 'projectPresetView',
+        projectKey,
+        presetName: itemName,
+        canEdit: true,
+      });
     } else if (itemType === 'layout') {
-      uiActions.navigateTo({ type: 'projectLayoutEdit', layoutName: itemName });
+      uiActions.navigateTo({
+        type: 'projectLayoutView',
+        projectKey,
+        layoutName: itemName,
+        canEdit: true,
+      });
     } else if (itemType === 'firmware') {
       const firmwareName = itemName;
       const firmwareInfo = projectInfo.firmwares.find(
@@ -93,8 +115,10 @@ export const projectResourceActions = {
       );
       if (firmwareInfo?.type === 'standard') {
         uiActions.navigateTo({
-          type: 'projectStandardFirmwareEdit',
+          type: 'projectStandardFirmwareView',
+          projectKey,
           firmwareName,
+          canEdit: true,
         });
       } else if (firmwareInfo?.type === 'custom') {
         // uiActions.navigateTo({
@@ -169,5 +193,8 @@ export const projectResourceActions = {
       itemName,
       1,
     );
+  },
+  handleOpenLocalProjectsFolder() {
+    dispatchCoreAction({ project_openLocalProjectsFolder: 1 });
   },
 };

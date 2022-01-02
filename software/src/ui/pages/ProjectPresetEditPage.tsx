@@ -1,21 +1,29 @@
 import { css, FC, jsx, useState } from 'alumina';
 import { fallbackProjectProfileEntry, IProjectProfileEntry } from '~/shared';
 import { colors, uiConfiguration } from '~/ui/base';
-import { IPageSpec_ProjectPresetEdit } from '~/ui/commonModels';
+import { IPageSpec_ProjectPresetView } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/elements/frames';
 import {
   AssignerGeneralComponent,
   AssignerGeneralComponent_OutputPropsSupplier,
 } from '~/ui/featureEditors';
-import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
+import {
+  projectPackagesReader,
+  projectPackagesWriter,
+  uiActions,
+} from '~/ui/store';
 
 type Props = {
-  spec: IPageSpec_ProjectPresetEdit;
+  spec: IPageSpec_ProjectPresetView;
 };
 
 const helpers = {
-  loadSourceProfileEntry(presetName: string): IProjectProfileEntry {
-    const projectInfo = uiReaders.editTargetProject;
+  loadSourceProfileEntry(
+    projectKey: string,
+    presetName: string,
+  ): IProjectProfileEntry {
+    const projectInfo =
+      projectPackagesReader.findProjectInfoByProjectKey(projectKey);
     const profileEntry = projectInfo?.profiles.find(
       (it) => it.profileName === presetName,
     );
@@ -23,9 +31,11 @@ const helpers = {
   },
 };
 
-export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
+export const ProjectPresetEditPage: FC<Props> = ({
+  spec: { projectKey, presetName, canEdit },
+}) => {
   const [sourceProfileEntry, setSourceProfileEntry] = useState(
-    helpers.loadSourceProfileEntry(presetName),
+    helpers.loadSourceProfileEntry(projectKey, presetName),
   );
 
   const { isModified, emitSavingDesign } =
@@ -51,9 +61,9 @@ export const ProjectPresetEditPage: FC<Props> = ({ spec: { presetName } }) => {
     <div css={style}>
       <RouteHeaderBar
         title={`edit project preset: ${sourceProfileEntry.profileName}`}
-        backPagePath="/projectResource"
+        backHandler={uiActions.closeSubPage}
         canSave={isModified}
-        saveHandler={saveHandler}
+        saveHandler={(canEdit && saveHandler) || undefined}
       />
       <AssignerGeneralComponent originalProfile={sourceProfileEntry.data} />
     </div>

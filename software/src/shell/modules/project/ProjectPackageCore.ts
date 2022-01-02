@@ -21,6 +21,7 @@ import {
   pathResolve,
 } from '~/shell/funcs';
 import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
+import { loadKermiteServerProjectPackageInfos } from '~/shell/modules/project/KermiteServerProjectLoader';
 
 const configs = {
   debugUseLocalRepositoryPackages: false,
@@ -126,21 +127,6 @@ async function loadDraftProjectPackageFile(
   return undefined;
 }
 
-let cachedRemotePackages: IProjectPackageInfo[] | undefined;
-
-async function loadRemoteProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
-  if (!cachedRemotePackages) {
-    const remotePackagesLocalFolderPath = appEnv.resolveUserDataFilePath(
-      'data/remote_projects',
-    );
-    cachedRemotePackages = await loadProjectPackageFiles(
-      remotePackagesLocalFolderPath,
-      'online',
-    );
-  }
-  return cachedRemotePackages;
-}
-
 async function loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(): Promise<
   IProjectPackageInfo[]
 > {
@@ -214,6 +200,7 @@ async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
     throw new Error('invalid package file content');
   }
   const destFilePath = getUserProjectFilePath(packageName, false);
+  await fsxEnsureFolderExists(pathDirname(destFilePath));
   await fsxWriteJsonFile(destFilePath, data);
 }
 
@@ -226,7 +213,7 @@ export const projectPackageProvider = {
       ];
     } else {
       return [
-        ...(await loadRemoteProjectPackageInfos()),
+        ...(await loadKermiteServerProjectPackageInfos()),
         ...(await loadUserProjectPackageInfos()),
       ];
     }

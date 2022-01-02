@@ -1,26 +1,26 @@
 import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
-import { IPageSpec_ProjectStandardFirmwareEdit } from '~/ui/commonModels';
+import { IPageSpec_ProjectStandardFirmwareView } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/elements/frames';
 import { StandardFirmwareEditor } from '~/ui/featureEditors';
 import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
 
 type Props = {
-  spec: IPageSpec_ProjectStandardFirmwareEdit;
+  spec: IPageSpec_ProjectStandardFirmwareView;
 };
 
 export const ProjectStandardFirmwareEditPage: FC<Props> = ({
-  spec: { firmwareName: sourceFirmwareName },
+  spec: { projectKey, firmwareName: sourceFirmwareName, canEdit },
 }) => {
   const { editFirmwareName, canSave, saveHandler, backHandler } =
-    useProjectStandardFirmwareEditPageModel(sourceFirmwareName);
+    useProjectStandardFirmwareEditPageModel(projectKey, sourceFirmwareName);
 
   return (
     <div css={style}>
       <RouteHeaderBar
         title={`edit project firmware: ${editFirmwareName || '(new)'}`}
         canSave={canSave}
-        saveHandler={saveHandler}
+        saveHandler={(canEdit && saveHandler) || undefined}
         backHandler={backHandler}
         editMode={editFirmwareName ? 'Edit' : 'Create'}
       />

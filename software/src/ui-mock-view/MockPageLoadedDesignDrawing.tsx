@@ -58,7 +58,7 @@ export const MockPageLoadedDesignDrawing = () => {
                   />
                 </g>
               )}
-              {ke.shape.type === 'circle' && (
+              {/* {ke.shape.type === 'circle' && (
                 <circle
                   cx={0}
                   cy={0}
@@ -66,7 +66,7 @@ export const MockPageLoadedDesignDrawing = () => {
                   stroke="#0A0"
                   fill="transparent"
                 />
-              )}
+              )} */}
               {ke.shape.type === 'polygon' && (
                 <polygon
                   points={ke.shape.points.map((p) => `${p.x},${p.y}`).join(' ')}

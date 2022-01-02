@@ -1,8 +1,11 @@
 import { IProjectPackageInfo } from '~/shared';
-import { ISelectorOption } from '~/ui/base';
+import { ipcAgent, ISelectorOption } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { callProjectSelectionModal } from '~/ui/elements/featureModals';
-import { projectPackagesReader } from '~/ui/store/ProjectPackages';
+import {
+  projectPackagesActions,
+  projectPackagesReader,
+} from '~/ui/store/ProjectPackages';
 import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import { resourceManagementUtils } from '~/ui/utils';
 
@@ -135,6 +138,12 @@ export const projectManagementMenuActions = {
           project_saveLocalProjectPackageInfo: newProject,
         });
       }
+    }
+  },
+  async handleSelectLocalPackageToImport() {
+    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
+    if (filePath) {
+      await projectPackagesActions.importLocalPackageFile(filePath);
     }
   },
   handleOpenLocalProjectsFolder() {

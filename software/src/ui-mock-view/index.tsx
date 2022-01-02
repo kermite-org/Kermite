@@ -6,7 +6,6 @@ import { AluminaDebugPage2 } from '~/ui-mock-view/AluminaDebugPage2';
 import { AluminaDebugPage3 } from '~/ui-mock-view/AluminaDebugPage3';
 import { AluminaDebugPage4 } from '~/ui-mock-view/AluminaDebugPage4';
 import { AluminaDebugPage5 } from '~/ui-mock-view/AluminaDebugPage5';
-import { ComponentCatalogPage } from '~/ui-mock-view/ComponentCatalog';
 import { initializeCss } from '~/ui-mock-view/CssInitializer';
 import { GooberDevelopmentPage } from '~/ui-mock-view/GooberDevelopmentPage';
 import { GooberDevelopmentPage2 } from '~/ui-mock-view/GooberDevelopmentPage2';
@@ -17,7 +16,7 @@ import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
 import { SpaLayoutDebugPage } from '~/ui-mock-view/SpaLayoutDebugPage';
 import { SvgScalingDevPage } from '~/ui-mock-view/SvgScalingDev';
-import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
+import { LayoutManagerPageComponent } from '~/ui/pages/LayoutEditorPage';
 import { MockPageLayoutEditorDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {
@@ -39,9 +38,9 @@ const PageRoot = () => {
       {/* <GooberDevelopmentPage /> */}
       {/* <GooberDevelopmentPage2 /> */}
       {/* <ShortCssDevPage /> */}
-      <ComponentCatalogPage />
+      {/* <ComponentCatalogPage /> */}
       {/* <SvgScalingDevPage /> */}
-      {/* <SpaLayoutDebugPage /> */}
+      <SpaLayoutDebugPage />
     </div>
   );
 };

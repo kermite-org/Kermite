@@ -17,6 +17,11 @@ export const uiReaders = {
   get allProjectPackageInfos(): IProjectPackageInfo[] {
     return uiState.core.allProjectPackageInfos;
   },
+  get activeProjectPackageInfos(): IProjectPackageInfo[] {
+    return uiState.core.allProjectPackageInfos.filter(
+      (it) => it.origin !== 'online_audit',
+    );
+  },
   get allCustomFirmwareInfos(): ICustomFirmwareInfo[] {
     return uiState.core.allCustomFirmwareInfos;
   },

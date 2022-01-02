@@ -1,7 +1,9 @@
 import { useEffect } from 'alumina';
+import { fallbackProjectPackageInfo, IProjectPackageInfo } from '~/shared';
 import { IGeneralMenuItem } from '~/ui/base';
 import { createProjectResourceMenuItems } from '~/ui/features/ProjectResourcesPart/models/ProjectResourceMenuItems';
 import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
+import { uiReaders } from '~/ui/store';
 
 interface IProjectResourcePageModel {
   keyboardName: string;
@@ -12,6 +14,8 @@ interface IProjectResourcePageModel {
   clearSelection(): void;
   editSelectedResourceItem(): void;
   menuItems: IGeneralMenuItem[];
+  editProjectInfo: IProjectPackageInfo;
+  openDetailView: () => void;
 }
 
 export function useProjectResourcePageModel(): IProjectResourcePageModel {
@@ -26,6 +30,11 @@ export function useProjectResourcePageModel(): IProjectResourcePageModel {
     setSelectedItemKey,
     handleKeyboardNameChange,
   } = projectResourceStore.actions;
+
+  const editProjectInfo =
+    uiReaders.editTargetProject || fallbackProjectPackageInfo;
+
+  const openDetailView = projectResourceStore.actions.editSelectedResourceItem;
   return {
     keyboardName,
     handleKeyboardNameChange,
@@ -35,5 +44,7 @@ export function useProjectResourcePageModel(): IProjectResourcePageModel {
     clearSelection,
     menuItems,
     editSelectedResourceItem,
+    editProjectInfo,
+    openDetailView,
   };
 }

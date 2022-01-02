@@ -2,7 +2,7 @@ import { jsx, render } from 'alumina';
 import { debounce } from '~/shared';
 import { appUi } from '~/ui/base';
 import { SiteRoot } from '~/ui/root/SiteRoot';
-import { uiSettingsPersistence, commitUiState } from '~/ui/store';
+import { commitUiState, uiSettingsPersistence } from '~/ui/store';
 
 function start() {
   console.log('start');

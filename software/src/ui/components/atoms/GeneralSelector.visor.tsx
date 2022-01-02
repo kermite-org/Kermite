@@ -6,6 +6,6 @@ const options: ISelectorOption[] = ['apple', 'orange', 'banana'].map(
   makePlainSelectorOption,
 );
 
-export const GeneralSelectorExamples = {
+export default {
   base: <GeneralSelector options={options} value="apple" setValue={() => {}} />,
 };

@@ -65,9 +65,10 @@ export namespace DisplayKeyboardDesignLoader {
     shapeSpec: string,
     sizeUnit: ICoordUnit,
   ): IDisplayKeyShape {
-    if (shapeSpec === 'ext circle') {
-      return { type: 'circle', radius: 9 };
-    } else if (shapeSpec === 'ext isoEnter') {
+    // if (shapeSpec === 'ext circle') {
+    //   return { type: 'circle', radius: 9 };
+    // } else
+    if (shapeSpec === 'ext isoEnter') {
       return {
         type: 'polygon',
         points: getIsoEnterShapePoints('center'),
@@ -146,12 +147,12 @@ export namespace DisplayKeyboardDesignLoader {
 
     keyEntities.forEach((ke) => {
       const { shape } = ke;
-      if (shape.type === 'circle') {
-        xs.push(ke.x - shape.radius);
-        xs.push(ke.x + shape.radius);
-        ys.push(ke.y - shape.radius);
-        ys.push(ke.y + shape.radius);
-      }
+      // if (shape.type === 'circle') {
+      //   xs.push(ke.x - shape.radius);
+      //   xs.push(ke.x + shape.radius);
+      //   ys.push(ke.y - shape.radius);
+      //   ys.push(ke.y + shape.radius);
+      // }
       if (shape.type === 'rect') {
         const keyX = ke.x;
         const keyY = ke.y;
