@@ -14,7 +14,11 @@ export type IPresetSpec =
       presetName: string;
     };
 
-export type IResourceOrigin = 'local' | 'online';
+export type IResourceOrigin =
+  | 'local'
+  | 'online'
+  | 'local_draft'
+  | 'online_audit';
 
 export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
 
@@ -111,11 +115,19 @@ export interface IProjectPackageFileContent {
   profiles: IProjectProfileEntry[];
 }
 
+export interface IOnlineProjectAttributes {
+  isOfficial: boolean;
+  authorDisplayName: string;
+  authorIconUrl: string;
+  revision: number;
+}
+
 export type IProjectPackageInfo = {
   projectKey: string; // ${origin}#${projectId}
   origin: IResourceOrigin;
   packageName: string;
   isDraft?: boolean;
+  onlineProjectAttributes?: IOnlineProjectAttributes;
 } & IProjectPackageFileContent;
 
 export type IFirmwareOrigin = 'localBuild' | 'online';

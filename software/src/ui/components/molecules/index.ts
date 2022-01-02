@@ -6,7 +6,5 @@ export * from './KeyboardProfileSelector';
 export * from './KeyboardProjectSelector';
 export * from './NavigationStepList.StepCard';
 export * from './NavigationStepList';
-export * from './NavigationStepList.visor';
 export * from './RadioButtonLine';
 export * from './ToggleSwitchLine';
-export * from './ToggleSwitchLine.visor';

@@ -9,7 +9,7 @@ import {
   RadioButtonLine,
   RibbonSelector,
 } from '~/ui/components';
-import { ProjectKeyboardList } from '~/ui/fabrics';
+import { ProjectKeyboardList } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList';
 
 type Props = {
   sourceProjectItems: IProjectKeyboardListProjectItem[];

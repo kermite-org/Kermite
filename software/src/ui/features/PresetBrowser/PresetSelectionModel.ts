@@ -247,7 +247,7 @@ const actions = {
   },
   initialize() {
     state.allProjectItems = helpers.createProjectItems(
-      uiReaders.allProjectPackageInfos,
+      uiReaders.activeProjectPackageInfos,
     );
     const { globalProjectKey } = uiReaders;
     if (globalProjectKey) {

@@ -74,12 +74,13 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
       const patterns = [
         /^\d+\.?\d*$/,
         /^\d+\.?\d* \d+\.?\d*$/,
-        /^circle$/,
+        // /^circle$/,
         /^isoEnter$/,
       ];
       const valid = patterns.some((p) => text.match(p));
 
-      if (text !== 'circle' && text !== 'isoEnter') {
+      // if (text !== 'circle' && text !== 'isoEnter') {
+      if (text !== 'isoEnter') {
         const textValues = text.split(' ');
         if (textValues.some((t) => t.length > 8)) {
           return 'too many digits';
@@ -99,7 +100,8 @@ const slotSources: IAttributeSlotSource<IEditKeyEntity, IEditPropKey>[] = [
       return '';
     },
     writer(text: string) {
-      if (text === 'circle' || text === 'isoEnter') {
+      // if (text === 'circle' || text === 'isoEnter') {
+      if (text === 'isoEnter') {
         return `ext ${text}`;
       }
       const values = text.split(' ');

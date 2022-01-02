@@ -1,6 +1,6 @@
 import { ILayer } from '~/shared';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
-import { profilesReader } from '~/ui/pages/assigner-page/models';
+import { profilesReader } from '~/ui/pages/AssignerPage/models';
 import { uiActions } from '~/ui/store';
 
 export interface ILayerListViewModel {

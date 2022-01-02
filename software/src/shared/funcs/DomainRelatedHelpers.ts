@@ -150,6 +150,7 @@ export function decodeProjectResourceItemKey(key: string): {
 export function validateResourceName(
   resourceName: string,
   resourceTypeNameText: string,
+  prohibitMultiByteCharacters?: boolean,
 ): string | undefined {
   if (
     // eslint-disable-next-line no-misleading-character-class
@@ -157,6 +158,11 @@ export function validateResourceName(
     resourceName.match(/^\s+$/)
   ) {
     return `${resourceName} is not a valid ${resourceTypeNameText}.`;
+  }
+  if (prohibitMultiByteCharacters) {
+    if (resourceName.match(/[^ -~]/)) {
+      return `${resourceName} is not a valid ${resourceTypeNameText}.`;
+    }
   }
   if (resourceName.length > 32) {
     return `${resourceTypeNameText} should be no more than 32 characters.`;

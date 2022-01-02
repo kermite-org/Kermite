@@ -6,7 +6,7 @@ const options: ISelectorOption[] = ['apple', 'orange', 'banana'].map(
   makePlainSelectorOption,
 );
 
-export const FlatListSelectorExamples = {
+export default {
   base: (
     <FlatListSelector
       options={options}

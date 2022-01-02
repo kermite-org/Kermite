@@ -17,16 +17,17 @@ It uses native modules such as `node-hid` and `node-serialport`, and requires an
 
 ### Installation
 
-note: if you debug on Mac M1, change package.json scripts
 
-```
--  "postinstall": "electron-rebuild",
-+  "postinstall": "electron-rebuild --arch=arm64",
-```
 
 ```
 yarn install
 ```
+
+note: if you are on Mac with M1 processor, rebuild native packages by the command below.
+```
+yarn postinstall --arch=arm64
+```
+
 
 ### Start debug
 

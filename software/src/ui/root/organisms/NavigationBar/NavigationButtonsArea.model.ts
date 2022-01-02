@@ -76,6 +76,13 @@ const itemsSource: NavigationItemSource[] = [
     hint: texts.sideMenuAppsHint.projectSelection,
   },
   {
+    pagePath: '/projectReview',
+    pageName: 'review',
+    iconSpec: 'fa fa-globe',
+    hint: 'review page',
+    isAvailable: () => uiReaders.isDeveloperMode,
+  },
+  {
     pagePath: '/settings',
     pageName: texts.sideMenuApps.settings,
     iconSpec: 'fa fa-cog',

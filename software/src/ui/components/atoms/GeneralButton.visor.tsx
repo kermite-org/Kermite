@@ -1,7 +1,7 @@
 import { jsx } from 'alumina';
 import { GeneralButton } from '~/ui/components/atoms/GeneralButton';
 
-export const GeneralButtonExamples = {
+export default {
   basic: <GeneralButton text="test" />,
   withIcon: <GeneralButton text="delete" icon="fa fa-trash" />,
   smallSquare: <GeneralButton icon="fa fa-link" size="unitSquare" />,

@@ -1,9 +1,7 @@
-import { appUi } from '~/ui/base';
-
 export const uiConfiguration = {
   closeProjectResourceEditPageOnSave: false,
-  checkDeviceConnectionOnWizard: true,
+  checkDeviceConnectionOnWizard: false,
 };
-if (appUi.isDevelopment) {
-  uiConfiguration.checkDeviceConnectionOnWizard = false;
-}
+// if (appUi.isDevelopment) {
+//   uiConfiguration.checkDeviceConnectionOnWizard = false;
+// }

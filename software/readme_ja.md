@@ -16,14 +16,13 @@
 `node-hid`, `node-serialport`などのネイティブモジュールを使用しており、`node-gyp`でC言語のソースコードをビルドするための環境(`GCC`, `Make`, `Python`など)が必要です。Windowsの場合`windows-build-tools`, MacOSの場合`xcode-select`を使って導入してください。
 ### 導入
 
-note: M1プロセッサ搭載のMac環境でデバッグする場合、package.jsonを以下のように書き換えてください。
-```
--  "postinstall": "electron-rebuild",
-+  "postinstall": "electron-rebuild --arch=arm64",
-```
-
 ```
 yarn install
+```
+
+M1プロセッサ搭載のMac環境でデバッグする場合、ネイティブパッケージをCPUのアーキテクチャに合わせて再ビルドするために以下のコマンドを実行してください。
+```
+yarn postinstall --arch=arm64
 ```
 
 ### 実行

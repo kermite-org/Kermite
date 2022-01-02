@@ -10,4 +10,8 @@ export const appConfig = {
   initialPageWidth: 1280,
   initialPageHeight: 800,
   onlineResourcesBaseUrl: 'https://app.kermite.org/krs/resources2',
+  kermiteServerUrl: 'https://dev.server.kermite.org',
 };
+if (process.env.USE_KERMITE_SERVER_LOCAL) {
+  appConfig.kermiteServerUrl = 'http://localhost:5000';
+}

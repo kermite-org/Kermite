@@ -5,7 +5,7 @@ import { NavigationStepListStepCard } from '~/ui/components/molecules/Navigation
 const steps = [0, 1, 2, 3];
 let step = 0;
 
-export const NavigationStepListExamples = {
+export default {
   card: <NavigationStepListStepCard step={0} isActive={false} />,
   cardActive: <NavigationStepListStepCard step={1} isActive={true} />,
   list: () => (

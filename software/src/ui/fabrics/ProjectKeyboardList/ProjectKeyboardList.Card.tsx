@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardShapeView } from '~/ui/elements/keyboard/panels';
+import { OnlineAttrsPart } from '~/ui/fabrics/ProjectKeyboardList/OnlineAttrsPart';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
@@ -22,6 +23,9 @@ export const ProjectKeyboardListCard: FC<Props> = ({
       <div className="body-part">
         <ProjectKeyboardShapeView keyboardDesign={project.design} />
       </div>
+      {project.onlineProjectAttrs && (
+        <OnlineAttrsPart attrs={project.onlineProjectAttrs} />
+      )}
     </div>
   </div>
 );
@@ -41,7 +45,7 @@ const style = css`
 
   > .inner {
     ${projectKeyboardListCardCommonStyles.inner};
-    padding: 10px;
+    padding: 5px 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -61,7 +65,7 @@ const style = css`
     }
 
     > .body-part {
-      height: 120px;
+      height: 100px;
     }
   }
 `;

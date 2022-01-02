@@ -4,16 +4,15 @@ import {
   createPresetKey,
   createProjectKey,
   fallbackProjectPackageInfo,
-  getFileBaseNameFromFilePath,
   getOriginAndProjectIdFromProjectKey,
   getPresetSpecFromPresetKey,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
-import { modalConfirm, modalError } from '~/ui/components';
 import {
   dispatchCoreAction,
   globalSettingsWriter,
+  projectPackagesActions,
   projectPackagesReader,
   uiReaders,
   uiState,
@@ -61,66 +60,6 @@ const readers = {
   },
 };
 
-const actionsImpl = {
-  async importLocalPackageFile(filePath: string) {
-    if (!filePath?.endsWith('.kmpkg.json')) {
-      await modalError(
-        'Invalid target file. Only .kmpkg.json file can be loaded.',
-      );
-      return;
-    }
-    const packageName = getFileBaseNameFromFilePath(filePath, '.kmpkg.json');
-    const fileContent = (await ipcAgent.async.file_loadJsonFileContent(
-      filePath,
-    )) as { projectId: string };
-
-    const loadedProjectId = fileContent.projectId;
-    if (!loadedProjectId) {
-      await modalError('invalid file content');
-      return;
-    }
-
-    const existingLocalPackages = uiReaders.allProjectPackageInfos.filter(
-      (it) => it.origin === 'local' && !it.isDraft,
-    );
-
-    const sameIdPackage = existingLocalPackages.find(
-      (it) =>
-        it.projectId === loadedProjectId && it.packageName !== packageName,
-    );
-
-    if (sameIdPackage) {
-      await modalError(
-        `Cannot add package due to projectId duplication. \nLocal package ${sameIdPackage.packageName} has the same projectId as of this.`,
-      );
-      return;
-    }
-
-    const sameNamePackage = existingLocalPackages.find(
-      (it) => it.packageName === packageName,
-    );
-
-    if (sameNamePackage) {
-      const ok = await modalConfirm({
-        message: `Existing local package ${packageName} is overwritten. Are you ok?`,
-        caption: 'import local package',
-      });
-      if (!ok) {
-        return;
-      }
-    }
-    await dispatchCoreAction({ project_addLocalProjectFromFile: { filePath } });
-
-    if (
-      uiReaders.allProjectPackageInfos.find(
-        (it) => it.origin === 'local' && it.projectId === loadedProjectId,
-      )
-    ) {
-      state.targetProjectKey = createProjectKey('local', loadedProjectId);
-    }
-  },
-};
-
 const actions = {
   setTargetProjectKey(projectKey: string) {
     state.targetProjectKey = projectKey;
@@ -160,12 +99,22 @@ const actions = {
     });
   },
   async handleLocalPackageFileDrop(filePath: string) {
-    await actionsImpl.importLocalPackageFile(filePath);
+    const loadedProjectId = await projectPackagesActions.importLocalPackageFile(
+      filePath,
+    );
+    if (
+      loadedProjectId &&
+      uiReaders.allProjectPackageInfos.find(
+        (it) => it.origin === 'local' && it.projectId === loadedProjectId,
+      )
+    ) {
+      state.targetProjectKey = createProjectKey('local', loadedProjectId);
+    }
   },
   async handleSelectLocalPackageToImport() {
     const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
     if (filePath) {
-      await actionsImpl.importLocalPackageFile(filePath);
+      actions.handleLocalPackageFileDrop(filePath);
     }
   },
 };
