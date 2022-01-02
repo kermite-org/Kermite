@@ -24,9 +24,16 @@ export interface ISettingsPageModel {
   appVersionInfo: string;
 }
 
-const uiScaleOptions: ISelectorOption[] = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3].map(
-  (val) => ({ label: `${(val * 100) >> 0}%`, value: val.toString() }),
-);
+const sourceScales = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3];
+
+if (appUi.processEnv.FE_ADD_SMALL_UI_SCALES) {
+  sourceScales.unshift(...[0.3, 0.4, 0.5, 0.6]);
+}
+
+const uiScaleOptions: ISelectorOption[] = sourceScales.map((val) => ({
+  label: `${(val * 100) >> 0}%`,
+  value: val.toString(),
+}));
 
 export function useSettingsPageModel(): ISettingsPageModel {
   const local = useLocal({

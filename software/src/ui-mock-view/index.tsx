@@ -16,7 +16,7 @@ import { RoutingDevelopmentPage } from '~/ui-mock-view/RoutingDevelopmentPage';
 import { ShortCssDevPage } from '~/ui-mock-view/ShortCssDevPage';
 import { SpaLayoutDebugPage } from '~/ui-mock-view/SpaLayoutDebugPage';
 import { SvgScalingDevPage } from '~/ui-mock-view/SvgScalingDev';
-import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
+import { LayoutManagerPageComponent } from '~/ui/pages/LayoutEditorPage';
 import { MockPageLayoutEditorDevelopment } from './MockPageLayouterDevelopment';
 
 const PageRoot = () => {

@@ -1,4 +1,4 @@
-import { css, FC, jsx, useLocal } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import { CommonPageFrame } from '~/ui/components';
 import { ProjectKeyboardList, ProjectResourceList } from '~/ui/fabrics';
 import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
@@ -30,8 +30,14 @@ const ProjectReviewPageComponent: FC = () => {
           projectItems={projectItems}
           currentProjectKey={currentProjectKey}
           setCurrentProjectKey={setCurrentProjectKey}
+          if={projectItems.length > 0}
         />
-
+        <div
+          class="keyboard-list keyboard-list-dummy"
+          if={projectItems.length === 0}
+        >
+          No auditing packages
+        </div>
         <div class="main-row">
           <div class="left-column">
             <ProjectResourceList
@@ -51,6 +57,11 @@ const ProjectReviewPageComponent: FC = () => {
             />
           </div>
         </div>
+
+        <div class="info-row" if={!!currentProjectKey}>
+          package revision:
+          {selectedProjectInfo.onlineProjectAttributes?.revision}
+        </div>
       </div>
     </CommonPageFrame>
   );
@@ -60,6 +71,13 @@ const style = css`
   > .keyboard-list {
     height: 220px;
   }
+
+  > .keyboard-list-dummy {
+    background: #ccc;
+    color: #444;
+    padding: 10px;
+  }
+
   > .main-row {
     margin-top: 10px;
     display: flex;
@@ -77,10 +95,13 @@ const style = css`
       border: solid 1px #888;
     }
   }
+  > .info-row {
+    margin-top: 5px;
+  }
 `;
 
+const store = createProjectReviewPageStore();
 export const ProjectReviewPage: FC = () => {
-  const store = useLocal(createProjectReviewPageStore);
   store.updateOnRender();
   return (
     <projectReviewPageStoreContext.Provider value={store}>

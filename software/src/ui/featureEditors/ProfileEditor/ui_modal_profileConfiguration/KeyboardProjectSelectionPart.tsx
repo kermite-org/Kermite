@@ -8,7 +8,7 @@ import { uiReaders } from '~/ui/store';
 const fallbackProjectId = '000000';
 
 function makeTargetProjectSelectOptions(): ISelectorOption[] {
-  const projectInfos = uiReaders.allProjectPackageInfos;
+  const projectInfos = uiReaders.activeProjectPackageInfos;
   const options: ISelectorOption[] = uniqueArrayItemsByField(
     projectInfos,
     'projectId',
