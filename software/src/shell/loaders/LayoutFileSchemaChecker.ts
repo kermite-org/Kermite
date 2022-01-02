@@ -38,7 +38,7 @@ export const persistEditKeyboardDesignSchemaChecker = vObject({
         angle: vNumber().optional,
         shape: vStringMatchesTo([
           /^std [\d.]+( [\d.]+)?$/,
-          /^ext circle$/,
+          // /^ext circle$/,
           /^ext isoEnter$/,
         ]).optional,
         keyIndex: vNaturalInteger().optional,

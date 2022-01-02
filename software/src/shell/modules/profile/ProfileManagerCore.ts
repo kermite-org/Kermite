@@ -71,7 +71,8 @@ async function getProfileEntry(
 export const profileManagerCore = {
   getProfilesFolderPath(profileEntry: IProfileEntry): string {
     const { projectId } = profileEntry;
-    const folderPath = `data/profiles/${projectId}`;
+    const folderName = getProjectProfileFolderName(projectId);
+    const folderPath = `data/profiles/${folderName}`;
     return appEnv.resolveUserDataFilePath(folderPath);
   },
   async ensureProfilesDirectoryExists() {

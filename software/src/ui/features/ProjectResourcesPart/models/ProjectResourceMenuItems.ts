@@ -50,5 +50,11 @@ export function createProjectResourceMenuItems(): IGeneralMenuItem[] {
         projectResourceStore.actions.shiftSelectedResourceItemOrderForward,
       disabled: !projectResourceStore.readers.canShiftSelectedItemForward,
     },
+    { type: 'separator' },
+    {
+      type: 'menuEntry',
+      text: 'open data folder',
+      handler: projectResourceStore.actions.handleOpenLocalProjectsFolder,
+    },
   ];
 }

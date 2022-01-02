@@ -190,22 +190,22 @@ const KeyEntityCardSingle = (props: {
 
   const outerTransformSpec = `translate(${ox}, ${oy}) rotate(${orot}) translate(${x3}, ${y3}) rotate(${angle2})`;
 
-  if (ke.shape === 'ext circle') {
-    return (
-      <g transform={outerTransformSpec}>
-        <circle
-          cx={0}
-          cy={0}
-          r={9}
-          css={cssKeyRect}
-          data-selected={isSelected}
-          data-ghost={isGhost}
-          onMouseDown={onMouseDown}
-        />
-        {idTexts}
-      </g>
-    );
-  }
+  // if (ke.shape === 'ext circle') {
+  //   return (
+  //     <g transform={outerTransformSpec}>
+  //       <circle
+  //         cx={0}
+  //         cy={0}
+  //         r={9}
+  //         css={cssKeyRect}
+  //         data-selected={isSelected}
+  //         data-ghost={isGhost}
+  //         onMouseDown={onMouseDown}
+  //       />
+  //       {idTexts}
+  //     </g>
+  //   );
+  // }
 
   if (ke.shape === 'ext isoEnter') {
     return (
