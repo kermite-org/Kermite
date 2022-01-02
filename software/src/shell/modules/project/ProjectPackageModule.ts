@@ -14,7 +14,7 @@ import {
 } from '~/shell/modules/core';
 import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
 import { projectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
-import { remoteResourceUpdater_updateRemoteProjectPackages } from '~/shell/modules/project/RemoteResourcesUpdater';
+import { remoteResourceUpdater2_updateRemoteProjectPackages } from '~/shell/modules/project/RemoteResourcesUpdater2';
 
 const projectPackageModuleHelper = {
   findProjectInfo(origin: IResourceOrigin, projectId: string) {
@@ -59,7 +59,7 @@ const projectPackageModuleHelper = {
 
 export const projectPackageModule = createCoreModule({
   async project_loadAllProjectPackages() {
-    await remoteResourceUpdater_updateRemoteProjectPackages();
+    await remoteResourceUpdater2_updateRemoteProjectPackages();
     await projectPackageModuleHelper.reEnumerateAllProjectPackages();
   },
   async project_saveLocalProjectPackageInfo(projectInfo) {

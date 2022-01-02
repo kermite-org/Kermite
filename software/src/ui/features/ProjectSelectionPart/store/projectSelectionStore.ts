@@ -23,13 +23,23 @@ const state: IState = {
 };
 
 const helpers = {
+  getProjectItemPrefix(info: IProjectPackageInfo) {
+    if (info.origin === 'online_audit') {
+      return '(review)';
+    }
+    if (info.isDraft) {
+      return '(draft)';
+    }
+    return '';
+  },
   createSourceProjectItems(
     allProjectPackageInfos: IProjectPackageInfo[],
-    resourceOrigin: IResourceOrigin,
+    targetResourceOrigin: IResourceOrigin,
     namePrefix: string = '',
   ): IProjectKeyboardListProjectItem[] {
     const filteredProjects = allProjectPackageInfos.filter(
-      (info) => info.origin === resourceOrigin,
+      (info) => info.origin === targetResourceOrigin,
+      // info.origin.startsWith(targetResourceOrigin),
     );
     filteredProjects.sort(
       sortOrderBy((it) => (it.isDraft ? '' : it.keyboardName)),
@@ -37,12 +47,13 @@ const helpers = {
     return filteredProjects.map((info) => ({
       projectId: info.projectId,
       projectKey: info.projectKey,
-      keyboardName: info.isDraft
-        ? `${namePrefix}(draft)${info.keyboardName}`
-        : `${namePrefix}${info.keyboardName}`,
+      keyboardName: `${namePrefix}${this.getProjectItemPrefix(info)}${
+        info.keyboardName
+      }`,
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
+      onlineProjectAttrs: info.onlineProjectAttributes,
     }));
   },
   createSourceProjectItemsWrapped(

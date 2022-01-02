@@ -2,6 +2,7 @@ import {
   IDisplayKeyboardDesign,
   IDisplayKeyShape,
   IFirmwareTargetDevice,
+  IOnlineProjectAttributes,
 } from '~/shared';
 
 export interface ICustomKeyUnitViewModelBase {
@@ -90,6 +91,7 @@ export interface IProjectKeyboardListProjectItem {
   projectKey: string;
   keyboardName: string;
   design: IDisplayKeyboardDesign;
+  onlineProjectAttrs?: IOnlineProjectAttributes;
 }
 
 export interface IFirmwareVariationSelectorItem {

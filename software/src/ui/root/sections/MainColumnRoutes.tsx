@@ -13,6 +13,7 @@ import {
 } from '~/ui/pages';
 import { FirmwareFlashPage } from '~/ui/pages/FirmwareFlashPage';
 import { ProfileSetupWizardPage } from '~/ui/pages/ProfileSetupWizardPage';
+import { ProjectReviewPage } from '~/ui/pages/ProjectReviewPage';
 import { AssignerPage } from '~/ui/pages/assigner-page';
 import { FirmwareUpdatePage } from '~/ui/pages/firmware-update-page';
 import { LayoutManagerPageComponent } from '~/ui/pages/layout-editor-page';
@@ -24,16 +25,16 @@ export const MainColumnRoutes: FC = () => {
   if (pageSpec) {
     return (
       <div>
-        {pageSpec.type === 'projectLayoutEdit' && (
+        {pageSpec.type === 'projectLayoutView' && (
           <ProjectLayoutEditPage spec={pageSpec} />
         )}
-        {pageSpec.type === 'projectPresetEdit' && (
+        {pageSpec.type === 'projectPresetView' && (
           <ProjectPresetEditPage spec={pageSpec} />
         )}
         {pageSpec.type === 'projectCustomFirmwareCreate' && (
           <ProjectCustomFirmwareCreatePage />
         )}
-        {pageSpec.type === 'projectStandardFirmwareEdit' && (
+        {pageSpec.type === 'projectStandardFirmwareView' && (
           <ProjectStandardFirmwareEditPage spec={pageSpec} />
         )}
       </div>
@@ -51,6 +52,7 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/presetBrowser' && <PresetBrowserPage />}
       {pagePath === '/settings' && <SettingsPage />}
       {pagePath === '/projectSelection' && <ProjectSelectionPage />}
+      {pagePath === '/projectReview' && <ProjectReviewPage />}
       {pagePath === '/home' && <WelcomePage />}
       {pagePath === '/projectResource' && <ProjectResourcePage />}
       {pagePath.startsWith('/profileSetup') && <ProfileSetupWizardPage />}

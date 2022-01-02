@@ -58,13 +58,17 @@ const readers = {
 };
 
 const actions = {
-  loadSourceFirmwareEntry(firmwareName: string) {
+  loadSourceFirmwareEntry(projectKey: string, firmwareName: string) {
     if (firmwareName) {
-      store.sourceEntry =
-        projectPackagesReader.getEditTargetFirmwareEntryByFirmwareName(
-          'standard',
-          firmwareName,
-        )!;
+      const projectInfo =
+        projectPackagesReader.findProjectInfoByProjectKey(projectKey);
+      const entry = projectInfo?.firmwares.find(
+        (it) => it.firmwareName === firmwareName,
+      );
+      if (!(entry?.type === 'standard')) {
+        throw new Error('invalid firmware edit target');
+      }
+      store.sourceEntry = entry;
     } else {
       const newVariationId = getNextFirmwareVariationId(
         readers.existingVariationIds,
@@ -122,11 +126,12 @@ const actions = {
 };
 
 export function useProjectStandardFirmwareEditPageModel(
+  projectKey: string,
   sourceFirmwareName: string,
 ): IProjectStandardFirmwareEditPageModel {
   useInlineEffect(
-    () => actions.loadSourceFirmwareEntry(sourceFirmwareName),
-    [sourceFirmwareName],
+    () => actions.loadSourceFirmwareEntry(projectKey, sourceFirmwareName),
+    [projectKey, sourceFirmwareName],
   );
 
   const {

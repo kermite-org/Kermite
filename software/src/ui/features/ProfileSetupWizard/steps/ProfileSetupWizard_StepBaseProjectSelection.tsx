@@ -35,6 +35,7 @@ const helpers = {
       design: DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign(
         info.layouts[0]?.data || createFallbackPersistKeyboardDesign(),
       ),
+      onlineProjectAttrs: info.onlineProjectAttributes,
     }));
   },
 };
