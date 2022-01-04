@@ -21,7 +21,7 @@ export const ProjectQuickSetupWizard: FC = () => {
     projectQuickSetupWizardStore.readers;
   const { shiftStep, shiftStepTo } = projectQuickSetupWizardStore.actions;
   return (
-    <div className={style}>
+    <div class={style}>
       <WizardTopBar
         steps={['step1', 'step2', 'step3']}
         currentStep={currentStep}

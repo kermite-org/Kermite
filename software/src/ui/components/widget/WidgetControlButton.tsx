@@ -2,24 +2,17 @@ import { css, FC, jsx } from 'alumina';
 import { Icon } from '~/ui/components/atoms';
 
 type Props = {
-  className?: string;
   iconSpec: string;
   isActive?: boolean;
   onClick: () => void;
 };
 
 export const WidgetControlButton: FC<Props> = ({
-  className,
   iconSpec,
   isActive,
   onClick,
 }) => (
-  <div
-    css={style}
-    className={className}
-    onClick={onClick}
-    data-active={isActive}
-  >
+  <div css={style} onClick={onClick} data-active={isActive}>
     <Icon spec={iconSpec} size={16} sizeMi={21} />
   </div>
 );

@@ -28,7 +28,7 @@ export const LayoutPreviewKeyEntityCard: FC<Props> = ({
       <KeyUnitShape
         shape={shape}
         css={cssKeyShape}
-        className={isHold && '--hold'}
+        class={isHold && '--hold'}
       />
       <text css={cssKeyText} x={0} y={0} if={showLabels}>
         {keyIndex}

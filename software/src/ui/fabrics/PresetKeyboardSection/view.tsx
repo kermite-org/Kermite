@@ -33,7 +33,7 @@ export const PresetKeyboardSection: FC<Props> = ({ profileData }) => {
           layers={layers}
           currentLayerId={currentLayerId}
           setCurrentLayerId={setCurrentLayerId}
-          className="layersBox"
+          class="layersBox"
         />
       </div>
     </div>

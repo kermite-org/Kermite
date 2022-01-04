@@ -20,7 +20,7 @@ export const ProfileSetupWizard: FC = () => {
     profileSetupWizardStore.readers;
   const { shiftStep, shiftStepTo } = profileSetupWizardStore.actions;
   return (
-    <div className={style}>
+    <div class={style}>
       <WizardTopBar
         steps={['step1', 'step2', 'step3']}
         currentStep={currentStep}

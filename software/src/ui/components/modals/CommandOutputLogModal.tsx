@@ -16,7 +16,7 @@ export const showCommandOutputLogModal = createModal(
           <CommonDialogFrame caption={args.caption}>
             <DialogContentRow>
               <div css={cssContentBody}>
-                <pre className="logTextBox">{args.logText}</pre>
+                <pre class="logTextBox">{args.logText}</pre>
               </div>
               <DialogButtonsRow>
                 <DialogButton onClick={props.close}>close</DialogButton>

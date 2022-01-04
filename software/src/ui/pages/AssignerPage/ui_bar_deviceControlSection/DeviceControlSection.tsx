@@ -8,7 +8,7 @@ export const DeviceControlSection: FC = () => {
   return (
     <div css={style}>
       <div
-        className="keyboardName"
+        class="keyboardName"
         data-hint={texts.assignerTopBarHint.connectedKeyboardName}
       >
         {vm.currentDeviceKeyboardName}

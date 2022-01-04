@@ -10,11 +10,11 @@ export const AssignerPage: FC = () => {
   updateProfileDataSourceHandling();
   return (
     <div css={style}>
-      <div className="topRow">
-        <ProfileManagementPart className="profile-management-part" />
+      <div class="topRow">
+        <ProfileManagementPart class="profile-management-part" />
         <DeviceControlSection />
       </div>
-      <div className="mainRow">
+      <div class="mainRow">
         <KeyAssignEditView />
       </div>
       <ProfileConfigurationModalLayer />

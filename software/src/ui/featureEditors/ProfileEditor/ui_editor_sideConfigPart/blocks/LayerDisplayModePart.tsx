@@ -24,7 +24,7 @@ export const LayerDisplayModePart: FC = () => {
         value={value}
         setValue={setValue}
         hint={texts.assignerDisplaySettingsPartHint.layerDisplayMode}
-        className="selector"
+        class="selector"
         disabled={!profilesReader.isEditProfileAvailable}
       />
     </div>

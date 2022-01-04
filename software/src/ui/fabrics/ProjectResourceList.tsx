@@ -7,7 +7,6 @@ import { colors, uiTheme } from '~/ui/base';
 import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
-  className?: string;
   resourceItemKeys: string[];
   selectedItemKey: string;
   setSelectedItemKey(itemKey: string): void;
@@ -54,7 +53,6 @@ function createResourceItems(
 }
 
 export const ProjectResourceList: FC<Props> = ({
-  className,
   resourceItemKeys,
   selectedItemKey,
   setSelectedItemKey,
@@ -66,7 +64,7 @@ export const ProjectResourceList: FC<Props> = ({
     setSelectedItemKey,
   );
   return (
-    <div css={style} className={className} onClick={clearSelection}>
+    <div css={style} onClick={clearSelection}>
       <ResourceItemsBlock groupName="profiles" items={profiles} />
       <ResourceItemsBlock groupName="layouts" items={layouts} />
       <ResourceItemsBlock groupName="firmwares" items={firmwares} />
@@ -80,9 +78,9 @@ const ResourceItemsBlock = (props: {
 }) => {
   const { groupName, items } = props;
   return (
-    <div className="block">
-      <div className="header">{groupName}</div>
-      <div className="items">
+    <div class="block">
+      <div class="header">{groupName}</div>
+      <div class="items">
         {items.map((item) => (
           <div
             key={item.itemKey}

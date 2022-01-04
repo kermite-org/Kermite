@@ -58,7 +58,7 @@ const KermiteServerLinkPart: FC = () => {
   return (
     <div css={style}>
       User profiles are served on &nbsp;
-      <span className="link" onClick={onClick}>
+      <span class="link" onClick={onClick}>
         KermiteServer
       </span>
     </div>

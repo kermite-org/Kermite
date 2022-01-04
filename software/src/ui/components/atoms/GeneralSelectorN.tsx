@@ -7,7 +7,6 @@ interface Props {
   value: number;
   setValue(value: number): void;
   width?: number;
-  className?: string;
   disabled?: boolean;
   hint?: string;
   forceControlled?: boolean;

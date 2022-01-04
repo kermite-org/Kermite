@@ -70,7 +70,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
         {phase === 'WaitingUploadOrder' &&
           detectedDeviceSig &&
           !canFlashFirmwareToDetectedDevice && (
-            <div className="note">
+            <div class="note">
               {texts.firmwareFlashSection.deviceIncompatible}
             </div>
           )}

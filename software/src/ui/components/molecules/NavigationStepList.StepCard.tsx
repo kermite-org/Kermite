@@ -1,26 +1,24 @@
 import { css, FC, jsx } from 'alumina';
 
 type Props = {
-  className?: string;
   step: number;
   isActive: boolean;
   clickHandler?: () => void;
 };
 
 export const NavigationStepListStepCard: FC<Props> = ({
-  className,
   step,
   isActive,
   clickHandler,
 }) => (
   <svg
     css={style}
-    class={[className, isActive && '--active']}
+    class={isActive && '--active'}
     viewBox="0 0 51 30"
     onClick={clickHandler}
   >
-    <polygon points="0,0 40,0, 50,15 40,30, 0,30 10,15" className="shape" />
-    <text x={25} y={14} className="text">
+    <polygon points="0,0 40,0, 50,15 40,30, 0,30 10,15" class="shape" />
+    <text x={25} y={14} class="text">
       {step}
     </text>
   </svg>

@@ -1,21 +1,21 @@
-import { jsx, css } from 'alumina';
-import { FcWithClassName, texts, uiTheme } from '~/ui/base';
+import { jsx, css, FC } from 'alumina';
+import { texts, uiTheme } from '~/ui/base';
 import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/GlobalMenuPart.model';
 
-export const GlobalMenuPart: FcWithClassName = ({ className }) => {
+export const GlobalMenuPart: FC = () => {
   const { isOpen, openMenu, closeMenu, menuItems } = useGlobalMenuPartModel();
   return (
-    <div css={style} className={className}>
-      <div className="overlay" if={isOpen} onClick={closeMenu} />
-      <div className="menuArea">
+    <div css={style}>
+      <div class="overlay" if={isOpen} onClick={closeMenu} />
+      <div class="menuArea">
         <div
-          className="menuButton"
+          class="menuButton"
           onMouseDown={openMenu}
           data-hint={texts.globalMenuHint.globalMenuButton}
         >
-          <i className="fa fa-bars" />
+          <i class="fa fa-bars" />
         </div>
-        <div className="menuPopup" if={isOpen}>
+        <div class="menuPopup" if={isOpen}>
           {menuItems.map((mi) => (
             <div key={mi.key} onMouseUp={mi.handler} data-hint={mi.hint}>
               {mi.active ? '✓' : ''} {mi.text}

@@ -20,32 +20,32 @@ export const ProjectResourcesPart: FC = () => {
 
   return (
     <div css={style}>
-      <div className="top-row">
+      <div class="top-row">
         <GeneralButtonMenu menuItems={menuItems} />
-        <div className="keyboard-name-part">{keyboardName}</div>
+        <div class="keyboard-name-part">{keyboardName}</div>
       </div>
       <div if={false}>
         <label>
           <span>keyboard name</span>
           <input
-            className="keyboard-name-input"
+            class="keyboard-name-input"
             type="text"
             value={keyboardName}
             onChange={reflectValue(handleKeyboardNameChange)}
           />
         </label>
       </div>
-      <div className="main-row">
-        <div className="left-column">
+      <div class="main-row">
+        <div class="left-column">
           <ProjectResourceList
-            className="items-box"
+            class="items-box"
             resourceItemKeys={resourceItemKeys}
             selectedItemKey={selectedItemKey}
             setSelectedItemKey={setSelectedItemKey}
             clearSelection={clearSelection}
           />
         </div>
-        <div className="right-column">
+        <div class="right-column">
           <ProjectResourceItemView
             selectedItemKey={selectedItemKey}
             if={!!selectedItemKey}

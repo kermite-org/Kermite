@@ -19,7 +19,7 @@ export const LayerOperationButton: FC<Props> = ({
     data-disabled={!enabled}
     data-hint={hint}
   >
-    <i className={icon} />
+    <i class={icon} />
   </div>
 );
 

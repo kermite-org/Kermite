@@ -3,7 +3,6 @@ import { colors, uiTheme } from '~/ui/base';
 import { CheckBox } from '~/ui/components/atoms';
 
 interface Props {
-  className?: string;
   checked: boolean;
   setChecked(value: boolean): void;
   text: string;
@@ -12,15 +11,14 @@ interface Props {
 }
 
 export const CheckBoxLine: FC<Props> = ({
-  className,
   checked,
   setChecked,
   text,
   disabled,
   hint,
 }) => (
-  <div css={style} className={className} data-hint={hint}>
-    <div className="inner">
+  <div css={style} data-hint={hint}>
+    <div class="inner">
       <CheckBox checked={checked} setChecked={setChecked} disabled={disabled} />
       <span data-disabled={disabled}>{text}</span>
     </div>

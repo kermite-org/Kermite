@@ -50,9 +50,7 @@ export const SettingsPage = () => {
             />
             <div>
               <div
-                className={
-                  !canChangeLocalRepositoryFolderPath && 'text-disabled'
-                }
+                class={!canChangeLocalRepositoryFolderPath && 'text-disabled'}
               >
                 {texts.settings.configKermiteRootDirectory}
               </div>
@@ -96,7 +94,7 @@ export const SettingsPage = () => {
         </Indent>
       </Indent>
 
-      <div className="version-area" if={!!appVersionInfo}>
+      <div class="version-area" if={!!appVersionInfo}>
         application version: {appVersionInfo}
       </div>
     </div>

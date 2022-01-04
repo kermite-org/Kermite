@@ -5,7 +5,6 @@ interface Props {
   onClick?(): void;
   disabled?: boolean;
   extraCss?: string;
-  className?: string;
   children?: any;
   active?: boolean;
   hint?: string;
@@ -15,7 +14,6 @@ export const ButtonBase: FC<Props> = ({
   onClick,
   disabled,
   extraCss,
-  className,
   children,
   active,
   hint,
@@ -26,7 +24,6 @@ export const ButtonBase: FC<Props> = ({
       extraCss,
       (disabled && 'disabled') || undefined,
       (active && 'active') || undefined,
-      className,
     ]}
     onClick={(!disabled && onClick) || undefined}
     data-hint={hint}

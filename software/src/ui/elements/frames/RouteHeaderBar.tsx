@@ -2,7 +2,6 @@ import { css, FC, jsx } from 'alumina';
 import { LinkButton } from '~/ui/components';
 
 type Props = {
-  className?: string;
   title: string;
   backPagePath?: string;
   backHandler?(): void;
@@ -12,7 +11,6 @@ type Props = {
 };
 
 export const RouteHeaderBar: FC<Props> = ({
-  className,
   title,
   backPagePath,
   backHandler,
@@ -20,16 +18,16 @@ export const RouteHeaderBar: FC<Props> = ({
   saveHandler,
   editMode = 'Edit',
 }) => (
-  <div css={style} className={className}>
-    <LinkButton className="back-button" if={!!backPagePath} to={backPagePath}>
+  <div css={style}>
+    <LinkButton class="back-button" if={!!backPagePath} to={backPagePath}>
       back
     </LinkButton>
-    <div className="back-button" if={!!backHandler} onClick={backHandler}>
+    <div class="back-button" if={!!backHandler} onClick={backHandler}>
       back
     </div>
-    <div className="title">{title}</div>
+    <div class="title">{title}</div>
     <button
-      className="save-button"
+      class="save-button"
       if={!!saveHandler}
       onClick={saveHandler}
       disabled={!canSave}

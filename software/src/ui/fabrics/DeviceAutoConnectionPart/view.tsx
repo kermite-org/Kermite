@@ -3,7 +3,6 @@ import { IProjectPackageInfo } from '~/shared';
 import { texts } from '~/ui/base';
 import { deviceAutoConnectionPartAssets } from '~/ui/fabrics/DeviceAutoConnectionPart/assets';
 import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/DeviceAutoConnectionPart/hooks';
-import { multiClasses } from '~/ui/utils';
 
 const { SvgIllustPc, SvgIllustThunder, SvgIllustMcu } =
   deviceAutoConnectionPartAssets;
@@ -27,7 +26,7 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
 
   return (
     <div class={style}>
-      <div className="indicators">
+      <div class="indicators">
         <div class={['indicator', isConnectionValid && '--active']} />
         <div
           class={['indicator', isCommunicationIndicatorActive && '--active']}
@@ -40,11 +39,9 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
       <div class="illust-area">
         <SvgIllustPc class="pc" />
         <SvgIllustThunder
-          class={multiClasses('thunder', isConnectionValid && '--active')}
+          class={['thunder', isConnectionValid && '--active']}
         />
-        <SvgIllustMcu
-          class={multiClasses('mcu', isConnectionValid && '--active')}
-        />
+        <SvgIllustMcu class={['mcu', isConnectionValid && '--active']} />
       </div>
       <div class="status-text-part">{connectionStatusText}</div>
     </div>

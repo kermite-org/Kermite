@@ -48,9 +48,4 @@ export const ALink: FC<{ to: string; children: AluminaNode }> = ({
 export const Link: FC<{
   to: string;
   children: AluminaNode;
-  className?: string;
-}> = ({ to, children, className }) => (
-  <div onClick={linkTo(to)} className={className}>
-    {children}
-  </div>
-);
+}> = ({ to, children }) => <div onClick={linkTo(to)}>{children}</div>;

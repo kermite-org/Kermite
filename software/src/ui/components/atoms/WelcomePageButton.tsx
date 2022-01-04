@@ -2,7 +2,6 @@ import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
 type Props = {
-  className?: string;
   onClick?: () => void;
   active?: boolean;
   children?: AluminaChildren;
@@ -10,14 +9,12 @@ type Props = {
 };
 
 export const WelcomePageButton: FC<Props> = ({
-  className,
   onClick,
   active,
   children,
   hint,
 }) => (
   <ButtonBase
-    className={className}
     onClick={onClick}
     active={active}
     extraCss={buttonStyle}

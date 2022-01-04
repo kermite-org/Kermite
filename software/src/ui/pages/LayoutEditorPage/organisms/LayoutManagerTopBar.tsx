@@ -27,7 +27,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
 }) => {
   return (
     <div css={style}>
-      <div className="first-row">
+      <div class="first-row">
         Edit Target
         <RadioButtonLine
           text="Current Profile Layout"
@@ -43,7 +43,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
           radioGroupName="radio_group_edit_target_selection"
         />
       </div>
-      <div className="second-row">
+      <div class="second-row">
         <GeneralButtonMenu menuItems={menuItems} />
         <div class="targetDisplayArea">{editSourceText}</div>
         <OperationButtonWithIcon

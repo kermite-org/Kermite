@@ -44,7 +44,7 @@ export const DualModeSettingsPart: FC = () => {
               <div class="tapholdms-edit-cell">
                 <GeneralInput
                   type="number"
-                  className="ms-input"
+                  class="ms-input"
                   value={local.tapHoldThresholdMs.toString()}
                   setValue={onTapHoldThresholdValueChanged}
                   invalid={!local.TapHoldThresholdMsValid}

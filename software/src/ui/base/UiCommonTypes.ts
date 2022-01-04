@@ -1,5 +1,3 @@
-import { FC } from 'alumina';
-
 export interface ISelectorOption {
   value: string;
   label: string;
@@ -47,8 +45,6 @@ export interface ICommonSelectorViewModel {
   setValue(value: string): void;
   disabled?: boolean;
 }
-
-export type FcWithClassName = FC<{ className?: string }>;
 
 export type IFeatureEditor<T> = {
   load(value: T): void;

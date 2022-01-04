@@ -6,7 +6,6 @@ interface Props {
   value: string;
   setValue(value: string): void;
   width?: number;
-  className?: string;
   disabled?: boolean;
   hint?: string;
   forceControlled?: boolean;
@@ -16,7 +15,6 @@ export const GeneralSelector: FC<Props> = ({
   options,
   value,
   setValue,
-  className,
   width,
   disabled,
   hint,
@@ -37,7 +35,6 @@ export const GeneralSelector: FC<Props> = ({
       value={options.length > 0 ? value : ''}
       onChange={onChange}
       css={style(width)}
-      className={className}
       disabled={disabled}
       data-hint={hint}
     >
