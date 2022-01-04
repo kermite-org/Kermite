@@ -28,12 +28,9 @@ export const DeviceAutoConnectionPart: FC<Props> = ({
   return (
     <div class={style}>
       <div className="indicators">
-        <div classNames={['indicator', isConnectionValid && '--active']} />
+        <div class={['indicator', isConnectionValid && '--active']} />
         <div
-          classNames={[
-            'indicator',
-            isCommunicationIndicatorActive && '--active',
-          ]}
+          class={['indicator', isCommunicationIndicatorActive && '--active']}
         />
       </div>
       <div class="keyboard-name-text">

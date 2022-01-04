@@ -78,7 +78,7 @@ const FirmwareVariationItemCard: FC<{
     rp2040: 'RP',
   };
   return (
-    <div classNames={[style, selected && '--selected']} onClick={setSelected}>
+    <div class={[style, selected && '--selected']} onClick={setSelected}>
       <div class="icon-box">
         <SvgIcon_McuSquare class="icon" />
         <div class="text">{mcuLabelMap[mcuType]}</div>

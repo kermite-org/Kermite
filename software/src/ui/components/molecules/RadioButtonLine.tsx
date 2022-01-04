@@ -19,7 +19,7 @@ export const RadioButtonLine: FC<Props> = ({
 }) => (
   <div
     css={style}
-    classNames={[className, disabled && '--disabled']}
+    class={[className, disabled && '--disabled']}
     onClick={onClick}
   >
     <input

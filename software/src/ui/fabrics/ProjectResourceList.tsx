@@ -86,7 +86,7 @@ const ResourceItemsBlock = (props: {
         {items.map((item) => (
           <div
             key={item.itemKey}
-            classNames={['item', item.selected && '--selected']}
+            class={['item', item.selected && '--selected']}
             onClick={withStopPropagation(item.setSelected)}
           >
             {item.itemName}

@@ -21,7 +21,7 @@ export const ButtonBase: FC<Props> = ({
   hint,
 }) => (
   <div
-    classNames={[
+    class={[
       style,
       extraCss,
       (disabled && 'disabled') || undefined,

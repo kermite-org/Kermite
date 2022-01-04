@@ -16,7 +16,7 @@ export const CheckBox: FC<Props> = ({
 }) => (
   <div
     css={style}
-    classNames={[className, checked && '--checked', disabled && '--disabled']}
+    class={[className, checked && '--checked', disabled && '--disabled']}
     onClick={() => setChecked(!checked)}
   >
     <i class="fa fa-check mark" />
