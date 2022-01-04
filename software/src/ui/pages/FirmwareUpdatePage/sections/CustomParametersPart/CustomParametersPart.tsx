@@ -14,16 +14,16 @@ export const CustomParametersPart: FC = () => {
   return (
     <div css={style}>
       <PartHeader>{texts.deviceCustomParameters.sectionTitle}</PartHeader>
-      <PartBody className="part-body">
+      <PartBody class="part-body">
         {definitionUnavailable &&
           texts.deviceCustomParameters.parametersUnavailable}
-        <div className="parameters-list-outer">
+        <div class="parameters-list-outer">
           <div
-            className="parameters-list"
+            class="parameters-list"
             data-hint={texts.deviceCustomParametersHint.sectionArea}
           >
             {parameterModels.map((item) => (
-              <div key={item.slotIndex} className="row">
+              <div key={item.slotIndex} class="row">
                 <label>{item.label}</label>
                 <div>
                   {item.type === 'selection' && (
@@ -53,7 +53,7 @@ export const CustomParametersPart: FC = () => {
             ))}
           </div>
         </div>
-        <div className="button-row">
+        <div class="button-row">
           {isConnected && !definitionUnavailable && (
             <button onClick={resetParameters}>Reset To Default</button>
           )}

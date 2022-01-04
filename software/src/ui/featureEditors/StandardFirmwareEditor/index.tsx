@@ -58,7 +58,7 @@ export const StandardFirmwareEditor: FC = () => {
   return (
     <div css={style}>
       <div>standard firmware configuration</div>
-      <table className="config-table">
+      <table class="config-table">
         <tbody>
           <FieldItem title="base firmware type">
             <GeneralSelector
@@ -214,7 +214,7 @@ export const StandardFirmwareEditor: FC = () => {
           <FieldItem title="available pins">{availablePinsText}</FieldItem>
         </tbody>
       </table>
-      <div className="total-error" if={!!totalError}>
+      <div class="total-error" if={!!totalError}>
         {totalError}
       </div>
       <div if={false}>{JSON.stringify(editValues)}</div>

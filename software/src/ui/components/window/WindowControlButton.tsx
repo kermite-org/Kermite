@@ -15,7 +15,7 @@ export const WindowControlButton: FC<Props> = ({
   disabled,
 }) => (
   <div css={style} onClick={onClick} data-hint={hint} data-disabled={disabled}>
-    <i className={icon} />
+    <i class={icon} />
   </div>
 );
 

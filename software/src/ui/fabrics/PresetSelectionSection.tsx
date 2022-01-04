@@ -21,14 +21,14 @@ export const PresetSelectionSection: FC<Props> = ({
 }) => (
   <div css={style}>
     <div class="selectorsPart">
-      <div className="selectorBlock" if={cansSelectProject}>
+      <div class="selectorBlock" if={cansSelectProject}>
         <div>{texts.presetBrowser.selectionTitle_keyboard}</div>
         <KeyboardProjectSelector
           selectorSource={projectSelectorSource}
           hint={texts.presetBrowserHint.selection_keyboard}
         />
       </div>
-      <div className="selectorBlock">
+      <div class="selectorBlock">
         <div>{texts.presetBrowser.selectionTitle_preset}</div>
         <KeyboardProfileSelector
           selectorSource={presetSelectorSource}

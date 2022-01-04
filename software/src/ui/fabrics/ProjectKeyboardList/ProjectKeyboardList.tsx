@@ -3,7 +3,6 @@ import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardListCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.Card';
 
 type Props = {
-  className?: string;
   projectItems: IProjectKeyboardListProjectItem[];
   currentProjectKey: string;
   setCurrentProjectKey: (key: string) => void;
@@ -11,14 +10,13 @@ type Props = {
 };
 
 export const ProjectKeyboardList: FC<Props> = ({
-  className,
   projectItems,
   currentProjectKey,
   setCurrentProjectKey,
   renderAdditionalItem,
 }) => {
   return (
-    <div css={style} className={className}>
+    <div css={style}>
       {projectItems.map((item) => (
         <ProjectKeyboardListCard
           key={item.projectKey}

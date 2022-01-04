@@ -7,12 +7,12 @@ type Props = {
 };
 
 export const NavigationColumn: FC<Props> = ({ disabled }) => (
-  <div css={style} className={disabled && '--disabled'}>
-    <div className="base">
-      <NavigationButtonsArea className="buttons-area" />
-      <GlobalMenuPart if={appUi.isDevelopment} className="menu-part" />
+  <div css={style} class={disabled && '--disabled'}>
+    <div class="base">
+      <NavigationButtonsArea class="buttons-area" />
+      <GlobalMenuPart if={appUi.isDevelopment} class="menu-part" />
     </div>
-    <div className="cover" />
+    <div class="cover" />
   </div>
 );
 

@@ -10,14 +10,14 @@ export const DeviceSelectionPart: FC = () => {
   return (
     <div css={style}>
       <PartHeader>{texts.deviceSelection.sectionTitle}</PartHeader>
-      <PartBody className="part-body">
+      <PartBody class="part-body">
         {/* <div>connected keyboard: {connectedKeyboardName}</div> */}
         <FlatListSelector
           options={deviceOptions}
           value={currentDevicePath}
           setValue={setSelectedDevicePath}
           size={5}
-          className="selector"
+          class="selector"
           hint={texts.deviceSelectionHint.selectionArea}
         />
       </PartBody>

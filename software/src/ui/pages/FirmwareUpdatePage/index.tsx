@@ -11,12 +11,12 @@ export const FirmwareUpdatePage: FC = () => {
   return (
     <CommonPageFrame>
       <div css={style}>
-        <div className="topRow">
-          <div className="leftColumn">
+        <div class="topRow">
+          <div class="leftColumn">
             <DeviceSelectionPart />
             <CustomParametersPart />
           </div>
-          <div className="rightColumn">
+          <div class="rightColumn">
             <ConnectedDeviceAttrsPart />
           </div>
         </div>

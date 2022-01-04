@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'alumina';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
-import { multiClasses } from '~/ui/utils';
 
 type Props = {
   onClick?: () => void;
@@ -16,7 +15,7 @@ export const SetupNavigationStepShiftButton: FC<Props> = ({
   small,
 }) => (
   <ButtonBase
-    className={multiClasses(buttonStyle, small && '--small')}
+    class={[buttonStyle, small && '--small']}
     onClick={onClick}
     disabled={disabled}
   >

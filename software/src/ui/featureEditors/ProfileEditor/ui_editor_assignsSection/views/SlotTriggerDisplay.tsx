@@ -2,9 +2,7 @@ import { css, FC, jsx } from 'alumina';
 import { IProfileSettings_Dual } from '~/shared';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
 
-type Props = {
-  className?: string;
-};
+type Props = {};
 
 type ISlotTriggerDisplayText = 'normal' | 'tap' | 'hold' | 'double-tap';
 
@@ -38,7 +36,7 @@ function getSlotTriggerText(
   }
 }
 
-export const SlotTriggerDisplay: FC<Props> = ({ className }) => {
+export const SlotTriggerDisplay: FC<Props> = () => {
   const {
     assignEntry,
     dualModeEditTargetOperationSig: slotSig,
@@ -63,7 +61,7 @@ export const SlotTriggerDisplay: FC<Props> = ({ className }) => {
         settings,
       );
       return (
-        <div css={style} className={className}>
+        <div css={style}>
           trigger:
           <br /> {triggerText}
         </div>

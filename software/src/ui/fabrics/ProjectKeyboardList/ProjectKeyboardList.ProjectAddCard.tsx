@@ -48,8 +48,8 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
 
   return (
     <div css={style} onClick={onClick} ref={refBaseDiv}>
-      <div className="inner">
-        <div className="frame">
+      <div class="inner">
+        <div class="frame">
           <Icon spec="add" size={32} />
           <div class="texts">
             Add keyboard definition

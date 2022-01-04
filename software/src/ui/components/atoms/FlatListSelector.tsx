@@ -8,7 +8,6 @@ interface Props {
   setValue: (value: string) => void;
   size: number;
   disabled?: boolean;
-  className?: string;
   hint?: string;
 }
 
@@ -18,7 +17,6 @@ export const FlatListSelector: FC<Props> = ({
   setValue,
   size,
   disabled,
-  className,
   hint,
 }) => (
   <select
@@ -27,7 +25,6 @@ export const FlatListSelector: FC<Props> = ({
     onInput={reflectValue(setValue)}
     css={style}
     disabled={disabled}
-    className={className}
     data-hint={hint}
   >
     {options.map((it) => (

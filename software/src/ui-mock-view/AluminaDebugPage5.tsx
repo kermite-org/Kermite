@@ -15,7 +15,7 @@ const Foo: FC = () => {
 
   return (
     <div css={styleFoo}>
-      <div classNames={['hoge', active && '--active']}>hello</div>
+      <div class={['hoge', active && '--active']}>hello</div>
     </div>
   );
 };

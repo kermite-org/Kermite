@@ -1,7 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 
 type Props = {
-  className?: string;
   checked: boolean;
   onClick?: () => void;
   text: string;
@@ -10,18 +9,13 @@ type Props = {
 };
 
 export const RadioButtonLine: FC<Props> = ({
-  className,
   checked,
   onClick,
   text,
   disabled,
   radioGroupName,
 }) => (
-  <div
-    css={style}
-    classNames={[className, disabled && '--disabled']}
-    onClick={onClick}
-  >
+  <div css={style} class={disabled && '--disabled'} onClick={onClick}>
     <input
       type="radio"
       name={radioGroupName}

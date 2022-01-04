@@ -63,7 +63,7 @@ export const ProjectCustomFirmwareCreatePage: FC = () => {
         saveHandler={saveHandler}
         editMode="Create"
       />
-      <div className="content">
+      <div class="content">
         <CustomFirmwareEditor sourceEditValues={sourceEditValues} />
       </div>
     </div>

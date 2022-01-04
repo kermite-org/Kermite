@@ -24,7 +24,7 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
         backHandler={backHandler}
         editMode={editFirmwareName ? 'Edit' : 'Create'}
       />
-      <div className="content">
+      <div class="content">
         <StandardFirmwareEditor />
       </div>
     </div>

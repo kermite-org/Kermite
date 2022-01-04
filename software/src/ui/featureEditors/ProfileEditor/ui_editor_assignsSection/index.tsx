@@ -24,7 +24,7 @@ export const AssignEditSection: FC = () => {
               operationSlotsVM={operationSlotsVM}
               plainOperationEditCardsVM={plainOperationEditCardsVM}
             />
-            <SlotTriggerDisplay className="slot-trigger-display" />
+            <SlotTriggerDisplay class="slot-trigger-display" />
           </div>
         )}
         <OperationEditPart

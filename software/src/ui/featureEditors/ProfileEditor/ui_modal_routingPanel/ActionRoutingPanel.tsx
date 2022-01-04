@@ -1,7 +1,7 @@
-import { css, jsx } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import { IMappingEntry } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
-import { colors, FcWithClassName } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
 import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
@@ -53,13 +53,13 @@ const helpers = {
   },
 };
 
-export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
+export const ActionRoutingPanel: FC = () => {
   const { mappingEntries } = assignerModel.profileData;
   const { addMappingEntry, deleteLastMappingEntry, handleClose } = actions;
   const { itemValueSetter } = helpers;
 
   return (
-    <div css={style} class={className}>
+    <div css={style}>
       <div class="overlay" onClick={handleClose} />
       <div class="panel">
         <div class="closeButton" onClick={handleClose}>

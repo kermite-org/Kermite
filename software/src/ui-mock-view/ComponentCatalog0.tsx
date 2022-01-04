@@ -50,7 +50,7 @@ export const ComponentCatalog = () => {
         <GeneralButton
           text="foo"
           icon="fa fa-cog"
-          className={buttonExtraCss}
+          class={buttonExtraCss}
           size="unit"
         />
         <GeneralButton icon="fa fa-cog" disabled size="unitSquare" />

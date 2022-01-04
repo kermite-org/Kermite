@@ -14,20 +14,20 @@ export const TransGroupListPart: FC = () => {
       <ConfigSubHeader>
         <div css={cssHeaderRow}>
           <span>groups</span>
-          <div className="buttonsBox">
+          <div class="buttonsBox">
             <GeneralButton
               disabled={!canAddGroup}
               onClick={addGroup}
               icon="add"
               size="unitSquare"
-              className={cssOpButton}
+              class={cssOpButton}
             />
             <GeneralButton
               disabled={!canDeleteGroup}
               onClick={deleteGroup}
               icon="delete"
               size="unitSquare"
-              className={cssOpButton}
+              class={cssOpButton}
             />
           </div>
         </div>

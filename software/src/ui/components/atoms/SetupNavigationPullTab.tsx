@@ -1,12 +1,11 @@
 import { css, FC, jsx, styled } from 'alumina';
 
 type Props = {
-  className?: string;
   handler?: () => void;
 };
 
-export const SetupNavigationPullTab: FC<Props> = ({ className, handler }) => (
-  <div css={style} className={className} onClick={handler}>
+export const SetupNavigationPullTab: FC<Props> = ({ handler }) => (
+  <div css={style} onClick={handler}>
     ナビ
   </div>
 );

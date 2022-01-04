@@ -59,8 +59,7 @@ const MultipleClassNameTestCard1 = () => {
   `;
   return (
     <div css={cssBase}>
-      <div classNames={['foo', 'bar', 'buzz']}>test</div>
-      <div classNames={{ foo: true, bar: true, buzz: false }}>test</div>
+      <div class={['foo', 'bar', 'buzz']}>test</div>
     </div>
   );
 };
