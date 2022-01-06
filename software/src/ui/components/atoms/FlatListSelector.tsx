@@ -23,7 +23,7 @@ export const FlatListSelector: FC<Props> = ({
     size={size}
     value={options.length > 0 ? value : ''}
     onInput={reflectValue(setValue)}
-    css={style}
+    class={style}
     disabled={disabled}
     data-hint={hint}
   >

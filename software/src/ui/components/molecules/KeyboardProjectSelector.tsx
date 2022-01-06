@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const KeyboardProjectSelector: FC<Props> = (props) => (
-  <div css={style}>
+  <div class={style}>
     <GeneralSelector {...props.selectorSource} width={170} hint={props.hint} />
     <GeneralButton
       icon="fa fa-link"

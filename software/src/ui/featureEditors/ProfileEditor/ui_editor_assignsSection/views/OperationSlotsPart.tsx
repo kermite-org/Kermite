@@ -12,7 +12,7 @@ export const OperationSlotsPart: FC<Props> = ({
   plainOperationEditCardsVM: { transparentEntry, blockEntry },
   operationSlotsVM,
 }) => (
-  <div css={style}>
+  <div class={style}>
     {operationSlotsVM.slots.map((slot, index) => (
       <OperationSlotCard
         key={index}

@@ -6,7 +6,7 @@ import { makeTestInputAreaViewModel } from '~/ui/featureEditors/ProfileEditor/ui
 export const TestInputArea: FC = () => {
   const vm = useLocal(makeTestInputAreaViewModel);
   return (
-    <div css={style}>
+    <div class={style}>
       <GeneralInput
         value={vm.text}
         setValue={vm.setText}

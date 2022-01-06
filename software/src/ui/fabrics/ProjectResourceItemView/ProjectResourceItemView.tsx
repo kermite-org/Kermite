@@ -38,7 +38,7 @@ export const ProjectResourceItemView: FC<Props> = ({
   const { itemType, itemName } = decodeProjectResourceItemKey(selectedItemKey);
   const canEdit = useMemoEx(checkCanEdit, [projectInfo, selectedItemKey]);
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="header">
         <div>
           {itemType} {itemName}

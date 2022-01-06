@@ -11,11 +11,11 @@ export const DebugOverlay: FC = () => {
 
   return baseVisible ? (
     <div>
-      <div css={cssTab} onClick={toggleOpen}>
+      <div class={cssTab} onClick={toggleOpen}>
         D
       </div>
       {state.isOpen && (
-        <div css={cssDebugPane}>
+        <div class={cssDebugPane}>
           <pre>{JSON.stringify(appUi.debugObject, null, '  ')}</pre>
         </div>
       )}

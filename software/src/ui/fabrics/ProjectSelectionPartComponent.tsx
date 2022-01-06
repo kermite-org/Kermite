@@ -32,7 +32,7 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
   menuItems,
   showNoSelectionOption,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <div class="top-row">
       {isMenuButtonVisible && menuItems && (
         <GeneralButtonMenu menuItems={menuItems} />

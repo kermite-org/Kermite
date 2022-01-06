@@ -18,7 +18,7 @@ export const RibbonSelector: FC<Props> = ({
   disabled,
   hint,
 }) => (
-  <div css={style(buttonWidth)} data-disabled={disabled} data-hint={hint}>
+  <div class={style(buttonWidth)} data-disabled={disabled} data-hint={hint}>
     {options.map((item) => (
       <div
         key={item.value}

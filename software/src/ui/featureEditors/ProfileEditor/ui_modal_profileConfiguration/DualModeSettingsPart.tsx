@@ -29,7 +29,7 @@ export const DualModeSettingsPart: FC = () => {
   };
 
   return (
-    <div css={style}>
+    <div class={style}>
       <table class="settingsTable">
         <tbody>
           <tr>
@@ -89,7 +89,7 @@ export const DualModeSettingsPart2: FC = () => {
   const { writeSettingsValueDual } = assignerModel;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <table class="settingsTable">
         <tbody>
           <tr>

@@ -11,7 +11,7 @@ export const EditorSideColumnContent: FC = () => {
   const isKeyPanelVisible = editMode === 'key' || !!currentKeyEntity;
   const isShapePanelVisible = editMode === 'shape' || !!currentOutlinePoint;
   return (
-    <div css={style}>
+    <div class={style}>
       <DesignConfigurationPanel />
       {/* {editorTarget === 'key' && <KeyEntityEditPanel />}
       {editorTarget === 'outline' && <OutlineEditPanel />} */}

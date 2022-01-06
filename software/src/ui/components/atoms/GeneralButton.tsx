@@ -24,7 +24,7 @@ export const GeneralButton: FC<Props> = ({
   hint,
 }) => (
   <div
-    css={style}
+    class={style}
     onClick={onClick}
     data-disabled={disabled}
     data-size={size}

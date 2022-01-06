@@ -12,7 +12,7 @@ export const NavigationStepListStepCard: FC<Props> = ({
   clickHandler,
 }) => (
   <svg
-    css={style}
+    class={style}
     class={isActive && '--active'}
     viewBox="0 0 51 30"
     onClick={clickHandler}

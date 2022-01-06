@@ -14,7 +14,7 @@ export const SectionHeaderText: FC<Props> = ({
   hint,
   xOffset = 0,
 }) => (
-  <div css={style} data-hint={hint} style={{ marginLeft: `${xOffset}px` }}>
+  <div class={style} data-hint={hint} style={{ marginLeft: `${xOffset}px` }}>
     <Icon spec={icon} size={20} />
     <span>{text}</span>
   </div>

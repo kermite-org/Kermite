@@ -89,7 +89,7 @@ export const SiteRoot: FC = () => {
 
   return (
     <SiteDpiScaler dpiScale={uiState.settings.siteDpiScale}>
-      <div css={cssSiteRoot}>
+      <div class={cssSiteRoot}>
         {uiState.initialLoading ? <InitialLoadingView /> : <AppView />}
         <ForegroundModalLayerRoot />
         <DebugOverlay />

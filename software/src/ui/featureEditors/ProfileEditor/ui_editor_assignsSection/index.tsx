@@ -16,8 +16,8 @@ export const AssignEditSection: FC = () => {
   } = makeAssignEditSectionViewModel();
 
   return (
-    <div css={cssAssignEditSection}>
-      <div css={cssAssignEntryEditPart} data-disabled={isDisabled}>
+    <div class={cssAssignEditSection}>
+      <div class={cssAssignEntryEditPart} data-disabled={isDisabled}>
         {isDualMode && (
           <div>
             <OperationSlotsPart

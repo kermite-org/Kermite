@@ -37,7 +37,7 @@ const PlacementUnitEditPart = (props: {
             unit="mm"
           />
         </ConfigRow>
-        <div css={cssErrorText}>
+        <div class={cssErrorText}>
           {!vmUnitText.valid && 'invalid keypitch specification'}
         </div>
       </ConfigSubContent>
@@ -79,7 +79,7 @@ const SizeUnitEditPart = (props: {
             unit="mm"
           />
         </ConfigRow>
-        <div css={cssErrorText}>
+        <div class={cssErrorText}>
           {!vmUnitText.valid && 'invalid size specification'}
         </div>
       </ConfigSubContent>

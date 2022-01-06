@@ -16,7 +16,7 @@ export const FirmwareDetailView: FC<Props> = ({
     [projectInfo, firmwareName],
   );
   return (
-    <div css={style}>
+    <div class={style}>
       {firmwareEntry?.type === 'standard' && (
         <StandardFirmwareDetailView
           config={firmwareEntry.standardFirmwareConfig}

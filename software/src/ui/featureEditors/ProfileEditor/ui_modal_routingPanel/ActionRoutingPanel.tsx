@@ -59,7 +59,7 @@ export const ActionRoutingPanel: FC = () => {
   const { itemValueSetter } = helpers;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="overlay" onClick={handleClose} />
       <div class="panel">
         <div class="closeButton" onClick={handleClose}>

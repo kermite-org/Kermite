@@ -15,7 +15,7 @@ export const ProjectKeyboardShapeView: FC<Props> = ({ keyboardDesign }) => {
   const bodyStrokeColor = colors.projectKeyboard_bodyEdge;
   const { displayArea, keyEntities, outlineShapes } = keyboardDesign;
   return (
-    <div css={cssKeyboardShapeView}>
+    <div class={cssKeyboardShapeView}>
       <svg viewBox={getKeyboardSvgViewBoxSpec(displayArea)}>
         <g stroke-width={baseStrokeWidth} stroke-linejoin="round">
           <KeyboardBodyShape

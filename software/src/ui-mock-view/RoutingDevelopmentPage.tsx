@@ -42,11 +42,11 @@ export const RoutingDevelopmentPage: FC = () => {
         <div>
           root page
           <Link to="/foo">foo</Link>
-          <div css={cssNavBox}>
+          <div class={cssNavBox}>
             <Link to="/foo" class={cssNavButton}>
               foo
             </Link>
-            <div onClick={linkTo('/foo')} css={cssNavButton}>
+            <div onClick={linkTo('/foo')} class={cssNavButton}>
               foo
             </div>
           </div>

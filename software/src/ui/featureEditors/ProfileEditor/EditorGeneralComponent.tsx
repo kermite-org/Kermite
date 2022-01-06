@@ -30,7 +30,7 @@ export const AssignerGeneralComponent: FC<Props> = ({ originalProfile }) => {
   }, [originalProfile]);
 
   return (
-    <div css={style}>
+    <div class={style}>
       <KeyAssignEditView />
       <ProfileConfigurationModalLayer />
     </div>

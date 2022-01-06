@@ -29,7 +29,7 @@ export const GeneralInput: FC<Props> = ({
 }) => {
   return (
     <input
-      css={style(width)}
+      class={style(width)}
       type={type}
       value={value}
       onInput={setValue && reflectValue(setValue)}

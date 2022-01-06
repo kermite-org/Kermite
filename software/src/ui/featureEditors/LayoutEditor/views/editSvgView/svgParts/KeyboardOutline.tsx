@@ -151,7 +151,7 @@ const OutlinePoint = (props: {
         y={-d}
         width={d * 2}
         height={d * 2}
-        css={cssOutlinePoint}
+        class={cssOutlinePoint}
         if={visible}
         data-editable={editable}
         data-selected={isSelected}
@@ -224,7 +224,7 @@ const HittestLine = (props: {
       y1={p0.y}
       x2={p1.x}
       y2={p1.y}
-      css={cssHittestLine}
+      class={cssHittestLine}
       onMouseDown={onMouseDown}
     />
   );
@@ -254,10 +254,10 @@ export const KeyboardOutlineShapeViewSingle = (props: {
   return (
     <g transform={outerTransformSpec}>
       {!isDrawing && (
-        <polygon points={pointsSpec} css={cssKeyboardOutlineShapeView} />
+        <polygon points={pointsSpec} class={cssKeyboardOutlineShapeView} />
       )}
       {isDrawing && (
-        <polyline points={pointsSpec} css={cssKeyboardOutlineShapeView} />
+        <polyline points={pointsSpec} class={cssKeyboardOutlineShapeView} />
       )}
       <g if={canSplitLine}>
         {vmLines.map((vm) => (
@@ -325,7 +325,7 @@ const KeyboardOutlineJoinedShapeDrawingTest = (props: {
 
   return (
     <g transform={outerTransformSpec}>
-      <polygon points={pointsSpec} css={cssTestJoinedShape} />
+      <polygon points={pointsSpec} class={cssTestJoinedShape} />
     </g>
   );
 };

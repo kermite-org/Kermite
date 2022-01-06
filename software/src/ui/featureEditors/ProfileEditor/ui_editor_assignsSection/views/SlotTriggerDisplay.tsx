@@ -61,7 +61,7 @@ export const SlotTriggerDisplay: FC<Props> = () => {
         settings,
       );
       return (
-        <div css={style}>
+        <div class={style}>
           trigger:
           <br /> {triggerText}
         </div>

@@ -27,7 +27,7 @@ export const CustomFirmwareEditor: FC<Props> = ({ sourceEditValues }) => {
     readers: { editValues, allFirmwareOptions },
   } = customFirmwareEditorModel;
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="row">
         <div>firmware</div>
         <GeneralSelector

@@ -17,7 +17,7 @@ export const FirmwareUpdatePart: FC = () => {
   } = useFirmwareUpdatePartModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <PartHeader>{texts.deviceFirmwareUpdate.sectionTitle}</PartHeader>
       <PartBody class="part-body">
         <div class="operationAlert">

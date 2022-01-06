@@ -19,7 +19,7 @@ export const ProjectResourcesPart: FC = () => {
   } = useProjectResourcePageModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="top-row">
         <GeneralButtonMenu menuItems={menuItems} />
         <div class="keyboard-name-part">{keyboardName}</div>

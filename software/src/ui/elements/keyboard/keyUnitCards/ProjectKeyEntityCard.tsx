@@ -16,7 +16,7 @@ export const ProjectKeyEntityCard: FC<Props> = ({ keyEntity }) => {
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <KeyUnitShape shape={shape} css={cssKeyShape} />
+      <KeyUnitShape shape={shape} class={cssKeyShape} />
     </g>
   );
 };

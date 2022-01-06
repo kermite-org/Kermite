@@ -11,7 +11,7 @@ export const BehaviorOptionsPartB: FC = () => {
 
   const { isUserProfileEditorView } = assignerModel;
   return (
-    <div css={style}>
+    <div class={style}>
       <CheckBoxLine
         text={texts.assignerDisplaySettingsPart.showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}

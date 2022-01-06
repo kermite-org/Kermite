@@ -6,7 +6,7 @@ import { makeDeviceControlSectionViewModel } from '~/ui/pages/AssignerPage/ui_ba
 export const DeviceControlSection: FC = () => {
   const vm = makeDeviceControlSectionViewModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <div
         class="keyboardName"
         data-hint={texts.assignerTopBarHint.connectedKeyboardName}

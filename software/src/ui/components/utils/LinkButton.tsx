@@ -7,7 +7,7 @@ type Props = {
   extraCss?: string;
 };
 export const LinkButton: FC<Props> = ({ extraCss, to, children }) => (
-  <button css={extraCss} onClick={() => uiActions.navigateTo(to as any)}>
+  <button class={extraCss} onClick={() => uiActions.navigateTo(to as any)}>
     {children}
   </button>
 );

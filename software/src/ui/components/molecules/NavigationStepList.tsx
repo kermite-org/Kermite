@@ -12,7 +12,7 @@ export const NavigationStepList: FC<Props> = ({
   currentStep,
   setCurrentStep,
 }) => (
-  <div css={style}>
+  <div class={style}>
     {steps.map((step) => (
       <NavigationStepListStepCard
         key={step}

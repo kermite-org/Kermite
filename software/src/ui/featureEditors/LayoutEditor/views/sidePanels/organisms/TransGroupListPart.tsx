@@ -12,7 +12,7 @@ export const TransGroupListPart: FC = () => {
   return (
     <div>
       <ConfigSubHeader>
-        <div css={cssHeaderRow}>
+        <div class={cssHeaderRow}>
           <span>groups</span>
           <div class="buttonsBox">
             <GeneralButton
@@ -33,7 +33,7 @@ export const TransGroupListPart: FC = () => {
         </div>
       </ConfigSubHeader>
       <div
-        css={cssListFrame}
+        class={cssListFrame}
         onClick={() => editMutations.setCurrentTransGroupById(undefined)}
       >
         {groupItems.map((item) => (
@@ -44,7 +44,7 @@ export const TransGroupListPart: FC = () => {
               e.stopPropagation();
             }}
             data-active={item.isActive}
-            css={cssTransGroupListItemCard}
+            class={cssTransGroupListItemCard}
           >
             {item.id}
           </div>

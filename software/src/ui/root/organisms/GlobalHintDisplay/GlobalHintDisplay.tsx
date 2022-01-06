@@ -9,7 +9,7 @@ export const GlobalHintDisplay: FC = () => {
   const toggleShowHint = () =>
     commitUiSettings({ showGlobalHint: !settings.showGlobalHint });
   return (
-    <div css={style}>
+    <div class={style}>
       <GlobalHintIconButton isActive={showHint} onClick={toggleShowHint} />
       <GlobalHintDisplayText if={showHint} />
     </div>

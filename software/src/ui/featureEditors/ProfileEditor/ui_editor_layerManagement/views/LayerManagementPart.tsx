@@ -20,7 +20,7 @@ export const LayerManagementPart: FC<Props> = ({
     canDeleteCurrentLayer,
   },
 }) => (
-  <div css={style}>
+  <div class={style}>
     <LayerOperationButton
       icon="fa fa-plus"
       enabled={canEdit}

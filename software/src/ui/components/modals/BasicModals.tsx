@@ -119,16 +119,16 @@ export const modalTextEdit = createModal(
           <CommonDialogFrame caption={caption} close={close}>
             <DialogContentRow>
               <div>{message}</div>
-              <div css={cssInputRow}>
+              <div class={cssInputRow}>
                 <input
                   type="text"
-                  css={cssCommonTextInput}
+                  class={cssCommonTextInput}
                   value={editValues.text}
                   onInput={reflectFieldValue(editValues, 'text')}
                   spellcheck={'false' as any}
                 />
               </div>
-              <div css={cssErrorText}>{errorText}</div>
+              <div class={cssErrorText}>{errorText}</div>
             </DialogContentRow>
             <DialogButtonsRow>
               <DialogButton onClick={submit} disabled={!isValid}>

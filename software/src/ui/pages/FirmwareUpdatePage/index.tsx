@@ -10,7 +10,7 @@ import {
 export const FirmwareUpdatePage: FC = () => {
   return (
     <CommonPageFrame>
-      <div css={style}>
+      <div class={style}>
         <div class="topRow">
           <div class="leftColumn">
             <DeviceSelectionPart />

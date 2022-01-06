@@ -19,7 +19,7 @@ export const PresetSelectionSection: FC<Props> = ({
   handleCreateProfileButton,
   cansSelectProject,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <div class="selectorsPart">
       <div class="selectorBlock" if={cansSelectProject}>
         <div>{texts.presetBrowser.selectionTitle_keyboard}</div>

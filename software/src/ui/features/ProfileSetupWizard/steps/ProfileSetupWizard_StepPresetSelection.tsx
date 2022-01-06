@@ -80,7 +80,7 @@ export const ProfileSetupWizard_StepPresetSelection: FC = () => {
   const { presetSelectorSource, loadedProfileData } =
     usePresetSelectionStepModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="selectors-part">
         <div>{texts.presetBrowser.selectionTitle_preset}</div>
         <KeyboardProfileSelector

@@ -5,7 +5,7 @@ import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/Globa
 export const GlobalMenuPart: FC = () => {
   const { isOpen, openMenu, closeMenu, menuItems } = useGlobalMenuPartModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="overlay" if={isOpen} onClick={closeMenu} />
       <div class="menuArea">
         <div

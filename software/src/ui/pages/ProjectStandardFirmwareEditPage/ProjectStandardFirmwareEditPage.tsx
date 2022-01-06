@@ -16,7 +16,7 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
     useProjectStandardFirmwareEditPageModel(projectKey, sourceFirmwareName);
 
   return (
-    <div css={style}>
+    <div class={style}>
       <RouteHeaderBar
         title={`edit project firmware: ${editFirmwareName || '(new)'}`}
         canSave={canSave}

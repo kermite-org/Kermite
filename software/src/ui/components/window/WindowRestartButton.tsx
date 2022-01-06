@@ -6,7 +6,7 @@ type Props = {
 
 export const WindowRestartButton: FC<Props> = ({ handler }) => {
   return (
-    <button css={style} onClick={handler}>
+    <button class={style} onClick={handler}>
       Restart
     </button>
   );

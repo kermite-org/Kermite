@@ -12,7 +12,7 @@ import { reflectChecked } from '~/ui/utils';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 
 const AdvancedOptionSwitchPart: FC = () => (
-  <div css={cssAdvancedOptionSwitchPart}>
+  <div class={cssAdvancedOptionSwitchPart}>
     <input
       type="checkbox"
       checked={uiState.settings.showProfileAdvancedOptions}
@@ -56,7 +56,7 @@ export const ProfileConfigurationModalLayer: FC = () => {
         caption={texts.assignerProfileConfigModal.modalTitle}
         close={closeModal}
       >
-        <div css={cssDialogContent}>
+        <div class={cssDialogContent}>
           <KeyboardProjectSelectionPart if={showProjectSelectionUi} />
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />

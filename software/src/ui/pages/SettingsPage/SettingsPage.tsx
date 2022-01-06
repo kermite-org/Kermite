@@ -29,7 +29,7 @@ export const SettingsPage = () => {
   } = useSettingsPageModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div>{texts.settings.pageTitle}</div>
 
       <Indent>

@@ -8,7 +8,7 @@ export const DeviceSelectionPart: FC = () => {
   const { deviceOptions, currentDevicePath, setSelectedDevicePath } =
     useDeviceSelectionPartModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <PartHeader>{texts.deviceSelection.sectionTitle}</PartHeader>
       <PartBody class="part-body">
         {/* <div>connected keyboard: {connectedKeyboardName}</div> */}

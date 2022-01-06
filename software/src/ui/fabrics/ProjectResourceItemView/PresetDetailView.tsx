@@ -25,7 +25,7 @@ export const PresetDetailView: FC<Props> = ({ projectInfo, presetName }) => {
     );
   }, [projectInfo, presetName]);
   return (
-    <div css={style}>
+    <div class={style}>
       <PresetKeyboardViewWrapper profileData={profileData} />
     </div>
   );

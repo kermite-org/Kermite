@@ -15,7 +15,7 @@ export const showCommandOutputLogModal = createModal(
         <ClosableOverlay close={props.close}>
           <CommonDialogFrame caption={args.caption}>
             <DialogContentRow>
-              <div css={cssContentBody}>
+              <div class={cssContentBody}>
                 <pre class="logTextBox">{args.logText}</pre>
               </div>
               <DialogButtonsRow>

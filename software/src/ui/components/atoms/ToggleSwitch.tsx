@@ -16,7 +16,7 @@ export const ToggleSwitch: FC<Props> = ({
 }) => (
   <input
     type="checkbox"
-    css={style}
+    class={style}
     checked={checked}
     onChange={(e) => onChange?.(e.currentTarget.checked)}
     disabled={disabled}
