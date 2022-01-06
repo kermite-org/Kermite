@@ -27,3 +27,10 @@ const style = (baseW: number, baseH: number, dpiScale: number) => css`
     height: ${baseH / dpiScale}px;
   }
 `;
+
+export function getUnscaledOverlayStyle(dpiScale: number) {
+  return `
+    transform: scale(${1 / dpiScale});
+    transform-origin: top left;
+  `;
+}
