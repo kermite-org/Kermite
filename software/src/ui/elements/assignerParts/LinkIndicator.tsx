@@ -7,7 +7,7 @@ type Props = {
 
 export const LinkIndicator: FC<Props> = ({ isActive }) => (
   <div
-    css={style}
+    class={style}
     data-active={isActive}
     data-hint={texts.assignerTopBarHint.deviceConnectionStatus}
   >

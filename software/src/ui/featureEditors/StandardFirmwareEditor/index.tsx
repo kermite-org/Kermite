@@ -56,7 +56,7 @@ export const StandardFirmwareEditor: FC = () => {
   } = standardFirmwareEditorComponents;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div>standard firmware configuration</div>
       <table class="config-table">
         <tbody>

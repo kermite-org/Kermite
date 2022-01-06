@@ -5,7 +5,7 @@ import { LayoutManagerTopBarTemplate } from '~/ui/pages/LayoutEditorPage/templat
 
 export const LayoutManagerPageComponent: FC = () => {
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="topRow">
         <LayoutManagerTopBarTemplate />
       </div>

@@ -84,7 +84,7 @@ function useInputModel(initialText: string) {
 
 export const MockPageComponentDevelopment: FC = () => {
   return (
-    <div css={cssRoot}>
+    <div class={cssRoot}>
       <Header>Configurations</Header>
       <Row>
         <GeneralSelector {...useSelectorModel(testOptions)} />
@@ -155,7 +155,7 @@ export const MockPageComponentDevelopment: FC = () => {
         <Icon spec="fa fa-cog" size={20} />
         <Icon spec="settings" size={40} />
         <Icon spec="fa fa-cog" size={40} />
-        <div css={cssIconsContainer}>
+        <div class={cssIconsContainer}>
           <Icon spec="settings" />
           <Icon spec="fa fa-cog" />
           <Icon spec="settings" size={20} />

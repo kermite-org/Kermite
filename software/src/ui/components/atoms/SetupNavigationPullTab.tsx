@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const SetupNavigationPullTab: FC<Props> = ({ handler }) => (
-  <div css={style} onClick={handler}>
+  <div class={style} onClick={handler}>
     ナビ
   </div>
 );

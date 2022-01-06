@@ -17,7 +17,7 @@ export const CheckBoxLine: FC<Props> = ({
   disabled,
   hint,
 }) => (
-  <div css={style} data-hint={hint}>
+  <div class={style} data-hint={hint}>
     <div class="inner">
       <CheckBox checked={checked} setChecked={setChecked} disabled={disabled} />
       <span data-disabled={disabled}>{text}</span>

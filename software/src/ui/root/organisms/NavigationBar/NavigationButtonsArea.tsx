@@ -5,7 +5,7 @@ import { useNavigationButtonsAreaModel } from '~/ui/root/organisms/NavigationBar
 export const NavigationButtonsArea: FC = () => {
   const { navigationItems } = useNavigationButtonsAreaModel();
   return (
-    <div css={style}>
+    <div class={style}>
       {navigationItems.map((item) => (
         <NavigationButton vm={item} key={item.pagePath} />
       ))}

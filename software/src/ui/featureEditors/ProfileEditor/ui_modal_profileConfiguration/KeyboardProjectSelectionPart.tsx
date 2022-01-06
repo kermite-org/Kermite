@@ -38,7 +38,7 @@ export const KeyboardProjectSelectionPart: FC = () => {
   const setValue = assignerModel.changeProjectId;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div data-hint={texts.assignerProfileConfigModalHint.assignModel}>
         target project
       </div>

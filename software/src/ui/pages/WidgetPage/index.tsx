@@ -5,7 +5,7 @@ import { siteModel } from '~/ui/store';
 
 export const WidgetZoneRoot: FC = () => {
   return (
-    <div css={style}>
+    <div class={style}>
       <WidgetWindowFrame>
         <WidgetMainPanel />
       </WidgetWindowFrame>

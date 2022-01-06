@@ -4,10 +4,7 @@ import { uiActions } from '~/ui/store';
 type Props = {
   to?: string;
   children?: AluminaNode;
-  extraCss?: string;
 };
-export const LinkButton: FC<Props> = ({ extraCss, to, children }) => (
-  <button css={extraCss} onClick={() => uiActions.navigateTo(to as any)}>
-    {children}
-  </button>
+export const LinkButton: FC<Props> = ({ to, children }) => (
+  <button onClick={() => uiActions.navigateTo(to as any)}>{children}</button>
 );

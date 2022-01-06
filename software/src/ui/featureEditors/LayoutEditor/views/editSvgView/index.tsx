@@ -23,7 +23,7 @@ export const EditSvgViewContainer: FC = () => {
   }
 
   return (
-    <div css={style} ref={ref}>
+    <div class={style} ref={ref}>
       <EditSvgView />
       <DebugOverlay />
       <InformationOverlay />

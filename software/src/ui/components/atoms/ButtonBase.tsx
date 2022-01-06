@@ -4,7 +4,6 @@ import { uiTheme } from '~/ui/base';
 interface Props {
   onClick?(): void;
   disabled?: boolean;
-  extraCss?: string;
   children?: any;
   active?: boolean;
   hint?: string;
@@ -13,18 +12,12 @@ interface Props {
 export const ButtonBase: FC<Props> = ({
   onClick,
   disabled,
-  extraCss,
   children,
   active,
   hint,
 }) => (
   <div
-    class={[
-      style,
-      extraCss,
-      (disabled && 'disabled') || undefined,
-      (active && 'active') || undefined,
-    ]}
+    class={[style, disabled && 'disabled', active && 'active']}
     onClick={(!disabled && onClick) || undefined}
     data-hint={hint}
   >

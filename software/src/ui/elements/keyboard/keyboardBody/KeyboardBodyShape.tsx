@@ -22,7 +22,7 @@ export const KeyboardBodyShape: FC<Props> = ({
         <polygon
           points={shape.points.map((p) => `${p.x}, ${p.y}`).join(' ')}
           key={idx}
-          css={style}
+          class={style}
         />
       ))}
     </g>

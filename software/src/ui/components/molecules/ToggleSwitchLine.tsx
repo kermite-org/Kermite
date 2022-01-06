@@ -19,7 +19,7 @@ export const ToggleSwitchLine: FC<Props> = ({
   hint,
   textSide = 'left',
 }) => (
-  <div css={style} class={disabled && '--disabled'} data-hint={hint}>
+  <div class={[style, disabled && '--disabled']} data-hint={hint}>
     <span if={textSide === 'left'}>{text}</span>
     <ToggleSwitch checked={checked} onChange={onChange} disabled={disabled} />
     <span if={textSide === 'right'}>{text}</span>

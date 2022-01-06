@@ -22,9 +22,9 @@ export const PreviewKeyEntityCard: FC<Props> = ({
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <KeyUnitShape shape={shape} css={cssKeyShape} />
+      <KeyUnitShape shape={shape} class={cssKeyShape} />
       <text
-        css={cssKeyText}
+        class={cssKeyText}
         x={0}
         y={-2}
         text-anchor="middle"
@@ -35,7 +35,7 @@ export const PreviewKeyEntityCard: FC<Props> = ({
       </text>
 
       <text
-        css={cssKeyText}
+        class={cssKeyText}
         x={0}
         y={4}
         text-anchor="middle"

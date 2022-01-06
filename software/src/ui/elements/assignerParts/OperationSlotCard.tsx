@@ -15,7 +15,7 @@ export const OperationSlotCard: FC<Props> = ({
   hint,
 }) => (
   <div
-    css={style}
+    class={style}
     data-current={isCurrent}
     onClick={setCurrent}
     data-hint={hint}

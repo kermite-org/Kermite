@@ -17,7 +17,7 @@ export const WizardSectionFrame: FC<{
     }
   `;
   return (
-    <div css={style} class={inactive && '--inactive'}>
+    <div class={[style, inactive && '--inactive']}>
       <div class="title">{title}</div>
       <div class={['body', contentClassName]}>{children}</div>
     </div>

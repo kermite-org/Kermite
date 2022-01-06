@@ -9,7 +9,7 @@ import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagem
 export const AssignerPage: FC = () => {
   updateProfileDataSourceHandling();
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="topRow">
         <ProfileManagementPart class="profile-management-part" />
         <DeviceControlSection />

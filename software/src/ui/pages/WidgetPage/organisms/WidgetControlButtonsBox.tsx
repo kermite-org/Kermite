@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const WidgetControlButtonsBox: FC<Props> = ({ vm }) => (
-  <div css={style}>
+  <div class={style}>
     <WidgetControlButton
       class="pinning-button"
       iconSpec="fa fa-thumbtack"

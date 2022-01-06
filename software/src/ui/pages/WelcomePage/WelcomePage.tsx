@@ -20,7 +20,7 @@ export const WelcomePage: FC = () => {
     setDeveloperMode,
   } = useWelcomePageModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <h1>Kermite</h1>
       <h2>Keyboard Ecosystem All in One</h2>
       <div class="buttons-panel">

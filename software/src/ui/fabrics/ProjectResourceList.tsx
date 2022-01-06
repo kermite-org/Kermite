@@ -64,7 +64,7 @@ export const ProjectResourceList: FC<Props> = ({
     setSelectedItemKey,
   );
   return (
-    <div css={style} onClick={clearSelection}>
+    <div class={style} onClick={clearSelection}>
       <ResourceItemsBlock groupName="profiles" items={profiles} />
       <ResourceItemsBlock groupName="layouts" items={layouts} />
       <ResourceItemsBlock groupName="firmwares" items={firmwares} />

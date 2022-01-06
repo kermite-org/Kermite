@@ -23,7 +23,7 @@ export const ProfileManagementPart: FC = () => {
   const menuItems = createProfileSelectionMenuItems(baseVm);
 
   return (
-    <div css={style}>
+    <div class={style}>
       <GeneralButtonMenu
         menuItems={menuItems}
         hint={texts.assignerTopBarHint.profileOperationsMenu}

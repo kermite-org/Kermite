@@ -7,7 +7,7 @@ import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/FirmwareUpdatePage
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <PartHeader>{texts.deviceInformation.sectionTitle}</PartHeader>
       <PartBody>
         {tableData && (

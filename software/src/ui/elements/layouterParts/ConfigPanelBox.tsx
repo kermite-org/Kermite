@@ -19,7 +19,7 @@ export const ConfigPanelBox: FC<Props> = ({
   const toggleIsOpen = () => setIsOpen(!isOpen);
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="header">
         <Icon spec="article" />
         <span class="caption">{headerText}</span>

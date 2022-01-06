@@ -14,7 +14,7 @@ const Foo: FC = () => {
   const active = true;
 
   return (
-    <div css={styleFoo}>
+    <div class={styleFoo}>
       <div class={['hoge', active && '--active']}>hello</div>
     </div>
   );

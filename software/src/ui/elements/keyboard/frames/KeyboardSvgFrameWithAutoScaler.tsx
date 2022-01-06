@@ -25,7 +25,7 @@ export const KeyboardSvgFrameWithAutoScaler: FC<Props> = ({
 
   return (
     <ScalerBox contentWidth={contentWidth} contentHeight={contentHeight}>
-      <div css={cssScalerContent}>
+      <div class={cssScalerContent}>
         <KeyboardSvgFrame
           displayArea={displayArea}
           dpiScale={dpiScale}

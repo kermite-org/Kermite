@@ -10,7 +10,7 @@ export const LoadingOverlay: FC<Props> = ({ isLoading }) => {
     return null;
   }
   return (
-    <div css={style}>
+    <div class={style}>
       <LoadingAnimationIcon />
     </div>
   );

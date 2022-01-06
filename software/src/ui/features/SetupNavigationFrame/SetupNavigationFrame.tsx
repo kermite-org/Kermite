@@ -26,7 +26,7 @@ export const SetupNavigationFrame: FC<Props> = ({ children }) => {
     completeSteps,
   } = useSetupNavigationFrameModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="top-bar">
         <NavigationStepList
           class="step-list"

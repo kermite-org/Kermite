@@ -12,7 +12,7 @@ export const CustomParametersPart: FC = () => {
     resetParameters,
   } = useCustomParametersPartModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <PartHeader>{texts.deviceCustomParameters.sectionTitle}</PartHeader>
       <PartBody class="part-body">
         {definitionUnavailable &&

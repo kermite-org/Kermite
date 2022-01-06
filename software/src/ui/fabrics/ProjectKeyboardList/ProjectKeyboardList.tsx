@@ -16,7 +16,7 @@ export const ProjectKeyboardList: FC<Props> = ({
   renderAdditionalItem,
 }) => {
   return (
-    <div css={style}>
+    <div class={style}>
       {projectItems.map((item) => (
         <ProjectKeyboardListCard
           key={item.projectKey}

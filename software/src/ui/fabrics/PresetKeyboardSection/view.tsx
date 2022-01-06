@@ -19,7 +19,7 @@ export const PresetKeyboardSection: FC<Props> = ({ profileData }) => {
     setCurrentLayerId,
   } = usePresetKeyboardSectionModel(profileData);
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="keyboardPart">
         <PresetKeyboardView
           keyUnits={keyUnits}

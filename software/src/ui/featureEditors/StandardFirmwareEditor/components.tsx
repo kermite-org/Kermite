@@ -24,11 +24,9 @@ const FieldItem: FC<{
   const styleChildren = css``;
   return (
     <tr>
-      <td css={styleTitleCell} class={indent && '--indent'}>
-        {title}
-      </td>
+      <td class={[styleTitleCell, indent && '--indent']}>{title}</td>
       <td>
-        <div css={styleChildren}>{children}</div>
+        <div class={styleChildren}>{children}</div>
       </td>
     </tr>
   );

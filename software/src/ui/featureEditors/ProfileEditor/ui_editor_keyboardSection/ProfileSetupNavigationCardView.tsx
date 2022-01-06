@@ -3,7 +3,7 @@ import { Link } from '~/ui/base';
 
 export const ProfileSetupNavigationCardView: FC = () => {
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="card">
         <p>
           No profiles available. <br />

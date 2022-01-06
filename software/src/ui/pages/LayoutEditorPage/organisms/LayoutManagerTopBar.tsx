@@ -26,7 +26,7 @@ export const LayoutManagerTopBar: FC<Props> = ({
   saveButtonVisible,
 }) => {
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="first-row">
         Edit Target
         <RadioButtonLine

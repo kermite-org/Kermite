@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'alumina';
 
 export const SvgScalingDevPage: FC = () => {
   return (
-    <div css={rootCss}>
+    <div class={rootCss}>
       <div class="cardFrame">
         <svg viewBox="0 0 200 100">
           <rect

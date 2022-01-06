@@ -18,7 +18,7 @@ export const RouteHeaderBar: FC<Props> = ({
   saveHandler,
   editMode = 'Edit',
 }) => (
-  <div css={style}>
+  <div class={style}>
     <LinkButton class="back-button" if={!!backPagePath} to={backPagePath}>
       back
     </LinkButton>

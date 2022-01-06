@@ -9,7 +9,7 @@ export const DisplayAreaFrame: FC = () => {
   const w = da.right - da.left;
   const hh = da.bottom - da.top;
 
-  return <rect x={x} y={y} width={w} height={hh} css={style} />;
+  return <rect x={x} y={y} width={w} height={hh} class={style} />;
 };
 
 const style = css`

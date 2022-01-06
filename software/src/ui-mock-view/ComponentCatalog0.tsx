@@ -40,7 +40,7 @@ export const ComponentCatalog = () => {
   };
 
   return () => (
-    <div css={cssBase}>
+    <div class={cssBase}>
       <div class="buttonsRow">
         <GeneralButton
           icon="fa fa-cog"

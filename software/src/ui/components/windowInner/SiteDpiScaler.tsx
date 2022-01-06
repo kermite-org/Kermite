@@ -9,7 +9,7 @@ export const SiteDpiScaler: FC<Props> = ({ children, dpiScale }) => {
   const baseW = window.innerWidth;
   const baseH = window.innerHeight;
   return (
-    <div css={style(baseW, baseH, dpiScale)}>
+    <div class={style(baseW, baseH, dpiScale)}>
       <div class="inner">{children}</div>
     </div>
   );

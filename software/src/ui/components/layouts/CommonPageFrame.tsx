@@ -8,7 +8,7 @@ type Props = {
 
 export const CommonPageFrame: FC<Props> = ({ pageTitle, children }) => {
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="header" if={!!pageTitle}>
         {pageTitle}
       </div>

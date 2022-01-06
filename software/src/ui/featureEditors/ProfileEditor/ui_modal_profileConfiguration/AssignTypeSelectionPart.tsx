@@ -18,7 +18,7 @@ export const AssignTypeSelectionPart: FC = () => {
     useAssignTypeSelectionPartViewModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div data-hint={texts.assignerProfileConfigModalHint.assignModel}>
         {texts.assignerProfileConfigModal.assignModel}
       </div>

@@ -58,7 +58,7 @@ const MultipleClassNameTestCard1 = () => {
     }
   `;
   return (
-    <div css={cssBase}>
+    <div class={cssBase}>
       <div class={['foo', 'bar', 'buzz']}>test</div>
     </div>
   );
@@ -96,8 +96,8 @@ const GooberStyledDev = () => (
 
 export const GooberDevelopmentPage2 = () => {
   return (
-    <div css={cssRoot}>
-      <div css={cssHeader}>hello</div>
+    <div class={cssRoot}>
+      <div class={cssHeader}>hello</div>
       <Header2>world</Header2>
       {/* <StyledMyButton text="test" /> */}
       <MultipleClassNameTestCard1 />

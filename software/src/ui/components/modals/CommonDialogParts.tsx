@@ -37,7 +37,7 @@ export function ClosableOverlay(props: {
   };
 
   return (
-    <div css={cssDiv} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+    <div class={cssDiv} onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
       <div onMouseUp={onMouseUpInner}>{props.children}</div>
     </div>
   );
@@ -84,14 +84,14 @@ export const CommonDialogFrame = (props: {
   const cssBody = css``;
 
   return (
-    <div css={cssLayerEditDialogPanel}>
-      <div css={cssTitleBar}>
+    <div class={cssLayerEditDialogPanel}>
+      <div class={cssTitleBar}>
         <span class="titleText">{props.caption}</span>
         <div class="closeButton" onClick={props.close} if={!!props.close}>
           <i class="fa fa-times" />
         </div>
       </div>
-      <div css={cssBody}>{props.children}</div>
+      <div class={cssBody}>{props.children}</div>
     </div>
   );
 };
@@ -111,7 +111,7 @@ export const DialogContentRow = (props: { children: AluminaChildren }) => {
     max-height: 600px;
     user-select: text;
   `;
-  return <div css={cssBody}>{props.children}</div>;
+  return <div class={cssBody}>{props.children}</div>;
 };
 
 export const DialogButtonsRow = (props: { children: AluminaChildren }) => {
@@ -123,7 +123,7 @@ export const DialogButtonsRow = (props: { children: AluminaChildren }) => {
       margin-left: 10px;
     }
   `;
-  return <div css={cssButtonsRow}>{props.children}</div>;
+  return <div class={cssButtonsRow}>{props.children}</div>;
 };
 
 export const DialogButton = (props: {
@@ -151,7 +151,7 @@ export const DialogButton = (props: {
     }
   `;
   return (
-    <button css={cssButton} onClick={props.onClick} disabled={props.disabled}>
+    <button class={cssButton} onClick={props.onClick} disabled={props.disabled}>
       {props.children}
     </button>
   );

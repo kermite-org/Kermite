@@ -27,7 +27,7 @@ const displayOptionsSource: IDisplayOptionSource[] = [
 ];
 
 export const ShapePreviewOptionsBox: FC<Props> = ({ settings }) => (
-  <div css={style}>
+  <div class={style}>
     {displayOptionsSource.map((om) => (
       <div key={om.fieldKey}>
         <CheckBoxLine

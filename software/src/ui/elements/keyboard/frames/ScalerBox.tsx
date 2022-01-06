@@ -40,9 +40,9 @@ export const ScalerBox: FC<Props> = ({
   useEffect(asyncRerender, [contentWidth, contentHeight]);
 
   return (
-    <div css={cssBase} ref={ref}>
+    <div class={cssBase} ref={ref}>
       <div
-        css={cssInner}
+        class={cssInner}
         style={{
           width: `${contentWidth}px`,
           height: `${contentHeight}px`,

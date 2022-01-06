@@ -26,7 +26,7 @@ export const KeyboardSection: FC = () => {
   }
 
   return (
-    <div css={cssKeyboardSection} onMouseDown={clearAssignSlotSelection}>
+    <div class={cssKeyboardSection} onMouseDown={clearAssignSlotSelection}>
       <EditorKeyboardView
         cards={cardsPartVm.cards}
         showLayerDefaultAssign={cardsPartVm.showLayerDefaultAssign}

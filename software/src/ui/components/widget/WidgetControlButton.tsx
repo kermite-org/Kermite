@@ -12,7 +12,7 @@ export const WidgetControlButton: FC<Props> = ({
   isActive,
   onClick,
 }) => (
-  <div css={style} onClick={onClick} data-active={isActive}>
+  <div class={style} onClick={onClick} data-active={isActive}>
     <Icon spec={iconSpec} size={16} sizeMi={21} />
   </div>
 );

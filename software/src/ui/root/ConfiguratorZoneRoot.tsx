@@ -19,7 +19,7 @@ export const ConfiguratorZoneRoot: FC = () => {
       renderTitleBar={WindowTitleBarSection}
       renderStatusBar={WindowStatusBarSection}
     >
-      <div css={cssWindowContent}>
+      <div class={cssWindowContent}>
         <NavigationColumn
           disabled={uiReaders.blockerPageVisible}
           class="side-bar"

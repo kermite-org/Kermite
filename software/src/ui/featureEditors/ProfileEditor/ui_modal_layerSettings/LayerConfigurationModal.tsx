@@ -99,7 +99,7 @@ const LayerConfigurationModalContent = (props: {
     <ClosableOverlay close={close}>
       <CommonDialogFrame caption={caption} close={close}>
         <DialogContentRow>
-          <table css={cssCommonPropertiesTable}>
+          <table class={cssCommonPropertiesTable}>
             <tbody>
               <tr>
                 <td data-hint={texts.assignerLayerModalHint.layerName}>
@@ -108,7 +108,7 @@ const LayerConfigurationModalContent = (props: {
                 <td>
                   <input
                     type="text"
-                    css={cssCommonTextInput}
+                    class={cssCommonTextInput}
                     value={editValues.layerName}
                     onChange={reflectFieldValue(editValues, 'layerName')}
                     spellcheck={'false' as any}
@@ -120,7 +120,7 @@ const LayerConfigurationModalContent = (props: {
                   {texts.assignerLayerModal.defaultScheme}
                 </td>
                 <td>
-                  <div css={cssDefaultSchemeButtonsRow}>
+                  <div class={cssDefaultSchemeButtonsRow}>
                     {defaultSchemeOptions.map((ds) => (
                       <DefaultSchemeButton
                         key={ds}
@@ -138,7 +138,7 @@ const LayerConfigurationModalContent = (props: {
                   {texts.assignerLayerModal.attachedModifiers}
                 </td>
                 <td>
-                  <div css={cssAttachedModifiersBox}>
+                  <div class={cssAttachedModifiersBox}>
                     {modsModel.map((mod) => {
                       return (
                         <label key={mod.sig}>

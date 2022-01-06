@@ -3,7 +3,7 @@ import { colors } from '~/ui/base';
 
 export const WindowTitlePart: FC = () => {
   return (
-    <div css={style}>
+    <div class={style}>
       {/* <img class="icon" src="appicon.png" /> */}
       <span class="text K">K</span>
       <span class="text">ermite</span>

@@ -39,7 +39,7 @@ const ProfileSetupModalContent = (props: {
     <ClosableOverlay close={close}>
       <CommonDialogFrame caption="Create Profile" close={close}>
         <DialogContentRow>
-          <table css={cssCommonPropertiesTable}>
+          <table class={cssCommonPropertiesTable}>
             <tbody>
               <tr>
                 <td>Target Keyboard</td>

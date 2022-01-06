@@ -24,7 +24,7 @@ export const WidgetSvgKeyboardView: FC<Props> = ({ keyboardDesign, cards }) => {
   const fillColor = '#89C';
   const strokeColor = 'rgb(0, 0, 51)';
   return (
-    <div css={style}>
+    <div class={style}>
       <KeyboardSvgFrameWithAutoScaler
         displayArea={keyboardDesign.displayArea}
         dpiScale={dpiScale}
