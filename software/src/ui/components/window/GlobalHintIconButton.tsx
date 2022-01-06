@@ -11,7 +11,7 @@ export const GlobalHintIconButton: FC<Props> = ({ isActive, onClick }) => (
   <ButtonBase
     active={isActive}
     onClick={onClick}
-    extraCss={style}
+    class={style}
     hint={texts.statusBarHint.toggleHintMessageVisibility}
   >
     <Icon spec="info" size={18} />

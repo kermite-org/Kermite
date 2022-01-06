@@ -14,12 +14,7 @@ export const WelcomePageButton: FC<Props> = ({
   children,
   hint,
 }) => (
-  <ButtonBase
-    onClick={onClick}
-    active={active}
-    extraCss={buttonStyle}
-    hint={hint}
-  >
+  <ButtonBase onClick={onClick} active={active} class={buttonStyle} hint={hint}>
     {children}
   </ButtonBase>
 );
