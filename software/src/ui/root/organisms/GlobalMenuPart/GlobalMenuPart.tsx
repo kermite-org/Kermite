@@ -1,12 +1,22 @@
 import { jsx, css, FC } from 'alumina';
 import { texts, uiTheme } from '~/ui/base';
+import { getUnscaledOverlayStyle } from '~/ui/components';
 import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/GlobalMenuPart.model';
+import { uiState } from '~/ui/store';
 
 export const GlobalMenuPart: FC = () => {
   const { isOpen, openMenu, closeMenu, menuItems } = useGlobalMenuPartModel();
+  const styleOverlayScale = getUnscaledOverlayStyle(
+    uiState.settings.siteDpiScale,
+  );
   return (
     <div class={style}>
-      <div class="overlay" if={isOpen} onClick={closeMenu} />
+      <div
+        class="overlay"
+        style={styleOverlayScale}
+        if={isOpen}
+        onClick={closeMenu}
+      />
       <div class="menuArea">
         <div
           class="menuButton"
