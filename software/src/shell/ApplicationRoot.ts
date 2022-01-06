@@ -181,6 +181,10 @@ export class ApplicationRoot {
     }
   }
 
+  disposeConnectedHidDevice() {
+    this.deviceService.disposeConnectedHidDevice();
+  }
+
   async terminate() {
     await executeWithFatalErrorHandler(async () => {
       console.log(`terminate services`);
