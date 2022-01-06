@@ -12,9 +12,7 @@ const style = (size?: number) => css`
 
 export const Icon: FC<Props> = ({ spec, size, sizeMi }) =>
   spec.startsWith('fa ') ? (
-    <i class={spec} class={style(size)} />
+    <i class={[spec, style(size)]} />
   ) : (
-    <i class="material-icons" class={style(sizeMi || size)}>
-      {spec}
-    </i>
+    <i class={['material-icons', style(sizeMi || size)]}>{spec}</i>
   );

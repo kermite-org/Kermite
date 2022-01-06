@@ -15,7 +15,7 @@ export const ProjectKeyboardListCard: FC<Props> = ({
   isCurrent,
   setCurrent,
 }) => (
-  <div class={style} class={isCurrent && '--current'} onClick={setCurrent}>
+  <div class={[style, isCurrent && '--current']} onClick={setCurrent}>
     <div class="inner">
       <div class="header-part">
         <div class="keyboard-name">{project.keyboardName}</div>

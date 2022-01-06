@@ -18,11 +18,7 @@ export function DualItemsHoverSelector<T extends string | number>({
   disabled,
 }: Props<T>) {
   return (
-    <div
-      class={style}
-      data-hint={hint}
-      class={(disabled && '--disabled') || ''}
-    >
+    <div data-hint={hint} class={[style, disabled && '--disabled']}>
       <div class="fixedView">{textDictionary[currentItem]}</div>
       <div class="selectable">
         {items.map((it) => (

@@ -9,8 +9,7 @@ interface Props {
 
 export const CheckBox: FC<Props> = ({ checked, setChecked, disabled }) => (
   <div
-    class={style}
-    class={[checked && '--checked', disabled && '--disabled']}
+    class={[style, checked && '--checked', disabled && '--disabled']}
     onClick={() => setChecked(!checked)}
   >
     <i class="fa fa-check mark" />

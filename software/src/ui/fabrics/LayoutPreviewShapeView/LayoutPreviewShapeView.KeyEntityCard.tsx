@@ -25,21 +25,13 @@ export const LayoutPreviewKeyEntityCard: FC<Props> = ({
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <KeyUnitShape
-        shape={shape}
-        class={cssKeyShape}
-        class={isHold && '--hold'}
-      />
+      <KeyUnitShape shape={shape} class={[cssKeyShape, isHold && '--hold']} />
       <text class={cssKeyText} x={0} y={0} if={showLabels}>
         {keyIndex}
       </text>
       <g if={showLabels}>
         {labelEntities.map((le) => (
-          <text
-            key={le.pinType}
-            class={cssLabelText}
-            class={`--type-${le.pinType}`}
-          >
+          <text key={le.pinType} class={[cssLabelText, `--type-${le.pinType}`]}>
             {le.pinName}
           </text>
         ))}

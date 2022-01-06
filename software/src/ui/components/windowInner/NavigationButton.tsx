@@ -18,8 +18,7 @@ export const NavigationButton: FC<Props> = ({
 }) => (
   <div
     onClick={onClick}
-    class={style}
-    class={isCurrent && '--active'}
+    class={[style, isCurrent && '--active']}
     data-hint={hint}
   >
     <Icon spec={iconSpec} />

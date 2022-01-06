@@ -15,7 +15,7 @@ export const RadioButtonLine: FC<Props> = ({
   disabled,
   radioGroupName,
 }) => (
-  <div class={style} class={disabled && '--disabled'} onClick={onClick}>
+  <div class={[style, disabled && '--disabled']} onClick={onClick}>
     <input
       type="radio"
       name={radioGroupName}
