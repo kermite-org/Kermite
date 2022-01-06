@@ -1212,10 +1212,10 @@ alumina-visor@^0.1.4:
     fs-extra "^10.0.0"
     servor "^4.0.2"
 
-alumina@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.9.tgz#7c8239970b0812e90e012b6ac12ea6ffaba7197e"
-  integrity sha512-jP1eMmsN+6aWpkCCX/Xa1JGLHS56+Fna6EIvR25SaBDer7fjmV9Hf9LfjuJtDiVA+cgpwo0FWscdsS5gOLQE7w==
+alumina@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/alumina/-/alumina-0.1.10.tgz#15587730f432c8656db3ad43ab270dc9799ff87e"
+  integrity sha512-kLG6MNsCQcuQACElPVjBczMqtrWK1zv6ehsSp7Q/R33+3TpmEIRtmgI0Yy7ZU2P0XvNSByN+S7GF5L2ijs3lVA==
 
 ansi-align@^3.0.0:
   version "3.0.1"
