@@ -1,4 +1,4 @@
-import { css, FC, jsx, useMemo } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import {
   createFallbackPersistKeyboardDesign,
   DisplayKeyboardDesignLoader,
@@ -14,17 +14,26 @@ import { ProjectKeyboardList } from '~/ui/fabrics';
 import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.ProjectAddCard';
 import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
 import { uiReaders } from '~/ui/store';
+import { useMemoEx } from '~/ui/utils';
 
 const helpers = {
   createSourceProjectItems(
     allProjectPackageInfos: IProjectPackageInfo[],
+    isDeveloperMode: boolean,
+    showDevelopmentPackages: boolean,
   ): IProjectKeyboardListProjectItem[] {
-    const onlineProjects = allProjectPackageInfos
+    let onlineProjects = allProjectPackageInfos
       .filter((info) => info.origin === 'online')
       .sort(sortOrderBy((it) => it.keyboardName));
     const localProjects = allProjectPackageInfos
       .filter((info) => info.origin === 'local' && !info.isDraft)
       .sort(sortOrderBy((it) => it.keyboardName));
+
+    if (!(isDeveloperMode && showDevelopmentPackages)) {
+      onlineProjects = onlineProjects.filter(
+        (it) => !it.onlineProjectAttributes?.isDevelopment,
+      );
+    }
 
     return [...onlineProjects, ...localProjects].map((info) => ({
       projectId: info.projectId,
@@ -47,10 +56,11 @@ export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
     handleSelectLocalPackageToImport,
     handleLocalPackageFileDrop,
   } = profileSetupStore.actions;
-  const sourceProjectItems = useMemo(
-    () => helpers.createSourceProjectItems(uiReaders.allProjectPackageInfos),
-    [uiReaders.allProjectPackageInfos],
-  );
+  const sourceProjectItems = useMemoEx(helpers.createSourceProjectItems, [
+    uiReaders.allProjectPackageInfos,
+    uiReaders.isDeveloperMode,
+    uiReaders.globalSettings.showDevelopmentPackages,
+  ]);
 
   return (
     <div class={style}>

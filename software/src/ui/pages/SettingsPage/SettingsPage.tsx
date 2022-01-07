@@ -26,6 +26,8 @@ export const SettingsPage = () => {
     uiScalingSelectionValue,
     setUiScalingSelectionValue,
     appVersionInfo,
+    flagShowDevelopmentPackages,
+    setFlagShowDevelopmentPackages,
   } = useSettingsPageModel();
 
   return (
@@ -77,6 +79,12 @@ export const SettingsPage = () => {
               text="Allow Cross Keyboard Keymapping Write"
               checked={flagAllowCrossKeyboardKeyMappingWrite}
               setChecked={setFlagAllowCrossKeyboardKeyMappingWrite}
+              disabled={!flagDeveloperMode}
+            />
+            <CheckBoxLine
+              text="Show development packages"
+              checked={flagShowDevelopmentPackages}
+              setChecked={setFlagShowDevelopmentPackages}
               disabled={!flagDeveloperMode}
             />
           </Indent>

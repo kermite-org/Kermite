@@ -117,6 +117,7 @@ export interface IProjectPackageFileContent {
 
 export interface IOnlineProjectAttributes {
   isOfficial: boolean;
+  isDevelopment: boolean;
   authorDisplayName: string;
   authorIconUrl: string;
   revision: number;

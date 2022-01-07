@@ -22,6 +22,8 @@ export interface ISettingsPageModel {
   uiScalingSelectionValue: string;
   setUiScalingSelectionValue: (value: string) => void;
   appVersionInfo: string;
+  flagShowDevelopmentPackages: boolean;
+  setFlagShowDevelopmentPackages: (value: boolean) => void;
 }
 
 const sourceScales = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3];
@@ -102,5 +104,8 @@ export function useSettingsPageModel(): ISettingsPageModel {
     setUiScalingSelectionValue: (strVal) =>
       commitUiSettings({ siteDpiScale: parseFloat(strVal) }),
     appVersionInfo,
+    flagShowDevelopmentPackages: globalSettings.showDevelopmentPackages,
+    setFlagShowDevelopmentPackages: (value) =>
+      globalSettingsWriter.writeValue('showDevelopmentPackages', value),
   };
 }
