@@ -11,7 +11,7 @@ import { globalSettingsWriter, uiReaders } from '~/ui/store/base';
 import { createSimpleSelector2 } from '~/ui/utils';
 
 const configs = {
-  showAllPackagesForNonDeveloperMode: true,
+  showLocalPackagesForNonDeveloperMode: true,
 };
 
 type IState = {
@@ -61,9 +61,11 @@ const helpers = {
     resourceOrigin: IResourceOrigin,
     isDeveloperMode: boolean,
   ): IProjectKeyboardListProjectItem[] {
-    if (configs.showAllPackagesForNonDeveloperMode && !isDeveloperMode) {
+    if (configs.showLocalPackagesForNonDeveloperMode && !isDeveloperMode) {
       const onlineProjects = helpers.createSourceProjectItems(
-        allProjectPackageInfos,
+        allProjectPackageInfos.filter(
+          (it) => !it.onlineProjectAttributes?.isDevelopment,
+        ),
         'online',
       );
       const localProjects = helpers.createSourceProjectItems(
