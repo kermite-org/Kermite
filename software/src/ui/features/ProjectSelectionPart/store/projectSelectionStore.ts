@@ -56,23 +56,30 @@ const helpers = {
     allProjectPackageInfos: IProjectPackageInfo[],
     resourceOrigin: IResourceOrigin,
     isDeveloperMode: boolean,
+    showDevelopmentPackages: boolean,
   ): IProjectKeyboardListProjectItem[] {
+    let targetProjectPackages = allProjectPackageInfos;
+    if (!(isDeveloperMode && showDevelopmentPackages)) {
+      targetProjectPackages = targetProjectPackages.filter(
+        (it) => !it.onlineProjectAttributes?.isDevelopment,
+      );
+    }
     if (!isDeveloperMode) {
       const onlineProjects = helpers.createSourceProjectItems(
-        allProjectPackageInfos.filter(
+        targetProjectPackages.filter(
           (it) => !it.onlineProjectAttributes?.isDevelopment,
         ),
         'online',
       );
       const localProjects = helpers.createSourceProjectItems(
-        allProjectPackageInfos.filter((it) => !it.isDraft),
+        targetProjectPackages.filter((it) => !it.isDraft),
         'local',
         '(local)',
       );
       return [...onlineProjects, ...localProjects];
     } else {
       return helpers.createSourceProjectItems(
-        allProjectPackageInfos,
+        targetProjectPackages,
         resourceOrigin,
       );
     }
@@ -85,6 +92,7 @@ const sourceProjectItemsSelector = createSimpleSelector2(
     uiReaders.allProjectPackageInfos,
     state.tabResourceOrigin,
     uiReaders.isDeveloperMode,
+    uiReaders.globalSettings.showDevelopmentPackages,
   ],
 );
 

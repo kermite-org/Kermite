@@ -20,6 +20,7 @@ const helpers = {
   createSourceProjectItems(
     allProjectPackageInfos: IProjectPackageInfo[],
     isDeveloperMode: boolean,
+    showDevelopmentPackages: boolean,
   ): IProjectKeyboardListProjectItem[] {
     let onlineProjects = allProjectPackageInfos
       .filter((info) => info.origin === 'online')
@@ -28,7 +29,7 @@ const helpers = {
       .filter((info) => info.origin === 'local' && !info.isDraft)
       .sort(sortOrderBy((it) => it.keyboardName));
 
-    if (!isDeveloperMode) {
+    if (!(isDeveloperMode && showDevelopmentPackages)) {
       onlineProjects = onlineProjects.filter(
         (it) => !it.onlineProjectAttributes?.isDevelopment,
       );
@@ -58,6 +59,7 @@ export const ProfileSetupWizard_StepBaseProfileSelection: FC = () => {
   const sourceProjectItems = useMemoEx(helpers.createSourceProjectItems, [
     uiReaders.allProjectPackageInfos,
     uiReaders.isDeveloperMode,
+    uiReaders.globalSettings.showDevelopmentPackages,
   ]);
 
   return (
