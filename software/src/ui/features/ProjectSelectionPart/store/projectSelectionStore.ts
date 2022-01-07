@@ -10,10 +10,6 @@ import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { globalSettingsWriter, uiReaders } from '~/ui/store/base';
 import { createSimpleSelector2 } from '~/ui/utils';
 
-const configs = {
-  showLocalPackagesForNonDeveloperMode: true,
-};
-
 type IState = {
   tabResourceOrigin: IResourceOrigin;
 };
@@ -61,7 +57,7 @@ const helpers = {
     resourceOrigin: IResourceOrigin,
     isDeveloperMode: boolean,
   ): IProjectKeyboardListProjectItem[] {
-    if (configs.showLocalPackagesForNonDeveloperMode && !isDeveloperMode) {
+    if (!isDeveloperMode) {
       const onlineProjects = helpers.createSourceProjectItems(
         allProjectPackageInfos.filter(
           (it) => !it.onlineProjectAttributes?.isDevelopment,
