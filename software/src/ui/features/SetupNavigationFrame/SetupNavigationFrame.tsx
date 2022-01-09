@@ -8,11 +8,10 @@ import {
 import { useSetupNavigationFrameModel } from './SetupNavigationFrame.model';
 
 type Props = {
-  className?: string;
   children: AluminaNode;
 };
 
-export const SetupNavigationFrame: FC<Props> = ({ className, children }) => {
+export const SetupNavigationFrame: FC<Props> = ({ children }) => {
   const {
     allSteps,
     currentStep,
@@ -27,24 +26,24 @@ export const SetupNavigationFrame: FC<Props> = ({ className, children }) => {
     completeSteps,
   } = useSetupNavigationFrameModel();
   return (
-    <div css={style} className={className}>
-      <div className="top-bar">
+    <div class={style}>
+      <div class="top-bar">
         <NavigationStepList
-          className="step-list"
+          class="step-list"
           steps={allSteps}
           currentStep={currentStep}
           setCurrentStep={setCurrentStep}
         />
-        <div className="instruction-part">
+        <div class="instruction-part">
           <p>ステップを順番に進めてキーボードのセットアップを行いましょう</p>
           <p>{currentStepInstruction}</p>
         </div>
-        <div className="close-button" onClick={closePanel}>
+        <div class="close-button" onClick={closePanel}>
           <Icon spec="fa fa-times" />
         </div>
       </div>
-      <div className="content-row">{children}</div>
-      <div className="bottom-bar">
+      <div class="content-row">{children}</div>
+      <div class="bottom-bar">
         <SetupNavigationStepShiftButton
           if={currentStep === 0}
           text="キャンセル"

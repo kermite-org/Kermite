@@ -1,5 +1,5 @@
-import { css, jsx } from 'alumina';
-import { FcWithClassName, texts } from '~/ui/base';
+import { css, FC, jsx } from 'alumina';
+import { texts } from '~/ui/base';
 import {
   GeneralButtonMenu,
   KeyboardProfileSelector,
@@ -17,13 +17,13 @@ import { useProfileSelectorModel } from '~/ui/pages/AssignerPage/ui_bar_profileM
 import { makeProfilesOperationModel } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
 import { SavingProjectPresetSelectionModal } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
 
-export const ProfileManagementPart: FcWithClassName = ({ className }) => {
+export const ProfileManagementPart: FC = () => {
   const baseVm = makeProfilesOperationModel();
   const { profileSelectorSource } = useProfileSelectorModel();
   const menuItems = createProfileSelectionMenuItems(baseVm);
 
   return (
-    <div css={style} className={className}>
+    <div class={style}>
       <GeneralButtonMenu
         menuItems={menuItems}
         hint={texts.assignerTopBarHint.profileOperationsMenu}

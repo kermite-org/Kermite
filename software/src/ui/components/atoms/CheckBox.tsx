@@ -2,21 +2,14 @@ import { FC, jsx, css } from 'alumina';
 import { colors } from '~/ui/base';
 
 interface Props {
-  className?: string;
   checked: boolean;
   setChecked(value: boolean): void;
   disabled?: boolean;
 }
 
-export const CheckBox: FC<Props> = ({
-  className,
-  checked,
-  setChecked,
-  disabled,
-}) => (
+export const CheckBox: FC<Props> = ({ checked, setChecked, disabled }) => (
   <div
-    css={style}
-    classNames={[className, checked && '--checked', disabled && '--disabled']}
+    class={[style, checked && '--checked', disabled && '--disabled']}
     onClick={() => setChecked(!checked)}
   >
     <i class="fa fa-check mark" />

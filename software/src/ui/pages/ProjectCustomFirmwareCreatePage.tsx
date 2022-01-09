@@ -55,7 +55,7 @@ export const ProjectCustomFirmwareCreatePage: FC = () => {
   };
 
   return (
-    <div css={style}>
+    <div class={style}>
       <RouteHeaderBar
         title="edit custom firmware: (new)"
         backPagePath="/projectResource"
@@ -63,7 +63,7 @@ export const ProjectCustomFirmwareCreatePage: FC = () => {
         saveHandler={saveHandler}
         editMode="Create"
       />
-      <div className="content">
+      <div class="content">
         <CustomFirmwareEditor sourceEditValues={sourceEditValues} />
       </div>
     </div>

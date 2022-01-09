@@ -37,7 +37,7 @@ export const MockPageLoadedDesignDrawing = () => {
 
   const da = design.displayArea;
   return (
-    <div css={cssRootDiv}>
+    <div class={cssRootDiv}>
       {/* <pre>{JSON.stringify(state.design, null, ' ')}</pre> */}
       <svg width={600} height={600} viewBox="-100 -100 200 200">
         <g stroke-width={0.5} transform="translate(0, 20)">
@@ -75,10 +75,10 @@ export const MockPageLoadedDesignDrawing = () => {
                 />
               )}
               <g>
-                <text x={0} y={-10} css={cssText} transform="scale(0.3)">
+                <text x={0} y={-10} class={cssText} transform="scale(0.3)">
                   {ke.keyId}
                 </text>
-                <text x={0} y={10} css={cssText} transform="scale(0.3)">
+                <text x={0} y={10} class={cssText} transform="scale(0.3)">
                   {ke.keyIndex}
                 </text>
               </g>

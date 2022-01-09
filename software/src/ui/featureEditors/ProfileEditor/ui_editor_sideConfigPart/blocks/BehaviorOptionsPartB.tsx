@@ -11,7 +11,7 @@ export const BehaviorOptionsPartB: FC = () => {
 
   const { isUserProfileEditorView } = assignerModel;
   return (
-    <div css={style}>
+    <div class={style}>
       <CheckBoxLine
         text={texts.assignerDisplaySettingsPart.showFallbackAssigns}
         checked={settings.showLayerDefaultAssign}
@@ -22,7 +22,7 @@ export const BehaviorOptionsPartB: FC = () => {
         disabled={!profilesReader.isEditProfileAvailable}
       />
 
-      <div if={!isUserProfileEditorView} className="config-icons">
+      <div if={!isUserProfileEditorView} class="config-icons">
         <ConfigurationButton
           onClick={() => commitUiState({ profileConfigModalVisible: true })}
           iconSpec="fa fa-cog"

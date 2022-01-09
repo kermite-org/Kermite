@@ -26,7 +26,7 @@ export const LayoutPreviewShapeView: FC<Props> = ({
   const fillColor = '#54566f';
   const strokeColor = 'transparent';
   return (
-    <div css={style}>
+    <div class={style}>
       <KeyboardSvgFrameWithAutoScaler
         displayArea={keyboardDesign.displayArea}
         dpiScale={dpiScale}

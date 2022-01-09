@@ -17,7 +17,7 @@ export const GeneralButtonMenuButton: FC<Props> = ({
   hint,
 }) => (
   <div
-    css={style}
+    class={style}
     onClick={handler}
     data-active={active}
     data-disabled={disabled}

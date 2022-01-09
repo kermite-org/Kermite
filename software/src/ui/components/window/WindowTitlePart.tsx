@@ -3,10 +3,10 @@ import { colors } from '~/ui/base';
 
 export const WindowTitlePart: FC = () => {
   return (
-    <div css={style}>
-      {/* <img className="icon" src="appicon.png" /> */}
-      <span className="text K">K</span>
-      <span className="text">ermite</span>
+    <div class={style}>
+      {/* <img class="icon" src="appicon.png" /> */}
+      <span class="text K">K</span>
+      <span class="text">ermite</span>
     </div>
   );
 };

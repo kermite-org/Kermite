@@ -24,11 +24,9 @@ const FieldItem: FC<{
   const styleChildren = css``;
   return (
     <tr>
-      <td css={styleTitleCell} className={indent && '--indent'}>
-        {title}
-      </td>
+      <td class={[styleTitleCell, indent && '--indent']}>{title}</td>
       <td>
-        <div css={styleChildren}>{children}</div>
+        <div class={styleChildren}>{children}</div>
       </td>
     </tr>
   );
@@ -92,7 +90,7 @@ const IntegerFieldRow: FC<{
       disabled={availabilityKey ? !editValues[availabilityKey] : disabled}
       invalid={!!fieldErrors[fieldKey]}
     />
-    <div className="error">{fieldErrors[fieldKey]}</div>
+    <div class="error">{fieldErrors[fieldKey]}</div>
   </FieldItem>
 );
 
@@ -121,7 +119,7 @@ const SinglePinFieldRow: FC<{
       disabled={availabilityKey ? !editValues[availabilityKey] : disabled}
       invalid={!!fieldErrors[fieldKey]}
     />
-    <div className="error">{fieldErrors[fieldKey]}</div>
+    <div class="error">{fieldErrors[fieldKey]}</div>
   </FieldItem>
 );
 
@@ -140,7 +138,7 @@ const MultiplePinsFieldRow: FC<{
       disabled={!editValues[availabilityKey]}
       invalid={!!fieldErrors[fieldKey]}
     />
-    <div className="error">{fieldErrors[fieldKey]}</div>
+    <div class="error">{fieldErrors[fieldKey]}</div>
   </FieldItem>
 );
 

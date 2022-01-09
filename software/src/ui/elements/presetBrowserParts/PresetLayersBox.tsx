@@ -3,7 +3,6 @@ import { texts } from '~/ui/base';
 import { PresetLayersBoxItem } from '~/ui/elements/presetBrowserParts/PresetLayersBox.Item';
 
 type Props = {
-  className?: string;
   layers: {
     layerId: string;
     layerName: string;
@@ -13,15 +12,13 @@ type Props = {
 };
 
 export const PresetLayersBox: FC<Props> = ({
-  className,
   layers,
   currentLayerId,
   setCurrentLayerId,
 }) => (
   <div
-    css={style}
+    class={style}
     data-hint={texts.presetBrowserHint.layers}
-    className={className}
     onClick={() => setCurrentLayerId('')}
   >
     {layers.reverse().map((la) => (

@@ -9,7 +9,6 @@ interface Props {
   icon?: string;
   onClick?(): void;
   disabled?: boolean;
-  className?: string;
   size?: IGeneralButtonSize;
   children?: any;
   hint?: string;
@@ -20,14 +19,12 @@ export const GeneralButton: FC<Props> = ({
   icon,
   onClick,
   disabled,
-  className,
   size = 'unit',
   children,
   hint,
 }) => (
   <div
-    css={style}
-    className={className}
+    class={style}
     onClick={onClick}
     data-disabled={disabled}
     data-size={size}

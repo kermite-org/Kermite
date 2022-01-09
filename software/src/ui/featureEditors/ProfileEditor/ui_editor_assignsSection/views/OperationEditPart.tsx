@@ -25,17 +25,17 @@ export const OperationEditPart: FC<Props> = ({
   layoutOptionEditVM,
   isSingleMode,
 }) => (
-  <div css={cssAssignPanel}>
-    <div css={cssGroupBoxV}>
+  <div class={cssAssignPanel}>
+    <div class={cssGroupBoxV}>
       <OperationCard model={noAssignEntry} />
       {isSingleMode && <OperationCard model={blockEntry} />}
       {isSingleMode && <OperationCard model={transparentEntry} />}
     </div>
     <div>
-      <div css={cssKeyAssignsRow}>
+      <div class={cssKeyAssignsRow}>
         <div>
           {virtualKeyEntryGroups.map((group, index) => (
-            <div css={cssGroupBox} key={index}>
+            <div class={cssGroupBox} key={index}>
               {group.map((model) => (
                 <OperationCard model={model} key={model.sig} />
               ))}
@@ -43,32 +43,32 @@ export const OperationEditPart: FC<Props> = ({
           ))}
         </div>
         <div>
-          <div css={cssGroupBoxV}>
+          <div class={cssGroupBoxV}>
             {attachedModifierEntries.map((model) => (
               <OperationCard model={model} key={model.sig} />
             ))}
           </div>
         </div>
       </div>
-      <div css={cssLayerAssignsRow}>
-        <div css={cssGroupBox}>
+      <div class={cssLayerAssignsRow}>
+        <div class={cssGroupBox}>
           {layerCallEntries.map((model) => (
             <OperationCard model={model} key={model.sig} />
           ))}
           <OperationLayerOptionSelector {...layoutOptionEditVM} />
         </div>
       </div>
-      <div css={cssLayerAssignsRow}>
-        <div css={cssGroupBox}>
+      <div class={cssLayerAssignsRow}>
+        <div class={cssGroupBox}>
           {systemActionEntries.map((model) => (
             <OperationCard model={model} key={model.sig} />
           ))}
         </div>
       </div>
-      <div css={cssKeyAssignsRow}>
+      <div class={cssKeyAssignsRow}>
         <div>
           {virtualKeyEntryGroups2.map((group, index) => (
-            <div css={cssGroupBox} key={index}>
+            <div class={cssGroupBox} key={index}>
               {group.map((model) => (
                 <OperationCard model={model} key={model.sig} />
               ))}

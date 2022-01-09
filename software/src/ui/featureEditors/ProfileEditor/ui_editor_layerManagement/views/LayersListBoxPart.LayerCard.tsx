@@ -10,7 +10,7 @@ export const LayerCard: FC<Props> = ({
   layerModel: { layerId, layerName, isCurrent, setCurrent },
 }) => (
   <div
-    css={style}
+    class={style}
     key={layerId}
     data-current={isCurrent}
     onClick={setCurrent}

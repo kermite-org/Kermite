@@ -14,7 +14,7 @@ export const PresetLayersBoxItem: FC<Props> = ({
   onClick,
 }) => (
   <div
-    css={style}
+    class={style}
     onClick={withStopPropagation(onClick)}
     data-active={isActive}
   >

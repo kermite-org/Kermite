@@ -26,10 +26,12 @@ export const SettingsPage = () => {
     uiScalingSelectionValue,
     setUiScalingSelectionValue,
     appVersionInfo,
+    flagShowDevelopmentPackages,
+    setFlagShowDevelopmentPackages,
   } = useSettingsPageModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div>{texts.settings.pageTitle}</div>
 
       <Indent>
@@ -50,9 +52,7 @@ export const SettingsPage = () => {
             />
             <div>
               <div
-                className={
-                  !canChangeLocalRepositoryFolderPath && 'text-disabled'
-                }
+                class={!canChangeLocalRepositoryFolderPath && 'text-disabled'}
               >
                 {texts.settings.configKermiteRootDirectory}
               </div>
@@ -81,6 +81,12 @@ export const SettingsPage = () => {
               setChecked={setFlagAllowCrossKeyboardKeyMappingWrite}
               disabled={!flagDeveloperMode}
             />
+            <CheckBoxLine
+              text="Show development packages"
+              checked={flagShowDevelopmentPackages}
+              setChecked={setFlagShowDevelopmentPackages}
+              disabled={!flagDeveloperMode}
+            />
           </Indent>
         </Indent>
 
@@ -96,7 +102,7 @@ export const SettingsPage = () => {
         </Indent>
       </Indent>
 
-      <div className="version-area" if={!!appVersionInfo}>
+      <div class="version-area" if={!!appVersionInfo}>
         application version: {appVersionInfo}
       </div>
     </div>

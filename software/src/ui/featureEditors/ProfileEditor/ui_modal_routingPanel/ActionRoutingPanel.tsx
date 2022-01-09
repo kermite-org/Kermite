@@ -1,8 +1,12 @@
-import { css, jsx } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import { IMappingEntry } from '~/shared';
 import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
-import { colors, FcWithClassName } from '~/ui/base';
-import { GeneralButton, GeneralSelector } from '~/ui/components';
+import { colors } from '~/ui/base';
+import {
+  GeneralButton,
+  GeneralSelector,
+  getUnscaledOverlayStyle,
+} from '~/ui/components';
 import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
 import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
 import {
@@ -10,7 +14,7 @@ import {
   getRoutingTargetKeyOptions,
   getRoutingTargetModifierOptions,
 } from '~/ui/featureEditors/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanelModel';
-import { commitUiState } from '~/ui/store';
+import { commitUiState, uiState } from '~/ui/store';
 
 const actions = {
   addMappingEntry() {
@@ -53,14 +57,18 @@ const helpers = {
   },
 };
 
-export const ActionRoutingPanel: FcWithClassName = ({ className }) => {
+export const ActionRoutingPanel: FC = () => {
   const { mappingEntries } = assignerModel.profileData;
   const { addMappingEntry, deleteLastMappingEntry, handleClose } = actions;
   const { itemValueSetter } = helpers;
 
+  const styleOverlayScale = getUnscaledOverlayStyle(
+    uiState.settings.siteDpiScale,
+  );
+
   return (
-    <div css={style} class={className}>
-      <div class="overlay" onClick={handleClose} />
+    <div class={style}>
+      <div class="overlay" style={styleOverlayScale} onClick={handleClose} />
       <div class="panel">
         <div class="closeButton" onClick={handleClose}>
           <i class="fa fa-times" />

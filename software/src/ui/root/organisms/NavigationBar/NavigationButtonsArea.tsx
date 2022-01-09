@@ -1,12 +1,11 @@
-import { css, jsx } from 'alumina';
-import { FcWithClassName } from '~/ui/base';
+import { css, FC, jsx } from 'alumina';
 import { NavigationButton } from '~/ui/components';
 import { useNavigationButtonsAreaModel } from '~/ui/root/organisms/NavigationBar/NavigationButtonsArea.model';
 
-export const NavigationButtonsArea: FcWithClassName = ({ className }) => {
+export const NavigationButtonsArea: FC = () => {
   const { navigationItems } = useNavigationButtonsAreaModel();
   return (
-    <div css={style} className={className}>
+    <div class={style}>
       {navigationItems.map((item) => (
         <NavigationButton vm={item} key={item.pagePath} />
       ))}

@@ -10,7 +10,7 @@ type Props = {
 export const LayersListBoxPart: FC<Props> = ({ vm }) => {
   const layers = vm.layers.reverse();
   return (
-    <div css={style}>
+    <div class={style}>
       {layers.map((la) => (
         <LayerCard layerModel={la} key={`${la.layerId}_${la.layerName}`} />
       ))}

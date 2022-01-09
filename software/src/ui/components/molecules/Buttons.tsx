@@ -14,11 +14,7 @@ export const SmallSymbolicActionButton = (props: {
     font-size: 20px;
   `;
   return (
-    <ButtonBase
-      onClick={props.onClick}
-      disabled={props.disabled}
-      extraCss={style}
-    >
+    <ButtonBase onClick={props.onClick} disabled={props.disabled} class={style}>
       <Icon spec={props.icon} />
     </ButtonBase>
   );
@@ -43,7 +39,7 @@ export const OperationButtonWithIcon = (props: {
     <ButtonBase
       onClick={props.onClick}
       disabled={props.disabled}
-      extraCss={style}
+      class={style}
       hint={props.hint}
     >
       <Icon spec={props.icon} />
@@ -62,11 +58,7 @@ export const OperationButtonOnlyIcon = (props: {
     font-size: 28px;
   `;
   return (
-    <ButtonBase
-      onClick={props.onClick}
-      disabled={props.disabled}
-      extraCss={style}
-    >
+    <ButtonBase onClick={props.onClick} disabled={props.disabled} class={style}>
       <Icon spec={props.icon} />
     </ButtonBase>
   );

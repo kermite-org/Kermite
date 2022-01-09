@@ -14,15 +14,15 @@ import { uiState } from '~/ui/store';
 export const KeyAssignEditView: FC = () => {
   const { isUserProfileEditorView } = assignerModel;
   return (
-    <div css={cssKeyAssignEditView}>
+    <div class={cssKeyAssignEditView}>
       <div
-        css={cssEditTopBarBox}
+        class={cssEditTopBarBox}
         if={isUserProfileEditorView && uiState.settings.showTestInputArea}
       >
         <TestInputArea />
       </div>
-      <div css={cssEditMainRow}>
-        <div css={cssEditMainColumn}>
+      <div class={cssEditMainRow}>
+        <div class={cssEditMainColumn}>
           <div class="keyboardPartBox">
             <KeyboardSection />
           </div>
@@ -31,7 +31,7 @@ export const KeyAssignEditView: FC = () => {
           </div>
           {uiState.profileRoutingPanelVisible && <ActionRoutingPanel />}
         </div>
-        <div css={cssEditSideBarColumn}>
+        <div class={cssEditSideBarColumn}>
           {isUserProfileEditorView && (
             <div class="topPartBox">
               <DisplaySettingsPanelContent />

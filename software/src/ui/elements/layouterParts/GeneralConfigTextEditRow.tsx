@@ -27,7 +27,7 @@ export const GeneralConfigTextEditRow: FC<Props> = ({
   inputWidth,
   unit,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <label style={styleWidthSpec(labelWidth)}>{label}</label>
     <GeneralInput
       value={editText}

@@ -22,6 +22,10 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     this.core.setDevice(this.selectionManager.getDevice());
   }
 
+  disposeConnectedHidDevice() {
+    this.selectionManager.disposeConnectedHidDevice();
+  }
+
   terminate() {
     this.selectionManager.terminate();
   }

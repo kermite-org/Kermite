@@ -45,7 +45,7 @@ export const EditKeyUnitCard: FC<Props> = ({
     >
       <KeyUnitShape
         shape={shape}
-        classNames={[
+        class={[
           keyUnitShapeStyle,
           (showOutline && '--with-outline') || undefined,
         ]}

@@ -11,7 +11,7 @@ export const OperationCard: FC<Props> = ({
   const isTextLong = text.length >= 2;
   return (
     <div
-      css={style}
+      class={style}
       data-current={isCurrent}
       onMouseDown={setCurrent}
       data-disabled={!isEnabled}

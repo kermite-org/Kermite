@@ -21,16 +21,16 @@ export const PresetKeyUnitCard: FC<Props> = ({
     transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
     key={keyUnitId}
   >
-    <KeyUnitShape shape={shape} css={cssKeyShape} />
-    <text css={cssKeyText} x={0} y={-2} if={!isLayerFallback}>
+    <KeyUnitShape shape={shape} class={cssKeyShape} />
+    <text class={cssKeyText} x={0} y={-2} if={!isLayerFallback}>
       {primaryText}
     </text>
 
-    <text css={cssKeyText} x={0} y={4} if={!isLayerFallback}>
+    <text class={cssKeyText} x={0} y={4} if={!isLayerFallback}>
       {secondaryText}
     </text>
 
-    <text css={cssKeyText} x={4} y={-6} if={!isLayerFallback}>
+    <text class={cssKeyText} x={4} y={-6} if={!isLayerFallback}>
       {tertiaryText}
     </text>
   </g>

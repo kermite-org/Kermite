@@ -15,7 +15,7 @@ export const SetupNavigationStepButton: FC<Props> = ({
   active,
 }) => (
   <button
-    classNames={[style, active && '--active']}
+    class={[style, active && '--active']}
     onClick={handler}
     disabled={disabled}
   >

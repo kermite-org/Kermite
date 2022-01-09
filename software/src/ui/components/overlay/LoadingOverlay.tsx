@@ -10,18 +10,18 @@ export const LoadingOverlay: FC<Props> = ({ isLoading }) => {
     return null;
   }
   return (
-    <div css={style}>
+    <div class={style}>
       <LoadingAnimationIcon />
     </div>
   );
 };
 
 const style = css`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;

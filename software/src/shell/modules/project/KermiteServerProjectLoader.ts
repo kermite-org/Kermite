@@ -17,6 +17,7 @@ interface IProjectPackageWrapperFileContent {
   authorIconUrl: string;
   revision: number;
   isOfficial: boolean;
+  isDevelopment: boolean;
 }
 
 function checkProjectFileContentSchema(
@@ -77,12 +78,18 @@ async function loadProjectPackageWrapperFiles(
           return undefined;
         }
 
-        const { authorDisplayName, authorIconUrl, isOfficial, revision } =
-          wrapperItem;
+        const {
+          authorDisplayName,
+          authorIconUrl,
+          isOfficial,
+          isDevelopment,
+          revision,
+        } = wrapperItem;
         const attrs: IOnlineProjectAttributes = {
           authorDisplayName,
           authorIconUrl,
           isOfficial,
+          isDevelopment,
           revision,
         };
         return convertOnlinePackageDataToPackageInfo(

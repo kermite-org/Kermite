@@ -4,20 +4,15 @@ import { colors } from '~/ui/base';
 type Props = {
   pageTitle?: string;
   children: AluminaChildren;
-  className?: string;
 };
 
-export const CommonPageFrame: FC<Props> = ({
-  pageTitle,
-  children,
-  className,
-}) => {
+export const CommonPageFrame: FC<Props> = ({ pageTitle, children }) => {
   return (
-    <div css={style} className={className}>
-      <div className="header" if={!!pageTitle}>
+    <div class={style}>
+      <div class="header" if={!!pageTitle}>
         {pageTitle}
       </div>
-      <div className="body">{children}</div>
+      <div class="body">{children}</div>
     </div>
   );
 };

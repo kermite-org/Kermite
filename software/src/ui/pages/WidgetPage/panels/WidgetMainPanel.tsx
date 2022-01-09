@@ -7,13 +7,13 @@ import { siteModel } from '~/ui/store';
 export const WidgetMainPanel: FC = () => {
   const vm = useWidgetMainPanelModel();
   return (
-    <div className={style}>
+    <div class={style}>
       <WidgetSvgKeyboardView
         keyboardDesign={vm.keyboardVM.keyboardDesign}
         cards={vm.keyboardVM.cards}
       />
       <WidgetControlButtonsBox
-        className="control-buttons-box"
+        class="control-buttons-box"
         vm={vm}
         if={siteModel.isWindowActive}
       />

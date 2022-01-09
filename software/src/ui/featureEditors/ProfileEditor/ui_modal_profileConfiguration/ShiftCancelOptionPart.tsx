@@ -8,7 +8,7 @@ export const ShiftCancelOptionPart: FC = () => {
   const { settings } = assignerModel.profileData;
   const { writeSettingsValue } = assignerModel;
   return (
-    <div css={style}>
+    <div class={style}>
       <label data-hint={texts.assignerProfileConfigModalHint.shiftCancel}>
         {texts.assignerProfileConfigModal.shiftCancel}
       </label>

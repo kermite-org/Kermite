@@ -12,7 +12,7 @@ export const LayerStateView: FC<Props> = ({ playerModel }) => {
   const visible = uiState.settings.showLayersDynamic;
   return (
     <div
-      css={cssLayerStateView}
+      class={cssLayerStateView}
       data-hint={texts.assignerKeyboardViewHint.layerStates}
       if={visible}
     >
@@ -20,7 +20,7 @@ export const LayerStateView: FC<Props> = ({ playerModel }) => {
         return (
           <div
             key={la.layerId}
-            css={cssLayerCard}
+            class={cssLayerCard}
             data-active={(isConnected && la.isActive) || false}
           >
             {la.layerName}

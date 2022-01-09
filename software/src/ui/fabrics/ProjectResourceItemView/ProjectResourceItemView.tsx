@@ -7,7 +7,6 @@ import { PresetDetailView } from '~/ui/fabrics/ProjectResourceItemView/PresetDet
 import { useMemoEx } from '~/ui/utils';
 
 type Props = {
-  className?: string;
   projectInfo: IProjectPackageInfo;
   selectedItemKey: string;
   detailButtonText: string;
@@ -39,8 +38,8 @@ export const ProjectResourceItemView: FC<Props> = ({
   const { itemType, itemName } = decodeProjectResourceItemKey(selectedItemKey);
   const canEdit = useMemoEx(checkCanEdit, [projectInfo, selectedItemKey]);
   return (
-    <div css={style}>
-      <div className="header">
+    <div class={style}>
+      <div class="header">
         <div>
           {itemType} {itemName}
         </div>
@@ -48,7 +47,7 @@ export const ProjectResourceItemView: FC<Props> = ({
           {detailButtonText}
         </GeneralButton>
       </div>
-      <div className="content-body">
+      <div class="content-body">
         {itemType === 'profile' && (
           <PresetDetailView projectInfo={projectInfo} presetName={itemName} />
         )}

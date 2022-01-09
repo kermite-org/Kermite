@@ -32,8 +32,8 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
   menuItems,
   showNoSelectionOption,
 }) => (
-  <div css={style}>
-    <div className="top-row">
+  <div class={style}>
+    <div class="top-row">
       {isMenuButtonVisible && menuItems && (
         <GeneralButtonMenu menuItems={menuItems} />
       )}
@@ -43,12 +43,12 @@ export const ProjectSelectionPartComponent: FC<Props> = ({
       )}
     </div>
     <ProjectKeyboardList
-      className="keyboard-list"
+      class="keyboard-list"
       projectItems={sourceProjectItems}
       currentProjectKey={projectKey}
       setCurrentProjectKey={setProjectKey}
     />
-    <div className="bottom-row" if={showNoSelectionOption}>
+    <div class="bottom-row" if={showNoSelectionOption}>
       <RadioButtonLine
         checked={projectKey === ''}
         onClick={() => setProjectKey('')}

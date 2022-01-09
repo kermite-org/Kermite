@@ -5,7 +5,7 @@ import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
 export const InformationOverlay: FC = () => {
   const { pressedKeyIndices } = editReader;
   return (
-    <div css={style} if={pressedKeyIndices.length > 0}>
+    <div class={style} if={pressedKeyIndices.length > 0}>
       hold key indices: {JSON.stringify(pressedKeyIndices)}
     </div>
   );

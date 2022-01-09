@@ -14,12 +14,12 @@ export const LayerOperationButton: FC<Props> = ({
   hint,
 }) => (
   <div
-    css={style}
+    class={style}
     onClick={(enabled && handler) || undefined}
     data-disabled={!enabled}
     data-hint={hint}
   >
-    <i className={icon} />
+    <i class={icon} />
   </div>
 );
 

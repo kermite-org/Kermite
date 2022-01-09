@@ -15,12 +15,12 @@ export const ProjectKeyboardListCard: FC<Props> = ({
   isCurrent,
   setCurrent,
 }) => (
-  <div css={style} className={isCurrent && '--current'} onClick={setCurrent}>
-    <div className="inner">
-      <div className="header-part">
-        <div className="keyboard-name">{project.keyboardName}</div>
+  <div class={[style, isCurrent && '--current']} onClick={setCurrent}>
+    <div class="inner">
+      <div class="header-part">
+        <div class="keyboard-name">{project.keyboardName}</div>
       </div>
-      <div className="body-part">
+      <div class="body-part">
         <ProjectKeyboardShapeView keyboardDesign={project.design} />
       </div>
       {project.onlineProjectAttrs && (

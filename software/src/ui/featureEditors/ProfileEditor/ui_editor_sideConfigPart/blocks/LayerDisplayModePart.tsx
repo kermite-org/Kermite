@@ -17,14 +17,14 @@ export const LayerDisplayModePart: FC = () => {
   };
 
   return (
-    <div css={style}>
+    <div class={style}>
       <p>{texts.assignerDisplaySettingsPart.layerDisplayMode}</p>
       <RibbonSelector
         options={options}
         value={value}
         setValue={setValue}
         hint={texts.assignerDisplaySettingsPartHint.layerDisplayMode}
-        className="selector"
+        class="selector"
         disabled={!profilesReader.isEditProfileAvailable}
       />
     </div>

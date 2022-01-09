@@ -14,7 +14,7 @@ export const ProjectKeyboardNameEditPart: FC<Props> = ({
 }) => {
   return (
     <div class={style}>
-      <div className="field-name">
+      <div class="field-name">
         {texts.standardFirmwareConfiguration.keyboardName}
       </div>
       <GeneralInput

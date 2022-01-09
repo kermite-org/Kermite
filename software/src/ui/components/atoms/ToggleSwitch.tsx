@@ -2,7 +2,6 @@ import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 
 type Props = {
-  className?: string;
   checked?: boolean;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
@@ -10,7 +9,6 @@ type Props = {
 };
 
 export const ToggleSwitch: FC<Props> = ({
-  className,
   checked,
   onChange,
   disabled,
@@ -18,8 +16,7 @@ export const ToggleSwitch: FC<Props> = ({
 }) => (
   <input
     type="checkbox"
-    css={style}
-    className={className}
+    class={style}
     checked={checked}
     onChange={(e) => onChange?.(e.currentTarget.checked)}
     disabled={disabled}

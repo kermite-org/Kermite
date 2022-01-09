@@ -9,6 +9,10 @@ async function startApplication() {
   console.log('start');
   appRoot = new ApplicationRoot();
   await appRoot.initialize();
+
+  appGlobal.mainWindow?.on('close', () => {
+    appRoot?.disposeConnectedHidDevice();
+  });
 }
 
 async function endApplication() {

@@ -59,7 +59,7 @@ export const ProjectLayoutEditPage: FC<Props> = ({
     }
   };
   return (
-    <div css={style}>
+    <div class={style}>
       <RouteHeaderBar
         title={`edit project layout: ${sourceLayoutEntry.layoutName}`}
         backHandler={uiActions.closeSubPage}

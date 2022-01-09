@@ -25,7 +25,7 @@ export const KeyTextLabel: FC<Props> = ({
   isBold,
 }) => (
   <text
-    css={style}
+    class={style}
     x={xpos}
     y={ypos}
     font-size={getFontSize(text)}
