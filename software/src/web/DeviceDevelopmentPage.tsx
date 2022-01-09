@@ -33,7 +33,7 @@ async function setupDevice() {
 
 export const DeviceDevelopmentPage: FC = () => {
   return (
-    <div css={pageStyle}>
+    <div class={pageStyle}>
       <h2>device development page</h2>
       <button onClick={setupDevice}>connect</button>
     </div>

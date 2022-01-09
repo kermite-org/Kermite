@@ -16,7 +16,7 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
     useProjectStandardFirmwareEditPageModel(projectKey, sourceFirmwareName);
 
   return (
-    <div css={style}>
+    <div class={style}>
       <RouteHeaderBar
         title={`edit project firmware: ${editFirmwareName || '(new)'}`}
         canSave={canSave}
@@ -24,7 +24,7 @@ export const ProjectStandardFirmwareEditPage: FC<Props> = ({
         backHandler={backHandler}
         editMode={editFirmwareName ? 'Edit' : 'Create'}
       />
-      <div className="content">
+      <div class="content">
         <StandardFirmwareEditor />
       </div>
     </div>

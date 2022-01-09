@@ -1,17 +1,5 @@
-import {
-  jsx,
-  applyGlobalStyle,
-  css,
-  setShortCssProcessor,
-  useEffect,
-  FC,
-} from 'alumina';
-import {
-  router,
-  shortCssProcessor,
-  globalHintMouseMoveHandlerEffect,
-  appUi,
-} from '~/ui/base';
+import { jsx, applyGlobalStyle, css, useEffect, FC } from 'alumina';
+import { router, globalHintMouseMoveHandlerEffect, appUi } from '~/ui/base';
 import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
   DebugOverlay,
@@ -27,8 +15,6 @@ import {
   uiState,
   uiStateDriverEffect,
 } from '~/ui/store';
-
-setShortCssProcessor(shortCssProcessor);
 
 const cssGlobal = css`
   * {
@@ -103,7 +89,7 @@ export const SiteRoot: FC = () => {
 
   return (
     <SiteDpiScaler dpiScale={uiState.settings.siteDpiScale}>
-      <div css={cssSiteRoot}>
+      <div class={cssSiteRoot}>
         {uiState.initialLoading ? <InitialLoadingView /> : <AppView />}
         <ForegroundModalLayerRoot />
         <DebugOverlay />

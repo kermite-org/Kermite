@@ -14,7 +14,7 @@ export const ShapePreviewPage: FC = () => {
   } = useShapePreviewPageModel();
   return (
     <CommonPageFrame pageTitle="Keyboard Shape Preview">
-      <div css={style}>
+      <div class={style}>
         <div class="topRow">
           <GeneralSelector {...projectSelectorSource} width={160} />
           <GeneralSelector {...layoutSelectorSource} width={160} />

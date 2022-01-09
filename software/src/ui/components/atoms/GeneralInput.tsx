@@ -3,7 +3,6 @@ import { colors, uiTheme } from '~/ui/base';
 import { reflectValue } from '~/ui/utils';
 
 interface Props {
-  className?: string;
   type?: string;
   value: string;
   setValue?(value: string): void;
@@ -20,7 +19,6 @@ export const GeneralInput: FC<Props> = ({
   type = 'text',
   value,
   setValue,
-  className,
   width,
   disabled,
   invalid,
@@ -31,8 +29,7 @@ export const GeneralInput: FC<Props> = ({
 }) => {
   return (
     <input
-      css={style(width)}
-      className={className}
+      class={style(width)}
       type={type}
       value={value}
       onInput={setValue && reflectValue(setValue)}

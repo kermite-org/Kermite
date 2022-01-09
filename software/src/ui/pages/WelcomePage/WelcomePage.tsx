@@ -20,13 +20,13 @@ export const WelcomePage: FC = () => {
     setDeveloperMode,
   } = useWelcomePageModel();
   return (
-    <div css={style}>
+    <div class={style}>
       <h1>Kermite</h1>
       <h2>Keyboard Ecosystem All in One</h2>
-      <div className="buttons-panel">
-        <div className="row">
+      <div class="buttons-panel">
+        <div class="row">
           <WelcomePageButton
-            className="button"
+            class="button"
             active={isLanguageEnglish}
             onClick={setLanguageEnglish}
             hint={texts.welcomePageHint.language_english}
@@ -34,7 +34,7 @@ export const WelcomePage: FC = () => {
             {texts.welcomePage.language_english}
           </WelcomePageButton>
           <WelcomePageButton
-            className="button"
+            class="button"
             active={isLanguageJapanese}
             onClick={setLanguageJapanese}
             hint={texts.welcomePageHint.language_japanese}
@@ -42,18 +42,18 @@ export const WelcomePage: FC = () => {
             {texts.welcomePage.language_japanese}
           </WelcomePageButton>
         </div>
-        <div className="row">
+        <div class="row">
           <WelcomePageButton
-            className="button"
+            class="button"
             onClick={showProfileSetupWizard}
             hint={texts.welcomePageHint.profileSetupWizardButton}
           >
             {texts.welcomePage.profileSetupWizardButton}
           </WelcomePageButton>
         </div>
-        <div className="row">
+        <div class="row">
           <WelcomePageButton
-            className="button"
+            class="button"
             onClick={showProjectQuickSetupWizard}
             hint={texts.welcomePageHint.projectQuickSetupWizardButton}
             if={isDeveloperMode}
@@ -62,10 +62,10 @@ export const WelcomePage: FC = () => {
           </WelcomePageButton>
         </div>
       </div>
-      <div className="version-area" if={!!appVersion}>
+      <div class="version-area" if={!!appVersion}>
         {texts.welcomePage.version}: {appVersion}
       </div>
-      <div className="theme-config-area">
+      <div class="theme-config-area">
         <ToggleSwitchLine
           text={texts.welcomePage.darkThemeOption}
           checked={isDarkTheme}
@@ -73,7 +73,7 @@ export const WelcomePage: FC = () => {
           hint={texts.welcomePageHint.darkThemeOption}
         />
       </div>
-      <div className="developer-mode-option-area">
+      <div class="developer-mode-option-area">
         <CheckBoxLine
           text={texts.welcomePage.developerModeOption}
           checked={isDeveloperMode}

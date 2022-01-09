@@ -30,7 +30,7 @@ export const PreviewKeyboardShapeView: FC<Props> = ({
   const fillColor = '#54566f';
   const strokeColor = 'transparent';
   return (
-    <div css={cssKeyboardShapeView}>
+    <div class={cssKeyboardShapeView}>
       <KeyboardSvgFrameWithAutoScaler
         displayArea={keyboardDesign.displayArea}
         dpiScale={dpiScale}

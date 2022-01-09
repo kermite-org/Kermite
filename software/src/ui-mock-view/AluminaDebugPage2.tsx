@@ -21,7 +21,7 @@ const TestCard: FC = () => {
 };
 const CounterCard: FC = () => {
   return (
-    <div id="countCard" css={cssCounterCard} onClick={() => count++}>
+    <div id="countCard" class={cssCounterCard} onClick={() => count++}>
       {count}
       {count % 5 < 2 && <div>fizz</div>}
       <TestCard />
@@ -32,7 +32,7 @@ const CounterCard: FC = () => {
 export const AluminaDebugPage2: FC = () => {
   console.log(`render`);
   return (
-    <div css={cssBase}>
+    <div class={cssBase}>
       Hello
       <CounterCard />
     </div>

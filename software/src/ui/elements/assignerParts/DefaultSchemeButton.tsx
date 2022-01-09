@@ -15,7 +15,7 @@ export const DefaultSchemeButton: FC<Props> = ({
   disabled,
 }) => (
   <div
-    css={style}
+    class={style}
     data-current={isCurrent}
     onClick={setCurrent}
     data-disabled={disabled}

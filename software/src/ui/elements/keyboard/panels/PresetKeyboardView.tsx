@@ -26,7 +26,7 @@ export const PresetKeyboardView: FC<Props> = ({
   displayArea,
   outlineShapes,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <KeyboardSvgFrameWithAutoScaler
       displayArea={displayArea}
       dpiScale={configs.dpiScale}

@@ -17,14 +17,14 @@ export const FirmwareUpdatePart: FC = () => {
   } = useFirmwareUpdatePartModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <PartHeader>{texts.deviceFirmwareUpdate.sectionTitle}</PartHeader>
-      <PartBody className="part-body">
-        <div className="operationAlert">
+      <PartBody class="part-body">
+        <div class="operationAlert">
           {texts.deviceFirmwareUpdate.operationAlertText}
         </div>
 
-        <div className="mainRow">
+        <div class="mainRow">
           <GeneralSelector
             {...firmwareSelectorSource}
             width={350}
@@ -33,7 +33,7 @@ export const FirmwareUpdatePart: FC = () => {
           />
         </div>
 
-        <div className="statusRow">
+        <div class="statusRow">
           {phase === 'WaitingReset' && (
             <div>{texts.deviceFirmwareUpdate.usageText}</div>
           )}
@@ -58,7 +58,7 @@ export const FirmwareUpdatePart: FC = () => {
           {phase === 'WaitingUploadOrder' &&
             detectedDeviceSig &&
             !canFlashSelectedFirmwareToDetectedDevice && (
-              <div className="note">
+              <div class="note">
                 {firmwareSelectorSource.value
                   ? 'Selected firmware is not supposed to be flashed into this device.'
                   : 'Please select firmware.'}

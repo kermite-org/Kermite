@@ -31,7 +31,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
   } = useModalDisplayStateModel();
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="top-row">
         <div class="target-mcu-text">
           {targetDeviceType &&
@@ -70,7 +70,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
         {phase === 'WaitingUploadOrder' &&
           detectedDeviceSig &&
           !canFlashFirmwareToDetectedDevice && (
-            <div className="note">
+            <div class="note">
               {texts.firmwareFlashSection.deviceIncompatible}
             </div>
           )}

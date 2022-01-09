@@ -2,7 +2,6 @@ export * from './AppUi';
 export * from './ColorHelper';
 export * from './GlobalHint';
 export * from './Router';
-export * from './ShortCssProcessor';
 export * from './UiCommonTypes';
 export * from './UiDomainHelpers';
 export * from './UiGlobal';

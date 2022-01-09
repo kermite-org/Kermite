@@ -29,7 +29,7 @@ export const DualModeSettingsPart: FC = () => {
   };
 
   return (
-    <div css={style}>
+    <div class={style}>
       <table class="settingsTable">
         <tbody>
           <tr>
@@ -44,7 +44,7 @@ export const DualModeSettingsPart: FC = () => {
               <div class="tapholdms-edit-cell">
                 <GeneralInput
                   type="number"
-                  className="ms-input"
+                  class="ms-input"
                   value={local.tapHoldThresholdMs.toString()}
                   setValue={onTapHoldThresholdValueChanged}
                   invalid={!local.TapHoldThresholdMsValid}
@@ -89,7 +89,7 @@ export const DualModeSettingsPart2: FC = () => {
   const { writeSettingsValueDual } = assignerModel;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <table class="settingsTable">
         <tbody>
           <tr>

@@ -12,7 +12,7 @@ export const CustomWindowFrame: FC<Props> = ({
   renderStatusBar,
   children,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <div class="title-bar">{renderTitleBar({})}</div>
     <div class="body-row">{children}</div>
     <div class="status-bar">{renderStatusBar({})}</div>

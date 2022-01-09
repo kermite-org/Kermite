@@ -23,6 +23,7 @@ interface IProjectPackageWrapperFileContent {
   authorIconUrl: string;
   revision: number;
   isOfficial: boolean;
+  isDevelopment: boolean;
 }
 
 async function loadLocalDigestMap(
@@ -94,6 +95,7 @@ interface IApiProjectPackageWrapperItemPartial {
   dataHash: string;
   revision: number;
   official: boolean;
+  development: boolean;
 }
 interface IApiPackagesProjectsResponse {
   approvals: IApiProjectPackageWrapperItemPartial[];
@@ -109,6 +111,7 @@ async function fetchProjectPackageWrapperItem(
   const data = (await fetchJson(
     `${appConfig.kermiteServerUrl}/api/packages/projects/${projectId}`,
   )) as IApiPackagesProjectsResponse;
+
   const wrapperItemsSource = isAudit
     ? [...data.reviews, ...data.rereviews]
     : data.approvals;
@@ -119,6 +122,7 @@ async function fetchProjectPackageWrapperItem(
     userId,
     dataHash,
     official: isOfficial,
+    development: isDevelopment,
     revision,
   } = wrapperItem;
 
@@ -136,6 +140,7 @@ async function fetchProjectPackageWrapperItem(
     dataHash,
     revision,
     isOfficial,
+    isDevelopment,
     authorDisplayName,
     authorIconUrl,
   };

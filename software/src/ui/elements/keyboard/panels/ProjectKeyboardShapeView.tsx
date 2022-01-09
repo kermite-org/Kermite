@@ -6,20 +6,16 @@ import { ProjectKeyEntityCard } from '~/ui/elements/keyboard/keyUnitCards';
 import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody';
 
 type Props = {
-  className?: string;
   keyboardDesign: IDisplayKeyboardDesign;
 };
 
-export const ProjectKeyboardShapeView: FC<Props> = ({
-  className,
-  keyboardDesign,
-}) => {
+export const ProjectKeyboardShapeView: FC<Props> = ({ keyboardDesign }) => {
   const baseStrokeWidth = 0.5;
   const bodyFillColor = colors.projectKeyboard_bodyFill;
   const bodyStrokeColor = colors.projectKeyboard_bodyEdge;
   const { displayArea, keyEntities, outlineShapes } = keyboardDesign;
   return (
-    <div css={cssKeyboardShapeView} className={className}>
+    <div class={cssKeyboardShapeView}>
       <svg viewBox={getKeyboardSvgViewBoxSpec(displayArea)}>
         <g stroke-width={baseStrokeWidth} stroke-linejoin="round">
           <KeyboardBodyShape

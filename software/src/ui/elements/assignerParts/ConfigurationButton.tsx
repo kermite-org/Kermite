@@ -13,7 +13,7 @@ export const ConfigurationButton: FC<Props> = ({
   onClick,
   disabled,
 }) => (
-  <div css={style} className={disabled && '--disabled'} onClick={onClick}>
+  <div class={[style, disabled && '--disabled']} onClick={onClick}>
     <Icon spec={iconSpec} />
   </div>
 );

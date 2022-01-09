@@ -4,7 +4,7 @@ import { layouterAppGlobal } from '~/ui/featureEditors/LayoutEditor/common';
 export const DebugOverlay: FC = () => {
   const { debugObject, hasDebugValue } = layouterAppGlobal;
   return (
-    <div css={style} if={hasDebugValue}>
+    <div class={style} if={hasDebugValue}>
       {Object.keys(debugObject).map((key) => {
         const value = debugObject[key];
         return (

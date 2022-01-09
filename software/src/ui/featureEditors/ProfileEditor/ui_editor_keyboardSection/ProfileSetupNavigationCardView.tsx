@@ -3,12 +3,12 @@ import { Link } from '~/ui/base';
 
 export const ProfileSetupNavigationCardView: FC = () => {
   return (
-    <div css={style}>
-      <div className="card">
+    <div class={style}>
+      <div class="card">
         <p>
           No profiles available. <br />
           Create first profile in &nbsp;
-          <Link to="/presetBrowser" className="link">
+          <Link to="/presetBrowser" class="link">
             presets
           </Link>
           &nbsp; page.

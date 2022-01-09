@@ -146,7 +146,7 @@ const KeyEntityCardSingle = (props: {
     <g transform={idTextsTransformSpec}>
       <text
         y={showBoth ? -10 : 0}
-        css={cssText}
+        class={cssText}
         if={showKeyId && !isGhost}
         data-selected={isSelected}
       >
@@ -154,7 +154,7 @@ const KeyEntityCardSingle = (props: {
       </text>
       <text
         y={showBoth ? 10 : 0}
-        css={cssText}
+        class={cssText}
         if={showKeyIndex && !isGhost}
         data-selected={isSelected}
       >
@@ -197,7 +197,7 @@ const KeyEntityCardSingle = (props: {
   //         cx={0}
   //         cy={0}
   //         r={9}
-  //         css={cssKeyRect}
+  //         class={cssKeyRect}
   //         data-selected={isSelected}
   //         data-ghost={isGhost}
   //         onMouseDown={onMouseDown}
@@ -212,7 +212,7 @@ const KeyEntityCardSingle = (props: {
       <g transform={outerTransformSpec}>
         <path
           d={getIsoEnterSvgPathSpecText('center')}
-          css={cssKeyRect}
+          class={cssKeyRect}
           data-selected={isSelected}
           data-ghost={isGhost}
           onMouseDown={onMouseDown}
@@ -229,7 +229,7 @@ const KeyEntityCardSingle = (props: {
         y={-keyH / 2}
         width={keyW}
         height={keyH}
-        css={cssKeyRect}
+        class={cssKeyRect}
         data-selected={isSelected}
         data-ghost={isGhost}
         onMouseDown={onMouseDown}

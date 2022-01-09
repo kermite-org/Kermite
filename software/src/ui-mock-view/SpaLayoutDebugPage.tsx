@@ -32,7 +32,7 @@ export const SpaLayoutDebugPage: FC = () => {
     }
   `;
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="top-row" />
       <div class="main-row">
         {/* <PageContent1 /> */}
@@ -70,10 +70,10 @@ const PageContent1: FC = () => {
     }
   `;
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="top-row" />
       <div class="main-row">
-        <div css={cssLongContent}>aaa</div>
+        <div class={cssLongContent}>aaa</div>
       </div>
       <div class="bottom-row" />
     </div>
@@ -120,11 +120,11 @@ const PageContent2: FC = () => {
     }
   `;
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="top-row" />
       <div class="main-row">
         <div class="side-column">
-          <div css={cssLongContent}>aaa</div>
+          <div class={cssLongContent}>aaa</div>
         </div>
         <div class="main-column" />
       </div>

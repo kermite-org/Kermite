@@ -23,7 +23,7 @@ export const LayoutDetailView: FC<Props> = ({ projectInfo, layoutName }) => {
     return profileData;
   }, [projectInfo, layoutName]);
   return (
-    <div css={style}>
+    <div class={style}>
       <PresetKeyboardViewWrapper profileData={profileData} />
     </div>
   );

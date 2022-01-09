@@ -4,7 +4,7 @@ import { WindowTitlePart } from '~/ui/components';
 import { WindowControlButtonsPart } from '~/ui/root/organisms';
 
 export const WindowTitleBarSection: FC = () => (
-  <div css={style}>
+  <div class={style}>
     <WindowTitlePart />
     <WindowControlButtonsPart />
   </div>

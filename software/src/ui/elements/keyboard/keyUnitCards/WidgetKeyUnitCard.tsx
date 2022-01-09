@@ -36,9 +36,9 @@ export const WidgetKeyUnitCard: FC<Props> = ({
     transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
     key={keyUnitId}
   >
-    <KeyUnitShape shape={shape} css={cssKeyShape} data-hold={isHold} />
+    <KeyUnitShape shape={shape} class={cssKeyShape} data-hold={isHold} />
     <text
-      css={cssKeyText}
+      class={cssKeyText}
       x={0}
       y={0}
       font-size={getFontSize(primaryText)}
@@ -51,7 +51,7 @@ export const WidgetKeyUnitCard: FC<Props> = ({
     </text>
 
     <text
-      css={cssKeyText}
+      class={cssKeyText}
       x={0}
       y={8}
       font-size={getFontSize(secondaryText)}
@@ -64,7 +64,7 @@ export const WidgetKeyUnitCard: FC<Props> = ({
     </text>
 
     <text
-      css={cssKeyText}
+      class={cssKeyText}
       x={4}
       y={-4}
       font-size={getFontSize(tertiaryText)}

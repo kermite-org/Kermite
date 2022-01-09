@@ -15,7 +15,7 @@ export const PresetBrowserPageContent: FC = () => {
   } = usePresetSelectionModel();
   return (
     <CommonPageFrame pageTitle={texts.presetBrowser.pageTitle}>
-      <div css={style}>
+      <div class={style}>
         {isNoPresets && <div>No Presets Available</div>}
         {!isNoPresets && (
           <div>
@@ -56,9 +56,9 @@ const KermiteServerLinkPart: FC = () => {
     );
   };
   return (
-    <div css={style}>
+    <div class={style}>
       User profiles are served on &nbsp;
-      <span className="link" onClick={onClick}>
+      <span class="link" onClick={onClick}>
         KermiteServer
       </span>
     </div>

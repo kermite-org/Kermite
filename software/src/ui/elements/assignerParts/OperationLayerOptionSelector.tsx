@@ -16,7 +16,7 @@ export const OperationLayerOptionSelector: FC<Props> = ({
   onValueChanged,
 }) => (
   <div
-    css={style}
+    class={style}
     data-hint={texts.assignerAssignsPaletteHint.layerInvocationModeSelector}
   >
     <select

@@ -5,8 +5,8 @@ type Props = {
 };
 
 export const WidgetWindowFrame: FC<Props> = ({ children }) => (
-  <div css={style}>
-    <div className="inner">{children}</div>
+  <div class={style}>
+    <div class="inner">{children}</div>
   </div>
 );
 

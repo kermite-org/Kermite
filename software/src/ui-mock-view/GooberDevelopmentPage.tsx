@@ -59,8 +59,8 @@ export const GooberDevelopmentPage = () => {
 
   console.log('render');
   return (
-    <div css={cssRoot}>
-      <div css={cssHeader}>hello</div>
+    <div class={cssRoot}>
+      <div class={cssHeader}>hello</div>
       <Foo>world</Foo>
     </div>
   );

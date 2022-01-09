@@ -3,7 +3,6 @@ import { colors, uiTheme } from '~/ui/base';
 import { ToggleSwitch } from '~/ui/components/atoms/ToggleSwitch';
 
 interface Props {
-  className?: string;
   checked: boolean;
   onChange?: (value: boolean) => void;
   text: string;
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export const ToggleSwitchLine: FC<Props> = ({
-  className,
   checked,
   onChange,
   text,
@@ -21,11 +19,7 @@ export const ToggleSwitchLine: FC<Props> = ({
   hint,
   textSide = 'left',
 }) => (
-  <div
-    css={style}
-    classNames={[className, disabled && '--disabled']}
-    data-hint={hint}
-  >
+  <div class={[style, disabled && '--disabled']} data-hint={hint}>
     <span if={textSide === 'left'}>{text}</span>
     <ToggleSwitch checked={checked} onChange={onChange} disabled={disabled} />
     <span if={textSide === 'right'}>{text}</span>

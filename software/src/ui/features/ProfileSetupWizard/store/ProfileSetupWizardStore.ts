@@ -28,6 +28,9 @@ const readers = {
     if (targetStep === 'step2') {
       return !!profileSetupStore.state.targetProjectKey;
     } else if (targetStep === 'step3') {
+      if (!profileSetupStore.state.targetProjectKey) {
+        return false;
+      }
       if (uiConfiguration.checkDeviceConnectionOnWizard) {
         return profileSetupStore.readers.isTargetDeviceConnected;
       } else {

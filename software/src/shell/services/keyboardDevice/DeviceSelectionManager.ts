@@ -114,6 +114,10 @@ export class DeviceSelectionManager {
     this.timerWrapper.start(this.updateEnumeration, 2000);
   }
 
+  disposeConnectedHidDevice() {
+    this.closeDevice();
+  }
+
   terminate() {
     applicationStorage.writeItem(
       'currentDevicePath',

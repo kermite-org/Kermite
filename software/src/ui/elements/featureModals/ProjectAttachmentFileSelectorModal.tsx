@@ -50,7 +50,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
 
   return (
     <ClosableOverlay close={closeModal}>
-      <div css={cssPanel}>
+      <div class={cssPanel}>
         <div class="panelHeader">
           <div class="titleText">{titleText}</div>
           <div class="closeButton" onClick={closeModal}>
@@ -58,7 +58,7 @@ export const ProjectAttachmentFileSelectorModal = (props: {
           </div>
         </div>
         <div class="panelBody">
-          <div css={cssProjectLayoutContent}>
+          <div class={cssProjectLayoutContent}>
             <div class="primaryRow">
               <div class="column listColumn">
                 <div>{texts.projectAttachmentFileSelectionModal.project}</div>

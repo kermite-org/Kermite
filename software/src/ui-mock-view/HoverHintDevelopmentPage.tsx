@@ -19,7 +19,7 @@ const cssInstructionArea = css`
 export const HoverHintDevelopmentPage = () => {
   return (
     <div onMouseMove={globalHintMouseMoveHandler}>
-      <div css={cssInstructionArea}>
+      <div class={cssInstructionArea}>
         <GlobalHintDisplayText />
       </div>
       <div data-hint="hoge">foo</div>

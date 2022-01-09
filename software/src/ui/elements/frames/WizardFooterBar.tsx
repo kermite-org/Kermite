@@ -27,7 +27,7 @@ export const WizardFooterBar: FC<Props> = ({
       : texts.wizardCommon.buttonNext;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <SetupNavigationStepShiftButton
         onClick={() => shiftStep(-1)}
         text={backText}

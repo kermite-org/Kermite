@@ -18,7 +18,7 @@ export const ToggleButton: FC<Props> = ({
   disabled,
 }) => (
   <ButtonBase
-    extraCss={style(width)}
+    class={style(width)}
     active={active}
     disabled={disabled}
     onClick={() => setActive(!active)}

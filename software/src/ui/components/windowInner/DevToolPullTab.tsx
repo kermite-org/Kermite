@@ -6,7 +6,7 @@ type Props = {
 
 export const DevToolPullTab: FC<Props> = ({ handler }) => {
   return (
-    <div css={style}>
+    <div class={style}>
       <div onClick={handler}>devtools</div>
     </div>
   );

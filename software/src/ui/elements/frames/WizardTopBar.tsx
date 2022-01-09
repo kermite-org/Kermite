@@ -20,7 +20,7 @@ export const WizardTopBar: FC<Props> = ({
   shiftStepTo,
   stepInstructionTextMap,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <div>
       {getStepText(currentStep)}: {stepInstructionTextMap[currentStep]}
     </div>

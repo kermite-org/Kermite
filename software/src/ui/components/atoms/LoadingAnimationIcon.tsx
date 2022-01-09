@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 
 export const LoadingAnimationIcon: FC = () => (
-  <div css={style}>
+  <div class={style}>
     <div class="loading">
       <div class="spinner"></div>
     </div>

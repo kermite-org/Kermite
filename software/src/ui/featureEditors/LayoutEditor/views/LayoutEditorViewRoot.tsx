@@ -6,7 +6,7 @@ import { EditorSideColumnContent } from '~/ui/featureEditors/LayoutEditor/views/
 
 export const LayoutEditorViewRoot = () => {
   return (
-    <div css={style}>
+    <div class={style}>
       <div class="topRow">
         <EditMenuBar />
       </div>

@@ -12,28 +12,28 @@ export const TransGroupListPart: FC = () => {
   return (
     <div>
       <ConfigSubHeader>
-        <div css={cssHeaderRow}>
+        <div class={cssHeaderRow}>
           <span>groups</span>
-          <div className="buttonsBox">
+          <div class="buttonsBox">
             <GeneralButton
               disabled={!canAddGroup}
               onClick={addGroup}
               icon="add"
               size="unitSquare"
-              className={cssOpButton}
+              class={cssOpButton}
             />
             <GeneralButton
               disabled={!canDeleteGroup}
               onClick={deleteGroup}
               icon="delete"
               size="unitSquare"
-              className={cssOpButton}
+              class={cssOpButton}
             />
           </div>
         </div>
       </ConfigSubHeader>
       <div
-        css={cssListFrame}
+        class={cssListFrame}
         onClick={() => editMutations.setCurrentTransGroupById(undefined)}
       >
         {groupItems.map((item) => (
@@ -44,7 +44,7 @@ export const TransGroupListPart: FC = () => {
               e.stopPropagation();
             }}
             data-active={item.isActive}
-            css={cssTransGroupListItemCard}
+            class={cssTransGroupListItemCard}
           >
             {item.id}
           </div>

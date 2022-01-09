@@ -19,7 +19,7 @@ export const KeyboardSvgFrame: FC<Props> = ({
     width={displayArea.width * dpiScale}
     height={displayArea.height * dpiScale}
     viewBox={getKeyboardSvgViewBoxSpec(displayArea)}
-    css={style}
+    class={style}
   >
     <g stroke-width={baseStrokeWidth} stroke-linejoin="round">
       {children}

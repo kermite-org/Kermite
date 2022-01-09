@@ -30,6 +30,7 @@ export interface IGlobalSettings {
   allowCrossKeyboardKeyMappingWrite: boolean;
   globalProjectSpec: IGlobalProjectSpec | undefined;
   developerMode: boolean;
+  showDevelopmentPackages: boolean;
 }
 
 export const globalSettingsLoadingSchema = vObject({
@@ -49,6 +50,7 @@ export const globalSettingsDefault: IGlobalSettings = {
   allowCrossKeyboardKeyMappingWrite: false,
   globalProjectSpec: undefined,
   developerMode: false,
+  showDevelopmentPackages: false,
 };
 
 export const globalSettingsFallbackValue: IGlobalSettings = {
@@ -57,4 +59,5 @@ export const globalSettingsFallbackValue: IGlobalSettings = {
   allowCrossKeyboardKeyMappingWrite: false,
   globalProjectSpec: undefined,
   developerMode: false,
+  showDevelopmentPackages: false,
 };

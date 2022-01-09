@@ -9,8 +9,8 @@ export const SiteDpiScaler: FC<Props> = ({ children, dpiScale }) => {
   const baseW = window.innerWidth;
   const baseH = window.innerHeight;
   return (
-    <div css={style(baseW, baseH, dpiScale)}>
-      <div className="inner">{children}</div>
+    <div class={style(baseW, baseH, dpiScale)}>
+      <div class="inner">{children}</div>
     </div>
   );
 };
@@ -27,3 +27,10 @@ const style = (baseW: number, baseH: number, dpiScale: number) => css`
     height: ${baseH / dpiScale}px;
   }
 `;
+
+export function getUnscaledOverlayStyle(dpiScale: number) {
+  return `
+    transform: scale(${1 / dpiScale});
+    transform-origin: top left;
+  `;
+}

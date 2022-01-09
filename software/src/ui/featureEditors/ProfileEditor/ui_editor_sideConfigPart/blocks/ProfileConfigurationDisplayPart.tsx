@@ -14,7 +14,7 @@ export const ProfileConfigurationDisplayPart = () => {
   const { isEditProfileAvailable } = profilesReader;
 
   return (
-    <div css={style}>
+    <div class={style}>
       <div data-hint={texts.assignerProfilePropertiesPartHint.keyboard}>
         {texts.assignerProfilePropertiesPart.keyboard}: {keyboardName}
       </div>
