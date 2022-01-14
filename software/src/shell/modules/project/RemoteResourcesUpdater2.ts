@@ -28,7 +28,7 @@ interface IProjectPackageWrapperFileContent {
 
 async function loadLocalDigestMap(
   folderPath: string,
-): Promise<Record<string, string>> {
+): Promise<Record<string, number>> {
   const projectKeys = await fsxListFileBaseNames(
     folderPath,
     '.kmpkg_wrapper.json',
@@ -43,38 +43,41 @@ async function loadLocalDigestMap(
         const content = (await fsxReadJsonFile(
           filePath,
         )) as IProjectPackageWrapperFileContent;
-        const { dataHash } = content;
-        return [projectKey, dataHash] as [string, string];
+        const { revision } = content;
+        return [projectKey, revision] as [string, number];
       }),
     ),
   );
 }
 
-type ICatalogContent = {
-  approvals: Record<string, string>;
-  reviews: Record<string, string>;
-  rereviews: Record<string, string>;
+interface IApiGetPackagesCatalogResponsePackagesItem {
+  projectId: string;
+  status: 'Review' | 'Approval' | 'Rereview';
+  revision: number;
+  // datahash: string;
+}
+
+type IApiGetPackagesCatalogResponse = {
+  packages: IApiGetPackagesCatalogResponsePackagesItem[];
 };
 
-async function loadRemoteDigestMap(): Promise<Record<string, string>> {
+async function loadRemoteDigestMap(): Promise<Record<string, number>> {
   const { kermiteServerUrl } = appConfig;
   const catalogContent = (await fetchJson(
     `${kermiteServerUrl}/api/packages/catalog`,
-  )) as ICatalogContent;
+  )) as IApiGetPackagesCatalogResponse;
 
-  const { approvals, reviews, rereviews } = catalogContent;
+  const modPackages = catalogContent.packages.map((pkg) => ({
+    projectId:
+      pkg.status === 'Review' || pkg.status === 'Rereview'
+        ? `${pkg.projectId}_audit`
+        : pkg.projectId,
+    revision: pkg.revision,
+  }));
 
-  const auditing = {
-    ...reviews,
-    ...rereviews,
-  };
-  const modAuditing = Object.fromEntries(
-    Object.entries(auditing).map(([key, value]) => [`${key}_audit`, value]),
+  return Object.fromEntries(
+    modPackages.map((pkg) => [pkg.projectId, pkg.revision]),
   );
-  return {
-    ...approvals,
-    ...modAuditing,
-  };
 }
 
 interface IUserApiResponsePartial {
@@ -148,8 +151,8 @@ async function fetchProjectPackageWrapperItem(
 
 async function updateRemotePackagesDifferential(
   remotePackagesFolderPath: string,
-  localDigestMap: Record<string, string>,
-  remoteDigestMap: Record<string, string>,
+  localDigestMap: Record<string, number>,
+  remoteDigestMap: Record<string, number>,
 ) {
   const removedProjectKeys = getObjectKeys(localDigestMap).filter(
     (key) => remoteDigestMap[key] === undefined,
