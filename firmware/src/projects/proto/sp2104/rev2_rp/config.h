@@ -1,7 +1,7 @@
 #pragma once
 
 #define KERMITE_FIRMWARE_ID "7zabZ0"
-#define KERMITE_KEYBOARD_NAME "Minivers rev2"
+#define KERMITE_KEYBOARD_NAME "SP2104"
 
 #define KS_NUM_SCAN_SLOTS 56
 
