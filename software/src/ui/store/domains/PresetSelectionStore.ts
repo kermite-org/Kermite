@@ -1,4 +1,3 @@
-import { useEffect } from 'alumina';
 import {
   createProjectKey,
   fallbackProfileData,
@@ -25,15 +24,6 @@ import {
 } from '~/ui/store';
 
 type IPresetType = 'projectLayout' | 'projectProfile' | 'userProfile';
-
-type IPresetSelectionModel = {
-  projectSelectorSource: ISelectorSource;
-  presetSelectorSource: ISelectorSource;
-  loadedProfileData: IProfileData;
-  createProfile(): void;
-  canSelectProject: boolean;
-  isNoPresets: boolean;
-};
 
 type IProjectItem = {
   projectKey: string; // online#${projectId} |  local#${projectId}
@@ -65,13 +55,22 @@ type IState = {
   loadedProfileData: IProfileData;
 };
 
-const state: IState = {
-  allProjectItems: [],
-  projectPresetItems: [],
-  userProfileItems: [],
-  currentProjectKey: '',
-  currentPresetKey: '',
-  loadedProfileData: fallbackProfileData,
+type IReaders = {
+  projectSelectorSource: ISelectorSource;
+  presetSelectorSource: ISelectorSource;
+  loadedProfileData: IProfileData;
+  canSelectProject: boolean;
+  isNoPresets: boolean;
+};
+
+type IActions = {
+  createProfile(): void;
+};
+
+type IPresetSelectionStore = {
+  readers: IReaders;
+  actions: IActions;
+  initializeOnMount(): void;
 };
 
 const helpers = {
@@ -180,7 +179,11 @@ const helpers = {
 };
 
 const loaders = {
-  loadProfileData(projectKey: string, presetKey: string): IProfileData {
+  loadProfileData(
+    projectKey: string,
+    presetKey: string,
+    userProfileItems: IUserProfileItem[],
+  ): IProfileData {
     if (projectKey && presetKey) {
       const { presetType } = helpers.decodePresetKey(presetKey);
       if (presetType === 'projectLayout' || presetType === 'projectProfile') {
@@ -198,7 +201,7 @@ const loaders = {
         }
       }
       if (presetType === 'userProfile') {
-        const profileItem = state.userProfileItems.find(
+        const profileItem = userProfileItems.find(
           (it) => it.presetKey === presetKey,
         );
         if (profileItem) {
@@ -210,100 +213,112 @@ const loaders = {
   },
 };
 
-const actions = {
-  updatePreviewProfileData() {
-    const { currentProjectKey, currentPresetKey } = state;
-    state.loadedProfileData = loaders.loadProfileData(
-      currentProjectKey,
-      currentPresetKey,
-    );
-  },
-  setProjectKey(projectKey: string) {
-    state.currentProjectKey = projectKey;
-    const projectInfo =
-      projectPackagesReader.findProjectInfoByProjectKey(projectKey);
-    if (projectInfo) {
-      state.projectPresetItems = helpers.createProjectPresetItems(projectInfo);
-      state.currentPresetKey = state.projectPresetItems[0]?.presetKey || '';
-      const { origin, projectId } =
-        getOriginAndProjectIdFromProjectKey(projectKey);
+function createPresetSelectionStore(): IPresetSelectionStore {
+  const state: IState = {
+    allProjectItems: [],
+    projectPresetItems: [],
+    userProfileItems: [],
+    currentProjectKey: '',
+    currentPresetKey: '',
+    loadedProfileData: fallbackProfileData,
+  };
 
-      if (origin === 'online') {
-        helpers.fetchKermiteServerProfiles(projectId).then((userProfiles) => {
-          state.userProfileItems = userProfiles.map(
-            helpers.createUserProfileItem,
-          );
-          appUi.rerender();
-        });
-      } else {
-        state.userProfileItems = [];
+  const internalActions = {
+    updatePreviewProfileData() {
+      const { currentProjectKey, currentPresetKey, userProfileItems } = state;
+      state.loadedProfileData = loaders.loadProfileData(
+        currentProjectKey,
+        currentPresetKey,
+        userProfileItems,
+      );
+    },
+    setProjectKey(projectKey: string) {
+      state.currentProjectKey = projectKey;
+      const projectInfo =
+        projectPackagesReader.findProjectInfoByProjectKey(projectKey);
+      if (projectInfo) {
+        state.projectPresetItems =
+          helpers.createProjectPresetItems(projectInfo);
+        state.currentPresetKey = state.projectPresetItems[0]?.presetKey || '';
+        const { origin, projectId } =
+          getOriginAndProjectIdFromProjectKey(projectKey);
+
+        if (origin === 'online') {
+          helpers.fetchKermiteServerProfiles(projectId).then((userProfiles) => {
+            state.userProfileItems = userProfiles.map(
+              helpers.createUserProfileItem,
+            );
+            appUi.rerender();
+          });
+        } else {
+          state.userProfileItems = [];
+        }
       }
-    }
-    actions.updatePreviewProfileData();
-  },
-  setPresetKey(presetKey: string) {
-    state.currentPresetKey = presetKey;
-    actions.updatePreviewProfileData();
-  },
-  initialize() {
+      internalActions.updatePreviewProfileData();
+    },
+    setPresetKey(presetKey: string) {
+      state.currentPresetKey = presetKey;
+      internalActions.updatePreviewProfileData();
+    },
+    initialize() {},
+  };
+
+  const readers: IReaders = {
+    get projectSelectorSource() {
+      return {
+        options: state.allProjectItems.map(helpers.createProjectSelectorOption),
+        value: state.currentProjectKey,
+        setValue: internalActions.setProjectKey,
+      };
+    },
+    get presetSelectorSource() {
+      return {
+        options: [
+          ...state.projectPresetItems.map(helpers.createPresetSelectorOption),
+          ...state.userProfileItems.map(
+            helpers.createUserProfileSelectorOption,
+          ),
+        ],
+        value: state.currentPresetKey,
+        setValue: internalActions.setPresetKey,
+      };
+    },
+    get loadedProfileData() {
+      return state.loadedProfileData;
+    },
+    get canSelectProject() {
+      return uiReaders.globalProjectKey === '';
+    },
+    get isNoPresets() {
+      return (
+        !readers.canSelectProject &&
+        readers.presetSelectorSource.options.length === 0
+      );
+    },
+  };
+
+  const actions: IActions = {
+    async createProfile() {
+      await dispatchCoreAction({
+        profile_createProfileExternal: { profileData: state.loadedProfileData },
+      });
+      uiActions.navigateTo('/assigner');
+    },
+  };
+
+  const initializeOnMount = () => {
     state.allProjectItems = helpers.createProjectItems(
       uiReaders.activeProjectPackageInfos,
     );
     const { globalProjectKey } = uiReaders;
     if (globalProjectKey) {
-      actions.setProjectKey(globalProjectKey);
+      internalActions.setProjectKey(globalProjectKey);
     } else {
-      actions.setProjectKey(state.allProjectItems[0]?.projectKey || '');
+      internalActions.setProjectKey(state.allProjectItems[0]?.projectKey || '');
     }
-  },
-  async createProfile() {
-    await dispatchCoreAction({
-      profile_createProfileExternal: { profileData: state.loadedProfileData },
-    });
-    uiActions.navigateTo('/assigner');
-  },
-};
-
-export function usePresetSelectionModel(): IPresetSelectionModel {
-  useEffect(actions.initialize, []);
-
-  const {
-    allProjectItems,
-    projectPresetItems,
-    userProfileItems,
-    currentProjectKey,
-    currentPresetKey,
-    loadedProfileData,
-  } = state;
-
-  const { setProjectKey, setPresetKey, createProfile } = actions;
-
-  const projectSelectorSource: ISelectorSource = {
-    options: allProjectItems.map(helpers.createProjectSelectorOption),
-    value: currentProjectKey,
-    setValue: setProjectKey,
   };
 
-  const presetSelectorSource: ISelectorSource = {
-    options: [
-      ...projectPresetItems.map(helpers.createPresetSelectorOption),
-      ...userProfileItems.map(helpers.createUserProfileSelectorOption),
-    ],
-    value: currentPresetKey,
-    setValue: setPresetKey,
-  };
-
-  const canSelectProject = uiReaders.globalProjectKey === '';
-
-  const isNoPresets =
-    !canSelectProject && presetSelectorSource.options.length === 0;
-
-  return {
-    projectSelectorSource,
-    presetSelectorSource,
-    loadedProfileData,
-    createProfile,
-    canSelectProject,
-    isNoPresets,
-  };
+  return { readers, actions, initializeOnMount };
 }
+
+export const presetSelectionStore = createPresetSelectionStore();
