@@ -20,7 +20,6 @@ interface ISettingsPageStore {
     flagShowDevelopmentPackages: boolean;
   };
   actions: {
-    initialize(): void;
     setFlagDeveloperMode(value: boolean): void;
     setFlagUseLocalResources(value: boolean): void;
     setFlagAllowCrossKeyboardKeyMappingWrite(value: boolean): void;
@@ -43,7 +42,7 @@ const helpers = {
   },
 };
 
-export function createSettingsPageStore(): ISettingsPageStore {
+function createSettingsPageStore(): ISettingsPageStore {
   type IState = {
     fixedProjectRootPath: string;
     temporaryInvalidLocalRepositoryFolderPath: string;
@@ -99,12 +98,6 @@ export function createSettingsPageStore(): ISettingsPageStore {
   };
 
   const actions: IActions = {
-    async initialize() {
-      if (appUi.isDevelopment) {
-        state.fixedProjectRootPath =
-          await ipcAgent.async.config_getProjectRootDirectoryPath();
-      }
-    },
     setFlagDeveloperMode(value: boolean) {
       globalSettingsWriter.writeValue('developerMode', value);
     },
@@ -138,7 +131,15 @@ export function createSettingsPageStore(): ISettingsPageStore {
     },
   };
 
-  actions.initialize();
+  async function initialize() {
+    if (appUi.isDevelopment) {
+      state.fixedProjectRootPath =
+        await ipcAgent.async.config_getProjectRootDirectoryPath();
+    }
+  }
+  initialize();
 
   return { readers, actions };
 }
+
+export const settingsPageStore = createSettingsPageStore();
