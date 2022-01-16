@@ -2,13 +2,10 @@ import { css, FC, jsx } from 'alumina';
 import { CommonPageFrame } from '~/ui/components';
 import { ProjectKeyboardList, ProjectResourceList } from '~/ui/fabrics';
 import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
-import { createProjectReviewPageStore } from '~/ui/pages/ProjectReviewPage/store';
-import {
-  projectReviewPageStoreContext,
-  useProjectReviewPageStore,
-} from '~/ui/pages/ProjectReviewPage/storeContext';
+import { projectReviewPageStore } from '~/ui/store';
 
-const ProjectReviewPageComponent: FC = () => {
+export const ProjectReviewPage: FC = () => {
+  projectReviewPageStore.updateOnRender();
   const {
     projectSelection: {
       projectItems,
@@ -20,7 +17,7 @@ const ProjectReviewPageComponent: FC = () => {
       readers: { resourceItemKeys, selectedItemKey },
       actions: { setSelectedItemKey, clearSelection, handleOpenDetail },
     },
-  } = useProjectReviewPageStore();
+  } = projectReviewPageStore;
 
   return (
     <CommonPageFrame pageTitle="Project Review">
@@ -99,13 +96,3 @@ const style = css`
     margin-top: 5px;
   }
 `;
-
-const store = createProjectReviewPageStore();
-export const ProjectReviewPage: FC = () => {
-  store.updateOnRender();
-  return (
-    <projectReviewPageStoreContext.Provider value={store}>
-      <ProjectReviewPageComponent />
-    </projectReviewPageStoreContext.Provider>
-  );
-};
