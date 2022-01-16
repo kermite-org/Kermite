@@ -1,7 +1,4 @@
-import {
-  useLanguageSelectionModel,
-  useThemeSelectionModel,
-} from '~/ui/commonModels';
+import { languageSelectionStore, themeSelectionStore } from '~/ui/commonModels';
 import {
   globalSettingsWriter,
   uiActions,
@@ -25,8 +22,8 @@ interface WelcomePageModel {
 
 export function useWelcomePageModel(): WelcomePageModel {
   const appVersion = uiState.core.applicationVersionInfo.version;
-  const { currentLanguage, changeLanguage } = useLanguageSelectionModel();
-  const { currentThemeKey, changeTheme } = useThemeSelectionModel();
+  const { currentLanguage, changeLanguage } = languageSelectionStore;
+  const { currentThemeKey, changeTheme } = themeSelectionStore;
 
   const isLanguageEnglish = currentLanguage === 'english';
   const setLanguageEnglish = () => changeLanguage('english');

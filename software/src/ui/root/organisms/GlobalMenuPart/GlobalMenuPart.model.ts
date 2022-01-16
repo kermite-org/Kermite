@@ -1,9 +1,6 @@
 import { useLocal } from 'alumina';
-import { texts, appUi } from '~/ui/base';
-import {
-  useThemeSelectionModel,
-  useLanguageSelectionModel,
-} from '~/ui/commonModels';
+import { appUi, texts } from '~/ui/base';
+import { languageSelectionStore, themeSelectionStore } from '~/ui/commonModels';
 
 export interface IGlobalMenuItem {
   key: string;
@@ -21,25 +18,23 @@ export interface IGlobalMenuModel {
 }
 
 function createMenuItems(): IGlobalMenuItem[] {
-  const themeSelectionModel = useThemeSelectionModel();
-  const languageSelectionModel = useLanguageSelectionModel();
   const menuItems: IGlobalMenuItem[] = [
     {
       key: 'miThemeLight',
       text: texts.globalMenu.theme_light,
       handler() {
-        themeSelectionModel.changeTheme('light');
+        themeSelectionStore.changeTheme('light');
       },
-      active: themeSelectionModel.currentThemeKey === 'light',
+      active: themeSelectionStore.currentThemeKey === 'light',
       hint: texts.globalMenuHint.theme_light,
     },
     {
       key: 'miThemeDark',
       text: texts.globalMenu.theme_dark,
       handler() {
-        themeSelectionModel.changeTheme('dark');
+        themeSelectionStore.changeTheme('dark');
       },
-      active: themeSelectionModel.currentThemeKey === 'dark',
+      active: themeSelectionStore.currentThemeKey === 'dark',
       hint: texts.globalMenuHint.theme_dark,
     },
 
@@ -47,18 +42,18 @@ function createMenuItems(): IGlobalMenuItem[] {
       key: 'miLanguageEnglish',
       text: texts.globalMenu.language_english,
       handler() {
-        languageSelectionModel.changeLanguage('english');
+        languageSelectionStore.changeLanguage('english');
       },
-      active: languageSelectionModel.currentLanguage === 'english',
+      active: languageSelectionStore.currentLanguage === 'english',
       hint: texts.globalMenuHint.language_english,
     },
     {
       key: 'miLanguageJapanese',
       text: texts.globalMenu.language_japanese,
       handler() {
-        languageSelectionModel.changeLanguage('japanese');
+        languageSelectionStore.changeLanguage('japanese');
       },
-      active: languageSelectionModel.currentLanguage === 'japanese',
+      active: languageSelectionStore.currentLanguage === 'japanese',
       hint: texts.globalMenuHint.language_japanese,
     },
   ];
