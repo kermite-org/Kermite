@@ -8,27 +8,31 @@ import {
   Indent,
   RibbonSelector,
 } from '~/ui/components';
-import { useSettingsPageModel } from '~/ui/pages/SettingsPage/SettingsPage.model';
+import { settingsPageStore } from '~/ui/store/domains/SettingsPageStore';
 
 export const SettingsPage = () => {
   const {
-    flagDeveloperMode,
-    setFlagDeveloperMode,
-    flagUseLocalResources,
-    setFlagUseLocalResources,
-    flagAllowCrossKeyboardKeyMappingWrite,
-    setFlagAllowCrossKeyboardKeyMappingWrite,
-    canChangeLocalRepositoryFolderPath,
-    localRepositoryFolderPathDisplayValue,
-    handleSelectLocalRepositoryFolder,
-    isLocalRepositoryFolderPathValid,
-    uiScalingOptions,
-    uiScalingSelectionValue,
-    setUiScalingSelectionValue,
-    appVersionInfo,
-    flagShowDevelopmentPackages,
-    setFlagShowDevelopmentPackages,
-  } = useSettingsPageModel();
+    readers: {
+      flagDeveloperMode,
+      flagUseLocalResources,
+      flagAllowCrossKeyboardKeyMappingWrite,
+      canChangeLocalRepositoryFolderPath,
+      localRepositoryFolderPathDisplayValue,
+      isLocalRepositoryFolderPathValid,
+      uiScalingOptions,
+      uiScalingSelectionValue,
+      appVersionInfo,
+      flagShowDevelopmentPackages,
+    },
+    actions: {
+      setFlagDeveloperMode,
+      setFlagUseLocalResources,
+      setFlagAllowCrossKeyboardKeyMappingWrite,
+      handleSelectLocalRepositoryFolder,
+      setUiScalingSelectionValue,
+      setFlagShowDevelopmentPackages,
+    },
+  } = settingsPageStore;
 
   return (
     <div class={style}>
