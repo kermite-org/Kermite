@@ -24,6 +24,7 @@ interface IProjectPackageWrapperFileContent {
   revision: number;
   isOfficial: boolean;
   isDevelopment: boolean;
+  timeStamp: number;
 }
 
 async function loadLocalDigestMap(
@@ -43,8 +44,8 @@ async function loadLocalDigestMap(
         const content = (await fsxReadJsonFile(
           filePath,
         )) as IProjectPackageWrapperFileContent;
-        const { revision } = content;
-        return [projectKey, revision] as [string, number];
+        const { timeStamp } = content;
+        return [projectKey, timeStamp] as [string, number];
       }),
     ),
   );
@@ -53,7 +54,8 @@ async function loadLocalDigestMap(
 interface IApiGetPackagesCatalogResponsePackagesItem {
   projectId: string;
   status: 'Review' | 'Approval' | 'Rereview';
-  revision: number;
+  timeStamp: number;
+  // revision: number;
   // datahash: string;
 }
 
@@ -72,11 +74,11 @@ async function loadRemoteDigestMap(): Promise<Record<string, number>> {
       pkg.status === 'Review' || pkg.status === 'Rereview'
         ? `${pkg.projectId}_audit`
         : pkg.projectId,
-    revision: pkg.revision,
+    timeStamp: pkg.timeStamp,
   }));
 
   return Object.fromEntries(
-    modPackages.map((pkg) => [pkg.projectId, pkg.revision]),
+    modPackages.map((pkg) => [pkg.projectId, pkg.timeStamp]),
   );
 }
 
@@ -108,6 +110,7 @@ interface IApiPackagesProjectsResponse {
 
 async function fetchProjectPackageWrapperItem(
   projectKey: string,
+  timeStamp: number,
 ): Promise<IProjectPackageWrapperFileContent> {
   const projectId = projectKey.replace('_audit', '');
   const isAudit = projectKey.endsWith('_audit');
@@ -146,6 +149,7 @@ async function fetchProjectPackageWrapperItem(
     isDevelopment,
     authorDisplayName,
     authorIconUrl,
+    timeStamp,
   };
 }
 
@@ -171,8 +175,10 @@ async function updateRemotePackagesDifferential(
   );
   await Promise.all(
     updatedProjectKeys.map(async (projectKey) => {
+      const timeStamp = remoteDigestMap[projectKey];
       const wrapperFileContent = await fetchProjectPackageWrapperItem(
         projectKey,
+        timeStamp,
       );
       const filePath = pathJoin(
         remotePackagesFolderPath,
