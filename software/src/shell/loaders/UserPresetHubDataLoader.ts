@@ -3,7 +3,7 @@ import { cacheRemoteResource, fetchJson } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
 
 export namespace PresetHubServerTypes {
-  export type GetDistinctedProjectIdsResponse = {
+  export type GetProfilesProjectIdsResponse = {
     projectIds?: string[] | null;
   };
 
@@ -29,9 +29,9 @@ const serverUrlBase = `http://dev.server.kermite.org`;
 
 export const userPresetHubDataLoader = {
   async getServerProjectIds(): Promise<string[]> {
-    const url = `${serverUrlBase}/api/projects/distinctedids`;
+    const url = `${serverUrlBase}/api/profiles/projectids`;
     const data =
-      await cacheRemoteResource<PresetHubServerTypes.GetDistinctedProjectIdsResponse>(
+      await cacheRemoteResource<PresetHubServerTypes.GetProfilesProjectIdsResponse>(
         fetchJson,
         url,
       );
