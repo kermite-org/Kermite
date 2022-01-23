@@ -168,7 +168,7 @@ export class ApplicationRoot {
       const kermiteServerProjectIds =
         await userPresetHubDataLoader.getServerProjectIds();
       commitCoreState({ kermiteServerProjectIds });
-      await profileManagerRoot.initializeAsync();
+      await profileManagerRoot.initializeAsync().catch(reportShellError);
       await layoutManagerRoot.initializeAsync();
       coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
       this.deviceService.initialize();
