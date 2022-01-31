@@ -1,7 +1,7 @@
 import { optInArrayItem } from '~/shared';
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectManagementMenuActions } from '~/ui/features/ProjectSelectionPart/store';
 import { projectPackagesReader } from '~/ui/store';
+import { projectManagementMenuActions } from '~/ui/store/domains/ProjectSelectionPartStore/ProjectManagementMenuActions';
 
 export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
   const editTargetProject = projectPackagesReader.getEditTargetProject();

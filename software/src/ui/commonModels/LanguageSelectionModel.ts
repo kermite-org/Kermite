@@ -1,17 +1,13 @@
-import { useMemo } from 'alumina';
 import { ILanguageKey, uiTextConfigLoader } from '~/ui/base';
 import { dispatchCoreAction } from '~/ui/store/base';
 
-export interface ILanguageSelectionModel {
+interface ILanguageSelectionStore {
   currentLanguage: ILanguageKey;
   changeLanguage(languageKey: ILanguageKey): void;
 }
 
-export function useLanguageSelectionModel(): ILanguageSelectionModel {
-  const currentLanguage = useMemo(
-    () => uiTextConfigLoader.loadLanguageKey(),
-    [],
-  );
+function createLanguageSelectionStore(): ILanguageSelectionStore {
+  const currentLanguage = uiTextConfigLoader.loadLanguageKey();
   const changeLanguage = (languageKey: ILanguageKey) => {
     if (languageKey !== currentLanguage) {
       uiTextConfigLoader.saveLanguageKey(languageKey);
@@ -20,3 +16,5 @@ export function useLanguageSelectionModel(): ILanguageSelectionModel {
   };
   return { currentLanguage, changeLanguage };
 }
+
+export const languageSelectionStore = createLanguageSelectionStore();

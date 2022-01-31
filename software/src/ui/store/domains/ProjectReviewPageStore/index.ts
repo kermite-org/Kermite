@@ -2,19 +2,19 @@ import { useEffect } from 'alumina';
 import {
   createProjectSelectionStore,
   IProjectSelectionStore,
-} from '~/ui/pages/ProjectReviewPage/store/ProjectSelectionStore';
+} from '~/ui/store/domains/ProjectReviewPageStore/ProjectSelectionStore';
 import {
   createReviewProjectResourceStore,
   IReviewProjectResourceStore,
-} from '~/ui/pages/ProjectReviewPage/store/ReviewProjectResourceStore';
+} from '~/ui/store/domains/ProjectReviewPageStore/ReviewProjectResourceStore';
 
-export type IProjectReviewPageStore = {
+type IProjectReviewPageStore = {
   projectSelection: IProjectSelectionStore;
   projectResources: IReviewProjectResourceStore;
   updateOnRender: () => void;
 };
 
-export function createProjectReviewPageStore(): IProjectReviewPageStore {
+function createProjectReviewPageStore(): IProjectReviewPageStore {
   const projectSelection = createProjectSelectionStore();
   const projectResources = createReviewProjectResourceStore();
 
@@ -31,3 +31,4 @@ export function createProjectReviewPageStore(): IProjectReviewPageStore {
     updateOnRender,
   };
 }
+export const projectReviewPageStore = createProjectReviewPageStore();
