@@ -3,22 +3,27 @@ import { colors, texts } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
-import { useWelcomePageModel } from '~/ui/pages/WelcomePage/WelcomePage.model';
+import { welcomePageStore } from '~/ui/store/domains/WelcomePageStore';
 
 export const WelcomePage: FC = () => {
   const {
-    appVersion,
-    isLanguageEnglish,
-    setLanguageEnglish,
-    isLanguageJapanese,
-    setLanguageJapanese,
-    showProfileSetupWizard,
-    isDarkTheme,
-    setDarkTheme,
-    showProjectQuickSetupWizard,
-    isDeveloperMode,
-    setDeveloperMode,
-  } = useWelcomePageModel();
+    readers: {
+      appVersion,
+      isLanguageEnglish,
+      isLanguageJapanese,
+      isDarkTheme,
+      isDeveloperMode,
+    },
+    actions: {
+      setLanguageEnglish,
+      setLanguageJapanese,
+      showProfileSetupWizard,
+      setDarkTheme,
+      showProjectQuickSetupWizard,
+      setDeveloperMode,
+    },
+  } = welcomePageStore;
+
   return (
     <div class={style}>
       <h1>Kermite</h1>

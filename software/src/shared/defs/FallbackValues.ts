@@ -12,8 +12,8 @@ import { createFallbackPersistKeyboardDesign } from '~/shared/defs/KeyboardDesig
 import { fallbackPersistProfileData } from '~/shared/defs/ProfileData';
 
 export const fallbackStandardFirmwareConfig: IStandardFirmwareConfig = {
-  baseFirmwareType: 'AvrUnified',
-  boardType: 'ProMicro',
+  baseFirmwareType: 'RpUnified',
+  boardType: 'RpiPico',
 };
 
 export const fallbackStandardFirmwareEntry: IStandardFirmwareEntry = {

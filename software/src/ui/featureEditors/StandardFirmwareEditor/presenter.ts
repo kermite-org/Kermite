@@ -22,9 +22,9 @@ export interface IStandardFirmwareEditPresenter {
 
 const constants = {
   baseFirmwareTypeOptions: [
-    'AvrUnified',
-    'AvrSplit',
-    'AvrOddSplit',
+    // 'AvrUnified',
+    // 'AvrSplit',
+    // 'AvrOddSplit',
     'RpUnified',
     'RpSplit',
     'RpOddSplit',

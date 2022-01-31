@@ -5,6 +5,6 @@ export * from './LanguageSelectionModel';
 export * from './PageTypes';
 export * from './ParameterBasedModeModels';
 export * from './PlayerModel';
-export * from './ThemeSelectionModel';
+export * from './ThemeSelectionStore';
 export * from './DomainRelatedHooks';
 export * from './FeatureCommonHelpers';

@@ -1,18 +1,23 @@
-import { css, FC, jsx } from 'alumina';
+import { css, FC, jsx, useEffect } from 'alumina';
 import { ipcAgent, texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
-import { usePresetSelectionModel } from '~/ui/features/PresetBrowser/PresetSelectionModel';
+import { presetSelectionStore } from '~/ui/store/domains/PresetSelectionStore';
 
 export const PresetBrowserPageContent: FC = () => {
+  useEffect(presetSelectionStore.initializeOnMount, []);
   const {
-    projectSelectorSource,
-    presetSelectorSource,
-    createProfile,
-    loadedProfileData,
-    isNoPresets,
-    canSelectProject,
-  } = usePresetSelectionModel();
+    readers: {
+      projectSelectorSource,
+      presetSelectorSource,
+
+      loadedProfileData,
+      isNoPresets,
+      canSelectProject,
+    },
+    actions: { createProfile },
+  } = presetSelectionStore;
+
   return (
     <CommonPageFrame pageTitle={texts.presetBrowser.pageTitle}>
       <div class={style}>
