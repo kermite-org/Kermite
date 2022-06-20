@@ -1,7 +1,7 @@
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 export const fileDialogLoaders = {
-  async getOpeningDirectoryPathWithDialog() {
+  getOpeningDirectoryPathWithDialog() {
     // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
     //   properties: ['openDirectory'],
     // });
@@ -11,7 +11,7 @@ export const fileDialogLoaders = {
     // return undefined;
     throw new Error('obsolete function invoked');
   },
-  async getOpeningJsonFilePathWithDialog() {
+  getOpeningJsonFilePathWithDialog() {
     // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
     //   properties: ['openFile'],
     //   filters: [
@@ -27,7 +27,7 @@ export const fileDialogLoaders = {
     // return undefined;
     throw new Error('obsolete function invoked');
   },
-  async getSavingJsonFilePathWithDialog() {
+  getSavingJsonFilePathWithDialog() {
     // const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
     //   properties: ['showOverwriteConfirmation'],
     //   filters: [
@@ -40,12 +40,11 @@ export const fileDialogLoaders = {
     // return result.filePath;
     throw new Error('obsolete function invoked');
   },
-  async loadObjectFromJsonWithFileDialog(): Promise<any | undefined> {
+  loadObjectFromJsonWithFileDialog(): any | undefined {
     try {
-      const filePath =
-        await fileDialogLoaders.getOpeningJsonFilePathWithDialog();
+      const filePath = fileDialogLoaders.getOpeningJsonFilePathWithDialog();
       if (filePath) {
-        const obj = await fsxReadJsonFile(filePath);
+        const obj = fsxReadJsonFile(filePath);
         return obj;
       }
     } catch (error) {
@@ -53,12 +52,11 @@ export const fileDialogLoaders = {
       return undefined;
     }
   },
-  async saveObjectToJsonWithFileDialog(obj: any): Promise<boolean> {
+  saveObjectToJsonWithFileDialog(obj: any): boolean {
     try {
-      const filePath =
-        await fileDialogLoaders.getSavingJsonFilePathWithDialog();
+      const filePath = fileDialogLoaders.getSavingJsonFilePathWithDialog();
       if (filePath) {
-        await fsxWriteJsonFile(filePath, obj);
+        fsxWriteJsonFile(filePath, obj);
         return true;
       }
       return false;
@@ -67,7 +65,7 @@ export const fileDialogLoaders = {
       return false;
     }
   },
-  async loadJsonFileContent(filePath: string): Promise<any | undefined> {
-    return await fsxReadJsonFile(filePath);
+  loadJsonFileContent(filePath: string): any | undefined {
+    return fsxReadJsonFile(filePath);
   },
 };

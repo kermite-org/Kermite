@@ -9,19 +9,19 @@ import { createEventPort } from '~/shell/funcs';
 export class FirmwareUpdateService {
   deviceDetectionEvents = createEventPort<IBootloaderDeviceDetectionStatus>({});
 
-  async writeFirmware(
+  writeFirmware(
     origin: IResourceOrigin,
     projectId: string,
     variationId: string,
     firmwareOrigin: IFirmwareOriginEx,
-  ): Promise<'ok' | string> {
+  ): 'ok' | string {
     throw new Error('obsolete function invoked');
   }
 
-  async writeStandardFirmwareDirect(
+  writeStandardFirmwareDirect(
     packageInfo: IProjectPackageInfo,
     variationId: string,
-  ): Promise<'ok' | string> {
+  ): 'ok' | string {
     throw new Error('obsolete function invoked');
   }
 }

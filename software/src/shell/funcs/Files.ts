@@ -59,7 +59,7 @@ export const fspCopyFile = memoryFileSystem.copyFile;
 export const fspRename = memoryFileSystem.renameFile;
 export const fspReaddir = memoryFileSystem.enumerateFilesPathStartWith;
 
-export async function fsxDeleteFile(filePath: string): Promise<void> {
+export function fsxDeleteFile(filePath: string): void {
   try {
     // return await fs.promises.unlink(filePath);
     return memoryFileSystem.deleteFile(filePath);
@@ -68,7 +68,7 @@ export async function fsxDeleteFile(filePath: string): Promise<void> {
   }
 }
 
-export async function fsxCopyFile(src: string, dest: string): Promise<void> {
+export function fsxCopyFile(src: string, dest: string): void {
   try {
     // return await fs.promises.copyFile(src, dest);
     return memoryFileSystem.copyFile(src, dest);
@@ -77,7 +77,7 @@ export async function fsxCopyFile(src: string, dest: string): Promise<void> {
   }
 }
 
-export async function fsxRenameFile(src: string, dest: string): Promise<void> {
+export function fsxRenameFile(src: string, dest: string): void {
   try {
     // return await fs.promises.rename(src, dest);
     return memoryFileSystem.renameFile(src, dest);
@@ -86,7 +86,7 @@ export async function fsxRenameFile(src: string, dest: string): Promise<void> {
   }
 }
 
-export async function fsxReaddir(folderPath: string): Promise<string[]> {
+export function fsxReaddir(folderPath: string): string[] {
   try {
     // return await fs.promises.readdir(folderPath);
     return memoryFileSystem.enumerateFilesPathStartWith(folderPath);
@@ -101,13 +101,13 @@ export function fsxMkdirpSync(path: string) {
   // }
 }
 
-export async function fsxEnsureFolderExists(path: string) {
+export function fsxEnsureFolderExists(path: string) {
   // if (!fsExistsSync(path)) {
   //   await fspMkdir(path);
   // }
 }
 
-export async function fsxReadFile(filePath: string): Promise<string> {
+export function fsxReadFile(filePath: string): string {
   try {
     // return await fs.promises.readFile(filePath, { encoding: 'utf-8' });
     return memoryFileSystem.readFile(filePath);
@@ -116,7 +116,7 @@ export async function fsxReadFile(filePath: string): Promise<string> {
   }
 }
 
-export async function fsxReadBinaryFile(filePath: string): Promise<Uint8Array> {
+export function fsxReadBinaryFile(filePath: string): Uint8Array {
   try {
     // return await fs.promises.readFile(filePath);
     // return memoryFileSystem.readFile(filePath);
@@ -126,8 +126,8 @@ export async function fsxReadBinaryFile(filePath: string): Promise<Uint8Array> {
   }
 }
 
-export async function fsxReadJsonFile(filePath: string): Promise<any> {
-  const text = await fsxReadFile(filePath);
+export function fsxReadJsonFile(filePath: string): any {
+  const text = fsxReadFile(filePath);
   try {
     return JSON.parse(text);
   } catch (error) {
@@ -135,27 +135,24 @@ export async function fsxReadJsonFile(filePath: string): Promise<any> {
   }
 }
 
-export async function fsxWriteFile(
+export function fsxWriteFile(
   filePath: string,
   content: string | Uint8Array,
-): Promise<void> {
+): void {
   try {
     // await fs.promises.writeFile(filePath, content);
     if (Array.isArray(content)) {
       throw new Error('not supported yet');
     }
-    return memoryFileSystem.writeFile(filePath, content as string);
+    memoryFileSystem.writeFile(filePath, content as string);
   } catch (error) {
     throw new AppError('CannotWriteFile', { filePath }, error);
   }
 }
 
-export async function fsxWriteJsonFile(
-  filePath: string,
-  obj: any,
-): Promise<void> {
+export function fsxWriteJsonFile(filePath: string, obj: any): void {
   const text = JSON.stringify(obj, null, '  ');
-  return await fsxWriteFile(filePath, text);
+  return fsxWriteFile(filePath, text);
 }
 
 export function fsxWatchFilesChange(
@@ -196,11 +193,11 @@ export function listAllFilesNameEndWith(
     .map((path) => pathRelative(baseDir, path));
 }
 
-export async function fsxListFileBaseNames(
+export function fsxListFileBaseNames(
   folderPath: string,
   extension: string,
-): Promise<string[]> {
-  return (await fsxReaddir(folderPath))
+): string[] {
+  return fsxReaddir(folderPath)
     .filter((fileName) => fileName.endsWith(extension))
     .map((fileName) => pathBasename(fileName, extension));
 }

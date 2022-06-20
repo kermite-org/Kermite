@@ -104,16 +104,16 @@ namespace fetcherLocalDebugStandard {
     ),
   };
 
-  export async function debugLoadLocalStandardBaseFirmware(
+  export function debugLoadLocalStandardBaseFirmware(
     baseFirmwareType: IStandardBaseFirmwareType,
-  ): Promise<IFirmwareFetchResult> {
+  ): IFirmwareFetchResult {
     const filePath = localStandardFirmwarePaths[baseFirmwareType];
     if (!filePath) {
       throw new Error(`base firmware ${baseFirmwareType} is not supported yet`);
     }
     const fileName = pathBasename(filePath);
     console.log(`loading local firmware ${filePath}`);
-    const data = await fsxReadBinaryFile(filePath);
+    const data = fsxReadBinaryFile(filePath);
     return { fileName, data };
   }
 }
@@ -203,10 +203,10 @@ async function loadFirmwareFileBytes_CustomOnline(
   }
 }
 
-async function loadFirmwareFileBytes_CustomLocalBuild(
+function loadFirmwareFileBytes_CustomLocalBuild(
   packageInfo: IProjectPackageInfo,
   firmwareEntry: ICustomFirmwareEntry,
-): Promise<IFirmwareFetchResultWithTargetDevice | undefined> {
+): IFirmwareFetchResultWithTargetDevice | undefined {
   const filePath = customFirmwareInfoProvider.getLocalBuildFirmwareBinaryPath(
     firmwareEntry.customFirmwareId,
   );
@@ -220,7 +220,7 @@ async function loadFirmwareFileBytes_CustomLocalBuild(
   if (filePath && info) {
     const fileName = pathBasename(filePath);
     console.log(`loading local firmware ${filePath}`);
-    const rawData = await fsxReadBinaryFile(filePath);
+    const rawData = fsxReadBinaryFile(filePath);
     const format = helpers.getFirmwareFormatFromFileName(fileName);
     const data = applyFirmwareBinaryPatch(rawData, format, meta);
     return { fileName, data, targetDevice: info.targetDevice };
@@ -245,10 +245,7 @@ export async function loadFirmwareFileBytes(
         firmwareEntry,
       );
     } else if (firmwareOrigin === 'localBuild') {
-      return await loadFirmwareFileBytes_CustomLocalBuild(
-        packageInfo,
-        firmwareEntry,
-      );
+      return loadFirmwareFileBytes_CustomLocalBuild(packageInfo, firmwareEntry);
     }
   }
   return undefined;
@@ -274,7 +271,7 @@ export async function firmwareFileLoader_loadFirmwareFileByPackageInfo(
   );
   fsxMkdirpSync(pathDirname(localTempFilePath));
 
-  await fsxWriteFile(localTempFilePath, data);
+  fsxWriteFile(localTempFilePath, data);
 
   return {
     filePath: localTempFilePath,

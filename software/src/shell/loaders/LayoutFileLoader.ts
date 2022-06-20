@@ -22,10 +22,8 @@ export namespace LayoutFileLoader {
     }
   }
 
-  export async function loadLayoutFromFile(
-    filePath: string,
-  ): Promise<IPersistKeyboardDesign> {
-    const obj = await fsxReadJsonFile(filePath);
+  export function loadLayoutFromFile(filePath: string): IPersistKeyboardDesign {
+    const obj = fsxReadJsonFile(filePath);
     fixLayoutData(obj, filePath);
     return obj as IPersistKeyboardDesign;
   }
@@ -38,10 +36,10 @@ export namespace LayoutFileLoader {
     return obj as IPersistKeyboardDesign;
   }
 
-  export async function saveLayoutToFile(
+  export function saveLayoutToFile(
     filePath: string,
     design: IPersistKeyboardDesign,
-  ): Promise<void> {
-    await fsxWriteJsonFile(filePath, design);
+  ): void {
+    fsxWriteJsonFile(filePath, design);
   }
 }

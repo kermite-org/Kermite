@@ -69,6 +69,7 @@ class ApplicationStorage {
 
   writeItem<T>(key: string, value: T) {
     this.data[key] = value;
+    console.log({ aa: this.data });
   }
 
   initialize() {

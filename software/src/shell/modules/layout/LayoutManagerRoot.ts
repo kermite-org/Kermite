@@ -32,14 +32,14 @@ const layoutEditSourceSchema = vSchemaOneOf([
   }),
 ]);
 
-async function loadLayoutByEditSource(editSource: ILayoutEditSource) {
+function loadLayoutByEditSource(editSource: ILayoutEditSource) {
   if (editSource.type === 'LayoutNewlyCreated') {
     layoutManagerModule.layout_createNewLayout(1);
   } else if (editSource.type === 'CurrentProfile') {
     layoutManagerModule.layout_loadCurrentProfileLayout(1);
   } else if (editSource.type === 'File') {
     const { filePath } = editSource;
-    await layoutManagerModule.layout_loadFromFile({ filePath });
+    layoutManagerModule.layout_loadFromFile({ filePath });
   } else if (editSource.type === 'ProjectLayout') {
     const { projectId, layoutName } = editSource;
     layoutManagerModule.layout_loadProjectLayout({ projectId, layoutName });
@@ -58,7 +58,7 @@ function onCoreStateChange(diff: Partial<ICoreState>) {
   }
 }
 
-async function initializeAsync() {
+function initialize() {
   const editSource = applicationStorage.readItemSafe<ILayoutEditSource>(
     'layoutEditSource',
     layoutEditSourceSchema,
@@ -66,7 +66,7 @@ async function initializeAsync() {
   );
   try {
     // 前回起動時に編集していたファイルの読み込みを試みる
-    await loadLayoutByEditSource(editSource);
+    loadLayoutByEditSource(editSource);
   } catch (error) {
     // 読み込めない場合は初期状態のままで、特にエラーを通知しない
     console.log(`error while loading previous edit layout file`);
@@ -88,6 +88,6 @@ function terminate() {
 }
 
 export const layoutManagerRoot = {
-  initializeAsync,
+  initialize,
   terminate,
 };

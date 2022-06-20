@@ -100,8 +100,8 @@ export class ApplicationRoot {
         fileDialogLoaders.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         fileDialogLoaders.loadObjectFromJsonWithFileDialog,
-      file_saveObjectToJsonWithFileDialog:
-        fileDialogLoaders.saveObjectToJsonWithFileDialog,
+      file_saveObjectToJsonWithFileDialog: async (obj) =>
+        fileDialogLoaders.saveObjectToJsonWithFileDialog(obj),
       file_getOpenDirectoryWithDialog:
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
       file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,
@@ -138,6 +138,10 @@ export class ApplicationRoot {
   };
 
   initialize() {
+    const lastSavedTimeStamp = localStorage.getItem(
+      'kermite_lastDataSaveTimeStamp',
+    );
+    console.log({ lastSavedTimeStamp });
     executeWithFatalErrorHandlerSync(() => {
       memoryFileSystem.initialize();
       console.log(`initialize services`);
@@ -172,8 +176,12 @@ export class ApplicationRoot {
       const kermiteServerProjectIds =
         await userPresetHubDataLoader.getServerProjectIds();
       commitCoreState({ kermiteServerProjectIds });
-      await profileManagerRoot.initializeAsync().catch(reportShellError);
-      await layoutManagerRoot.initializeAsync();
+      try {
+        profileManagerRoot.initialize();
+      } catch (err) {
+        reportShellError(err);
+      }
+      layoutManagerRoot.initialize();
       coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
       this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
@@ -200,6 +208,10 @@ export class ApplicationRoot {
       coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
       applicationStorage.terminate();
       memoryFileSystem.terminate();
+      localStorage.setItem(
+        'kermite_lastDataSaveTimeStamp',
+        new Date().toLocaleString(),
+      );
     });
   }
 }
