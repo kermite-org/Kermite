@@ -431,7 +431,7 @@ export function deployStageProjectsBuilder_buildProjects(): IBuildStats {
     buildProjectVariationEntry(pp, commonRevisions)
   );
 
-  copyProjectPackages();
+  // copyProjectPackages();
 
   const numSuccess = arrayCount(results, (a) => !!a);
   const numTotal = results.length;
