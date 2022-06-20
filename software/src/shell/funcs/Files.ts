@@ -6,7 +6,13 @@ import { AppError } from '~/shared/defs';
 
 export const pathJoin = path.join;
 export const pathResolve = path.resolve;
-export const pathRelative = path.relative;
+// export const pathRelative = path.relative;
+export function pathRelative(from: string, to: string): string {
+  if (to.startsWith(from)) {
+    return to.replace(from, '');
+  }
+  return to;
+}
 export const pathDirname = path.dirname;
 export const pathBasename = path.basename;
 export const pathExtname = path.extname;
@@ -194,11 +200,7 @@ export async function fsxListFileBaseNames(
   folderPath: string,
   extension: string,
 ): Promise<string[]> {
-  if (fsExistsSync(folderPath)) {
-    return (await fsxReaddir(folderPath))
-      .filter((fileName) => fileName.endsWith(extension))
-      .map((fileName) => pathBasename(fileName, extension));
-  } else {
-    return [];
-  }
+  return (await fsxReaddir(folderPath))
+    .filter((fileName) => fileName.endsWith(extension))
+    .map((fileName) => pathBasename(fileName, extension));
 }

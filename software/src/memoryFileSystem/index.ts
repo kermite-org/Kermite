@@ -1,5 +1,11 @@
-import path from 'path';
 import { removeArrayItems, removeArrayItemsMatched } from '~/shared';
+
+function pathRelative(from: string, to: string): string {
+  if (to.startsWith(from)) {
+    return to.replace(from, '');
+  }
+  return to;
+}
 
 interface IVirtualFileEntity {
   path: string;
@@ -22,15 +28,26 @@ interface IMemoryFileSystem {
 }
 
 function createMemoryFileSystem(): IMemoryFileSystem {
-  const fileEntities: IVirtualFileEntity[] = [];
+  const localStorageKey = 'kermite-app-virtual-file-system';
+  let fileEntities: IVirtualFileEntity[] = [];
 
   function findFileEntityByPath(path: string) {
     return fileEntities.find((it) => it.path === path);
   }
 
   return {
-    initialize() {},
-    terminate() {},
+    initialize() {
+      const text = localStorage.getItem(localStorageKey);
+      if (text) {
+        const data = JSON.parse(text) as { items: IVirtualFileEntity[] };
+        fileEntities = data.items;
+        console.log({ fileEntities });
+      }
+    },
+    terminate() {
+      const text = JSON.stringify({ items: fileEntities });
+      localStorage.setItem(localStorageKey, text);
+    },
     isExist(path) {
       return !!findFileEntityByPath(path);
     },
@@ -83,7 +100,7 @@ function createMemoryFileSystem(): IMemoryFileSystem {
     },
     enumerateFilesPathStartWith(targetPath) {
       const items = fileEntities.filter((it) => it.path.startsWith(targetPath));
-      return items.map((it) => path.relative(targetPath, it.path));
+      return items.map((it) => pathRelative(targetPath, it.path));
     },
     deleteFilesPathStartWith(targetPath) {
       const items = fileEntities.filter((it) => it.path.startsWith(targetPath));

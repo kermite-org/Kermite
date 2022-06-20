@@ -206,7 +206,6 @@ export async function remoteResourceUpdater2_updateRemoteProjectPackages() {
   console.log('update remote project packages');
   const localDigestMap = await loadLocalDigestMap(remotePackagesFolderPath);
   const remoteDigestMap = await loadRemoteDigestMap();
-  // console.log({ localDigestMap, remoteDigestMap });
   await updateRemotePackagesDifferential(
     remotePackagesFolderPath,
     localDigestMap,
