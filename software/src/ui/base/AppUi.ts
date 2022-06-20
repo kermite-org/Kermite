@@ -1,9 +1,11 @@
 import { asyncRerender } from 'alumina';
 
 class AppUi {
-  isDevelopment = (window as any).debugConfig?.isDevelopment;
+  // isDevelopment = (window as any).debugConfig?.isDevelopment;
+  isDevelopment = process.env.NODE_ENV === 'development';
 
-  isExecutedInApp = (window as any).ipcRenderer !== undefined;
+  // isExecutedInApp = (window as any).ipcRenderer !== undefined;
+  isExecutedInApp = true;
 
   // processEnv = process.env;
   processEnv = {} as any;
