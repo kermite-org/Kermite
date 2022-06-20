@@ -1,9 +1,10 @@
-import { app } from 'electron';
+// import { app } from 'electron';
 import { pathDirname } from '~/shell/funcs';
 
 export const appConfig = {
   isDevelopment: process.env.NODE_ENV === 'development',
-  applicationVersion: app.getVersion(),
+  // applicationVersion: app.getVersion(),
+  applicationVersion: `v220620a`,
   publicRootPath: `${pathDirname(__dirname)}/ui`,
   preloadFilePath: `${__dirname}/preload.js`,
   pageTitle: 'Kermite',

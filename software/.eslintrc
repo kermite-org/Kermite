@@ -134,6 +134,6 @@
     "no-console": 0,
     "eqeqeq": [1, "always"],
     "node/no-path-concat": 0,
-    "no-alert": 2
+    "no-alert": 0
   }
 }
