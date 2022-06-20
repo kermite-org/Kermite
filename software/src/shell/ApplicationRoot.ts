@@ -138,10 +138,6 @@ export class ApplicationRoot {
   };
 
   initialize() {
-    const lastSavedTimeStamp = localStorage.getItem(
-      'kermite_lastDataSaveTimeStamp',
-    );
-    console.log({ lastSavedTimeStamp });
     executeWithFatalErrorHandlerSync(() => {
       memoryFileSystem.initialize();
       console.log(`initialize services`);
@@ -208,10 +204,6 @@ export class ApplicationRoot {
       coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
       applicationStorage.terminate();
       memoryFileSystem.terminate();
-      localStorage.setItem(
-        'kermite_lastDataSaveTimeStamp',
-        new Date().toLocaleString(),
-      );
     });
   }
 }
