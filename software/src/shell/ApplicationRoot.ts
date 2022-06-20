@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { shell } from 'electron';
 import { memoryFileSystem } from '~/memoryFileSystem';
 import { getAppErrorData, ICoreState, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
@@ -31,7 +30,6 @@ import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModu
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
-import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
 
 export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();
@@ -40,7 +38,7 @@ export class ApplicationRoot {
 
   private inputLogicSimulator = new InputLogicSimulator(this.deviceService);
 
-  private windowWrapper = new AppWindowWrapper();
+  // private windowWrapper = new AppWindowWrapper();
 
   // ------------------------------------------------------------
 
@@ -107,7 +105,10 @@ export class ApplicationRoot {
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
       file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,
 
-      platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
+      platform_openUrlInDefaultBrowser: (path) => {
+        // shell.openExternal(path)
+        throw new Error('obsolete function invoked');
+      },
       global_lazyInitializeServices: () => this.lazyInitializeServices(),
 
       global_dispatchCoreAction: async (action) =>
@@ -141,7 +142,7 @@ export class ApplicationRoot {
       console.log(`initialize services`);
       applicationStorage.initialize();
       this.setupIpcBackend();
-      this.windowWrapper.initialize();
+      // this.windowWrapper.initialize();
     });
   }
 
@@ -150,12 +151,12 @@ export class ApplicationRoot {
   async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
-      const windowModule = createWindowModule(this.windowWrapper);
+      // const windowModule = createWindowModule(this.windowWrapper);
       coreActionDistributor.addReceivers(
         globalSettingsModule,
         projectPackageModule,
         keyboardConfigModule,
-        windowModule,
+        // windowModule,
         profileManagerModule,
         layoutManagerModule,
       );
@@ -192,7 +193,7 @@ export class ApplicationRoot {
       console.log(`terminate services`);
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
-      this.windowWrapper.terminate();
+      // this.windowWrapper.terminate();
       profileManagerRoot.terminate();
       layoutManagerRoot.terminate();
       coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
