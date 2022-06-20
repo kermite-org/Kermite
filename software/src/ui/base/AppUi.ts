@@ -5,7 +5,8 @@ class AppUi {
 
   isExecutedInApp = (window as any).ipcRenderer !== undefined;
 
-  processEnv = (window as any).processEnv;
+  // processEnv = process.env;
+  processEnv = {} as any;
 
   private _debugObject: any = {};
 
