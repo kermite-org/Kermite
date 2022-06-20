@@ -57,6 +57,7 @@
     "immer": "^9.0.7",
     "node-fetch": "3.0.0",
     "node-hid": "^2.1.1",
+    "path-browserify": "^1.0.1",
     "serialport": "9.2.8",
     "usb": "^2.0.3"
   },
