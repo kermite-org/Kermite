@@ -9,7 +9,6 @@ import {
   fetchJson,
   fsExistsSync,
   fsxReadFile,
-  globAsync,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -130,19 +129,20 @@ namespace LocalRepositoryFirmwareListLoader {
   async function loadLocalFirmwareInfosImpl(
     localRepositoryDir: string,
   ): Promise<ICustomFirmwareInfo_WithBinaryFilePath[]> {
-    const projectsRoot = pathJoin(localRepositoryDir, 'firmware/src/projects');
-    const buildsRoot = pathJoin(localRepositoryDir, 'firmware/build');
-    const elfFilePaths = await globAsync(`${buildsRoot}/**/*.elf`);
-    const allFirmwareInfos = await Promise.all(
-      elfFilePaths.map(
-        async (elfFilePath) =>
-          await loadLocalFirmwareInfo(elfFilePath, projectsRoot, buildsRoot),
-      ),
-    );
-    const firmwareInfos = allFirmwareInfos.filter(
-      (it) => !!it,
-    ) as ICustomFirmwareInfo_WithBinaryFilePath[];
-    return firmwareInfos;
+    throw new Error('obsolete function invoked');
+    // const projectsRoot = pathJoin(localRepositoryDir, 'firmware/src/projects');
+    // const buildsRoot = pathJoin(localRepositoryDir, 'firmware/build');
+    // const elfFilePaths = await globAsync(`${buildsRoot}/**/*.elf`);
+    // const allFirmwareInfos = await Promise.all(
+    //   elfFilePaths.map(
+    //     async (elfFilePath) =>
+    //       await loadLocalFirmwareInfo(elfFilePath, projectsRoot, buildsRoot),
+    //   ),
+    // );
+    // const firmwareInfos = allFirmwareInfos.filter(
+    //   (it) => !!it,
+    // ) as ICustomFirmwareInfo_WithBinaryFilePath[];
+    // return firmwareInfos;
   }
 
   const cashed = new (class {

@@ -1,6 +1,6 @@
 // import fs from 'fs';
 import * as path from 'path';
-import { glob } from 'glob';
+// import { glob } from 'glob';
 import { memoryFileSystem } from '~/memoryFileSystem';
 import { AppError } from '~/shared/defs';
 
@@ -165,19 +165,29 @@ export function fsxWatchFilesChange(
   // });
 }
 
-export function globAsync(
+// export function globAsync(
+//   pattern: string,
+//   baseDir?: string,
+// ): Promise<string[]> {
+//   return new Promise((resolve, reject) => {
+//     const options = baseDir ? { cwd: baseDir } : {};
+//     return glob(pattern, options, (err, matches) => {
+//       if (err) {
+//         reject(err);
+//       }
+//       resolve(matches);
+//     });
+//   });
+// }
+
+export function listAllFilesNameEndWith(
   pattern: string,
-  baseDir?: string,
-): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    const options = baseDir ? { cwd: baseDir } : {};
-    return glob(pattern, options, (err, matches) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(matches);
-    });
-  });
+  baseDir: string = '',
+): string[] {
+  const files = memoryFileSystem.enumerateFilesPathStartWith(baseDir);
+  return files
+    .filter((path) => path.endsWith(pattern))
+    .map((path) => pathRelative(baseDir, path));
 }
 
 export async function fsxListFileBaseNames(

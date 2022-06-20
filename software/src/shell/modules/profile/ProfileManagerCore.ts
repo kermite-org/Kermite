@@ -15,7 +15,7 @@ import {
   fsxReaddir,
   fsxReadJsonFile,
   fsxRenameFile,
-  globAsync,
+  listAllFilesNameEndWith,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -96,8 +96,8 @@ export const profileManagerCore = {
   },
   async listAllProfileEntries(): Promise<IProfileEntry[]> {
     const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
-    const relativeFilePaths = await globAsync(
-      '*/*.profile.json',
+    const relativeFilePaths = listAllFilesNameEndWith(
+      'profile.json',
       profilesBaseDir,
     );
     const allProfileEntries = await Promise.all(
