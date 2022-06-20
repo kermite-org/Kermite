@@ -1,10 +1,12 @@
 // import { app } from 'electron';
 import { pathJoin } from '~/shell/funcs';
+import { processEnv } from './AppConfig';
 
 export const appEnv = new (class {
-  isDevelopment = process.env.NODE_ENV === 'development';
+  isDevelopment = processEnv.NODE_ENV === 'development';
+  // isDevelopment = location.host === 'localhost';
 
-  platform = process.platform;
+  // platform = process.platform;
 
   get userDataFolderPath() {
     // return app.getPath('userData');
