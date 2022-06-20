@@ -29,24 +29,57 @@ export interface IIpcAgentBypassed<T extends IIpcContractBase> {
 export function createIpcAgentBypassed<
   T extends IIpcContractBase,
 >(): IIpcAgentBypassed<T> {
-  let syncReceiver: T['sync'] = {};
-  let asyncReceiver: T['async'] = {};
-  let eventsReceiver: T['events'] = {};
+  let rawEventsReceivers: {
+    [K in keyof T['events']]: (
+      cb: (value: T['events'][K]) => void,
+    ) => () => void;
+  } = {} as any;
 
-  return {
-    sync: syncReceiver,
-    async: asyncReceiver,
-    events: eventsReceiver,
+  const unSubscribers: Map<Function, Function> = new Map();
+
+  function subscribe<K extends keyof T['events']>(
+    propKey: K,
+    listener: (value: T['events'][K]) => void,
+  ) {
+    const unSubscriber = rawEventsReceivers[propKey](listener);
+    unSubscribers.set(listener, unSubscriber);
+    return unSubscriber;
+  }
+
+  function unsubscribe<K extends keyof T['events']>(
+    propKey: K,
+    listener: (value: T['events'][K]) => void,
+  ) {
+    const unSubscriber = unSubscribers.get(listener);
+    unSubscriber?.();
+    unSubscribers.delete(listener);
+  }
+
+  const self: IIpcAgentBypassed<T> = {
+    sync: {},
+    async: {},
+    // events: {} as T['events'],
+    events: new Proxy(
+      {},
+      {
+        get: (target, key: string) => ({
+          subscribe: (listener: any) => subscribe(key, listener),
+          unsubscribe: (listener: any) => unsubscribe(key, listener),
+        }),
+      },
+    ) as any,
     supplySyncHandlers(handlers) {
-      syncReceiver = handlers;
+      self.sync = handlers;
     },
     supplyAsyncHandlers(handlers) {
-      asyncReceiver = handlers;
+      self.async = handlers;
     },
     supplySubscriptionHandlers(handlers) {
-      eventsReceiver = handlers;
+      rawEventsReceivers = handlers;
+      // self.events = handlers as T['events'];
     },
     setErrorHandler() {},
     setPropsProcessHook() {},
   };
+  return self;
 }

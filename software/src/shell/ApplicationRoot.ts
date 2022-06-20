@@ -136,7 +136,7 @@ export class ApplicationRoot {
     }
   };
 
-  async initialize() {
+  initialize() {
     executeWithFatalErrorHandlerSync(() => {
       memoryFileSystem.initialize();
       console.log(`initialize services`);
@@ -188,7 +188,7 @@ export class ApplicationRoot {
     this.deviceService.disposeConnectedHidDevice();
   }
 
-  async terminate() {
+  terminate() {
     executeWithFatalErrorHandlerSync(() => {
       console.log(`terminate services`);
       this.inputLogicSimulator.terminate();

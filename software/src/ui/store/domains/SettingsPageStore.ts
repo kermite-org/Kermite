@@ -131,13 +131,13 @@ function createSettingsPageStore(): ISettingsPageStore {
     },
   };
 
-  async function initialize() {
-    if (appUi.isDevelopment) {
-      state.fixedProjectRootPath =
-        await ipcAgent.async.config_getProjectRootDirectoryPath();
-    }
-  }
-  initialize();
+  // async function initialize() {
+  //   if (appUi.isDevelopment) {
+  //     state.fixedProjectRootPath =
+  //       await ipcAgent.async.config_getProjectRootDirectoryPath();
+  //   }
+  // }
+  // initialize();
 
   return { readers, actions };
 }
