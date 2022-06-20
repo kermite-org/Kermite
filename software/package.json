@@ -34,8 +34,9 @@
   "private": true,
   "scripts": {
     "postinstall": "electron-rebuild",
-    "start": "ts-node build.ts -x-watch -x-exec",
-    "start:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
+    "start0": "ts-node build.ts -x-watch -x-exec",
+    "start0:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
+    "start": "vite",
     "build": "cross-env NODE_ENV=production ts-node build.ts -x-build",
     "packaging:mac": "electron-builder --mac --x64",
     "packaging:win": "electron-builder --win --x64",
@@ -98,7 +99,8 @@
     "source-map-support": "^0.5.21",
     "ts-jest": "^27.1.2",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "vite": "^2.9.12"
   },
   "resolutions": {
     "tar": "^6.1.9",
