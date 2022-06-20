@@ -20,6 +20,8 @@
 // import { IAppWindowWrapper } from './Interfaces';
 // import { preparePreloadJsFile, setupWebContentSourceChecker } from './helpers';
 
+import { createCoreModule } from '~/shell/modules/core';
+
 // interface IWindowPersistState {
 //   pagePath: string;
 //   isDevtoolsVisible: boolean;
@@ -304,16 +306,16 @@
 //   }
 // }
 
-// export function createWindowModule(appWindow: AppWindowWrapper) {
-//   return createCoreModule({
-//     window_closeWindow: () => appWindow.closeMainWindow(),
-//     window_minimizeWindow: () => appWindow.minimizeMainWindow(),
-//     window_maximizeWindow: () => appWindow.maximizeMainWindow(),
-//     window_restartApplication: () => appWindow.restartApplication(),
-//     window_setDevToolVisibility: (visible) =>
-//       appWindow.setDevToolsVisibility(visible),
-//     window_setWidgetAlwaysOnTop: (alwaysOnTop) =>
-//       appWindow.setWidgetAlwaysOnTop(alwaysOnTop),
-//     window_reloadPage: () => appWindow.reloadPage(),
-//   });
-// }
+export function createWindowModule() {
+  return createCoreModule({
+    // window_closeWindow: () => appWindow.closeMainWindow(),
+    // window_minimizeWindow: () => appWindow.minimizeMainWindow(),
+    // window_maximizeWindow: () => appWindow.maximizeMainWindow(),
+    // window_restartApplication: () => appWindow.restartApplication(),
+    // window_setDevToolVisibility: (visible) =>
+    //   appWindow.setDevToolsVisibility(visible),
+    // window_setWidgetAlwaysOnTop: (alwaysOnTop) =>
+    //   appWindow.setWidgetAlwaysOnTop(alwaysOnTop),
+    window_reloadPage: () => location.reload(),
+  });
+}

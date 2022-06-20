@@ -30,6 +30,7 @@ import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModu
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
+import { createWindowModule } from './services/window/AppWindowWrapper';
 
 export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();
@@ -151,12 +152,12 @@ export class ApplicationRoot {
   async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
-      // const windowModule = createWindowModule(this.windowWrapper);
+      const windowModule = createWindowModule();
       coreActionDistributor.addReceivers(
         globalSettingsModule,
         projectPackageModule,
         keyboardConfigModule,
-        // windowModule,
+        windowModule,
         profileManagerModule,
         layoutManagerModule,
       );
