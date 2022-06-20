@@ -31,16 +31,23 @@ class ApplicationStorage {
     schemaChecker: ICheckerEx,
     fallbackSource: T | (() => T),
   ): T {
-    const value = this.readItem<T>(key);
-    const errors = schemaChecker(value);
-    if (errors) {
-      console.error(`invalid persist data for ${key}`);
-      console.error(JSON.stringify(errors, null, '  '));
+    const returnFallbackValue = () => {
       if (fallbackSource instanceof Function) {
         return fallbackSource();
       } else {
         return duplicateObjectByJsonStringifyParse(fallbackSource);
       }
+    };
+    const value = this.readItem<T>(key);
+    if (value === undefined) {
+      return returnFallbackValue();
+    }
+
+    const errors = schemaChecker(value);
+    if (errors) {
+      console.error(`invalid persist data for ${key}`);
+      console.error(JSON.stringify(errors, null, '  '));
+      return returnFallbackValue();
     }
     return value!;
   }

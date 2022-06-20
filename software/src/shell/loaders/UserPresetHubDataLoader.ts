@@ -29,13 +29,15 @@ const serverUrlBase = `http://dev.server.kermite.org`;
 
 export const userPresetHubDataLoader = {
   async getServerProjectIds(): Promise<string[]> {
-    const url = `${serverUrlBase}/api/profiles/projectids`;
-    const data =
-      await cacheRemoteResource<PresetHubServerTypes.GetProfilesProjectIdsResponse>(
-        fetchJson,
-        url,
-      );
-    return data.projectIds || [];
+    // このエンドポイントだけcorsエラーになる? 要調査
+    // const url = `${serverUrlBase}/api/profiles/projectids`;
+    // const data =
+    //   await cacheRemoteResource<PresetHubServerTypes.GetProfilesProjectIdsResponse>(
+    //     fetchJson,
+    //     url,
+    //   );
+    // return data.projectIds || [];
+    return [];
   },
   async getServerProfiles(projectId: string): Promise<IServerProfileInfo[]> {
     const url = `${serverUrlBase}/api/profiles/projects/${projectId}`;
