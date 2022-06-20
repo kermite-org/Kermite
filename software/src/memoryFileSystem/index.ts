@@ -1,10 +1,8 @@
 import { removeArrayItems, removeArrayItemsMatched } from '~/shared';
 
 function pathRelative(from: string, to: string): string {
-  if (to.startsWith(from)) {
-    return to.replace(from, '');
-  }
-  return to;
+  const regex = new RegExp('^' + from + '/');
+  return to.replace(regex, '');
 }
 
 interface IVirtualFileEntity {

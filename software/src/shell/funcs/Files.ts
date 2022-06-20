@@ -8,11 +8,10 @@ export const pathJoin = path.join;
 export const pathResolve = path.resolve;
 // export const pathRelative = path.relative;
 export function pathRelative(from: string, to: string): string {
-  if (to.startsWith(from)) {
-    return to.replace(from, '');
-  }
-  return to;
+  const regex = new RegExp('^' + from + '/');
+  return to.replace(regex, '');
 }
+
 export const pathDirname = path.dirname;
 export const pathBasename = path.basename;
 export const pathExtname = path.extname;
@@ -185,7 +184,7 @@ export function fsxWatchFilesChange(
 
 export function listAllFilesNameEndWith(
   pattern: string,
-  baseDir: string = '',
+  baseDir: string,
 ): string[] {
   const files = memoryFileSystem.enumerateFilesPathStartWith(baseDir);
   return files
