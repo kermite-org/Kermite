@@ -62,14 +62,19 @@ export class ApplicationRoot {
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
       device_resetParameters: async () => this.deviceService.resetParameters(),
-      firmup_uploadFirmware: (origin, projectId, variationId, firmwareOrigin) =>
+      firmup_uploadFirmware: async (
+        origin,
+        projectId,
+        variationId,
+        firmwareOrigin,
+      ) =>
         this.firmwareUpdateService.writeFirmware(
           origin,
           projectId,
           variationId,
           firmwareOrigin,
         ),
-      firmup_writeStandardFirmwareDirect: (packageInfo, variationId) =>
+      firmup_writeStandardFirmwareDirect: async (packageInfo, variationId) =>
         this.firmwareUpdateService.writeStandardFirmwareDirect(
           packageInfo,
           variationId,
@@ -106,7 +111,7 @@ export class ApplicationRoot {
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
       file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,
 
-      platform_openUrlInDefaultBrowser: (path) => {
+      platform_openUrlInDefaultBrowser: (_path) => {
         // shell.openExternal(path)
         throw new Error('obsolete function invoked');
       },
