@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import produce from 'immer';
 import {
   createFallbackPersistKeyboardDesign,
@@ -140,9 +139,10 @@ export const layoutManagerModule = createCoreModule({
     }
   },
   layout_showEditLayoutFileInFiler() {
-    const filePath = layoutManagerModuleHelper.getCurrentEditLayoutFilePath();
-    if (filePath) {
-      shell.showItemInFolder(filePath);
-    }
+    // const filePath = layoutManagerModuleHelper.getCurrentEditLayoutFilePath();
+    // if (filePath) {
+    //   shell.showItemInFolder(filePath);
+    // }
+    throw new Error('obsolete function invoked');
   },
 });

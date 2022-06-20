@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import {
   createProjectKey,
   IProjectPackageFileContent,
@@ -228,8 +227,9 @@ export const projectPackageProvider = {
     await importLocalProjectPackageFromFileImpl(filePath);
   },
   async openLocalProjectsFolder() {
-    const folderPath = getUserProjectsFolderPath();
-    await fsxEnsureFolderExists(folderPath);
-    await shell.openPath(folderPath);
+    // const folderPath = getUserProjectsFolderPath();
+    // await fsxEnsureFolderExists(folderPath);
+    // await shell.openPath(folderPath);
+    throw new Error('obsolete function invoked');
   },
 };

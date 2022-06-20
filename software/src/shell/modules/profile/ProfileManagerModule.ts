@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import produce from 'immer';
 import {
   duplicateObjectByJsonStringifyParse,
@@ -294,11 +293,12 @@ export const profileManagerModule = createCoreModule({
   },
 
   async profile_openUserProfilesFolder() {
-    const { profileEditSource: editSource } = coreState;
-    if (editSource.type === 'InternalProfile' && editSource.profileEntry) {
-      await shell.openPath(
-        profileManagerCore.getProfilesFolderPath(editSource.profileEntry),
-      );
-    }
+    // const { profileEditSource: editSource } = coreState;
+    // if (editSource.type === 'InternalProfile' && editSource.profileEntry) {
+    //   await shell.openPath(
+    //     profileManagerCore.getProfilesFolderPath(editSource.profileEntry),
+    //   );
+    // }
+    throw new Error('obsolete function invoked');
   },
 });
