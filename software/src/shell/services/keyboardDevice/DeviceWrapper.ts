@@ -1,4 +1,4 @@
-import * as HID from 'node-hid';
+// import * as HID from 'node-hid';
 import {
   delayMs,
   fallbackKeyboardDeviceInfo,
@@ -19,7 +19,8 @@ export interface IDeviceWrapper {
   keyboardDeviceInfo: IKeyboardDeviceInfo;
 }
 export class DeviceWrapper implements IDeviceWrapper {
-  private device?: HID.HID | undefined;
+  // private device?: HID.HID | undefined;
+  private device?: undefined;
 
   onData = makeListenerPort<Uint8Array>();
   onClosed = makeListenerPort<void>();
@@ -44,14 +45,16 @@ export class DeviceWrapper implements IDeviceWrapper {
   }
 
   private open(path: string): boolean {
-    const device = new HID.HID(path);
-    if (!device) {
-      return false;
-    }
-    device.on('data', this.handleData);
-    device.on('error', this.handleError);
-    this.device = device;
-    return true;
+    throw new Error('obsolete function invoked');
+
+    // const device = new HID.HID(path);
+    // if (!device) {
+    //   return false;
+    // }
+    // device.on('data', this.handleData);
+    // device.on('error', this.handleError);
+    // this.device = device;
+    // return true;
   }
 
   private handleData = (data: any) => {
@@ -67,7 +70,7 @@ export class DeviceWrapper implements IDeviceWrapper {
 
   close() {
     if (this.device) {
-      this.device.close();
+      // this.device.close();
       this.onClosed.emit();
       this.onData.purge();
       this.onClosed.purge();
@@ -88,7 +91,7 @@ export class DeviceWrapper implements IDeviceWrapper {
 
     buf.unshift(0); // 先頭に0を付加して送信
 
-    this.device?.write(buf);
+    // this.device?.write(buf);
   }
 
   async writeFrames(frames: number[][]) {
