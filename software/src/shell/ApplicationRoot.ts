@@ -43,18 +43,18 @@ export class ApplicationRoot {
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    appGlobal.icpMainAgent.setErrorHandler((error) => {
+    appGlobal.ipcMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
       appGlobal.appErrorEventPort.emit(
         getAppErrorData(error, appEnv.resolveApplicationRootDir()),
       );
     });
 
-    appGlobal.icpMainAgent.supplySyncHandlers({
+    appGlobal.ipcMainAgent.supplySyncHandlers({
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
     });
 
-    appGlobal.icpMainAgent.supplyAsyncHandlers({
+    appGlobal.ipcMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
@@ -115,7 +115,7 @@ export class ApplicationRoot {
         await dispatchCoreAction(action),
     });
 
-    appGlobal.icpMainAgent.supplySubscriptionHandlers({
+    appGlobal.ipcMainAgent.supplySubscriptionHandlers({
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
