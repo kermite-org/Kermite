@@ -64,20 +64,20 @@ class ApplicationStorage {
     this.data[key] = value;
   }
 
-  async initializeAsync() {
+  initialize() {
     if (!fsExistsSync(this.configFilePath)) {
       console.log('config file not found!, create it');
-      await fsxEnsureFolderExists(pathDirname(this.configFilePath));
-      await fsxWriteJsonFile(this.configFilePath, {});
+      fsxEnsureFolderExists(pathDirname(this.configFilePath));
+      fsxWriteJsonFile(this.configFilePath, {});
     }
-    const obj = await fsxReadJsonFile(this.configFilePath);
+    const obj = fsxReadJsonFile(this.configFilePath);
     this.data = obj;
     this.initialized = true;
   }
 
-  async terminateAsync() {
+  terminate() {
     console.log(`saving persist state`);
-    await fsxWriteJsonFile(this.configFilePath, this.data);
+    fsxWriteJsonFile(this.configFilePath, this.data);
   }
 }
 

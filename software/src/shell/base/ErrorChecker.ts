@@ -62,3 +62,12 @@ export async function executeWithFatalErrorHandler(
     window.stop();
   }
 }
+
+export function executeWithFatalErrorHandlerSync(func: () => void): void {
+  try {
+    func();
+  } catch (error: any) {
+    alert(`Error\n\n${error.stack || error.message || error.toString()}`);
+    window.stop();
+  }
+}

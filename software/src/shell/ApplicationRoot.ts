@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { shell } from 'electron';
+import { memoryFileSystem } from '~/memoryFileSystem';
 import { getAppErrorData, ICoreState, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import {
-  executeWithFatalErrorHandler,
+  executeWithFatalErrorHandlerSync,
   reportShellError,
 } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -135,9 +136,10 @@ export class ApplicationRoot {
   };
 
   async initialize() {
-    await executeWithFatalErrorHandler(async () => {
+    executeWithFatalErrorHandlerSync(() => {
+      memoryFileSystem.initialize();
       console.log(`initialize services`);
-      await applicationStorage.initializeAsync();
+      applicationStorage.initialize();
       this.setupIpcBackend();
       this.windowWrapper.initialize();
     });
@@ -186,7 +188,7 @@ export class ApplicationRoot {
   }
 
   async terminate() {
-    await executeWithFatalErrorHandler(async () => {
+    executeWithFatalErrorHandlerSync(() => {
       console.log(`terminate services`);
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
@@ -194,7 +196,8 @@ export class ApplicationRoot {
       profileManagerRoot.terminate();
       layoutManagerRoot.terminate();
       coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
-      await applicationStorage.terminateAsync();
+      applicationStorage.terminate();
+      memoryFileSystem.terminate();
     });
   }
 }
