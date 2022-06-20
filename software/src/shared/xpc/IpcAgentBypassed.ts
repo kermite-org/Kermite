@@ -29,6 +29,11 @@ export interface IIpcAgentBypassed<T extends IIpcContractBase> {
 export function createIpcAgentBypassed<
   T extends IIpcContractBase,
 >(): IIpcAgentBypassed<T> {
+  let postProcessHook: (() => void) | undefined;
+
+  let rawSyncReceivers: T['sync'] = {};
+  let rawAsyncReceivers: T['async'] = {};
+
   let rawEventsReceivers: {
     [K in keyof T['events']]: (
       cb: (value: T['events'][K]) => void,
@@ -37,11 +42,26 @@ export function createIpcAgentBypassed<
 
   const unSubscribers: Map<Function, Function> = new Map();
 
+  function getSyncHandler(key: string) {
+    return (...args: any[]) => rawSyncReceivers[key](...args);
+  }
+
+  function getAsyncHandler(key: string) {
+    return async (...args: any[]) => {
+      await rawAsyncReceivers[key](...args);
+      postProcessHook?.();
+    };
+  }
+
   function subscribe<K extends keyof T['events']>(
     propKey: K,
     listener: (value: T['events'][K]) => void,
   ) {
-    const unSubscriber = rawEventsReceivers[propKey](listener);
+    const listenerWrapper = (value: any) => {
+      listener(value);
+      postProcessHook?.();
+    };
+    const unSubscriber = rawEventsReceivers[propKey](listenerWrapper);
     unSubscribers.set(listener, unSubscriber);
     return unSubscriber;
   }
@@ -56,8 +76,21 @@ export function createIpcAgentBypassed<
   }
 
   const self: IIpcAgentBypassed<T> = {
-    sync: {},
-    async: {},
+    setPropsProcessHook(hook: () => void) {
+      postProcessHook = hook;
+    },
+    sync: new Proxy(
+      {},
+      {
+        get: (target, key: string) => getSyncHandler(key),
+      },
+    ) as T['sync'],
+    async: new Proxy(
+      {},
+      {
+        get: (target, key: string) => getAsyncHandler(key),
+      },
+    ) as T['async'],
     // events: {} as T['events'],
     events: new Proxy(
       {},
@@ -67,19 +100,18 @@ export function createIpcAgentBypassed<
           unsubscribe: (listener: any) => unsubscribe(key, listener),
         }),
       },
-    ) as any,
+    ) as T['events'],
     supplySyncHandlers(handlers) {
-      self.sync = handlers;
+      rawSyncReceivers = handlers;
     },
     supplyAsyncHandlers(handlers) {
-      self.async = handlers;
+      rawAsyncReceivers = handlers;
     },
     supplySubscriptionHandlers(handlers) {
       rawEventsReceivers = handlers;
       // self.events = handlers as T['events'];
     },
     setErrorHandler() {},
-    setPropsProcessHook() {},
   };
   return self;
 }
