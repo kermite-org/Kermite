@@ -59,6 +59,7 @@ export class ApplicationRoot {
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
       device_connectToDevice: async (path) =>
         this.deviceService.selectTargetDevice(path),
+      device_selectHidDevice: () => this.deviceService.selectHidDevice(),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
       device_resetParameters: async () => this.deviceService.resetParameters(),

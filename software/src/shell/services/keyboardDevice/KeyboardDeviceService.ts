@@ -17,6 +17,24 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     this.core.setDevice(this.selectionManager.getDevice());
   }
 
+  async selectHidDevice() {
+    const devices = await navigator.hid.requestDevice({
+      filters: [
+        { vendorId: 0xf055, productId: 0xa577 },
+        { vendorId: 0xf055, productId: 0xa579 },
+      ],
+    });
+    console.log({ devices });
+    const device = devices.find((d) => d.collections.length > 0);
+    if (device) {
+      await device.open();
+      device.addEventListener('inputreport', (e: any) => {
+        const bytes = [...new Uint8Array(e.data.buffer)];
+        console.log('received', { bytes });
+      });
+    }
+  }
+
   initialize() {
     this.selectionManager.initialize();
     this.core.setDevice(this.selectionManager.getDevice());

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { texts } from '~/ui/base';
+import { ipcAgent, texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components';
 import { PartBody, PartHeader } from '~/ui/pages/FirmwareUpdatePage/Components';
 import { useDeviceSelectionPartModel } from '~/ui/pages/FirmwareUpdatePage/sections/DeviceSelectionPart/DeviceSelectionPartModel';
@@ -7,6 +7,10 @@ import { useDeviceSelectionPartModel } from '~/ui/pages/FirmwareUpdatePage/secti
 export const DeviceSelectionPart: FC = () => {
   const { deviceOptions, currentDevicePath, setSelectedDevicePath } =
     useDeviceSelectionPartModel();
+
+  const onSelectionButton = () => {
+    ipcAgent.async.device_selectHidDevice();
+  };
   return (
     <div class={style}>
       <PartHeader>{texts.deviceSelection.sectionTitle}</PartHeader>
@@ -21,6 +25,7 @@ export const DeviceSelectionPart: FC = () => {
           hint={texts.deviceSelectionHint.selectionArea}
         />
       </PartBody>
+      <button onClick={onSelectionButton}>select device</button>
     </div>
   );
 };
