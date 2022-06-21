@@ -85,6 +85,42 @@ export class DeviceSelectionManager {
   //   }
   // }
 
+  private async openHidDevice(hidDevice: HIDDevice) {
+    const deviceName = hidDevice.productName;
+    this.closeDevice();
+    const device = await DeviceWrapper.openWebHidDevice(hidDevice);
+    if (!device) {
+      console.log(`failed to open device: ${deviceName}`);
+      return;
+    }
+    const na = 'N/A';
+    device.setKeyboardDeviceInfo({
+      path: na,
+      portName: na,
+      mcuCode: na,
+      firmwareId: na,
+      projectId: na,
+      variationId: na,
+      deviceInstanceCode: na,
+      productName: hidDevice.productName,
+      manufacturerName: na,
+    });
+    device.writeSingleFrame(Packets.connectionOpenedFrame);
+    device.writeSingleFrame(
+      Packets.makeSimulatorModeSpecFrame(
+        coreState.keyboardConfig.isSimulatorMode,
+      ),
+    );
+    console.log(`device opened: ${deviceName}`);
+    device.onClosed(() => {
+      // this.updateEnumeration();
+      this.setStatus({ currentDevicePath: 'none' });
+      console.log(`device closed: ${deviceName}`);
+    });
+    this.setStatus({ currentDevicePath: deviceName });
+    this.device = device;
+  }
+
   async selectHidDevice() {
     const hidDevices = await navigator.hid.requestDevice({
       filters: [
@@ -105,39 +141,7 @@ export class DeviceSelectionManager {
     // console.log({ hidDevices });
     const hidDevice = hidDevices.find((d) => d.collections.length > 0);
     if (hidDevice) {
-      const deviceName = hidDevice.productName;
-      this.closeDevice();
-      const device = await DeviceWrapper.openWebHidDevice(hidDevice);
-      if (!device) {
-        console.log(`failed to open device: ${deviceName}`);
-        return;
-      }
-      const na = 'N/A';
-      device.setKeyboardDeviceInfo({
-        path: na,
-        portName: na,
-        mcuCode: na,
-        firmwareId: na,
-        projectId: na,
-        variationId: na,
-        deviceInstanceCode: na,
-        productName: hidDevice.productName,
-        manufacturerName: na,
-      });
-      device.writeSingleFrame(Packets.connectionOpenedFrame);
-      device.writeSingleFrame(
-        Packets.makeSimulatorModeSpecFrame(
-          coreState.keyboardConfig.isSimulatorMode,
-        ),
-      );
-      console.log(`device opened: ${deviceName}`);
-      device.onClosed(() => {
-        // this.updateEnumeration();
-        this.setStatus({ currentDevicePath: 'none' });
-        console.log(`device closed: ${deviceName}`);
-      });
-      this.setStatus({ currentDevicePath: deviceName });
-      this.device = device;
+      this.openHidDevice(hidDevice);
     }
   }
 
@@ -148,19 +152,27 @@ export class DeviceSelectionManager {
   //   }
   // };
 
-  // private restoreConnection() {
-  //   const initialDevicePath =
-  //     applicationStorage.readItem<string>('currentDevicePath');
-  //   if (initialDevicePath) {
-  //     this.selectTargetDevice(initialDevicePath);
-  //   }
-  // }
+  private async restoreConnection() {
+    const initialDevicePath =
+      applicationStorage.readItem<string>('currentDevicePath');
+    console.log({ initialDevicePath });
+    if (initialDevicePath) {
+      const hidDevices = await navigator.hid.getDevices();
+      const hidDevice = hidDevices.find(
+        (d) => d.collections.length > 0 && d.productName === initialDevicePath,
+      );
+      console.log({ hidDevices });
+      if (hidDevice) {
+        this.openHidDevice(hidDevice);
+      }
+    }
+  }
 
   // private timerWrapper = new IntervalTimerWrapper();
 
-  initialize() {
+  async initialize() {
     // this.updateEnumeration();
-    // this.restoreConnection();
+    await this.restoreConnection();
     // this.timerWrapper.start(this.updateEnumeration, 2000);
   }
 

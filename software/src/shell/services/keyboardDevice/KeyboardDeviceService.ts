@@ -23,8 +23,8 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     this.core.setDevice(this.selectionManager.getDevice());
   }
 
-  initialize() {
-    this.selectionManager.initialize();
+  async initialize() {
+    await this.selectionManager.initialize();
     this.core.setDevice(this.selectionManager.getDevice());
   }
 

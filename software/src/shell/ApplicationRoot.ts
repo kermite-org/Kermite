@@ -185,7 +185,7 @@ export class ApplicationRoot {
       }
       layoutManagerRoot.initialize();
       coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
-      this.deviceService.initialize();
+      await this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
       commitCoreState({
         applicationVersionInfo: {
