@@ -16,7 +16,7 @@ export default defineConfig({
   },
   plugins: [
     // EnvironmentPlugin({
-    //   FE_BOARD_SERVER_URL_BASE: null,
+    //   USE_KERMITE_SERVER_LOCAL: null,
     // }),
   ],
   // envPrefix: 'FE_',
