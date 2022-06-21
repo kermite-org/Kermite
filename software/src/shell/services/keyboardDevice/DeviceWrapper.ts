@@ -5,7 +5,6 @@ import {
   IKeyboardDeviceInfo,
 } from '~/shared';
 import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
-import { bytesToHexString } from '~/shell/services/keyboardDevice/Helpers';
 
 export interface IDeviceWrapper {
   close(): void;
@@ -68,10 +67,8 @@ export class DeviceWrapper implements IDeviceWrapper {
   }
 
   private handleData = (ev: HIDInputReportEvent) => {
-    // const buf = getArrayFromBuffer(data);
-    // console.log(`received: ${bytesToHexString([...buf])}`);
     const buf = new Uint8Array(ev.data.buffer);
-    console.log(`received: ${bytesToHexString([...buf])}`);
+    // console.log(`received: ${bytesToHexString([...buf])}`);
     this.onData.emit(buf);
   };
 
@@ -102,12 +99,12 @@ export class DeviceWrapper implements IDeviceWrapper {
     }
     // const padding = zeros(64 - bytes.length);
     // const buf = [...bytes, ...padding];
-
-    // console.log(`sending ${bytes.length} bytes:`);
-    console.log(`sending: ${bytesToHexString(bytes)}`);
-
     // buf.unshift(0); // 先頭に0を付加して送信
     // this.device?.write(buf);
+
+    // console.log(`sending ${bytes.length} bytes:`);
+    // console.log(`sending: ${bytesToHexString(bytes)}`);
+
     this.device?.sendReport(0, new Uint8Array(bytes));
   }
 

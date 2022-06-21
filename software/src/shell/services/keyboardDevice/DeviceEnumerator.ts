@@ -73,3 +73,23 @@ export function enumerateSupportedDeviceInfos(
     .sort((a, b) => compareString(a.path, b.path))
     .map(makeKeyboardDeviceInfoFromDeviceSpec);
 }
+
+export async function enumerateSupportedDeviceInfosWebHid(): Promise<
+  IKeyboardDeviceInfo[]
+> {
+  const hidDevices = (await navigator.hid.getDevices()).filter(
+    (d) => d.collections.length > 0,
+  );
+  const na = 'N/A';
+  return hidDevices.map((d) => ({
+    path: d.productName,
+    portName: na,
+    mcuCode: na,
+    firmwareId: na,
+    projectId: na,
+    variationId: na,
+    deviceInstanceCode: na,
+    productName: d.productName,
+    manufacturerName: na,
+  }));
+}

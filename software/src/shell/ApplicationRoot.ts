@@ -57,7 +57,7 @@ export class ApplicationRoot {
 
     appGlobal.ipcMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
-      device_connectToDevice: async (path) =>
+      device_connectToDevice: (path) =>
         this.deviceService.selectTargetDevice(path),
       device_selectHidDevice: () => this.deviceService.selectHidDevice(),
       device_setCustomParameterValue: async (index, value) =>

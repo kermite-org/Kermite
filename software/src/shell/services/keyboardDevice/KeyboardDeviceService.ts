@@ -12,10 +12,9 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     return this.core.realtimeEventPort;
   }
 
-  selectTargetDevice(_path: string) {
-    // this.selectionManager.selectTargetDevice(path);
-    // this.core.setDevice(this.selectionManager.getDevice());
-    throw new Error('obsolete function invoked');
+  async selectTargetDevice(path: string) {
+    await this.selectionManager.selectTargetDevice(path);
+    this.core.setDevice(this.selectionManager.getDevice());
   }
 
   async selectHidDevice() {
