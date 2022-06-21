@@ -4,6 +4,7 @@ import { IEventPort } from '~/shell/funcs';
 export interface IKeyboardDeviceService {
   realtimeEventPort: IEventPort<IRealtimeKeyboardEvent>;
   selectTargetDevice(path: string): void;
+  selectHidDevice(): Promise<void>;
   setSimulatorMode(enabled: boolean): void;
   writeSimulatorHidReport(report: number[]): void;
   setCustomParameterValue(index: number, value: number): void;

@@ -5,10 +5,7 @@ import {
   IKeyboardDeviceInfo,
 } from '~/shared';
 import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
-import {
-  getArrayFromBuffer,
-  zeros,
-} from '~/shell/services/keyboardDevice/Helpers';
+import { bytesToHexString } from '~/shell/services/keyboardDevice/Helpers';
 
 export interface IDeviceWrapper {
   close(): void;
@@ -20,7 +17,7 @@ export interface IDeviceWrapper {
 }
 export class DeviceWrapper implements IDeviceWrapper {
   // private device?: HID.HID | undefined;
-  private device?: undefined;
+  private device?: HIDDevice | undefined;
 
   onData = makeListenerPort<Uint8Array>();
   onClosed = makeListenerPort<void>();
@@ -35,31 +32,42 @@ export class DeviceWrapper implements IDeviceWrapper {
     this._keyboardDeviceInfo = info;
   }
 
-  static openDeviceByPath(path: string): DeviceWrapper | undefined {
+  // static openDeviceByPath(path: string): DeviceWrapper | undefined {
+  //   const instance = new DeviceWrapper();
+  //   const ok = instance.open(path);
+  //   if (ok) {
+  //     return instance;
+  //   }
+  //   return undefined;
+  // }
+
+  static async openWebHidDevice(device: HIDDevice) {
     const instance = new DeviceWrapper();
-    const ok = instance.open(path);
+    const ok = await instance.open(device);
     if (ok) {
       return instance;
     }
     return undefined;
   }
 
-  private open(path: string): boolean {
-    throw new Error('obsolete function invoked');
-
+  private async open(device: HIDDevice): Promise<boolean> {
     // const device = new HID.HID(path);
     // if (!device) {
     //   return false;
     // }
     // device.on('data', this.handleData);
     // device.on('error', this.handleError);
-    // this.device = device;
-    // return true;
+    await device.open();
+    device.addEventListener('inputreport', this.handleData);
+    this.device = device;
+    return true;
   }
 
-  private handleData = (data: any) => {
-    const buf = getArrayFromBuffer(data);
+  private handleData = (ev: HIDInputReportEvent) => {
+    // const buf = getArrayFromBuffer(data);
     // console.log(`received: ${bytesToHexString([...buf])}`);
+    const buf = new Uint8Array(ev.data.buffer);
+    console.log(`received: ${bytesToHexString([...buf])}`);
     this.onData.emit(buf);
   };
 
@@ -83,15 +91,15 @@ export class DeviceWrapper implements IDeviceWrapper {
     if (bytes.length > 64) {
       throw new Error(`generic hid frame length too long, ${bytes.length}/64`);
     }
-    const padding = zeros(64 - bytes.length);
-    const buf = [...bytes, ...padding];
+    // const padding = zeros(64 - bytes.length);
+    // const buf = [...bytes, ...padding];
 
-    // console.log(`sending ${buf.length} bytes:`);
-    // console.log(`sending: ${bytesToHexString(bytes)}`);
+    // console.log(`sending ${bytes.length} bytes:`);
+    console.log(`sending: ${bytesToHexString(bytes)}`);
 
-    buf.unshift(0); // 先頭に0を付加して送信
-
+    // buf.unshift(0); // 先頭に0を付加して送信
     // this.device?.write(buf);
+    this.device?.sendReport(0, new Uint8Array(bytes));
   }
 
   async writeFrames(frames: number[][]) {

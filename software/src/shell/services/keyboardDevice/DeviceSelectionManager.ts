@@ -1,20 +1,14 @@
-import {
-  compareObjectByJsonStringify,
-  IDeviceSelectionStatus,
-  IntervalTimerWrapper,
-} from '~/shared';
+import { IDeviceSelectionStatus } from '~/shared';
 import { applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState } from '~/shell/modules/core';
-import {
-  enumerateSupportedDeviceInfos,
-  IDeviceSpecificationParams,
-} from '~/shell/services/keyboardDevice/DeviceEnumerator';
+import { IDeviceSpecificationParams } from '~/shell/services/keyboardDevice/DeviceEnumerator';
 import {
   DeviceWrapper,
   IDeviceWrapper,
 } from '~/shell/services/keyboardDevice/DeviceWrapper';
 import { Packets } from '~/shell/services/keyboardDevice/Packets';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // atmega32u4
   {
@@ -57,61 +51,107 @@ export class DeviceSelectionManager {
     }
   }
 
-  selectTargetDevice(path: string) {
-    if (path !== this.status.currentDevicePath) {
+  // selectTargetDevice(path: string) {
+  //   if (path !== this.status.currentDevicePath) {
+  //     this.closeDevice();
+  //     if (path !== 'none') {
+  //       const targetDeviceInfo = this.status.allDeviceInfos.find(
+  //         (info) => info.path === path,
+  //       );
+  //       if (targetDeviceInfo) {
+  //         const deviceSig = targetDeviceInfo.portName;
+  //         const device = DeviceWrapper.openDeviceByPath(path);
+  //         if (!device) {
+  //           console.log(`failed to open device: ${deviceSig}`);
+  //           return;
+  //         }
+  //         device.setKeyboardDeviceInfo(targetDeviceInfo);
+  //         device.writeSingleFrame(Packets.connectionOpenedFrame);
+  //         device.writeSingleFrame(
+  //           Packets.makeSimulatorModeSpecFrame(
+  //             coreState.keyboardConfig.isSimulatorMode,
+  //           ),
+  //         );
+  //         console.log(`device opened: ${deviceSig}`);
+  //         device.onClosed(() => {
+  //           // this.updateEnumeration();
+  //           this.setStatus({ currentDevicePath: 'none' });
+  //           console.log(`device closed: ${deviceSig}`);
+  //         });
+  //         this.setStatus({ currentDevicePath: path });
+  //         this.device = device;
+  //       }
+  //     }
+  //   }
+  // }
+
+  async selectHidDevice() {
+    const hidDevices = await navigator.hid.requestDevice({
+      filters: [
+        { vendorId: 0xf055, productId: 0xa577 },
+        { vendorId: 0xf055, productId: 0xa579 },
+      ],
+    });
+    // console.log({ hidDevices });
+    const hidDevice = hidDevices.find((d) => d.collections.length > 0);
+    if (hidDevice) {
+      const deviceName = hidDevice.productName;
       this.closeDevice();
-      if (path !== 'none') {
-        const targetDeviceInfo = this.status.allDeviceInfos.find(
-          (info) => info.path === path,
-        );
-        if (targetDeviceInfo) {
-          const deviceSig = targetDeviceInfo.portName;
-          const device = DeviceWrapper.openDeviceByPath(path);
-          if (!device) {
-            console.log(`failed to open device: ${deviceSig}`);
-            return;
-          }
-          device.setKeyboardDeviceInfo(targetDeviceInfo);
-          device.writeSingleFrame(Packets.connectionOpenedFrame);
-          device.writeSingleFrame(
-            Packets.makeSimulatorModeSpecFrame(
-              coreState.keyboardConfig.isSimulatorMode,
-            ),
-          );
-          console.log(`device opened: ${deviceSig}`);
-          device.onClosed(() => {
-            this.updateEnumeration();
-            this.setStatus({ currentDevicePath: 'none' });
-            console.log(`device closed: ${deviceSig}`);
-          });
-          this.setStatus({ currentDevicePath: path });
-          this.device = device;
-        }
+      const device = await DeviceWrapper.openWebHidDevice(hidDevice);
+      if (!device) {
+        console.log(`failed to open device: ${deviceName}`);
+        return;
       }
+      const na = 'N/A';
+      device.setKeyboardDeviceInfo({
+        path: na,
+        portName: na,
+        mcuCode: na,
+        firmwareId: na,
+        projectId: na,
+        variationId: na,
+        deviceInstanceCode: na,
+        productName: hidDevice.productName,
+        manufacturerName: na,
+      });
+      device.writeSingleFrame(Packets.connectionOpenedFrame);
+      device.writeSingleFrame(
+        Packets.makeSimulatorModeSpecFrame(
+          coreState.keyboardConfig.isSimulatorMode,
+        ),
+      );
+      console.log(`device opened: ${deviceName}`);
+      device.onClosed(() => {
+        // this.updateEnumeration();
+        this.setStatus({ currentDevicePath: 'none' });
+        console.log(`device closed: ${deviceName}`);
+      });
+      this.setStatus({ currentDevicePath: deviceName });
+      this.device = device;
     }
   }
 
-  private updateEnumeration = () => {
-    const infos = enumerateSupportedDeviceInfos(deviceSpecificationParams);
-    if (!compareObjectByJsonStringify(infos, this.status.allDeviceInfos)) {
-      this.setStatus({ allDeviceInfos: infos });
-    }
-  };
+  // private updateEnumeration = () => {
+  //   const infos = enumerateSupportedDeviceInfos(deviceSpecificationParams);
+  //   if (!compareObjectByJsonStringify(infos, this.status.allDeviceInfos)) {
+  //     this.setStatus({ allDeviceInfos: infos });
+  //   }
+  // };
 
-  private restoreConnection() {
-    const initialDevicePath =
-      applicationStorage.readItem<string>('currentDevicePath');
-    if (initialDevicePath) {
-      this.selectTargetDevice(initialDevicePath);
-    }
-  }
+  // private restoreConnection() {
+  //   const initialDevicePath =
+  //     applicationStorage.readItem<string>('currentDevicePath');
+  //   if (initialDevicePath) {
+  //     this.selectTargetDevice(initialDevicePath);
+  //   }
+  // }
 
-  private timerWrapper = new IntervalTimerWrapper();
+  // private timerWrapper = new IntervalTimerWrapper();
 
   initialize() {
-    this.updateEnumeration();
-    this.restoreConnection();
-    this.timerWrapper.start(this.updateEnumeration, 2000);
+    // this.updateEnumeration();
+    // this.restoreConnection();
+    // this.timerWrapper.start(this.updateEnumeration, 2000);
   }
 
   disposeConnectedHidDevice() {
@@ -124,6 +164,6 @@ export class DeviceSelectionManager {
       this.status.currentDevicePath,
     );
     this.closeDevice();
-    this.timerWrapper.stop();
+    // this.timerWrapper.stop();
   }
 }
