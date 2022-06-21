@@ -14,12 +14,8 @@ import {
   cacheRemoteResource,
   fetchBinary,
   fetchJson,
-  fsxMkdirpSync,
   fsxReadBinaryFile,
-  fsxWriteFile,
   pathBasename,
-  pathDirname,
-  pathResolve,
 } from '~/shell/funcs';
 import { coreState } from '~/shell/modules/core';
 import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
@@ -88,20 +84,20 @@ namespace fetcherLocalDebugStandard {
   const localStandardFirmwarePaths: {
     [key in IStandardBaseFirmwareType]?: string;
   } = {
-    AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
-    RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
-    AvrSplit: pathResolve(
-      '../firmware/build/standard/avr_split/standard_avr_split.hex',
-    ),
-    RpSplit: pathResolve(
-      '../firmware/build/standard/rp_split/standard_rp_split.uf2',
-    ),
-    AvrOddSplit: pathResolve(
-      '../firmware/build/standard/avr_split/standard_avr_split.hex',
-    ),
-    RpOddSplit: pathResolve(
-      '../firmware/build/standard/rp_split/standard_rp_split.uf2',
-    ),
+    // AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
+    // RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
+    // AvrSplit: pathResolve(
+    //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
+    // ),
+    // RpSplit: pathResolve(
+    //   '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+    // ),
+    // AvrOddSplit: pathResolve(
+    //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
+    // ),
+    // RpOddSplit: pathResolve(
+    //   '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+    // ),
   };
 
   export function debugLoadLocalStandardBaseFirmware(
@@ -166,9 +162,15 @@ async function loadFirmwareFileBytes_Standard(
   const { fileName: sourceFirmwareFileName, data: sourceFirmwareBytes } =
     await firmwareLoader(baseFirmwareType);
 
-  const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
+  if (targetDevice !== 'rp2040') {
+    throw new Error('firmware target device not supported');
+  }
+  // const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
+  // const fileName = `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`;
 
-  const fileName = `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`;
+  const firmwareFormat = 'uf2';
+  const sourceNamePart = sourceFirmwareFileName.replace('.uf2', '');
+  const fileName = `${sourceNamePart}_${packageInfo.keyboardName}.uf2`;
 
   const meta = helpers.makeInjectedMetaData(
     packageInfo,
@@ -265,17 +267,18 @@ export async function firmwareFileLoader_loadFirmwareFileByPackageInfo(
     return undefined;
   }
 
-  const { fileName: binaryFileName, data, targetDevice } = loadResult;
-  const localTempFilePath = appEnv.resolveTempFilePath(
-    `remote_firmwares/${binaryFileName}`,
-  );
-  fsxMkdirpSync(pathDirname(localTempFilePath));
-
-  fsxWriteFile(localTempFilePath, data);
+  const { fileName, data, targetDevice } = loadResult;
+  // const localTempFilePath = appEnv.resolveTempFilePath(
+  //   `remote_firmwares/${binaryFileName}`,
+  // );
+  // fsxMkdirpSync(pathDirname(localTempFilePath));
+  // fsxWriteFile(localTempFilePath, data);
 
   return {
-    filePath: localTempFilePath,
+    // filePath: localTempFilePath,
+    fileName,
     targetDevice: targetDevice,
+    fileContentBytes: data,
   };
 }
 

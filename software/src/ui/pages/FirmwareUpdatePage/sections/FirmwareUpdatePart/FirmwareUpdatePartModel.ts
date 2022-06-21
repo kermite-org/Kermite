@@ -15,6 +15,8 @@ interface IFirmwareUpdatePartModel {
   onWriteButton(): void;
   onResetButton(): void;
   onLogButton(): void;
+  isFirmwareSelected: boolean;
+  onDownloadButton(): void;
 }
 
 export function useFirmwareUpdatePartModel(): IFirmwareUpdatePartModel {
@@ -48,6 +50,10 @@ export function useFirmwareUpdatePartModel(): IFirmwareUpdatePartModel {
         caption: 'Operation Command Log',
         logText: state.firmwareUploadResult || '',
       });
+    },
+    isFirmwareSelected: !!state.currentProjectFirmwareSpec,
+    onDownloadButton() {
+      actions.downloadFirmwareUf2File();
     },
   };
 }

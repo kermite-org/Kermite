@@ -226,6 +226,24 @@ const actions = {
       }
     }
   },
+
+  async downloadFirmwareUf2File() {
+    const [projectKey, variationId, firmwareOrigin] =
+      state.currentProjectFirmwareSpec.split(':');
+    const projectInfo = readers.projectInfosWithFirmware.find((it) =>
+      it.projectKey.startsWith(projectKey),
+    );
+    if (projectInfo) {
+      uiActions.setLoading();
+      await ipcAgent.async.firmup_downloadFirmwareUf2File(
+        projectInfo.origin,
+        projectInfo.projectId,
+        variationId,
+        firmwareOrigin as IFirmwareOriginEx,
+      );
+      uiActions.clearLoading();
+    }
+  },
 };
 
 export const firmwareUpdateModel = {

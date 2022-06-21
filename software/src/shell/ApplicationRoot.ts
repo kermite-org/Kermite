@@ -80,6 +80,8 @@ export class ApplicationRoot {
           packageInfo,
           variationId,
         ),
+      firmup_downloadFirmwareUf2File:
+        this.firmwareUpdateService.downloadFirmwareUf2File,
       presetHub_getServerProjectIds: () =>
         userPresetHubDataLoader.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>

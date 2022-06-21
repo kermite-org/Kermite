@@ -43,6 +43,13 @@ export interface IAppIpcContract {
       variationId: string,
     ): Promise<string>;
 
+    firmup_downloadFirmwareUf2File(
+      origin: IResourceOrigin,
+      projectId: string,
+      variationId: string,
+      firmwareOrigin: IFirmwareOriginEx,
+    ): Promise<void>;
+
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
     file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
