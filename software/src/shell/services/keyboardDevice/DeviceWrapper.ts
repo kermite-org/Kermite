@@ -7,7 +7,7 @@ import {
 import { IListenerPortImpl, makeListenerPort } from '~/shell/funcs';
 
 export interface IDeviceWrapper {
-  close(): void;
+  close(): Promise<void>;
   onData: IListenerPortImpl<Uint8Array>;
   onClosed: IListenerPortImpl<void>;
   writeSingleFrame(bytes: number[]): void;
@@ -82,9 +82,9 @@ export class DeviceWrapper implements IDeviceWrapper {
     this.close();
   };
 
-  close() {
+  async close() {
     if (this.device) {
-      // this.device.close();
+      await this.device.close();
       this.onClosed.emit();
       this.onData.purge();
       this.onClosed.purge();

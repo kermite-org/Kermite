@@ -195,8 +195,8 @@ export class ApplicationRoot {
     }
   }
 
-  disposeConnectedHidDevice() {
-    this.deviceService.disposeConnectedHidDevice();
+  async disposeConnectedHidDevice() {
+    await this.deviceService.disposeConnectedHidDevice();
   }
 
   terminate() {
@@ -211,5 +211,6 @@ export class ApplicationRoot {
       applicationStorage.terminate();
       memoryFileSystem.terminate();
     });
+    this.disposeConnectedHidDevice();
   }
 }

@@ -50,17 +50,17 @@ export class DeviceSelectionManager {
     commitCoreState({ deviceSelectionStatus });
   }
 
-  private closeDevice() {
+  private async closeDevice() {
     if (this.device) {
       this.device.writeSingleFrame(Packets.connectionClosingFrame);
-      this.device.close();
+      await this.device.close();
       this.device = undefined;
     }
   }
 
   private async openHidDevice(hidDevice: HIDDevice) {
     const deviceName = hidDevice.productName;
-    this.closeDevice();
+    await this.closeDevice();
     const device = await DeviceWrapper.openWebHidDevice(hidDevice);
     if (!device) {
       console.log(`failed to open device: ${deviceName}`);
@@ -106,7 +106,7 @@ export class DeviceSelectionManager {
 
   async selectTargetDevice(path: string) {
     if (path !== this.status.currentDevicePath) {
-      this.closeDevice();
+      await this.closeDevice();
       if (path !== 'none') {
         await this.openPreAuthorizedDeviceByProductName(path);
       }
@@ -160,16 +160,16 @@ export class DeviceSelectionManager {
     this.timerWrapper.start(this.updateEnumeration, 2000);
   }
 
-  disposeConnectedHidDevice() {
-    this.closeDevice();
-  }
-
   terminate() {
     applicationStorage.writeItem(
       'currentDevicePath',
       this.status.currentDevicePath,
     );
-    this.closeDevice();
     this.timerWrapper.stop();
+    // await this.closeDevice();
+  }
+
+  async disposeConnectedHidDevice() {
+    await this.closeDevice();
   }
 }
