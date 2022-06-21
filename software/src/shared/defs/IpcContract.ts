@@ -50,6 +50,11 @@ export interface IAppIpcContract {
       firmwareOrigin: IFirmwareOriginEx,
     ): Promise<void>;
 
+    firmup_downloadFirmwareUf2FileFromPackage(
+      packageInfo: IProjectPackageInfo,
+      variationId: string,
+    ): Promise<void>;
+
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
     file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
     file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;

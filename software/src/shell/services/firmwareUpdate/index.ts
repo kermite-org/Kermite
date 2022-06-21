@@ -5,7 +5,11 @@ import {
   IResourceOrigin,
 } from '~/shared';
 import { createEventPort } from '~/shell/funcs';
-import { firmwareFileLoader_loadFirmwareFile } from './firmwareFileLoader/FirmwareFileLoader';
+import {
+  firmwareFileLoader_loadFirmwareFile,
+  firmwareFileLoader_loadFirmwareFileByPackageInfo,
+} from './firmwareFileLoader/FirmwareFileLoader';
+import { IFirmwareBinaryFileSpec } from './types';
 
 export class FirmwareUpdateService {
   deviceDetectionEvents = createEventPort<IBootloaderDeviceDetectionStatus>({});
@@ -26,6 +30,17 @@ export class FirmwareUpdateService {
     throw new Error('obsolete function invoked');
   }
 
+  private executeDownloadBlobFile(binarySpec: IFirmwareBinaryFileSpec) {
+    const { fileName, fileContentBytes } = binarySpec;
+    const blob = new Blob([fileContentBytes.buffer], {
+      type: 'application-octet-binary',
+    });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+  }
+
   async downloadFirmwareUf2File(
     origin: IResourceOrigin,
     projectId: string,
@@ -39,14 +54,21 @@ export class FirmwareUpdateService {
       firmwareOrigin,
     );
     if (binarySpec?.targetDevice === 'rp2040') {
-      const { fileName, fileContentBytes } = binarySpec;
-      const blob = new Blob([fileContentBytes.buffer], {
-        type: 'application-octet-binary',
-      });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = fileName;
-      link.click();
+      this.executeDownloadBlobFile(binarySpec);
+    }
+  }
+
+  async downloadFirmwareUf2FileFromPackage(
+    packageInfo: IProjectPackageInfo,
+    variationId: string,
+  ): Promise<void> {
+    const binarySpec = await firmwareFileLoader_loadFirmwareFileByPackageInfo(
+      packageInfo,
+      variationId,
+      'online',
+    );
+    if (binarySpec?.targetDevice === 'rp2040') {
+      this.executeDownloadBlobFile(binarySpec);
     }
   }
 }

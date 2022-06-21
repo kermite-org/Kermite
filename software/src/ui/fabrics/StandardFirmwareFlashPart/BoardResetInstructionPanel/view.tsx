@@ -56,7 +56,7 @@ export const BoardResetInstructionPanel: FC<Props> = ({ isOpen, close }) => {
           </div>
         </div>
         <div class="summary">{texts.summary}</div>
-        <h3>{texts.forAvr}</h3>
+        {/* <h3>{texts.forAvr}</h3>
         <div class="row">
           <div class="frame">
             <IllustReset1 />
@@ -64,7 +64,7 @@ export const BoardResetInstructionPanel: FC<Props> = ({ isOpen, close }) => {
           <div class="inst">{texts.avrReset1}</div>
         </div>
 
-        <h3>{texts.forRp}</h3>
+        <h3>{texts.forRp}</h3> */}
         <div class="row">
           <div class="frame">
             <IllustReset2 />
@@ -111,6 +111,7 @@ const panelStyle = css`
 
   > .summary {
     margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   > .row {

@@ -21,6 +21,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton,
+    onDownloadButton,
     targetDeviceType,
   } = useStandardFirmwareFlashPartModel(projectInfo, variationId);
 
@@ -44,7 +45,19 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
       </div>
 
       <div class="image-box">{svgImage_resetByHand}</div>
-      <div class="text-part">
+      <div class="text-part2">
+        <p>1.デバイスをリセットしてブートローダモードにします。</p>
+        <p>2.uf2ファイルをダウンロードしてデバイスのドライブに書き込みます。</p>
+        <div>
+          <button
+            onClick={onDownloadButton}
+            disabled={targetDeviceType !== 'rp2040'}
+          >
+            uf2ファイルダウンロード
+          </button>
+        </div>
+      </div>
+      <div class="text-part" if={false}>
         {phase === 'WaitingReset' && (
           <div>{texts.firmwareFlashSection.resetDeviceToFlashFirmware}</div>
         )}
@@ -114,6 +127,14 @@ const style = css`
     overflow: hidden;
   }
 
+  > .text-part2 {
+    width: 300px;
+    margin: 0 auto;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
   > .text-part {
     width: 300px;
     margin: 0 auto;

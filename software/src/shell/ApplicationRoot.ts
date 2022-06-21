@@ -80,8 +80,23 @@ export class ApplicationRoot {
           packageInfo,
           variationId,
         ),
-      firmup_downloadFirmwareUf2File:
-        this.firmwareUpdateService.downloadFirmwareUf2File,
+      firmup_downloadFirmwareUf2File: (
+        origin,
+        projectId,
+        variationId,
+        firmwareOrigin,
+      ) =>
+        this.firmwareUpdateService.downloadFirmwareUf2File(
+          origin,
+          projectId,
+          variationId,
+          firmwareOrigin,
+        ),
+      firmup_downloadFirmwareUf2FileFromPackage: (packageInfo, variationId) =>
+        this.firmwareUpdateService.downloadFirmwareUf2FileFromPackage(
+          packageInfo,
+          variationId,
+        ),
       presetHub_getServerProjectIds: () =>
         userPresetHubDataLoader.getServerProjectIds(),
       presetHub_getServerProfiles: (projectId: string) =>

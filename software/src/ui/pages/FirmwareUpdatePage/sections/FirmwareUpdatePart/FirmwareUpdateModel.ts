@@ -234,14 +234,17 @@ const actions = {
       it.projectKey.startsWith(projectKey),
     );
     if (projectInfo) {
-      uiActions.setLoading();
+      // try {
+      //   uiActions.setLoading();
       await ipcAgent.async.firmup_downloadFirmwareUf2File(
         projectInfo.origin,
         projectInfo.projectId,
         variationId,
         firmwareOrigin as IFirmwareOriginEx,
       );
-      uiActions.clearLoading();
+      // } finally {
+      //   uiActions.clearLoading();
+      // }
     }
   },
 };

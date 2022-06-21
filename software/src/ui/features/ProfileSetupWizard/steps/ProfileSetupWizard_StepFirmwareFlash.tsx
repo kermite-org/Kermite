@@ -23,11 +23,13 @@ function useFirmwareFlashStepModel(): IFirmwareFlashStepModel {
 
   const { targetProjectInfo: projectInfo } = profileSetupStore.readers;
 
-  const variationSelectorItems = projectInfo.firmwares.map((it) => ({
-    variationId: it.variationId,
-    variationName: it.firmwareName,
-    mcuType: getFirmwareTargetDeviceType(projectInfo, it.variationId)!,
-  }));
+  const variationSelectorItems = projectInfo.firmwares
+    .map((it) => ({
+      variationId: it.variationId,
+      variationName: it.firmwareName,
+      mcuType: getFirmwareTargetDeviceType(projectInfo, it.variationId)!,
+    }))
+    .filter((it) => it.mcuType === 'rp2040');
   return {
     projectInfo,
     variationId,
