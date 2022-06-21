@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
-import { texts } from '~/ui/base';
+import { ipcAgent, texts } from '~/ui/base';
 import { useModalDisplayStateModel } from '~/ui/commonModels';
 import { GeneralButton } from '~/ui/components';
 import { svgImage_resetByHand } from '~/ui/constants';
@@ -31,6 +31,10 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
     close: closePanel,
   } = useModalDisplayStateModel();
 
+  const onDeviceAddButton = () => {
+    ipcAgent.async.device_selectHidDevice();
+  };
+
   return (
     <div class={style}>
       <div class="top-row">
@@ -47,14 +51,26 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
       <div class="image-box">{svgImage_resetByHand}</div>
       <div class="text-part2">
         <p>1.デバイスをリセットしてブートローダモードにします。</p>
-        <p>2.uf2ファイルをダウンロードしてデバイスのドライブに書き込みます。</p>
         <div>
-          <button
-            onClick={onDownloadButton}
-            disabled={targetDeviceType !== 'rp2040'}
-          >
-            uf2ファイルダウンロード
-          </button>
+          <p>
+            2.uf2ファイルをダウンロードしてデバイスのドライブに書き込みます。
+          </p>
+          <div>
+            <button
+              onClick={onDownloadButton}
+              disabled={targetDeviceType !== 'rp2040'}
+            >
+              uf2ファイルダウンロード
+            </button>
+          </div>
+        </div>
+        <div>
+          <p>
+            3.デバイスに接続します。以下のボタンを押して、リストからデバイスを選択してください。
+          </p>
+          <div>
+            <button onClick={onDeviceAddButton}>add device</button>
+          </div>
         </div>
       </div>
       <div class="text-part" if={false}>
@@ -117,7 +133,7 @@ const style = css`
 
   > .image-box {
     margin: 20px auto;
-    width: 300px;
+    width: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
