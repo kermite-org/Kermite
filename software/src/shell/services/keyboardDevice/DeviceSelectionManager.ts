@@ -88,8 +88,18 @@ export class DeviceSelectionManager {
   async selectHidDevice() {
     const hidDevices = await navigator.hid.requestDevice({
       filters: [
-        { vendorId: 0xf055, productId: 0xa577 },
-        { vendorId: 0xf055, productId: 0xa579 },
+        // {
+        //   vendorId: 0xf055,
+        //   productId: 0xa577,
+        //   usagePage: 0xffab,
+        //   usage: 0x0200,
+        // },
+        {
+          vendorId: 0xf055,
+          productId: 0xa579,
+          usagePage: 0xff00,
+          usage: 0x0001,
+        },
       ],
     });
     // console.log({ hidDevices });
