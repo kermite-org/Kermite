@@ -56,15 +56,23 @@ const helpers = {
           const { projectKey, keyboardName } = info;
           const { firmwareName, variationId } = firmware;
           if (firmware.type === 'standard') {
-            return [
-              {
-                value: `${projectKey}:${variationId}:unspecified`,
-                label: `${projectOriginText} ${keyboardName} ${firmwareName}`,
-              },
-            ];
+            const isRp =
+              firmware.standardFirmwareConfig.baseFirmwareType.includes('Rp');
+            if (isRp) {
+              return [
+                {
+                  value: `${projectKey}:${variationId}:unspecified`,
+                  label: `${projectOriginText} ${keyboardName} ${firmwareName}`,
+                },
+              ];
+            } else {
+              return [];
+            }
           } else {
             const customFirmwares = allCustomFirmwareInfos.filter(
-              (it) => it.firmwareId === firmware.customFirmwareId,
+              (it) =>
+                it.firmwareId === firmware.customFirmwareId &&
+                it.targetDevice === 'rp2040',
             );
             return customFirmwares.map((customFirmware) => {
               const { firmwareOrigin } = customFirmware;
