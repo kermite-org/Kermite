@@ -24,15 +24,17 @@ export const DeviceSelectionPart: FC = () => {
           class="selector"
           hint={texts.deviceSelectionHint.selectionArea}
         />
+        <div>
+          <button onClick={onSelectionButton}>add device</button>
+        </div>
       </PartBody>
-      <button onClick={onSelectionButton}>select device</button>
     </div>
   );
 };
 
 const style = css`
   > .part-body {
-    .selector {
+    > .selector {
       width: 300px;
     }
   }
