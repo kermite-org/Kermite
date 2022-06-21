@@ -155,13 +155,11 @@ export class DeviceSelectionManager {
   private async restoreConnection() {
     const initialDevicePath =
       applicationStorage.readItem<string>('currentDevicePath');
-    console.log({ initialDevicePath });
     if (initialDevicePath) {
       const hidDevices = await navigator.hid.getDevices();
       const hidDevice = hidDevices.find(
         (d) => d.collections.length > 0 && d.productName === initialDevicePath,
       );
-      console.log({ hidDevices });
       if (hidDevice) {
         this.openHidDevice(hidDevice);
       }

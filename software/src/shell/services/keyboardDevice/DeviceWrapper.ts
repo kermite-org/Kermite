@@ -59,6 +59,10 @@ export class DeviceWrapper implements IDeviceWrapper {
     // device.on('error', this.handleError);
     await device.open();
     device.addEventListener('inputreport', this.handleData);
+
+    navigator.hid.addEventListener('disconnect', this.handleDisconnect, {
+      once: true,
+    });
     this.device = device;
     return true;
   }
@@ -73,6 +77,11 @@ export class DeviceWrapper implements IDeviceWrapper {
 
   private handleError = (error: any) => {
     console.log(`hid device error occurred: ${error}`);
+    this.close();
+  };
+
+  private handleDisconnect = () => {
+    console.log(`hid device disconnected`);
     this.close();
   };
 
