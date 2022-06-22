@@ -40,13 +40,16 @@ namespace CommunicationDataBinaryFormat {
     [2]: { configStorageFormatRevision: u8 };
     [3]: { profileBinaryFormatRevision: u8 };
     [4]: { configParametersRevision: u8 };
-    [5_14]: { kermiteMcuCode: Bytes<10> };
-    [15_20]: { projectId: Bytes<6> };
+    [5_7]: { kermiteMcuCode: Bytes<3> };
+    [8_13]: { projectId: Bytes<6> };
+    [14]: { reserved: u8 };
+    [15_20]: { firmwareId: Bytes<6> };
     [21]: { isOnlineProject: u8 };
     [22_23]: { projectReleaseBuildRevision: u16 };
     [24_39]: { variationName: Bytes<16> };
     [40_43]: { deviceInstanceCode: Bytes<4> };
-    [44_47]: { reserved: Bytes<4> };
+    [44_45]: { variationId: Bytes<2> };
+    [46_47]: { reserved: 2 };
     [48_49]: { assignStorageCapacity: u16 };
   };
 
