@@ -140,7 +140,7 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, "\0", 1);
 
   // usbIoCore_setProductName(commonFirmwareMetadata.keyboardName);
-  snprintf(tempProductNameBuf, 32, "KRM#%s %s", commonFirmwareMetadata.deviceInstanceCode, commonFirmwareMetadata.keyboardName);
+  snprintf(tempProductNameBuf, 32, "%s #%s", commonFirmwareMetadata.keyboardName, commonFirmwareMetadata.deviceInstanceCode);
   usbIoCore_setProductName(tempProductNameBuf);
 }
 
