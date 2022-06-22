@@ -11,9 +11,9 @@ interface IDeviceSelectionPartModel {
 function makeDeviceOptionEntry(
   deviceInfo: IKeyboardDeviceInfo,
 ): ISelectorOption {
-  const { path, portName, productName } = deviceInfo;
+  const { path, productName } = deviceInfo;
   return {
-    label: `device@${portName}(${productName})`,
+    label: productName,
     value: path,
   };
 }

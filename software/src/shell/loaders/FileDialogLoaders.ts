@@ -1,50 +1,50 @@
-import { dialog } from 'electron';
-import { appGlobal } from '~/shell/base';
 import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
 
 export const fileDialogLoaders = {
-  async getOpeningDirectoryPathWithDialog() {
-    const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
-      properties: ['openDirectory'],
-    });
-    if (result.filePaths && result.filePaths.length > 0) {
-      return result.filePaths[0];
-    }
-    return undefined;
+  getOpeningDirectoryPathWithDialog() {
+    // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
+    //   properties: ['openDirectory'],
+    // });
+    // if (result.filePaths && result.filePaths.length > 0) {
+    //   return result.filePaths[0];
+    // }
+    // return undefined;
+    throw new Error('obsolete function invoked');
   },
-  async getOpeningJsonFilePathWithDialog() {
-    const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
-      properties: ['openFile'],
-      filters: [
-        {
-          name: 'JSON Documents',
-          extensions: ['json'],
-        },
-      ],
-    });
-    if (result.filePaths && result.filePaths.length > 0) {
-      return result.filePaths[0];
-    }
-    return undefined;
+  getOpeningJsonFilePathWithDialog() {
+    // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
+    //   properties: ['openFile'],
+    //   filters: [
+    //     {
+    //       name: 'JSON Documents',
+    //       extensions: ['json'],
+    //     },
+    //   ],
+    // });
+    // if (result.filePaths && result.filePaths.length > 0) {
+    //   return result.filePaths[0];
+    // }
+    // return undefined;
+    throw new Error('obsolete function invoked');
   },
-  async getSavingJsonFilePathWithDialog() {
-    const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
-      properties: ['showOverwriteConfirmation'],
-      filters: [
-        {
-          name: 'JSON Documents',
-          extensions: ['json'],
-        },
-      ],
-    });
-    return result.filePath;
+  getSavingJsonFilePathWithDialog() {
+    // const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
+    //   properties: ['showOverwriteConfirmation'],
+    //   filters: [
+    //     {
+    //       name: 'JSON Documents',
+    //       extensions: ['json'],
+    //     },
+    //   ],
+    // });
+    // return result.filePath;
+    throw new Error('obsolete function invoked');
   },
-  async loadObjectFromJsonWithFileDialog(): Promise<any | undefined> {
+  loadObjectFromJsonWithFileDialog(): any | undefined {
     try {
-      const filePath =
-        await fileDialogLoaders.getOpeningJsonFilePathWithDialog();
+      const filePath = fileDialogLoaders.getOpeningJsonFilePathWithDialog();
       if (filePath) {
-        const obj = await fsxReadJsonFile(filePath);
+        const obj = fsxReadJsonFile(filePath);
         return obj;
       }
     } catch (error) {
@@ -52,12 +52,11 @@ export const fileDialogLoaders = {
       return undefined;
     }
   },
-  async saveObjectToJsonWithFileDialog(obj: any): Promise<boolean> {
+  saveObjectToJsonWithFileDialog(obj: any): boolean {
     try {
-      const filePath =
-        await fileDialogLoaders.getSavingJsonFilePathWithDialog();
+      const filePath = fileDialogLoaders.getSavingJsonFilePathWithDialog();
       if (filePath) {
-        await fsxWriteJsonFile(filePath, obj);
+        fsxWriteJsonFile(filePath, obj);
         return true;
       }
       return false;
@@ -66,7 +65,7 @@ export const fileDialogLoaders = {
       return false;
     }
   },
-  async loadJsonFileContent(filePath: string): Promise<any | undefined> {
-    return await fsxReadJsonFile(filePath);
+  loadJsonFileContent(filePath: string): any | undefined {
+    return fsxReadJsonFile(filePath);
   },
 };

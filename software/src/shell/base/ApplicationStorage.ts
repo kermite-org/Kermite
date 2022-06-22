@@ -31,16 +31,23 @@ class ApplicationStorage {
     schemaChecker: ICheckerEx,
     fallbackSource: T | (() => T),
   ): T {
-    const value = this.readItem<T>(key);
-    const errors = schemaChecker(value);
-    if (errors) {
-      console.error(`invalid persist data for ${key}`);
-      console.error(JSON.stringify(errors, null, '  '));
+    const returnFallbackValue = () => {
       if (fallbackSource instanceof Function) {
         return fallbackSource();
       } else {
         return duplicateObjectByJsonStringifyParse(fallbackSource);
       }
+    };
+    const value = this.readItem<T>(key);
+    if (value === undefined) {
+      return returnFallbackValue();
+    }
+
+    const errors = schemaChecker(value);
+    if (errors) {
+      console.error(`invalid persist data for ${key}`);
+      console.error(JSON.stringify(errors, null, '  '));
+      return returnFallbackValue();
     }
     return value!;
   }
@@ -64,20 +71,20 @@ class ApplicationStorage {
     this.data[key] = value;
   }
 
-  async initializeAsync() {
+  initialize() {
     if (!fsExistsSync(this.configFilePath)) {
       console.log('config file not found!, create it');
-      await fsxEnsureFolderExists(pathDirname(this.configFilePath));
-      await fsxWriteJsonFile(this.configFilePath, {});
+      fsxEnsureFolderExists(pathDirname(this.configFilePath));
+      fsxWriteJsonFile(this.configFilePath, {});
     }
-    const obj = await fsxReadJsonFile(this.configFilePath);
+    const obj = fsxReadJsonFile(this.configFilePath);
     this.data = obj;
     this.initialized = true;
   }
 
-  async terminateAsync() {
+  terminate() {
     console.log(`saving persist state`);
-    await fsxWriteJsonFile(this.configFilePath, this.data);
+    fsxWriteJsonFile(this.configFilePath, this.data);
   }
 }
 

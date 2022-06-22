@@ -9,17 +9,13 @@ import {
   IStandardBaseFirmwareType,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig } from '~/shell/base';
 import {
   cacheRemoteResource,
   fetchBinary,
   fetchJson,
-  fsxMkdirpSync,
   fsxReadBinaryFile,
-  fsxWriteFile,
   pathBasename,
-  pathDirname,
-  pathResolve,
 } from '~/shell/funcs';
 import { coreState } from '~/shell/modules/core';
 import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
@@ -29,11 +25,7 @@ import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
 
 const config = {
   remoteBaseUrl: 'https://app.kermite.org/krs/resources2',
-  debugLoadLocalFirmware: false,
 };
-if (appEnv.isDevelopment) {
-  // config.debugLoadLocalFirmware = true;
-}
 
 type IFirmwareFetchResult = { fileName: string; data: Uint8Array };
 type IFirmwareFetchResultWithTargetDevice = {
@@ -88,32 +80,32 @@ namespace fetcherLocalDebugStandard {
   const localStandardFirmwarePaths: {
     [key in IStandardBaseFirmwareType]?: string;
   } = {
-    AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
-    RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
-    AvrSplit: pathResolve(
-      '../firmware/build/standard/avr_split/standard_avr_split.hex',
-    ),
-    RpSplit: pathResolve(
-      '../firmware/build/standard/rp_split/standard_rp_split.uf2',
-    ),
-    AvrOddSplit: pathResolve(
-      '../firmware/build/standard/avr_split/standard_avr_split.hex',
-    ),
-    RpOddSplit: pathResolve(
-      '../firmware/build/standard/rp_split/standard_rp_split.uf2',
-    ),
+    // AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
+    RpUnified: '/debug_local_firmwares/standard_rp.uf2',
+    // AvrSplit: pathResolve(
+    //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
+    // ),
+    // RpSplit: pathResolve(
+    //   '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+    // ),
+    // AvrOddSplit: pathResolve(
+    //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
+    // ),
+    // RpOddSplit: pathResolve(
+    //   '../firmware/build/standard/rp_split/standard_rp_split.uf2',
+    // ),
   };
 
   export async function debugLoadLocalStandardBaseFirmware(
     baseFirmwareType: IStandardBaseFirmwareType,
   ): Promise<IFirmwareFetchResult> {
-    const filePath = localStandardFirmwarePaths[baseFirmwareType];
-    if (!filePath) {
+    const url = localStandardFirmwarePaths[baseFirmwareType];
+    if (!url) {
       throw new Error(`base firmware ${baseFirmwareType} is not supported yet`);
     }
-    const fileName = pathBasename(filePath);
-    console.log(`loading local firmware ${filePath}`);
-    const data = await fsxReadBinaryFile(filePath);
+    const fileName = pathBasename(url);
+    // console.log(`loading local firmware ${url}`);
+    const data = await cacheRemoteResource(fetchBinary, url);
     return { fileName, data };
   }
 }
@@ -159,16 +151,22 @@ async function loadFirmwareFileBytes_Standard(
   const targetDevice =
     getFirmwareTargetDeviceFromBaseFirmwareType(baseFirmwareType);
 
-  const firmwareLoader = config.debugLoadLocalFirmware
+  const firmwareLoader = appConfig.useDebugLocalFirmwares
     ? fetcherLocalDebugStandard.debugLoadLocalStandardBaseFirmware
     : fetcherOnlineStandard.fetchStandardBaseFirmware;
 
   const { fileName: sourceFirmwareFileName, data: sourceFirmwareBytes } =
     await firmwareLoader(baseFirmwareType);
 
-  const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
+  if (targetDevice !== 'rp2040') {
+    throw new Error('firmware target device not supported');
+  }
+  // const firmwareFormat = targetDevice === 'rp2040' ? 'uf2' : 'hex';
+  // const fileName = `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`;
 
-  const fileName = `${sourceFirmwareFileName}_patched_for_${packageInfo.keyboardName}.${firmwareFormat}`;
+  const firmwareFormat = 'uf2';
+  const sourceNamePart = sourceFirmwareFileName.replace('.uf2', '');
+  const fileName = `${sourceNamePart}_${packageInfo.keyboardName}.uf2`;
 
   const meta = helpers.makeInjectedMetaData(
     packageInfo,
@@ -203,10 +201,10 @@ async function loadFirmwareFileBytes_CustomOnline(
   }
 }
 
-async function loadFirmwareFileBytes_CustomLocalBuild(
+function loadFirmwareFileBytes_CustomLocalBuild(
   packageInfo: IProjectPackageInfo,
   firmwareEntry: ICustomFirmwareEntry,
-): Promise<IFirmwareFetchResultWithTargetDevice | undefined> {
+): IFirmwareFetchResultWithTargetDevice | undefined {
   const filePath = customFirmwareInfoProvider.getLocalBuildFirmwareBinaryPath(
     firmwareEntry.customFirmwareId,
   );
@@ -220,7 +218,7 @@ async function loadFirmwareFileBytes_CustomLocalBuild(
   if (filePath && info) {
     const fileName = pathBasename(filePath);
     console.log(`loading local firmware ${filePath}`);
-    const rawData = await fsxReadBinaryFile(filePath);
+    const rawData = fsxReadBinaryFile(filePath);
     const format = helpers.getFirmwareFormatFromFileName(fileName);
     const data = applyFirmwareBinaryPatch(rawData, format, meta);
     return { fileName, data, targetDevice: info.targetDevice };
@@ -245,10 +243,7 @@ export async function loadFirmwareFileBytes(
         firmwareEntry,
       );
     } else if (firmwareOrigin === 'localBuild') {
-      return await loadFirmwareFileBytes_CustomLocalBuild(
-        packageInfo,
-        firmwareEntry,
-      );
+      return loadFirmwareFileBytes_CustomLocalBuild(packageInfo, firmwareEntry);
     }
   }
   return undefined;
@@ -268,17 +263,18 @@ export async function firmwareFileLoader_loadFirmwareFileByPackageInfo(
     return undefined;
   }
 
-  const { fileName: binaryFileName, data, targetDevice } = loadResult;
-  const localTempFilePath = appEnv.resolveTempFilePath(
-    `remote_firmwares/${binaryFileName}`,
-  );
-  fsxMkdirpSync(pathDirname(localTempFilePath));
-
-  await fsxWriteFile(localTempFilePath, data);
+  const { fileName, data, targetDevice } = loadResult;
+  // const localTempFilePath = appEnv.resolveTempFilePath(
+  //   `remote_firmwares/${binaryFileName}`,
+  // );
+  // fsxMkdirpSync(pathDirname(localTempFilePath));
+  // fsxWriteFile(localTempFilePath, data);
 
   return {
-    filePath: localTempFilePath,
+    // filePath: localTempFilePath,
+    fileName,
     targetDevice: targetDevice,
+    fileContentBytes: data,
   };
 }
 

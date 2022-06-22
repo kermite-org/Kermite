@@ -26,16 +26,19 @@ export function useConnectedDevicesAttrsPartModel(): IConnectedDevicesAttrsPartM
   const tableData =
     deviceAttrs &&
     ([
-      [texts.deviceInformation.fieldName_port, deviceAttrs.portName],
-      [texts.deviceInformation.fieldName_firmwareId, deviceAttrs.firmwareId],
+      // [texts.deviceInformation.fieldName_port, deviceAttrs.portName],
+      [
+        texts.deviceInformation.fieldName_keyboardName,
+        deviceAttrs.keyboardName,
+      ],
       ['projectId', deviceAttrs.projectId],
       ['variationId', deviceAttrs.variationId],
+      [texts.deviceInformation.fieldName_firmwareId, deviceAttrs.firmwareId],
       [
         texts.deviceInformation.fieldName_instanceNumber,
         deviceAttrs.deviceInstanceCode,
       ],
-      [texts.deviceInformation.fieldName_keyboardName, deviceAttrs.productName],
-      ['manufacturerName', deviceAttrs.manufacturerName],
+      // ['manufacturerName', deviceAttrs.manufacturerName],
       [
         texts.deviceInformation.fieldName_firmwareVariation,
         deviceAttrs.firmwareVariationName,

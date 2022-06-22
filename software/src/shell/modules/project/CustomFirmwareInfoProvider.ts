@@ -9,7 +9,6 @@ import {
   fetchJson,
   fsExistsSync,
   fsxReadFile,
-  globAsync,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -64,11 +63,11 @@ namespace LocalRepositoryFirmwareListLoader {
     firmwareLocalBinaryFilePath: string;
   };
 
-  async function loadLocalFirmwareInfo(
+  function loadLocalFirmwareInfo(
     elfFilePath: string,
     projectsRoot: string,
     buildsRoot: string,
-  ): Promise<ICustomFirmwareInfo_WithBinaryFilePath | undefined> {
+  ): ICustomFirmwareInfo_WithBinaryFilePath | undefined {
     const variationPath = pathRelative(buildsRoot, pathDirname(elfFilePath));
 
     try {
@@ -83,13 +82,13 @@ namespace LocalRepositoryFirmwareListLoader {
         return undefined;
       }
 
-      const configContent = await fsxReadFile(configFilePath);
+      const configContent = fsxReadFile(configFilePath);
       const firmwareId =
         getMatched(
           configContent,
           /^#define KERMITE_FIRMWARE_ID "([a-zA-Z0-9]+)"$/m,
         ) ?? '';
-      const rulesMkContent = await fsxReadFile(ruleMkFilePath);
+      const rulesMkContent = fsxReadFile(ruleMkFilePath);
       const targetDevice =
         (getMatched(
           rulesMkContent,
@@ -127,22 +126,23 @@ namespace LocalRepositoryFirmwareListLoader {
     return undefined;
   }
 
-  async function loadLocalFirmwareInfosImpl(
+  function loadLocalFirmwareInfosImpl(
     localRepositoryDir: string,
-  ): Promise<ICustomFirmwareInfo_WithBinaryFilePath[]> {
-    const projectsRoot = pathJoin(localRepositoryDir, 'firmware/src/projects');
-    const buildsRoot = pathJoin(localRepositoryDir, 'firmware/build');
-    const elfFilePaths = await globAsync(`${buildsRoot}/**/*.elf`);
-    const allFirmwareInfos = await Promise.all(
-      elfFilePaths.map(
-        async (elfFilePath) =>
-          await loadLocalFirmwareInfo(elfFilePath, projectsRoot, buildsRoot),
-      ),
-    );
-    const firmwareInfos = allFirmwareInfos.filter(
-      (it) => !!it,
-    ) as ICustomFirmwareInfo_WithBinaryFilePath[];
-    return firmwareInfos;
+  ): ICustomFirmwareInfo_WithBinaryFilePath[] {
+    throw new Error('obsolete function invoked');
+    // const projectsRoot = pathJoin(localRepositoryDir, 'firmware/src/projects');
+    // const buildsRoot = pathJoin(localRepositoryDir, 'firmware/build');
+    // const elfFilePaths = await globAsync(`${buildsRoot}/**/*.elf`);
+    // const allFirmwareInfos = await Promise.all(
+    //   elfFilePaths.map(
+    //     async (elfFilePath) =>
+    //       await loadLocalFirmwareInfo(elfFilePath, projectsRoot, buildsRoot),
+    //   ),
+    // );
+    // const firmwareInfos = allFirmwareInfos.filter(
+    //   (it) => !!it,
+    // ) as ICustomFirmwareInfo_WithBinaryFilePath[];
+    // return firmwareInfos;
   }
 
   const cashed = new (class {
@@ -150,16 +150,14 @@ namespace LocalRepositoryFirmwareListLoader {
     items: ICustomFirmwareInfo_WithBinaryFilePath[] = [];
   })();
 
-  export async function loadLocalFirmwareInfos(): Promise<
-    ICustomFirmwareInfo_WithBinaryFilePath[]
-  > {
+  export function loadLocalFirmwareInfos(): ICustomFirmwareInfo_WithBinaryFilePath[] {
     const localRepositoryDir = globalSettingsReader.getLocalRepositoryDir();
     if (!localRepositoryDir) {
       return [];
     }
     if (localRepositoryDir !== cashed.localRepositoryDir) {
       cashed.localRepositoryDir = localRepositoryDir;
-      cashed.items = await loadLocalFirmwareInfosImpl(localRepositoryDir);
+      cashed.items = loadLocalFirmwareInfosImpl(localRepositoryDir);
     }
     return cashed.items;
   }
@@ -175,7 +173,7 @@ export const customFirmwareInfoProvider = {
     state.onlineFirmwareInfos ||=
       await OnlineFirmwareListLoader.loadOnlineFirmwareInfos();
     const localFirmwareInfos =
-      await LocalRepositoryFirmwareListLoader.loadLocalFirmwareInfos();
+      LocalRepositoryFirmwareListLoader.loadLocalFirmwareInfos();
     state.firmwareIdToLocalBinaryFilePathMap = Object.fromEntries(
       localFirmwareInfos.map((it) => [
         it.firmwareId,

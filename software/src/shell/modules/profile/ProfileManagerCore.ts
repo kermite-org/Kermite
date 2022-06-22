@@ -15,7 +15,7 @@ import {
   fsxReaddir,
   fsxReadJsonFile,
   fsxRenameFile,
-  globAsync,
+  listAllFilesNameEndWith,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -43,15 +43,13 @@ function getProfileFilePath(profileEntry: IProfileEntry): string {
   );
 }
 
-async function getProfileEntry(
+function getProfileEntry(
   relativeFilePath: string,
   profilesBaseDir: string,
-): Promise<IProfileEntry> {
+): IProfileEntry {
   const projectId = pathDirname(relativeFilePath).slice(0, 6);
   const filePath = pathJoin(profilesBaseDir, relativeFilePath);
-  const userProfileData = (await fsxReadJsonFile(
-    filePath,
-  )) as IPersistProfileFileData;
+  const userProfileData = fsxReadJsonFile(filePath) as IPersistProfileFileData;
   const profileNameFromContent = userProfileData.profileName || '';
   const profileNameFromFileName = pathBasename(
     relativeFilePath,
@@ -75,102 +73,94 @@ export const profileManagerCore = {
     const folderPath = `data/profiles/${folderName}`;
     return appEnv.resolveUserDataFilePath(folderPath);
   },
-  async ensureProfilesDirectoryExists() {
+  ensureProfilesDirectoryExists() {
     const dataDirPath = appEnv.resolveUserDataFilePath('data');
-    await fsxEnsureFolderExists(dataDirPath);
+    fsxEnsureFolderExists(dataDirPath);
     const profilesBaseDir = appEnv.resolveUserDataFilePath('data/profiles');
-    await fsxEnsureFolderExists(profilesBaseDir);
+    fsxEnsureFolderExists(profilesBaseDir);
   },
-  async migrateOldProfileFolderNames() {
+  migrateOldProfileFolderNames() {
     const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
-    const folderNames = await fsxReaddir(profilesBaseDir);
+    const folderNames = fsxReaddir(profilesBaseDir);
     for (const folderName of folderNames) {
       const modFolderName = getProjectProfileFolderName(folderName);
       if (modFolderName !== folderName) {
         const srcPath = pathJoin(profilesBaseDir, folderName);
         const dstPath = pathJoin(profilesBaseDir, modFolderName);
         console.log(`rename folder ${folderName} ${modFolderName}`);
-        await fsxRenameFile(srcPath, dstPath);
+        fsxRenameFile(srcPath, dstPath);
       }
     }
   },
-  async listAllProfileEntries(): Promise<IProfileEntry[]> {
+  listAllProfileEntries(): IProfileEntry[] {
     const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
-    const relativeFilePaths = await globAsync(
-      '*/*.profile.json',
+    const relativeFilePaths = listAllFilesNameEndWith(
+      'profile.json',
       profilesBaseDir,
     );
-    const allProfileEntries = await Promise.all(
-      relativeFilePaths.map((relPath) =>
-        getProfileEntry(relPath, profilesBaseDir),
-      ),
+    const allProfileEntries = relativeFilePaths.map((relPath) =>
+      getProfileEntry(relPath, profilesBaseDir),
     );
     return allProfileEntries.filter(
       (it) =>
         validateResourceName(it.profileName, 'profile name') === undefined,
     );
   },
-  async loadProfile(profileEntry: IProfileEntry): Promise<IProfileData> {
+  loadProfile(profileEntry: IProfileEntry): IProfileData {
     const filePath = getProfileFilePath(profileEntry);
-    const profileData = await ProfileFileLoader.loadProfileFromFile(filePath);
+    const profileData = ProfileFileLoader.loadProfileFromFile(filePath);
     profileData.projectId = profileEntry.projectId;
     return profileData;
   },
-  async ensureSavingFolder(filePath: string) {
-    await fsxEnsureFolderExists(pathDirname(filePath));
+  ensureSavingFolder(filePath: string) {
+    fsxEnsureFolderExists(pathDirname(filePath));
   },
-  async saveProfile(
-    profileEntry: IProfileEntry,
-    profileData: IProfileData,
-  ): Promise<void> {
+  saveProfile(profileEntry: IProfileEntry, profileData: IProfileData): void {
     const filePath = getProfileFilePath(profileEntry);
     console.log(`saving current profile to ${pathBasename(filePath)}`);
-    await this.ensureSavingFolder(filePath);
-    await ProfileFileLoader.saveProfileToFile(
+    this.ensureSavingFolder(filePath);
+    ProfileFileLoader.saveProfileToFile(
       filePath,
       profileData,
       profileEntry.profileName,
     );
   },
-  async loadExternalProfileFile(filePath: string): Promise<IProfileData> {
-    return await ProfileFileLoader.loadProfileFromFile(filePath);
+  loadExternalProfileFile(filePath: string): IProfileData {
+    return ProfileFileLoader.loadProfileFromFile(filePath);
   },
-  async saveExternalProfileFile(
-    filePath: string,
-    profileData: IProfileData,
-  ): Promise<void> {
+  saveExternalProfileFile(filePath: string, profileData: IProfileData): void {
     const profileName = pathBasename(filePath, '.profile.json');
     const baseDir = pathDirname(filePath);
     const savingFilePath = pathJoin(baseDir, profileName.toLowerCase());
-    await ProfileFileLoader.saveProfileToFile(
+    ProfileFileLoader.saveProfileToFile(
       savingFilePath,
       profileData,
       profileName,
     );
   },
-  async deleteProfile(profileEntry: IProfileEntry): Promise<void> {
+  deleteProfile(profileEntry: IProfileEntry): void {
     const filePath = getProfileFilePath(profileEntry);
-    await fspUnlink(filePath);
+    fspUnlink(filePath);
     const folderPath = pathDirname(filePath);
-    const fileNames = await fspReaddir(folderPath);
+    const fileNames = fspReaddir(folderPath);
     if (fileNames.length === 0) {
       fsRmdirSync(folderPath);
     }
   },
-  async renameProfile(
+  renameProfile(
     profileEntry: IProfileEntry,
     newProfileEntry: IProfileEntry,
-  ): Promise<void> {
+  ): void {
     const srcPath = getProfileFilePath(profileEntry);
     const dstPath = getProfileFilePath(newProfileEntry);
-    await fspRename(srcPath, dstPath);
+    fspRename(srcPath, dstPath);
   },
-  async copyProfile(
+  copyProfile(
     profileEntry: IProfileEntry,
     newProfileEntry: IProfileEntry,
-  ): Promise<void> {
+  ): void {
     const srcPath = getProfileFilePath(profileEntry);
     const dstPath = getProfileFilePath(newProfileEntry);
-    await fspCopyFile(srcPath, dstPath);
+    fspCopyFile(srcPath, dstPath);
   },
 };

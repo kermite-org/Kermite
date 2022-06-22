@@ -12,18 +12,23 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     return this.core.realtimeEventPort;
   }
 
-  selectTargetDevice(path: string) {
-    this.selectionManager.selectTargetDevice(path);
+  async selectTargetDevice(path: string) {
+    await this.selectionManager.selectTargetDevice(path);
     this.core.setDevice(this.selectionManager.getDevice());
   }
 
-  initialize() {
-    this.selectionManager.initialize();
+  async selectHidDevice() {
+    await this.selectionManager.selectHidDevice();
     this.core.setDevice(this.selectionManager.getDevice());
   }
 
-  disposeConnectedHidDevice() {
-    this.selectionManager.disposeConnectedHidDevice();
+  async initialize() {
+    await this.selectionManager.initialize();
+    this.core.setDevice(this.selectionManager.getDevice());
+  }
+
+  async disposeConnectedHidDevice() {
+    await this.selectionManager.disposeConnectedHidDevice();
   }
 
   terminate() {

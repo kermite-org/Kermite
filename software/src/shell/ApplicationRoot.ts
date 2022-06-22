@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { shell } from 'electron';
+import { memoryFileSystem } from '~/memoryFileSystem';
 import { getAppErrorData, ICoreState, makeCompactStackTrace } from '~/shared';
 import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import {
-  executeWithFatalErrorHandler,
+  executeWithFatalErrorHandlerSync,
   reportShellError,
 } from '~/shell/base/ErrorChecker';
 import { pathResolve } from '~/shell/funcs';
@@ -30,7 +30,7 @@ import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModu
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
-import { AppWindowWrapper, createWindowModule } from '~/shell/services/window';
+import { createWindowModule } from './services/window/AppWindowWrapper';
 
 export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();
@@ -39,38 +39,61 @@ export class ApplicationRoot {
 
   private inputLogicSimulator = new InputLogicSimulator(this.deviceService);
 
-  private windowWrapper = new AppWindowWrapper();
+  // private windowWrapper = new AppWindowWrapper();
 
   // ------------------------------------------------------------
 
   private setupIpcBackend() {
-    appGlobal.icpMainAgent.setErrorHandler((error) => {
+    appGlobal.ipcMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
       appGlobal.appErrorEventPort.emit(
         getAppErrorData(error, appEnv.resolveApplicationRootDir()),
       );
     });
 
-    appGlobal.icpMainAgent.supplySyncHandlers({
+    appGlobal.ipcMainAgent.supplySyncHandlers({
       dev_debugMessage: (msg) => console.log(`[renderer] ${msg}`),
     });
 
-    appGlobal.icpMainAgent.supplyAsyncHandlers({
+    appGlobal.ipcMainAgent.supplyAsyncHandlers({
       profile_getCurrentProfile: async () => profilesReader.getCurrentProfile(),
-      device_connectToDevice: async (path) =>
+      device_connectToDevice: (path) =>
         this.deviceService.selectTargetDevice(path),
+      device_selectHidDevice: () => this.deviceService.selectHidDevice(),
       device_setCustomParameterValue: async (index, value) =>
         this.deviceService.setCustomParameterValue(index, value),
       device_resetParameters: async () => this.deviceService.resetParameters(),
-      firmup_uploadFirmware: (origin, projectId, variationId, firmwareOrigin) =>
+      firmup_uploadFirmware: async (
+        origin,
+        projectId,
+        variationId,
+        firmwareOrigin,
+      ) =>
         this.firmwareUpdateService.writeFirmware(
           origin,
           projectId,
           variationId,
           firmwareOrigin,
         ),
-      firmup_writeStandardFirmwareDirect: (packageInfo, variationId) =>
+      firmup_writeStandardFirmwareDirect: async (packageInfo, variationId) =>
         this.firmwareUpdateService.writeStandardFirmwareDirect(
+          packageInfo,
+          variationId,
+        ),
+      firmup_downloadFirmwareUf2File: (
+        origin,
+        projectId,
+        variationId,
+        firmwareOrigin,
+      ) =>
+        this.firmwareUpdateService.downloadFirmwareUf2File(
+          origin,
+          projectId,
+          variationId,
+          firmwareOrigin,
+        ),
+      firmup_downloadFirmwareUf2FileFromPackage: (packageInfo, variationId) =>
+        this.firmwareUpdateService.downloadFirmwareUf2FileFromPackage(
           packageInfo,
           variationId,
         ),
@@ -100,20 +123,23 @@ export class ApplicationRoot {
         fileDialogLoaders.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         fileDialogLoaders.loadObjectFromJsonWithFileDialog,
-      file_saveObjectToJsonWithFileDialog:
-        fileDialogLoaders.saveObjectToJsonWithFileDialog,
+      file_saveObjectToJsonWithFileDialog: async (obj) =>
+        fileDialogLoaders.saveObjectToJsonWithFileDialog(obj),
       file_getOpenDirectoryWithDialog:
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
       file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,
 
-      platform_openUrlInDefaultBrowser: (path) => shell.openExternal(path),
+      platform_openUrlInDefaultBrowser: (_path) => {
+        // shell.openExternal(path)
+        throw new Error('obsolete function invoked');
+      },
       global_lazyInitializeServices: () => this.lazyInitializeServices(),
 
       global_dispatchCoreAction: async (action) =>
         await dispatchCoreAction(action),
     });
 
-    appGlobal.icpMainAgent.supplySubscriptionHandlers({
+    appGlobal.ipcMainAgent.supplySubscriptionHandlers({
       global_appErrorEvents: (cb) => appGlobal.appErrorEventPort.subscribe(cb),
       device_keyEvents: (cb) => {
         this.deviceService.realtimeEventPort.subscribe(cb);
@@ -134,12 +160,13 @@ export class ApplicationRoot {
     }
   };
 
-  async initialize() {
-    await executeWithFatalErrorHandler(async () => {
+  initialize() {
+    executeWithFatalErrorHandlerSync(() => {
+      memoryFileSystem.initialize();
       console.log(`initialize services`);
-      await applicationStorage.initializeAsync();
+      applicationStorage.initialize();
       this.setupIpcBackend();
-      this.windowWrapper.initialize();
+      // this.windowWrapper.initialize();
     });
   }
 
@@ -148,7 +175,7 @@ export class ApplicationRoot {
   async lazyInitializeServices() {
     if (!this._lazyInitializeTriggered) {
       this._lazyInitializeTriggered = true;
-      const windowModule = createWindowModule(this.windowWrapper);
+      const windowModule = createWindowModule();
       coreActionDistributor.addReceivers(
         globalSettingsModule,
         projectPackageModule,
@@ -168,10 +195,14 @@ export class ApplicationRoot {
       const kermiteServerProjectIds =
         await userPresetHubDataLoader.getServerProjectIds();
       commitCoreState({ kermiteServerProjectIds });
-      await profileManagerRoot.initializeAsync().catch(reportShellError);
-      await layoutManagerRoot.initializeAsync();
+      try {
+        profileManagerRoot.initialize();
+      } catch (err) {
+        reportShellError(err);
+      }
+      layoutManagerRoot.initialize();
       coreStateManager.coreStateEventPort.subscribe(this.onCoreStateChange);
-      this.deviceService.initialize();
+      await this.deviceService.initialize();
       this.inputLogicSimulator.initialize();
       commitCoreState({
         applicationVersionInfo: {
@@ -181,20 +212,22 @@ export class ApplicationRoot {
     }
   }
 
-  disposeConnectedHidDevice() {
-    this.deviceService.disposeConnectedHidDevice();
+  async disposeConnectedHidDevice() {
+    await this.deviceService.disposeConnectedHidDevice();
   }
 
-  async terminate() {
-    await executeWithFatalErrorHandler(async () => {
+  terminate() {
+    executeWithFatalErrorHandlerSync(() => {
       console.log(`terminate services`);
       this.inputLogicSimulator.terminate();
       this.deviceService.terminate();
-      this.windowWrapper.terminate();
+      // this.windowWrapper.terminate();
       profileManagerRoot.terminate();
       layoutManagerRoot.terminate();
       coreStateManager.coreStateEventPort.unsubscribe(this.onCoreStateChange);
-      await applicationStorage.terminateAsync();
+      applicationStorage.terminate();
+      memoryFileSystem.terminate();
     });
+    this.disposeConnectedHidDevice();
   }
 }

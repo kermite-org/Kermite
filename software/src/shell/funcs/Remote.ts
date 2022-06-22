@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
 import { AppError } from '~/shared';
 
 export async function fetchJson(uri: string): Promise<any> {

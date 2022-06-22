@@ -1,4 +1,4 @@
-import { app, dialog } from 'electron';
+// import { app, dialog } from 'electron';
 import { getAppErrorData, makeCompactStackTrace } from '~/shared';
 import { appEnv } from '~/shell/base/AppEnv';
 import { appGlobal } from '~/shell/base/AppGlobal';
@@ -53,10 +53,21 @@ export async function executeWithFatalErrorHandler(
   try {
     await func();
   } catch (error: any) {
-    dialog.showErrorBox(
-      'Error',
-      error.stack || error.message || error.toString(),
-    );
-    app.quit();
+    // dialog.showErrorBox(
+    //   'Error',
+    //   error.stack || error.message || error.toString(),
+    // );
+    // app.quit();
+    alert(`Error\n\n${error.stack || error.message || error.toString()}`);
+    window.stop();
+  }
+}
+
+export function executeWithFatalErrorHandlerSync(func: () => void): void {
+  try {
+    func();
+  } catch (error: any) {
+    alert(`Error\n\n${error.stack || error.message || error.toString()}`);
+    window.stop();
   }
 }

@@ -93,6 +93,21 @@ const actions = {
       state.phase = 'WaitingReset';
     }
   },
+
+  async downloadFirmwareUf2File() {
+    const { projectInfo, variationId } = state;
+    if (projectInfo && variationId) {
+      // try {
+      //   uiActions.setLoading();
+      await ipcAgent.async.firmup_downloadFirmwareUf2FileFromPackage(
+        projectInfo,
+        variationId,
+      );
+      // } finally {
+      //   uiActions.clearLoading();
+      // }
+    }
+  },
 };
 
 type IStandardFirmwareFlashPartModel = {
@@ -100,6 +115,7 @@ type IStandardFirmwareFlashPartModel = {
   detectedDeviceSig: string | undefined;
   canFlashFirmwareToDetectedDevice: boolean;
   onWriteButton(): void;
+  onDownloadButton(): void;
   targetDeviceType: IFirmwareTargetDevice | undefined;
 };
 
@@ -124,12 +140,13 @@ export function useStandardFirmwareFlashPartModel(
     [],
   );
   const { detectedDeviceSig, canFlashFirmwareToDetectedDevice } = readers;
-  const { uploadFirmware } = actions;
+  const { uploadFirmware, downloadFirmwareUf2File } = actions;
   return {
     phase: state.phase,
     detectedDeviceSig,
     canFlashFirmwareToDetectedDevice,
     onWriteButton: uploadFirmware,
+    onDownloadButton: downloadFirmwareUf2File,
     targetDeviceType: state.targetDeviceType,
   };
 }

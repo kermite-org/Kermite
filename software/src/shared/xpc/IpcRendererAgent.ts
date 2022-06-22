@@ -41,7 +41,7 @@ interface ISubscriptionEntry {
 }
 
 export function getIpcRendererAgent<
-  T extends IIpcContractBase
+  T extends IIpcContractBase,
 >(): IIpcRendererAgent<T> {
   const ipcRenderer = (window as any).ipcRenderer as IpcRenderer;
 
@@ -69,7 +69,7 @@ export function getIpcRendererAgent<
   }
 
   function subscribe<K extends keyof T['events']>(
-    propKey: K,
+    propKey: Extract<K, string>,
     listener: (value: T['events'][K]) => void,
   ) {
     const subscriptionKey = `${propKey}_${(Math.random() * 100000) >> 0}`; // todo GUIDのようなものを使う
@@ -89,7 +89,7 @@ export function getIpcRendererAgent<
   }
 
   function unsubscribe<K extends keyof T['events']>(
-    propKey: K,
+    propKey: Extract<K, string>,
     listener: (value: T['events'][K]) => void,
   ) {
     const entry = subscriptionEntries.find(

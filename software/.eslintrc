@@ -2,7 +2,7 @@
   "plugins": ["@typescript-eslint", "react", "import", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": "./tsconfig.eslint.json",
     "ecmaVersion": 2018,
     "sourceType": "module",
     "ecmaFeatures": {
@@ -61,7 +61,7 @@
     "@typescript-eslint/no-misused-promises": 0,
     "@typescript-eslint/restrict-template-expressions": 0,
     "@typescript-eslint/prefer-regexp-exec": 0,
-    "@typescript-eslint/await-thenable": 1,
+    "@typescript-eslint/await-thenable": 2,
     "@typescript-eslint/no-unnecessary-type-assertion": 0,
     "@typescript-eslint/no-unsafe-call": 0,
 
@@ -134,6 +134,6 @@
     "no-console": 0,
     "eqeqeq": [1, "always"],
     "node/no-path-concat": 0,
-    "no-alert": 2
+    "no-alert": 0
   }
 }

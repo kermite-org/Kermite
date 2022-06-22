@@ -1,5 +1,10 @@
 import { languageSelectionStore, themeSelectionStore } from '~/ui/commonModels';
-import { globalSettingsWriter, uiActions, uiState } from '~/ui/store';
+import {
+  globalSettingsWriter,
+  uiActions,
+  uiReaders,
+  uiState,
+} from '~/ui/store';
 
 interface IWelcomePageStore {
   readers: {
@@ -34,7 +39,7 @@ function createWelcomePageStore(): IWelcomePageStore {
       return themeSelectionStore.currentThemeKey === 'dark';
     },
     get isDeveloperMode() {
-      return themeSelectionStore.currentThemeKey === 'light';
+      return uiReaders.isDeveloperMode;
     },
   };
 
@@ -45,12 +50,14 @@ function createWelcomePageStore(): IWelcomePageStore {
     setLanguageJapanese() {
       languageSelectionStore.changeLanguage('japanese');
     },
-    showProfileSetupWizard() {},
+    showProfileSetupWizard() {
+      uiActions.showProfileSetupWizard();
+    },
     setDarkTheme(isDark: boolean) {
       themeSelectionStore.changeTheme(isDark ? 'dark' : 'light');
     },
     showProjectQuickSetupWizard() {
-      uiActions.showProfileSetupWizard();
+      uiActions.showProjectQuickSetupWizard();
     },
     setDeveloperMode(value: boolean) {
       globalSettingsWriter.writeValue('developerMode', value);

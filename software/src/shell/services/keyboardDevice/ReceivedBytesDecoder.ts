@@ -10,8 +10,12 @@ export type IDeviceAttributesReadResponseData = {
   profileBinaryFormatRevision: number;
   rawHidMessageProtocolRevision: number;
   resourceOrigin: IResourceOrigin;
+  projectId: string;
+  variationId: string;
+  firmwareId: string;
   deviceInstanceCode: string;
   assignStorageCapacity: number;
+  kermiteMcuCode: string;
 };
 
 export type ICustomParametersReadResponseData = {
@@ -50,12 +54,14 @@ export function receivedBytesDecoder(
     const configStorageFormatRevision = buf[2];
     const profileBinaryFormatRevision = buf[3];
     const configParametersRevision = buf[4];
-    // const kermiteMcuCode = bytesToString([...buf].slice(5, 15));
-    // const firmwareId = bytesToString([...buf].slice(15, 21));
+    const kermiteMcuCode = bytesToString([...buf.slice(5, 8)]);
+    const projectId = bytesToString([...buf.slice(8, 14)]);
+    const firmwareId = bytesToString([...buf.slice(15, 21)]);
     const isProjectOriginOnline = !!buf[21];
     const projectReleaseBuildRevision = (buf[22] << 8) | buf[23];
-    const firmwareVariationName = bytesToString([...buf].slice(24, 40));
-    const deviceInstanceCode = bytesToString([...buf].slice(40, 44));
+    const firmwareVariationName = bytesToString([...buf.slice(24, 40)]);
+    const deviceInstanceCode = bytesToString([...buf.slice(40, 44)]);
+    const variationId = bytesToString([...buf.slice(44, 46)]);
     const assignStorageCapacity = (buf[48] << 8) | buf[49];
     return {
       type: 'deviceAttributeResponse',
@@ -69,6 +75,10 @@ export function receivedBytesDecoder(
         resourceOrigin: isProjectOriginOnline ? 'online' : 'local',
         deviceInstanceCode,
         assignStorageCapacity,
+        kermiteMcuCode,
+        projectId,
+        variationId,
+        firmwareId,
       },
     };
   }

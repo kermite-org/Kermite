@@ -35,12 +35,10 @@ export namespace ProfileFileLoader {
     return ProfileDataConverter.convertProfileDataFromPersist(profileData);
   }
 
-  export async function loadProfileFromFile(
-    filePath: string,
-  ): Promise<IProfileData> {
-    const profileFileData = (await fsxReadJsonFile(
+  export function loadProfileFromFile(filePath: string): IProfileData {
+    const profileFileData = fsxReadJsonFile(
       filePath,
-    )) as IPersistProfileFileData;
+    ) as IPersistProfileFileData;
     return convertProfileDataFromPersistProfileData(profileFileData, filePath);
   }
 
@@ -52,16 +50,16 @@ export namespace ProfileFileLoader {
     return convertProfileDataFromPersistProfileData(profileFileData, uri);
   }
 
-  export async function saveProfileToFile(
+  export function saveProfileToFile(
     filePath: string,
     profileData: IProfileData,
     profileName: string,
-  ): Promise<void> {
+  ): void {
     const persistProfileData =
       ProfileDataConverter.convertProfileToPersistFileData(
         profileData,
         profileName,
       );
-    await fsxWriteJsonFile(filePath, persistProfileData);
+    fsxWriteJsonFile(filePath, persistProfileData);
   }
 }

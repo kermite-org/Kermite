@@ -14,6 +14,8 @@ export const FirmwareUpdatePart: FC = () => {
     onWriteButton,
     onResetButton,
     onLogButton,
+    isFirmwareSelected,
+    onDownloadButton,
   } = useFirmwareUpdatePartModel();
 
   return (
@@ -33,7 +35,13 @@ export const FirmwareUpdatePart: FC = () => {
           />
         </div>
 
-        <div class="statusRow">
+        <div>
+          <button onClick={onDownloadButton} disabled={!isFirmwareSelected}>
+            uf2ファイルダウンロード
+          </button>
+        </div>
+
+        <div class="statusRow" if={false}>
           {phase === 'WaitingReset' && (
             <div>{texts.deviceFirmwareUpdate.usageText}</div>
           )}

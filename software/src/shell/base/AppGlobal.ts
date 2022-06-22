@@ -1,16 +1,12 @@
-import { BrowserWindow } from 'electron';
+// import { BrowserWindow } from 'electron';
 import { IAppErrorData, IAppIpcContract } from '~/shared';
-import { IpcMainAgent } from '~/shared/xpc/IpcMainAgent';
+import { createIpcAgentBypassed } from '~/shared/xpc/IpcAgentBypassed';
 import { createEventPort } from '~/shell/funcs';
 
-// interface IAppInternalEvents {
-//   keyboardConfigChanged: IKeyboardConfig;
-// }
 export const appGlobal = new (class {
-  mainWindow: BrowserWindow | undefined = undefined;
-  icpMainAgent = new IpcMainAgent<IAppIpcContract>();
-  // eventBus = new TypedEventEmitter<IAppInternalEvents>();
+  // mainWindow: BrowserWindow | undefined = undefined;
+  // icpMainAgent = new IpcMainAgent<IAppIpcContract>();
+  ipcMainAgent = createIpcAgentBypassed<IAppIpcContract>();
   appErrorEventPort = createEventPort<IAppErrorData<any>>();
-
   getSimulatorMode = () => false;
 })();

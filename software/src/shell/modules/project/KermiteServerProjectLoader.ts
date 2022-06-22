@@ -51,68 +51,58 @@ function convertOnlinePackageDataToPackageInfo(
   };
 }
 
-async function loadProjectPackageWrapperFiles(
+function loadProjectPackageWrapperFiles(
   folderPath: string,
-): Promise<IProjectPackageInfo[]> {
-  const projectKeys = await fsxListFileBaseNames(
-    folderPath,
-    '.kmpkg_wrapper.json',
-  );
-  const items = (
-    await Promise.all(
-      projectKeys.map(async (projectKey) => {
-        const isAudit = projectKey.endsWith('_audit');
-        const filePath = pathJoin(
-          folderPath,
-          `${projectKey}.kmpkg_wrapper.json`,
-        );
-        const wrapperItem = (await fsxReadJsonFile(
-          filePath,
-        )) as IProjectPackageWrapperFileContent;
+): IProjectPackageInfo[] {
+  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper.json');
+  const items = projectKeys
+    .map((projectKey) => {
+      const isAudit = projectKey.endsWith('_audit');
+      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper.json`);
+      const wrapperItem = fsxReadJsonFile(
+        filePath,
+      ) as IProjectPackageWrapperFileContent;
 
-        const packageFileContent = wrapperItem.data;
+      const packageFileContent = wrapperItem.data;
 
-        migrateProjectPackageData(packageFileContent);
-        if (!checkProjectFileContentSchema(packageFileContent)) {
-          console.log(`invalid online package ${projectKey}`);
-          return undefined;
-        }
+      migrateProjectPackageData(packageFileContent);
+      if (!checkProjectFileContentSchema(packageFileContent)) {
+        console.log(`invalid online package ${projectKey}`);
+        return undefined;
+      }
 
-        const {
-          authorDisplayName,
-          authorIconUrl,
-          isOfficial,
-          isDevelopment,
-          revision,
-        } = wrapperItem;
-        const attrs: IOnlineProjectAttributes = {
-          authorDisplayName,
-          authorIconUrl,
-          isOfficial,
-          isDevelopment,
-          revision,
-        };
-        return convertOnlinePackageDataToPackageInfo(
-          packageFileContent,
-          attrs,
-          isAudit,
-        );
-      }),
-    )
-  ).filter((it) => it) as IProjectPackageInfo[];
+      const {
+        authorDisplayName,
+        authorIconUrl,
+        isOfficial,
+        isDevelopment,
+        revision,
+      } = wrapperItem;
+      const attrs: IOnlineProjectAttributes = {
+        authorDisplayName,
+        authorIconUrl,
+        isOfficial,
+        isDevelopment,
+        revision,
+      };
+      return convertOnlinePackageDataToPackageInfo(
+        packageFileContent,
+        attrs,
+        isAudit,
+      );
+    })
+    .filter((it) => it) as IProjectPackageInfo[];
   return items;
 }
 
 let cachedRemotePackages: IProjectPackageInfo[] | undefined;
 
-export async function loadKermiteServerProjectPackageInfos(): Promise<
-  IProjectPackageInfo[]
-> {
+export function loadKermiteServerProjectPackageInfos(): IProjectPackageInfo[] {
   if (!cachedRemotePackages) {
     const remotePackagesLocalFolderPath = appEnv.resolveUserDataFilePath(
       'data/kermite_server_projects',
     );
-    cachedRemotePackages = await loadProjectPackageWrapperFiles(
+    cachedRemotePackages = loadProjectPackageWrapperFiles(
       remotePackagesLocalFolderPath,
     );
   }

@@ -1,8 +1,10 @@
 import { IFirmwareTargetDevice } from '~/shared';
 
 export type IFirmwareBinaryFileSpec = {
-  filePath: string;
+  // filePath: string;
+  fileName: string;
   targetDevice: IFirmwareTargetDevice;
+  fileContentBytes: Uint8Array;
 };
 
 export interface IFirmwareUpdateScheme {

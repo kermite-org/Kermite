@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import produce from 'immer';
 import {
   createFallbackPersistKeyboardDesign,
@@ -48,7 +47,7 @@ export const layoutManagerModule = createCoreModule({
       });
     }
   },
-  async layout_overwriteCurrentLayout({ design }) {
+  layout_overwriteCurrentLayout({ design }) {
     const { layoutEditSource } = coreState;
     if (layoutEditSource.type === 'LayoutNewlyCreated') {
       throw new Error('cannot save newly created layout');
@@ -57,13 +56,13 @@ export const layoutManagerModule = createCoreModule({
       if (profile) {
         const newProfile = duplicateObjectByJsonStringifyParse(profile);
         newProfile.keyboardDesign = design;
-        await dispatchCoreAction({
+        dispatchCoreAction({
           profile_saveCurrentProfile: { profileData: newProfile },
         });
       }
     } else if (layoutEditSource.type === 'File') {
       const { filePath } = layoutEditSource;
-      await LayoutFileLoader.saveLayoutToFile(filePath, design);
+      LayoutFileLoader.saveLayoutToFile(filePath, design);
     } else if (layoutEditSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = layoutEditSource;
       layoutManagerModule.layout_saveProjectLayout({
@@ -74,22 +73,22 @@ export const layoutManagerModule = createCoreModule({
     }
     commitCoreState({ loadedLayoutData: design });
   },
-  async layout_loadFromFile({ filePath }) {
-    const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(filePath);
+  layout_loadFromFile({ filePath }) {
+    const loadedDesign = LayoutFileLoader.loadLayoutFromFile(filePath);
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
       loadedLayoutData: loadedDesign,
     });
   },
-  async layout_saveToFile({ filePath, design }) {
-    await LayoutFileLoader.saveLayoutToFile(filePath, design);
+  layout_saveToFile({ filePath, design }) {
+    LayoutFileLoader.saveLayoutToFile(filePath, design);
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
       loadedLayoutData: design,
     });
   },
-  async layout_exportToFile({ filePath, design }) {
-    await LayoutFileLoader.saveLayoutToFile(filePath, design);
+  layout_exportToFile({ filePath, design }) {
+    LayoutFileLoader.saveLayoutToFile(filePath, design);
   },
   layout_createProjectLayout({ projectId, layoutName }) {
     const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
@@ -140,9 +139,10 @@ export const layoutManagerModule = createCoreModule({
     }
   },
   layout_showEditLayoutFileInFiler() {
-    const filePath = layoutManagerModuleHelper.getCurrentEditLayoutFilePath();
-    if (filePath) {
-      shell.showItemInFolder(filePath);
-    }
+    // const filePath = layoutManagerModuleHelper.getCurrentEditLayoutFilePath();
+    // if (filePath) {
+    //   shell.showItemInFolder(filePath);
+    // }
+    throw new Error('obsolete function invoked');
   },
 });

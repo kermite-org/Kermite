@@ -1,31 +1,32 @@
-import { app } from 'electron';
-import { pathJoin, pathResolve } from '~/shell/funcs';
+// import { app } from 'electron';
+import { pathJoin } from '~/shell/funcs';
+import { processEnv } from './AppConfig';
 
 export const appEnv = new (class {
-  isDevelopment = process.env.NODE_ENV === 'development';
+  isDevelopment = processEnv.NODE_ENV === 'development';
+  // isDevelopment = location.host === 'localhost';
 
-  platform = process.platform;
+  // platform = process.platform;
 
   get userDataFolderPath() {
-    return app.getPath('userData');
+    // return app.getPath('userData');
+    return '';
   }
 
   resolveUserDataFilePath(relPath: string) {
-    const appDataDir = app.getPath('userData');
-    return pathJoin(appDataDir, relPath);
-  }
-
-  resolveAssetsPath(relPath: string) {
-    const appDir = app.getAppPath();
-    return pathJoin(appDir, relPath);
+    // const appDataDir = app.getPath('userData');
+    // return pathJoin(appDataDir, relPath);
+    return relPath;
   }
 
   resolveTempFilePath(relPath: string) {
-    const tmpDir = app.getPath('temp');
-    return pathJoin(tmpDir, relPath);
+    // const tmpDir = app.getPath('temp');
+    // return pathJoin(tmpDir, relPath);
+    return pathJoin('temp', relPath);
   }
 
   resolveApplicationRootDir() {
-    return pathResolve();
+    // return pathResolve();
+    return '';
   }
 })();

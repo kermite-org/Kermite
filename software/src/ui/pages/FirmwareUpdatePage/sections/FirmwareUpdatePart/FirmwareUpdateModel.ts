@@ -56,15 +56,23 @@ const helpers = {
           const { projectKey, keyboardName } = info;
           const { firmwareName, variationId } = firmware;
           if (firmware.type === 'standard') {
-            return [
-              {
-                value: `${projectKey}:${variationId}:unspecified`,
-                label: `${projectOriginText} ${keyboardName} ${firmwareName}`,
-              },
-            ];
+            const isRp =
+              firmware.standardFirmwareConfig.baseFirmwareType.includes('Rp');
+            if (isRp) {
+              return [
+                {
+                  value: `${projectKey}:${variationId}:unspecified`,
+                  label: `${projectOriginText} ${keyboardName} ${firmwareName}`,
+                },
+              ];
+            } else {
+              return [];
+            }
           } else {
             const customFirmwares = allCustomFirmwareInfos.filter(
-              (it) => it.firmwareId === firmware.customFirmwareId,
+              (it) =>
+                it.firmwareId === firmware.customFirmwareId &&
+                it.targetDevice === 'rp2040',
             );
             return customFirmwares.map((customFirmware) => {
               const { firmwareOrigin } = customFirmware;
@@ -216,6 +224,27 @@ const actions = {
           state.phase = 'UploadFailure';
         }
       }
+    }
+  },
+
+  async downloadFirmwareUf2File() {
+    const [projectKey, variationId, firmwareOrigin] =
+      state.currentProjectFirmwareSpec.split(':');
+    const projectInfo = readers.projectInfosWithFirmware.find((it) =>
+      it.projectKey.startsWith(projectKey),
+    );
+    if (projectInfo) {
+      // try {
+      //   uiActions.setLoading();
+      await ipcAgent.async.firmup_downloadFirmwareUf2File(
+        projectInfo.origin,
+        projectInfo.projectId,
+        variationId,
+        firmwareOrigin as IFirmwareOriginEx,
+      );
+      // } finally {
+      //   uiActions.clearLoading();
+      // }
     }
   },
 };

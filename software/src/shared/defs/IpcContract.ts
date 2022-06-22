@@ -29,6 +29,7 @@ export interface IAppIpcContract {
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;
     device_resetParameters(): Promise<void>;
+    device_selectHidDevice(): Promise<void>;
 
     firmup_uploadFirmware(
       origin: IResourceOrigin,
@@ -41,6 +42,18 @@ export interface IAppIpcContract {
       packageInfo: IProjectPackageInfo,
       variationId: string,
     ): Promise<string>;
+
+    firmup_downloadFirmwareUf2File(
+      origin: IResourceOrigin,
+      projectId: string,
+      variationId: string,
+      firmwareOrigin: IFirmwareOriginEx,
+    ): Promise<void>;
+
+    firmup_downloadFirmwareUf2FileFromPackage(
+      packageInfo: IProjectPackageInfo,
+      variationId: string,
+    ): Promise<void>;
 
     file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
     file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;

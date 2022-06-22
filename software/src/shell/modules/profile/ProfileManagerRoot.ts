@@ -81,24 +81,22 @@ function fixEditSource(editSource: IProfileEditSource): IProfileEditSource {
   return editSource;
 }
 
-async function loadProfileByEditSource(
-  editSource: IProfileEditSource,
-): Promise<IProfileData> {
+function loadProfileByEditSource(editSource: IProfileEditSource): IProfileData {
   if (editSource.type === 'NoEditProfileAvailable') {
     return fallbackProfileData;
   } else if (editSource.type === 'ProfileNewlyCreated') {
     return fallbackProfileData;
   } else if (editSource.type === 'InternalProfile') {
-    return await profileManagerCore.loadProfile(editSource.profileEntry);
+    return profileManagerCore.loadProfile(editSource.profileEntry);
   }
   return fallbackProfileData;
 }
 
-async function patchStatusOnGlobalProjectIdChange() {
+function patchStatusOnGlobalProjectIdChange() {
   const currEditSource = coreState.profileEditSource;
   const modEditSource = fixEditSource(currEditSource);
   if (modEditSource !== currEditSource) {
-    const profile = await loadProfileByEditSource(modEditSource);
+    const profile = loadProfileByEditSource(modEditSource);
     commitCoreState({
       profileEditSource: modEditSource,
       loadedProfileData: profile,
@@ -128,15 +126,15 @@ function onCoreStateChange(partialState: Partial<ICoreState>) {
   }
 }
 
-async function initializeAsync() {
+function initialize() {
   local.globalProjectId = coreState.globalSettings.globalProjectSpec?.projectId;
-  await profileManagerCore.ensureProfilesDirectoryExists();
-  await profileManagerCore.migrateOldProfileFolderNames();
-  const allProfileEntries = await profileManagerCore.listAllProfileEntries();
+  profileManagerCore.ensureProfilesDirectoryExists();
+  profileManagerCore.migrateOldProfileFolderNames();
+  const allProfileEntries = profileManagerCore.listAllProfileEntries();
   commitCoreState({ allProfileEntries });
   const loadedEditSource = loadInitialEditSource();
   const editSource = fixEditSource(loadedEditSource);
-  const profile = await loadProfileByEditSource(editSource);
+  const profile = loadProfileByEditSource(editSource);
   commitCoreState({
     profileEditSource: editSource,
     loadedProfileData: profile,
@@ -149,6 +147,6 @@ function terminate() {
 }
 
 export const profileManagerRoot = {
-  initializeAsync,
+  initialize,
   terminate,
 };

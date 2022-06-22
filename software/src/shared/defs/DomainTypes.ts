@@ -175,6 +175,7 @@ export interface IKeyboardDeviceAttributes {
   projectId: string;
   variationId: string;
   deviceInstanceCode: string;
+  keyboardName: string;
   productName: string;
   manufacturerName: string;
   firmwareVariationName: string;

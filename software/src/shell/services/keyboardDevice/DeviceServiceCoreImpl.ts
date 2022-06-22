@@ -28,11 +28,16 @@ function createConnectedStatus(
     deviceAttrs: {
       origin: attrsRes.resourceOrigin,
       portName: keyboardDeviceInfo.portName,
-      mcuCode: keyboardDeviceInfo.mcuCode,
-      firmwareId: keyboardDeviceInfo.firmwareId,
-      projectId: keyboardDeviceInfo.projectId,
-      variationId: keyboardDeviceInfo.variationId,
+      // mcuCode: keyboardDeviceInfo.mcuCode,
+      // firmwareId: keyboardDeviceInfo.firmwareId,
+      // projectId: keyboardDeviceInfo.projectId,
+      // variationId: keyboardDeviceInfo.variationId,
+      mcuCode: attrsRes.kermiteMcuCode,
+      firmwareId: attrsRes.firmwareId,
+      projectId: attrsRes.projectId,
+      variationId: attrsRes.variationId,
       deviceInstanceCode: attrsRes.deviceInstanceCode,
+      keyboardName: keyboardDeviceInfo.productName.replace(/#.{4}$/, ''),
       productName: keyboardDeviceInfo.productName,
       manufacturerName: keyboardDeviceInfo.manufacturerName,
       firmwareVariationName: attrsRes.firmwareVariationName,
@@ -80,7 +85,7 @@ export class KeyboardDeviceServiceCore {
 
   private async loadDeviceInfo(device: IDeviceWrapper) {
     const setupRes = await deviceSetupTask(device);
-    // console.log({ res: setupRes });
+    console.log({ res: setupRes });
     if (setupRes) {
       this.setStatus(
         createConnectedStatus(

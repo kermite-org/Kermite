@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import {
   createProjectKey,
   IProjectPackageFileContent,
@@ -75,42 +74,36 @@ function convertProjectPackageInfoToFileContent(
   };
 }
 
-async function loadProjectPackageFiles(
+function loadProjectPackageFiles(
   folderPath: string,
   origin: IResourceOrigin,
-): Promise<IProjectPackageInfo[]> {
-  const packageNames = await fsxListFileBaseNames(folderPath, '.kmpkg.json');
-  const items = (
-    await Promise.all(
-      packageNames.map(async (packageName) => {
-        const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
-        const data = (await fsxReadJsonFile(
-          filePath,
-        )) as IProjectPackageFileContent;
-        migrateProjectPackageData(data);
-        if (!checkProjectFileContentSchema(data)) {
-          console.log(`drop package ${origin} ${packageName}`);
-          return undefined;
-        }
-        return convertPackageFileContentToPackageInfo(
-          data,
-          origin,
-          packageName,
-          true,
-        );
-      }),
-    )
-  ).filter((it) => it) as IProjectPackageInfo[];
+): IProjectPackageInfo[] {
+  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg.json');
+  const items = packageNames
+    .map((packageName) => {
+      const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
+      const data = fsxReadJsonFile(filePath) as IProjectPackageFileContent;
+      migrateProjectPackageData(data);
+      if (!checkProjectFileContentSchema(data)) {
+        console.log(`drop package ${origin} ${packageName}`);
+        return undefined;
+      }
+      return convertPackageFileContentToPackageInfo(
+        data,
+        origin,
+        packageName,
+        true,
+      );
+    })
+    .filter((it) => it) as IProjectPackageInfo[];
   return uniqueArrayItemsByField(items, 'projectId');
 }
 
-async function loadDraftProjectPackageFile(
+function loadDraftProjectPackageFile(
   filePath: string,
-): Promise<IProjectPackageInfo | undefined> {
+): IProjectPackageInfo | undefined {
   if (fsExistsSync(filePath)) {
-    const data = (await fsxReadJsonFile(
-      filePath,
-    )) as IProjectPackageFileContent;
+    const data = fsxReadJsonFile(filePath) as IProjectPackageFileContent;
     migrateProjectPackageData(data);
     if (!checkProjectFileContentSchema(data)) {
       return undefined;
@@ -127,11 +120,9 @@ async function loadDraftProjectPackageFile(
   return undefined;
 }
 
-async function loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(): Promise<
-  IProjectPackageInfo[]
-> {
+function loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(): IProjectPackageInfo[] {
   const projectPackagesFolderPath = pathResolve('../firmware/project_packages');
-  return await loadProjectPackageFiles(projectPackagesFolderPath, 'online');
+  return loadProjectPackageFiles(projectPackagesFolderPath, 'online');
 }
 
 function getUserProjectsFolderPath() {
@@ -159,77 +150,74 @@ function getUserProjectFilePath(packageName: string, isDraft: boolean) {
   }
 }
 
-async function loadUserProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+function loadUserProjectPackageInfos(): IProjectPackageInfo[] {
   const projectsFolder = getUserProjectsFolderPath();
-  const projectInfos = (
-    await loadProjectPackageFiles(projectsFolder, 'local')
-  ).filter(
+  const projectInfos = loadProjectPackageFiles(projectsFolder, 'local').filter(
     (it) => validateResourceName(it.packageName, 'package name') === undefined,
   );
   const draftFilePath = getUserDraftProjectFilePath();
-  const draftProjectInfo = await loadDraftProjectPackageFile(draftFilePath);
+  const draftProjectInfo = loadDraftProjectPackageFile(draftFilePath);
   if (draftProjectInfo) {
     projectInfos.push(draftProjectInfo);
   }
   return projectInfos;
 }
 
-async function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
+function saveUserProjectPackageInfoImpl(info: IProjectPackageInfo) {
   const savingData = convertProjectPackageInfoToFileContent(info);
   const filePath = getUserProjectFilePath(info.packageName, !!info.isDraft);
   console.log(`saving ${pathBasename(filePath)}`);
-  await fsxEnsureFolderExists(pathDirname(filePath));
-  await fsxWriteJsonFile(filePath, savingData);
+  fsxEnsureFolderExists(pathDirname(filePath));
+  fsxWriteJsonFile(filePath, savingData);
 }
 
-async function deleteUserProjectPackageFileImpl(
+function deleteUserProjectPackageFileImpl(
   packageName: string,
   isDraft: boolean,
 ) {
   const filePath = getUserProjectFilePath(packageName, isDraft);
-  await fsxDeleteFile(filePath);
+  fsxDeleteFile(filePath);
 }
 
-async function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
+function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
   const packageName = pathBasename(sourceFilePath, '.kmpkg.json');
-  const data = (await fsxReadJsonFile(
-    sourceFilePath,
-  )) as IProjectPackageFileContent;
+  const data = fsxReadJsonFile(sourceFilePath) as IProjectPackageFileContent;
   migrateProjectPackageData(data);
   if (!checkProjectFileContentSchema(data)) {
     throw new Error('invalid package file content');
   }
   const destFilePath = getUserProjectFilePath(packageName, false);
-  await fsxEnsureFolderExists(pathDirname(destFilePath));
-  await fsxWriteJsonFile(destFilePath, data);
+  fsxEnsureFolderExists(pathDirname(destFilePath));
+  fsxWriteJsonFile(destFilePath, data);
 }
 
 export const projectPackageProvider = {
-  async getAllProjectPackageInfos(): Promise<IProjectPackageInfo[]> {
+  getAllProjectPackageInfos(): IProjectPackageInfo[] {
     if (configs.debugUseLocalRepositoryPackages) {
       return [
-        ...(await loadRemoteProjectPackageInfos_debugLoadFromLocalRepository()),
-        ...(await loadUserProjectPackageInfos()),
+        ...loadRemoteProjectPackageInfos_debugLoadFromLocalRepository(),
+        ...loadUserProjectPackageInfos(),
       ];
     } else {
       return [
-        ...(await loadKermiteServerProjectPackageInfos()),
-        ...(await loadUserProjectPackageInfos()),
+        ...loadKermiteServerProjectPackageInfos(),
+        ...loadUserProjectPackageInfos(),
       ];
     }
   },
-  async saveLocalProjectPackageInfo(info: IProjectPackageInfo): Promise<void> {
-    await saveUserProjectPackageInfoImpl(info);
+  saveLocalProjectPackageInfo(info: IProjectPackageInfo) {
+    saveUserProjectPackageInfoImpl(info);
   },
-  async deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
-    await deleteUserProjectPackageFileImpl(packageName, isDraft);
+  deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
+    deleteUserProjectPackageFileImpl(packageName, isDraft);
   },
-  async importLocalProjectPackageFromFile(filePath: string) {
-    await importLocalProjectPackageFromFileImpl(filePath);
+  importLocalProjectPackageFromFile(filePath: string) {
+    importLocalProjectPackageFromFileImpl(filePath);
   },
-  async openLocalProjectsFolder() {
-    const folderPath = getUserProjectsFolderPath();
-    await fsxEnsureFolderExists(folderPath);
-    await shell.openPath(folderPath);
+  openLocalProjectsFolder() {
+    // const folderPath = getUserProjectsFolderPath();
+    // await fsxEnsureFolderExists(folderPath);
+    // await shell.openPath(folderPath);
+    throw new Error('obsolete function invoked');
   },
 };
