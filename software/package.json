@@ -2,34 +2,11 @@
   "name": "kermite",
   "productName": "Kermite",
   "version": "0.1.0-alpha.30",
-  "main": "dist/shell/index.js",
   "author": "yahiro",
   "description": "keyboard software",
   "license": "MIT",
   "engines": {
     "node": "14"
-  },
-  "build": {
-    "appId": "org.kermite.electron-app",
-    "mac": {
-      "target": "pkg",
-      "icon": "misc/iconC.png"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "misc/iconC.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    },
-    "files": [
-      "dist/**/*"
-    ],
-    "directories": {
-      "output": "release"
-    },
-    "buildDependenciesFromSource": true
   },
   "private": true,
   "scripts": {
