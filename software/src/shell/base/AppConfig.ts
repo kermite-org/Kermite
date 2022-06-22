@@ -13,7 +13,7 @@ export const appConfig = {
   isDevelopment: processEnv.NODE_ENV === 'development',
   // isDevelopment: location.host === 'localhost',
   // applicationVersion: app.getVersion(),
-  applicationVersion: `v220620a`,
+  applicationVersion: 'v220623a',
   // publicRootPath: `${pathDirname(__dirname)}/ui`,
   // preloadFilePath: `${__dirname}/preload.js`,
   pageTitle: 'Kermite',

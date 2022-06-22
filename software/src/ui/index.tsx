@@ -1,12 +1,13 @@
 import { jsx, render } from 'alumina';
 import { debounce } from '~/shared';
 import { appRoot } from '~/shell';
+import { appConfig } from '~/shell/base';
 import { appUi } from '~/ui/base';
 import { SiteRoot } from '~/ui/root/SiteRoot';
 import { commitUiState, uiSettingsPersistence } from '~/ui/store';
 
 function start() {
-  console.log('start');
+  console.log(`kermite_web ${appConfig.applicationVersion}`);
   appRoot.initialize();
   const appDiv = document.getElementById('app');
 
