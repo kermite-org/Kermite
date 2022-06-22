@@ -5,13 +5,18 @@ import { memoryFileSystem } from '~/memoryFileSystem';
 import { AppError } from '~/shared/defs';
 
 export const pathJoin = path.join;
-export const pathResolve = path.resolve;
+// export const pathResolve = path.resolve;
 // export const pathRelative = path.relative;
+// export function pathJoin(...paths: string[]): string {
+//   return paths.join('/').replace(/\/{1,}/g, '/');
+// }
+export function pathResolve(..._pathSegments: string[]): string {
+  throw new Error('invalid invocation');
+}
 export function pathRelative(from: string, to: string): string {
   const regex = new RegExp('^' + from + '/');
   return to.replace(regex, '');
 }
-
 export const pathDirname = path.dirname;
 export const pathBasename = path.basename;
 export const pathExtname = path.extname;
