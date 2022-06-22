@@ -85,7 +85,7 @@ export class KeyboardDeviceServiceCore {
 
   private async loadDeviceInfo(device: IDeviceWrapper) {
     const setupRes = await deviceSetupTask(device);
-    console.log({ res: setupRes });
+    // console.log({ res: setupRes });
     if (setupRes) {
       this.setStatus(
         createConnectedStatus(
