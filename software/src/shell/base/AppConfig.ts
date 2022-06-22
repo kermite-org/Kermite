@@ -1,6 +1,13 @@
 // import { app } from 'electron';
 
-export const processEnv = (import.meta as any).env;
+type IProcessEnv = {
+  NODE_ENV: 'development' | 'production';
+  FE_USE_KERMITE_SERVER_LOCAL?: boolean;
+  FE_USE_DEBUG_LOCAL_FIRMWARES?: boolean;
+};
+
+export const processEnv = (import.meta as any).env as IProcessEnv;
+// console.log({ processEnv });
 
 export const appConfig = {
   isDevelopment: processEnv.NODE_ENV === 'development',
@@ -14,7 +21,8 @@ export const appConfig = {
   initialPageHeight: 800,
   onlineResourcesBaseUrl: 'https://app.kermite.org/krs/resources2',
   kermiteServerUrl: 'https://dev.server.kermite.org',
+  useDebugLocalFirmwares: !!processEnv.FE_USE_DEBUG_LOCAL_FIRMWARES,
 };
-if (processEnv.USE_KERMITE_SERVER_LOCAL) {
+if (processEnv.FE_USE_KERMITE_SERVER_LOCAL) {
   appConfig.kermiteServerUrl = 'http://localhost:5000';
 }

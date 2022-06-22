@@ -9,7 +9,7 @@ import {
   IStandardBaseFirmwareType,
   IStandardFirmwareEntry,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig } from '~/shell/base';
 import {
   cacheRemoteResource,
   fetchBinary,
@@ -25,11 +25,7 @@ import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
 
 const config = {
   remoteBaseUrl: 'https://app.kermite.org/krs/resources2',
-  debugLoadLocalFirmware: false,
 };
-if (appEnv.isDevelopment) {
-  // config.debugLoadLocalFirmware = true;
-}
 
 type IFirmwareFetchResult = { fileName: string; data: Uint8Array };
 type IFirmwareFetchResultWithTargetDevice = {
@@ -85,7 +81,7 @@ namespace fetcherLocalDebugStandard {
     [key in IStandardBaseFirmwareType]?: string;
   } = {
     // AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
-    // RpUnified: pathResolve('../firmware/build/standard/rp/standard_rp.uf2'),
+    RpUnified: '/debug_local_firmwares/standard_rp.uf2',
     // AvrSplit: pathResolve(
     //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
     // ),
@@ -100,16 +96,16 @@ namespace fetcherLocalDebugStandard {
     // ),
   };
 
-  export function debugLoadLocalStandardBaseFirmware(
+  export async function debugLoadLocalStandardBaseFirmware(
     baseFirmwareType: IStandardBaseFirmwareType,
-  ): IFirmwareFetchResult {
-    const filePath = localStandardFirmwarePaths[baseFirmwareType];
-    if (!filePath) {
+  ): Promise<IFirmwareFetchResult> {
+    const url = localStandardFirmwarePaths[baseFirmwareType];
+    if (!url) {
       throw new Error(`base firmware ${baseFirmwareType} is not supported yet`);
     }
-    const fileName = pathBasename(filePath);
-    console.log(`loading local firmware ${filePath}`);
-    const data = fsxReadBinaryFile(filePath);
+    const fileName = pathBasename(url);
+    // console.log(`loading local firmware ${url}`);
+    const data = await cacheRemoteResource(fetchBinary, url);
     return { fileName, data };
   }
 }
@@ -155,7 +151,7 @@ async function loadFirmwareFileBytes_Standard(
   const targetDevice =
     getFirmwareTargetDeviceFromBaseFirmwareType(baseFirmwareType);
 
-  const firmwareLoader = config.debugLoadLocalFirmware
+  const firmwareLoader = appConfig.useDebugLocalFirmwares
     ? fetcherLocalDebugStandard.debugLoadLocalStandardBaseFirmware
     : fetcherOnlineStandard.fetchStandardBaseFirmware;
 

@@ -1,5 +1,6 @@
 import path from 'path';
 import { defineConfig } from 'vite';
+import EnvironmentPlugin from 'vite-plugin-environment';
 
 export default defineConfig({
   base: './',
@@ -15,10 +16,11 @@ export default defineConfig({
     },
   },
   plugins: [
-    // EnvironmentPlugin({
-    //   USE_KERMITE_SERVER_LOCAL: null,
-    // }),
+    EnvironmentPlugin({
+      FE_USE_KERMITE_SERVER_LOCAL: null,
+      FE_USE_DEBUG_LOCAL_FIRMWARES: null,
+    }),
   ],
-  // envPrefix: 'FE_',
+  envPrefix: 'FE_',
   clearScreen: false,
 });

@@ -22,5 +22,6 @@ tsconfig.tsbuildinfo
 .history/
 /.env
 
+/public/debug_local_firmwares/
 
 
