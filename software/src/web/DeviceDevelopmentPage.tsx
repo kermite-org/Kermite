@@ -1,18 +1,7 @@
-import { css, FC, jsx } from 'alumina';
-import { Packets } from '~/shell/services/keyboardDevice/Packets';
+import { css, FC, jsx, useEffect } from 'alumina';
+import { Packets } from '~/shell/services/keyboardDevice/packets';
 
-async function setupDevice() {
-  const devices = await navigator.hid.requestDevice({
-    filters: [
-      { vendorId: 0xf055, productId: 0xa577 },
-      { vendorId: 0xf055, productId: 0xa579 },
-    ],
-  });
-
-  console.log({ devices });
-
-  const device = devices.find((d) => d.collections.length > 0);
-
+async function openHidDevice(device: HIDDevice) {
   if (device) {
     await device.open();
     device.addEventListener('inputreport', (e: any) => {
@@ -31,11 +20,37 @@ async function setupDevice() {
   }
 }
 
+async function connectToNewDevice() {
+  const devices = (
+    await navigator.hid.requestDevice({
+      filters: [
+        { vendorId: 0xf055, productId: 0xa577 },
+        { vendorId: 0xf055, productId: 0xa579 },
+      ],
+    })
+  ).filter((d) => d.collections.length > 0);
+
+  console.log({ devices });
+
+  const device = devices[0];
+  openHidDevice(device);
+}
+
+async function reconnectToDevice() {
+  const devices = (await navigator.hid.getDevices()).filter(
+    (d) => d.collections.length > 0,
+  );
+  console.log({ devices });
+  const device = devices[0];
+  openHidDevice(device);
+}
+
 export const DeviceDevelopmentPage: FC = () => {
+  useEffect(reconnectToDevice, []);
   return (
     <div class={pageStyle}>
       <h2>device development page</h2>
-      <button onClick={setupDevice}>connect</button>
+      <button onClick={connectToNewDevice}>connect</button>
     </div>
   );
 };

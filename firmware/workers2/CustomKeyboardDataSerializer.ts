@@ -28,7 +28,7 @@ export function serializeCustomKeyboardSpec(
   }
 
   return convertArrayElementsToBytes([
-    spec.useBoardLedsProMicroAvr,
+    spec.useBoardLedsProMicroAvr__OBSOLETE,
     spec.useBoardLedsProMicroRp,
     spec.useBoardLedsRpiPico,
     spec.useDebugUart,

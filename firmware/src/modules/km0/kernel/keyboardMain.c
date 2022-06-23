@@ -117,6 +117,9 @@ static char *writeTextBytes(char *buf, char *text, int len) {
   return buf + len;
 }
 
+
+static char tempProductNameBuf[32];
+
 //usb serial number
 //format: <Prefix(8)>:<McuCode(3)>:<FirmwareId(6)>:<ProjectId(6)>:<VariationId(2)>:<DeviceInstanceCode(4)>
 //example: A152FD2C:M01:7qHDCp:K3e89X:01:d46d
@@ -136,7 +139,9 @@ static void setupUsbDeviceAttributes() {
   buf = writeTextBytes(buf, commonFirmwareMetadata.deviceInstanceCode, 4);
   buf = writeTextBytes(buf, "\0", 1);
 
-  usbIoCore_setProductName(commonFirmwareMetadata.keyboardName);
+  // usbIoCore_setProductName(commonFirmwareMetadata.keyboardName);
+  snprintf(tempProductNameBuf, 32, "%s #%s", commonFirmwareMetadata.keyboardName, commonFirmwareMetadata.deviceInstanceCode);
+  usbIoCore_setProductName(tempProductNameBuf);
 }
 
 static void resetKeyboardCoreLogic() {

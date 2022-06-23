@@ -39,7 +39,7 @@ After installing with the installer, add PATH to `C:\Program Files\GnuWin32\bin`
 | File | mingw-w64-install.exe 
 | How to install | DL, install, add bin to PATH
 
-This is required if you are building firmware for the RP2040; it is not required for the AVR.
+This is required if you are building firmware for the RP2040.
 On the linked site, follow the link from 'MingW-W64-builds' to download the file.
 On the option setting screen that comes up during installation, set `x86_64` for Architecture. You can leave the other options as default.
 Once installed, add PATH to `C:\Program Files\mingw-w64\<version>\mingw64\bin`.
@@ -55,18 +55,15 @@ Make sure that each tool is available by using commands like
 > where mkdir.exe
 > where rm.exe
 > make -v
-> avr-gcc -v
 > arm-none-eabi-gcc -v
 > g++ -v
-> avrdude -v
 ```
 
 Make sure that you can build the project with commands like
 
 ```
 > make clean
-> make astelia:atmega:build
-> make proto/minivers:rev2_rp:build
+> make proto/standard:rp:build
 ```
 
 

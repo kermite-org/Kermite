@@ -4,5 +4,5 @@
     "rootDir": "../",
     "resolveJsonModule": true
   },
-  "include": ["./**/*", "../shared/**/*", "./i18n/*.json"]
+  "include": ["./**/*", "../shared/**/*", "../shell/**/*", "./i18n/*.json"]
 }

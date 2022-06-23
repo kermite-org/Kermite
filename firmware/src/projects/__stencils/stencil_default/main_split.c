@@ -170,12 +170,6 @@ static void setupBoard(int8_t side) {
 
 int main() {
 
-#ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
-  if (boardIoImpl_setupLeds_proMicroAvr) {
-    boardIoImpl_setupLeds_proMicroAvr();
-  }
-#endif
-
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_RP
   if (boardIoImpl_setupLeds_proMicroRp) {
     boardIoImpl_setupLeds_proMicroRp();

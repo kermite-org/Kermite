@@ -1,9 +1,5 @@
 {
   "env": {
-    "myAvrCompilerBaseDirectory__windows_example": "C:/tools/avr8-gnu-toolchain-win32_x86",
-    "myAvrCompilerExecutablePath__windows_example": "C:/tools/avr8-gnu-toolchain-win32_x86/bin/avr-gcc.exe",
-    "myAvrCompilerBaseDirectory": "/usr/local/Cellar/avr-gcc/9.3.0",
-    "myAvrCompilerExecutablePath": "/usr/local/bin/avr-gcc",
     "myCompilerExecutablePath": "/usr/local/bin/arm-none-eabi-gcc",
     "picoSdkOuterDir": "./deps/rp2040/pico_sdk_import",
     "picoSdkRoot": "./deps/rp2040/pico_sdk_import/pico_sdk",
@@ -11,35 +7,6 @@
     "picoLocalDir": "./deps/rp2040/pico_sdk_local"
   },
   "configurations": [
-    {
-      "name": "ConfigAVR",
-      "includePath": [
-        "src/modules",
-        "src/projects/__stencils/dummy_header_provider_project",
-        "${myAvrCompilerBaseDirectory}/avr/include"
-      ],
-      "defines": [
-        "IDE_SYNTAX_CHECK",
-        "_DEBUG",
-        "UNICODE",
-        "_UNICODE",
-        "__AVR_ATmega32U4__",
-        "F_CPU=16000000",
-        "EXTR_KERMITE_PROJECT_RELEASE_BUILD_REVISION=0",
-        "EXTR_KERMITE_IS_RESOURCE_ORIGIN_ONLINE=0",
-        "EXTR_KERMITE_VARIATION_NAME=\"default\"",
-        "KERMITE_TARGET_MCU_ATMEGA"
-      ],
-      "compilerPath": "${myAvrCompilerExecutablePath} -mmcu=atmega32u4",
-      "cStandard": "c11",
-      "cppStandard": "c++17",
-      "intelliSenseMode": "gcc-arm",
-      "browse": {
-        "path": ["src", "${myAvrCompilerBaseDirectory}/avr/include"],
-        "limitSymbolsToIncludedHeaders": true,
-        "databaseFilename": ""
-      }
-    },
     {
       "name": "ConfigRP",
       "includePath": [

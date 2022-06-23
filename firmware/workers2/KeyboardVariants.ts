@@ -1,22 +1,5 @@
 import { IKermiteStandardKeyboaredSpec } from '@/CoreDefinitions';
 
-export const keyboardSpec_astelia: IKermiteStandardKeyboaredSpec = {
-  baseFirmwareType: 'AvrUnified',
-  useBoardLedsProMicroAvr: true,
-  useDebugUart: true,
-  useMatrixKeyScanner: true,
-  matrixColumnPins: ['PC6', 'PD4', 'PF7', 'PF6', 'PF5', 'PF4'],
-  matrixRowPins: ['PB1', 'PB3', 'PB2', 'PB6', 'PD7', 'PE6', 'PB4', 'PB5'],
-};
-
-export const keyboardSpec_dw4: IKermiteStandardKeyboaredSpec = {
-  baseFirmwareType: 'AvrUnified',
-  useBoardLedsProMicroAvr: true,
-  useDebugUart: true,
-  useDirectWiredKeyScanner: true,
-  directWiredPins: ['PE6', 'PB4', 'PB5', 'PB6'],
-};
-
 export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
   baseFirmwareType: 'RpUnified',
   useBoardLedsProMicroRp: true,

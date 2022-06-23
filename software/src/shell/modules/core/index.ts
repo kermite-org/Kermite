@@ -1,2 +1,2 @@
-export * from './CoreStateAction';
-export * from './Readers';
+export * from './coreStateAction';
+export * from './readers';

@@ -3,7 +3,6 @@ import { execueteOneliner } from "../helpers";
 export interface IEnvironmentVersions {
   OS: string;
   make: string;
-  "avr-gcc": string;
   "arm-none-eabi-gcc": string;
 }
 
@@ -34,13 +33,11 @@ function readArmNoneEabiGccVersion(): string {
 
 export function readEnvironmentVersions(): IEnvironmentVersions {
   const osVersion = readOsVersion();
-  const avrGccVersion = execueteOneliner(`avr-gcc --version | grep "avr-gcc"`);
   const makeVersion = execueteOneliner(`make -v | grep "GNU Make"`);
   const armNoneEabiGccVersion = readArmNoneEabiGccVersion();
   return {
     OS: osVersion,
     make: makeVersion,
-    "avr-gcc": avrGccVersion,
     "arm-none-eabi-gcc": armNoneEabiGccVersion,
   };
 }

@@ -14,8 +14,8 @@
 
 enum {
   BoardType_None = 0,
-  BoardType_ChipAtMega32U4 = 1,
-  BoardType_ProMicro = 2,
+  BoardType_ChipAtMega32U4__OBSOLETE = 1,
+  BoardType_ProMicro__OBSOLETE = 2,
   BoardType_ChipRP2040 = 3,
   BoardType_ProMicroRP2040 = 4,
   BoardType_RpiPico = 5
@@ -62,9 +62,6 @@ static EncoderConfig encoderConfigs[3] = { 0 };
 
 int main() {
   if (defs.useBoardLeds) {
-    if (defs.boardType == BoardType_ProMicro && boardIoImpl_setupLeds_proMicroAvr) {
-      boardIoImpl_setupLeds_proMicroAvr();
-    }
     if (defs.boardType == BoardType_ProMicroRP2040 && boardIoImpl_setupLeds_proMicroRp) {
       boardIoImpl_setupLeds_proMicroRp();
     }

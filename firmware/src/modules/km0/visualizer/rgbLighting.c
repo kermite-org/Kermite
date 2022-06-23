@@ -18,7 +18,7 @@ static uint32_t frameTick = 0;
 
 #define NumTableColors 13
 
-__flash static const uint32_t commonColorTable[NumTableColors] = {
+static const uint32_t commonColorTable[NumTableColors] = {
   0xFF0000,
   0xFF4400,
   0xFFFF00,
@@ -189,7 +189,7 @@ static void scene4_updateFrame() {
 
 typedef void (*SceneFunc)(void);
 
-__flash static const SceneFunc sceneFuncs[] = {
+static const SceneFunc sceneFuncs[] = {
   scene0_updateFrame,
   scene1_updateFrame,
   scene2_updateFrame,

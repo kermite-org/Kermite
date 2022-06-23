@@ -1,4 +1,4 @@
-import { FC, jsx, css, useEffect } from 'alumina';
+import { FC, jsx, css } from 'alumina';
 import { Link, linkTo, router } from '~/ui/base';
 
 const cssNavBox = css`
@@ -24,7 +24,7 @@ const cssNavButton = css`
 `;
 
 export const RoutingDevelopmentPage: FC = () => {
-  useEffect(router.rerenderEffectOnHashChange, []);
+  // useEffect(router.rerenderEffectOnHashChange, []);
 
   console.log(`render`, { hash: location.hash });
 

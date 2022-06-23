@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { colors } from '~/ui/base';
-import { getKeyboardSvgViewBoxSpec } from '~/ui/base/UiDomainHelpers';
+import { getKeyboardSvgViewBoxSpec } from '~/ui/base/uiDomainHelpers';
 import { ProjectKeyEntityCard } from '~/ui/elements/keyboard/keyUnitCards';
 import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody';
 

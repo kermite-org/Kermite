@@ -20,7 +20,8 @@ tsconfig.tsbuildinfo
 .~*.csv#
 .visor/
 .history/
-/.env
+/.env.development
 
+/public/debug_local_firmwares/
 
 

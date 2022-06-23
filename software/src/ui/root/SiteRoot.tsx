@@ -6,7 +6,7 @@ import {
   ForegroundModalLayerRoot,
   SiteDpiScaler,
 } from '~/ui/components';
-import { WidgetZoneRoot } from '~/ui/pages/WidgetPage';
+import { WidgetZoneRoot } from '~/ui/pages/widgetPage';
 import { ConfiguratorZoneRoot } from '~/ui/root/ConfiguratorZoneRoot';
 import {
   commitUiState,
@@ -70,18 +70,16 @@ const AppView: FC = () => {
 };
 
 const InitialLoadingView: FC = () => {
-  useEffect(() => {
-    (async () => {
-      await lazyInitializeCoreServices();
-      commitUiState({ initialLoading: false });
-      appUi.rerender();
-    })();
+  useEffect(async () => {
+    await lazyInitializeCoreServices();
+    commitUiState({ initialLoading: false });
+    appUi.rerender();
   }, []);
   return <div>Loading...</div>;
 };
 
 export const SiteRoot: FC = () => {
-  useEffect(router.rerenderEffectOnHashChange, []);
+  // useEffect(router.rerenderEffectOnHashChange, []);
   useEffect(appErrorNotifierEffect, []);
   useEffect(globalHintMouseMoveHandlerEffect, []);
   useEffect(uiStateDriverEffect, []);

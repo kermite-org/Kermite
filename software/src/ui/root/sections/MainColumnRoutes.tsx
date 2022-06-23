@@ -11,13 +11,13 @@ import {
   SettingsPage,
   WelcomePage,
 } from '~/ui/pages';
-import { AssignerPage } from '~/ui/pages/AssignerPage';
 import { FirmwareFlashPage } from '~/ui/pages/FirmwareFlashPage';
-import { FirmwareUpdatePage } from '~/ui/pages/FirmwareUpdatePage';
-import { LayoutManagerPageComponent } from '~/ui/pages/LayoutEditorPage';
 import { ProfileSetupWizardPage } from '~/ui/pages/ProfileSetupWizardPage';
-import { ProjectReviewPage } from '~/ui/pages/ProjectReviewPage';
-import { ShapePreviewPage } from '~/ui/pages/ShapePreviewPage';
+import { AssignerPage } from '~/ui/pages/assignerPage';
+import { FirmwareUpdatePage } from '~/ui/pages/firmwareUpdatePage';
+import { LayoutManagerPageComponent } from '~/ui/pages/layoutEditorPage';
+import { ProjectReviewPage } from '~/ui/pages/projectReviewPage';
+import { ShapePreviewPage } from '~/ui/pages/shapePreviewPage';
 import { uiReaders, uiState } from '~/ui/store';
 
 export const MainColumnRoutes: FC = () => {
