@@ -26,7 +26,8 @@ import {
 
 class BuildStepError extends Error {}
 
-type ITargetDevice = "atmega32u4" | "rp2040";
+// type ITargetDevice = "atmega32u4" | "rp2040";
+type ITargetDevice = "rp2040";
 
 function gatherTargetProjectVariationPaths() {
   return globSync("./src/projects/**/rules.mk")
@@ -102,41 +103,6 @@ function makeFirmwareBuild(
   }
 }
 
-//avr-size -C --mcu=atmega32u4 $(ELF) の結果からROM/RAM使用率を抽出
-function readRomRamUsageFromSizeCommandChipOutput(sizeOutputText: string) {
-  const match0 = sizeOutputText.match(/^Program.*\(([\d.]+)% Full\)/m);
-  const match1 = sizeOutputText.match(/^Data.*\(([\d.]+)% Full\)/m);
-  if (match0 && match1) {
-    const usageProg = parseFloat(match0[1]);
-    const usageData = parseFloat(match1[1]);
-    return [usageProg, usageData];
-  }
-  throw new Error(`invalid size command output`);
-}
-
-//avr-size $(ELF) の結果からROM/RAM使用率を抽出
-function readRomRamUsageFromSizeCommandRawOutput(
-  sizeOutputText: string,
-  romMax: number,
-  ramMax: number
-) {
-  const lastLine = sizeOutputText.trim().split(/\r?\n/).pop();
-  if (lastLine) {
-    const m = lastLine.match(/^\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)/);
-    if (m) {
-      const nText = parseInt(m[1]);
-      const nData = parseInt(m[2]);
-      const nBss = parseInt(m[3]);
-      const nRom = nText + nData;
-      const nRam = nData + nBss;
-      const usageProg = Number(((nRom / romMax) * 100).toFixed(2));
-      const usageData = Number(((nRam / ramMax) * 100).toFixed(2));
-      return [usageProg, usageData];
-    }
-  }
-  throw new Error(`invalid size command output`);
-}
-
 function checkFirmwareBinarySize(
   projectPath: string,
   variationName: string,
@@ -147,13 +113,7 @@ function checkFirmwareBinarySize(
 
   let usageProg = -1;
   let usageData = -1;
-  if (targetDevice === "atmega32u4") {
-    [usageProg, usageData] = readRomRamUsageFromSizeCommandRawOutput(
-      sizeOutputText,
-      32768,
-      2560
-    );
-  } else if (targetDevice == "rp2040") {
+  if (targetDevice == "rp2040") {
     usageProg = parseFloat(sizeOutputText.match(/FLASH:.*\s([\d.]+)%/m)![1]);
     usageData = parseFloat(sizeOutputText.match(/RAM:.*\s([\d.]+)%/m)![1]);
   } else {
@@ -340,7 +300,7 @@ function buildProjectVariationEntry(
     throw new BuildStepError(`cannot read firmware id for ${targetName}`);
   }
 
-  const extension = targetDevice === "atmega32u4" ? "hex" : "uf2";
+  const extension = "uf2";
 
   const midDir = `./build/${projectVariationPath}`;
   const destDir = `./dist/firmwares/${projectPath}`;
