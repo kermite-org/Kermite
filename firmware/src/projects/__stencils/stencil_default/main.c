@@ -47,12 +47,6 @@ extern const int8_t customData_keyIndexTable[KM0_KEYBOARD__NUM_SCAN_SLOTS];
 
 int main() {
 
-#ifdef KS_USE_BOARD_LEDS_PROMICRO_AVR
-  if (boardIoImpl_setupLeds_proMicroAvr) {
-    boardIoImpl_setupLeds_proMicroAvr();
-  }
-#endif
-
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_RP
   if (boardIoImpl_setupLeds_proMicroRp) {
     boardIoImpl_setupLeds_proMicroRp();
