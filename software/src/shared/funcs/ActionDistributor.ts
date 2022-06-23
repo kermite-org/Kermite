@@ -4,7 +4,7 @@ export type IActionReceiver<T> = {
   [K in keyof T]?: (payload: NonNullable<T[K]>) => void | Promise<void>;
 };
 
-export class ActionDistributor<T> {
+export class ActionDistributor<T extends {}> {
   receivers: IActionReceiver<T>[] = [];
 
   addReceivers(...receivers: IActionReceiver<T>[]) {
@@ -27,7 +27,7 @@ export class ActionDistributor<T> {
         }
       }
       if (!handled) {
-        console.log(`no action handler found for ${key} `);
+        console.log(`no action handler found for ${key as any} `);
       }
     }
   }
