@@ -3,6 +3,9 @@
 
 This is firmware for DIY keyboard using RP2040.
 
+If you use the standard firmware with Kermite's GUI, pre-built firmware is provided and you do not need to build the firmware yourself. The following is an explanation for those who develop custom firmware.
+
+
 ## Preparation of development environment
 
 ### RP2040
