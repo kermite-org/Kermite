@@ -18,11 +18,9 @@ export interface IWidgetMainPanelModel {
 
 export function useWidgetMainPanelModel(): IWidgetMainPanelModel {
   const playerModel = usePlayerModel();
-  useEffect(() => {
-    (async () => {
-      const profileData = await ipcAgent.async.profile_getCurrentProfile();
-      playerModel.setProfileData(profileData || fallbackProfileData);
-    })();
+  useEffect(async () => {
+    const profileData = await ipcAgent.async.profile_getCurrentProfile();
+    playerModel.setProfileData(profileData || fallbackProfileData);
   }, []);
 
   const { isWindowActive, isWidgetAlwaysOnTop } = siteModel;

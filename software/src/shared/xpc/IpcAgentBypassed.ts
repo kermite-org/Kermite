@@ -48,8 +48,9 @@ export function createIpcAgentBypassed<
 
   function getAsyncHandler(key: string) {
     return async (...args: any[]) => {
-      await rawAsyncReceivers[key](...args);
+      const res = await rawAsyncReceivers[key](...args);
       postProcessHook?.();
+      return res;
     };
   }
 

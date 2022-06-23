@@ -2,7 +2,6 @@ import { jsx, css, FC } from 'alumina';
 import { WidgetSvgKeyboardView } from '~/ui/elements/keyboard';
 import { useWidgetMainPanelModel } from '~/ui/pages/WidgetPage/models/WidgetMainPanelModel';
 import { WidgetControlButtonsBox } from '~/ui/pages/WidgetPage/organisms/WidgetControlButtonsBox';
-import { siteModel } from '~/ui/store';
 
 export const WidgetMainPanel: FC = () => {
   const vm = useWidgetMainPanelModel();
@@ -12,11 +11,7 @@ export const WidgetMainPanel: FC = () => {
         keyboardDesign={vm.keyboardVM.keyboardDesign}
         cards={vm.keyboardVM.cards}
       />
-      <WidgetControlButtonsBox
-        class="control-buttons-box"
-        vm={vm}
-        if={siteModel.isWindowActive}
-      />
+      <WidgetControlButtonsBox class="control-buttons-box" vm={vm} />
     </div>
   );
 };
