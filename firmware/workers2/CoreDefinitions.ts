@@ -31,7 +31,7 @@ export type PinName =
   | 'GP29';
 
 export type IKermiteStandardKeyboaredRawSpec = {
-  useBoardLedsProMicroAvr?: boolean;
+  useBoardLedsProMicroAvr__OBSOLETE?: boolean;
   useBoardLedsProMicroRp?: boolean;
   useBoardLedsRpiPico?: boolean;
   useDebugUart?: boolean;
