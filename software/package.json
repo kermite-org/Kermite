@@ -15,8 +15,6 @@
     "start": "vite",
     "build": "tsc && vite build",
     "build0": "cross-env NODE_ENV=production ts-node build.ts -x-build",
-    "packaging:mac": "electron-builder --mac --x64",
-    "packaging:win": "electron-builder --win --x64",
     "mockview": "cross-env NODE_ENV=development ts-node build2.ts -x-mockview",
     "web": "cross-env NODE_ENV=development ts-node build2.ts -x-web",
     "clean": "rm -rf dist .cache",
