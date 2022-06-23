@@ -1,14 +1,5 @@
 import { serializeCustomKeyboardSpec } from '@/CustomKeyboardDataSerializer';
-import {
-  decodeBytesFromHexFileContent,
-  encodeBytesToHexFileContent,
-} from '@/FirmwareBinaryDataConverter';
-import {
-  keyboardSpec_astelia,
-  keyboardSpec_dw4,
-  keyboardSpec_km60,
-  keyboardSpec_mp2105,
-} from '@/KeyboardVariants';
+import { keyboardSpec_km60, keyboardSpec_mp2105 } from '@/KeyboardVariants';
 import * as fs from 'fs';
 
 function compareArray(ar1: number[], ar2: number[]): boolean {
@@ -47,36 +38,6 @@ function getBinaryContentMarkerIndex(
   return -1;
 }
 
-function forgeStandardKeyboardFirmwareAvr() {
-  // const targetKeyboardSpec = keyboardSpec_astelia;
-  const targetKeyboardSpec = keyboardSpec_dw4;
-
-  const customDataBytes = serializeCustomKeyboardSpec(targetKeyboardSpec);
-
-  const binaryBaseDir = '../build/standard/avr';
-  const srcFilePath = `${binaryBaseDir}/standard_avr.hex`;
-  const modFilePath = `${binaryBaseDir}/standard_avr_patched.hex`;
-
-  const fileText = fs.readFileSync(srcFilePath, {
-    encoding: 'utf-8',
-  });
-  const binaryBytes = decodeBytesFromHexFileContent(fileText);
-
-  const markerPosition = getBinaryContentMarkerIndex(binaryBytes, 'KMDF');
-  if (markerPosition === -1) {
-    throw new Error('cannot find marker');
-  }
-  const dataLocation = markerPosition + 4;
-  replaceArrayConent(binaryBytes, dataLocation, customDataBytes);
-
-  const savingText = encodeBytesToHexFileContent(binaryBytes);
-
-  fs.writeFileSync(modFilePath, savingText);
-
-  console.log(`file saved: ${modFilePath}`);
-  console.log('done');
-}
-
 function forgeStandardKeyboardFirmwareRp() {
   // const targetKeyboardSpec = keyboardSpec_mp2105;
   const targetKeyboardSpec = keyboardSpec_km60;
@@ -104,10 +65,4 @@ function forgeStandardKeyboardFirmwareRp() {
   console.log('done');
 }
 
-if (process.argv.includes('--target=avr')) {
-  forgeStandardKeyboardFirmwareAvr();
-} else if (process.argv.includes('--target=rp')) {
-  forgeStandardKeyboardFirmwareRp();
-} else {
-  throw new Error('no target specification');
-}
+forgeStandardKeyboardFirmwareRp();
