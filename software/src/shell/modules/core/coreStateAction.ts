@@ -13,7 +13,7 @@ export type ICoreActionReceiver = IActionReceiver<ICoreAction>;
 export const coreActionDistributor = new ActionDistributor<ICoreAction>();
 
 export async function dispatchCoreAction(action: ICoreAction) {
-  await coreActionDistributor.putAction(action);
+  return await coreActionDistributor.putAction(action);
 }
 
 export const coreState: ICoreState = defaultCoreState;

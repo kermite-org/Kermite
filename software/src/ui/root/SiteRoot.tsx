@@ -70,12 +70,10 @@ const AppView: FC = () => {
 };
 
 const InitialLoadingView: FC = () => {
-  useEffect(() => {
-    (async () => {
-      await lazyInitializeCoreServices();
-      commitUiState({ initialLoading: false });
-      appUi.rerender();
-    })();
+  useEffect(async () => {
+    await lazyInitializeCoreServices();
+    commitUiState({ initialLoading: false });
+    appUi.rerender();
   }, []);
   return <div>Loading...</div>;
 };
