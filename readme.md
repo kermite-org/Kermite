@@ -2,7 +2,7 @@
 
 ## Overview
 
-Kermite is a software for DIY keyboards, which includes firmware to run on MCU and utility software to configure key mappings. It supports DIY keyboards using ProMicro (microcontroller board).
+Kermite is a software for DIY keyboards, which includes firmware to run on MCU and utility software to configure key mappings. It supports DIY keyboards using RP2040 (microcontroller).
 
 ## Features
 ### Key Mapping Configuration
@@ -18,7 +18,7 @@ There is a function to display the layer status of the keyboard you are using in
 ## Operating Environment
 
 ### Hardware/Firmware
-- Keyboard using ProMicro or ATMega32u4, RP2040
+- Keyboard using RP2040
 ### Utility Software
 - Windows 10
 - Mac OS 10.15 Catalina
@@ -31,7 +31,7 @@ There is a function to display the layer status of the keyboard you are using in
 ## Development Environment
 
 ### Firmware
-- AVR ATMega32u4, Raspberry Pi RP2040
+- Raspberry Pi RP2040
 - avr-gcc, arm-none-eabi-gcc, GNU Make
 
 ### Utility Software

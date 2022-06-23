@@ -1,6 +1,5 @@
 import {
   checkArrayItemsUnique,
-  flattenArray,
   generateNumberSequence,
   getObjectKeys,
   IStandardFirmwareConfig,
@@ -17,28 +16,16 @@ import {
   IStandardFirmwareMcuType,
 } from '~/ui/featureEditors/standardFirmwareEditor/types';
 
-const availablePinsAvr = flattenArray(
-  ['PB', 'PC', 'PD', 'PE', 'PF'].map((port) =>
-    [0, 1, 2, 3, 4, 5, 6, 7].map((idx) => port + idx),
-  ),
-);
-const acceptableAvrEncoderPrimaryPins = [0, 1, 2, 3, 4, 5, 6, 7].map(
-  (idx) => 'PB' + idx,
-);
-
-const acceptableAvrSingleWirePins = ['PD0', 'PD2'];
-
 const availablePinsRp = generateNumberSequence(30).map((i) => 'GP' + i);
 
-const availablePinsAll = [...availablePinsAvr, ...availablePinsRp];
+const availablePinsAll = availablePinsRp;
 
 const subHelpers = {
   validatePin(
     pin: string,
-    mcuType: IStandardFirmwareMcuType,
+    _mcuType: IStandardFirmwareMcuType,
   ): string | undefined {
-    const availablePins =
-      mcuType === 'avr' ? availablePinsAvr : availablePinsRp;
+    const availablePins = availablePinsRp;
     const valid = availablePins.includes(pin);
     if (!valid) {
       return `invalid pin specification`;
@@ -46,41 +33,12 @@ const subHelpers = {
   },
   validatePins(
     pins: string[],
-    mcuType: IStandardFirmwareMcuType,
+    _mcuType: IStandardFirmwareMcuType,
   ): string | undefined {
-    const availablePins =
-      mcuType === 'avr' ? availablePinsAvr : availablePinsRp;
+    const availablePins = availablePinsRp;
     const valid = pins.every((pin) => availablePins.includes(pin)) || false;
     if (!valid) {
       return `invalid pins specification`;
-    }
-  },
-  validateAvrEncoderPrimaryPins(
-    pins: string[],
-    mcuType: IStandardFirmwareMcuType,
-  ): string | undefined {
-    if (mcuType === 'avr') {
-      const numEncoder = pins.length / 2;
-      const checkedPins = generateNumberSequence(numEncoder).map(
-        (i) => pins[i * 2],
-      );
-      const valid = checkedPins.every((pin) =>
-        acceptableAvrEncoderPrimaryPins.includes(pin),
-      );
-      if (!valid) {
-        return `primary pin for encoder must be PB0~PB7`;
-      }
-    }
-  },
-  validateAvrSingleWireSignalPin(
-    pin: string,
-    mcuType: IStandardFirmwareMcuType,
-  ): string | undefined {
-    if (mcuType === 'avr') {
-      const valid = acceptableAvrSingleWirePins.includes(pin);
-      if (!valid) {
-        return `signal pin must be PD0 or PD2`;
-      }
     }
   },
   checkPinsCount(pins: string[], expectedLength: number): string | undefined {
@@ -139,12 +97,6 @@ export const standardFirmwareEditModelHelpers = {
     baseFirmwareType: IStandardBaseFirmwareType,
   ): IStandardFirmwareMcuType {
     if (
-      baseFirmwareType === 'AvrUnified' ||
-      baseFirmwareType === 'AvrSplit' ||
-      baseFirmwareType === 'AvrOddSplit'
-    ) {
-      return 'avr';
-    } else if (
       baseFirmwareType === 'RpUnified' ||
       baseFirmwareType === 'RpSplit' ||
       baseFirmwareType === 'RpOddSplit'
@@ -154,17 +106,10 @@ export const standardFirmwareEditModelHelpers = {
     throw new Error(`invalid baseFirmwareType ${baseFirmwareType}`);
   },
   getIsSplit(baseFirmwareType: IStandardBaseFirmwareType): boolean {
-    return (
-      baseFirmwareType === 'AvrSplit' ||
-      baseFirmwareType === 'RpSplit' ||
-      baseFirmwareType === 'AvrOddSplit' ||
-      baseFirmwareType === 'RpOddSplit'
-    );
+    return baseFirmwareType === 'RpSplit' || baseFirmwareType === 'RpOddSplit';
   },
   getIsOddSplit(baseFirmwareType: IStandardBaseFirmwareType): boolean {
-    return (
-      baseFirmwareType === 'AvrOddSplit' || baseFirmwareType === 'RpOddSplit'
-    );
+    return baseFirmwareType === 'RpOddSplit';
   },
   cleanupFirmwareConfig(
     data: IStandardFirmwareConfig,
@@ -239,17 +184,10 @@ export const standardFirmwareEditModelHelpers = {
   ) {
     const { baseFirmwareType, boardType } = editValues;
 
-    const { getMcuType, getIsSplit } = standardFirmwareEditModelHelpers;
+    const { getMcuType } = standardFirmwareEditModelHelpers;
     const mcuType = getMcuType(baseFirmwareType);
-    const isAvr = mcuType === 'avr';
     const isRp = mcuType === 'rp';
-    const isSplit = getIsSplit(baseFirmwareType);
 
-    if (isAvr) {
-      if (!isIncluded(boardType)('ChipAtMega32U4', 'ProMicro')) {
-        editValues.boardType = 'ProMicro';
-      }
-    }
     if (isRp) {
       if (!isIncluded(boardType)('ChipRP2040', 'ProMicroRP2040', 'RpiPico')) {
         editValues.boardType = 'ProMicroRP2040';
@@ -259,19 +197,10 @@ export const standardFirmwareEditModelHelpers = {
       // editValues.matrixRowPins = undefined;
       // editValues.matrixColumnPins = undefined;
     }
-    if (isAvr && editValues.useLighting) {
-      editValues.lightingPin = 'PD3';
-    }
     if (isRp && !editValues.useLighting && editValues.lightingPin === 'PD3') {
       editValues.lightingPin = undefined;
     }
-    if (isAvr && isSplit) {
-      editValues.useLcd = false;
-    }
-    const isChip = isIncluded(editValues.boardType)(
-      'ChipAtMega32U4',
-      'ChipRP2040',
-    );
+    const isChip = isIncluded(editValues.boardType)('ChipRP2040');
     if (isChip && editValues.useBoardLeds) {
       editValues.useBoardLeds = false;
     }
@@ -339,8 +268,7 @@ export const standardFirmwareEditModelHelpers = {
       (useEncoder &&
         pins &&
         (subHelpers.validatePins(pins, mcuType) ||
-          subHelpers.checkPinsCountEx(pins, allowedEncoderPinCounts) ||
-          subHelpers.validateAvrEncoderPrimaryPins(pins, mcuType))) ||
+          subHelpers.checkPinsCountEx(pins, allowedEncoderPinCounts))) ||
       undefined;
 
     const checkNumLeds = (numLeds: number | undefined) =>
@@ -366,11 +294,7 @@ export const standardFirmwareEditModelHelpers = {
 
       singleWireSignalPin:
         singleWireSignalPin &&
-        (subHelpers.validatePin(singleWireSignalPin, mcuType) ||
-          subHelpers.validateAvrSingleWireSignalPin(
-            singleWireSignalPin,
-            mcuType,
-          )),
+        subHelpers.validatePin(singleWireSignalPin, mcuType),
     };
   },
   getTotalValidationError(editValues: IStandardFirmwareEditValues): string {

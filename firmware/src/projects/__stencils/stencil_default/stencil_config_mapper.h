@@ -1,8 +1,6 @@
 #pragma once
 
-#if defined(KERMITE_TARGET_MCU_ATMEGA)
-#define __IS_ATMEGA
-#elif defined(KERMITE_TARGET_MCU_RP2040)
+#if defined(KERMITE_TARGET_MCU_RP2040)
 #define __IS_RP2040
 #else
 #error KERMITE_TARGET_MCU_* is not defined
@@ -22,12 +20,6 @@
 
 #ifdef KS_USB_PRODUCT
 #define KM0_USB__PRODUCT_TEXT KS_USB_PRODUCT
-#endif
-
-#ifdef KS_RGBLED_PIN
-#ifdef __IS_ATMEGA
-#define KM0_ATMEGA_NEOPIXELCORE__PIN_RGBLED KS_RGBLED_PIN
-#endif
 #endif
 
 #ifdef KS_SNGLEWIRE_PIN

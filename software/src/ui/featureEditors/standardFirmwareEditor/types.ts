@@ -6,7 +6,8 @@ export type IStandardFirmwareEditErrors = {
   [key in keyof IStandardFirmwareConfig]?: string;
 };
 
-export type IStandardFirmwareMcuType = 'avr' | 'rp';
+// export type IStandardFirmwareMcuType = 'avr' | 'rp';
+export type IStandardFirmwareMcuType = 'rp';
 
 export type IFlagFieldKey = ExtractKeysWithType<
   Required<IStandardFirmwareConfig>,

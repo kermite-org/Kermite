@@ -20,7 +20,8 @@ export type IResourceOrigin =
   | 'local_draft'
   | 'online_audit';
 
-export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
+// export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
+export type IFirmwareTargetDevice = 'rp2040';
 
 export interface IProjectFirmwareInfo {
   variationName: string;
@@ -30,19 +31,15 @@ export interface IProjectFirmwareInfo {
 }
 
 export type IStandardBaseFirmwareType =
-  | 'AvrUnified'
-  | 'AvrSplit'
-  | 'RpUnified'
-  | 'RpSplit'
-  | 'AvrOddSplit'
-  | 'RpOddSplit';
+  // | 'AvrUnified'
+  // | 'AvrSplit'
+  // 'AvrOddSplit'
+  'RpUnified' | 'RpSplit' | 'RpOddSplit';
 
 export type IStandardFirmwareBoardType =
-  | 'ChipAtMega32U4'
-  | 'ProMicro'
-  | 'ChipRP2040'
-  | 'ProMicroRP2040'
-  | 'RpiPico';
+  // | 'ChipAtMega32U4'
+  // | 'ProMicro'
+  'ChipRP2040' | 'ProMicroRP2040' | 'RpiPico';
 
 export type IStandardFirmwareConfig = {
   baseFirmwareType: IStandardBaseFirmwareType;
@@ -307,7 +304,9 @@ export interface IApplicationVersionInfo {
   version: string;
 }
 
-export type IBootloaderType = 'avrCaterina' | 'rp2040uf2' | 'avrDfu';
+// export type IBootloaderType = 'avrCaterina' | 'rp2040uf2' | 'avrDfu';
+export type IBootloaderType = 'rp2040uf2';
+
 export type IBootloaderDeviceDetectionStatus =
   | {
       detected: false;

@@ -18,11 +18,11 @@ import { Packets } from '~/shell/services/keyboardDevice/packets';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   // atmega32u4
-  {
-    serialNumberFirst12Bytes: 'A152FD2C:M01',
-    usagePage: 0xffab,
-    usage: 0x0200,
-  },
+  // {
+  //   serialNumberFirst12Bytes: 'A152FD2C:M01',
+  //   usagePage: 0xffab,
+  //   usage: 0x0200,
+  // },
   // rp2040
   {
     serialNumberFirst12Bytes: 'A152FD2C:M02',

@@ -60,11 +60,8 @@ const specSerializerFunctionMap: {
     meta: IStandardKeyboardInjectedMetaData,
   ) => number[];
 } = {
-  AvrUnified: serializeCustomKeyboardSpec_Unified,
   RpUnified: serializeCustomKeyboardSpec_Unified,
-  AvrSplit: serializeCustomKeyboardSpec_Split,
   RpSplit: serializeCustomKeyboardSpec_Split,
-  AvrOddSplit: serializeCustomKeyboardSpec_OddSplit,
   RpOddSplit: serializeCustomKeyboardSpec_OddSplit,
 };
 

@@ -36,7 +36,6 @@ export const StandardFirmwareEditor: FC = () => {
     baseFirmwareTypeOptions,
     boardTypeOptions,
     editValues,
-    isAvr,
     isRp,
     isSplit,
     isOddSplit,
@@ -193,7 +192,6 @@ export const StandardFirmwareEditor: FC = () => {
             fieldKey="useLcd"
             label="use OLED"
             editValues={editValues}
-            disabled={isAvr && isSplit}
           />
 
           <SinglePinFieldRow

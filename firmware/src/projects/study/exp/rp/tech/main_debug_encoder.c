@@ -20,7 +20,7 @@ typedef struct {
 
 static const int err = 2;
 
-__flash static const uint8_t encoder_count_delta_table[16] = {
+static const uint8_t encoder_count_delta_table[16] = {
   0, 1, -1, err,
   -1, 0, err, 1,
   1, err, 0, -1,

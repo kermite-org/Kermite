@@ -60,35 +60,14 @@ export function checkStandardFirmwareConfigData(
     singleWireSignalPin,
   } = spec;
 
-  const isAvr =
-    fw === 'AvrUnified' || fw === 'AvrSplit' || fw === 'AvrOddSplit';
   const isRp = fw === 'RpUnified' || fw === 'RpSplit' || fw === 'RpOddSplit';
-  const isSplit =
-    fw === 'AvrSplit' ||
-    fw === 'RpSplit' ||
-    fw === 'AvrOddSplit' ||
-    fw === 'RpOddSplit';
-  const isOddSplit = fw === 'AvrOddSplit' || fw === 'RpOddSplit';
+  const isSplit = fw === 'RpSplit' || fw === 'RpOddSplit';
+  const isOddSplit = fw === 'RpOddSplit';
 
-  if (isAvr) {
-    if (
-      boardType === 'ChipRP2040' ||
-      boardType === 'ProMicroRP2040' ||
-      boardType === 'RpiPico'
-    ) {
-      return false;
-    }
-  } else if (isRp) {
-    if (boardType === 'ChipAtMega32U4' || boardType === 'ProMicro') {
-      return false;
-    }
-  } else {
+  if (!isRp) {
     return false;
   }
-  if (
-    useBoardLeds &&
-    (boardType === 'ChipAtMega32U4' || boardType === 'ChipRP2040')
-  ) {
+  if (useBoardLeds && boardType === 'ChipRP2040') {
     return false;
   }
 

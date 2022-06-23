@@ -21,7 +21,7 @@
 
 typedef struct {
   uint8_t dataHeader[5];
-  bool useBoardLedsProMicroAvr;
+  bool useBoardLedsProMicroAvr__OBSOLETE;
   bool useBoardLedsProMicroRp;
   bool useBoardLedsRpiPico;
   bool useDebugUart;
@@ -47,7 +47,7 @@ typedef struct {
 
 KermiteKeyboardDefinitionData defs = {
   .dataHeader = { '$', 'K', 'M', 'D', 'F' },
-  .useBoardLedsProMicroAvr = false,
+  .useBoardLedsProMicroAvr__OBSOLETE = false,
   .useBoardLedsProMicroRp = false,
   .useBoardLedsRpiPico = false,
   .useDebugUart = false,
@@ -164,9 +164,6 @@ static void setupBoard(int8_t side) {
 }
 
 int main() {
-  if (defs.useBoardLedsProMicroAvr) {
-    boardIoImpl_setupLeds_proMicroAvr();
-  }
   if (defs.useBoardLedsProMicroRp) {
     boardIoImpl_setupLeds_proMicroRp();
   }

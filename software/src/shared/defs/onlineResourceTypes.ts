@@ -25,7 +25,7 @@ export interface IKrsSummaryJsonData {
     };
     environment: {
       OS: string;
-      'avr-gcc': string;
+      'arm-none-eabi-gcc': string;
       make: string;
     };
     updateAt: string;

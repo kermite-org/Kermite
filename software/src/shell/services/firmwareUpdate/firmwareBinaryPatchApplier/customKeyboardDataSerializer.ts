@@ -25,8 +25,8 @@ function mapBoardTypeToCode(
   }
   return (
     {
-      ChipAtMega32U4: 1,
-      ProMicro: 2,
+      // ChipAtMega32U4: 1,
+      // ProMicro: 2,
       ChipRP2040: 3,
       ProMicroRP2040: 4,
       RpiPico: 5,
