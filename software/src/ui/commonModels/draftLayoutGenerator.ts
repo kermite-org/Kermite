@@ -22,17 +22,17 @@ function makeLabelEntity(
 }
 
 const unifiedKeyboardTypes: IStandardBaseFirmwareType[] = [
-  'AvrUnified',
+  // 'AvrUnified',
   'RpUnified',
 ];
 
 const evenSplitKeyboardTypes: IStandardBaseFirmwareType[] = [
-  'AvrSplit',
+  // 'AvrSplit',
   'RpSplit',
 ];
 
 const oddSplitKeyboardTypes: IStandardBaseFirmwareType[] = [
-  'AvrOddSplit',
+  // 'AvrOddSplit',
   'RpOddSplit',
 ];
 

@@ -1,39 +1,5 @@
 import { IBoardPinAssignsData } from '~/ui/fabrics/controllerPinAssignsSection/types';
 
-export const boardAssignsData_proMicro: IBoardPinAssignsData = {
-  unitPixels: 18,
-  boardUnitWidth: 7,
-  boardUnitHeight: 14,
-  pinsRowOffset: 2,
-  boardImageSig: 'proMicro',
-  pinNames: [
-    'PD3',
-    'PD2',
-    'GND',
-    'GND',
-    'PD1',
-    'PD0',
-    'PD4',
-    'PC6',
-    'PD7',
-    'PE6',
-    'PB4',
-    'PB5',
-    'PB6',
-    'PB2',
-    'PB3',
-    'PB1',
-    'PF7',
-    'PF6',
-    'PF5',
-    'PF4',
-    'VCC',
-    '#RST',
-    'GND',
-    'RAW',
-  ],
-};
-
 export const boardAssignsData_proMicroRp2040: IBoardPinAssignsData = {
   unitPixels: 18,
   boardUnitWidth: 7,

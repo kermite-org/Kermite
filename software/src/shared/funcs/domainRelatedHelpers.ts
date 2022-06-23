@@ -60,7 +60,7 @@ export function checkDeviceInstanceCodeValid(code: string): boolean {
 }
 
 const kermiteMcuCodeToMcuNameMap: { [key in string]: string } = {
-  M01: 'ATmega32U4',
+  // M01: 'ATmega32U4',
   M02: 'RP2040',
 };
 export function getMcuNameFromKermiteMcuCode(code: string) {
@@ -77,26 +77,21 @@ export function checkDeviceBootloaderMatch(
   bootloaderType: IBootloaderType,
   firmwareTargetDevice: IFirmwareTargetDevice,
 ): boolean {
-  const isBootloaderAvr =
-    bootloaderType === 'avrCaterina' || bootloaderType === 'avrDfu';
   const isBootloaderRp2040 = bootloaderType === 'rp2040uf2';
-  return (
-    (isBootloaderAvr && firmwareTargetDevice === 'atmega32u4') ||
-    (isBootloaderRp2040 && firmwareTargetDevice === 'rp2040')
-  );
+  return isBootloaderRp2040 && firmwareTargetDevice === 'rp2040';
 }
 
 export function getFirmwareTargetDeviceFromBaseFirmwareType(
   baseFirmwareType: IStandardBaseFirmwareType,
 ): IFirmwareTargetDevice {
   if (
-    baseFirmwareType === 'AvrUnified' ||
-    baseFirmwareType === 'AvrSplit' ||
-    baseFirmwareType === 'AvrOddSplit'
+    baseFirmwareType === 'RpUnified' ||
+    baseFirmwareType === 'RpSplit' ||
+    baseFirmwareType === 'RpOddSplit'
   ) {
-    return 'atmega32u4';
-  } else {
     return 'rp2040';
+  } else {
+    throw new Error('invalid baseFirmwareType');
   }
 }
 

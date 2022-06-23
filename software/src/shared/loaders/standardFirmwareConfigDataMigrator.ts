@@ -1,7 +1,7 @@
 import { IStandardFirmwareConfig } from '~/shared';
 
 export type IStandardFirmwareConfigOld = IStandardFirmwareConfig & {
-  useBoardLedsProMicroAvr?: boolean;
+  // useBoardLedsProMicroAvr?: boolean;
   useBoardLedsProMicroRp?: boolean;
   useBoardLedsRpiPico?: boolean;
 };
@@ -9,11 +9,6 @@ export type IStandardFirmwareConfigOld = IStandardFirmwareConfig & {
 export function migrateStandardFirmwareConfig(
   spec: IStandardFirmwareConfigOld,
 ) {
-  if (spec.useBoardLedsProMicroAvr) {
-    delete spec.useBoardLedsProMicroAvr;
-    spec.boardType = 'ProMicro';
-    spec.useBoardLeds = true;
-  }
   if (spec.useBoardLedsProMicroRp) {
     delete spec.useBoardLedsProMicroRp;
     spec.boardType = 'ProMicroRP2040';
@@ -25,7 +20,6 @@ export function migrateStandardFirmwareConfig(
     spec.useBoardLeds = true;
   }
   if (!spec.boardType) {
-    const isAvr = spec.baseFirmwareType.includes('Avr');
-    spec.boardType = isAvr ? 'ProMicro' : 'ProMicroRP2040';
+    spec.boardType = 'ProMicroRP2040';
   }
 }

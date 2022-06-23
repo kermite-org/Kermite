@@ -74,7 +74,7 @@ const FirmwareVariationItemCard: FC<{
     }
   `;
   const mcuLabelMap: Record<IFirmwareTargetDevice, string> = {
-    atmega32u4: 'AVR',
+    // atmega32u4: 'AVR',
     rp2040: 'RP',
   };
   return (

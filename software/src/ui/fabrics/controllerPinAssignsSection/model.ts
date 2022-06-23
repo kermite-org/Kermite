@@ -1,6 +1,5 @@
 import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
 import {
-  boardAssignsData_proMicro,
   boardAssignsData_proMicroRp2040,
   boardAssignsData_rpiPico,
 } from '~/ui/fabrics/controllerPinAssignsSection/data';
@@ -57,8 +56,8 @@ const boardTypeToAssignsDataSourceMap: Record<
   IStandardFirmwareBoardType,
   IBoardPinAssignsData | undefined
 > = {
-  ChipAtMega32U4: undefined,
-  ProMicro: boardAssignsData_proMicro,
+  // ChipAtMega32U4: undefined,
+  // ProMicro: boardAssignsData_proMicro,
   ChipRP2040: undefined,
   ProMicroRP2040: boardAssignsData_proMicroRp2040,
   RpiPico: boardAssignsData_rpiPico,
@@ -111,18 +110,11 @@ export function createBoardAssignsData(
     pushPinFunctionName(base, lightingPin, 'rgbled');
   }
   if (useDebugUart) {
-    if (mcuType === 'avr') {
-      pushPinFunctionName(base, 'PD3', 'debug_tx');
-    }
     if (mcuType === 'rp') {
       pushPinFunctionName(base, 'GP0', 'debug_tx');
     }
   }
   if (useLcd) {
-    if (mcuType === 'avr') {
-      pushPinFunctionName(base, 'PD1', 'oled_sda');
-      pushPinFunctionName(base, 'PD0', 'oled_scl');
-    }
     if (mcuType === 'rp') {
       pushPinFunctionName(base, 'GP2', 'oled_sda');
       pushPinFunctionName(base, 'GP3', 'oled_scl');

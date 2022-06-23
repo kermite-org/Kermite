@@ -54,11 +54,11 @@ namespace fetcherOnlineStandard {
   const standardFirmwarePaths: {
     [key in IStandardBaseFirmwareType]?: string;
   } = {
-    AvrUnified: 'firmwares/standard/standard_avr.hex',
+    // AvrUnified: 'firmwares/standard/standard_avr.hex',
     RpUnified: 'firmwares/standard/standard_rp.uf2',
-    AvrSplit: 'firmwares/standard/standard_avr_split.hex',
+    // AvrSplit: 'firmwares/standard/standard_avr_split.hex',
     RpSplit: 'firmwares/standard/standard_rp_split.uf2',
-    AvrOddSplit: 'firmwares/standard/standard_avr_split.hex',
+    // AvrOddSplit: 'firmwares/standard/standard_avr_split.hex',
     RpOddSplit: 'firmwares/standard/standard_rp_split.uf2',
   };
 
