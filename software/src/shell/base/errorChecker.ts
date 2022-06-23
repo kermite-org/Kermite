@@ -6,9 +6,11 @@ import { appGlobal } from '~/shell/base/appGlobal';
 const badExecutionContextNames: string[] = [];
 
 export function reportShellError(error: any) {
-  const rootDir = appEnv.resolveApplicationRootDir();
-  console.error(makeCompactStackTrace(error));
-  appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
+  // const rootDir = appEnv.resolveApplicationRootDir();
+  // console.error(makeCompactStackTrace(error));
+  // appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
+  console.log('caught shell error');
+  console.log({ error });
 }
 
 export async function executeWithAppErrorHandler(
