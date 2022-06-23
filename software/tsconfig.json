@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "composite": true,
     "declaration": true,
@@ -23,11 +23,5 @@
       "~/*": ["./*"]
     }
   },
-  "include": [
-    "./src/**/*",
-    "./build.ts",
-    "./build2.ts",
-    "./jest.config.js",
-    "./src/**/*.json"
-  ]
+  "include": ["src/**/*", "src/**/*.json"]
 }

@@ -1,2 +1,2 @@
-export * from './ProjectReviewPageStore';
-export * from './SettingsPageStore';
+export * from './projectReviewPageStore';
+export * from './settingsPageStore';

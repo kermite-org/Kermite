@@ -1,1 +1,1 @@
-export * from './InputLogicSimulator';
+export * from './inputLogicSimulator';

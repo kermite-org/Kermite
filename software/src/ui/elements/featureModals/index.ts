@@ -1,2 +1,2 @@
-export * from './ProjectSelectionModal/ProjectSelectionModal';
+export * from './projectSelectionModal/ProjectSelectionModal';
 export * from './ProjectAttachmentFileSelectorModal';

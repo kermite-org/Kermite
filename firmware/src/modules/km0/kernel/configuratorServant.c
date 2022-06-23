@@ -117,6 +117,7 @@ static void emitDeviceAttributesResponse() {
   p[3] = Kermite_ProfileBinaryFormatRevision;
   p[4] = Kermite_ConfigParametersRevision;
   utils_copyBytes(p + 5, (uint8_t *)Kermite_Project_McuCode, 3);
+  utils_copyBytes(p + 8, (uint8_t *)commonFirmwareMetadata.projectId, 6);
   utils_copyBytes(p + 15, (uint8_t *)KERMITE_FIRMWARE_ID, 6);
   p[21] = Kermite_Project_IsResourceOriginOnline;
   p[22] = Kermite_Project_ReleaseBuildRevision >> 8 & 0xFF;
@@ -125,6 +126,7 @@ static void emitDeviceAttributesResponse() {
   size_t slen = utils_clamp(strlen(Kermite_Project_VariationName), 0, 16);
   utils_copyBytes(p + 24, (uint8_t *)Kermite_Project_VariationName, slen);
   utils_copyBytes(p + 40, (uint8_t *)commonFirmwareMetadata.deviceInstanceCode, 4);
+  utils_copyBytes(p + 44, (uint8_t *)commonFirmwareMetadata.variationId, 2);
   p[48] = keyMappingDataCapacity >> 8 & 0xFF;
   p[49] = keyMappingDataCapacity & 0xFF;
   emitGenericHidData(rawHidTempBuf);

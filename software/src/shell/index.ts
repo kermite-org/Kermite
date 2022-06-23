@@ -1,9 +1,8 @@
-import { app } from 'electron';
 import 'source-map-support/register';
-import { ApplicationRoot } from '~/shell/ApplicationRoot';
-import { appGlobal } from '~/shell/base';
+import { ApplicationRoot } from '~/shell/applicationRoot';
 
-let appRoot: ApplicationRoot | undefined;
+/*
+// let appRoot: ApplicationRoot | undefined;
 
 async function startApplication() {
   console.log('start');
@@ -42,3 +41,6 @@ function bootElectronApp() {
 }
 
 bootElectronApp();
+*/
+
+export const appRoot = new ApplicationRoot();
