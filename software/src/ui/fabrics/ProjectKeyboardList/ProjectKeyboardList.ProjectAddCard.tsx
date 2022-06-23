@@ -30,7 +30,8 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
       e.preventDefault();
       const file = e.dataTransfer?.files[0];
       if (file && file.type === 'application/json') {
-        onFileDrop(file.path);
+        throw new Error('TODO: support importing package file');
+        // onFileDrop(file.path);
       }
       baseDiv.classList.remove('--drop-hover');
     };

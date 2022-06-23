@@ -1,7 +1,8 @@
-import { IpcRenderer } from 'electron';
+// import { IpcRenderer } from 'electron';
 import { removeArrayItems } from '~/shared/funcs';
 import { IIpcContractBase } from './IpcContractBase';
 
+type IpcRenderer = any;
 export interface IIpcRendererAgent<T extends IIpcContractBase> {
   setPropsProcessHook(hook: () => void): void;
   sync: T['sync'];
@@ -60,7 +61,7 @@ export function getIpcRendererAgent<
   function getAsyncHandler(key: string) {
     return (...args: any[]) => {
       return new Promise((resolve) => {
-        ipcRenderer.invoke(key, ...args).then((res) => {
+        ipcRenderer.invoke(key, ...args).then((res: any) => {
           resolve(res);
           postProcessHook?.();
         });
