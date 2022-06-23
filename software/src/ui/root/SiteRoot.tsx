@@ -81,7 +81,7 @@ const InitialLoadingView: FC = () => {
 };
 
 export const SiteRoot: FC = () => {
-  useEffect(router.rerenderEffectOnHashChange, []);
+  // useEffect(router.rerenderEffectOnHashChange, []);
   useEffect(appErrorNotifierEffect, []);
   useEffect(globalHintMouseMoveHandlerEffect, []);
   useEffect(uiStateDriverEffect, []);
