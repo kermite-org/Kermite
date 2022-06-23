@@ -10,7 +10,7 @@
 //square font
 const uint8_t oledFontWidth = 5;
 const uint8_t oledFontLetterSpacing = 1;
-__flash const uint8_t oledFontData[] = {
+const uint8_t oledFontData[] = {
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x5e, 0x00, 0x00,
   0x00, 0x06, 0x00, 0x06, 0x00,
@@ -113,7 +113,7 @@ __flash const uint8_t oledFontData[] = {
 //round font
 const uint8_t oledFontWidth = 5;
 const uint8_t oledFontLetterSpacing = 1;
-__flash const uint8_t oledFontData[] = {
+const uint8_t oledFontData[] = {
   0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x00, 0x5e, 0x00, 0x00,
   0x00, 0x06, 0x00, 0x06, 0x00,
