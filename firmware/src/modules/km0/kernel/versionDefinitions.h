@@ -11,9 +11,7 @@
 
 #define Kermite_CommonSerialNumberPrefix "A152FD2C"
 
-#if defined KERMITE_TARGET_MCU_ATMEGA
-#define Kermite_Project_McuCode "M01"
-#elif defined KERMITE_TARGET_MCU_RP2040
+#if defined KERMITE_TARGET_MCU_RP2040
 #define Kermite_Project_McuCode "M02"
 #else
 #error KERMITE_TARGET_MCU_* is not defined
