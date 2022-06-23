@@ -8,7 +8,7 @@ import { createEventPort } from '~/shell/funcs';
 import {
   firmwareFileLoader_loadFirmwareFile,
   firmwareFileLoader_loadFirmwareFileByPackageInfo,
-} from './firmwareFileLoader/FirmwareFileLoader';
+} from './firmwareFileLoader/firmwareFileLoader';
 import { IFirmwareBinaryFileSpec } from './types';
 
 export class FirmwareUpdateService {

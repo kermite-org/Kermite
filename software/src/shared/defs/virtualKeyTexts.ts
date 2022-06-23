@@ -1,4 +1,4 @@
-import { VirtualKey } from './VirtualKeys';
+import { VirtualKey } from './virtualKeys';
 
 export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_NONE: 'none',

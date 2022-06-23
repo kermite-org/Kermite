@@ -7,9 +7,9 @@ import {
   IProjectPackageInfo,
   IProjectProfileEntry,
   IStandardFirmwareEntry,
-} from '~/shared/defs/DomainTypes';
-import { createFallbackPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
-import { fallbackPersistProfileData } from '~/shared/defs/ProfileData';
+} from '~/shared/defs/domainTypes';
+import { createFallbackPersistKeyboardDesign } from '~/shared/defs/keyboardDesign';
+import { fallbackPersistProfileData } from '~/shared/defs/profileData';
 
 export const fallbackStandardFirmwareConfig: IStandardFirmwareConfig = {
   baseFirmwareType: 'RpUnified',

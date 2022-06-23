@@ -1,4 +1,4 @@
-import { getObjectKeys } from '~/shared/funcs/Utils';
+import { getObjectKeys } from '~/shared/funcs/utils';
 
 export type IActionReceiver<T> = {
   [K in keyof T]?: (payload: NonNullable<T[K]>) => void | Promise<void>;

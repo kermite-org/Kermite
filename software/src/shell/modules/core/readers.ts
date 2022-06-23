@@ -6,7 +6,7 @@ import {
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { pathResolve } from '~/shell/funcs';
-import { coreState } from '~/shell/modules/core/CoreStateAction';
+import { coreState } from '~/shell/modules/core/coreStateAction';
 
 export const profilesReader = {
   getCurrentProfileProjectId(): string {

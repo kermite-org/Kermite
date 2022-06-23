@@ -1,9 +1,9 @@
-import { SystemAction } from '~/shared/defs/CommandDefinitions';
+import { SystemAction } from '~/shared/defs/commandDefinitions';
 import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,
-} from './KeyboardDesign';
-import { VirtualKey } from './VirtualKeys';
+} from './keyboardDesign';
+import { VirtualKey } from './virtualKeys';
 
 export type ILayerDefaultScheme = 'block' | 'transparent';
 export interface ILayer {

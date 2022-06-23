@@ -1,5 +1,5 @@
-import { LogicalKey } from '~/shared/defs/LogicalKey';
-import { VirtualKey } from '~/shared/defs/VirtualKeys';
+import { LogicalKey } from '~/shared/defs/logicalKey';
+import { VirtualKey } from '~/shared/defs/virtualKeys';
 
 export const routerConstants = {
   RoutingChannelValueAny: 15,

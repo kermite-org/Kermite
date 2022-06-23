@@ -1,6 +1,6 @@
 import { IPersistProfileData, IServerProfileInfo } from '~/shared';
 import { cacheRemoteResource, fetchJson } from '~/shell/funcs';
-import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
+import { ProfileFileLoader } from '~/shell/loaders/profileFileLoader';
 
 export namespace PresetHubServerTypes {
   export type GetProfilesProjectIdsResponse = {

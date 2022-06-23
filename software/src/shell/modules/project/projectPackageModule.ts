@@ -12,9 +12,9 @@ import {
   coreState,
   createCoreModule,
 } from '~/shell/modules/core';
-import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
-import { projectPackageProvider } from '~/shell/modules/project/ProjectPackageCore';
-import { remoteResourceUpdater2_updateRemoteProjectPackages } from '~/shell/modules/project/RemoteResourcesUpdater2';
+import { customFirmwareInfoProvider } from '~/shell/modules/project/customFirmwareInfoProvider';
+import { projectPackageProvider } from '~/shell/modules/project/projectPackageCore';
+import { remoteResourceUpdater2_updateRemoteProjectPackages } from '~/shell/modules/project/remoteResourcesUpdater2';
 
 const projectPackageModuleHelper = {
   findProjectInfo(origin: IResourceOrigin, projectId: string) {

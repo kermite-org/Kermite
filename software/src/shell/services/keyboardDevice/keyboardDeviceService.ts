@@ -1,8 +1,8 @@
 import { IProfileData, IRealtimeKeyboardEvent } from '~/shared';
-import { DeviceSelectionManager } from '~/shell/services/keyboardDevice/DeviceSelectionManager';
-import { KeyboardDeviceServiceCore } from '~/shell/services/keyboardDevice/DeviceServiceCoreImpl';
-import { IKeyboardDeviceService } from '~/shell/services/keyboardDevice/Interfaces';
-import { KeyMappingEmitter } from '~/shell/services/keyboardDevice/KeyMappingEmitter';
+import { DeviceSelectionManager } from '~/shell/services/keyboardDevice/deviceSelectionManager';
+import { KeyboardDeviceServiceCore } from '~/shell/services/keyboardDevice/deviceServiceCoreImpl';
+import { IKeyboardDeviceService } from '~/shell/services/keyboardDevice/interfaces';
+import { KeyMappingEmitter } from '~/shell/services/keyboardDevice/keyMappingEmitter';
 
 export class KeyboardDeviceService implements IKeyboardDeviceService {
   private core = new KeyboardDeviceServiceCore();

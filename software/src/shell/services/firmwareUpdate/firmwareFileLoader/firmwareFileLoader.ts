@@ -18,9 +18,9 @@ import {
   pathBasename,
 } from '~/shell/funcs';
 import { coreState } from '~/shell/modules/core';
-import { customFirmwareInfoProvider } from '~/shell/modules/project/CustomFirmwareInfoProvider';
-import { applyFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryPatchApplier';
-import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
+import { customFirmwareInfoProvider } from '~/shell/modules/project/customFirmwareInfoProvider';
+import { applyFirmwareBinaryPatch } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/firmwareBinaryPatchApplier';
+import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/types';
 import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
 
 const config = {

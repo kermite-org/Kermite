@@ -3,20 +3,20 @@ import {
   IKeyboardDeviceStatus,
   IRealtimeKeyboardEvent,
 } from '~/shared';
-import { executeWithAppErrorHandler2 } from '~/shell/base/ErrorChecker';
+import { executeWithAppErrorHandler2 } from '~/shell/base/errorChecker';
 import { createEventPort } from '~/shell/funcs';
 import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   deviceSetupTask,
   readDeviceCustomParameters,
-} from '~/shell/services/keyboardDevice/DeviceServiceCoreFuncs';
-import { Packets } from '~/shell/services/keyboardDevice/Packets';
+} from '~/shell/services/keyboardDevice/deviceServiceCoreFuncs';
+import { Packets } from '~/shell/services/keyboardDevice/packets';
 import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
   receivedBytesDecoder,
-} from '~/shell/services/keyboardDevice/ReceivedBytesDecoder';
-import { IDeviceWrapper } from './DeviceWrapper';
+} from '~/shell/services/keyboardDevice/receivedBytesDecoder';
+import { IDeviceWrapper } from './deviceWrapper';
 
 function createConnectedStatus(
   keyboardDeviceInfo: IKeyboardDeviceInfo,

@@ -19,8 +19,8 @@ import {
   pathJoin,
   pathResolve,
 } from '~/shell/funcs';
-import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
-import { loadKermiteServerProjectPackageInfos } from '~/shell/modules/project/KermiteServerProjectLoader';
+import { migrateProjectPackageData } from '~/shell/loaders/projectPackageDataMigrator';
+import { loadKermiteServerProjectPackageInfos } from '~/shell/modules/project/kermiteServerProjectLoader';
 
 const configs = {
   debugUseLocalRepositoryPackages: false,

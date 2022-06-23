@@ -12,7 +12,7 @@ import {
   coreStateManager,
   profilesReader,
 } from '~/shell/modules/core';
-import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
+import { layoutManagerModule } from '~/shell/modules/layout/layoutManagerModule';
 
 const layoutEditSourceSchema = vSchemaOneOf([
   vObject({

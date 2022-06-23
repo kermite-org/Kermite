@@ -10,7 +10,7 @@ import {
   ModifierVirtualKey,
   ProfileDataConverter,
 } from '~/shared';
-import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
+import { LayoutDataMigrator } from '~/shell/loaders/layoutDataMigrator';
 
 namespace ProfileDataMigratorHelper {
   export function patchAllLayers(layers: ILayer[], fn: (la: ILayer) => void) {

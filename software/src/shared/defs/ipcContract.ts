@@ -1,4 +1,4 @@
-import { IAppErrorData } from '~/shared/defs/CustomErrors';
+import { IAppErrorData } from '~/shared/defs/customErrors';
 import {
   IBootloaderDeviceDetectionStatus,
   IFirmwareOriginEx,
@@ -6,9 +6,9 @@ import {
   IRealtimeKeyboardEvent,
   IResourceOrigin,
   IServerProfileInfo,
-} from '~/shared/defs/DomainTypes';
-import { ICoreAction, ICoreState } from '~/shared/defs/GlobalStateActionTypes';
-import { IProfileData } from './ProfileData';
+} from '~/shared/defs/domainTypes';
+import { ICoreAction, ICoreState } from '~/shared/defs/globalStateActionTypes';
+import { IProfileData } from './profileData';
 
 export interface IAppIpcContract {
   sync: {

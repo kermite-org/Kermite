@@ -5,15 +5,15 @@ import {
   ProfileBinaryFormatRevision,
   RawHidMessageProtocolRevision,
 } from '~/shared';
-import { NumSystemParameters } from '~/shared/defs/CommandDefinitions';
-import { Packets } from '~/shell/services/keyboardDevice/Packets';
+import { NumSystemParameters } from '~/shared/defs/commandDefinitions';
+import { Packets } from '~/shell/services/keyboardDevice/packets';
 import {
   ICustomParametersReadResponseData,
   IDeviceAttributesReadResponseData,
   IReceivedBytesDecodeResult,
   receivedBytesDecoder,
-} from '~/shell/services/keyboardDevice/ReceivedBytesDecoder';
-import { IDeviceWrapper } from './DeviceWrapper';
+} from '~/shell/services/keyboardDevice/receivedBytesDecoder';
+import { IDeviceWrapper } from './deviceWrapper';
 
 function checkRevisionValue(
   label: string,

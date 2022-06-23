@@ -8,11 +8,11 @@ import {
   serializeCustomKeyboardSpec_OddSplit,
   serializeCustomKeyboardSpec_Split,
   serializeCustomKeyboardSpec_Unified,
-} from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/CustomKeyboardDataSerializer';
-import { patchHexFileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryModifierHex';
-import { patchUf2FileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/FirmwareBinaryModifierUF2';
-import { replaceArrayContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
-import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
+} from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/customKeyboardDataSerializer';
+import { patchHexFileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/firmwareBinaryModifierHex';
+import { patchUf2FileContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/firmwareBinaryModifierUF2';
+import { replaceArrayContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/helpers';
+import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/types';
 
 function getBinaryContentMarkerIndex(
   bytes: number[],

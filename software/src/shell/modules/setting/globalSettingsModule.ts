@@ -4,7 +4,7 @@ import {
   IGlobalSettings,
 } from '~/shared';
 import { applicationStorage } from '~/shell/base';
-import { checkLocalRepositoryFolder } from '~/shell/loaders/LocalResourceHelper';
+import { checkLocalRepositoryFolder } from '~/shell/loaders/localResourceHelper';
 import {
   commitCoreState,
   coreState,

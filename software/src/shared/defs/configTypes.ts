@@ -1,9 +1,9 @@
-import { IResourceOrigin } from '~/shared/defs/DomainTypes';
+import { IResourceOrigin } from '~/shared/defs/domainTypes';
 import {
   vBoolean,
   vObject,
   vString,
-} from '~/shared/loaders/SchemaValidationHelper';
+} from '~/shared/loaders/schemaValidationHelper';
 
 export interface IKeyboardConfig {
   isSimulatorMode: boolean;

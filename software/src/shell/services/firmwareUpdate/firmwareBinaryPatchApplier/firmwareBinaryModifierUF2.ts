@@ -1,5 +1,5 @@
 import { flattenArray, splitBytesN } from '~/shared';
-import { replaceArrayContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
+import { replaceArrayContent } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/helpers';
 
 const uf2Config = {
   blockSize: 512,

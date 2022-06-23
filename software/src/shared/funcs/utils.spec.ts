@@ -1,4 +1,4 @@
-import { copyObjectProps } from '~/shared';
+import { copyObjectProps } from './utils';
 
 describe('copyObjectProps', () => {
   test('basic usage', () => {

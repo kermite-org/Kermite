@@ -1,5 +1,5 @@
 import { IDisplayKeyboardDesign, IPersistKeyboardDesign } from '~/shared/defs';
-import { DisplayKeyboardDesignLoader } from '~/shared/loaders/DisplayKeyboardDesignLoader';
+import { DisplayKeyboardDesignLoader } from '~/shared/loaders/displayKeyboardDesignLoader';
 
 const state = new (class {
   source!: IPersistKeyboardDesign;

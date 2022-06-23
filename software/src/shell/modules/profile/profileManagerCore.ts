@@ -4,7 +4,7 @@ import {
   IProfileEntry,
   validateResourceName,
 } from '~/shared';
-import { appEnv } from '~/shell/base/AppEnv';
+import { appEnv } from '~/shell/base';
 import {
   fspCopyFile,
   fspReaddir,
@@ -20,7 +20,7 @@ import {
   pathDirname,
   pathJoin,
 } from '~/shell/funcs';
-import { ProfileFileLoader } from '~/shell/loaders/ProfileFileLoader';
+import { ProfileFileLoader } from '~/shell/loaders/profileFileLoader';
 import { coreState } from '~/shell/modules/core';
 
 function getProjectProfileFolderName(projectId: string) {

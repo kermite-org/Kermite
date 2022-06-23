@@ -1,6 +1,6 @@
 // import { BrowserWindow } from 'electron';
 import { IAppErrorData, IAppIpcContract } from '~/shared';
-import { createIpcAgentBypassed } from '~/shared/xpc/IpcAgentBypassed';
+import { createIpcAgentBypassed } from '~/shared/xpc/ipcAgentBypassed';
 import { createEventPort } from '~/shell/funcs';
 
 export const appGlobal = new (class {

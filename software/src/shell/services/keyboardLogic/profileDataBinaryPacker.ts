@@ -22,7 +22,7 @@ import {
   writeBytes,
   writeUint16LE,
   writeUint8,
-} from '~/shell/services/keyboardDevice/Helpers';
+} from '~/shell/services/keyboardDevice/helpers';
 
 /*
 Key Assigns Restriction

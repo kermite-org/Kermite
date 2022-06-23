@@ -1,5 +1,5 @@
 import { routerConstants } from '~/shared';
-import { dataStorage } from '~/shell/services/keyboardLogic/DataStorage';
+import { dataStorage } from '~/shell/services/keyboardLogic/dataStorage';
 
 type u8 = number;
 type u16 = number;

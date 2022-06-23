@@ -3,7 +3,7 @@ import {
   globalSettingsDefault,
   IGlobalSettings,
   IKeyboardConfig,
-} from '~/shared/defs/ConfigTypes';
+} from '~/shared/defs/configTypes';
 import {
   IApplicationVersionInfo,
   IAppWindowStatus,
@@ -16,13 +16,13 @@ import {
   IProfileEntry,
   IProjectPackageInfo,
   IResourceOrigin,
-} from '~/shared/defs/DomainTypes';
-import { fallbackDeviceSelectionStatus } from '~/shared/defs/FallbackValues';
+} from '~/shared/defs/domainTypes';
+import { fallbackDeviceSelectionStatus } from '~/shared/defs/fallbackValues';
 import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,
-} from '~/shared/defs/KeyboardDesign';
-import { fallbackProfileData, IProfileData } from '~/shared/defs/ProfileData';
+} from '~/shared/defs/keyboardDesign';
+import { fallbackProfileData, IProfileData } from '~/shared/defs/profileData';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;

@@ -10,7 +10,7 @@ import {
   vValueEquals,
   vValueOneOf,
 } from '~/shared';
-import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/LayoutFileSchemaChecker';
+import { persistEditKeyboardDesignSchemaChecker } from '~/shell/loaders/layoutFileSchemaChecker';
 
 const vAssignOperation = () =>
   vSchemaOneOf([

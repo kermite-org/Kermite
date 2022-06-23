@@ -1,4 +1,4 @@
-import { IFirmwareTargetDevice } from '~/shared';
+import { IFirmwareTargetDevice } from './domainTypes';
 
 export interface IKrsRemoteProjectResourceInfoSource {
   projectId: string;

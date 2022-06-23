@@ -13,8 +13,8 @@ import {
   dispatchCoreAction,
   profilesReader,
 } from '~/shell/modules/core';
-import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profile/PresetProfileLoader';
-import { profileManagerCore } from '~/shell/modules/profile/ProfileManagerCore';
+import { presetProfileLoader_loadPresetProfileData } from '~/shell/modules/profile/presetProfileLoader';
+import { profileManagerCore } from '~/shell/modules/profile/profileManagerCore';
 
 const errorTextInvalidOperation = 'invalid operation';
 

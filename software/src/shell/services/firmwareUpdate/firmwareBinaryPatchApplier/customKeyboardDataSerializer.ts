@@ -1,13 +1,13 @@
 import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
-import { PinNameToPinNumberMap } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/DataTables';
+import { PinNameToPinNumberMap } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/dataTables';
 import {
   convertArrayElementsToBytes,
   isStringPrintableAscii,
   padByteArray,
   stringToEmbedBytes,
-} from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Helpers';
-import { checkStandardFirmwareConfigData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/StandardFirmwareConfigValidator';
-import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/Types';
+} from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/helpers';
+import { checkStandardFirmwareConfigData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/standardFirmwareConfigValidator';
+import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpdate/firmwareBinaryPatchApplier/types';
 
 function mapPinNameToPinNumber(pinName: string | undefined): number {
   const pinNumber = PinNameToPinNumberMap[pinName || ''];

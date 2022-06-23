@@ -6,7 +6,7 @@ import {
 } from '~/shared';
 import { appEnv } from '~/shell/base';
 import { fsxListFileBaseNames, fsxReadJsonFile, pathJoin } from '~/shell/funcs';
-import { migrateProjectPackageData } from '~/shell/loaders/ProjectPackageDataMigrator';
+import { migrateProjectPackageData } from '~/shell/loaders/projectPackageDataMigrator';
 
 interface IProjectPackageWrapperFileContent {
   projectId: string;

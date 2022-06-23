@@ -4,8 +4,8 @@ import {
   IProjectPackageFileContent,
 } from '~/shared';
 import { migrateStandardFirmwareConfig } from '~/shared/loaders';
-import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
-import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
+import { LayoutDataMigrator } from '~/shell/loaders/layoutDataMigrator';
+import { ProfileDataMigrator } from '~/shell/loaders/profileDataMigrator';
 
 export interface IProjectProfileEntryOld {
   presetName: string;

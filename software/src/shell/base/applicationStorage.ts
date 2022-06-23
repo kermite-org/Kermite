@@ -3,7 +3,7 @@ import {
   duplicateObjectByJsonStringifyParse,
   ICheckerEx,
 } from '~/shared';
-import { appEnv } from '~/shell/base/AppEnv';
+import { appEnv } from '~/shell/base/appEnv';
 import {
   fsExistsSync,
   fsxEnsureFolderExists,

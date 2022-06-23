@@ -1,6 +1,6 @@
 // import { IpcRenderer } from 'electron';
 import { removeArrayItems } from '~/shared/funcs';
-import { IIpcContractBase } from './IpcContractBase';
+import { IIpcContractBase } from './ipcContractBase';
 
 type IpcRenderer = any;
 export interface IIpcRendererAgent<T extends IIpcContractBase> {

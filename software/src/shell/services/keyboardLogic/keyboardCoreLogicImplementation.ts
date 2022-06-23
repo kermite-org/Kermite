@@ -5,12 +5,12 @@ import {
   LogicalKey,
   keyCodeTranslator_mapLogicalKeyToHidKeyCode,
 } from '~/shared';
-import { dataStorage } from '~/shell/services/keyboardLogic/DataStorage';
+import { dataStorage } from '~/shell/services/keyboardLogic/dataStorage';
 import {
   keyActionRemapper_setupDataReader,
   keyActionRemapper_translateKeyOperation,
-} from '~/shell/services/keyboardLogic/KeyActionRemapper';
-import { KeyboardCoreLogicInterface } from './KeyboardCoreLogicInterface';
+} from '~/shell/services/keyboardLogic/keyActionRemapper';
+import { KeyboardCoreLogicInterface } from './keyboardCoreLogicInterface';
 
 // --------------------------------------------------------------------------------
 // types

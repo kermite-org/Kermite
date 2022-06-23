@@ -7,12 +7,12 @@ import {
   IRealtimeKeyboardEvent,
   SystemParameter,
 } from '~/shared';
-import { withAppErrorHandler } from '~/shell/base/ErrorChecker';
+import { withAppErrorHandler } from '~/shell/base/errorChecker';
 import { coreStateManager } from '~/shell/modules/core';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
-import { dataStorage } from '~/shell/services/keyboardLogic/DataStorage';
-import { getKeyboardCoreLogicInterface } from './KeyboardCoreLogicImplementation';
-import { makeProfileBinaryData } from './ProfileDataBinaryPacker';
+import { dataStorage } from '~/shell/services/keyboardLogic/dataStorage';
+import { getKeyboardCoreLogicInterface } from './keyboardCoreLogicImplementation';
+import { makeProfileBinaryData } from './profileDataBinaryPacker';
 
 function compareArray(ar0: any[], ar1: any[]): boolean {
   return (

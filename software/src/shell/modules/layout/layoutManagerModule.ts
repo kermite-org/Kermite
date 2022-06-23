@@ -4,7 +4,7 @@ import {
   duplicateObjectByJsonStringifyParse,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
-import { LayoutFileLoader } from '~/shell/loaders/LayoutFileLoader';
+import { LayoutFileLoader } from '~/shell/loaders/layoutFileLoader';
 import {
   commitCoreState,
   coreState,

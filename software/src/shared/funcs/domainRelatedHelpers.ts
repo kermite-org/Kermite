@@ -9,7 +9,7 @@ import {
   IResourceOrigin,
   IStandardBaseFirmwareType,
 } from '~/shared/defs';
-import { generateRandomIdBase62 } from '~/shared/funcs/Utils';
+import { generateRandomIdBase62 } from '~/shared/funcs/utils';
 
 // プロジェクトソースの単一文字列表現 `local#${projectId}` or `online#${projectId}`
 export function createProjectKey(origin: IResourceOrigin, projectId: string) {

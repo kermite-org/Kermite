@@ -11,8 +11,8 @@ import {
   fsxReadJsonFile,
   fsxWriteJsonFile,
 } from '~/shell/funcs';
-import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
-import { checkProfileDataObjectSchema } from '~/shell/loaders/ProfileDataSchemaChecker';
+import { ProfileDataMigrator } from '~/shell/loaders/profileDataMigrator';
+import { checkProfileDataObjectSchema } from '~/shell/loaders/profileDataSchemaChecker';
 
 export namespace ProfileFileLoader {
   export function convertProfileDataFromPersistProfileData(

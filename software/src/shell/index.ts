@@ -1,5 +1,5 @@
 import 'source-map-support/register';
-import { ApplicationRoot } from '~/shell/ApplicationRoot';
+import { ApplicationRoot } from '~/shell/applicationRoot';
 
 /*
 // let appRoot: ApplicationRoot | undefined;

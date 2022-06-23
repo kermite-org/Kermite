@@ -8,12 +8,12 @@ import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfosWebHid,
   IDeviceSpecificationParams,
-} from '~/shell/services/keyboardDevice/DeviceEnumerator';
+} from '~/shell/services/keyboardDevice/deviceEnumerator';
 import {
   DeviceWrapper,
   IDeviceWrapper,
-} from '~/shell/services/keyboardDevice/DeviceWrapper';
-import { Packets } from '~/shell/services/keyboardDevice/Packets';
+} from '~/shell/services/keyboardDevice/deviceWrapper';
+import { Packets } from '~/shell/services/keyboardDevice/packets';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const deviceSpecificationParams: IDeviceSpecificationParams[] = [

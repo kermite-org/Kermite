@@ -5,11 +5,11 @@ import { appConfig, appEnv, appGlobal, applicationStorage } from '~/shell/base';
 import {
   executeWithFatalErrorHandlerSync,
   reportShellError,
-} from '~/shell/base/ErrorChecker';
+} from '~/shell/base/errorChecker';
 import { pathResolve } from '~/shell/funcs';
-import { fileDialogLoaders } from '~/shell/loaders/FileDialogLoaders';
-import { checkLocalRepositoryFolder } from '~/shell/loaders/LocalResourceHelper';
-import { userPresetHubDataLoader } from '~/shell/loaders/UserPresetHubDataLoader';
+import { fileDialogLoaders } from '~/shell/loaders/fileDialogLoaders';
+import { checkLocalRepositoryFolder } from '~/shell/loaders/localResourceHelper';
+import { userPresetHubDataLoader } from '~/shell/loaders/userPresetHubDataLoader';
 import {
   keyboardConfigModule,
   layoutManagerRoot,
@@ -23,14 +23,14 @@ import {
   dispatchCoreAction,
   profilesReader,
 } from '~/shell/modules/core';
-import { layoutManagerModule } from '~/shell/modules/layout/LayoutManagerModule';
-import { profileManagerModule } from '~/shell/modules/profile/ProfileManagerModule';
-import { profileManagerRoot } from '~/shell/modules/profile/ProfileManagerRoot';
-import { globalSettingsModule } from '~/shell/modules/setting/GlobalSettingsModule';
+import { layoutManagerModule } from '~/shell/modules/layout/layoutManagerModule';
+import { profileManagerModule } from '~/shell/modules/profile/profileManagerModule';
+import { profileManagerRoot } from '~/shell/modules/profile/profileManagerRoot';
+import { globalSettingsModule } from '~/shell/modules/setting/globalSettingsModule';
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
-import { createWindowModule } from './services/window/AppWindowWrapper';
+import { createWindowModule } from './services/window/appWindowWrapper';
 
 export class ApplicationRoot {
   private firmwareUpdateService = new FirmwareUpdateService();

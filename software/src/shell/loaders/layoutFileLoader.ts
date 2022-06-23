@@ -6,8 +6,8 @@ import {
   fsxReadJsonFile,
   fsxWriteJsonFile,
 } from '~/shell/funcs';
-import { LayoutDataMigrator } from '~/shell/loaders/LayoutDataMigrator';
-import { checkLayoutFileContentObjectSchema } from '~/shell/loaders/LayoutFileSchemaChecker';
+import { LayoutDataMigrator } from '~/shell/loaders/layoutDataMigrator';
+import { checkLayoutFileContentObjectSchema } from '~/shell/loaders/layoutFileSchemaChecker';
 
 export namespace LayoutFileLoader {
   function fixLayoutData(obj: IPersistKeyboardDesign, filePath: string) {

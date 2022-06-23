@@ -1,4 +1,4 @@
-import { IIpcContractBase } from './IpcContractBase';
+import { IIpcContractBase } from './ipcContractBase';
 
 type IErrorHandler = (error: any) => void;
 

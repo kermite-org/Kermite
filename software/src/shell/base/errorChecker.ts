@@ -1,7 +1,7 @@
 // import { app, dialog } from 'electron';
 import { getAppErrorData, makeCompactStackTrace } from '~/shared';
-import { appEnv } from '~/shell/base/AppEnv';
-import { appGlobal } from '~/shell/base/AppGlobal';
+import { appEnv } from '~/shell/base/appEnv';
+import { appGlobal } from '~/shell/base/appGlobal';
 
 const badExecutionContextNames: string[] = [];
 

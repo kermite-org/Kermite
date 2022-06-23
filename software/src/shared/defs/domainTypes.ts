@@ -1,6 +1,6 @@
-import { ICustomParameterSpec } from '~/shared/defs/CustomParameter';
-import { IPersistKeyboardDesign } from '~/shared/defs/KeyboardDesign';
-import { IPersistProfileData, IProfileData } from './ProfileData';
+import { ICustomParameterSpec } from '~/shared/defs/customParameter';
+import { IPersistKeyboardDesign } from '~/shared/defs/keyboardDesign';
+import { IPersistProfileData, IProfileData } from './profileData';
 
 export type IPresetType = 'blank' | 'preset';
 

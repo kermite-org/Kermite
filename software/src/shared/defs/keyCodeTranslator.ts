@@ -1,4 +1,4 @@
-import { LogicalKey } from './LogicalKey';
+import { LogicalKey } from './logicalKey';
 
 // HIDキーコード定義, キーボードの言語やレイアウトによらない共通部分
 const enum HidKey {
