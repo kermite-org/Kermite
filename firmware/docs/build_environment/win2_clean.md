@@ -4,7 +4,6 @@ The basic configuration is the same as [win1_default](./win1_default.md), except
 ## What to add to PATH in OS preferences
 * Make for Windows
 ## Tools to be used by specifying the PATH in Makefile
-* AVR-GCC
 * arm-none-eabi-gcc
 * GOW (or CoreUtils)
 * MinGW

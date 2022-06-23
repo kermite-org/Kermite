@@ -5,7 +5,6 @@
 ## OSの環境設定でパスを通すもの
 * Make for Windows
 ## Makefileの中でパスを指定して利用するもの
-* AVR-GCC
 * arm-none-eabi-gcc
 * GOW (or CoreUtils)
 * MinGW

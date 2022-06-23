@@ -6,21 +6,6 @@ The following steps have been confirmed on MacOS 10.15 Catalina.
 ### Make, GCC
  Make and GCC are included in OS by default, so we use them as they are.
 
-### AVR-GCC
-There is a toolchain for AVR at https://github.com/osx-cross/homebrew-avr which can be installed with Homebrew.
-
-```
-$ xcode-select --install
-$ brew tap osx-cross/avr
-$ brew install avr-gcc
-```
-
-### avrdude
-Use https://formulae.brew.sh/formula/avrdude.
-```
-$ brew install avrdude
-```
-
 ### arm-none-eabi-gcc
 Use https://github.com/ARMmbed/homebrew-formulae.
 ```
@@ -37,7 +22,6 @@ Make sure that each tool is available by using commands like
 
 ```
 $ make -v
-$ avr-gcc -v
 $ g++ -v
 $ arm-none-eabi-gcc -v
 $ avrdude -v
@@ -46,7 +30,6 @@ $ avrdude -v
 
 Make sure you can build the project with commands like
 ```
-$ make astelia:atmega:build
-$ make proto/minivers:rev2_rp:build
+$ make proto/standard:rp:build
 ```
 
