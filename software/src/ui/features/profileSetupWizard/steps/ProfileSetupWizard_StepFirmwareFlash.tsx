@@ -7,8 +7,8 @@ import {
   DeviceAutoConnectionPart,
   StandardFirmwareFlashPart,
 } from '~/ui/fabrics';
-import { FirmwareVariationSelector } from '~/ui/fabrics/FirmwareVariationSelector/view';
-import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
+import { FirmwareVariationSelector } from '~/ui/fabrics/firmwareVariationSelector/view';
+import { profileSetupStore } from '~/ui/features/profileSetupWizard/store/profileSetupStore';
 
 type IFirmwareFlashStepModel = {
   projectInfo: IProjectPackageInfo;

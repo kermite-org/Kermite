@@ -2,11 +2,11 @@ import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { IProfileSetupStep } from '~/ui/commonModels';
 import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
-import { ProfileSetupWizard_StepBaseProfileSelection } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepBaseProjectSelection';
-import { ProfileSetupWizard_StepFirmwareFlash } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepFirmwareFlash';
-import { ProfileSetupWizard_StepPresetSelection } from '~/ui/features/ProfileSetupWizard/steps/ProfileSetupWizard_StepPresetSelection';
-import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
-import { profileSetupWizardStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupWizardStore';
+import { ProfileSetupWizard_StepBaseProfileSelection } from '~/ui/features/profileSetupWizard/steps/ProfileSetupWizard_StepBaseProjectSelection';
+import { ProfileSetupWizard_StepFirmwareFlash } from '~/ui/features/profileSetupWizard/steps/ProfileSetupWizard_StepFirmwareFlash';
+import { ProfileSetupWizard_StepPresetSelection } from '~/ui/features/profileSetupWizard/steps/ProfileSetupWizard_StepPresetSelection';
+import { profileSetupStore } from '~/ui/features/profileSetupWizard/store/profileSetupStore';
+import { profileSetupWizardStore } from '~/ui/features/profileSetupWizard/store/profileSetupWizardStore';
 
 const stepInstructionMap: Record<IProfileSetupStep, string> = {
   step1: texts.profileWizardFrame.headerStep1KeyboardSelection,

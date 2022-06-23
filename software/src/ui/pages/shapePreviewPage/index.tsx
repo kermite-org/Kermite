@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { CommonPageFrame, GeneralSelector } from '~/ui/components';
 import { PreviewKeyboardShapeView } from '~/ui/elements/keyboard';
-import { useShapePreviewPageModel } from '~/ui/pages/ShapePreviewPage/models';
-import { ShapePreviewOptionsBox } from '~/ui/pages/ShapePreviewPage/organisms/ShapePreviewOptionsBox';
+import { useShapePreviewPageModel } from '~/ui/pages/shapePreviewPage/models';
+import { ShapePreviewOptionsBox } from '~/ui/pages/shapePreviewPage/organisms/ShapePreviewOptionsBox';
 
 export const ShapePreviewPage: FC = () => {
   const {

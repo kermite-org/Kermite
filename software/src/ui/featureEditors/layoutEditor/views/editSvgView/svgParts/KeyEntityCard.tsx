@@ -4,14 +4,14 @@ import { colors, uiTheme } from '~/ui/base';
 import {
   IPosition,
   startDragSession,
-} from '~/ui/featureEditors/LayoutEditor/common';
+} from '~/ui/featureEditors/layoutEditor/common';
 import {
   editMutations,
   editReader,
   IEditKeyEntity,
-} from '~/ui/featureEditors/LayoutEditor/models';
-import { getKeyIdentifierText } from '~/ui/featureEditors/LayoutEditor/models/DomainRelatedHelpers';
-import { unitValueToMm } from '~/ui/featureEditors/LayoutEditor/models/PlacementUnitHelperEx';
+} from '~/ui/featureEditors/layoutEditor/models';
+import { getKeyIdentifierText } from '~/ui/featureEditors/layoutEditor/models/domainRelatedHelpers';
+import { unitValueToMm } from '~/ui/featureEditors/layoutEditor/models/placementUnitHelperEx';
 
 export function startKeyEntityDragOperation(
   e: MouseEvent,

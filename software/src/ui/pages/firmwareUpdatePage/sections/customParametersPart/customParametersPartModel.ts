@@ -3,7 +3,7 @@ import { ipcAgent } from '~/ui/base';
 import {
   ICustomParameterModel,
   makeParameterModel,
-} from '~/ui/pages/FirmwareUpdatePage/sections/CustomParametersPart/CustomParameterModel';
+} from '~/ui/pages/firmwareUpdatePage/sections/customParametersPart/customParameterModel';
 import { uiReaders } from '~/ui/store';
 
 interface ICustomParametersPartModel {

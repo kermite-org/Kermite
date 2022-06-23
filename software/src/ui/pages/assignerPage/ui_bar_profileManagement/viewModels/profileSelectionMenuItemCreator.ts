@@ -1,6 +1,6 @@
 import { IGeneralMenuItem, texts } from '~/ui/base';
 import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
-import { IProfileManagementPartViewModel } from './ProfilesOperationModel';
+import { IProfileManagementPartViewModel } from './profilesOperationModel';
 
 export function createProfileSelectionMenuItems(
   vm: IProfileManagementPartViewModel,

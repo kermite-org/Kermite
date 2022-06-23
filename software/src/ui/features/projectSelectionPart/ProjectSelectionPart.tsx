@@ -1,6 +1,6 @@
 import { FC, jsx, useEffect } from 'alumina';
 import { ProjectSelectionPartComponent } from '~/ui/fabrics';
-import { projectSelectionPartStore } from '~/ui/store/domains/ProjectSelectionPartStore/ProjectSelectionPartStore';
+import { projectSelectionPartStore } from '~/ui/store/domains/projectSelectionPartStore/projectSelectionPartStore';
 
 export const ProjectSelectionPart: FC = () => {
   useEffect(projectSelectionPartStore.initializeOnMount, []);

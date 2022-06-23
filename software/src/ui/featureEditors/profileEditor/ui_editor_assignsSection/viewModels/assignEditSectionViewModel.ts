@@ -1,10 +1,10 @@
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import {
   makePlainOperationEditCardsViewModel,
   makeOperationEditPartViewModel,
-} from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
-import { makeOperationLayerOptionEditViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationLayerOptionEditViewModel';
-import { makeOperationSlotsPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';
+} from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationEditPartViewModel';
+import { makeOperationLayerOptionEditViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationLayerOptionEditViewModel';
+import { makeOperationSlotsPartViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationSlotsPartViewModel';
 
 export function makeAssignEditSectionViewModel() {
   const isDisabled = !assignerModel.isSlotSelected;

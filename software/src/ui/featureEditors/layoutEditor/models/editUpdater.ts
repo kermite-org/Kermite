@@ -1,8 +1,8 @@
 import { produce } from 'immer';
 import { compareObjectByJsonStringify } from '~/shared';
-import { appState, IEditState, IEnvState } from './AppState';
-import { IEditKeyEntity } from './DataSchema';
-import { editManager } from './EditManager';
+import { appState, IEditState, IEnvState } from './appState';
+import { IEditKeyEntity } from './dataSchema';
+import { editManager } from './editManager';
 
 class EditUpdater {
   patchEnvState(callback: (state: IEnvState) => void) {

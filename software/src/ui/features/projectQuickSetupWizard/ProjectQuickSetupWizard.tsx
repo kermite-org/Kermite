@@ -2,11 +2,11 @@ import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { IProjectQuickSetupStep } from '~/ui/commonModels';
 import { WizardFooterBar, WizardTopBar } from '~/ui/elements/frames';
-import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareConfig';
-import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareFlash';
-import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/ProjectQuickSetupWizard/steps/ProjectQuickSetupPart_StepLayoutConfig';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
-import { projectQuickSetupWizardStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupWizardStore';
+import { ProjectQuickSetupPart_StepFirmwareConfig } from '~/ui/features/projectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareConfig';
+import { ProjectQuickSetupPart_StepFirmwareFlash } from '~/ui/features/projectQuickSetupWizard/steps/ProjectQuickSetupPart_StepFirmwareFlash';
+import { ProjectQuickSetupPart_StepLayoutConfig } from '~/ui/features/projectQuickSetupWizard/steps/ProjectQuickSetupPart_StepLayoutConfig';
+import { projectQuickSetupStore } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStore';
+import { projectQuickSetupWizardStore } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupWizardStore';
 
 const stepInstructionMap: Record<IProjectQuickSetupStep, string> = {
   step1: texts.projectWizardFrame.headerStep1FirmwareConfiguration,

@@ -10,8 +10,8 @@ import {
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
-} from '~/ui/featureEditors/LayoutEditor/models/DataSchema';
-import { getKeyIdentifierText } from '~/ui/featureEditors/LayoutEditor/models/DomainRelatedHelpers';
+} from '~/ui/featureEditors/layoutEditor/models';
+import { getKeyIdentifierText } from '~/ui/featureEditors/layoutEditor/models/domainRelatedHelpers';
 
 // groupId: string, ('0', '1', '2', など) 無効値は''
 // groupIndex: number | undefined, 無効値はundefined

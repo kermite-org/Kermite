@@ -1,7 +1,7 @@
 import {
   editMutations,
   editReader,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
 
 interface ITransGroupListPartModel {
   canAddGroup: boolean;

@@ -6,8 +6,8 @@ import {
   IProjectAttachmentFileSelectorModalModel,
   ProjectAttachmentFileSelectorModal,
 } from '~/ui/elements/featureModals';
-import { profilesActions } from '~/ui/pages/AssignerPage/models';
-import { IProfileManagementPartViewModel } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
+import { profilesActions } from '~/ui/pages/assignerPage/models';
+import { IProfileManagementPartViewModel } from '~/ui/pages/assignerPage/ui_bar_profileManagement/viewModels/profilesOperationModel';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
 
 function getSavingPackageFilePath() {

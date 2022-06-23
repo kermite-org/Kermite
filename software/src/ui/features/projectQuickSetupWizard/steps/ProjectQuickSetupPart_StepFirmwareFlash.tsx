@@ -5,7 +5,7 @@ import {
   DeviceAutoConnectionPart,
   StandardFirmwareFlashPart,
 } from '~/ui/fabrics';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareFlash: FC = () => {
   const projectInfo = useMemo(

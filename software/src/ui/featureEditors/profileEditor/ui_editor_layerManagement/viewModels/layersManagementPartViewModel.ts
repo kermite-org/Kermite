@@ -1,14 +1,14 @@
 import { asyncRerender } from 'alumina';
 import { ILayer, removeArrayItemsMatched } from '~/shared';
-import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
+import { generateNextSequentialId } from '~/shared/funcs/domainRelatedHelpers';
 import { texts } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import {
   callLayerConfigurationModal,
   ILayerConfigurationModelEditValues,
-} from '~/ui/featureEditors/ProfileEditor/ui_modal_layerSettings/LayerConfigurationModal';
-import { profilesReader } from '~/ui/pages/AssignerPage/models';
+} from '~/ui/featureEditors/profileEditor/ui_modal_layerSettings/LayerConfigurationModal';
+import { profilesReader } from '~/ui/pages/assignerPage/models';
 
 export interface ILayerManagementPartViewModel {
   canEdit: boolean;

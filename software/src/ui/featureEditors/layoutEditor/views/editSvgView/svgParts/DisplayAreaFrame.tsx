@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'alumina';
 import { makeCssColor } from '~/ui/base';
-import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
 
 export const DisplayAreaFrame: FC = () => {
   const { displayArea: da } = editReader;

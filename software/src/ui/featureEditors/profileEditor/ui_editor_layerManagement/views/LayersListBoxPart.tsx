@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
-import { ILayerListBoxPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';
-import { LayerCard } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/views/LayersListBoxPart.LayerCard';
+import { ILayerListBoxPartViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_layerManagement/viewModels/layersListBoxPartViewModel';
+import { LayerCard } from '~/ui/featureEditors/profileEditor/ui_editor_layerManagement/views/LayersListBoxPart.LayerCard';
 
 type Props = {
   vm: ILayerListBoxPartViewModel;

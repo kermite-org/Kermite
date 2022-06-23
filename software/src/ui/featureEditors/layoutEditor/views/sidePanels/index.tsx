@@ -1,9 +1,9 @@
 import { jsx, css, FC } from 'alumina';
-import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
-import { DesignConfigurationPanel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/DesignConfigurationPanel';
-import { KeyEntityEditPanel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/KeyEntityEditPanel';
-import { OutlineEditPanel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/OutlineEditPanel';
-import { TransGroupEditPanel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/TransGroupEditPanel';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
+import { DesignConfigurationPanel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/organisms/DesignConfigurationPanel';
+import { KeyEntityEditPanel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/organisms/KeyEntityEditPanel';
+import { OutlineEditPanel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/organisms/OutlineEditPanel';
+import { TransGroupEditPanel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/organisms/TransGroupEditPanel';
 
 export const EditorSideColumnContent: FC = () => {
   const { editMode, currentKeyEntity, currentOutlinePoint } = editReader;

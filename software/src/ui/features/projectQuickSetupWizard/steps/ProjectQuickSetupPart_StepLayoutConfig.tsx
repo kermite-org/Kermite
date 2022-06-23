@@ -4,7 +4,7 @@ import {
   LayoutConfigurationSectionContent,
   LayoutGeneratorOptionsPart,
 } from '~/ui/fabrics';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepLayoutConfig: FC = () => {
   const { firmwareConfig, layoutOptions } = projectQuickSetupStore.state;

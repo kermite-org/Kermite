@@ -7,8 +7,8 @@ import {
   IProjectPackageInfo,
 } from '~/shared';
 import { router } from '~/ui/base';
-import { PagePaths } from '~/ui/commonModels/PageTypes';
-import { uiState } from '~/ui/store/base/UiState';
+import { PagePaths } from '~/ui/commonModels/pageTypes';
+import { uiState } from '~/ui/store/base/uiState';
 
 export const uiReaders = {
   get globalSettings(): IGlobalSettings {

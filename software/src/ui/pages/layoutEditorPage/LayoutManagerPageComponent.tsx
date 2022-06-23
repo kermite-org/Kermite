@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { LayoutEditorCore } from '~/ui/featureEditors';
-import { LayoutManagerTopBarTemplate } from '~/ui/pages/LayoutEditorPage/templates/LayoutManagerTopBarTemplate';
+import { LayoutManagerTopBarTemplate } from '~/ui/pages/layoutEditorPage/templates/LayoutManagerTopBarTemplate';
 
 export const LayoutManagerPageComponent: FC = () => {
   return (

@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'alumina';
 import { texts, uiTheme } from '~/ui/base';
 import { getUnscaledOverlayStyle } from '~/ui/components';
-import { useGlobalMenuPartModel } from '~/ui/root/organisms/GlobalMenuPart/GlobalMenuPart.model';
+import { useGlobalMenuPartModel } from '~/ui/root/organisms/globalMenuPart/globalMenuPart.model';
 import { uiState } from '~/ui/store';
 
 export const GlobalMenuPart: FC = () => {

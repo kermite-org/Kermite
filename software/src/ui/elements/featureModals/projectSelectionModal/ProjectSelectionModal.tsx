@@ -1,7 +1,7 @@
 import { jsx, useLocal } from 'alumina';
 import { ISelectorOption } from '~/ui/base';
 import { createModal } from '~/ui/components/overlay';
-import { ProjectSelectionModalContent } from '~/ui/elements/featureModals/ProjectSelectionModal/ProjectSelectionModal.content';
+import { ProjectSelectionModalContent } from '~/ui/elements/featureModals/projectSelectionModal/ProjectSelectionModal.content';
 
 type ModalProps = {
   modalTitle: string;

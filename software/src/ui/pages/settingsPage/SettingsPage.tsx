@@ -8,7 +8,7 @@ import {
   Indent,
   RibbonSelector,
 } from '~/ui/components';
-import { settingsPageStore } from '~/ui/store/domains/SettingsPageStore';
+import { settingsPageStore } from '~/ui/store/domains/settingsPageStore';
 
 export const SettingsPage = () => {
   const {

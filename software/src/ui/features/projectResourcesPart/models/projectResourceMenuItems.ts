@@ -1,5 +1,5 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
+import { projectResourceStore } from '~/ui/features/projectResourcesPart/store';
 import { uiReaders } from '~/ui/store';
 
 export function createProjectResourceMenuItems(): IGeneralMenuItem[] {

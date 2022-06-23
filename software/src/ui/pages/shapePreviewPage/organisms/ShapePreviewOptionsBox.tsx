@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'alumina';
 import { CheckBoxLine } from '~/ui/components';
-import { IShapeViewPersistState } from '~/ui/pages/ShapePreviewPage/models';
+import { IShapeViewPersistState } from '~/ui/pages/shapePreviewPage/models';
 import { fieldSetter } from '~/ui/utils';
 
 interface Props {

@@ -6,7 +6,7 @@ import {
   MuteModeSelector2,
   LayoutStandardSelector,
   RoutingChannelSelector,
-} from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
+} from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
 
 export const InputLogicOptionsPanelContent: FC = () => {
   return (

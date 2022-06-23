@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { CommonPageFrame } from '~/ui/components';
 import { ProjectKeyboardList, ProjectResourceList } from '~/ui/fabrics';
-import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
+import { ProjectResourceItemView } from '~/ui/fabrics/projectResourceItemView/ProjectResourceItemView';
 import { projectReviewPageStore } from '~/ui/store';
 
 export const ProjectReviewPage: FC = () => {

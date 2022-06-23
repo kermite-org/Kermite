@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { WidgetWindowActiveChrome, WidgetWindowFrame } from '~/ui/components';
-import { WidgetMainPanel } from '~/ui/pages/WidgetPage/panels/WidgetMainPanel';
+import { WidgetMainPanel } from '~/ui/pages/widgetPage/panels/WidgetMainPanel';
 import { siteModel } from '~/ui/store';
 
 export const WidgetZoneRoot: FC = () => {

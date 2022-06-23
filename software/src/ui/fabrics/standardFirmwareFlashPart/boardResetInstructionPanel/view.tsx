@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { languageKey } from '~/ui/base';
 import { ClosableOverlay } from '~/ui/components';
-import { boardResetInstructionPanelAssets } from '~/ui/fabrics/StandardFirmwareFlashPart/BoardResetInstructionPanel/assets';
+import { boardResetInstructionPanelAssets } from '~/ui/fabrics/standardFirmwareFlashPart/boardResetInstructionPanel/assets';
 
 type Props = {
   isOpen: boolean;

@@ -1,5 +1,5 @@
 import { IGlobalSettings } from '~/shared';
-import { dispatchCoreAction } from '~/ui/store/base/UiState';
+import { dispatchCoreAction } from '~/ui/store/base/uiState';
 
 export const globalSettingsWriter = {
   async writeValue<K extends keyof IGlobalSettings>(

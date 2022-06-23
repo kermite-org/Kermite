@@ -4,9 +4,9 @@ import { ClosableOverlay, CommonDialogFrame } from '~/ui/components';
 import {
   DualModeSettingsPart,
   DualModeSettingsPart2,
-} from '~/ui/featureEditors/ProfileEditor/ui_modal_profileConfiguration/DualModeSettingsPart';
-import { KeyboardProjectSelectionPart } from '~/ui/featureEditors/ProfileEditor/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
-import { ShiftCancelOptionPart } from '~/ui/featureEditors/ProfileEditor/ui_modal_profileConfiguration/ShiftCancelOptionPart';
+} from '~/ui/featureEditors/profileEditor/ui_modal_profileConfiguration/DualModeSettingsPart';
+import { KeyboardProjectSelectionPart } from '~/ui/featureEditors/profileEditor/ui_modal_profileConfiguration/KeyboardProjectSelectionPart';
+import { ShiftCancelOptionPart } from '~/ui/featureEditors/profileEditor/ui_modal_profileConfiguration/ShiftCancelOptionPart';
 import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
 import { reflectChecked } from '~/ui/utils';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';

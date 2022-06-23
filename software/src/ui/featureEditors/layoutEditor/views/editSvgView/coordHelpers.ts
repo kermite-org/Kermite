@@ -2,7 +2,7 @@ import { degToRad } from '~/shared';
 import {
   editReader,
   IEditTransGroup,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
 
 export function screenToWorld(sx: number, sy: number): [x: number, y: number] {
   const { sight } = editReader;

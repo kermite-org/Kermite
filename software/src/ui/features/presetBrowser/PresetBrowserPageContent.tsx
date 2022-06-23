@@ -2,7 +2,7 @@ import { css, FC, jsx, useEffect } from 'alumina';
 import { ipcAgent, texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
-import { presetSelectionStore } from '~/ui/store/domains/PresetSelectionStore';
+import { presetSelectionStore } from '~/ui/store/domains/presetSelectionStore';
 
 export const PresetBrowserPageContent: FC = () => {
   useEffect(presetSelectionStore.initializeOnMount, []);

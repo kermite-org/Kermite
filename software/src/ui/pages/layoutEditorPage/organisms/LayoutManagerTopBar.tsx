@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'alumina';
 import { colors, IGeneralMenuItem } from '~/ui/base';
 import { GeneralButtonMenu, OperationButtonWithIcon } from '~/ui/components';
 import { RadioButtonLine } from '~/ui/components/molecules/RadioButtonLine';
-import { ILayoutManagerEditTarget } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerBase';
+import { ILayoutManagerEditTarget } from '~/ui/pages/layoutEditorPage/models/layoutManagerBase';
 
 type Props = {
   menuItems: IGeneralMenuItem[];

@@ -4,10 +4,10 @@ import { ISelectorOption } from '~/ui/base';
 import { modalError } from '~/ui/components';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/elements/featureModals';
 import { LayoutEditorCore } from '~/ui/featureEditors';
-import { layoutManagerActions } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerActions';
-import { ILayoutManagerModalState } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerBase';
-import { layoutManagerHelpers } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerHelpers';
-import { layoutManagerReader } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerReaders';
+import { layoutManagerActions } from '~/ui/pages/layoutEditorPage/models/layoutManagerActions';
+import { ILayoutManagerModalState } from '~/ui/pages/layoutEditorPage/models/layoutManagerBase';
+import { layoutManagerHelpers } from '~/ui/pages/layoutEditorPage/models/layoutManagerHelpers';
+import { layoutManagerReader } from '~/ui/pages/layoutEditorPage/models/layoutManagerReaders';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
 
 const configs = {

@@ -1,8 +1,8 @@
 import { css, FC, jsx, useEffect } from 'alumina';
 import { IPersistProfileData, ProfileDataConverter } from '~/shared';
-import { KeyAssignEditView } from '~/ui/featureEditors/ProfileEditor/KeyAssignEditView';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
-import { ProfileConfigurationModalLayer } from '~/ui/featureEditors/ProfileEditor/ui_modal_profileConfiguration';
+import { KeyAssignEditView } from '~/ui/featureEditors/profileEditor/KeyAssignEditView';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
+import { ProfileConfigurationModalLayer } from '~/ui/featureEditors/profileEditor/ui_modal_profileConfiguration';
 
 type Props = {
   originalProfile: IPersistProfileData;

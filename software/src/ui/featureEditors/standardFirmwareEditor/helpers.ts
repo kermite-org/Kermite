@@ -15,7 +15,7 @@ import {
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
   IStandardFirmwareMcuType,
-} from '~/ui/featureEditors/StandardFirmwareEditor/types';
+} from '~/ui/featureEditors/standardFirmwareEditor/types';
 
 const availablePinsAvr = flattenArray(
   ['PB', 'PC', 'PD', 'PE', 'PF'].map((port) =>

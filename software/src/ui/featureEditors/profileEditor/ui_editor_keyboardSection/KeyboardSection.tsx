@@ -1,10 +1,10 @@
 import { css, FC, jsx } from 'alumina';
 import { usePlayerModel } from '~/ui/commonModels';
 import { EditorKeyboardView } from '~/ui/elements/keyboard';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
-import { makeEditKeyUnitCardsPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_keyboardSection/EditKeyUnitCardsPartViewModel';
-import { ProfileSetupNavigationCardView } from '~/ui/featureEditors/ProfileEditor/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
-import { profilesReader } from '~/ui/pages/AssignerPage/models';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
+import { ProfileSetupNavigationCardView } from '~/ui/featureEditors/profileEditor/ui_editor_keyboardSection/ProfileSetupNavigationCardView';
+import { makeEditKeyUnitCardsPartViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_keyboardSection/editKeyUnitCardsPartViewModel';
+import { profilesReader } from '~/ui/pages/assignerPage/models';
 import { LayerStateView } from './LayerStateView';
 
 export const KeyboardSection: FC = () => {

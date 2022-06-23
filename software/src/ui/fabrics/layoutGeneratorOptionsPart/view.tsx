@@ -5,7 +5,7 @@ import { RibbonSelector, ToggleSwitch } from '~/ui/components';
 import {
   IWriteLayoutOptionFunc,
   useLayoutGeneratorOptionsPartModel,
-} from '~/ui/fabrics/LayoutGeneratorOptionsPart/model';
+} from '~/ui/fabrics/layoutGeneratorOptionsPart/model';
 
 type Props = {
   firmwareConfig: IStandardFirmwareConfig;

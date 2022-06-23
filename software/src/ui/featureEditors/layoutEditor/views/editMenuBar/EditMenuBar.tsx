@@ -5,7 +5,7 @@ import {
   RibbonSelector,
   ToggleButton,
 } from '~/ui/components';
-import { makeEditMenuBarViewModel } from '~/ui/featureEditors/LayoutEditor/views/editMenuBar/EditMenuBar.model';
+import { makeEditMenuBarViewModel } from '~/ui/featureEditors/layoutEditor/views/editMenuBar/editMenuBar.model';
 
 export const EditMenuBar: FC = () => {
   const {

@@ -4,13 +4,13 @@ import {
   IProjectPackageInfo,
   DisplayKeyboardDesignLoader,
 } from '~/shared';
-import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
+import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/domainRelatedHelpers';
 import { UiLocalStorage } from '~/ui/base';
 import {
   IShapeViewPersistState,
   shapeViewPersistStateDefault,
   shapeViewPersistStateSchema,
-} from '~/ui/pages/ShapePreviewPage/models/ShapeViewPersistState';
+} from '~/ui/pages/shapePreviewPage/models/shapeViewPersistState';
 import { projectPackagesReader } from '~/ui/store';
 
 export interface IKeyboardShapesModel {

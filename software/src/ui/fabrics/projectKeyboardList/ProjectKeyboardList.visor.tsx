@@ -6,8 +6,8 @@ import {
   exampleData_persistKeyboardDesign_miniversRev2,
   exampleData_persistKeyboardDesign_shiro,
 } from '~/ui/constants';
-import { ProjectKeyboardList } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList';
-import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.ProjectAddCard';
+import { ProjectKeyboardList } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList';
+import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.ProjectAddCard';
 
 const convertDesign = DisplayKeyboardDesignLoader.loadDisplayKeyboardDesign;
 

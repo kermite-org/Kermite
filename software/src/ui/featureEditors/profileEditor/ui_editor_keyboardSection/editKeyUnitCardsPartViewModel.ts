@@ -2,7 +2,7 @@ import { IAssignEntryWithLayerFallback, IDisplayKeyEntity } from '~/shared';
 import { IEditKeyUnitCardViewModel } from '~/ui/base';
 import { IPlayerModel } from '~/ui/commonModels';
 import { getAssignEntryTexts } from '~/ui/elements/keyboard';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import { uiActions, uiState } from '~/ui/store';
 
 export interface IEditKeyUnitCardPartViewModel {

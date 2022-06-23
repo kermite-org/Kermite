@@ -1,8 +1,8 @@
 import { FC, jsx } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { ILayoutGeneratorOptions } from '~/ui/base';
-import { useLayoutConfigurationSectionModel } from '~/ui/fabrics/LayoutConfigurationSection/model';
-import { LayoutPreviewShapeView } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeView';
+import { useLayoutConfigurationSectionModel } from '~/ui/fabrics/layoutConfigurationSection/model';
+import { LayoutPreviewShapeView } from '~/ui/fabrics/layoutPreviewShapeView/LayoutPreviewShapeView';
 
 export const LayoutConfigurationSectionContent: FC<{
   firmwareConfig: IStandardFirmwareConfig;

@@ -1,11 +1,11 @@
 import produce from 'immer';
 import { fallbackStandardFirmwareConfig } from '~/shared';
-import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
+import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/standardFirmwareEditor/helpers';
 import {
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
   IStandardFirmwareMcuType,
-} from '~/ui/featureEditors/StandardFirmwareEditor/types';
+} from '~/ui/featureEditors/standardFirmwareEditor/types';
 import { createSimpleSelector } from '~/ui/utils';
 
 type IStandardFirmwareEditState = {

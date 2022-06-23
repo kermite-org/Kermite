@@ -1,4 +1,4 @@
-import { IEditKeyEntity } from '~/ui/featureEditors/LayoutEditor/models/DataSchema';
+import { IEditKeyEntity } from '~/ui/featureEditors/layoutEditor/models/dataSchema';
 
 export function getKeyIdentifierText(
   ke: IEditKeyEntity,

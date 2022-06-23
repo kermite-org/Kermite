@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { WidgetControlButton } from '~/ui/components';
-import { IWidgetMainPanelModel } from '~/ui/pages/WidgetPage/models/WidgetMainPanelModel';
+import { IWidgetMainPanelModel } from '~/ui/pages/widgetPage/models/widgetMainPanelModel';
 
 type Props = {
   vm: IWidgetMainPanelModel;

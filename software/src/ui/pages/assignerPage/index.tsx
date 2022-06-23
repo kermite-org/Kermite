@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
 import { KeyAssignEditView } from '~/ui/featureEditors';
-import { ProfileConfigurationModalLayer } from '~/ui/featureEditors/ProfileEditor/ui_modal_profileConfiguration';
-import { updateProfileDataSourceHandling } from '~/ui/pages/AssignerPage/models';
+import { ProfileConfigurationModalLayer } from '~/ui/featureEditors/profileEditor/ui_modal_profileConfiguration';
+import { updateProfileDataSourceHandling } from '~/ui/pages/assignerPage/models';
 import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 

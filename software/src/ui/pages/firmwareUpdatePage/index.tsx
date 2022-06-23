@@ -5,7 +5,7 @@ import {
   CustomParametersPart,
   DeviceSelectionPart,
   FirmwareUpdatePart,
-} from '~/ui/pages/FirmwareUpdatePage/sections';
+} from '~/ui/pages/firmwareUpdatePage/sections';
 
 export const FirmwareUpdatePage: FC = () => {
   return (

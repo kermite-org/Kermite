@@ -3,12 +3,12 @@ import {
   boardAssignsData_proMicro,
   boardAssignsData_proMicroRp2040,
   boardAssignsData_rpiPico,
-} from '~/ui/fabrics/ControllerPinAssignsSection/data';
+} from '~/ui/fabrics/controllerPinAssignsSection/data';
 import {
   IBoardPinAssignsData,
   IBoardPinAssignsDataEx,
-} from '~/ui/fabrics/ControllerPinAssignsSection/types';
-import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
+} from '~/ui/fabrics/controllerPinAssignsSection/types';
+import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/standardFirmwareEditor/helpers';
 
 function pushPinFunctionName(
   base: IBoardPinAssignsDataEx,

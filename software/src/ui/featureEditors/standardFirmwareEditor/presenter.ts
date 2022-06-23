@@ -1,10 +1,10 @@
 import { isIncluded } from '~/shared';
 import { ISelectorOption, makePlainSelectorOption } from '~/ui/base';
-import { standardFirmwareEditStore } from '~/ui/featureEditors/StandardFirmwareEditor/store';
+import { standardFirmwareEditStore } from '~/ui/featureEditors/standardFirmwareEditor/store';
 import {
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
-} from '~/ui/featureEditors/StandardFirmwareEditor/types';
+} from '~/ui/featureEditors/standardFirmwareEditor/types';
 
 export interface IStandardFirmwareEditPresenter {
   editValues: IStandardFirmwareEditValues;

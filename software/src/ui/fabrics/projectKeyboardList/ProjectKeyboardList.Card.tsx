@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
 import { ProjectKeyboardShapeView } from '~/ui/elements/keyboard/panels';
-import { OnlineAttrsPart } from '~/ui/fabrics/ProjectKeyboardList/OnlineAttrsPart';
-import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.CardCommonStyles';
+import { OnlineAttrsPart } from '~/ui/fabrics/projectKeyboardList/OnlineAttrsPart';
+import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
   project: IProjectKeyboardListProjectItem;

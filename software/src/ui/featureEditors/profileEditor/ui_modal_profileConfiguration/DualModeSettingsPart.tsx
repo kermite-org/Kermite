@@ -2,7 +2,7 @@ import { css, FC, jsx, useLocal } from 'alumina';
 import { IPrimaryDefaultTrigger, ISecondaryDefaultTrigger } from '~/shared';
 import { texts } from '~/ui/base';
 import { GeneralInput } from '~/ui/components';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import { reflectChecked, reflectValue } from '~/ui/utils';
 
 export const DualModeSettingsPart: FC = () => {

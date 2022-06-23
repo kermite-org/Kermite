@@ -1,8 +1,8 @@
 import { useEffect } from 'alumina';
 import { fallbackProjectPackageInfo, IProjectPackageInfo } from '~/shared';
 import { IGeneralMenuItem } from '~/ui/base';
-import { createProjectResourceMenuItems } from '~/ui/features/ProjectResourcesPart/models/ProjectResourceMenuItems';
-import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
+import { createProjectResourceMenuItems } from '~/ui/features/projectResourcesPart/models/projectResourceMenuItems';
+import { projectResourceStore } from '~/ui/features/projectResourcesPart/store';
 import { uiReaders } from '~/ui/store';
 
 interface IProjectResourcePageModel {

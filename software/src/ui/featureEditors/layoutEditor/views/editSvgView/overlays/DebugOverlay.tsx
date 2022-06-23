@@ -1,5 +1,5 @@
 import { jsx, css, FC } from 'alumina';
-import { layouterAppGlobal } from '~/ui/featureEditors/LayoutEditor/common';
+import { layouterAppGlobal } from '~/ui/featureEditors/layoutEditor/common';
 
 export const DebugOverlay: FC = () => {
   const { debugObject, hasDebugValue } = layouterAppGlobal;

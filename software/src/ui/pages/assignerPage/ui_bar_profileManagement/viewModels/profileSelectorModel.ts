@@ -11,7 +11,7 @@ import { assignerModel } from '~/ui/featureEditors';
 import {
   profilesActions,
   profilesReader,
-} from '~/ui/pages/AssignerPage/models';
+} from '~/ui/pages/assignerPage/models';
 import { projectPackagesReader, uiReaders } from '~/ui/store';
 
 export type IProfileSelectorModel = {

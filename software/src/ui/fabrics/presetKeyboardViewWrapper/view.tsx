@@ -1,7 +1,7 @@
 import { FC, jsx } from 'alumina';
 import { IProfileData } from '~/shared';
 import { PresetKeyboardView } from '~/ui/elements';
-import { usePresetKeyboardViewWrapperModel } from '~/ui/fabrics/PresetKeyboardViewWrapper/model';
+import { usePresetKeyboardViewWrapperModel } from '~/ui/fabrics/presetKeyboardViewWrapper/model';
 
 export const PresetKeyboardViewWrapper: FC<{ profileData: IProfileData }> = ({
   profileData,

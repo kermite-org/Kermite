@@ -3,7 +3,7 @@ import { GeneralSelector } from '~/ui/components';
 import {
   customFirmwareEditorModel,
   ICustomFirmwareEditValues,
-} from '~/ui/featureEditors/CustomFirmwareEditor/CustomFirmwareEditor.model';
+} from '~/ui/featureEditors/customFirmwareEditor/customFirmwareEditor.model';
 
 type Props = {
   sourceEditValues: ICustomFirmwareEditValues;

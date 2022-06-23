@@ -1,4 +1,4 @@
-import { appState, IEditState } from './AppState';
+import { appState, IEditState } from './appState';
 
 export interface IModification {
   oldState: IEditState;

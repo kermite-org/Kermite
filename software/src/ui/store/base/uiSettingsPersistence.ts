@@ -3,7 +3,7 @@ import {
   commitUiSettings,
   commitUiState,
   uiState,
-} from '~/ui/store/base/UiState';
+} from '~/ui/store/base/uiState';
 
 export const uiSettingsPersistence = {
   initialize() {

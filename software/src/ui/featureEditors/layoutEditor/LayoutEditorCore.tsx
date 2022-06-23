@@ -8,13 +8,13 @@ import {
   IEditState,
   IEnvState,
   IModification,
-} from '~/ui/featureEditors/LayoutEditor/models';
-import { LayoutEditorViewRoot } from '~/ui/featureEditors/LayoutEditor/views/LayoutEditorViewRoot';
+} from '~/ui/featureEditors/layoutEditor/models';
+import { LayoutEditorViewRoot } from '~/ui/featureEditors/layoutEditor/views/LayoutEditorViewRoot';
 import {
   KeyboardDesignConverter,
   keyboardOperationHandler,
   setupDeviceKeyEventsListener,
-} from '~/ui/featureEditors/LayoutEditor/wrapper';
+} from '~/ui/featureEditors/layoutEditor/wrapper';
 import { windowKeyboardEventEffect } from '~/ui/utils';
 
 interface IBackingStoreData {

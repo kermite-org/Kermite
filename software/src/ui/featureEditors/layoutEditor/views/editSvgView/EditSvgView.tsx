@@ -4,17 +4,17 @@ import {
   IPosition,
   layouterAppFeatures,
   startDragSession,
-} from '~/ui/featureEditors/LayoutEditor/common';
+} from '~/ui/featureEditors/layoutEditor/common';
 import {
   editMutations,
   editReader,
-} from '~/ui/featureEditors/LayoutEditor/models';
-import { CoordCursor } from '~/ui/featureEditors/LayoutEditor/views/editSvgView/svgParts/CoordCursor';
-import { FieldGrid } from '~/ui/featureEditors/LayoutEditor/views/editSvgView/svgParts/FieldGrid';
+} from '~/ui/featureEditors/layoutEditor/models';
+import { CoordCursor } from '~/ui/featureEditors/layoutEditor/views/editSvgView/svgParts/CoordCursor';
+import { FieldGrid } from '~/ui/featureEditors/layoutEditor/views/editSvgView/svgParts/FieldGrid';
 import {
   screenCoordToGroupTransformationCoord,
   screenToWorld,
-} from './CoordHelpers';
+} from './coordHelpers';
 import { FieldAxis } from './svgParts/FieldAxis';
 import {
   KeyEntityCard,

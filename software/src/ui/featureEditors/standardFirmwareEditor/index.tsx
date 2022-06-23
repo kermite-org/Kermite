@@ -2,10 +2,10 @@ import { css, FC, jsx } from 'alumina';
 import { IStandardFirmwareConfig } from '~/shared';
 import { appUi } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
-import { standardFirmwareEditorComponents } from '~/ui/featureEditors/StandardFirmwareEditor/components';
-import { useStandardFirmwareEditPresenter } from '~/ui/featureEditors/StandardFirmwareEditor/presenter';
-import { standardFirmwareEditStore } from '~/ui/featureEditors/StandardFirmwareEditor/store';
-import { IStandardFirmwareEditValues } from '~/ui/featureEditors/StandardFirmwareEditor/types';
+import { standardFirmwareEditorComponents } from '~/ui/featureEditors/standardFirmwareEditor/components';
+import { useStandardFirmwareEditPresenter } from '~/ui/featureEditors/standardFirmwareEditor/presenter';
+import { standardFirmwareEditStore } from '~/ui/featureEditors/standardFirmwareEditor/store';
+import { IStandardFirmwareEditValues } from '~/ui/featureEditors/standardFirmwareEditor/types';
 
 export const StandardFirmwareEditor_ExposedModel = {
   get isValid(): boolean {

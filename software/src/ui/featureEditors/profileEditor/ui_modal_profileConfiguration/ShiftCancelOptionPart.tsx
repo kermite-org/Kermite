@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'alumina';
 import { IShiftCancelMode } from '~/shared';
 import { makePlainSelectorOption, texts } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 
 export const ShiftCancelOptionPart: FC = () => {
   const { settings } = assignerModel.profileData;

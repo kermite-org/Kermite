@@ -1,8 +1,8 @@
-import { IEditState } from '~/ui/featureEditors/LayoutEditor/models/AppState';
+import { IEditState } from '~/ui/featureEditors/layoutEditor/models/appState';
 import {
   IEditOutlinePoint,
   IEditOutlineShape,
-} from '~/ui/featureEditors/LayoutEditor/models/DataSchema';
+} from '~/ui/featureEditors/layoutEditor/models/dataSchema';
 
 export function draftGetEditShape(
   editor: IEditState,

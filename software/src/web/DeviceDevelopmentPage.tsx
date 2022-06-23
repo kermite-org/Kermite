@@ -1,5 +1,5 @@
 import { css, FC, jsx, useEffect } from 'alumina';
-import { Packets } from '~/shell/services/keyboardDevice/Packets';
+import { Packets } from '~/shell/services/keyboardDevice/packets';
 
 async function openHidDevice(device: HIDDevice) {
   if (device) {

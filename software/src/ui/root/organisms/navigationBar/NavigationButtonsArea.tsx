@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { NavigationButton } from '~/ui/components';
-import { useNavigationButtonsAreaModel } from '~/ui/root/organisms/NavigationBar/NavigationButtonsArea.model';
+import { useNavigationButtonsAreaModel } from '~/ui/root/organisms/navigationBar/navigationButtonsArea.model';
 
 export const NavigationButtonsArea: FC = () => {
   const { navigationItems } = useNavigationButtonsAreaModel();

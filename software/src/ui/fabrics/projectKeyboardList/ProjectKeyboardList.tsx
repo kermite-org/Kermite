@@ -1,6 +1,6 @@
 import { AluminaNode, css, FC, jsx } from 'alumina';
 import { IProjectKeyboardListProjectItem } from '~/ui/base';
-import { ProjectKeyboardListCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.Card';
+import { ProjectKeyboardListCard } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.Card';
 
 type Props = {
   projectItems: IProjectKeyboardListProjectItem[];

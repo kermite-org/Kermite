@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { GeneralButtonMenu } from '~/ui/components';
-import { ProjectResourceItemView } from '~/ui/fabrics/ProjectResourceItemView/ProjectResourceItemView';
 import { ProjectResourceList } from '~/ui/fabrics/ProjectResourceList';
-import { useProjectResourcePageModel } from '~/ui/features/ProjectResourcesPart/models/ProjectResourcePageModel';
+import { ProjectResourceItemView } from '~/ui/fabrics/projectResourceItemView/ProjectResourceItemView';
+import { useProjectResourcePageModel } from '~/ui/features/projectResourcesPart/models/projectResourcePageModel';
 import { reflectValue } from '~/ui/utils';
 
 export const ProjectResourcesPart: FC = () => {

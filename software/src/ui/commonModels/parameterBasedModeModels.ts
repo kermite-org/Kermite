@@ -3,7 +3,7 @@ import { ipcAgent } from '~/ui/base';
 import {
   IRoutingChannelModel,
   ISystemLayoutModel,
-} from '~/ui/commonModels/Interfaces';
+} from '~/ui/commonModels/interfaces';
 import { uiReaders } from '~/ui/store';
 
 interface ISystemParameterModel {

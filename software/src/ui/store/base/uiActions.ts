@@ -4,10 +4,10 @@ import {
   IPageModelSpec,
   IPageSpec,
   PagePaths,
-} from '~/ui/commonModels/PageTypes';
-import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
-import { globalSettingsWriter } from '~/ui/store/base/GlobalSettings';
-import { commitUiSettings, commitUiState } from '~/ui/store/base/UiState';
+} from '~/ui/commonModels/pageTypes';
+import { profileSetupStore } from '~/ui/features/profileSetupWizard/store/profileSetupStore';
+import { globalSettingsWriter } from '~/ui/store/base/globalSettings';
+import { commitUiSettings, commitUiState } from '~/ui/store/base/uiState';
 
 export const uiActions = {
   navigateTo(pageSpecOrPagePath: IPageSpec | PagePaths) {

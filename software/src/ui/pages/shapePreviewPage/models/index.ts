@@ -1,3 +1,3 @@
-export * from './KeyboardShapesModel';
-export * from './ShapePreviewPageModel';
-export * from './ShapeViewPersistState';
+export * from './keyboardShapesModel';
+export * from './shapePreviewPageModel';
+export * from './shapeViewPersistState';

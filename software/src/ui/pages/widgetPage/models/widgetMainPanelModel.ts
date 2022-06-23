@@ -2,7 +2,7 @@ import { useEffect } from 'alumina';
 import { fallbackProfileData, IDisplayKeyboardDesign } from '~/shared';
 import { ipcAgent, IWidgetKeyUnitCardViewModel } from '~/ui/base';
 import { usePlayerModel } from '~/ui/commonModels';
-import { useWidgetKeyUnitCardViewModel } from '~/ui/pages/WidgetPage/models/WidgetKeyUnitCardViewModel';
+import { useWidgetKeyUnitCardViewModel } from '~/ui/pages/widgetPage/models/widgetKeyUnitCardViewModel';
 import { dispatchCoreAction, siteModel, uiActions } from '~/ui/store';
 
 export interface IWidgetMainPanelModel {

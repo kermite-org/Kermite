@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IMappingEntry } from '~/shared';
-import { generateNextSequentialId } from '~/shared/funcs/DomainRelatedHelpers';
+import { generateNextSequentialId } from '~/shared/funcs/domainRelatedHelpers';
 import { colors } from '~/ui/base';
 import {
   GeneralButton,
@@ -8,12 +8,12 @@ import {
   getUnscaledOverlayStyle,
 } from '~/ui/components';
 import { GeneralSelectorN } from '~/ui/components/atoms/GeneralSelectorN';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import {
   getRoutingChannelOptions,
   getRoutingTargetKeyOptions,
   getRoutingTargetModifierOptions,
-} from '~/ui/featureEditors/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanelModel';
+} from '~/ui/featureEditors/profileEditor/ui_modal_routingPanel/actionRoutingPanelModel';
 import { commitUiState, uiState } from '~/ui/store';
 
 const actions = {

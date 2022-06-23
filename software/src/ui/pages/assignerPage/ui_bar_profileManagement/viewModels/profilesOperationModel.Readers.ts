@@ -1,6 +1,6 @@
 import { standardFirmwareIds } from '~/shared';
 import { assignerModel } from '~/ui/featureEditors';
-import { profilesReader } from '~/ui/pages/AssignerPage/models';
+import { profilesReader } from '~/ui/pages/assignerPage/models';
 import { uiReaders } from '~/ui/store';
 
 export const profilesOperationReader = {

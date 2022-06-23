@@ -21,7 +21,7 @@ import { uiReaders, uiState } from '~/ui/store';
 import {
   changeProfileDataAssignType,
   checkAssignValid,
-} from './ProfileDataHelper';
+} from './profileDataHelper';
 
 export type IDualModeEditTargetOperationSig = 'pri' | 'sec' | 'ter';
 export type IDualModeOperationPath = 'primaryOp' | 'secondaryOp' | 'tertiaryOp';

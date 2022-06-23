@@ -11,7 +11,7 @@ import { ILayoutGeneratorOptions } from '~/ui/base';
 import {
   IDraftLayoutLabelEntity,
   IDraftLayoutLabelEntityPinType,
-} from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
+} from '~/ui/fabrics/layoutPreviewShapeView/layoutPreviewShapeViewTypes';
 
 function makeLabelEntity(
   keyId: string,

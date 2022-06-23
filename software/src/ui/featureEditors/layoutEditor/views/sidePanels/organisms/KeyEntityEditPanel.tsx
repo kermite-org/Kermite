@@ -5,7 +5,7 @@ import {
   ConfigPanelBox,
   GeneralConfigTextEditRow,
 } from '~/ui/elements';
-import { useKeyEntityEditPanelModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/KeyEntityEditPanel.model';
+import { useKeyEntityEditPanelModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/keyEntityEditPanel.model';
 
 export const KeyEntityEditPanel: FC = () => {
   const { keyEntityAttrsVm: vm } = useKeyEntityEditPanelModel();

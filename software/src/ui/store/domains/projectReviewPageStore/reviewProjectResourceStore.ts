@@ -1,5 +1,5 @@
 import { decodeProjectResourceItemKey } from '~/shared';
-import { projectResourceHelpers } from '~/ui/features/ProjectResourcesPart/store/helpers';
+import { projectResourceHelpers } from '~/ui/features/projectResourcesPart/store/helpers';
 import { projectPackagesReader, uiActions } from '~/ui/store';
 import { createSimpleSelector } from '~/ui/utils';
 

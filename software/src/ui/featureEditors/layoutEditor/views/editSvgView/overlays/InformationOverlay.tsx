@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'alumina';
 import { colors } from '~/ui/base';
-import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
 
 export const InformationOverlay: FC = () => {
   const { pressedKeyIndices } = editReader;

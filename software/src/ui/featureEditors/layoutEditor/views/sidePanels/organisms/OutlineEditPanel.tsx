@@ -7,7 +7,7 @@ import {
   ConfigPanelBox,
   GeneralConfigTextEditRow,
 } from '~/ui/elements';
-import { useOutlineEditPanelModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/OutlineEditPanel.model';
+import { useOutlineEditPanelModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/outlineEditPanel.model';
 
 export const OutlineEditPanel: FC = () => {
   const {

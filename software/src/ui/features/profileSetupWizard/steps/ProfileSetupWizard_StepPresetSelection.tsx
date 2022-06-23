@@ -10,7 +10,7 @@ import {
 import { colors, ISelectorOption, ISelectorSource, texts } from '~/ui/base';
 import { KeyboardProfileSelector } from '~/ui/components';
 import { PresetKeyboardSection } from '~/ui/fabrics';
-import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
+import { profileSetupStore } from '~/ui/features/profileSetupWizard/store/profileSetupStore';
 
 function makePresetOptions(
   projectInfo: IProjectPackageInfo,

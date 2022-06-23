@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { SectionHeaderText } from '~/ui/elements';
-import { makeLayerListBoxPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';
-import { makeLayerManagementPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersManagementPartViewModel';
+import { makeLayerListBoxPartViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_layerManagement/viewModels/layersListBoxPartViewModel';
+import { makeLayerManagementPartViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_layerManagement/viewModels/layersManagementPartViewModel';
 import { LayerManagementPart } from './views/LayerManagementPart';
 import { LayersListBoxPart } from './views/LayersListBoxPart';
 

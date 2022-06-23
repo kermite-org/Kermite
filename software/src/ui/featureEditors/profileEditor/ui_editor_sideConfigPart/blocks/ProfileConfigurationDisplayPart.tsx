@@ -1,7 +1,7 @@
 import { css, jsx } from 'alumina';
 import { texts } from '~/ui/base';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
-import { profilesReader } from '~/ui/pages/AssignerPage/models';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
+import { profilesReader } from '~/ui/pages/assignerPage/models';
 import { uiReaders } from '~/ui/store';
 
 export const ProfileConfigurationDisplayPart = () => {

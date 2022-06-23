@@ -7,7 +7,7 @@ import {
   ICoreState,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
-import { IPageModelSpec, IPageSpec } from '~/ui/commonModels/PageTypes';
+import { IPageModelSpec, IPageSpec } from '~/ui/commonModels/pageTypes';
 
 export interface IUiSettings {
   showTestInputArea: boolean;

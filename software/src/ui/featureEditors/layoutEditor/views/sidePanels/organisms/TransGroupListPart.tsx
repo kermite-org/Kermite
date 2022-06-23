@@ -2,8 +2,8 @@ import { jsx, css, FC } from 'alumina';
 import { colors } from '~/ui/base';
 import { GeneralButton } from '~/ui/components';
 import { ConfigSubHeader } from '~/ui/elements';
-import { editMutations } from '~/ui/featureEditors/LayoutEditor/models';
-import { useTransGroupListPartModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/TransGroupListPanel.model';
+import { editMutations } from '~/ui/featureEditors/layoutEditor/models';
+import { useTransGroupListPartModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/transGroupListPanel.model';
 
 export const TransGroupListPart: FC = () => {
   const { canAddGroup, canDeleteGroup, addGroup, deleteGroup, groupItems } =

@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'alumina';
 import { OperationCard, OperationSlotCard } from '~/ui/elements';
-import { IPlainOperationEditCardsViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
-import { IOperationSlotsPartViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationSlotsPartViewModel';
+import { IPlainOperationEditCardsViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationEditPartViewModel';
+import { IOperationSlotsPartViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationSlotsPartViewModel';
 
 type Props = {
   operationSlotsVM: IOperationSlotsPartViewModel;

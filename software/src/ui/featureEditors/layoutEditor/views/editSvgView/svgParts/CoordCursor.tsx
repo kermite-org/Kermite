@@ -1,7 +1,7 @@
 import { FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
-import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
-import { applyCoordSnapping } from '~/ui/featureEditors/LayoutEditor/models/EditorHelper';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
+import { applyCoordSnapping } from '~/ui/featureEditors/layoutEditor/models/editorHelper';
 
 export const CoordCursor: FC = () => {
   let {

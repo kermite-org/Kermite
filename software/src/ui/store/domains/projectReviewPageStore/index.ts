@@ -2,11 +2,11 @@ import { useEffect } from 'alumina';
 import {
   createProjectSelectionStore,
   IProjectSelectionStore,
-} from '~/ui/store/domains/ProjectReviewPageStore/ProjectSelectionStore';
+} from '~/ui/store/domains/projectReviewPageStore/projectSelectionStore';
 import {
   createReviewProjectResourceStore,
   IReviewProjectResourceStore,
-} from '~/ui/store/domains/ProjectReviewPageStore/ReviewProjectResourceStore';
+} from '~/ui/store/domains/projectReviewPageStore/reviewProjectResourceStore';
 
 type IProjectReviewPageStore = {
   projectSelection: IProjectSelectionStore;

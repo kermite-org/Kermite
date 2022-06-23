@@ -1,7 +1,7 @@
 import { css, FC, jsx, AluminaChildren } from 'alumina';
 import { GeneralInput, ToggleSwitch } from '~/ui/components';
-import { standardFirmwareEditor_fieldValueConverters } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
-import { standardFirmwareEditStore } from '~/ui/featureEditors/StandardFirmwareEditor/store';
+import { standardFirmwareEditor_fieldValueConverters } from '~/ui/featureEditors/standardFirmwareEditor/helpers';
+import { standardFirmwareEditStore } from '~/ui/featureEditors/standardFirmwareEditor/store';
 import {
   IFlagFieldKey,
   IIntegerFieldKey,
@@ -9,7 +9,7 @@ import {
   ISinglePinFieldKey,
   IStandardFirmwareEditErrors,
   IStandardFirmwareEditValues,
-} from '~/ui/featureEditors/StandardFirmwareEditor/types';
+} from '~/ui/featureEditors/standardFirmwareEditor/types';
 
 const FieldItem: FC<{
   title: string;

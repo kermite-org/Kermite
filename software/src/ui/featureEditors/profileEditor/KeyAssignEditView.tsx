@@ -1,14 +1,14 @@
 import { css, FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
-import { TestInputArea } from '~/ui/featureEditors/ProfileEditor/ui_bar_testInputArea/TestInputArea';
-import { AssignEditSection } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection';
-import { KeyboardSection } from '~/ui/featureEditors/ProfileEditor/ui_editor_keyboardSection/KeyboardSection';
-import { LayersPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement';
-import { DisplaySettingsPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/panels/DisplaySettingsPanelContent';
-import { InputLogicOptionsPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/panels/InputLogicOptionsPanelContent';
-import { ProfilePropertiesPanelContent } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/panels/ProfilePropertiesPanelContent';
-import { ActionRoutingPanel } from '~/ui/featureEditors/ProfileEditor/ui_modal_routingPanel/ActionRoutingPanel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
+import { TestInputArea } from '~/ui/featureEditors/profileEditor/ui_bar_testInputArea/TestInputArea';
+import { AssignEditSection } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection';
+import { KeyboardSection } from '~/ui/featureEditors/profileEditor/ui_editor_keyboardSection/KeyboardSection';
+import { LayersPanelContent } from '~/ui/featureEditors/profileEditor/ui_editor_layerManagement';
+import { DisplaySettingsPanelContent } from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/panels/DisplaySettingsPanelContent';
+import { InputLogicOptionsPanelContent } from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/panels/InputLogicOptionsPanelContent';
+import { ProfilePropertiesPanelContent } from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/panels/ProfilePropertiesPanelContent';
+import { ActionRoutingPanel } from '~/ui/featureEditors/profileEditor/ui_modal_routingPanel/ActionRoutingPanel';
 import { uiState } from '~/ui/store';
 
 export const KeyAssignEditView: FC = () => {

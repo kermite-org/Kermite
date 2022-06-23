@@ -1,6 +1,6 @@
 import { IGeneralMenuItem } from '~/ui/base';
-import { layoutManagerActions } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerActions';
-import { layoutManagerReader } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerReaders';
+import { layoutManagerActions } from '~/ui/pages/layoutEditorPage/models/layoutManagerActions';
+import { layoutManagerReader } from '~/ui/pages/layoutEditorPage/models/layoutManagerReaders';
 
 function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
   return [

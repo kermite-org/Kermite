@@ -1,10 +1,10 @@
 import { defaultKeyboardDesignSetup } from '~/shared';
-import { IGridSpecKey } from '~/ui/featureEditors/LayoutEditor/models/GridDefinitions';
+import { IGridSpecKey } from '~/ui/featureEditors/layoutEditor/models/gridDefinitions';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
   IEditOutlineShape,
-} from './DataSchema';
+} from './dataSchema';
 
 export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
 export interface IEditState {

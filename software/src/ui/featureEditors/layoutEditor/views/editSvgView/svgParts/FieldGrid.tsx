@@ -1,11 +1,11 @@
 import { FC, jsx } from 'alumina';
 import { makeIntegersRange } from '~/shared';
 import { colors } from '~/ui/base';
-import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
 import {
   getGroupOuterSvgTransformSpec,
   getSightBoundingCircle,
-} from '~/ui/featureEditors/LayoutEditor/views/editSvgView/CoordHelpers';
+} from '~/ui/featureEditors/layoutEditor/views/editSvgView/coordHelpers';
 
 export const FieldGrid: FC = () => {
   const { x: gpx, y: gpy } = editReader.gridPitches;

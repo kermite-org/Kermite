@@ -4,31 +4,31 @@ import {
   IKeyPlacementAnchor,
   removeArrayItems,
 } from '~/shared';
-import { getNextEntityInstanceId } from '~/ui/featureEditors/LayoutEditor/models/DomainRelatedHelpers';
-import { editManager } from '~/ui/featureEditors/LayoutEditor/models/EditManager';
+import { getNextEntityInstanceId } from '~/ui/featureEditors/layoutEditor/models/domainRelatedHelpers';
+import { editManager } from '~/ui/featureEditors/layoutEditor/models/editManager';
 import {
   applyCoordSnapping,
   draftGetEditPoint,
-} from '~/ui/featureEditors/LayoutEditor/models/EditorHelper';
-import { IGridSpecKey } from '~/ui/featureEditors/LayoutEditor/models/GridDefinitions';
+} from '~/ui/featureEditors/layoutEditor/models/editorHelper';
+import { IGridSpecKey } from '~/ui/featureEditors/layoutEditor/models/gridDefinitions';
 import {
   changeKeySizeUnit,
   changePlacementCoordUnit,
   mmToUnitValue,
-} from '~/ui/featureEditors/LayoutEditor/models/PlacementUnitHelperEx';
+} from '~/ui/featureEditors/layoutEditor/models/placementUnitHelperEx';
 import {
   appState,
   createFallbackEditKeyboardDesign,
   IEditMode,
   IEnvBoolPropKey,
-} from './AppState';
+} from './appState';
 import {
   IEditKeyboardDesign,
   IEditKeyEntity,
   IEditPropKey,
-} from './DataSchema';
-import { editReader } from './EditReader';
-import { editUpdater } from './EditUpdater';
+} from './dataSchema';
+import { editReader } from './editReader';
+import { editUpdater } from './editUpdater';
 
 class EditMutations {
   startEdit = () => {

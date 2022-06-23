@@ -4,16 +4,16 @@ import {
   IKeyPlacementAnchor,
 } from '~/shared';
 import { ICommonSelectorViewModel } from '~/ui/base';
-import { useClosureModel } from '~/ui/featureEditors/LayoutEditor/common';
+import { useClosureModel } from '~/ui/featureEditors/layoutEditor/common';
 import {
   editReader,
   editMutations,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
+import { makeSelectorModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/slots/selectorModel';
 import {
   createConfigTextEditModel,
   IConfigTextEditModel,
-} from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/slots/ConfigTextEditModel';
-import { makeSelectorModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/slots/SelectorModel';
+} from './slots/configTextEditModel';
 
 interface IDesignConfigurationPanelModel {
   vmPlacementUnitMode: ICommonSelectorViewModel;

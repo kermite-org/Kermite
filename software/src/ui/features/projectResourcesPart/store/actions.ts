@@ -5,10 +5,10 @@ import {
   IProjectResourceItemType,
 } from '~/shared';
 import { modalConfirm } from '~/ui/components';
-import { projectResourceReaders } from '~/ui/features/ProjectResourcesPart/store/readers';
-import { projectResourceState } from '~/ui/features/ProjectResourcesPart/store/state';
-import { projectPackagesWriter } from '~/ui/store/ProjectPackages';
+import { projectResourceReaders } from '~/ui/features/projectResourcesPart/store/readers';
+import { projectResourceState } from '~/ui/features/projectResourcesPart/store/state';
 import { dispatchCoreAction, uiActions, uiReaders } from '~/ui/store/base';
+import { projectPackagesWriter } from '~/ui/store/projectPackages';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {

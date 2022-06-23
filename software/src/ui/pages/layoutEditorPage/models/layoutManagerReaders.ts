@@ -4,8 +4,8 @@ import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
   layoutManagerState,
-} from '~/ui/pages/LayoutEditorPage/models/LayoutManagerBase';
-import { layoutManagerHelpers } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerHelpers';
+} from '~/ui/pages/layoutEditorPage/models/layoutManagerBase';
+import { layoutManagerHelpers } from '~/ui/pages/layoutEditorPage/models/layoutManagerHelpers';
 import { projectPackagesReader, uiReaders, uiState } from '~/ui/store';
 
 export const layoutManagerReader = {

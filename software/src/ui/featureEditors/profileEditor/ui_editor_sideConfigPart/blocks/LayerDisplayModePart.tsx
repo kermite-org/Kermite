@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { ISelectorOption, texts } from '~/ui/base';
 import { RibbonSelector } from '~/ui/components';
-import { profilesReader } from '~/ui/pages/AssignerPage/models';
+import { profilesReader } from '~/ui/pages/assignerPage/models';
 import { commitUiSettings, uiState } from '~/ui/store';
 
 const options: ISelectorOption[] = [

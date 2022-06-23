@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { GeneralSelector, CheckBox, Slider } from '~/ui/components';
-import { PartBody, PartHeader } from '~/ui/pages/FirmwareUpdatePage/Components';
-import { useCustomParametersPartModel } from '~/ui/pages/FirmwareUpdatePage/sections/CustomParametersPart/CustomParametersPartModel';
+import { PartBody, PartHeader } from '~/ui/pages/firmwareUpdatePage/Components';
+import { useCustomParametersPartModel } from '~/ui/pages/firmwareUpdatePage/sections/customParametersPart/customParametersPartModel';
 
 export const CustomParametersPart: FC = () => {
   const {

@@ -11,11 +11,11 @@ import {
   LayoutStandardSelector,
   MuteModeSelector,
   RoutingChannelSelector,
-} from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
-import { createProfileSelectionMenuItems } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfileSelectionMenuItemCreator';
-import { useProfileSelectorModel } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfileSelectorModel';
-import { makeProfilesOperationModel } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfilesOperationModel';
-import { SavingProjectPresetSelectionModal } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
+} from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/blocks/ConfigSelectors';
+import { createProfileSelectionMenuItems } from '~/ui/pages/assignerPage/ui_bar_profileManagement/viewModels/profileSelectionMenuItemCreator';
+import { useProfileSelectorModel } from '~/ui/pages/assignerPage/ui_bar_profileManagement/viewModels/profileSelectorModel';
+import { makeProfilesOperationModel } from '~/ui/pages/assignerPage/ui_bar_profileManagement/viewModels/profilesOperationModel';
+import { SavingProjectPresetSelectionModal } from '~/ui/pages/assignerPage/ui_bar_profileManagement/views/SavingProjectPresetSelectionModal';
 
 export const ProfileManagementPart: FC = () => {
   const baseVm = makeProfilesOperationModel();

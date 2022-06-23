@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { colors, texts } from '~/ui/base';
-import { ILayerListViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_layerManagement/viewModels/LayersListBoxPartViewModel';
+import { ILayerListViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_layerManagement/viewModels/layersListBoxPartViewModel';
 
 type Props = {
   layerModel: ILayerListViewModel;

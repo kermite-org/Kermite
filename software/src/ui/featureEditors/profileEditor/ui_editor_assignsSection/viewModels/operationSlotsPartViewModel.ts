@@ -1,5 +1,5 @@
 import { texts } from '~/ui/base';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 
 export interface IOperationSlotViewModel {
   text: string;

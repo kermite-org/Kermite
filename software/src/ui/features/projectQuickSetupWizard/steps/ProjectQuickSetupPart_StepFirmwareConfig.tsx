@@ -8,7 +8,7 @@ import {
   ProjectKeyboardNameEditPart,
 } from '~/ui/fabrics';
 import { StandardFirmwareEditor } from '~/ui/featureEditors';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStore';
 
 export const ProjectQuickSetupPart_StepFirmwareConfig: FC = () => {
   projectQuickSetupStore.effects.useReflectEditFirmwareConfigToStore();

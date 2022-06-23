@@ -1,23 +1,23 @@
 import { useLocal } from 'alumina';
 import { ICommonSelectorViewModel } from '~/ui/base';
-import { useClosureModel } from '~/ui/featureEditors/LayoutEditor/common';
+import { useClosureModel } from '~/ui/featureEditors/layoutEditor/common';
 import {
   editMutations,
   editReader,
   IEditKeyEntity,
   IEditPropKey,
-} from '~/ui/featureEditors/LayoutEditor/models';
-import { getKeyIdentifierText } from '~/ui/featureEditors/LayoutEditor/models/DomainRelatedHelpers';
+} from '~/ui/featureEditors/layoutEditor/models';
+import { getKeyIdentifierText } from '~/ui/featureEditors/layoutEditor/models/domainRelatedHelpers';
 import {
   AttributeSlotModel,
   IAttributeSlotSource,
   IAttributeSlotViewModel,
-} from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/slots/AttributeSlotModel';
+} from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/slots/attributeSlotModel';
 import {
   createConfigTextEditModelDynamic2,
   IConfigTextEditModel2,
-} from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/slots/ConfigTextEditModel';
-import { makeSelectorModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/slots/SelectorModel';
+} from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/slots/configTextEditModel';
+import { makeSelectorModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/slots/selectorModel';
 
 function floatNumberValidator(text: string) {
   if (text.length > 10) {

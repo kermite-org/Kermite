@@ -1,6 +1,6 @@
 import { FC, jsx, useEffect } from 'alumina';
 import { IPersistKeyboardDesign } from '~/shared';
-import { LayoutEditorCore } from '~/ui/featureEditors/LayoutEditor/LayoutEditorCore';
+import { LayoutEditorCore } from '~/ui/featureEditors/layoutEditor/LayoutEditorCore';
 
 type Props = {
   layout: IPersistKeyboardDesign;

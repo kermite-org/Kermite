@@ -4,8 +4,8 @@ import { ipcAgent, texts } from '~/ui/base';
 import { useModalDisplayStateModel } from '~/ui/commonModels';
 import { GeneralButton } from '~/ui/components';
 import { svgImage_resetByHand } from '~/ui/constants';
-import { BoardResetInstructionPanel } from '~/ui/fabrics/StandardFirmwareFlashPart/BoardResetInstructionPanel/view';
-import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/StandardFirmwareFlashPart/model';
+import { BoardResetInstructionPanel } from '~/ui/fabrics/standardFirmwareFlashPart/boardResetInstructionPanel/view';
+import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/standardFirmwareFlashPart/model';
 
 type Props = {
   projectInfo: IProjectPackageInfo;

@@ -7,8 +7,8 @@ import {
   ConfigPanelBox,
   GeneralConfigTextEditRow,
 } from '~/ui/elements';
-import { useTransGroupEditPanelModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/TransGroupEditPanel.model';
-import { TransGroupListPart } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/organisms/TransGroupListPart';
+import { useTransGroupEditPanelModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/transGroupEditPanel.model';
+import { TransGroupListPart } from '~/ui/featureEditors/layoutEditor/views/sidePanels/organisms/TransGroupListPart';
 
 export const TransGroupEditPanel: FC = () => {
   const { vmX, vmY, vmAngle, currentGroupId, vmMirror } =

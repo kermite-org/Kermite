@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'alumina';
 import { IProfileAssignType } from '~/shared';
 import { texts } from '~/ui/base';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import { reflectValue } from '~/ui/utils';
 
 const useAssignTypeSelectionPartViewModel = () => {

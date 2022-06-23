@@ -5,7 +5,7 @@ import {
   SetupNavigationStepShiftButton,
   NavigationStepList,
 } from '~/ui/components';
-import { useSetupNavigationFrameModel } from './SetupNavigationFrame.model';
+import { useSetupNavigationFrameModel } from './setupNavigationFrame.model';
 
 type Props = {
   children: AluminaNode;

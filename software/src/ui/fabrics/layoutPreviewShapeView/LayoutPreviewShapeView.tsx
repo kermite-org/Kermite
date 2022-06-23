@@ -2,9 +2,9 @@ import { css, FC, jsx } from 'alumina';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
-import { CoordOriginMark } from '~/ui/fabrics/LayoutPreviewShapeView/CoordOriginMark';
-import { LayoutPreviewKeyEntityCard } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeView.KeyEntityCard';
-import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
+import { CoordOriginMark } from '~/ui/fabrics/layoutPreviewShapeView/CoordOriginMark';
+import { LayoutPreviewKeyEntityCard } from '~/ui/fabrics/layoutPreviewShapeView/LayoutPreviewShapeView.KeyEntityCard';
+import { IDraftLayoutLabelEntity } from '~/ui/fabrics/layoutPreviewShapeView/layoutPreviewShapeViewTypes';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;

@@ -5,11 +5,11 @@ import {
   editReader,
   IEditMode,
   IEnvBoolPropKey,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
 import {
   gridPitchSelectorOptions,
   IGridSpecKey,
-} from '~/ui/featureEditors/LayoutEditor/models/GridDefinitions';
+} from '~/ui/featureEditors/layoutEditor/models/gridDefinitions';
 
 function createModeSelectionViewModel(sources: {
   [key in IEditMode]?: string;

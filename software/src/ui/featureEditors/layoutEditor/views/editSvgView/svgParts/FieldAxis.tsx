@@ -1,7 +1,7 @@
 import { FC, jsx } from 'alumina';
 import { colors } from '~/ui/base';
-import { editReader } from '~/ui/featureEditors/LayoutEditor/models';
-import { getWorldViewBounds } from '~/ui/featureEditors/LayoutEditor/views/editSvgView/CoordHelpers';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
+import { getWorldViewBounds } from '~/ui/featureEditors/layoutEditor/views/editSvgView/coordHelpers';
 
 export const FieldAxis: FC = () => {
   let { left, top, right, bottom } = getWorldViewBounds();

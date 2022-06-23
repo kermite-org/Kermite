@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'alumina';
 import { IDisplayKeyEntity } from '~/shared';
 import { KeyUnitShape } from '~/ui/elements/keyboard/keyUnitCards/KeyUnitShape';
-import { IDraftLayoutLabelEntity } from '~/ui/fabrics/LayoutPreviewShapeView/LayoutPreviewShapeViewTypes';
+import { IDraftLayoutLabelEntity } from '~/ui/fabrics/layoutPreviewShapeView/layoutPreviewShapeViewTypes';
 
 type Props = {
   keyEntity: IDisplayKeyEntity;

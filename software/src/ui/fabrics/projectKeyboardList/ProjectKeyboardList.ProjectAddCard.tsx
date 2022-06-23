@@ -1,6 +1,6 @@
 import { css, FC, jsx, useEffect, useRef } from 'alumina';
 import { Icon } from '~/ui/components';
-import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.CardCommonStyles';
+import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
   onClick: () => void;

@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'alumina';
 import { WidgetSvgKeyboardView } from '~/ui/elements/keyboard';
-import { useWidgetMainPanelModel } from '~/ui/pages/WidgetPage/models/WidgetMainPanelModel';
-import { WidgetControlButtonsBox } from '~/ui/pages/WidgetPage/organisms/WidgetControlButtonsBox';
+import { useWidgetMainPanelModel } from '~/ui/pages/widgetPage/models/widgetMainPanelModel';
+import { WidgetControlButtonsBox } from '~/ui/pages/widgetPage/organisms/WidgetControlButtonsBox';
 
 export const WidgetMainPanel: FC = () => {
   const vm = useWidgetMainPanelModel();

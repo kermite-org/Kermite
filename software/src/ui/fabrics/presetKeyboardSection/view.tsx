@@ -3,7 +3,7 @@ import { IProfileData } from '~/shared';
 import { texts } from '~/ui/base';
 import { PresetLayersBox } from '~/ui/elements';
 import { PresetKeyboardView } from '~/ui/elements/keyboard';
-import { usePresetKeyboardSectionModel } from '~/ui/fabrics/PresetKeyboardSection/model';
+import { usePresetKeyboardSectionModel } from '~/ui/fabrics/presetKeyboardSection/model';
 
 type Props = {
   profileData: IProfileData;

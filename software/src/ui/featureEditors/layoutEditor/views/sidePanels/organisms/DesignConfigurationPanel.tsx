@@ -8,8 +8,8 @@ import {
   ConfigPanelBox,
   GeneralConfigTextEditRow,
 } from '~/ui/elements';
-import { useDesignConfigurationPanelModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/DesignConfigurationPanel.model';
-import { IConfigTextEditModel } from '~/ui/featureEditors/LayoutEditor/views/sidePanels/models/slots/ConfigTextEditModel';
+import { useDesignConfigurationPanelModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/designConfigurationPanel.model';
+import { IConfigTextEditModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/slots/configTextEditModel';
 
 const cssErrorText = css`
   color: red;

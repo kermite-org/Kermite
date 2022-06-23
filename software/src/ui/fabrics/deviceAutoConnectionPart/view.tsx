@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
 import { texts } from '~/ui/base';
-import { deviceAutoConnectionPartAssets } from '~/ui/fabrics/DeviceAutoConnectionPart/assets';
-import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/DeviceAutoConnectionPart/hooks';
+import { deviceAutoConnectionPartAssets } from '~/ui/fabrics/deviceAutoConnectionPart/assets';
+import { useDeviceAutoConnectionEffects } from '~/ui/fabrics/deviceAutoConnectionPart/hooks';
 
 const { SvgIllustPc, SvgIllustThunder, SvgIllustMcu } =
   deviceAutoConnectionPartAssets;

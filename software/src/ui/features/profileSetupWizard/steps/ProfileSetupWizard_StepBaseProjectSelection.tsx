@@ -11,8 +11,8 @@ import {
   IProjectKeyboardListProjectItem,
 } from '~/ui/base';
 import { ProjectKeyboardList } from '~/ui/fabrics';
-import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/ProjectKeyboardList/ProjectKeyboardList.ProjectAddCard';
-import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
+import { ProjectKeyboardListProjectAddCard } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.ProjectAddCard';
+import { profileSetupStore } from '~/ui/features/profileSetupWizard/store/profileSetupStore';
 import { uiReaders } from '~/ui/store';
 import { useMemoEx } from '~/ui/utils';
 

@@ -3,8 +3,8 @@ import { OperationCard, OperationLayerOptionSelector } from '~/ui/elements';
 import {
   IPlainOperationEditCardsViewModel,
   IOperationEditPartViewModel,
-} from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationEditPartViewModel';
-import { IOperationLayerOptionEditViewModel } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/viewModels/OperationLayerOptionEditViewModel';
+} from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationEditPartViewModel';
+import { IOperationLayerOptionEditViewModel } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/viewModels/operationLayerOptionEditViewModel';
 
 type Props = {
   plainOperationEditCardsVM: IPlainOperationEditCardsViewModel;

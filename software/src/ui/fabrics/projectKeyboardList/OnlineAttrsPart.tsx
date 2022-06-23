@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { IOnlineProjectAttributes } from '~/shared';
 import { Icon, TooltipBalloon } from '~/ui/components';
-import { KermiteServerBase64Icon } from '~/ui/fabrics/ProjectKeyboardList/KermiteServerBase64Icon';
+import { KermiteServerBase64Icon } from '~/ui/fabrics/projectKeyboardList/KermiteServerBase64Icon';
 
 type Props = {
   attrs: IOnlineProjectAttributes;

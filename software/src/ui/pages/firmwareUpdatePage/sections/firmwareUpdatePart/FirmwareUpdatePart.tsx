@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { GeneralButton, GeneralSelector } from '~/ui/components';
-import { PartBody, PartHeader } from '~/ui/pages/FirmwareUpdatePage/Components';
-import { useFirmwareUpdatePartModel } from '~/ui/pages/FirmwareUpdatePage/sections/FirmwareUpdatePart/FirmwareUpdatePartModel';
+import { PartBody, PartHeader } from '~/ui/pages/firmwareUpdatePage/Components';
+import { useFirmwareUpdatePartModel } from '~/ui/pages/firmwareUpdatePage/sections/firmwareUpdatePart/firmwareUpdatePartModel';
 
 export const FirmwareUpdatePart: FC = () => {
   const {

@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { SectionHeaderText } from '~/ui/elements';
-import { ProfileConfigurationDisplayPart } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/ProfileConfigurationDisplayPart';
+import { ProfileConfigurationDisplayPart } from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/blocks/ProfileConfigurationDisplayPart';
 
 export const ProfilePropertiesPanelContent: FC = () => {
   return (

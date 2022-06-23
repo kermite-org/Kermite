@@ -2,16 +2,16 @@ import { getCoordUnitFromUnitSpec, ICoordUnit } from '~/shared';
 import {
   decodeGridSpec,
   IGridSpecKey,
-} from '~/ui/featureEditors/LayoutEditor/models/GridDefinitions';
+} from '~/ui/featureEditors/layoutEditor/models/gridDefinitions';
 import { createSimpleSelector } from '~/ui/utils';
-import { appState, IEnvBoolPropKey } from './AppState';
-import { getKeyboardDesignBoundingBox } from './BoundingBoxCalculator';
+import { appState, IEnvBoolPropKey } from './appState';
+import { getKeyboardDesignBoundingBox } from './boundingBoxCalculator';
 import {
   IEditKeyEntity,
   IEditOutlinePoint,
   IEditOutlineShape,
   IEditTransGroup,
-} from './DataSchema';
+} from './dataSchema';
 
 class EditReader {
   get editMode() {

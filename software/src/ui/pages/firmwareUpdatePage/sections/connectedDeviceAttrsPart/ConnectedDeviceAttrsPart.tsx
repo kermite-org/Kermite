@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-key */
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
-import { PartBody, PartHeader } from '~/ui/pages/FirmwareUpdatePage/Components';
-import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/FirmwareUpdatePage/sections/ConnectedDeviceAttrsPart/ConnectedDeviceAttrsPartModel';
+import { PartBody, PartHeader } from '~/ui/pages/firmwareUpdatePage/Components';
+import { useConnectedDevicesAttrsPartModel } from '~/ui/pages/firmwareUpdatePage/sections/connectedDeviceAttrsPart/connectedDeviceAttrsPartModel';
 
 export const ConnectedDeviceAttrsPart: FC = () => {
   const { tableData } = useConnectedDevicesAttrsPartModel();

@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { ipcAgent, texts } from '~/ui/base';
 import { FlatListSelector } from '~/ui/components';
-import { PartBody, PartHeader } from '~/ui/pages/FirmwareUpdatePage/Components';
-import { useDeviceSelectionPartModel } from '~/ui/pages/FirmwareUpdatePage/sections/DeviceSelectionPart/DeviceSelectionPartModel';
+import { PartBody, PartHeader } from '~/ui/pages/firmwareUpdatePage/Components';
+import { useDeviceSelectionPartModel } from '~/ui/pages/firmwareUpdatePage/sections/deviceSelectionPart/deviceSelectionPartModel';
 
 export const DeviceSelectionPart: FC = () => {
   const { deviceOptions, currentDevicePath, setSelectedDevicePath } =

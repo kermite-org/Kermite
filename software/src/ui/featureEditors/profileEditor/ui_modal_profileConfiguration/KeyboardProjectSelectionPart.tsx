@@ -2,7 +2,7 @@ import { css, FC, jsx } from 'alumina';
 import { uniqueArrayItemsByField } from '~/shared';
 import { ISelectorOption, texts } from '~/ui/base';
 import { GeneralSelector } from '~/ui/components';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import { uiReaders } from '~/ui/store';
 
 const fallbackProjectId = '000000';

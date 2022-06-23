@@ -4,7 +4,7 @@ import { showCommandOutputLogModal } from '~/ui/components';
 import {
   firmwareUpdateModel,
   FirmwareUpdatePhase,
-} from './FirmwareUpdateModel';
+} from './firmwareUpdateModel';
 
 interface IFirmwareUpdatePartModel {
   phase: FirmwareUpdatePhase;

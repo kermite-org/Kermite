@@ -2,8 +2,8 @@ import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { ConfigurationButton } from '~/ui/elements';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
-import { profilesReader } from '~/ui/pages/AssignerPage/models';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
+import { profilesReader } from '~/ui/pages/assignerPage/models';
 import { commitUiSettings, commitUiState, uiState } from '~/ui/store';
 
 export const BehaviorOptionsPartB: FC = () => {

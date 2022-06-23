@@ -17,9 +17,9 @@ import {
   ILayoutGeneratorOptions,
   UiLocalStorage,
 } from '~/ui/base';
-import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/DraftLayoutGenerator';
+import { createLayoutFromFirmwareSpec } from '~/ui/commonModels/draftLayoutGenerator';
 import { StandardFirmwareEditor_ExposedModel } from '~/ui/featureEditors';
-import { projectQuickSetupStoreHelpers } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStoreHelpers';
+import { projectQuickSetupStoreHelpers } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStoreHelpers';
 import { dispatchCoreAction, globalSettingsWriter, uiState } from '~/ui/store';
 
 const constants = {

@@ -1,3 +1,3 @@
-export * from './KeyboardDesignConverter';
-export * from './KeyboardOperationHandler';
-export * from './DeviceKeyEventsReader';
+export * from './keyboardDesignConverter';
+export * from './keyboardOperationHandler';
+export * from './deviceKeyEventsReader';

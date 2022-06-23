@@ -3,9 +3,9 @@ import { assignerModel } from '~/ui/featureEditors';
 import {
   profilesActions,
   profilesReader,
-} from '~/ui/pages/AssignerPage/models';
-import { profilesOperationActions } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Actions';
-import { profilesOperationReader } from '~/ui/pages/AssignerPage/ui_bar_profileManagement/viewModels/ProfilesOperationModel.Readers';
+} from '~/ui/pages/assignerPage/models';
+import { profilesOperationActions } from '~/ui/pages/assignerPage/ui_bar_profileManagement/viewModels/profilesOperationModel.Actions';
+import { profilesOperationReader } from '~/ui/pages/assignerPage/ui_bar_profileManagement/viewModels/profilesOperationModel.Readers';
 
 export type IProfileManagerModalState =
   | 'None'

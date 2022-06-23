@@ -1,9 +1,9 @@
 import { FC, jsx } from 'alumina';
 import { ProjectAttachmentFileSelectorModal } from '~/ui/elements/featureModals';
-import { layoutManagerRootModel } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerRootModel';
-import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/LayoutEditorPage/models/ProjectLayoutSelectorModalModel';
-import { LayoutManagerTopBar } from '~/ui/pages/LayoutEditorPage/organisms/LayoutManagerTopBar';
-import { useLayoutManagerTopBarModel } from '~/ui/pages/LayoutEditorPage/templates/LayoutManagerTopBarModel';
+import { layoutManagerRootModel } from '~/ui/pages/layoutEditorPage/models/layoutManagerRootModel';
+import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/layoutEditorPage/models/projectLayoutSelectorModalModel';
+import { LayoutManagerTopBar } from '~/ui/pages/layoutEditorPage/organisms/LayoutManagerTopBar';
+import { useLayoutManagerTopBarModel } from '~/ui/pages/layoutEditorPage/templates/layoutManagerTopBarModel';
 
 export const LayoutManagerTopBarTemplate: FC = () => {
   layoutManagerRootModel.updateBeforeRender();

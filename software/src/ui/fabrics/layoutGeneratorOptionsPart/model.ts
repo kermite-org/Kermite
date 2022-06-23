@@ -1,6 +1,6 @@
 import { IStandardFirmwareConfig } from '~/shared';
 import { ILayoutGeneratorOptions, makePlainSelectorOption } from '~/ui/base';
-import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/StandardFirmwareEditor/helpers';
+import { standardFirmwareEditModelHelpers } from '~/ui/featureEditors/standardFirmwareEditor/helpers';
 
 export type IWriteLayoutOptionFunc = <K extends keyof ILayoutGeneratorOptions>(
   key: K,

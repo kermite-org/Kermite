@@ -3,7 +3,7 @@ import { colors } from '~/ui/base';
 import { IPageSpec_ProjectStandardFirmwareView } from '~/ui/commonModels';
 import { RouteHeaderBar } from '~/ui/elements/frames';
 import { StandardFirmwareEditor } from '~/ui/featureEditors';
-import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
+import { useProjectStandardFirmwareEditPageModel } from '~/ui/pages/projectStandardFirmwareEditPage/projectStandardFirmwareEditPage.model';
 
 type Props = {
   spec: IPageSpec_ProjectStandardFirmwareView;

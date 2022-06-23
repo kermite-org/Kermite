@@ -1,7 +1,7 @@
 import { jsx, css, FC } from 'alumina';
 import { colors, texts } from '~/ui/base';
 import { LinkIndicator } from '~/ui/elements';
-import { makeDeviceControlSectionViewModel } from '~/ui/pages/AssignerPage/ui_bar_deviceControlSection/DeviceControlSectionViewModel';
+import { makeDeviceControlSectionViewModel } from '~/ui/pages/assignerPage/ui_bar_deviceControlSection/deviceControlSectionViewModel';
 
 export const DeviceControlSection: FC = () => {
   const vm = makeDeviceControlSectionViewModel();

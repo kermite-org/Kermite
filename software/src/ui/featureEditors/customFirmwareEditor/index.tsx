@@ -1,2 +1,2 @@
 export * from './CustomFirmwareEditor';
-export * from './CustomFirmwareEditor.model';
+export * from './customFirmwareEditor.model';

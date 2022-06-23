@@ -1,9 +1,9 @@
 import { css, FC, jsx } from 'alumina';
 import { decodeProjectResourceItemKey, IProjectPackageInfo } from '~/shared';
 import { GeneralButton } from '~/ui/components';
-import { FirmwareDetailView } from '~/ui/fabrics/ProjectResourceItemView/FirmwareDetailView';
-import { LayoutDetailView } from '~/ui/fabrics/ProjectResourceItemView/LayoutDetailView';
-import { PresetDetailView } from '~/ui/fabrics/ProjectResourceItemView/PresetDetailView';
+import { FirmwareDetailView } from '~/ui/fabrics/projectResourceItemView/FirmwareDetailView';
+import { LayoutDetailView } from '~/ui/fabrics/projectResourceItemView/LayoutDetailView';
+import { PresetDetailView } from '~/ui/fabrics/projectResourceItemView/PresetDetailView';
 import { useMemoEx } from '~/ui/utils';
 
 type Props = {

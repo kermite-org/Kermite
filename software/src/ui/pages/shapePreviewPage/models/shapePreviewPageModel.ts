@@ -1,8 +1,8 @@
 import { IDisplayKeyboardDesign } from '~/shared';
 import { getProjectDisplayNamePrefix, ISelectorSource } from '~/ui/base';
 import { useHoldKeyIndices } from '~/ui/commonModels';
-import { useKeyboardShapesModel } from '~/ui/pages/ShapePreviewPage/models/KeyboardShapesModel';
-import { IShapeViewPersistState } from '~/ui/pages/ShapePreviewPage/models/ShapeViewPersistState';
+import { useKeyboardShapesModel } from '~/ui/pages/shapePreviewPage/models/keyboardShapesModel';
+import { IShapeViewPersistState } from '~/ui/pages/shapePreviewPage/models/shapeViewPersistState';
 
 export interface IShapePreviewPageModel {
   settings: IShapeViewPersistState;

@@ -7,11 +7,11 @@ import {
   VirtualKeyTexts,
 } from '~/shared';
 import { IOperationCardViewModel, texts } from '~/ui/base';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 import {
   getKeyAssignNote,
   getSystemActionNote,
-} from '~/ui/featureEditors/ProfileEditor/models/KeyAssignNoteTexts';
+} from '~/ui/featureEditors/profileEditor/models/keyAssignNoteTexts';
 import {
   virtualKeyGroupsTable2,
   virtualKeyGroupsTable3,

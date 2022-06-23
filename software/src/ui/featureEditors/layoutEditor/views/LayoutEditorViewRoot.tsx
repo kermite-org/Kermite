@@ -1,8 +1,8 @@
 import { jsx, css } from 'alumina';
 import { colors } from '~/ui/base';
-import { EditMenuBar } from '~/ui/featureEditors/LayoutEditor/views/editMenuBar/EditMenuBar';
-import { EditSvgViewContainer } from '~/ui/featureEditors/LayoutEditor/views/editSvgView';
-import { EditorSideColumnContent } from '~/ui/featureEditors/LayoutEditor/views/sidePanels';
+import { EditMenuBar } from '~/ui/featureEditors/layoutEditor/views/editMenuBar/EditMenuBar';
+import { EditSvgViewContainer } from '~/ui/featureEditors/layoutEditor/views/editSvgView';
+import { EditorSideColumnContent } from '~/ui/featureEditors/layoutEditor/views/sidePanels';
 
 export const LayoutEditorViewRoot = () => {
   return (

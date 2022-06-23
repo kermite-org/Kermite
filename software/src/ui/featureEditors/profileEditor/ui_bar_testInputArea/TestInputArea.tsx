@@ -1,7 +1,7 @@
 import { css, FC, jsx, useLocal } from 'alumina';
 import { texts } from '~/ui/base';
 import { GeneralInput, GeneralButton } from '~/ui/components';
-import { makeTestInputAreaViewModel } from '~/ui/featureEditors/ProfileEditor/ui_bar_testInputArea/TestInputAreaViewModel';
+import { makeTestInputAreaViewModel } from '~/ui/featureEditors/profileEditor/ui_bar_testInputArea/testInputAreaViewModel';
 
 export const TestInputArea: FC = () => {
   const vm = useLocal(makeTestInputAreaViewModel);

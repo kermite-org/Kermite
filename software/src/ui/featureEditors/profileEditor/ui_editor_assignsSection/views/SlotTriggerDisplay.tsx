@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IProfileSettings_Dual } from '~/shared';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 
 type Props = {};
 

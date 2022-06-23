@@ -2,7 +2,7 @@ import { jsx, asyncRerender, css, useRef, FC } from 'alumina';
 import {
   editReader,
   editMutations,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
 import { EditSvgView } from './EditSvgView';
 import { DebugOverlay } from './overlays/DebugOverlay';
 import { InformationOverlay } from './overlays/InformationOverlay';

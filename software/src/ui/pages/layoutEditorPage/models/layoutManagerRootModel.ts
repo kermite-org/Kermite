@@ -1,6 +1,6 @@
 import { useEffect } from 'alumina';
 import { LayoutEditorCore, assignerModel } from '~/ui/featureEditors';
-import { layoutManagerState } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerBase';
+import { layoutManagerState } from '~/ui/pages/layoutEditorPage/models/layoutManagerBase';
 import { uiState } from '~/ui/store';
 
 export const layoutManagerRootModel = {

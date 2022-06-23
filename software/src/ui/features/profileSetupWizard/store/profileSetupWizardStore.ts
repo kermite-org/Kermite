@@ -1,7 +1,7 @@
 import { isNumberInRange } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
 import { IProfileSetupStep } from '~/ui/commonModels';
-import { profileSetupStore } from '~/ui/features/ProfileSetupWizard/store/ProfileSetupStore';
+import { profileSetupStore } from '~/ui/features/profileSetupWizard/store/profileSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
 
 const helpers = {

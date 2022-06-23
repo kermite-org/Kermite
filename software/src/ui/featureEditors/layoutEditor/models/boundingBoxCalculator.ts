@@ -12,7 +12,7 @@ import {
   IEditKeyEntity,
   IEditOutlineShape,
   IEditTransGroup,
-} from './DataSchema';
+} from './dataSchema';
 
 function getKeyCornerPoints(
   ke: IEditKeyEntity,

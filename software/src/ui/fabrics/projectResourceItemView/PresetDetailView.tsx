@@ -4,7 +4,7 @@ import {
   IProjectPackageInfo,
   ProfileDataConverter,
 } from '~/shared';
-import { PresetKeyboardViewWrapper } from '~/ui/fabrics/PresetKeyboardViewWrapper/view';
+import { PresetKeyboardViewWrapper } from '~/ui/fabrics/presetKeyboardViewWrapper/view';
 
 type Props = {
   projectInfo: IProjectPackageInfo;

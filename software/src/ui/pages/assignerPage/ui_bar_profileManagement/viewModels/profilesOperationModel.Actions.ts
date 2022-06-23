@@ -1,14 +1,14 @@
 import { asyncRerender } from 'alumina';
 import { forceChangeFilePathExtension } from '~/shared';
-import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/DomainRelatedHelpers';
+import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/domainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
 import { assignerModel } from '~/ui/featureEditors';
 import {
   profilesActions,
   profilesReader,
-} from '~/ui/pages/AssignerPage/models';
-import { callProfileSetupModal } from '~/ui/pages/AssignerPage/ui_modal_profileSetup/ProfileSetupModal';
+} from '~/ui/pages/assignerPage/models';
+import { callProfileSetupModal } from '~/ui/pages/assignerPage/ui_modal_profileSetup/ProfileSetupModal';
 import { commitUiState, uiActions, uiState } from '~/ui/store';
 import { resourceManagementUtils } from '~/ui/utils';
 

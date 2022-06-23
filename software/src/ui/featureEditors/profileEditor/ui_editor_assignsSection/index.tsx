@@ -1,6 +1,6 @@
 import { jsx, css, FC } from 'alumina';
-import { SlotTriggerDisplay } from '~/ui/featureEditors/ProfileEditor/ui_editor_assignsSection/views/SlotTriggerDisplay';
-import { makeAssignEditSectionViewModel } from './viewModels/AssignEditSectionViewModel';
+import { SlotTriggerDisplay } from '~/ui/featureEditors/profileEditor/ui_editor_assignsSection/views/SlotTriggerDisplay';
+import { makeAssignEditSectionViewModel } from './viewModels/assignEditSectionViewModel';
 import { OperationEditPart } from './views/OperationEditPart';
 import { OperationSlotsPart } from './views/OperationSlotsPart';
 

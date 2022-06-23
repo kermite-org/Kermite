@@ -1,6 +1,6 @@
 import { useEffect } from 'alumina';
 import { assignerModel } from '~/ui/featureEditors';
-import { profilesReader } from '~/ui/pages/AssignerPage/models/ProfilesReader';
+import { profilesReader } from '~/ui/pages/assignerPage/models/profilesReader';
 import { dispatchCoreAction } from '~/ui/store';
 
 export function updateProfileDataSourceHandling() {

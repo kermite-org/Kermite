@@ -1,7 +1,7 @@
 import { isNumberInRange } from '~/shared';
 import { uiConfiguration } from '~/ui/base';
 import { IProjectQuickSetupStep } from '~/ui/commonModels';
-import { projectQuickSetupStore } from '~/ui/features/ProjectQuickSetupWizard/store/ProjectQuickSetupStore';
+import { projectQuickSetupStore } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStore';
 import { uiActions, uiReaders } from '~/ui/store';
 
 const helpers = {

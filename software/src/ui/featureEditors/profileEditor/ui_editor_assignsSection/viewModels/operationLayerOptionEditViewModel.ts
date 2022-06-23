@@ -1,5 +1,5 @@
 import { LayerInvocationMode, generateNumberSequence } from '~/shared';
-import { assignerModel } from '~/ui/featureEditors/ProfileEditor/models/AssignerModel';
+import { assignerModel } from '~/ui/featureEditors/profileEditor/models/assignerModel';
 
 export interface IOperationLayerOptionEditViewModel {
   enabled: boolean;

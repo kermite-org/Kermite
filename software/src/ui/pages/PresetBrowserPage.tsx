@@ -1,4 +1,4 @@
 import { FC, jsx } from 'alumina';
-import { PresetBrowserPageContent } from '~/ui/features/PresetBrowser/PresetBrowserPageContent';
+import { PresetBrowserPageContent } from '~/ui/features/presetBrowser/PresetBrowserPageContent';
 
 export const PresetBrowserPage: FC = () => <PresetBrowserPageContent />;

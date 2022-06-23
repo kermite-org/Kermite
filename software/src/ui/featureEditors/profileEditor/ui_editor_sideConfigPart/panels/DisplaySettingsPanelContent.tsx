@@ -1,8 +1,8 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
 import { SectionHeaderText } from '~/ui/elements';
-import { BehaviorOptionsPartB } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/BehaviorOptionsPartB';
-import { LayerDisplayModePart } from '~/ui/featureEditors/ProfileEditor/ui_editor_sideConfigPart/blocks/LayerDisplayModePart';
+import { BehaviorOptionsPartB } from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/blocks/BehaviorOptionsPartB';
+import { LayerDisplayModePart } from '~/ui/featureEditors/profileEditor/ui_editor_sideConfigPart/blocks/LayerDisplayModePart';
 
 export const DisplaySettingsPanelContent: FC = () => {
   return (

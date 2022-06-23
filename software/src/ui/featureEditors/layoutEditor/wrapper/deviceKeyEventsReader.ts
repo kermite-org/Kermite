@@ -1,5 +1,5 @@
 import { appUi, ipcAgent } from '~/ui/base';
-import { editMutations } from '~/ui/featureEditors/LayoutEditor/models';
+import { editMutations } from '~/ui/featureEditors/layoutEditor/models';
 
 export function setupDeviceKeyEventsListener(): () => void {
   if (appUi.isExecutedInApp) {

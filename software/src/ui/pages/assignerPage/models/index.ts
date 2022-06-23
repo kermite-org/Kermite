@@ -1,3 +1,3 @@
-export * from './ProfilesActions';
-export * from './ProfilesReader';
-export * from './ProfilesRootModel';
+export * from './profilesActions';
+export * from './profilesReader';
+export * from './profilesRootModel';

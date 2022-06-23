@@ -13,7 +13,7 @@ import {
   makePlainSelectorOption,
 } from '~/ui/base';
 import { globalSettingsWriter, uiReaders } from '~/ui/store/base';
-import { createProjectManagementMenuItems } from '~/ui/store/domains/ProjectSelectionPartStore/ProjectManagementMenuModel';
+import { createProjectManagementMenuItems } from '~/ui/store/domains/projectSelectionPartStore/projectManagementMenuModel';
 import { createSimpleSelector2 } from '~/ui/utils';
 
 type IState = {

@@ -10,8 +10,8 @@ import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
   layoutManagerState,
-} from '~/ui/pages/LayoutEditorPage/models/LayoutManagerBase';
-import { layoutManagerReader } from '~/ui/pages/LayoutEditorPage/models/LayoutManagerReaders';
+} from '~/ui/pages/layoutEditorPage/models/layoutManagerBase';
+import { layoutManagerReader } from '~/ui/pages/layoutEditorPage/models/layoutManagerReaders';
 import {
   dispatchCoreAction,
   projectPackagesReader,

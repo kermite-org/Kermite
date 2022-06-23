@@ -2,7 +2,7 @@ import { rerender } from 'alumina';
 import {
   editMutations,
   editReader,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
 
 export function keyboardOperationHandler(e: KeyboardEvent) {
   if (e.key === 'Delete' || (e.key === 'Backspace' && e.metaKey)) {

@@ -3,7 +3,7 @@ import { colors, texts } from '~/ui/base';
 import { CheckBoxLine } from '~/ui/components';
 import { WelcomePageButton } from '~/ui/components/atoms';
 import { ToggleSwitchLine } from '~/ui/components/molecules/ToggleSwitchLine';
-import { welcomePageStore } from '~/ui/store/domains/WelcomePageStore';
+import { welcomePageStore } from '~/ui/store/domains/welcomePageStore';
 
 export const WelcomePage: FC = () => {
   const {

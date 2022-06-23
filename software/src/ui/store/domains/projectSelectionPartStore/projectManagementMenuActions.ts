@@ -2,11 +2,11 @@ import { IProjectPackageInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { callProjectSelectionModal } from '~/ui/elements/featureModals';
+import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
 import {
   projectPackagesActions,
   projectPackagesReader,
-} from '~/ui/store/ProjectPackages';
-import { dispatchCoreAction, uiReaders } from '~/ui/store/base';
+} from '~/ui/store/projectPackages';
 import { resourceManagementUtils } from '~/ui/utils';
 
 const helpers = {

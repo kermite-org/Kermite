@@ -3,7 +3,7 @@ import { ISelectorOptionN, texts } from '~/ui/base';
 import {
   useRoutingChannelModel,
   useSystemLayoutModel,
-} from '~/ui/commonModels/ParameterBasedModeModels';
+} from '~/ui/commonModels';
 import { CheckBoxLine, GeneralSelectorN, ToggleSwitch } from '~/ui/components';
 import { keyboardBehaviorModeModule, uiReaders } from '~/ui/store';
 

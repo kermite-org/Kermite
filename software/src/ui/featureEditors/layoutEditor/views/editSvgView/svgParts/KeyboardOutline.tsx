@@ -4,18 +4,18 @@ import { colors, makeCssColor, uiTheme } from '~/ui/base';
 import {
   IPosition,
   startDragSession,
-} from '~/ui/featureEditors/LayoutEditor/common';
+} from '~/ui/featureEditors/layoutEditor/common';
 import {
   editReader,
   editMutations,
   IEditOutlinePoint,
   IEditOutlineShape,
-} from '~/ui/featureEditors/LayoutEditor/models';
+} from '~/ui/featureEditors/layoutEditor/models';
 import {
   applyInverseGroupTransform,
   getGroupOuterSvgTransformSpec,
   getWorldMousePositionOnEditSvg,
-} from '../CoordHelpers';
+} from '../coordHelpers';
 
 const cssKeyboardOutlineShapeView = css`
   fill: none;
