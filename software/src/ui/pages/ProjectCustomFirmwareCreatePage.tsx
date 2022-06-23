@@ -10,8 +10,8 @@ import {
   CustomFirmwareEditor,
   CustomFirmwareEditor_OutputPropsSupplier,
 } from '~/ui/featureEditors';
-import { projectResourceStore } from '~/ui/features/ProjectResourcesPart/store';
-import { inputSavingFirmwareName } from '~/ui/pages/ProjectStandardFirmwareEditPage/ProjectStandardFirmwareEditPage.model';
+import { projectResourceStore } from '~/ui/features/projectResourcesPart/store';
+import { inputSavingFirmwareName } from '~/ui/pages/projectStandardFirmwareEditPage/projectStandardFirmwareEditPage.model';
 import { projectPackagesWriter, uiActions, uiReaders } from '~/ui/store';
 
 const helpers = {

@@ -38,7 +38,7 @@ Unix互換の`rm`や`mkdir`などのコマンドが必要なため導入しま�
 | ファイル | mingw-w64-install.exe          | 
 | 導入方法 | DL, インストール, binにパスを通す        | 
 
-RP2040向けのファームウェアをビルドする場合に必要です。AVRの場合は不要です。
+RP2040向けのファームウェアをビルドする場合に必要です。
 リンク先のサイトの、'MingW-W64-builds'からリンクをたどってファイルをダウンロードします。
 インストール時に出るオプションを設定する画面で、Architectureを`x86_64`にします。その他の項目はデフォルトのままでよいでしょう。
 インストールができたら, `C:\Program Files\mingw-w64\<バージョン>\mingw64\bin`にパスを通します。
@@ -51,16 +51,13 @@ RP2040向けのファームウェアをビルドする場合に必要です。AV
 > where mkdir.exe
 > where rm.exe
 > make -v
-> avr-gcc -v
 > arm-none-eabi-gcc -v
 > g++ -v
-> avrdude -v
 ```
 などのコマンドで、各ツールが使えるようになっていることを確認します。
 
 ```
 > make clean
-> make astelia:atmega:build
-> make proto/minivers:rev2_rp:build
+> make proto/standard:rp:build
 ```
 などのコマンドで、プロジェクトをビルドできることを確認します。

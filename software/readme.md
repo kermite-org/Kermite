@@ -2,6 +2,7 @@
 
 ## Overview
 Utility software for writing key mapping to firmware.
+It works in a browser.
 
 ## How to build
 
@@ -11,23 +12,11 @@ The following are required to build and run
 
 - Node.js
 - yarn
-- node-gyp
-
-It uses native modules such as `node-hid` and `node-serialport`, and requires an environment (`GCC`, `Make`, `Python`, etc.) to build C source code with `node-gyp`. Use `windows-build-tools` on Windows or `xcode-select` on MacOS to install it.
-
 ### Installation
-
-
 
 ```
 yarn install
 ```
-
-note: if you are on Mac with M1 processor, rebuild native packages by the command below.
-```
-yarn postinstall --arch=arm64
-```
-
 
 ### Start debug
 
@@ -38,15 +27,12 @@ yarn start
 
 We use the following languages/frameworks/libraries etc.
 - Typescript
-- Electron
-- alumina ... UI framework
-- estrella ... Module bundler wrapping esbuild
-- node-hid ... Used for communication with RawHID
-- node-serialport ... Used for writing firmware
+- vite ... Module bundler
+- alumina ... Virtual DOM library
 
 ## IDE configuration
 
-For VSCode, copy `settings.example.json` and `launch.example.json` in `.vscode` folder save them as `settings.json` and `launch.json`.
+For VSCode, copy `settings.example.json` in `.vscode` folder save it as `settings.json`.
 
 The use of the following extensions is recommended
 * ESLint

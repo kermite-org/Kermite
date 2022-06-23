@@ -2,6 +2,7 @@
 
 ## 概要
 ファームウェアに配列を書き込むためのユーティリティソフトウェアです。
+ブラウザで動作します。
 
 ## ビルド/実行方法
 
@@ -11,18 +12,10 @@
 
 - Node.js
 - yarn
-- node-gyp
-
-`node-hid`, `node-serialport`などのネイティブモジュールを使用しており、`node-gyp`でC言語のソースコードをビルドするための環境(`GCC`, `Make`, `Python`など)が必要です。Windowsの場合`windows-build-tools`, MacOSの場合`xcode-select`を使って導入してください。
 ### 導入
 
 ```
 yarn install
-```
-
-M1プロセッサ搭載のMac環境でデバッグする場合、ネイティブパッケージをCPUのアーキテクチャに合わせて再ビルドするために以下のコマンドを実行してください。
-```
-yarn postinstall --arch=arm64
 ```
 
 ### 実行
@@ -34,14 +27,12 @@ yarn start
 
 以下の言語/フレームワーク/ライブラリなどを使用しています。
 - Typescript
-- Electron
-- estrella ... esbuildをラップしたモジュールバンドラ
-- node-hid ... RawHIDによる通信に使用
-- node-serialport ... ファームウェア書き込みに使用
+- vite ... モジュールバンドラ
+- alumina ... 仮想DOMライブラリ
 
 ## IDEの設定
 
-VSCodeの場合、`.vscode`フォルダにある`settings.example.json`と`launch.example.json`をコピーして`settings.json`と`launch.json`を追加して下さい。
+VSCodeの場合、`.vscode`フォルダにある`settings.example.json`をコピーして`settings.json`を追加して下さい。
 
 以下の拡張機能の使用を推奨します。
 * ESLint

@@ -1,3 +1,3 @@
-export * from './SetupNavigationFrame/SetupNavigationFrame';
-export * from './ProjectSelectionPart/ProjectSelectionPart';
-export * from './ProjectResourcesPart/ProjectResourcesPart';
+export * from './setupNavigationFrame/SetupNavigationFrame';
+export * from './projectSelectionPart/ProjectSelectionPart';
+export * from './projectResourcesPart/ProjectResourcesPart';

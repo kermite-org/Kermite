@@ -1,1 +1,1 @@
-export * from './KeyboardDeviceService';
+export * from './keyboardDeviceService';

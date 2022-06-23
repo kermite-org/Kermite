@@ -1,24 +1,19 @@
 # Kermite Firmware
 ## Overview
 
-This is firmware for DIY keyboard using ProMicro.
+This is firmware for DIY keyboard using RP2040.
+
+If you use the standard firmware with Kermite's GUI, pre-built firmware is provided and you do not need to build the firmware yourself. The following is an explanation for those who develop custom firmware.
+
 
 ## Preparation of development environment
-### AVR
-
-Following tools are required to build AVR firmware.
-
-- GNU Make
-- AVR 8-bit Toolchain (avr-gcc)
-
-Use avrdude to write the firmware to the microcontroller.
 
 ### RP2040
 
 Following tools are required to build RP2040 firmware.
 
 - GNU Make
-- GNU ARM Embedded Toolcahin (arm-none-eabi-gcc)
+- GNU ARM Embedded Toolchain (arm-none-eabi-gcc)
 - GNU GCC (g++)
 
 For more information about build environment, please refer to the following document
@@ -47,35 +42,8 @@ For `<project_path>`, specify the folder path of the project under `src/projects
 
 Example
 ```
-  make astelia:atmega:build
+  make proto/sp2104:rp:build
 ```
-
-## Flash (AVR)
-
-Copy `Makefile.user.example` to `Makefile.user`.
-In `Makefile.user`, specify the virtual COM port of the ProMicro bootloader in `COM_PORT`. If you don't know the virtual COM port, please refer to How to find out the virtual COM port used by the bootloader (see below).
-
-Press the reset button on your keyboard twice and then execute the following command.
-
-```
-  make <project_path>:<variation_name>:flash
-```
-
-## How to find out which virtual COM port the bootloader uses.
-
-### Windows
-
-Open the device manager and press the reset button on your keyboard twice to find them. You can find them under Ports (COM and LPT).
-
-### MacOS
-
-Press the reset button on your keyboard twice, and in the terminal, type
-
-```
-  ls -l /dev/tty.usb*
-```
-
-to find them.
 
 ## Flash (RP2040)
 ### Drag-and-drop firmware upload (Windows, MacOS)
@@ -109,8 +77,6 @@ If you use VSCode, install the `C/C++` extension.
 
 
 Copy `c_cpp_properties.json.example` and `settings.json.example` in the `.vscode` folder to a name without `.example` and arrange them according to your environment. Setting the compiler path in `c_cpp_properties.json` will make the completion and error display in the editor work properly.
-
-When editing C source code, the current setting will be displayed as `ConfigAVR` or `ConfigRP` on the right side of the VSCode status bar. The compiler and include path used by VSCode to check the grammar will be switched.
 
 ## How to implement supported firmware for individual keyboards
 

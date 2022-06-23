@@ -12,6 +12,7 @@ export interface IFirmwareMetadataJson {
   firmwareFileSize: number;
   firmwareBinaryFileMD5: string;
   variationName: string;
-  targetDevice: "atmega32u4" | "rp2040";
+  // targetDevice: "atmega32u4" | "rp2040";
+  targetDevice: "rp2040";
   firmwareFileName: string;
 }

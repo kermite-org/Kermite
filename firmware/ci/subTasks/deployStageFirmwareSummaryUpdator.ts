@@ -28,7 +28,8 @@ interface IFirmwareInfo {
   firmwareId: string;
   firmwareProjectPath: string;
   variationName: string;
-  targetDevice: "atmega32u4" | "rp2040";
+  // targetDevice: "atmega32u4" | "rp2040";
+  targetDevice: "rp2040";
   buildResult: "success" | "failure";
   firmwareFileName: string;
   metadataFileName: string;
