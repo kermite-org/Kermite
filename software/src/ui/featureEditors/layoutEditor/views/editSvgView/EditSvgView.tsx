@@ -132,8 +132,8 @@ export const EditSvgView = () => {
       width={sight.screenW}
       height={sight.screenH}
       viewBox={viewBoxSpec}
-      onMouseDown={onSvgMouseDown}
-      onMouseMove={
+      onPointerDown={onSvgMouseDown}
+      onPointerMove={
         (layouterAppFeatures.showCoordCrosshair && onSvgMouseMove) || undefined
       }
       onWheel={onSvgScroll}

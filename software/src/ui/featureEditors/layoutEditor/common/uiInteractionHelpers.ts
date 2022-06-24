@@ -28,12 +28,12 @@ export function startDragSession(
   };
 
   const onMouseUp = () => {
-    window.removeEventListener('mousemove', onMouseMove);
-    window.removeEventListener('mouseup', onMouseUp);
+    window.removeEventListener('pointermove', onMouseMove);
+    window.removeEventListener('pointerup', onMouseUp);
     upCallback();
     rerender();
   };
 
-  window.addEventListener('mousemove', onMouseMove);
-  window.addEventListener('mouseup', onMouseUp);
+  window.addEventListener('pointermove', onMouseMove);
+  window.addEventListener('pointerup', onMouseUp);
 }
