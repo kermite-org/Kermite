@@ -155,7 +155,7 @@ const OutlinePoint = (props: {
         if={visible}
         data-editable={editable}
         data-selected={isSelected}
-        onMouseDown={onMouseDown}
+        onPointerDown={onMouseDown}
       />
     </g>
   );
@@ -225,7 +225,7 @@ const HittestLine = (props: {
       x2={p1.x}
       y2={p1.y}
       class={cssHittestLine}
-      onMouseDown={onMouseDown}
+      onPointerDown={onMouseDown}
     />
   );
 };

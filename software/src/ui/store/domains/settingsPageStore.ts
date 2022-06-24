@@ -26,6 +26,7 @@ interface ISettingsPageStore {
     handleSelectLocalRepositoryFolder(): void;
     setUiScalingSelectionValue(value: string): void;
     setFlagShowDevelopmentPackages(value: boolean): void;
+    discardPageStorage(): void;
   };
 }
 
@@ -128,6 +129,16 @@ function createSettingsPageStore(): ISettingsPageStore {
     },
     setFlagShowDevelopmentPackages(value) {
       globalSettingsWriter.writeValue('showDevelopmentPackages', value);
+    },
+    discardPageStorage() {
+      const ok = window.confirm(
+        'このページ内で保存しているデータを消去して初期状態に戻します。よろしいですか',
+      );
+      if (ok) {
+        localStorage.clear();
+        appUi.skipPageTerminationTasks = true;
+        location.reload();
+      }
     },
   };
 

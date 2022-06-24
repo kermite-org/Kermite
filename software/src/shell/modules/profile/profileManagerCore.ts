@@ -21,18 +21,18 @@ import {
   pathJoin,
 } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/profileFileLoader';
-import { coreState } from '~/shell/modules/core';
 
 function getProjectProfileFolderName(projectId: string) {
-  const { allProjectPackageInfos } = coreState;
-  const project = allProjectPackageInfos.find(
-    (it) => it.projectId === projectId,
-  );
-  if (project) {
-    return `${projectId}_${project.packageName}`;
-  } else {
-    return projectId;
-  }
+  // const { allProjectPackageInfos } = coreState;
+  // const project = allProjectPackageInfos.find(
+  //   (it) => it.projectId === projectId,
+  // );
+  // if (project) {
+  //   return `${projectId}_${project.packageName}`;
+  // } else {
+  //   return projectId;
+  // }
+  return projectId;
 }
 
 function getProfileFilePath(profileEntry: IProfileEntry): string {
