@@ -23,4 +23,7 @@ export default defineConfig({
   ],
   envPrefix: 'FE_',
   clearScreen: false,
+  server: {
+    host: '0.0.0.0',
+  },
 });
