@@ -31,5 +31,7 @@ class AppUi {
   navigateTo(path: string) {
     location.href = path;
   }
+
+  skipPageTerminationTasks = false;
 }
 export const appUi = new AppUi();

@@ -31,6 +31,7 @@ export const SettingsPage = () => {
       handleSelectLocalRepositoryFolder,
       setUiScalingSelectionValue,
       setFlagShowDevelopmentPackages,
+      discardPageStorage,
     },
   } = settingsPageStore;
 
@@ -105,6 +106,9 @@ export const SettingsPage = () => {
           />
         </Indent>
       </Indent>
+      <div>
+        <button onClick={discardPageStorage}>保存データを破棄</button>
+      </div>
 
       <div class="version-area" if={!!appVersionInfo}>
         application version: {appVersionInfo}
