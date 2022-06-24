@@ -155,6 +155,10 @@ export class DeviceSelectionManager {
   private timerWrapper = new IntervalTimerWrapper();
 
   async initialize() {
+    if (!('hid' in navigator)) {
+      console.log(`[WARN] WebHID is not supported`);
+      return;
+    }
     this.updateEnumeration();
     await this.restoreConnection();
     this.timerWrapper.start(this.updateEnumeration, 2000);
