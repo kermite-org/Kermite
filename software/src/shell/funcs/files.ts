@@ -205,3 +205,33 @@ export function fsxListFileBaseNames(
     .filter((fileName) => fileName.endsWith(extension))
     .map((fileName) => pathBasename(fileName, extension));
 }
+
+export async function fsxReadJsonFromFileHandle(
+  fileHandle: FileSystemFileHandle,
+): Promise<any> {
+  const file = await fileHandle.getFile();
+  const text = await file.text();
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new AppError(
+      'InvalidJsonFileContent',
+      { filePath: file.name },
+      error,
+    );
+  }
+}
+
+export async function fsxWriteJsonToFileHandle(
+  fileHandle: FileSystemFileHandle,
+  obj: any,
+): Promise<void> {
+  const text = JSON.stringify(obj);
+  try {
+    const writable = await fileHandle.createWritable();
+    await writable.write(text);
+    await writable.close();
+  } catch (error) {
+    throw new AppError('CannotWriteFile', { filePath: fileHandle.name }, error);
+  }
+}
