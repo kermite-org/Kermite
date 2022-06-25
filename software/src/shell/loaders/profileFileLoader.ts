@@ -9,7 +9,9 @@ import {
   cacheRemoteResource,
   fetchJson,
   fsxReadJsonFile,
+  fsxReadJsonFromFileHandle,
   fsxWriteJsonFile,
+  fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
 import { ProfileDataMigrator } from '~/shell/loaders/profileDataMigrator';
 import { checkProfileDataObjectSchema } from '~/shell/loaders/profileDataSchemaChecker';
@@ -50,6 +52,16 @@ export namespace ProfileFileLoader {
     return convertProfileDataFromPersistProfileData(profileFileData, uri);
   }
 
+  export async function loadProfileFromLocalFile(
+    fileHandle: FileSystemFileHandle,
+  ): Promise<IProfileData> {
+    const profileFileData = (await fsxReadJsonFromFileHandle(
+      fileHandle,
+    )) as IPersistProfileFileData;
+    const fileName = (await fileHandle.getFile()).name;
+    return convertProfileDataFromPersistProfileData(profileFileData, fileName);
+  }
+
   export function saveProfileToFile(
     filePath: string,
     profileData: IProfileData,
@@ -61,5 +73,18 @@ export namespace ProfileFileLoader {
         profileName,
       );
     fsxWriteJsonFile(filePath, persistProfileData);
+  }
+
+  export async function saveProfileToLocalFile(
+    fileHandle: FileSystemFileHandle,
+    profileData: IProfileData,
+    profileName: string,
+  ) {
+    const persistProfileData =
+      ProfileDataConverter.convertProfileToPersistFileData(
+        profileData,
+        profileName,
+      );
+    await fsxWriteJsonToFileHandle(fileHandle, persistProfileData);
   }
 }

@@ -125,15 +125,19 @@ export const profileManagerCore = {
       profileEntry.profileName,
     );
   },
-  loadExternalProfileFile(filePath: string): IProfileData {
-    return ProfileFileLoader.loadProfileFromFile(filePath);
+  async loadExternalProfileFile(
+    fileHandle: FileSystemFileHandle,
+  ): Promise<IProfileData> {
+    return await ProfileFileLoader.loadProfileFromLocalFile(fileHandle);
   },
-  saveExternalProfileFile(filePath: string, profileData: IProfileData): void {
-    const profileName = pathBasename(filePath, '.profile.json');
-    const baseDir = pathDirname(filePath);
-    const savingFilePath = pathJoin(baseDir, profileName.toLowerCase());
-    ProfileFileLoader.saveProfileToFile(
-      savingFilePath,
+  async saveExternalProfileFile(
+    fileHandle: FileSystemFileHandle,
+    profileData: IProfileData,
+  ) {
+    const file = await fileHandle.getFile();
+    const profileName = pathBasename(file.name, '.profile.json');
+    await ProfileFileLoader.saveProfileToLocalFile(
+      fileHandle,
       profileData,
       profileName,
     );

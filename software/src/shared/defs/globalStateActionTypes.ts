@@ -143,8 +143,11 @@ export type ICoreAction = Partial<{
     presetName: string;
     profileData: IProfileData;
   };
-  profile_importFromFile: { filePath: string };
-  profile_exportToFile: { filePath: string; profileData: IProfileData };
+  profile_importFromFile: { fileHandle: FileSystemFileHandle };
+  profile_exportToFile: {
+    fileHandle: FileSystemFileHandle;
+    profileData: IProfileData;
+  };
   profile_openUserProfilesFolder: 1;
   profile_setEditProfileData: { editProfileData: IProfileData };
 

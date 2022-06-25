@@ -269,16 +269,18 @@ export const profileManagerModule = createCoreModule({
     }
   },
 
-  profile_importFromFile({ filePath }) {
-    const profile = profileManagerCore.loadExternalProfileFile(filePath);
+  async profile_importFromFile({ fileHandle }) {
+    const profile = await profileManagerCore.loadExternalProfileFile(
+      fileHandle,
+    );
     commitCoreState({
       profileEditSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profile,
     });
   },
 
-  profile_exportToFile({ filePath, profileData }) {
-    profileManagerCore.saveExternalProfileFile(filePath, profileData);
+  async profile_exportToFile({ fileHandle, profileData }) {
+    await profileManagerCore.saveExternalProfileFile(fileHandle, profileData);
   },
 
   profile_openUserProfilesFolder() {
