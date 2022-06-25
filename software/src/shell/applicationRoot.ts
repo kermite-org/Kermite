@@ -192,9 +192,14 @@ export class ApplicationRoot {
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 }).catch(
         reportShellError,
       );
-      const kermiteServerProjectIds =
-        await userPresetHubDataLoader.getServerProjectIds();
-      commitCoreState({ kermiteServerProjectIds });
+      try {
+        const kermiteServerProjectIds =
+          await userPresetHubDataLoader.getServerProjectIds();
+        commitCoreState({ kermiteServerProjectIds });
+      } catch (err) {
+        reportShellError(err);
+      }
+
       try {
         profileManagerRoot.initialize();
       } catch (err) {
