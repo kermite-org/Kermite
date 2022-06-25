@@ -25,7 +25,7 @@ export namespace PresetHubServerTypes {
   };
 }
 
-const serverUrlBase = `http://dev.server.kermite.org`;
+const serverUrlBase = `https://dev.server.kermite.org`;
 
 export const userPresetHubDataLoader = {
   async getServerProjectIds(): Promise<string[]> {
