@@ -1,5 +1,4 @@
 import { asyncRerender } from 'alumina';
-import { forceChangeFilePathExtension } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/domainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
@@ -150,7 +149,6 @@ const handleExportToFile = async () => {
     profileName.toLowerCase(),
   );
   if (fileHandle) {
-    // const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
     await profilesActions.exportToFile(fileHandle);
     modalConfirm({ caption: 'export to file', message: 'file saved.' });
   }

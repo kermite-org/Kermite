@@ -38,8 +38,9 @@ function loadLayoutByEditSource(editSource: ILayoutEditSource) {
   } else if (editSource.type === 'CurrentProfile') {
     layoutManagerModule.layout_loadCurrentProfileLayout(1);
   } else if (editSource.type === 'File') {
-    const { filePath } = editSource;
-    layoutManagerModule.layout_loadFromFile({ filePath });
+    // const { filePath } = editSource;
+    // layoutManagerModule.layout_loadFromFile({ filePath });
+    // TODO: persist edit data for standalone layout
   } else if (editSource.type === 'ProjectLayout') {
     const { projectId, layoutName } = editSource;
     layoutManagerModule.layout_loadProjectLayout({ projectId, layoutName });

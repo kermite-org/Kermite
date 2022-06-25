@@ -1,11 +1,7 @@
-import {
-  compareObjectByJsonStringify,
-  forceChangeFilePathExtension,
-  IPersistKeyboardDesign,
-} from '~/shared';
+import { compareObjectByJsonStringify, IPersistKeyboardDesign } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { LayoutEditorCore, assignerModel } from '~/ui/featureEditors';
+import { assignerModel, LayoutEditorCore } from '~/ui/featureEditors';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
@@ -124,35 +120,35 @@ export const layoutManagerActions = {
     if (!(await checkShallLoadData())) {
       return;
     }
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (filePath) {
-      dispatchCoreAction({ layout_loadFromFile: { filePath } });
+    const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+      '.layout.json',
+    );
+    if (fileHandle) {
+      await dispatchCoreAction({ layout_loadFromFile: { fileHandle } });
     }
   },
 
   async saveToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
-    const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
-    if (filePath) {
-      const modFilePath = forceChangeFilePathExtension(
-        filePath,
-        '.layout.json',
-      );
-      dispatchCoreAction({
-        layout_saveToFile: { filePath: modFilePath, design },
+    const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
+      '.layout.json',
+      'untitled.layout.json',
+    );
+    if (fileHandle) {
+      await dispatchCoreAction({
+        layout_saveToFile: { fileHandle, design },
       });
     }
   },
   async exportToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
-    const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
-    if (filePath) {
-      const modFilePath = forceChangeFilePathExtension(
-        filePath,
-        '.layout.json',
-      );
+    const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
+      '.layout.json',
+      'untitled.layout.json',
+    );
+    if (fileHandle) {
       await dispatchCoreAction({
-        layout_exportToFile: { filePath: modFilePath, design },
+        layout_exportToFile: { fileHandle, design },
       });
       await modalConfirm({ caption: 'export to file', message: 'file saved.' });
     }

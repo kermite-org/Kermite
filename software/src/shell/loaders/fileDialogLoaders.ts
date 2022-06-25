@@ -1,7 +1,6 @@
 import {
   fsxReadJsonFile,
   fsxReadJsonFromFileHandle,
-  fsxWriteJsonFile,
   fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
 

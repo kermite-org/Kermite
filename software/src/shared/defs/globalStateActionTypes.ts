@@ -154,9 +154,15 @@ export type ICoreAction = Partial<{
   layout_createNewLayout: 1;
   layout_loadCurrentProfileLayout: 1;
   layout_overwriteCurrentLayout: { design: IPersistKeyboardDesign };
-  layout_loadFromFile: { filePath: string };
-  layout_saveToFile: { filePath: string; design: IPersistKeyboardDesign };
-  layout_exportToFile: { filePath: string; design: IPersistKeyboardDesign };
+  layout_loadFromFile: { fileHandle: FileSystemFileHandle };
+  layout_saveToFile: {
+    fileHandle: FileSystemFileHandle;
+    design: IPersistKeyboardDesign;
+  };
+  layout_exportToFile: {
+    fileHandle: FileSystemFileHandle;
+    design: IPersistKeyboardDesign;
+  };
   layout_createProjectLayout: { projectId: string; layoutName: string };
   layout_loadProjectLayout: { projectId: string; layoutName: string };
   layout_saveProjectLayout: {

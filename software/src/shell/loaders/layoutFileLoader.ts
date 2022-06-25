@@ -3,8 +3,8 @@ import { AppError } from '~/shared/defs';
 import {
   cacheRemoteResource,
   fetchJson,
-  fsxReadJsonFile,
-  fsxWriteJsonFile,
+  fsxReadJsonFromFileHandle,
+  fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
 import { LayoutDataMigrator } from '~/shell/loaders/layoutDataMigrator';
 import { checkLayoutFileContentObjectSchema } from '~/shell/loaders/layoutFileSchemaChecker';
@@ -22,9 +22,12 @@ export namespace LayoutFileLoader {
     }
   }
 
-  export function loadLayoutFromFile(filePath: string): IPersistKeyboardDesign {
-    const obj = fsxReadJsonFile(filePath);
-    fixLayoutData(obj, filePath);
+  export async function loadLayoutFromFile(
+    fileHandle: FileSystemFileHandle,
+  ): Promise<IPersistKeyboardDesign> {
+    const obj = await fsxReadJsonFromFileHandle(fileHandle);
+    const fileName = (await fileHandle.getFile()).name;
+    fixLayoutData(obj, fileName);
     return obj as IPersistKeyboardDesign;
   }
 
@@ -36,10 +39,10 @@ export namespace LayoutFileLoader {
     return obj as IPersistKeyboardDesign;
   }
 
-  export function saveLayoutToFile(
-    filePath: string,
+  export async function saveLayoutToFile(
+    fileHandle: FileSystemFileHandle,
     design: IPersistKeyboardDesign,
-  ): void {
-    fsxWriteJsonFile(filePath, design);
+  ) {
+    await fsxWriteJsonToFileHandle(fileHandle, design);
   }
 }

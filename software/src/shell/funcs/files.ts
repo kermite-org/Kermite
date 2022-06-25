@@ -226,7 +226,7 @@ export async function fsxWriteJsonToFileHandle(
   fileHandle: FileSystemFileHandle,
   obj: any,
 ): Promise<void> {
-  const text = JSON.stringify(obj);
+  const text = JSON.stringify(obj, null, '  ');
   try {
     const writable = await fileHandle.createWritable();
     await writable.write(text);
