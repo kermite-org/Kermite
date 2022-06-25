@@ -1,4 +1,9 @@
-import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
+import {
+  fsxReadJsonFile,
+  fsxReadJsonFromFileHandle,
+  fsxWriteJsonFile,
+  fsxWriteJsonToFileHandle,
+} from '~/shell/funcs';
 
 export const fileDialogLoaders = {
   getOpeningDirectoryPathWithDialog() {
@@ -11,7 +16,9 @@ export const fileDialogLoaders = {
     // return undefined;
     throw new Error('obsolete function invoked');
   },
-  getOpeningJsonFilePathWithDialog() {
+  async getOpeningJsonFilePathWithDialog(
+    extension: string,
+  ): Promise<FileSystemFileHandle | undefined> {
     // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
     //   properties: ['openFile'],
     //   filters: [
@@ -25,9 +32,25 @@ export const fileDialogLoaders = {
     //   return result.filePaths[0];
     // }
     // return undefined;
-    throw new Error('obsolete function invoked');
+    // throw new Error('obsolete function invoked');
+    const [fileHandle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: extension,
+          accept: {
+            'application/json': [extension],
+          },
+        },
+      ],
+    });
+    return fileHandle;
   },
-  getSavingJsonFilePathWithDialog() {
+  async getSavingJsonFilePathWithDialog(
+    extension: string,
+    defaultFileName: string,
+  ): Promise<FileSystemFileHandle | undefined> {
+    // const file =
+    // return fileHandle.getFile();
     // const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
     //   properties: ['showOverwriteConfirmation'],
     //   filters: [
@@ -38,13 +61,26 @@ export const fileDialogLoaders = {
     //   ],
     // });
     // return result.filePath;
-    throw new Error('obsolete function invoked');
+    // throw new Error('obsolete function invoked');
+    const fileHandle = await window.showSaveFilePicker({
+      suggestedName: defaultFileName,
+      types: [
+        {
+          description: extension,
+          accept: {
+            'application/json': [extension],
+          },
+        },
+      ],
+    });
+    return fileHandle;
   },
-  loadObjectFromJsonWithFileDialog(): any | undefined {
+  async loadObjectFromJsonWithFileDialog(): Promise<any | undefined> {
     try {
-      const filePath = fileDialogLoaders.getOpeningJsonFilePathWithDialog();
-      if (filePath) {
-        const obj = fsxReadJsonFile(filePath);
+      const fileHandle =
+        await fileDialogLoaders.getOpeningJsonFilePathWithDialog();
+      if (fileHandle) {
+        const obj = await fsxReadJsonFromFileHandle(fileHandle);
         return obj;
       }
     } catch (error) {
@@ -52,11 +88,12 @@ export const fileDialogLoaders = {
       return undefined;
     }
   },
-  saveObjectToJsonWithFileDialog(obj: any): boolean {
+  async saveObjectToJsonWithFileDialog(obj: any): Promise<boolean> {
     try {
-      const filePath = fileDialogLoaders.getSavingJsonFilePathWithDialog();
-      if (filePath) {
-        fsxWriteJsonFile(filePath, obj);
+      const fileHandle =
+        await fileDialogLoaders.getSavingJsonFilePathWithDialog();
+      if (fileHandle) {
+        await fsxWriteJsonToFileHandle(fileHandle, obj);
         return true;
       }
       return false;
