@@ -77,15 +77,13 @@ export function makeCompactStackTrace(error: { stack?: string }) {
   return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
 }
 
-export function makeRelativeStackTrace(
-  error: {
-    stack?: string;
-    message?: string;
-  },
-  rootDir: string,
-): string {
+export function makeRelativeStackTrace(error: {
+  stack?: string;
+  message?: string;
+}): string {
   if (error.stack) {
-    return error.stack.replaceAll(rootDir + '/', '');
+    // return error.stack.replaceAll(rootDir + '/', '');
+    return error.stack.toString();
     // .replaceAll(/\/Users\/[^/]+/g, '~');
   } else if (error.message) {
     return error.message;
@@ -97,19 +95,18 @@ export function makeRelativeStackTrace(
 
 export function getAppErrorData(
   error: AppError<any> | Error | any,
-  rootDir: string,
 ): IAppErrorData<any> {
   if (error instanceof AppError) {
     return {
       isAppError: true,
       type: error.type,
       params: error.params,
-      stack: makeRelativeStackTrace(error, rootDir),
+      stack: makeRelativeStackTrace(error),
     };
   } else {
     return {
       isAppError: false,
-      stack: makeRelativeStackTrace(error, rootDir),
+      stack: makeRelativeStackTrace(error),
     };
   }
 }

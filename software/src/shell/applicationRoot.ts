@@ -46,9 +46,7 @@ export class ApplicationRoot {
   private setupIpcBackend() {
     appGlobal.ipcMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
-      appGlobal.appErrorEventPort.emit(
-        getAppErrorData(error, appEnv.resolveApplicationRootDir()),
-      );
+      appGlobal.appErrorEventPort.emit(getAppErrorData(error));
     });
 
     appGlobal.ipcMainAgent.supplySyncHandlers({
