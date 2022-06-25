@@ -73,17 +73,19 @@ export class AppError<T extends keyof IAppErrorsSource> extends Error {
   }
 }
 
-export function makeCompactStackTrace(error: { stack?: string }) {
-  return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
-}
+// export function makeCompactStackTrace(error: { stack?: string }) {
+//   return error.stack?.split(/\r?\n/).slice(0, 2).join('\n');
+// }
 
-export function makeRelativeStackTrace(error: {
+export function makeCompactStackTrace(error: {
   stack?: string;
   message?: string;
 }): string {
   if (error.stack) {
     // return error.stack.replaceAll(rootDir + '/', '');
-    return error.stack.toString();
+    // return error.stack;
+    return error.stack?.replace(/http.+\/src\//g, '~/');
+    // return error.stack.replace(/http.+\//g, '');
     // .replaceAll(/\/Users\/[^/]+/g, '~');
   } else if (error.message) {
     return error.message;
@@ -101,12 +103,12 @@ export function getAppErrorData(
       isAppError: true,
       type: error.type,
       params: error.params,
-      stack: makeRelativeStackTrace(error),
+      stack: makeCompactStackTrace(error),
     };
   } else {
     return {
       isAppError: false,
-      stack: makeRelativeStackTrace(error),
+      stack: makeCompactStackTrace(error),
     };
   }
 }

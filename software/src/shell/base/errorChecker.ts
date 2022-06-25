@@ -5,11 +5,11 @@ import { appGlobal } from '~/shell/base/appGlobal';
 const badExecutionContextNames: string[] = [];
 
 export function reportShellError(error: any) {
-  // console.log('caught shell error');
+  console.log('caught shell error');
   // console.log({ error });
   // const rootDir = appEnv.resolveApplicationRootDir();
   // console.error(makeCompactStackTrace(error));
-  // console.error(error.stack);
+  console.log(error.stack);
   // console.log({ ss: error.stack.toString() });
   appGlobal.appErrorEventPort.emit(getAppErrorData(error));
 }
