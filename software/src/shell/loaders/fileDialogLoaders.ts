@@ -32,17 +32,21 @@ export const fileDialogLoaders = {
     // }
     // return undefined;
     // throw new Error('obsolete function invoked');
-    const [fileHandle] = await window.showOpenFilePicker({
-      types: [
-        {
-          description: extension,
-          accept: {
-            'application/json': [extension],
+    try {
+      const [fileHandle] = await window.showOpenFilePicker({
+        types: [
+          {
+            description: extension,
+            accept: {
+              'application/json': [extension],
+            },
           },
-        },
-      ],
-    });
-    return fileHandle;
+        ],
+      });
+      return fileHandle;
+    } catch (error) {
+      return undefined;
+    }
   },
   async getSavingJsonFilePathWithDialog(
     extension: string,
@@ -61,18 +65,22 @@ export const fileDialogLoaders = {
     // });
     // return result.filePath;
     // throw new Error('obsolete function invoked');
-    const fileHandle = await window.showSaveFilePicker({
-      suggestedName: defaultFileName,
-      types: [
-        {
-          description: extension,
-          accept: {
-            'application/json': [extension],
+    try {
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          {
+            description: extension,
+            accept: {
+              'application/json': [extension],
+            },
           },
-        },
-      ],
-    });
-    return fileHandle;
+        ],
+      });
+      return fileHandle;
+    } catch (error) {
+      return undefined;
+    }
   },
   async loadObjectFromJsonWithFileDialog(
     extension: string,
@@ -92,7 +100,10 @@ export const fileDialogLoaders = {
   async saveObjectToJsonWithFileDialog(obj: any): Promise<boolean> {
     try {
       const fileHandle =
-        await fileDialogLoaders.getSavingJsonFilePathWithDialog();
+        await fileDialogLoaders.getSavingJsonFilePathWithDialog(
+          '__DUMMY',
+          '__DUMMY',
+        );
       if (fileHandle) {
         await fsxWriteJsonToFileHandle(fileHandle, obj);
         return true;

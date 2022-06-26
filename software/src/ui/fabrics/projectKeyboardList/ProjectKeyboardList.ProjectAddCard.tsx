@@ -4,7 +4,7 @@ import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboar
 
 type Props = {
   onClick: () => void;
-  onFileDrop: (filePath: string) => void;
+  onFileDrop: (fileHandle: FileSystemFileHandle) => void;
 };
 
 export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
@@ -26,12 +26,19 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
       baseDiv.classList.remove('--drop-hover');
     };
 
-    const onDrop = (e: DragEvent) => {
+    const onDrop = async (e: DragEvent) => {
       e.preventDefault();
-      const file = e.dataTransfer?.files[0];
-      if (file && file.type === 'application/json') {
-        throw new Error('TODO: support importing package file');
-        // onFileDrop(file.path);
+      const item = e.dataTransfer?.items[0];
+      if (
+        item &&
+        item.kind === 'file' &&
+        item.type.startsWith('application/json')
+      ) {
+        const fileHandle =
+          (await item.getAsFileSystemHandle()) as FileSystemFileHandle;
+        if (fileHandle) {
+          onFileDrop(fileHandle);
+        }
       }
       baseDiv.classList.remove('--drop-hover');
     };
