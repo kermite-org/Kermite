@@ -138,6 +138,7 @@ export const layoutManagerActions = {
       await dispatchCoreAction({
         layout_saveToFile: { fileHandle, design },
       });
+      await modalConfirm({ caption: 'save to file', message: 'file saved.' });
     }
   },
   async exportToFileWithDialog() {
