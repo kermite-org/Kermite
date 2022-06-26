@@ -1,5 +1,4 @@
 import {
-  fsxReadJsonFile,
   fsxReadJsonFromFileHandle,
   fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
@@ -97,12 +96,16 @@ export const fileDialogLoaders = {
       return undefined;
     }
   },
-  async saveObjectToJsonWithFileDialog(obj: any): Promise<boolean> {
+  async saveObjectToJsonWithFileDialog(
+    extension: string,
+    defaultFileName: string,
+    obj: any,
+  ): Promise<boolean> {
     try {
       const fileHandle =
         await fileDialogLoaders.getSavingJsonFilePathWithDialog(
-          '__DUMMY',
-          '__DUMMY',
+          extension,
+          defaultFileName,
         );
       if (fileHandle) {
         await fsxWriteJsonToFileHandle(fileHandle, obj);

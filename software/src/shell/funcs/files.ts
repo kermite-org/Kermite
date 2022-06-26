@@ -99,13 +99,13 @@ export function fsxReaddir(folderPath: string): string[] {
   }
 }
 
-export function fsxMkdirpSync(path: string) {
+export function fsxMkdirpSync(_path: string) {
   // if (!fsExistsSync(path)) {
   //   fsMkdirSync(path, { recursive: true });
   // }
 }
 
-export function fsxEnsureFolderExists(path: string) {
+export function fsxEnsureFolderExists(_path: string) {
   // if (!fsExistsSync(path)) {
   //   await fspMkdir(path);
   // }
@@ -159,18 +159,18 @@ export function fsxWriteJsonFile(filePath: string, obj: any): void {
   return fsxWriteFile(filePath, text);
 }
 
-export function fsxWatchFilesChange(
-  baseDir: string,
-  callback: (filePath: string) => void,
-) {
-  throw new Error('invalid invocation');
-  // return fs.watch(baseDir, { recursive: true }, (eventType, relPath) => {
-  //   if (eventType === 'change') {
-  //     const filePath = `${baseDir}/${relPath}`;
-  //     callback(filePath);
-  //   }
-  // });
-}
+// export function fsxWatchFilesChange(
+//   baseDir: string,
+//   callback: (filePath: string) => void,
+// ) {
+//   throw new Error('invalid invocation');
+//   // return fs.watch(baseDir, { recursive: true }, (eventType, relPath) => {
+//   //   if (eventType === 'change') {
+//   //     const filePath = `${baseDir}/${relPath}`;
+//   //     callback(filePath);
+//   //   }
+//   // });
+// }
 
 // export function globAsync(
 //   pattern: string,
