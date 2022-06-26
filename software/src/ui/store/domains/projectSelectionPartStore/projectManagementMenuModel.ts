@@ -48,6 +48,11 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
       text: 'import from file',
       handler: projectManagementMenuActions.handleSelectLocalPackageToImport,
     },
+    {
+      type: 'menuEntry',
+      text: 'export to file',
+      handler: projectManagementMenuActions.handleExportLocalPackageToFile,
+    },
     // {
     //   type: 'menuEntry',
     //   text: 'open data folder',

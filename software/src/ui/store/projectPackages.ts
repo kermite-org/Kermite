@@ -342,4 +342,12 @@ export const projectPackagesActions = {
 
     return loadedProjectId;
   },
+  async exportLocalPackageToFile(
+    fileHandle: FileSystemFileHandle,
+    projectId: string,
+  ) {
+    await dispatchCoreAction({
+      project_exportLocalProjectToFile: { fileHandle, projectId },
+    });
+  },
 };

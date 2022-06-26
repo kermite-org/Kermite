@@ -16,6 +16,7 @@ import {
   fsxReadJsonFile,
   fsxReadJsonFromFileHandle,
   fsxWriteJsonFile,
+  fsxWriteJsonToFileHandle,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -220,6 +221,13 @@ export const projectPackageProvider = {
   },
   async importLocalProjectPackageFromFile(fileHandle: FileSystemFileHandle) {
     return await importLocalProjectPackageFromFileImpl(fileHandle);
+  },
+  async exportLocalProjectPackageToFile(
+    fileHandle: FileSystemFileHandle,
+    info: IProjectPackageInfo,
+  ) {
+    const savingData = convertProjectPackageInfoToFileContent(info);
+    await fsxWriteJsonToFileHandle(fileHandle, savingData);
   },
   openLocalProjectsFolder() {
     // const folderPath = getUserProjectsFolderPath();

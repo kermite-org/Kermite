@@ -134,6 +134,18 @@ export const projectPackageModule = createCoreModule({
       projectPackageModuleHelper.reEnumerateAllProjectPackages();
     }
   },
+  async project_exportLocalProjectToFile({ fileHandle, projectId }) {
+    const project = projectPackageModuleHelper.findProjectInfo(
+      'local',
+      projectId,
+    );
+    if (project) {
+      await projectPackageProvider.exportLocalProjectPackageToFile(
+        fileHandle,
+        project,
+      );
+    }
+  },
   project_openLocalProjectsFolder() {
     projectPackageProvider.openLocalProjectsFolder();
   },

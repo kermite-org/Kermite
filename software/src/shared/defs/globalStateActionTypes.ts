@@ -99,6 +99,10 @@ export type ICoreAction = Partial<{
   project_createLocalProjectBasedOnOnlineProject: { projectId: string };
   project_deleteLocalProject: { projectId: string };
   project_renameLocalProject: { projectId: string; newKeyboardName: string };
+  project_exportLocalProjectToFile: {
+    fileHandle: FileSystemFileHandle;
+    projectId: string;
+  };
   project_openLocalProjectsFolder: 1;
   project_addLocalProjectFromFile: { fileHandle: FileSystemFileHandle };
 
