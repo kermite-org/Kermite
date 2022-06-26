@@ -13,6 +13,7 @@ interface IWelcomePageStore {
     isLanguageJapanese: boolean;
     isDarkTheme: boolean;
     isDeveloperMode: boolean;
+    isHidSupported: boolean;
   };
   actions: {
     setLanguageEnglish(): void;
@@ -40,6 +41,9 @@ function createWelcomePageStore(): IWelcomePageStore {
     },
     get isDeveloperMode() {
       return uiReaders.isDeveloperMode;
+    },
+    get isHidSupported() {
+      return 'hid' in navigator;
     },
   };
 
