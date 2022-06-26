@@ -43,12 +43,12 @@ function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
       handler: layoutManagerActions.createNewProfileFromCurrentLayout,
       disabled: !layoutManagerReader.canCreateProfileFromCurrentLayout,
     },
-    {
-      type: 'menuEntry',
-      text: 'show edit file in folder',
-      handler: layoutManagerActions.showEditLayoutFileInFiler,
-      disabled: !layoutManagerReader.canShowEditLayoutFileInFiler,
-    },
+    // {
+    //   type: 'menuEntry',
+    //   text: 'show edit file in folder',
+    //   handler: layoutManagerActions.showEditLayoutFileInFiler,
+    //   disabled: !layoutManagerReader.canShowEditLayoutFileInFiler,
+    // },
   ];
 }
 

@@ -42,15 +42,16 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
         handler: projectManagementMenuActions.handleDeleteProject,
       },
     ),
+    { type: 'separator' },
     {
       type: 'menuEntry',
       text: 'import from file',
       handler: projectManagementMenuActions.handleSelectLocalPackageToImport,
     },
-    {
-      type: 'menuEntry',
-      text: 'open data folder',
-      handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
-    },
+    // {
+    //   type: 'menuEntry',
+    //   text: 'open data folder',
+    //   handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
+    // },
   ];
 }
