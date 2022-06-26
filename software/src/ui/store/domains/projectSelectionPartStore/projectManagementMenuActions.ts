@@ -141,9 +141,11 @@ export const projectManagementMenuActions = {
     }
   },
   async handleSelectLocalPackageToImport() {
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (filePath) {
-      await projectPackagesActions.importLocalPackageFile(filePath);
+    const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+      '.kmpkg.json',
+    );
+    if (fileHandle) {
+      await projectPackagesActions.importLocalPackageFile(fileHandle);
     }
   },
   handleOpenLocalProjectsFolder() {

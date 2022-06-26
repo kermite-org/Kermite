@@ -3,6 +3,7 @@ import produce from 'immer';
 import {
   fallbackProjectPackageInfo,
   getFileBaseNameFromFilePath,
+  getFileNameFromHandle,
   getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
@@ -131,7 +132,7 @@ function removeItemFromArray<T, K extends keyof T>(
   }
 }
 
-function renameItemInArray<T, K extends keyof T>(
+function renameItemInArray<T extends { [key in K]: string }, K extends string>(
   items: T[],
   nameFiled: K,
   oldName: Extract<T[K], string>,
@@ -285,16 +286,19 @@ export const projectPackagesHooks = {
 };
 
 export const projectPackagesActions = {
-  async importLocalPackageFile(filePath: string): Promise<string | undefined> {
-    if (!filePath?.endsWith('.kmpkg.json')) {
+  async importLocalPackageFile(
+    fileHandle: FileSystemFileHandle,
+  ): Promise<string | undefined> {
+    const fileName = await getFileNameFromHandle(fileHandle);
+    if (!fileName?.endsWith('.kmpkg.json')) {
       await modalError(
         'Invalid target file. Only .kmpkg.json file can be loaded.',
       );
       return;
     }
-    const packageName = getFileBaseNameFromFilePath(filePath, '.kmpkg.json');
+    const packageName = getFileBaseNameFromFilePath(fileName, '.kmpkg.json');
     const fileContent = (await ipcAgent.async.file_loadJsonFileContent(
-      filePath,
+      fileHandle,
     )) as { projectId: string };
 
     const loadedProjectId = fileContent.projectId;
@@ -332,7 +336,9 @@ export const projectPackagesActions = {
         return;
       }
     }
-    await dispatchCoreAction({ project_addLocalProjectFromFile: { filePath } });
+    await dispatchCoreAction({
+      project_addLocalProjectFromFile: { fileHandle },
+    });
 
     return loadedProjectId;
   },

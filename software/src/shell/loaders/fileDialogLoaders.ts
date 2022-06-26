@@ -74,10 +74,12 @@ export const fileDialogLoaders = {
     });
     return fileHandle;
   },
-  async loadObjectFromJsonWithFileDialog(): Promise<any | undefined> {
+  async loadObjectFromJsonWithFileDialog(
+    extension: string,
+  ): Promise<any | undefined> {
     try {
       const fileHandle =
-        await fileDialogLoaders.getOpeningJsonFilePathWithDialog();
+        await fileDialogLoaders.getOpeningJsonFilePathWithDialog(extension);
       if (fileHandle) {
         const obj = await fsxReadJsonFromFileHandle(fileHandle);
         return obj;
@@ -101,7 +103,9 @@ export const fileDialogLoaders = {
       return false;
     }
   },
-  loadJsonFileContent(filePath: string): any | undefined {
-    return fsxReadJsonFile(filePath);
+  async loadJsonFileContent(
+    fileHandle: FileSystemFileHandle,
+  ): Promise<any | undefined> {
+    return await fsxReadJsonFromFileHandle(fileHandle);
   },
 };

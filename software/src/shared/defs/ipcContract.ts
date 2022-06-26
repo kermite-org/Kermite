@@ -62,10 +62,12 @@ export interface IAppIpcContract {
       extension: string,
       defaultName: string,
     ): Promise<FileSystemFileHandle | undefined>;
-    file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
+    file_loadObjectFromJsonWithFileDialog(
+      extension: string,
+    ): Promise<any | undefined>;
     file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
-    file_loadJsonFileContent(filePath: string): Promise<any>;
+    file_loadJsonFileContent(fileHandle: FileSystemFileHandle): Promise<any>;
 
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 
