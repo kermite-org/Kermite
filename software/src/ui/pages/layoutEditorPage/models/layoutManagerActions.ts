@@ -135,10 +135,11 @@ export const layoutManagerActions = {
 
   async saveToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
-    const ext = fileExtensions.layout;
+    const namePart = layoutManagerReader.getSavingFileDefaultNamePart();
+    const extension = fileExtensions.layout;
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-      ext,
-      `untitled${ext}`,
+      extension,
+      `${namePart}${extension}`,
       true,
     );
     if (fileHandle) {
@@ -150,21 +151,18 @@ export const layoutManagerActions = {
   },
   async exportToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
-    const ext = fileExtensions.layout;
+    const namePart = layoutManagerReader.getSavingFileDefaultNamePart();
+    const extension = fileExtensions.layout;
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-      ext,
-      `untitled${ext}`,
+      extension,
+      `${namePart}${extension}`,
+      true,
     );
     if (fileHandle) {
       await dispatchCoreAction({
         layout_exportToFile: { fileHandle, design },
       });
-      if (featureConfig.useFileSystemAccessApiForSaving) {
-        await modalConfirm({
-          caption: 'export to file',
-          message: 'file saved.',
-        });
-      }
+      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
     }
   },
   save(design: IPersistKeyboardDesign) {

@@ -1,4 +1,4 @@
-import { ILayoutEditSource } from '~/shared';
+import { fileExtensions, ILayoutEditSource } from '~/shared';
 import { LayoutEditorCore } from '~/ui/featureEditors';
 import {
   ILayoutManagerEditTarget,
@@ -64,5 +64,19 @@ export const layoutManagerReader = {
   },
   get saveButtonVisible(): boolean {
     return layoutManagerReader.editSource.type !== 'CurrentProfile';
+  },
+  getSavingFileDefaultNamePart(): string {
+    const { editSource } = layoutManagerReader;
+    if (editSource.type === 'CurrentProfile') {
+      const { profileEditSource } = uiState.core;
+      if (profileEditSource.type === 'InternalProfile') {
+        return profileEditSource.profileEntry.profileName;
+      } else if (profileEditSource.type === 'ProfileNewlyCreated') {
+        return 'untitled';
+      }
+    } else if (editSource.type === 'File') {
+      return editSource.filePath.replace(fileExtensions.layout, '');
+    }
+    throw new Error('invalid condition');
   },
 };
