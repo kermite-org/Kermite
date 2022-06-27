@@ -1,4 +1,9 @@
-import { featureConfig, IFileReadHandle, IFileWriteHandle } from '~/shared';
+import {
+  AppError,
+  featureConfig,
+  IFileReadHandle,
+  IFileWriteHandle,
+} from '~/shared';
 import {
   fsxReadJsonFromFileHandle,
   fsxWriteJsonToFileHandle,
@@ -99,8 +104,9 @@ export const fileDialogLoaders = {
       featureConfig.useFileSystemAccessApiForSaving ||
       forceUseFileSystemAccessApiImpl
     ) {
+      let fileHandle: FileSystemFileHandle;
       try {
-        const fileHandle = await window.showSaveFilePicker({
+        fileHandle = await window.showSaveFilePicker({
           suggestedName: defaultFileName,
           types: [
             {
@@ -111,19 +117,23 @@ export const fileDialogLoaders = {
             },
           ],
         });
-        const file = await fileHandle.getFile();
-        const fileName = file.name;
-        return {
-          fileName,
-          async save(contentText: string) {
-            const writable = await fileHandle.createWritable();
-            await writable.write(contentText);
-            await writable.close();
-          },
-        };
       } catch (error) {
         return undefined;
       }
+
+      const file = await fileHandle.getFile();
+      const fileName = file.name;
+      if (!fileName.endsWith(extension)) {
+        throw new AppError('InvalidSavingFileExtension', { fileName });
+      }
+      return {
+        fileName,
+        async save(contentText: string) {
+          const writable = await fileHandle.createWritable();
+          await writable.write(contentText);
+          await writable.close();
+        },
+      };
     } else {
       const fileName = defaultFileName;
       return {
