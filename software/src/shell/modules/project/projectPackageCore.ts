@@ -1,5 +1,6 @@
 import {
   createProjectKey,
+  fileExtensions,
   getFileNameFromHandle,
   IProjectPackageFileContent,
   IProjectPackageInfo,
@@ -186,7 +187,7 @@ async function importLocalProjectPackageFromFileImpl(
   sourceFileHandle: FileSystemFileHandle,
 ) {
   const fileName = await getFileNameFromHandle(sourceFileHandle);
-  const packageName = pathBasename(fileName, '.kmpkg.json');
+  const packageName = pathBasename(fileName, fileExtensions.package);
   const data = (await fsxReadJsonFromFileHandle(
     sourceFileHandle,
   )) as IProjectPackageFileContent;

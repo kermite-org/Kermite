@@ -1,4 +1,5 @@
 import { css, FC, jsx, useEffect, useRef } from 'alumina';
+import { fileExtensions } from '~/shared';
 import { Icon } from '~/ui/components';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
@@ -31,8 +32,9 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
       const item = e.dataTransfer?.items[0];
       if (
         item &&
-        item.kind === 'file' &&
-        item.type.startsWith('application/json')
+        item.kind === 'file'
+        // 拡張子がjsonでない場合以下の判定にマッチしない
+        // item.type.startsWith('application/json')
       ) {
         const fileHandle =
           (await item.getAsFileSystemHandle()) as FileSystemFileHandle;
@@ -62,7 +64,7 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
           <div class="texts">
             Add keyboard definition
             <br />
-            (*.kmpkg.json)
+            (*{fileExtensions.package})
           </div>
         </div>
       </div>

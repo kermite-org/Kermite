@@ -4,6 +4,7 @@ import {
   createPresetKey,
   createProjectKey,
   fallbackProjectPackageInfo,
+  fileExtensions,
   getOriginAndProjectIdFromProjectKey,
   getPresetSpecFromPresetKey,
   IProjectPackageInfo,
@@ -113,7 +114,7 @@ const actions = {
   },
   async handleSelectLocalPackageToImport() {
     const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
-      '.kmpkg.json',
+      fileExtensions.package,
     );
     if (fileHandle) {
       await actions.handleLocalPackageFileDrop(fileHandle);
