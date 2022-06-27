@@ -76,6 +76,8 @@ export const layoutManagerReader = {
       }
     } else if (editSource.type === 'File') {
       return editSource.filePath.replace(fileExtensions.layout, '');
+    } else if (editSource.type === 'LayoutNewlyCreated') {
+      return 'untitled';
     }
     throw new Error('invalid condition');
   },
