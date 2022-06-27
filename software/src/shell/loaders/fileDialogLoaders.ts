@@ -8,6 +8,13 @@ import {
   fsxReadJsonFromFileHandle,
   fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
+import { reportShellError } from '../base/errorChecker';
+
+function checkFileNameExtension(fileName: string, extension: string) {
+  if (!fileName.endsWith(extension) || fileName.match(/\..*\./)) {
+    throw new AppError('InvalidLocalFileExtension', { fileName });
+  }
+}
 
 export const fileDialogLoaders = {
   getOpeningDirectoryPathWithDialog() {
@@ -46,6 +53,12 @@ export const fileDialogLoaders = {
           const file = (e.currentTarget as HTMLInputElement)?.files?.[0];
           if (file) {
             const fileName = file.name;
+            try {
+              checkFileNameExtension(fileName, extension);
+            } catch (error) {
+              reportShellError(error);
+              reject();
+            }
             const fileReader = new FileReader();
             fileReader.readAsText(file, 'utf-8');
             fileReader.addEventListener('load', () => {
@@ -119,9 +132,7 @@ export const fileDialogLoaders = {
 
       const file = await fileHandle.getFile();
       const fileName = file.name;
-      if (!fileName.endsWith(extension) || fileName.match(/\..*\./)) {
-        throw new AppError('InvalidSavingFileExtension', { fileName });
-      }
+      checkFileNameExtension(fileName, extension);
       return {
         fileName,
         async save(contentText: string) {
