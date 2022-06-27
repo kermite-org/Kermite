@@ -1,5 +1,5 @@
 import { asyncRerender } from 'alumina';
-import { featureConfig, fileExtensions } from '~/shared';
+import { fileExtensions } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/domainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
@@ -152,7 +152,7 @@ const handleExportToFile = async () => {
   );
   if (fileHandle) {
     await profilesActions.exportToFile(fileHandle);
-    if (featureConfig.useFileSystemAccessApiForSaving) {
+    if (fileHandle.isPreSelectedFile) {
       await modalConfirm({ caption: 'export to file', message: 'file saved.' });
     }
   }

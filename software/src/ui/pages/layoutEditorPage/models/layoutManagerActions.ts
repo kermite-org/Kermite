@@ -139,7 +139,6 @@ export const layoutManagerActions = {
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
       extension,
       `${namePart}${extension}`,
-      true,
     );
     if (fileHandle) {
       await dispatchCoreAction({
@@ -155,7 +154,6 @@ export const layoutManagerActions = {
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
       extension,
       `${namePart}${extension}`,
-      true,
     );
     if (fileHandle) {
       await dispatchCoreAction({

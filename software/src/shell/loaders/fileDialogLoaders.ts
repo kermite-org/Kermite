@@ -85,7 +85,6 @@ export const fileDialogLoaders = {
   async getSavingJsonFilePathWithDialog(
     extension: string,
     defaultFileName: string,
-    forceUseFileSystemAccessApiImpl?: boolean,
   ): Promise<IFileWriteHandle | undefined> {
     // const file =
     // return fileHandle.getFile();
@@ -100,10 +99,7 @@ export const fileDialogLoaders = {
     // });
     // return result.filePath;
     // throw new Error('obsolete function invoked');
-    if (
-      featureConfig.useFileSystemAccessApiForSaving ||
-      forceUseFileSystemAccessApiImpl
-    ) {
+    if (featureConfig.useFileSystemAccessApiForSaving) {
       let fileHandle: FileSystemFileHandle;
       try {
         fileHandle = await window.showSaveFilePicker({
@@ -133,6 +129,7 @@ export const fileDialogLoaders = {
           await writable.write(contentText);
           await writable.close();
         },
+        isPreSelectedFile: true,
       };
     } else {
       const fileName = defaultFileName;
@@ -144,6 +141,7 @@ export const fileDialogLoaders = {
           link.download = fileName;
           link.click();
         },
+        isPreSelectedFile: false,
       };
     }
   },

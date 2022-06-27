@@ -62,7 +62,6 @@ export interface IAppIpcContract {
     file_getSaveJsonFilePathWithDialog(
       extension: string,
       defaultName: string,
-      forceUseFileSystemAccessApiImpl?: boolean,
     ): Promise<IFileWriteHandle | undefined>;
     file_loadObjectFromJsonWithFileDialog(
       extension: string,
