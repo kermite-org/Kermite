@@ -206,6 +206,7 @@ export function fsxListFileBaseNames(
     .map((fileName) => pathBasename(fileName, extension));
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function fsxReadJsonFromFileHandle(
   fileHandle: IFileReadHandle,
 ): Promise<any> {
