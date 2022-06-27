@@ -29,6 +29,7 @@ export interface IIpcAgentBypassed<T extends IIpcContractBase> {
 export function createIpcAgentBypassed<
   T extends IIpcContractBase,
 >(): IIpcAgentBypassed<T> {
+  let errorHandler: IErrorHandler = (error) => console.log(error);
   let postProcessHook: (() => void) | undefined;
 
   let rawSyncReceivers: T['sync'] = {};
@@ -43,14 +44,24 @@ export function createIpcAgentBypassed<
   const unSubscribers: Map<Function, Function> = new Map();
 
   function getSyncHandler(key: string) {
-    return (...args: any[]) => rawSyncReceivers[key](...args);
+    return (...args: any[]) => {
+      try {
+        rawSyncReceivers[key](...args);
+      } catch (err) {
+        errorHandler(err);
+      }
+    };
   }
 
   function getAsyncHandler(key: string) {
     return async (...args: any[]) => {
-      const res = await rawAsyncReceivers[key](...args);
-      postProcessHook?.();
-      return res;
+      try {
+        const res = await rawAsyncReceivers[key](...args);
+        postProcessHook?.();
+        return res;
+      } catch (err) {
+        errorHandler(err);
+      }
     };
   }
 
@@ -112,7 +123,9 @@ export function createIpcAgentBypassed<
       rawEventsReceivers = handlers;
       // self.events = handlers as T['events'];
     },
-    setErrorHandler() {},
+    setErrorHandler(value) {
+      errorHandler = value;
+    },
   };
   return self;
 }
