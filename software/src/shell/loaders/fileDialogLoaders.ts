@@ -106,7 +106,16 @@ export const fileDialogLoaders = {
           },
         ],
       });
-      return fileHandle;
+      const file = await fileHandle.getFile();
+      const fileName = file.name;
+      return {
+        fileName,
+        async save(contentText: string) {
+          const writable = await fileHandle.createWritable();
+          await writable.write(contentText);
+          await writable.close();
+        },
+      };
     } catch (error) {
       return undefined;
     }

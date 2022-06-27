@@ -137,8 +137,10 @@ export const profileManagerCore = {
     fileHandle: IFileWriteHandle,
     profileData: IProfileData,
   ) {
-    const file = await fileHandle.getFile();
-    const profileName = pathBasename(file.name, fileExtensions.profile);
+    const profileName = pathBasename(
+      fileHandle.fileName,
+      fileExtensions.profile,
+    );
     await ProfileFileLoader.saveProfileToLocalFile(
       fileHandle,
       profileData,
