@@ -4,7 +4,8 @@ export type IFileHandleBase = {
 };
 
 export type IFileReadHandle = {
-  getFile(): Promise<Pick<File, 'name' | 'text'>>;
+  fileName: string;
+  contentText: string;
 };
 
 export type IFileWriteHandle = {

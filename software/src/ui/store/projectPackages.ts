@@ -4,7 +4,6 @@ import {
   fallbackProjectPackageInfo,
   fileExtensions,
   getFileBaseNameFromFilePath,
-  getFileNameFromHandle,
   getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
@@ -292,7 +291,7 @@ export const projectPackagesActions = {
   async importLocalPackageFile(
     fileHandle: IFileReadHandle,
   ): Promise<string | undefined> {
-    const fileName = await getFileNameFromHandle(fileHandle);
+    const { fileName } = fileHandle;
     const ext = fileExtensions.package;
     if (!fileName?.endsWith(ext)) {
       await modalError(`Invalid target file. Only ${ext} file can be loaded.`);

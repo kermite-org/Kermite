@@ -1,7 +1,6 @@
 import {
   createProjectKey,
   fileExtensions,
-  getFileNameFromHandle,
   IFileReadHandle,
   IFileWriteHandle,
   IProjectPackageFileContent,
@@ -188,8 +187,10 @@ function deleteUserProjectPackageFileImpl(
 async function importLocalProjectPackageFromFileImpl(
   sourceFileHandle: IFileReadHandle,
 ) {
-  const fileName = await getFileNameFromHandle(sourceFileHandle);
-  const packageName = pathBasename(fileName, fileExtensions.package);
+  const packageName = pathBasename(
+    sourceFileHandle.fileName,
+    fileExtensions.package,
+  );
   const data = (await fsxReadJsonFromFileHandle(
     sourceFileHandle,
   )) as IProjectPackageFileContent;

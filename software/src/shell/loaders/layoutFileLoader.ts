@@ -26,8 +26,7 @@ export namespace LayoutFileLoader {
     fileHandle: IFileReadHandle,
   ): Promise<IPersistKeyboardDesign> {
     const obj = await fsxReadJsonFromFileHandle(fileHandle);
-    const fileName = (await fileHandle.getFile()).name;
-    fixLayoutData(obj, fileName);
+    fixLayoutData(obj, fileHandle.fileName);
     return obj as IPersistKeyboardDesign;
   }
 

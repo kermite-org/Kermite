@@ -60,8 +60,10 @@ export namespace ProfileFileLoader {
     const profileFileData = (await fsxReadJsonFromFileHandle(
       fileHandle,
     )) as IPersistProfileFileData;
-    const fileName = (await fileHandle.getFile()).name;
-    return convertProfileDataFromPersistProfileData(profileFileData, fileName);
+    return convertProfileDataFromPersistProfileData(
+      profileFileData,
+      fileHandle.fileName,
+    );
   }
 
   export function saveProfileToFile(

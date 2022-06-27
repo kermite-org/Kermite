@@ -1,6 +1,6 @@
 import { css, FC, jsx, useEffect, useRef } from 'alumina';
 import { fileExtensions, IFileReadHandle } from '~/shared';
-import { Icon } from '~/ui/components';
+import { Icon, modalError } from '~/ui/components';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
@@ -29,18 +29,17 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
 
     const onDrop = async (e: DragEvent) => {
       e.preventDefault();
-      const item = e.dataTransfer?.items[0];
-      if (
-        item &&
-        item.kind === 'file'
-        // 拡張子がjsonでない場合以下の判定にマッチしない
-        // item.type.startsWith('application/json')
-      ) {
-        const fileHandle =
-          (await item.getAsFileSystemHandle()) as FileSystemFileHandle;
-        if (fileHandle) {
-          onFileDrop(fileHandle);
+      const file = e.dataTransfer?.files[0];
+      if (file) {
+        const fileName = file.name;
+        if (!fileName.endsWith(fileExtensions.package)) {
+          await modalError(
+            `Invalid file. Only ${fileExtensions.package} file can be loaded.`,
+          );
+          return;
         }
+        const contentText = await file.text();
+        onFileDrop({ fileName, contentText });
       }
       baseDiv.classList.remove('--drop-hover');
     };

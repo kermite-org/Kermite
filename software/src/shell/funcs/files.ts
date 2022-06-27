@@ -209,16 +209,11 @@ export function fsxListFileBaseNames(
 export async function fsxReadJsonFromFileHandle(
   fileHandle: IFileReadHandle,
 ): Promise<any> {
-  const file = await fileHandle.getFile();
-  const text = await file.text();
+  const { fileName, contentText } = fileHandle;
   try {
-    return JSON.parse(text);
+    return JSON.parse(contentText);
   } catch (error) {
-    throw new AppError(
-      'InvalidJsonFileContent',
-      { filePath: file.name },
-      error,
-    );
+    throw new AppError('InvalidJsonFileContent', { filePath: fileName }, error);
   }
 }
 

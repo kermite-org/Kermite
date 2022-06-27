@@ -43,7 +43,13 @@ export const fileDialogLoaders = {
           },
         ],
       });
-      return fileHandle;
+      const file = await fileHandle.getFile();
+      const fileName = file.name;
+      const contentText = await file.text();
+      return {
+        fileName,
+        contentText,
+      };
     } catch (error) {
       return undefined;
     }

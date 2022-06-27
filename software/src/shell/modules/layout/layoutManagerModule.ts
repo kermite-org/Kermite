@@ -75,9 +75,8 @@ export const layoutManagerModule = createCoreModule({
   },
   async layout_loadFromFile({ fileHandle }) {
     const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(fileHandle);
-    const filePath = (await fileHandle.getFile()).name;
     commitCoreState({
-      layoutEditSource: { type: 'File', filePath },
+      layoutEditSource: { type: 'File', filePath: fileHandle.fileName },
       loadedLayoutData: loadedDesign,
     });
   },

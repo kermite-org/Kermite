@@ -1,5 +1,3 @@
-import { IFileHandleBase } from '../defs';
-
 export function flattenArray<T>(arr: T[][]): T[] {
   const res: T[] = [];
   for (const ar of arr) {
@@ -353,10 +351,6 @@ export function getFileBaseNameFromFilePath(
   } else {
     return fileName.replace(extension, '');
   }
-}
-
-export async function getFileNameFromHandle(fileHandle: IFileHandleBase) {
-  return (await fileHandle.getFile()).name;
 }
 
 export function compareArray(ar0: any[], ar1: any[]): boolean {
