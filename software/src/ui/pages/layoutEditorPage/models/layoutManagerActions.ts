@@ -1,4 +1,8 @@
-import { compareObjectByJsonStringify, IPersistKeyboardDesign } from '~/shared';
+import {
+  compareObjectByJsonStringify,
+  fileExtensions,
+  IPersistKeyboardDesign,
+} from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { assignerModel, LayoutEditorCore } from '~/ui/featureEditors';
@@ -121,7 +125,7 @@ export const layoutManagerActions = {
       return;
     }
     const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
-      '.layout.json',
+      fileExtensions.layout,
     );
     if (fileHandle) {
       await dispatchCoreAction({ layout_loadFromFile: { fileHandle } });
@@ -130,9 +134,10 @@ export const layoutManagerActions = {
 
   async saveToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
+    const ext = fileExtensions.layout;
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-      '.layout.json',
-      'untitled.layout.json',
+      ext,
+      `untitled${ext}`,
     );
     if (fileHandle) {
       await dispatchCoreAction({
@@ -143,9 +148,10 @@ export const layoutManagerActions = {
   },
   async exportToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
+    const ext = fileExtensions.layout;
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-      '.layout.json',
-      'untitled.layout.json',
+      ext,
+      `untitled${ext}`,
     );
     if (fileHandle) {
       await dispatchCoreAction({
