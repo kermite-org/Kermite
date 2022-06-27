@@ -1,4 +1,5 @@
 import {
+  fileExtensions,
   IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
@@ -135,7 +136,7 @@ export const profileManagerCore = {
     profileData: IProfileData,
   ) {
     const file = await fileHandle.getFile();
-    const profileName = pathBasename(file.name, '.profile.json');
+    const profileName = pathBasename(file.name, fileExtensions.profile);
     await ProfileFileLoader.saveProfileToLocalFile(
       fileHandle,
       profileData,

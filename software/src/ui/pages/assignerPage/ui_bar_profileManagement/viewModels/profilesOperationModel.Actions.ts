@@ -1,4 +1,5 @@
 import { asyncRerender } from 'alumina';
+import { fileExtensions } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/domainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
@@ -132,7 +133,7 @@ const handleImportFromFile = async () => {
     return;
   }
   const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
-    '.profile.json',
+    fileExtensions.profile,
   );
   if (fileHandle) {
     await profilesActions.importFromFile(fileHandle);
@@ -145,7 +146,7 @@ const handleExportToFile = async () => {
     es.type === 'InternalProfile' ? es.profileEntry.profileName : 'untitled';
 
   const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-    '.profile.json',
+    fileExtensions.profile,
     profileName.toLowerCase(),
   );
   if (fileHandle) {
