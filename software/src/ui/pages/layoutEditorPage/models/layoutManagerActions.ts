@@ -144,7 +144,9 @@ export const layoutManagerActions = {
       await dispatchCoreAction({
         layout_saveToFile: { fileHandle, design },
       });
-      await modalConfirm({ caption: 'save to file', message: 'file saved.' });
+      if (fileHandle.isPreSelectedFile) {
+        await modalConfirm({ caption: 'save to file', message: 'file saved.' });
+      }
     }
   },
   async exportToFileWithDialog() {
@@ -159,7 +161,12 @@ export const layoutManagerActions = {
       await dispatchCoreAction({
         layout_exportToFile: { fileHandle, design },
       });
-      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
+      if (fileHandle.isPreSelectedFile) {
+        await modalConfirm({
+          caption: 'export to file',
+          message: 'file saved.',
+        });
+      }
     }
   },
   save(design: IPersistKeyboardDesign) {

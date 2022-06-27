@@ -82,6 +82,9 @@ export const layoutManagerModule = createCoreModule({
   },
   async layout_saveToFile({ fileHandle, design }) {
     await LayoutFileLoader.saveLayoutToFile(fileHandle, design);
+    if (!fileHandle.isPreSelectedFile) {
+      return;
+    }
     const filePath = fileHandle.fileName;
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
