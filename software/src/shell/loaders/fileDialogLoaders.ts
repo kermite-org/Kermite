@@ -32,26 +32,49 @@ export const fileDialogLoaders = {
     // }
     // return undefined;
     // throw new Error('obsolete function invoked');
-    try {
-      const [fileHandle] = await window.showOpenFilePicker({
-        types: [
-          {
-            description: extension,
-            accept: {
-              'application/json': [extension],
-            },
-          },
-        ],
+    if (1) {
+      return await new Promise((resolve, reject) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = extension;
+        input.addEventListener('change', (e) => {
+          const file = (e.currentTarget as HTMLInputElement)?.files?.[0];
+          if (file) {
+            const fileName = file.name;
+            const fileReader = new FileReader();
+            fileReader.readAsText(file, 'utf-8');
+            fileReader.addEventListener('load', () => {
+              const contentText = fileReader.result as string;
+              resolve({ fileName, contentText });
+            });
+          } else {
+            reject();
+          }
+        });
+        input.click();
       });
-      const file = await fileHandle.getFile();
-      const fileName = file.name;
-      const contentText = await file.text();
-      return {
-        fileName,
-        contentText,
-      };
-    } catch (error) {
-      return undefined;
+    } else {
+      try {
+        const [fileHandle] = await window.showOpenFilePicker({
+          types: [
+            {
+              description: extension,
+              accept: {
+                'application/json': [extension],
+              },
+            },
+          ],
+        });
+        const file = await fileHandle.getFile();
+        const fileName = file.name;
+        const contentText = await file.text();
+        return {
+          fileName,
+          contentText,
+        };
+      } catch (error) {
+        return undefined;
+      }
     }
   },
   async getSavingJsonFilePathWithDialog(
