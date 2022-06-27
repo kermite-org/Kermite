@@ -1,4 +1,4 @@
-import { fileExtensions, IProjectPackageInfo } from '~/shared';
+import { featureConfig, fileExtensions, IProjectPackageInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { callProjectSelectionModal } from '~/ui/elements/featureModals';
@@ -161,7 +161,9 @@ export const projectManagementMenuActions = {
           fileHandle,
           projectId,
         );
-        modalConfirm({ caption: 'export to file', message: 'file saved.' });
+        if (featureConfig.useFileSystemAccessApiForSaving) {
+          modalConfirm({ caption: 'export to file', message: 'file saved.' });
+        }
       }
     }
   },

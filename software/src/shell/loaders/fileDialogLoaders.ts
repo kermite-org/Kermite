@@ -1,4 +1,4 @@
-import { IFileReadHandle, IFileWriteHandle } from '~/shared';
+import { featureConfig, IFileReadHandle, IFileWriteHandle } from '~/shared';
 import {
   fsxReadJsonFromFileHandle,
   fsxWriteJsonToFileHandle,
@@ -80,6 +80,7 @@ export const fileDialogLoaders = {
   async getSavingJsonFilePathWithDialog(
     extension: string,
     defaultFileName: string,
+    forceUseFileSystemAccessApiImpl?: boolean,
   ): Promise<IFileWriteHandle | undefined> {
     // const file =
     // return fileHandle.getFile();
@@ -94,30 +95,46 @@ export const fileDialogLoaders = {
     // });
     // return result.filePath;
     // throw new Error('obsolete function invoked');
-    try {
-      const fileHandle = await window.showSaveFilePicker({
-        suggestedName: defaultFileName,
-        types: [
-          {
-            description: extension,
-            accept: {
-              'application/json': [extension],
+    if (
+      featureConfig.useFileSystemAccessApiForSaving ||
+      forceUseFileSystemAccessApiImpl
+    ) {
+      try {
+        const fileHandle = await window.showSaveFilePicker({
+          suggestedName: defaultFileName,
+          types: [
+            {
+              description: extension,
+              accept: {
+                'application/json': [extension],
+              },
             },
+          ],
+        });
+        const file = await fileHandle.getFile();
+        const fileName = file.name;
+        return {
+          fileName,
+          async save(contentText: string) {
+            const writable = await fileHandle.createWritable();
+            await writable.write(contentText);
+            await writable.close();
           },
-        ],
-      });
-      const file = await fileHandle.getFile();
-      const fileName = file.name;
+        };
+      } catch (error) {
+        return undefined;
+      }
+    } else {
+      const fileName = defaultFileName;
       return {
         fileName,
-        async save(contentText: string) {
-          const writable = await fileHandle.createWritable();
-          await writable.write(contentText);
-          await writable.close();
+        save(contentText: string) {
+          const link = document.createElement('a');
+          link.href = 'data:text/plain,' + encodeURIComponent(contentText);
+          link.download = fileName;
+          link.click();
         },
       };
-    } catch (error) {
-      return undefined;
     }
   },
   async loadObjectFromJsonWithFileDialog(

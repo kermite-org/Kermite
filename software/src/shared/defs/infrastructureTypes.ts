@@ -5,5 +5,5 @@ export type IFileReadHandle = {
 
 export type IFileWriteHandle = {
   fileName: string;
-  save(contentText: string): Promise<void>;
+  save(contentText: string): void | Promise<void>;
 };

@@ -1,5 +1,6 @@
 import {
   compareObjectByJsonStringify,
+  featureConfig,
   fileExtensions,
   IPersistKeyboardDesign,
 } from '~/shared';
@@ -138,6 +139,7 @@ export const layoutManagerActions = {
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
       ext,
       `untitled${ext}`,
+      true,
     );
     if (fileHandle) {
       await dispatchCoreAction({
@@ -157,7 +159,12 @@ export const layoutManagerActions = {
       await dispatchCoreAction({
         layout_exportToFile: { fileHandle, design },
       });
-      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
+      if (featureConfig.useFileSystemAccessApiForSaving) {
+        await modalConfirm({
+          caption: 'export to file',
+          message: 'file saved.',
+        });
+      }
     }
   },
   save(design: IPersistKeyboardDesign) {

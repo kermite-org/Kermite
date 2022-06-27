@@ -223,7 +223,10 @@ export async function fsxWriteJsonToFileHandle(
 ): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
   try {
-    await fileHandle.save(text);
+    const res = fileHandle.save(text);
+    if (res instanceof Promise) {
+      await res;
+    }
   } catch (error) {
     throw new AppError(
       'CannotWriteFile',
