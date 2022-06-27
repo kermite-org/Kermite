@@ -123,7 +123,7 @@ export const fileDialogLoaders = {
 
       const file = await fileHandle.getFile();
       const fileName = file.name;
-      if (!fileName.endsWith(extension)) {
+      if (!fileName.endsWith(extension) || fileName.match(/\..*\./)) {
         throw new AppError('InvalidSavingFileExtension', { fileName });
       }
       return {
