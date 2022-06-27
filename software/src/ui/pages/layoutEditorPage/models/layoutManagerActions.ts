@@ -1,6 +1,5 @@
 import {
   compareObjectByJsonStringify,
-  featureConfig,
   fileExtensions,
   IPersistKeyboardDesign,
 } from '~/shared';
