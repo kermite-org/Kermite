@@ -8,6 +8,7 @@ import {
   IServerProfileInfo,
 } from '~/shared/defs/domainTypes';
 import { ICoreAction, ICoreState } from '~/shared/defs/globalStateActionTypes';
+import { IFileReadHandle, IFileWriteHandle } from './infrastructureTypes';
 import { IProfileData } from './profileData';
 
 export interface IAppIpcContract {
@@ -57,11 +58,11 @@ export interface IAppIpcContract {
 
     file_getOpenJsonFilePathWithDialog(
       extension: string,
-    ): Promise<FileSystemFileHandle | undefined>;
+    ): Promise<IFileReadHandle | undefined>;
     file_getSaveJsonFilePathWithDialog(
       extension: string,
       defaultName: string,
-    ): Promise<FileSystemFileHandle | undefined>;
+    ): Promise<IFileWriteHandle | undefined>;
     file_loadObjectFromJsonWithFileDialog(
       extension: string,
     ): Promise<any | undefined>;
@@ -71,7 +72,7 @@ export interface IAppIpcContract {
       obj: any,
     ): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
-    file_loadJsonFileContent(fileHandle: FileSystemFileHandle): Promise<any>;
+    file_loadJsonFileContent(fileHandle: IFileReadHandle): Promise<any>;
 
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 

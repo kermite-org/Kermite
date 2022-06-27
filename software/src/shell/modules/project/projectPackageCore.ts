@@ -2,6 +2,8 @@ import {
   createProjectKey,
   fileExtensions,
   getFileNameFromHandle,
+  IFileReadHandle,
+  IFileWriteHandle,
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -184,7 +186,7 @@ function deleteUserProjectPackageFileImpl(
 }
 
 async function importLocalProjectPackageFromFileImpl(
-  sourceFileHandle: FileSystemFileHandle,
+  sourceFileHandle: IFileReadHandle,
 ) {
   const fileName = await getFileNameFromHandle(sourceFileHandle);
   const packageName = pathBasename(fileName, fileExtensions.package);
@@ -220,11 +222,11 @@ export const projectPackageProvider = {
   deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
     deleteUserProjectPackageFileImpl(packageName, isDraft);
   },
-  async importLocalProjectPackageFromFile(fileHandle: FileSystemFileHandle) {
+  async importLocalProjectPackageFromFile(fileHandle: IFileReadHandle) {
     return await importLocalProjectPackageFromFileImpl(fileHandle);
   },
   async exportLocalProjectPackageToFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     info: IProjectPackageInfo,
   ) {
     const savingData = convertProjectPackageInfoToFileContent(info);

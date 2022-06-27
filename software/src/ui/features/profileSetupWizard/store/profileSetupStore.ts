@@ -7,6 +7,7 @@ import {
   fileExtensions,
   getOriginAndProjectIdFromProjectKey,
   getPresetSpecFromPresetKey,
+  IFileReadHandle,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
@@ -99,7 +100,7 @@ const actions = {
       },
     });
   },
-  async handleLocalPackageFileDrop(fileHandle: FileSystemFileHandle) {
+  async handleLocalPackageFileDrop(fileHandle: IFileReadHandle) {
     const loadedProjectId = await projectPackagesActions.importLocalPackageFile(
       fileHandle,
     );

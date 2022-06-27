@@ -2,7 +2,7 @@
 import path from 'path-browserify';
 // import { glob } from 'glob';
 import { memoryFileSystem } from '~/memoryFileSystem';
-import { AppError } from '~/shared/defs';
+import { AppError, IFileReadHandle, IFileWriteHandle } from '~/shared/defs';
 
 export const pathJoin = path.join;
 // export const pathResolve = path.resolve;
@@ -207,7 +207,7 @@ export function fsxListFileBaseNames(
 }
 
 export async function fsxReadJsonFromFileHandle(
-  fileHandle: FileSystemFileHandle,
+  fileHandle: IFileReadHandle,
 ): Promise<any> {
   const file = await fileHandle.getFile();
   const text = await file.text();
@@ -223,7 +223,7 @@ export async function fsxReadJsonFromFileHandle(
 }
 
 export async function fsxWriteJsonToFileHandle(
-  fileHandle: FileSystemFileHandle,
+  fileHandle: IFileWriteHandle,
   obj: any,
 ): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
@@ -232,6 +232,7 @@ export async function fsxWriteJsonToFileHandle(
     await writable.write(text);
     await writable.close();
   } catch (error) {
-    throw new AppError('CannotWriteFile', { filePath: fileHandle.name }, error);
+    const fileName = (await fileHandle.getFile()).name;
+    throw new AppError('CannotWriteFile', { filePath: fileName }, error);
   }
 }

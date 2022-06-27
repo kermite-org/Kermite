@@ -1,5 +1,7 @@
 import {
   fileExtensions,
+  IFileReadHandle,
+  IFileWriteHandle,
   IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
@@ -127,12 +129,12 @@ export const profileManagerCore = {
     );
   },
   async loadExternalProfileFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<IProfileData> {
     return await ProfileFileLoader.loadProfileFromLocalFile(fileHandle);
   },
   async saveExternalProfileFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     profileData: IProfileData,
   ) {
     const file = await fileHandle.getFile();

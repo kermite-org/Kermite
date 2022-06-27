@@ -15,3 +15,4 @@ export * from './versionDefinitions';
 export * from './virtualKeys';
 export * from './virtualKeyTexts';
 export * from './constants';
+export * from './infrastructureTypes';

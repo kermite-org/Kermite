@@ -1,11 +1,11 @@
 import { css, FC, jsx, useEffect, useRef } from 'alumina';
-import { fileExtensions } from '~/shared';
+import { fileExtensions, IFileReadHandle } from '~/shared';
 import { Icon } from '~/ui/components';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
   onClick: () => void;
-  onFileDrop: (fileHandle: FileSystemFileHandle) => void;
+  onFileDrop: (fileHandle: IFileReadHandle) => void;
 };
 
 export const ProjectKeyboardListProjectAddCard: FC<Props> = ({

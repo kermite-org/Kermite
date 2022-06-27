@@ -1,3 +1,4 @@
+import { IFileReadHandle, IFileWriteHandle } from '~/shared';
 import {
   fsxReadJsonFromFileHandle,
   fsxWriteJsonToFileHandle,
@@ -16,7 +17,7 @@ export const fileDialogLoaders = {
   },
   async getOpeningJsonFilePathWithDialog(
     extension: string,
-  ): Promise<FileSystemFileHandle | undefined> {
+  ): Promise<IFileReadHandle | undefined> {
     // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
     //   properties: ['openFile'],
     //   filters: [
@@ -50,7 +51,7 @@ export const fileDialogLoaders = {
   async getSavingJsonFilePathWithDialog(
     extension: string,
     defaultFileName: string,
-  ): Promise<FileSystemFileHandle | undefined> {
+  ): Promise<IFileWriteHandle | undefined> {
     // const file =
     // return fileHandle.getFile();
     // const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
@@ -118,7 +119,7 @@ export const fileDialogLoaders = {
     }
   },
   async loadJsonFileContent(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<any | undefined> {
     return await fsxReadJsonFromFileHandle(fileHandle);
   },

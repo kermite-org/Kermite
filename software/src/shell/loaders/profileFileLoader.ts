@@ -1,5 +1,7 @@
 import {
   AppError,
+  IFileReadHandle,
+  IFileWriteHandle,
   IPersistProfileData,
   IPersistProfileFileData,
   IProfileData,
@@ -53,7 +55,7 @@ export namespace ProfileFileLoader {
   }
 
   export async function loadProfileFromLocalFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<IProfileData> {
     const profileFileData = (await fsxReadJsonFromFileHandle(
       fileHandle,
@@ -76,7 +78,7 @@ export namespace ProfileFileLoader {
   }
 
   export async function saveProfileToLocalFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     profileData: IProfileData,
     profileName: string,
   ) {

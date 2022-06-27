@@ -8,6 +8,8 @@ import {
   getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
+  IFileReadHandle,
+  IFileWriteHandle,
   IProjectFirmwareEntry,
   IProjectLayoutEntry,
   IProjectPackageInfo,
@@ -288,7 +290,7 @@ export const projectPackagesHooks = {
 
 export const projectPackagesActions = {
   async importLocalPackageFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<string | undefined> {
     const fileName = await getFileNameFromHandle(fileHandle);
     const ext = fileExtensions.package;
@@ -343,7 +345,7 @@ export const projectPackagesActions = {
     return loadedProjectId;
   },
   async exportLocalPackageToFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     projectId: string,
   ) {
     await dispatchCoreAction({
