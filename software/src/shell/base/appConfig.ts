@@ -10,10 +10,10 @@ export const processEnv = (import.meta as any).env as IProcessEnv;
 // console.log({ processEnv });
 
 export const appConfig = {
+  applicationVersion: 'v220628c',
   isDevelopment: processEnv.NODE_ENV === 'development',
   // isDevelopment: location.host === 'localhost',
   // applicationVersion: app.getVersion(),
-  applicationVersion: 'v220628b',
   // publicRootPath: `${pathDirname(__dirname)}/ui`,
   // preloadFilePath: `${__dirname}/preload.js`,
   pageTitle: 'Kermite',
