@@ -21,7 +21,7 @@ import {
 //       const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
 //       if (projectInfo) {
 //         return appEnv.resolveUserDataFilePath(
-//           `data/projects/${projectInfo?.packageName}.kmpkg.json`,
+//           `data/projects/${projectInfo?.packageName}.kmpkg`,
 //         );
 //       }
 //     } else if (layoutEditSource.type === 'File') {

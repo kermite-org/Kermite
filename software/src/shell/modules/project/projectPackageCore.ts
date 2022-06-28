@@ -83,10 +83,10 @@ function loadProjectPackageFiles(
   folderPath: string,
   origin: IResourceOrigin,
 ): IProjectPackageInfo[] {
-  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg.json');
+  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg');
   const items = packageNames
     .map((packageName) => {
-      const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
+      const filePath = pathJoin(folderPath, packageName + '.kmpkg');
       const data = fsxReadJsonFile(filePath) as IProjectPackageFileContent;
       migrateProjectPackageData(data);
       if (!checkProjectFileContentSchema(data)) {
@@ -135,11 +135,7 @@ function getUserProjectsFolderPath() {
 }
 
 function getUserDraftProjectFilePath() {
-  return pathJoin(
-    appEnv.userDataFolderPath,
-    'data',
-    `draft_project.kmpkg.json`,
-  );
+  return pathJoin(appEnv.userDataFolderPath, 'data', `draft_project.kmpkg`);
 }
 
 function getUserProjectFilePath(packageName: string, isDraft: boolean) {
@@ -150,7 +146,7 @@ function getUserProjectFilePath(packageName: string, isDraft: boolean) {
       appEnv.userDataFolderPath,
       'data',
       'projects',
-      `${packageName}.kmpkg.json`,
+      `${packageName}.kmpkg`,
     );
   }
 }

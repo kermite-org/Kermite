@@ -54,11 +54,11 @@ function convertOnlinePackageDataToPackageInfo(
 function loadProjectPackageWrapperFiles(
   folderPath: string,
 ): IProjectPackageInfo[] {
-  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper.json');
+  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper');
   const items = projectKeys
     .map((projectKey) => {
       const isAudit = projectKey.endsWith('_audit');
-      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper.json`);
+      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper`);
       const wrapperItem = fsxReadJsonFile(
         filePath,
       ) as IProjectPackageWrapperFileContent;
