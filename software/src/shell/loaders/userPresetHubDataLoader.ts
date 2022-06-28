@@ -25,19 +25,17 @@ export namespace PresetHubServerTypes {
   };
 }
 
-const serverUrlBase = `http://dev.server.kermite.org`;
+const serverUrlBase = `https://dev.server.kermite.org`;
 
 export const userPresetHubDataLoader = {
   async getServerProjectIds(): Promise<string[]> {
-    // このエンドポイントだけcorsエラーになる? 要調査
-    // const url = `${serverUrlBase}/api/profiles/projectids`;
-    // const data =
-    //   await cacheRemoteResource<PresetHubServerTypes.GetProfilesProjectIdsResponse>(
-    //     fetchJson,
-    //     url,
-    //   );
-    // return data.projectIds || [];
-    return [];
+    const url = `${serverUrlBase}/api/profiles/projectids`;
+    const data =
+      await cacheRemoteResource<PresetHubServerTypes.GetProfilesProjectIdsResponse>(
+        fetchJson,
+        url,
+      );
+    return data.projectIds || [];
   },
   async getServerProfiles(projectId: string): Promise<IServerProfileInfo[]> {
     const url = `${serverUrlBase}/api/profiles/projects/${projectId}`;

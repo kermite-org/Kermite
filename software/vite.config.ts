@@ -1,4 +1,5 @@
 import path from 'path';
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { defineConfig } from 'vite';
 import EnvironmentPlugin from 'vite-plugin-environment';
 
@@ -8,6 +9,7 @@ export default defineConfig({
     outDir: './dist',
     emptyOutDir: true,
     minify: false,
+    sourcemap: true,
   },
   resolve: {
     alias: {
@@ -21,6 +23,19 @@ export default defineConfig({
       FE_USE_DEBUG_LOCAL_FIRMWARES: null,
     }),
   ],
+  // avoid 'Buffer is not defined' exception raised when reading error.stack
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+        }) as any,
+      ],
+    },
+  },
   envPrefix: 'FE_',
   clearScreen: false,
   server: {
