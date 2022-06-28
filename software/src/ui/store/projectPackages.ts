@@ -2,11 +2,13 @@ import { useMemo } from 'alumina';
 import produce from 'immer';
 import {
   fallbackProjectPackageInfo,
+  fileExtensions,
   getFileBaseNameFromFilePath,
-  getFileNameFromHandle,
   getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
+  IFileReadHandle,
+  IFileWriteHandle,
   IProjectFirmwareEntry,
   IProjectLayoutEntry,
   IProjectPackageInfo,
@@ -287,16 +289,15 @@ export const projectPackagesHooks = {
 
 export const projectPackagesActions = {
   async importLocalPackageFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<string | undefined> {
-    const fileName = await getFileNameFromHandle(fileHandle);
-    if (!fileName?.endsWith('.kmpkg.json')) {
-      await modalError(
-        'Invalid target file. Only .kmpkg.json file can be loaded.',
-      );
+    const { fileName } = fileHandle;
+    const ext = fileExtensions.package;
+    if (!fileName?.endsWith(ext)) {
+      await modalError(`Invalid target file. Only ${ext} file can be loaded.`);
       return;
     }
-    const packageName = getFileBaseNameFromFilePath(fileName, '.kmpkg.json');
+    const packageName = getFileBaseNameFromFilePath(fileName, ext);
     const fileContent = (await ipcAgent.async.file_loadJsonFileContent(
       fileHandle,
     )) as { projectId: string };
@@ -343,7 +344,7 @@ export const projectPackagesActions = {
     return loadedProjectId;
   },
   async exportLocalPackageToFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     projectId: string,
   ) {
     await dispatchCoreAction({

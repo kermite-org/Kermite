@@ -23,6 +23,7 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared/defs/keyboardDesign';
 import { fallbackProfileData, IProfileData } from '~/shared/defs/profileData';
+import { IFileReadHandle, IFileWriteHandle } from './infrastructureTypes';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;
@@ -100,11 +101,11 @@ export type ICoreAction = Partial<{
   project_deleteLocalProject: { projectId: string };
   project_renameLocalProject: { projectId: string; newKeyboardName: string };
   project_exportLocalProjectToFile: {
-    fileHandle: FileSystemFileHandle;
+    fileHandle: IFileWriteHandle;
     projectId: string;
   };
   project_openLocalProjectsFolder: 1;
-  project_addLocalProjectFromFile: { fileHandle: FileSystemFileHandle };
+  project_addLocalProjectFromFile: { fileHandle: IFileReadHandle };
 
   config_loadGlobalSettings: 1;
   config_writeGlobalSettings: Partial<IGlobalSettings>;
@@ -147,9 +148,9 @@ export type ICoreAction = Partial<{
     presetName: string;
     profileData: IProfileData;
   };
-  profile_importFromFile: { fileHandle: FileSystemFileHandle };
+  profile_importFromFile: { fileHandle: IFileReadHandle };
   profile_exportToFile: {
-    fileHandle: FileSystemFileHandle;
+    fileHandle: IFileWriteHandle;
     profileData: IProfileData;
   };
   profile_openUserProfilesFolder: 1;
@@ -158,13 +159,13 @@ export type ICoreAction = Partial<{
   layout_createNewLayout: 1;
   layout_loadCurrentProfileLayout: 1;
   layout_overwriteCurrentLayout: { design: IPersistKeyboardDesign };
-  layout_loadFromFile: { fileHandle: FileSystemFileHandle };
+  layout_loadFromFile: { fileHandle: IFileReadHandle };
   layout_saveToFile: {
-    fileHandle: FileSystemFileHandle;
+    fileHandle: IFileWriteHandle;
     design: IPersistKeyboardDesign;
   };
   layout_exportToFile: {
-    fileHandle: FileSystemFileHandle;
+    fileHandle: IFileWriteHandle;
     design: IPersistKeyboardDesign;
   };
   layout_createProjectLayout: { projectId: string; layoutName: string };

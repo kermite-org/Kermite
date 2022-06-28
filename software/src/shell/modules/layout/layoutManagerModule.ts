@@ -21,7 +21,7 @@ import {
 //       const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
 //       if (projectInfo) {
 //         return appEnv.resolveUserDataFilePath(
-//           `data/projects/${projectInfo?.packageName}.kmpkg.json`,
+//           `data/projects/${projectInfo?.packageName}.kmpkg`,
 //         );
 //       }
 //     } else if (layoutEditSource.type === 'File') {
@@ -75,15 +75,17 @@ export const layoutManagerModule = createCoreModule({
   },
   async layout_loadFromFile({ fileHandle }) {
     const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(fileHandle);
-    const filePath = (await fileHandle.getFile()).name;
     commitCoreState({
-      layoutEditSource: { type: 'File', filePath },
+      layoutEditSource: { type: 'File', filePath: fileHandle.fileName },
       loadedLayoutData: loadedDesign,
     });
   },
   async layout_saveToFile({ fileHandle, design }) {
     await LayoutFileLoader.saveLayoutToFile(fileHandle, design);
-    const filePath = (await fileHandle.getFile()).name;
+    if (!fileHandle.isPreSelectedFile) {
+      return;
+    }
+    const filePath = fileHandle.fileName;
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
       loadedLayoutData: design,

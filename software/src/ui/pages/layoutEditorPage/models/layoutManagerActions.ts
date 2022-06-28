@@ -1,4 +1,8 @@
-import { compareObjectByJsonStringify, IPersistKeyboardDesign } from '~/shared';
+import {
+  compareObjectByJsonStringify,
+  fileExtensions,
+  IPersistKeyboardDesign,
+} from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { assignerModel, LayoutEditorCore } from '~/ui/featureEditors';
@@ -121,7 +125,7 @@ export const layoutManagerActions = {
       return;
     }
     const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
-      '.layout.json',
+      fileExtensions.layout,
     );
     if (fileHandle) {
       await dispatchCoreAction({ layout_loadFromFile: { fileHandle } });
@@ -130,28 +134,39 @@ export const layoutManagerActions = {
 
   async saveToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
+    const namePart = layoutManagerReader.getSavingFileDefaultNamePart();
+    const extension = fileExtensions.layout;
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-      '.layout.json',
-      'untitled.layout.json',
+      extension,
+      `${namePart}${extension}`,
     );
     if (fileHandle) {
       await dispatchCoreAction({
         layout_saveToFile: { fileHandle, design },
       });
-      await modalConfirm({ caption: 'save to file', message: 'file saved.' });
+      if (fileHandle.isPreSelectedFile) {
+        await modalConfirm({ caption: 'save to file', message: 'file saved.' });
+      }
     }
   },
   async exportToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
+    const namePart = layoutManagerReader.getSavingFileDefaultNamePart();
+    const extension = fileExtensions.layout;
     const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-      '.layout.json',
-      'untitled.layout.json',
+      extension,
+      `${namePart}${extension}`,
     );
     if (fileHandle) {
       await dispatchCoreAction({
         layout_exportToFile: { fileHandle, design },
       });
-      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
+      if (fileHandle.isPreSelectedFile) {
+        await modalConfirm({
+          caption: 'export to file',
+          message: 'file saved.',
+        });
+      }
     }
   },
   save(design: IPersistKeyboardDesign) {

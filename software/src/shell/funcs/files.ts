@@ -2,7 +2,7 @@
 import path from 'path-browserify';
 // import { glob } from 'glob';
 import { memoryFileSystem } from '~/memoryFileSystem';
-import { AppError } from '~/shared/defs';
+import { AppError, IFileReadHandle, IFileWriteHandle } from '~/shared/defs';
 
 export const pathJoin = path.join;
 // export const pathResolve = path.resolve;
@@ -206,32 +206,33 @@ export function fsxListFileBaseNames(
     .map((fileName) => pathBasename(fileName, extension));
 }
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function fsxReadJsonFromFileHandle(
-  fileHandle: FileSystemFileHandle,
+  fileHandle: IFileReadHandle,
 ): Promise<any> {
-  const file = await fileHandle.getFile();
-  const text = await file.text();
+  const { fileName, contentText } = fileHandle;
   try {
-    return JSON.parse(text);
+    return JSON.parse(contentText);
   } catch (error) {
-    throw new AppError(
-      'InvalidJsonFileContent',
-      { filePath: file.name },
-      error,
-    );
+    throw new AppError('InvalidJsonFileContent', { filePath: fileName }, error);
   }
 }
 
 export async function fsxWriteJsonToFileHandle(
-  fileHandle: FileSystemFileHandle,
+  fileHandle: IFileWriteHandle,
   obj: any,
 ): Promise<void> {
   const text = JSON.stringify(obj, null, '  ');
   try {
-    const writable = await fileHandle.createWritable();
-    await writable.write(text);
-    await writable.close();
+    const res = fileHandle.save(text);
+    if (res instanceof Promise) {
+      await res;
+    }
   } catch (error) {
-    throw new AppError('CannotWriteFile', { filePath: fileHandle.name }, error);
+    throw new AppError(
+      'CannotWriteFile',
+      { filePath: fileHandle.fileName },
+      error,
+    );
   }
 }

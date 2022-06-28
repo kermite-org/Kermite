@@ -1,5 +1,5 @@
 import { IPersistKeyboardDesign } from '~/shared';
-import { AppError } from '~/shared/defs';
+import { AppError, IFileReadHandle, IFileWriteHandle } from '~/shared/defs';
 import {
   cacheRemoteResource,
   fetchJson,
@@ -23,11 +23,10 @@ export namespace LayoutFileLoader {
   }
 
   export async function loadLayoutFromFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<IPersistKeyboardDesign> {
     const obj = await fsxReadJsonFromFileHandle(fileHandle);
-    const fileName = (await fileHandle.getFile()).name;
-    fixLayoutData(obj, fileName);
+    fixLayoutData(obj, fileHandle.fileName);
     return obj as IPersistKeyboardDesign;
   }
 
@@ -40,7 +39,7 @@ export namespace LayoutFileLoader {
   }
 
   export async function saveLayoutToFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     design: IPersistKeyboardDesign,
   ) {
     await fsxWriteJsonToFileHandle(fileHandle, design);

@@ -4,8 +4,10 @@ import {
   createPresetKey,
   createProjectKey,
   fallbackProjectPackageInfo,
+  fileExtensions,
   getOriginAndProjectIdFromProjectKey,
   getPresetSpecFromPresetKey,
+  IFileReadHandle,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
@@ -98,7 +100,7 @@ const actions = {
       },
     });
   },
-  async handleLocalPackageFileDrop(fileHandle: FileSystemFileHandle) {
+  async handleLocalPackageFileDrop(fileHandle: IFileReadHandle) {
     const loadedProjectId = await projectPackagesActions.importLocalPackageFile(
       fileHandle,
     );
@@ -113,7 +115,7 @@ const actions = {
   },
   async handleSelectLocalPackageToImport() {
     const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
-      '.kmpkg.json',
+      fileExtensions.package,
     );
     if (fileHandle) {
       await actions.handleLocalPackageFileDrop(fileHandle);

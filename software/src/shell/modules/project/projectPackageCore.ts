@@ -1,6 +1,8 @@
 import {
   createProjectKey,
-  getFileNameFromHandle,
+  fileExtensions,
+  IFileReadHandle,
+  IFileWriteHandle,
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -81,10 +83,10 @@ function loadProjectPackageFiles(
   folderPath: string,
   origin: IResourceOrigin,
 ): IProjectPackageInfo[] {
-  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg.json');
+  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg');
   const items = packageNames
     .map((packageName) => {
-      const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
+      const filePath = pathJoin(folderPath, packageName + '.kmpkg');
       const data = fsxReadJsonFile(filePath) as IProjectPackageFileContent;
       migrateProjectPackageData(data);
       if (!checkProjectFileContentSchema(data)) {
@@ -133,11 +135,7 @@ function getUserProjectsFolderPath() {
 }
 
 function getUserDraftProjectFilePath() {
-  return pathJoin(
-    appEnv.userDataFolderPath,
-    'data',
-    `draft_project.kmpkg.json`,
-  );
+  return pathJoin(appEnv.userDataFolderPath, 'data', `draft_project.kmpkg`);
 }
 
 function getUserProjectFilePath(packageName: string, isDraft: boolean) {
@@ -148,7 +146,7 @@ function getUserProjectFilePath(packageName: string, isDraft: boolean) {
       appEnv.userDataFolderPath,
       'data',
       'projects',
-      `${packageName}.kmpkg.json`,
+      `${packageName}.kmpkg`,
     );
   }
 }
@@ -183,10 +181,12 @@ function deleteUserProjectPackageFileImpl(
 }
 
 async function importLocalProjectPackageFromFileImpl(
-  sourceFileHandle: FileSystemFileHandle,
+  sourceFileHandle: IFileReadHandle,
 ) {
-  const fileName = await getFileNameFromHandle(sourceFileHandle);
-  const packageName = pathBasename(fileName, '.kmpkg.json');
+  const packageName = pathBasename(
+    sourceFileHandle.fileName,
+    fileExtensions.package,
+  );
   const data = (await fsxReadJsonFromFileHandle(
     sourceFileHandle,
   )) as IProjectPackageFileContent;
@@ -219,11 +219,11 @@ export const projectPackageProvider = {
   deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
     deleteUserProjectPackageFileImpl(packageName, isDraft);
   },
-  async importLocalProjectPackageFromFile(fileHandle: FileSystemFileHandle) {
+  async importLocalProjectPackageFromFile(fileHandle: IFileReadHandle) {
     return await importLocalProjectPackageFromFileImpl(fileHandle);
   },
   async exportLocalProjectPackageToFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     info: IProjectPackageInfo,
   ) {
     const savingData = convertProjectPackageInfoToFileContent(info);

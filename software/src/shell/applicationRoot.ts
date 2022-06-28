@@ -30,6 +30,7 @@ import { globalSettingsModule } from '~/shell/modules/setting/globalSettingsModu
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
+import { ApplicationMemoryFilesMigrator } from './loaders/applicationMemoryFilesMigrator';
 import { createWindowModule } from './services/window/appWindowWrapper';
 
 export class ApplicationRoot {
@@ -163,6 +164,7 @@ export class ApplicationRoot {
       memoryFileSystem.initialize();
       console.log(`initialize services`);
       applicationStorage.initialize();
+      ApplicationMemoryFilesMigrator.migrateFileEntities();
       this.setupIpcBackend();
       // this.windowWrapper.initialize();
     });

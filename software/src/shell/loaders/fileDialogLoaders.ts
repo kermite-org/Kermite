@@ -1,7 +1,20 @@
 import {
+  AppError,
+  featureConfig,
+  IFileReadHandle,
+  IFileWriteHandle,
+} from '~/shared';
+import {
   fsxReadJsonFromFileHandle,
   fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
+import { reportShellError } from '../base/errorChecker';
+
+function checkFileNameExtension(fileName: string, extension: string) {
+  if (!fileName.endsWith(extension) || fileName.match(/\..*\./)) {
+    throw new AppError('InvalidLocalFileExtension', { fileName });
+  }
+}
 
 export const fileDialogLoaders = {
   getOpeningDirectoryPathWithDialog() {
@@ -16,7 +29,7 @@ export const fileDialogLoaders = {
   },
   async getOpeningJsonFilePathWithDialog(
     extension: string,
-  ): Promise<FileSystemFileHandle | undefined> {
+  ): Promise<IFileReadHandle | undefined> {
     // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
     //   properties: ['openFile'],
     //   filters: [
@@ -31,26 +44,61 @@ export const fileDialogLoaders = {
     // }
     // return undefined;
     // throw new Error('obsolete function invoked');
-    try {
-      const [fileHandle] = await window.showOpenFilePicker({
-        types: [
-          {
-            description: extension,
-            accept: {
-              'application/json': [extension],
-            },
-          },
-        ],
+    if (1) {
+      return await new Promise((resolve, reject) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = extension;
+        input.addEventListener('change', (e) => {
+          const file = (e.currentTarget as HTMLInputElement)?.files?.[0];
+          if (file) {
+            const fileName = file.name;
+            try {
+              checkFileNameExtension(fileName, extension);
+            } catch (error) {
+              reportShellError(error);
+              reject();
+            }
+            const fileReader = new FileReader();
+            fileReader.readAsText(file, 'utf-8');
+            fileReader.addEventListener('load', () => {
+              const contentText = fileReader.result as string;
+              resolve({ fileName, contentText });
+            });
+          } else {
+            reject();
+          }
+        });
+        input.click();
       });
-      return fileHandle;
-    } catch (error) {
-      return undefined;
+    } else {
+      try {
+        const [fileHandle] = await window.showOpenFilePicker({
+          types: [
+            {
+              description: extension,
+              accept: {
+                'application/json': [extension],
+              },
+            },
+          ],
+        });
+        const file = await fileHandle.getFile();
+        const fileName = file.name;
+        const contentText = await file.text();
+        return {
+          fileName,
+          contentText,
+        };
+      } catch (error) {
+        return undefined;
+      }
     }
   },
   async getSavingJsonFilePathWithDialog(
     extension: string,
     defaultFileName: string,
-  ): Promise<FileSystemFileHandle | undefined> {
+  ): Promise<IFileWriteHandle | undefined> {
     // const file =
     // return fileHandle.getFile();
     // const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
@@ -64,21 +112,48 @@ export const fileDialogLoaders = {
     // });
     // return result.filePath;
     // throw new Error('obsolete function invoked');
-    try {
-      const fileHandle = await window.showSaveFilePicker({
-        suggestedName: defaultFileName,
-        types: [
-          {
-            description: extension,
-            accept: {
-              'application/json': [extension],
+    if (featureConfig.useFileSystemAccessApiForSaving) {
+      let fileHandle: FileSystemFileHandle;
+      try {
+        fileHandle = await window.showSaveFilePicker({
+          suggestedName: defaultFileName,
+          types: [
+            {
+              description: extension,
+              accept: {
+                'application/json': [extension],
+              },
             },
-          },
-        ],
-      });
-      return fileHandle;
-    } catch (error) {
-      return undefined;
+          ],
+        });
+      } catch (error) {
+        return undefined;
+      }
+
+      const file = await fileHandle.getFile();
+      const fileName = file.name;
+      checkFileNameExtension(fileName, extension);
+      return {
+        fileName,
+        async save(contentText: string) {
+          const writable = await fileHandle.createWritable();
+          await writable.write(contentText);
+          await writable.close();
+        },
+        isPreSelectedFile: true,
+      };
+    } else {
+      const fileName = defaultFileName;
+      return {
+        fileName,
+        save(contentText: string) {
+          const link = document.createElement('a');
+          link.href = 'data:text/plain,' + encodeURIComponent(contentText);
+          link.download = fileName;
+          link.click();
+        },
+        isPreSelectedFile: false,
+      };
     }
   },
   async loadObjectFromJsonWithFileDialog(
@@ -118,7 +193,7 @@ export const fileDialogLoaders = {
     }
   },
   async loadJsonFileContent(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<any | undefined> {
     return await fsxReadJsonFromFileHandle(fileHandle);
   },

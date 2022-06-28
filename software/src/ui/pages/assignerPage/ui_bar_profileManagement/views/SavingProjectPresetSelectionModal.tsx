@@ -13,7 +13,7 @@ import { projectPackagesReader, uiReaders } from '~/ui/store';
 function getSavingPackageFilePath() {
   const projectInfo = projectPackagesReader.getEditTargetProject();
   if (projectInfo) {
-    return `data/projects/${projectInfo.packageName}.kmpkg.json`;
+    return `data/projects/${projectInfo.packageName}.kmpkg`;
   }
   return '';
 }

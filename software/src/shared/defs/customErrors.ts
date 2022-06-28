@@ -10,6 +10,7 @@ export type IAppErrorsSource = {
   CannotCopyFile: { from: string; to: string };
   FailedToLoadRemoteResource: { url: string };
   // [key: string]: { [key in string]?: string };
+  InvalidLocalFileExtension: { fileName: string };
 };
 
 type IErrorType = keyof IAppErrorsSource;
@@ -26,6 +27,7 @@ const errorTextMapEN: { [key in IErrorType]: string } = {
   InvalidLayoutFileSchema: `Invalid schema for file.`,
   InvalidProfileFileSchema: `Invalid schema for file.`,
   FailedToLoadRemoteResource: `Failed to fetch remote resource.`,
+  InvalidLocalFileExtension: `Invalid file extension.`,
 };
 
 const errorTextMapJP: { [key in IErrorType]: string } = {
@@ -39,6 +41,7 @@ const errorTextMapJP: { [key in IErrorType]: string } = {
   InvalidLayoutFileSchema: `レイアウトファイルの形式が不正です。`,
   InvalidProfileFileSchema: `プロファイルファイルの形式が不正です。`,
   FailedToLoadRemoteResource: `リソースの取得に失敗しました。`,
+  InvalidLocalFileExtension: `ファイルの拡張子が不正です。`,
 };
 
 const fieldNameDictionaryJP: { [key: string]: string } = {

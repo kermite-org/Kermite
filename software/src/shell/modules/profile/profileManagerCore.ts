@@ -1,4 +1,7 @@
 import {
+  fileExtensions,
+  IFileReadHandle,
+  IFileWriteHandle,
   IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
@@ -39,7 +42,7 @@ function getProfileFilePath(profileEntry: IProfileEntry): string {
   const { projectId, profileName } = profileEntry;
   const folderName = getProjectProfileFolderName(projectId);
   return appEnv.resolveUserDataFilePath(
-    `data/profiles/${folderName}/${profileName.toLowerCase()}.profile.json`,
+    `data/profiles/${folderName}/${profileName.toLowerCase()}.kmprf`,
   );
 }
 
@@ -51,10 +54,7 @@ function getProfileEntry(
   const filePath = pathJoin(profilesBaseDir, relativeFilePath);
   const userProfileData = fsxReadJsonFile(filePath) as IPersistProfileFileData;
   const profileNameFromContent = userProfileData.profileName || '';
-  const profileNameFromFileName = pathBasename(
-    relativeFilePath,
-    '.profile.json',
-  );
+  const profileNameFromFileName = pathBasename(relativeFilePath, '.kmprf');
   const isContentProfileNameValid =
     profileNameFromContent.toLowerCase() === profileNameFromFileName;
   const profileName = isContentProfileNameValid
@@ -95,7 +95,7 @@ export const profileManagerCore = {
   listAllProfileEntries(): IProfileEntry[] {
     const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
     const relativeFilePaths = listAllFilesNameEndWith(
-      'profile.json',
+      '.kmprf',
       profilesBaseDir,
     );
     const allProfileEntries = relativeFilePaths.map((relPath) =>
@@ -126,16 +126,18 @@ export const profileManagerCore = {
     );
   },
   async loadExternalProfileFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileReadHandle,
   ): Promise<IProfileData> {
     return await ProfileFileLoader.loadProfileFromLocalFile(fileHandle);
   },
   async saveExternalProfileFile(
-    fileHandle: FileSystemFileHandle,
+    fileHandle: IFileWriteHandle,
     profileData: IProfileData,
   ) {
-    const file = await fileHandle.getFile();
-    const profileName = pathBasename(file.name, '.profile.json');
+    const profileName = pathBasename(
+      fileHandle.fileName,
+      fileExtensions.profile,
+    );
     await ProfileFileLoader.saveProfileToLocalFile(
       fileHandle,
       profileData,

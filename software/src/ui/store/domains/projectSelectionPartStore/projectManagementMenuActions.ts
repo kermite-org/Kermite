@@ -1,4 +1,4 @@
-import { IProjectPackageInfo } from '~/shared';
+import { fileExtensions, IProjectPackageInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { callProjectSelectionModal } from '~/ui/elements/featureModals';
@@ -142,7 +142,7 @@ export const projectManagementMenuActions = {
   },
   async handleSelectLocalPackageToImport() {
     const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
-      '.kmpkg.json',
+      fileExtensions.package,
     );
     if (fileHandle) {
       await projectPackagesActions.importLocalPackageFile(fileHandle);
@@ -152,18 +152,18 @@ export const projectManagementMenuActions = {
     const project = projectPackagesReader.getEditTargetProject();
     if (project) {
       const { projectId, keyboardName } = project;
-      const fileName = `${keyboardName.toLowerCase()}.kmpkg.json`;
+      const ext = fileExtensions.package;
+      const fileName = `${keyboardName.toLowerCase()}${ext}`;
       const fileHandle =
-        await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
-          '.kmpkg.json',
-          fileName,
-        );
+        await ipcAgent.async.file_getSaveJsonFilePathWithDialog(ext, fileName);
       if (fileHandle) {
         await projectPackagesActions.exportLocalPackageToFile(
           fileHandle,
           projectId,
         );
-        modalConfirm({ caption: 'export to file', message: 'file saved.' });
+        if (fileHandle.isPreSelectedFile) {
+          modalConfirm({ caption: 'export to file', message: 'file saved.' });
+        }
       }
     }
   },
