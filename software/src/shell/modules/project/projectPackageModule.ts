@@ -75,8 +75,8 @@ export const projectPackageModule = createCoreModule({
     const project = projectPackageModuleHelper.createLocalProject(keyboardName);
     projectPackageModule.project_saveLocalProjectPackageInfo(project);
   },
-  project_addLocalProjectFromFile({ filePath }) {
-    projectPackageProvider.importLocalProjectPackageFromFile(filePath);
+  async project_addLocalProjectFromFile({ fileHandle }) {
+    await projectPackageProvider.importLocalProjectPackageFromFile(fileHandle);
     projectPackageModuleHelper.reEnumerateAllProjectPackages();
   },
   async project_createLocalProjectBasedOnOnlineProject({ projectId }) {
@@ -132,6 +132,18 @@ export const projectPackageModule = createCoreModule({
       };
       projectPackageProvider.saveLocalProjectPackageInfo(newProject);
       projectPackageModuleHelper.reEnumerateAllProjectPackages();
+    }
+  },
+  async project_exportLocalProjectToFile({ fileHandle, projectId }) {
+    const project = projectPackageModuleHelper.findProjectInfo(
+      'local',
+      projectId,
+    );
+    if (project) {
+      await projectPackageProvider.exportLocalProjectPackageToFile(
+        fileHandle,
+        project,
+      );
     }
   },
   project_openLocalProjectsFolder() {

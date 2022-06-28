@@ -1,5 +1,8 @@
 import {
   createProjectKey,
+  fileExtensions,
+  IFileReadHandle,
+  IFileWriteHandle,
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -13,7 +16,9 @@ import {
   fsxEnsureFolderExists,
   fsxListFileBaseNames,
   fsxReadJsonFile,
+  fsxReadJsonFromFileHandle,
   fsxWriteJsonFile,
+  fsxWriteJsonToFileHandle,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -78,10 +83,10 @@ function loadProjectPackageFiles(
   folderPath: string,
   origin: IResourceOrigin,
 ): IProjectPackageInfo[] {
-  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg.json');
+  const packageNames = fsxListFileBaseNames(folderPath, '.kmpkg');
   const items = packageNames
     .map((packageName) => {
-      const filePath = pathJoin(folderPath, packageName + '.kmpkg.json');
+      const filePath = pathJoin(folderPath, packageName + '.kmpkg');
       const data = fsxReadJsonFile(filePath) as IProjectPackageFileContent;
       migrateProjectPackageData(data);
       if (!checkProjectFileContentSchema(data)) {
@@ -130,11 +135,7 @@ function getUserProjectsFolderPath() {
 }
 
 function getUserDraftProjectFilePath() {
-  return pathJoin(
-    appEnv.userDataFolderPath,
-    'data',
-    `draft_project.kmpkg.json`,
-  );
+  return pathJoin(appEnv.userDataFolderPath, 'data', `draft_project.kmpkg`);
 }
 
 function getUserProjectFilePath(packageName: string, isDraft: boolean) {
@@ -145,7 +146,7 @@ function getUserProjectFilePath(packageName: string, isDraft: boolean) {
       appEnv.userDataFolderPath,
       'data',
       'projects',
-      `${packageName}.kmpkg.json`,
+      `${packageName}.kmpkg`,
     );
   }
 }
@@ -179,9 +180,16 @@ function deleteUserProjectPackageFileImpl(
   fsxDeleteFile(filePath);
 }
 
-function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
-  const packageName = pathBasename(sourceFilePath, '.kmpkg.json');
-  const data = fsxReadJsonFile(sourceFilePath) as IProjectPackageFileContent;
+async function importLocalProjectPackageFromFileImpl(
+  sourceFileHandle: IFileReadHandle,
+) {
+  const packageName = pathBasename(
+    sourceFileHandle.fileName,
+    fileExtensions.package,
+  );
+  const data = (await fsxReadJsonFromFileHandle(
+    sourceFileHandle,
+  )) as IProjectPackageFileContent;
   migrateProjectPackageData(data);
   if (!checkProjectFileContentSchema(data)) {
     throw new Error('invalid package file content');
@@ -211,8 +219,15 @@ export const projectPackageProvider = {
   deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
     deleteUserProjectPackageFileImpl(packageName, isDraft);
   },
-  importLocalProjectPackageFromFile(filePath: string) {
-    importLocalProjectPackageFromFileImpl(filePath);
+  async importLocalProjectPackageFromFile(fileHandle: IFileReadHandle) {
+    return await importLocalProjectPackageFromFileImpl(fileHandle);
+  },
+  async exportLocalProjectPackageToFile(
+    fileHandle: IFileWriteHandle,
+    info: IProjectPackageInfo,
+  ) {
+    const savingData = convertProjectPackageInfoToFileContent(info);
+    await fsxWriteJsonToFileHandle(fileHandle, savingData);
   },
   openLocalProjectsFolder() {
     // const folderPath = getUserProjectsFolderPath();

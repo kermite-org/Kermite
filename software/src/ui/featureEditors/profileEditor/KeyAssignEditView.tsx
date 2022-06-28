@@ -146,7 +146,9 @@ const cssEditSideBarColumn = css`
     background: ${clPanelBox};
     border-radius: ${panelBoxBorderRadius};
     padding: ${panelPadding};
-    flex-shrink: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   > .logicOptionsPartBox {
@@ -159,6 +161,5 @@ const cssEditSideBarColumn = css`
     background: ${clPanelBox};
     border-radius: ${panelBoxBorderRadius};
     padding: ${panelPadding};
-    flex-grow: 1;
   }
 `;

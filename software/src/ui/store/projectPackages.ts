@@ -2,10 +2,13 @@ import { useMemo } from 'alumina';
 import produce from 'immer';
 import {
   fallbackProjectPackageInfo,
+  fileExtensions,
   getFileBaseNameFromFilePath,
   getNextFirmwareVariationId,
   getOriginAndProjectIdFromProjectKey,
   ICustomFirmwareEntry,
+  IFileReadHandle,
+  IFileWriteHandle,
   IProjectFirmwareEntry,
   IProjectLayoutEntry,
   IProjectPackageInfo,
@@ -131,7 +134,7 @@ function removeItemFromArray<T, K extends keyof T>(
   }
 }
 
-function renameItemInArray<T, K extends keyof T>(
+function renameItemInArray<T extends { [key in K]: string }, K extends string>(
   items: T[],
   nameFiled: K,
   oldName: Extract<T[K], string>,
@@ -285,16 +288,18 @@ export const projectPackagesHooks = {
 };
 
 export const projectPackagesActions = {
-  async importLocalPackageFile(filePath: string): Promise<string | undefined> {
-    if (!filePath?.endsWith('.kmpkg.json')) {
-      await modalError(
-        'Invalid target file. Only .kmpkg.json file can be loaded.',
-      );
+  async importLocalPackageFile(
+    fileHandle: IFileReadHandle,
+  ): Promise<string | undefined> {
+    const { fileName } = fileHandle;
+    const ext = fileExtensions.package;
+    if (!fileName?.endsWith(ext)) {
+      await modalError(`Invalid target file. Only ${ext} file can be loaded.`);
       return;
     }
-    const packageName = getFileBaseNameFromFilePath(filePath, '.kmpkg.json');
+    const packageName = getFileBaseNameFromFilePath(fileName, ext);
     const fileContent = (await ipcAgent.async.file_loadJsonFileContent(
-      filePath,
+      fileHandle,
     )) as { projectId: string };
 
     const loadedProjectId = fileContent.projectId;
@@ -332,8 +337,18 @@ export const projectPackagesActions = {
         return;
       }
     }
-    await dispatchCoreAction({ project_addLocalProjectFromFile: { filePath } });
+    await dispatchCoreAction({
+      project_addLocalProjectFromFile: { fileHandle },
+    });
 
     return loadedProjectId;
+  },
+  async exportLocalPackageToFile(
+    fileHandle: IFileWriteHandle,
+    projectId: string,
+  ) {
+    await dispatchCoreAction({
+      project_exportLocalProjectToFile: { fileHandle, projectId },
+    });
   },
 };

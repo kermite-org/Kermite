@@ -14,25 +14,25 @@ function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
     { type: 'separator' },
     {
       type: 'menuEntry',
-      text: 'load from file...',
+      text: 'load from file',
       handler: layoutManagerActions.loadFromFileWithDialog,
     },
     {
       type: 'menuEntry',
-      text: 'save to file...',
+      text: 'save to file',
       handler: layoutManagerActions.saveToFileWithDialog,
       disabled: !layoutManagerReader.canSaveToFile,
     },
     { type: 'separator' },
     {
       type: 'menuEntry',
-      text: 'load from project...',
+      text: 'load from project',
       handler: layoutManagerActions.openLoadFromProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
     {
       type: 'menuEntry',
-      text: 'save to project...',
+      text: 'save to project',
       handler: layoutManagerActions.openSaveToProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
@@ -43,12 +43,12 @@ function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
       handler: layoutManagerActions.createNewProfileFromCurrentLayout,
       disabled: !layoutManagerReader.canCreateProfileFromCurrentLayout,
     },
-    {
-      type: 'menuEntry',
-      text: 'show edit file in folder',
-      handler: layoutManagerActions.showEditLayoutFileInFiler,
-      disabled: !layoutManagerReader.canShowEditLayoutFileInFiler,
-    },
+    // {
+    //   type: 'menuEntry',
+    //   text: 'show edit file in folder',
+    //   handler: layoutManagerActions.showEditLayoutFileInFiler,
+    //   disabled: !layoutManagerReader.canShowEditLayoutFileInFiler,
+    // },
   ];
 }
 
@@ -56,13 +56,13 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
   return [
     {
       type: 'menuEntry',
-      text: 'export to file...',
+      text: 'export to file',
       handler: layoutManagerActions.exportToFileWithDialog,
       disabled: !layoutManagerReader.canSaveToFile,
     },
     {
       type: 'menuEntry',
-      text: 'save to project...',
+      text: 'save to project',
       handler: layoutManagerActions.openSaveToProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },

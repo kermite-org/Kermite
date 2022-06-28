@@ -1,5 +1,7 @@
 import {
   AppError,
+  IFileReadHandle,
+  IFileWriteHandle,
   IPersistProfileData,
   IPersistProfileFileData,
   IProfileData,
@@ -9,7 +11,9 @@ import {
   cacheRemoteResource,
   fetchJson,
   fsxReadJsonFile,
+  fsxReadJsonFromFileHandle,
   fsxWriteJsonFile,
+  fsxWriteJsonToFileHandle,
 } from '~/shell/funcs';
 import { ProfileDataMigrator } from '~/shell/loaders/profileDataMigrator';
 import { checkProfileDataObjectSchema } from '~/shell/loaders/profileDataSchemaChecker';
@@ -50,6 +54,18 @@ export namespace ProfileFileLoader {
     return convertProfileDataFromPersistProfileData(profileFileData, uri);
   }
 
+  export async function loadProfileFromLocalFile(
+    fileHandle: IFileReadHandle,
+  ): Promise<IProfileData> {
+    const profileFileData = (await fsxReadJsonFromFileHandle(
+      fileHandle,
+    )) as IPersistProfileFileData;
+    return convertProfileDataFromPersistProfileData(
+      profileFileData,
+      fileHandle.fileName,
+    );
+  }
+
   export function saveProfileToFile(
     filePath: string,
     profileData: IProfileData,
@@ -61,5 +77,18 @@ export namespace ProfileFileLoader {
         profileName,
       );
     fsxWriteJsonFile(filePath, persistProfileData);
+  }
+
+  export async function saveProfileToLocalFile(
+    fileHandle: IFileWriteHandle,
+    profileData: IProfileData,
+    profileName: string,
+  ) {
+    const persistProfileData =
+      ProfileDataConverter.convertProfileToPersistFileData(
+        profileData,
+        profileName,
+      );
+    await fsxWriteJsonToFileHandle(fileHandle, persistProfileData);
   }
 }

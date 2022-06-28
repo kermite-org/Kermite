@@ -1,8 +1,8 @@
 // import fs from 'fs';
-import * as path from 'path';
+import path from 'path-browserify';
 // import { glob } from 'glob';
 import { memoryFileSystem } from '~/memoryFileSystem';
-import { AppError } from '~/shared/defs';
+import { AppError, IFileReadHandle, IFileWriteHandle } from '~/shared/defs';
 
 export const pathJoin = path.join;
 // export const pathResolve = path.resolve;
@@ -99,13 +99,13 @@ export function fsxReaddir(folderPath: string): string[] {
   }
 }
 
-export function fsxMkdirpSync(path: string) {
+export function fsxMkdirpSync(_path: string) {
   // if (!fsExistsSync(path)) {
   //   fsMkdirSync(path, { recursive: true });
   // }
 }
 
-export function fsxEnsureFolderExists(path: string) {
+export function fsxEnsureFolderExists(_path: string) {
   // if (!fsExistsSync(path)) {
   //   await fspMkdir(path);
   // }
@@ -159,18 +159,18 @@ export function fsxWriteJsonFile(filePath: string, obj: any): void {
   return fsxWriteFile(filePath, text);
 }
 
-export function fsxWatchFilesChange(
-  baseDir: string,
-  callback: (filePath: string) => void,
-) {
-  throw new Error('invalid invocation');
-  // return fs.watch(baseDir, { recursive: true }, (eventType, relPath) => {
-  //   if (eventType === 'change') {
-  //     const filePath = `${baseDir}/${relPath}`;
-  //     callback(filePath);
-  //   }
-  // });
-}
+// export function fsxWatchFilesChange(
+//   baseDir: string,
+//   callback: (filePath: string) => void,
+// ) {
+//   throw new Error('invalid invocation');
+//   // return fs.watch(baseDir, { recursive: true }, (eventType, relPath) => {
+//   //   if (eventType === 'change') {
+//   //     const filePath = `${baseDir}/${relPath}`;
+//   //     callback(filePath);
+//   //   }
+//   // });
+// }
 
 // export function globAsync(
 //   pattern: string,
@@ -204,4 +204,35 @@ export function fsxListFileBaseNames(
   return fsxReaddir(folderPath)
     .filter((fileName) => fileName.endsWith(extension))
     .map((fileName) => pathBasename(fileName, extension));
+}
+
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function fsxReadJsonFromFileHandle(
+  fileHandle: IFileReadHandle,
+): Promise<any> {
+  const { fileName, contentText } = fileHandle;
+  try {
+    return JSON.parse(contentText);
+  } catch (error) {
+    throw new AppError('InvalidJsonFileContent', { filePath: fileName }, error);
+  }
+}
+
+export async function fsxWriteJsonToFileHandle(
+  fileHandle: IFileWriteHandle,
+  obj: any,
+): Promise<void> {
+  const text = JSON.stringify(obj, null, '  ');
+  try {
+    const res = fileHandle.save(text);
+    if (res instanceof Promise) {
+      await res;
+    }
+  } catch (error) {
+    throw new AppError(
+      'CannotWriteFile',
+      { filePath: fileHandle.fileName },
+      error,
+    );
+  }
 }

@@ -1,4 +1,10 @@
-import { IPresetSpec, IProfileEntry, IResourceOrigin } from '~/shared';
+import {
+  IFileReadHandle,
+  IFileWriteHandle,
+  IPresetSpec,
+  IProfileEntry,
+  IResourceOrigin,
+} from '~/shared';
 import { assignerModel } from '~/ui/featureEditors';
 import { dispatchCoreAction } from '~/ui/store';
 
@@ -48,14 +54,14 @@ export const profilesActions = {
     });
   },
 
-  importFromFile: (filePath: string) => {
-    dispatchCoreAction({ profile_importFromFile: { filePath } });
+  importFromFile: async (fileHandle: IFileReadHandle) => {
+    await dispatchCoreAction({ profile_importFromFile: { fileHandle } });
   },
 
-  exportToFile: async (filePath: string) => {
+  exportToFile: async (fileHandle: IFileWriteHandle) => {
     await dispatchCoreAction({
       profile_exportToFile: {
-        filePath,
+        fileHandle,
         profileData: assignerModel.profileData,
       },
     });

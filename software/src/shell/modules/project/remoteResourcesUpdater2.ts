@@ -28,10 +28,10 @@ interface IProjectPackageWrapperFileContent {
 }
 
 function loadLocalDigestMap(folderPath: string): Record<string, number> {
-  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper.json');
+  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper');
   return createDictionaryFromKeyValues(
     projectKeys.map((projectKey) => {
-      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper.json`);
+      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper`);
       const content = fsxReadJsonFile(
         filePath,
       ) as IProjectPackageWrapperFileContent;
@@ -86,7 +86,7 @@ interface IApiProjectPackageWrapperItemPartial {
   keyboardName: string;
   projectId: string;
   userId: string;
-  data: string; // content of .kmpkg.json
+  data: string; // content of .kmpkg
   dataHash: string;
   revision: number;
   official: boolean;
@@ -154,10 +154,10 @@ function updateRemotePackagesDifferential(
   const updatedProjectKeys = getObjectKeys(remoteDigestMap).filter(
     (key) => !(localDigestMap[key] === remoteDigestMap[key]),
   );
-  removedProjectKeys.map(async (projectKey) => {
+  removedProjectKeys.forEach((projectKey) => {
     const filePath = pathJoin(
       remotePackagesFolderPath,
-      `${projectKey}.kmpkg_wrapper.json`,
+      `${projectKey}.kmpkg_wrapper`,
     );
     fsxDeleteFile(filePath);
   });
@@ -169,7 +169,7 @@ function updateRemotePackagesDifferential(
     );
     const filePath = pathJoin(
       remotePackagesFolderPath,
-      `${projectKey}.kmpkg_wrapper.json`,
+      `${projectKey}.kmpkg_wrapper`,
     );
     fsxWriteJsonFile(filePath, wrapperFileContent);
   });

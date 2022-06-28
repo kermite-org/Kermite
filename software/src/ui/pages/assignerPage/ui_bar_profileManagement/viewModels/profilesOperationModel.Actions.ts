@@ -1,5 +1,5 @@
 import { asyncRerender } from 'alumina';
-import { forceChangeFilePathExtension } from '~/shared';
+import { fileExtensions } from '~/shared';
 import { getOriginAndProjectIdFromProjectKey } from '~/shared/funcs/domainRelatedHelpers';
 import { ipcAgent, texts } from '~/ui/base';
 import { modalAlert, modalConfirm } from '~/ui/components';
@@ -132,18 +132,29 @@ const handleImportFromFile = async () => {
   if (!(await checkShallLoadData())) {
     return;
   }
-  const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-  if (filePath) {
-    profilesActions.importFromFile(filePath);
+  const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+    fileExtensions.profile,
+  );
+  if (fileHandle) {
+    await profilesActions.importFromFile(fileHandle);
   }
 };
 
 const handleExportToFile = async () => {
-  const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
-  if (filePath) {
-    const modFilePath = forceChangeFilePathExtension(filePath, '.profile.json');
-    await profilesActions.exportToFile(modFilePath);
-    modalConfirm({ caption: 'export to file', message: 'file saved.' });
+  const es = profilesReader.profileEditSource;
+  const profileName =
+    es.type === 'InternalProfile' ? es.profileEntry.profileName : 'untitled';
+
+  const fileName = `${profileName.toLowerCase()}${fileExtensions.profile}`;
+  const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
+    fileExtensions.profile,
+    fileName,
+  );
+  if (fileHandle) {
+    await profilesActions.exportToFile(fileHandle);
+    if (fileHandle.isPreSelectedFile) {
+      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
+    }
   }
 };
 

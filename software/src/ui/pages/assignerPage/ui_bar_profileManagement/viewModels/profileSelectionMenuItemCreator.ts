@@ -55,6 +55,7 @@ export function createProfileSelectionMenuItems(
       handler: vm.handleExportToFile,
       hidden: !(uiReaders.isDeveloperMode && vm.isEditProfileAvailable),
     },
+    { type: 'separator' },
     {
       type: 'menuEntry',
       text: 'Load From Project Preset',
@@ -74,13 +75,13 @@ export function createProfileSelectionMenuItems(
       ),
     },
     { type: 'separator' },
-    {
-      type: 'menuEntry',
-      text: texts.assignerMenu.openUserProfilesFolder,
-      hint: texts.assignerMenuHint.openUserProfilesFolder,
-      handler: vm.openUserProfilesFolder,
-      hidden: !vm.isCurrentProfileInternal,
-    },
+    // {
+    //   type: 'menuEntry',
+    //   text: texts.assignerMenu.openUserProfilesFolder,
+    //   hint: texts.assignerMenuHint.openUserProfilesFolder,
+    //   handler: vm.openUserProfilesFolder,
+    //   hidden: !vm.isCurrentProfileInternal,
+    // },
     {
       type: 'menuEntry',
       text: texts.globalMenu.showTestInputArea,

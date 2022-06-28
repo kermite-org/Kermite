@@ -1,4 +1,7 @@
 import {
+  fileExtensions,
+  IFileReadHandle,
+  IFileWriteHandle,
   IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
@@ -21,25 +24,25 @@ import {
   pathJoin,
 } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/profileFileLoader';
-import { coreState } from '~/shell/modules/core';
 
 function getProjectProfileFolderName(projectId: string) {
-  const { allProjectPackageInfos } = coreState;
-  const project = allProjectPackageInfos.find(
-    (it) => it.projectId === projectId,
-  );
-  if (project) {
-    return `${projectId}_${project.packageName}`;
-  } else {
-    return projectId;
-  }
+  // const { allProjectPackageInfos } = coreState;
+  // const project = allProjectPackageInfos.find(
+  //   (it) => it.projectId === projectId,
+  // );
+  // if (project) {
+  //   return `${projectId}_${project.packageName}`;
+  // } else {
+  //   return projectId;
+  // }
+  return projectId;
 }
 
 function getProfileFilePath(profileEntry: IProfileEntry): string {
   const { projectId, profileName } = profileEntry;
   const folderName = getProjectProfileFolderName(projectId);
   return appEnv.resolveUserDataFilePath(
-    `data/profiles/${folderName}/${profileName.toLowerCase()}.profile.json`,
+    `data/profiles/${folderName}/${profileName.toLowerCase()}.kmprf`,
   );
 }
 
@@ -51,10 +54,7 @@ function getProfileEntry(
   const filePath = pathJoin(profilesBaseDir, relativeFilePath);
   const userProfileData = fsxReadJsonFile(filePath) as IPersistProfileFileData;
   const profileNameFromContent = userProfileData.profileName || '';
-  const profileNameFromFileName = pathBasename(
-    relativeFilePath,
-    '.profile.json',
-  );
+  const profileNameFromFileName = pathBasename(relativeFilePath, '.kmprf');
   const isContentProfileNameValid =
     profileNameFromContent.toLowerCase() === profileNameFromFileName;
   const profileName = isContentProfileNameValid
@@ -95,7 +95,7 @@ export const profileManagerCore = {
   listAllProfileEntries(): IProfileEntry[] {
     const profilesBaseDir = appEnv.resolveUserDataFilePath(`data/profiles`);
     const relativeFilePaths = listAllFilesNameEndWith(
-      'profile.json',
+      '.kmprf',
       profilesBaseDir,
     );
     const allProfileEntries = relativeFilePaths.map((relPath) =>
@@ -125,15 +125,21 @@ export const profileManagerCore = {
       profileEntry.profileName,
     );
   },
-  loadExternalProfileFile(filePath: string): IProfileData {
-    return ProfileFileLoader.loadProfileFromFile(filePath);
+  async loadExternalProfileFile(
+    fileHandle: IFileReadHandle,
+  ): Promise<IProfileData> {
+    return await ProfileFileLoader.loadProfileFromLocalFile(fileHandle);
   },
-  saveExternalProfileFile(filePath: string, profileData: IProfileData): void {
-    const profileName = pathBasename(filePath, '.profile.json');
-    const baseDir = pathDirname(filePath);
-    const savingFilePath = pathJoin(baseDir, profileName.toLowerCase());
-    ProfileFileLoader.saveProfileToFile(
-      savingFilePath,
+  async saveExternalProfileFile(
+    fileHandle: IFileWriteHandle,
+    profileData: IProfileData,
+  ) {
+    const profileName = pathBasename(
+      fileHandle.fileName,
+      fileExtensions.profile,
+    );
+    await ProfileFileLoader.saveProfileToLocalFile(
+      fileHandle,
       profileData,
       profileName,
     );

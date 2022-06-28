@@ -23,6 +23,7 @@ import {
   IPersistKeyboardDesign,
 } from '~/shared/defs/keyboardDesign';
 import { fallbackProfileData, IProfileData } from '~/shared/defs/profileData';
+import { IFileReadHandle, IFileWriteHandle } from './infrastructureTypes';
 
 export type ICoreState = {
   applicationVersionInfo: IApplicationVersionInfo;
@@ -99,8 +100,12 @@ export type ICoreAction = Partial<{
   project_createLocalProjectBasedOnOnlineProject: { projectId: string };
   project_deleteLocalProject: { projectId: string };
   project_renameLocalProject: { projectId: string; newKeyboardName: string };
+  project_exportLocalProjectToFile: {
+    fileHandle: IFileWriteHandle;
+    projectId: string;
+  };
   project_openLocalProjectsFolder: 1;
-  project_addLocalProjectFromFile: { filePath: string };
+  project_addLocalProjectFromFile: { fileHandle: IFileReadHandle };
 
   config_loadGlobalSettings: 1;
   config_writeGlobalSettings: Partial<IGlobalSettings>;
@@ -143,17 +148,26 @@ export type ICoreAction = Partial<{
     presetName: string;
     profileData: IProfileData;
   };
-  profile_importFromFile: { filePath: string };
-  profile_exportToFile: { filePath: string; profileData: IProfileData };
+  profile_importFromFile: { fileHandle: IFileReadHandle };
+  profile_exportToFile: {
+    fileHandle: IFileWriteHandle;
+    profileData: IProfileData;
+  };
   profile_openUserProfilesFolder: 1;
   profile_setEditProfileData: { editProfileData: IProfileData };
 
   layout_createNewLayout: 1;
   layout_loadCurrentProfileLayout: 1;
   layout_overwriteCurrentLayout: { design: IPersistKeyboardDesign };
-  layout_loadFromFile: { filePath: string };
-  layout_saveToFile: { filePath: string; design: IPersistKeyboardDesign };
-  layout_exportToFile: { filePath: string; design: IPersistKeyboardDesign };
+  layout_loadFromFile: { fileHandle: IFileReadHandle };
+  layout_saveToFile: {
+    fileHandle: IFileWriteHandle;
+    design: IPersistKeyboardDesign;
+  };
+  layout_exportToFile: {
+    fileHandle: IFileWriteHandle;
+    design: IPersistKeyboardDesign;
+  };
   layout_createProjectLayout: { projectId: string; layoutName: string };
   layout_loadProjectLayout: { projectId: string; layoutName: string };
   layout_saveProjectLayout: {

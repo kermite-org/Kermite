@@ -4,8 +4,10 @@ import {
   createPresetKey,
   createProjectKey,
   fallbackProjectPackageInfo,
+  fileExtensions,
   getOriginAndProjectIdFromProjectKey,
   getPresetSpecFromPresetKey,
+  IFileReadHandle,
   IProjectPackageInfo,
 } from '~/shared';
 import { ipcAgent, UiLocalStorage } from '~/ui/base';
@@ -98,9 +100,9 @@ const actions = {
       },
     });
   },
-  async handleLocalPackageFileDrop(filePath: string) {
+  async handleLocalPackageFileDrop(fileHandle: IFileReadHandle) {
     const loadedProjectId = await projectPackagesActions.importLocalPackageFile(
-      filePath,
+      fileHandle,
     );
     if (
       loadedProjectId &&
@@ -112,9 +114,11 @@ const actions = {
     }
   },
   async handleSelectLocalPackageToImport() {
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (filePath) {
-      actions.handleLocalPackageFileDrop(filePath);
+    const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+      fileExtensions.package,
+    );
+    if (fileHandle) {
+      await actions.handleLocalPackageFileDrop(fileHandle);
     }
   },
 };

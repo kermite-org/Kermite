@@ -215,7 +215,7 @@ const KeyEntityCardSingle = (props: {
           class={cssKeyRect}
           data-selected={isSelected}
           data-ghost={isGhost}
-          onMouseDown={onMouseDown}
+          onPointerDown={onMouseDown}
         />
         {idTexts}
       </g>
@@ -232,7 +232,7 @@ const KeyEntityCardSingle = (props: {
         class={cssKeyRect}
         data-selected={isSelected}
         data-ghost={isGhost}
-        onMouseDown={onMouseDown}
+        onPointerDown={onMouseDown}
       />
       {idTexts}
     </g>

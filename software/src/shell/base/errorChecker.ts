@@ -1,16 +1,17 @@
 // import { app, dialog } from 'electron';
-import { getAppErrorData, makeCompactStackTrace } from '~/shared';
-import { appEnv } from '~/shell/base/appEnv';
+import { getAppErrorData } from '~/shared';
 import { appGlobal } from '~/shell/base/appGlobal';
 
 const badExecutionContextNames: string[] = [];
 
 export function reportShellError(error: any) {
+  console.log('caught shell error');
+  // console.log({ error });
   // const rootDir = appEnv.resolveApplicationRootDir();
   // console.error(makeCompactStackTrace(error));
-  // appGlobal.appErrorEventPort.emit(getAppErrorData(error, rootDir));
-  console.log('caught shell error');
-  console.log({ error });
+  console.log(error.stack);
+  // console.log({ ss: error.stack.toString() });
+  appGlobal.appErrorEventPort.emit(getAppErrorData(error));
 }
 
 export async function executeWithAppErrorHandler(

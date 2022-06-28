@@ -30,6 +30,7 @@ import { globalSettingsModule } from '~/shell/modules/setting/globalSettingsModu
 import { FirmwareUpdateService } from '~/shell/services/firmwareUpdate';
 import { KeyboardDeviceService } from '~/shell/services/keyboardDevice';
 import { InputLogicSimulator } from '~/shell/services/keyboardLogic';
+import { ApplicationMemoryFilesMigrator } from './loaders/applicationMemoryFilesMigrator';
 import { createWindowModule } from './services/window/appWindowWrapper';
 
 export class ApplicationRoot {
@@ -46,9 +47,7 @@ export class ApplicationRoot {
   private setupIpcBackend() {
     appGlobal.ipcMainAgent.setErrorHandler((error) => {
       console.error(makeCompactStackTrace(error));
-      appGlobal.appErrorEventPort.emit(
-        getAppErrorData(error, appEnv.resolveApplicationRootDir()),
-      );
+      appGlobal.appErrorEventPort.emit(getAppErrorData(error));
     });
 
     appGlobal.ipcMainAgent.supplySyncHandlers({
@@ -123,8 +122,8 @@ export class ApplicationRoot {
         fileDialogLoaders.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         fileDialogLoaders.loadObjectFromJsonWithFileDialog,
-      file_saveObjectToJsonWithFileDialog: async (obj) =>
-        fileDialogLoaders.saveObjectToJsonWithFileDialog(obj),
+      file_saveObjectToJsonWithFileDialog:
+        fileDialogLoaders.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
       file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,
@@ -165,6 +164,7 @@ export class ApplicationRoot {
       memoryFileSystem.initialize();
       console.log(`initialize services`);
       applicationStorage.initialize();
+      ApplicationMemoryFilesMigrator.migrateFileEntities();
       this.setupIpcBackend();
       // this.windowWrapper.initialize();
     });
@@ -192,9 +192,14 @@ export class ApplicationRoot {
       await dispatchCoreAction({ project_loadAllCustomFirmwareInfos: 1 }).catch(
         reportShellError,
       );
-      const kermiteServerProjectIds =
-        await userPresetHubDataLoader.getServerProjectIds();
-      commitCoreState({ kermiteServerProjectIds });
+      try {
+        const kermiteServerProjectIds =
+          await userPresetHubDataLoader.getServerProjectIds();
+        commitCoreState({ kermiteServerProjectIds });
+      } catch (err) {
+        reportShellError(err);
+      }
+
       try {
         profileManagerRoot.initialize();
       } catch (err) {

@@ -1,11 +1,11 @@
 import {
   compareObjectByJsonStringify,
-  forceChangeFilePathExtension,
+  fileExtensions,
   IPersistKeyboardDesign,
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
-import { LayoutEditorCore, assignerModel } from '~/ui/featureEditors';
+import { assignerModel, LayoutEditorCore } from '~/ui/featureEditors';
 import {
   ILayoutManagerEditTarget,
   ILayoutManagerModalState,
@@ -124,37 +124,49 @@ export const layoutManagerActions = {
     if (!(await checkShallLoadData())) {
       return;
     }
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (filePath) {
-      dispatchCoreAction({ layout_loadFromFile: { filePath } });
+    const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+      fileExtensions.layout,
+    );
+    if (fileHandle) {
+      await dispatchCoreAction({ layout_loadFromFile: { fileHandle } });
     }
   },
 
   async saveToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
-    const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
-    if (filePath) {
-      const modFilePath = forceChangeFilePathExtension(
-        filePath,
-        '.layout.json',
-      );
-      dispatchCoreAction({
-        layout_saveToFile: { filePath: modFilePath, design },
+    const namePart = layoutManagerReader.getSavingFileDefaultNamePart();
+    const extension = fileExtensions.layout;
+    const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
+      extension,
+      `${namePart}${extension}`,
+    );
+    if (fileHandle) {
+      await dispatchCoreAction({
+        layout_saveToFile: { fileHandle, design },
       });
+      if (fileHandle.isPreSelectedFile) {
+        await modalConfirm({ caption: 'save to file', message: 'file saved.' });
+      }
     }
   },
   async exportToFileWithDialog() {
     const design = LayoutEditorCore.emitSavingDesign();
-    const filePath = await ipcAgent.async.file_getSaveJsonFilePathWithDialog();
-    if (filePath) {
-      const modFilePath = forceChangeFilePathExtension(
-        filePath,
-        '.layout.json',
-      );
+    const namePart = layoutManagerReader.getSavingFileDefaultNamePart();
+    const extension = fileExtensions.layout;
+    const fileHandle = await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
+      extension,
+      `${namePart}${extension}`,
+    );
+    if (fileHandle) {
       await dispatchCoreAction({
-        layout_exportToFile: { filePath: modFilePath, design },
+        layout_exportToFile: { fileHandle, design },
       });
-      await modalConfirm({ caption: 'export to file', message: 'file saved.' });
+      if (fileHandle.isPreSelectedFile) {
+        await modalConfirm({
+          caption: 'export to file',
+          message: 'file saved.',
+        });
+      }
     }
   },
   save(design: IPersistKeyboardDesign) {

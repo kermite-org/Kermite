@@ -19,6 +19,9 @@ function start() {
 
   window.addEventListener('beforeunload', () => {
     render(() => <div />, appDiv);
+    if (appUi.skipPageTerminationTasks) {
+      return;
+    }
     uiSettingsPersistence.finalize();
     appRoot.terminate();
   });

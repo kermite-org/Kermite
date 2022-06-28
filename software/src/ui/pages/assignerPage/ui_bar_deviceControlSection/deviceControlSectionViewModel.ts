@@ -5,7 +5,7 @@ export function makeDeviceControlSectionViewModel() {
   if (deviceStatus.isConnected) {
     return {
       isDeviceConnected: true,
-      currentDeviceKeyboardName: deviceStatus.deviceAttrs.productName,
+      currentDeviceKeyboardName: deviceStatus.deviceAttrs.keyboardName,
     };
   } else {
     return {
