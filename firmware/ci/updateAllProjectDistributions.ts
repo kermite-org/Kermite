@@ -1,13 +1,9 @@
-import {
-  executeCommand,
-  fsExistsSync,
-  fsRmdirSync,
-  fsxCopyDirectory,
-} from "./helpers";
+import { executeCommand, fsExistsSync, fsxCopyDirectory } from "./helpers";
 import { deployStageIndexUpdator_updateIndexIfFilesChanged } from "./subTasks/deployStageIndexUpdator";
 import { deployStageProjectsBuilder_buildProjects } from "./subTasks/deployStageProjectsBuilder";
 import { deployStageFirmwareSummaryUpdator_outputSummaryFile } from "./subTasks/deployStageFirmwareSummaryUpdator";
 import { packageSummaryUpdator_generateSummaryFile } from "./subTasks/packageSummaryUpdator";
+import { rmSync } from "fs";
 
 process.chdir("..");
 
@@ -20,7 +16,7 @@ function pullResourceStoreRepo() {
 }
 
 function copyResourcesToLocalResourceStoreRepo() {
-  fsRmdirSync("./KRS/resources2", { recursive: true });
+  rmSync("./KRS/resources2", { recursive: true });
   fsxCopyDirectory("./dist", "./KRS/resources2");
 }
 
