@@ -1,4 +1,4 @@
-import { appUi, texts } from '~/ui/base';
+import { texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
 
@@ -47,7 +47,8 @@ const itemsSource: NavigationItemSource[] = [
     pageName: texts.sideMenuApps.shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.sideMenuAppsHint.shapePreview,
-    isAvailable: () => appUi.isDevelopment && uiReaders.isDeveloperMode,
+    // isAvailable: () => appUi.isDevelopment && uiReaders.isDeveloperMode,
+    isAvailable: () => false,
   },
   {
     pagePath: '/firmwareUpdate',

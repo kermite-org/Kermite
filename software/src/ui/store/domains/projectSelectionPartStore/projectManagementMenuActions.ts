@@ -141,9 +141,30 @@ export const projectManagementMenuActions = {
     }
   },
   async handleSelectLocalPackageToImport() {
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (filePath) {
-      await projectPackagesActions.importLocalPackageFile(filePath);
+    const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+      '.kmpkg.json',
+    );
+    if (fileHandle) {
+      await projectPackagesActions.importLocalPackageFile(fileHandle);
+    }
+  },
+  async handleExportLocalPackageToFile() {
+    const project = projectPackagesReader.getEditTargetProject();
+    if (project) {
+      const { projectId, keyboardName } = project;
+      const fileName = `${keyboardName.toLowerCase()}.kmpkg.json`;
+      const fileHandle =
+        await ipcAgent.async.file_getSaveJsonFilePathWithDialog(
+          '.kmpkg.json',
+          fileName,
+        );
+      if (fileHandle) {
+        await projectPackagesActions.exportLocalPackageToFile(
+          fileHandle,
+          projectId,
+        );
+        modalConfirm({ caption: 'export to file', message: 'file saved.' });
+      }
     }
   },
   handleOpenLocalProjectsFolder() {

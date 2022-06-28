@@ -13,6 +13,7 @@ export const WidgetControlButtonsBox: FC<Props> = ({ vm }) => (
       iconSpec="fa fa-thumbtack"
       isActive={vm.isWidgetAlwaysOnTop}
       onClick={vm.toggleWidgetAlwaysOnTop}
+      if={false}
     />
     <WidgetControlButton
       class="config-button"

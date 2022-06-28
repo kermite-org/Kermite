@@ -1,5 +1,6 @@
 import {
   createProjectKey,
+  getFileNameFromHandle,
   IProjectPackageFileContent,
   IProjectPackageInfo,
   IResourceOrigin,
@@ -13,7 +14,9 @@ import {
   fsxEnsureFolderExists,
   fsxListFileBaseNames,
   fsxReadJsonFile,
+  fsxReadJsonFromFileHandle,
   fsxWriteJsonFile,
+  fsxWriteJsonToFileHandle,
   pathBasename,
   pathDirname,
   pathJoin,
@@ -179,9 +182,14 @@ function deleteUserProjectPackageFileImpl(
   fsxDeleteFile(filePath);
 }
 
-function importLocalProjectPackageFromFileImpl(sourceFilePath: string) {
-  const packageName = pathBasename(sourceFilePath, '.kmpkg.json');
-  const data = fsxReadJsonFile(sourceFilePath) as IProjectPackageFileContent;
+async function importLocalProjectPackageFromFileImpl(
+  sourceFileHandle: FileSystemFileHandle,
+) {
+  const fileName = await getFileNameFromHandle(sourceFileHandle);
+  const packageName = pathBasename(fileName, '.kmpkg.json');
+  const data = (await fsxReadJsonFromFileHandle(
+    sourceFileHandle,
+  )) as IProjectPackageFileContent;
   migrateProjectPackageData(data);
   if (!checkProjectFileContentSchema(data)) {
     throw new Error('invalid package file content');
@@ -211,8 +219,15 @@ export const projectPackageProvider = {
   deleteLocalProjectPackageFile(packageName: string, isDraft: boolean) {
     deleteUserProjectPackageFileImpl(packageName, isDraft);
   },
-  importLocalProjectPackageFromFile(filePath: string) {
-    importLocalProjectPackageFromFileImpl(filePath);
+  async importLocalProjectPackageFromFile(fileHandle: FileSystemFileHandle) {
+    return await importLocalProjectPackageFromFileImpl(fileHandle);
+  },
+  async exportLocalProjectPackageToFile(
+    fileHandle: FileSystemFileHandle,
+    info: IProjectPackageInfo,
+  ) {
+    const savingData = convertProjectPackageInfoToFileContent(info);
+    await fsxWriteJsonToFileHandle(fileHandle, savingData);
   },
   openLocalProjectsFolder() {
     // const folderPath = getUserProjectsFolderPath();

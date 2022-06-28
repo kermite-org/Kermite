@@ -13,6 +13,7 @@ export const WelcomePage: FC = () => {
       isLanguageJapanese,
       isDarkTheme,
       isDeveloperMode,
+      isHidSupported,
     },
     actions: {
       setLanguageEnglish,
@@ -67,8 +68,10 @@ export const WelcomePage: FC = () => {
           </WelcomePageButton>
         </div>
       </div>
-      <div class="version-area" if={!!appVersion}>
-        {texts.welcomePage.version}: {appVersion}
+      <div class="compatibility-message-area" if={!isHidSupported}>
+        ブラウザがWebHIDに対応していないため、デバイスとの通信ができません。
+        <br />
+        WebHIDをサポートしている、Google Chromeでの利用を推奨しています。
       </div>
       <div class="theme-config-area">
         <ToggleSwitchLine
@@ -85,6 +88,9 @@ export const WelcomePage: FC = () => {
           setChecked={setDeveloperMode}
           hint={texts.welcomePageHint.developerModeOption}
         />
+      </div>
+      <div class="version-area" if={!!appVersion}>
+        {texts.welcomePage.version}: {appVersion}
       </div>
     </div>
   );
@@ -135,11 +141,11 @@ const style = css`
     }
   }
 
-  > .version-area {
+  > .compatibility-message-area {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 5px;
+    top: 0;
+    left: 0;
+    margin: 10px;
   }
 
   > .theme-config-area {
@@ -152,6 +158,13 @@ const style = css`
   > .developer-mode-option-area {
     position: absolute;
     bottom: 0;
+    margin: 5px;
+  }
+
+  > .version-area {
+    position: absolute;
+    bottom: 0;
+    right: 0;
     margin: 5px;
   }
 `;

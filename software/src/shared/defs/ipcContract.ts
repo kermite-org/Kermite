@@ -55,12 +55,23 @@ export interface IAppIpcContract {
       variationId: string,
     ): Promise<void>;
 
-    file_getOpenJsonFilePathWithDialog(): Promise<string | undefined>;
-    file_getSaveJsonFilePathWithDialog(): Promise<string | undefined>;
-    file_loadObjectFromJsonWithFileDialog(): Promise<any | undefined>;
-    file_saveObjectToJsonWithFileDialog(obj: any): Promise<boolean>;
+    file_getOpenJsonFilePathWithDialog(
+      extension: string,
+    ): Promise<FileSystemFileHandle | undefined>;
+    file_getSaveJsonFilePathWithDialog(
+      extension: string,
+      defaultName: string,
+    ): Promise<FileSystemFileHandle | undefined>;
+    file_loadObjectFromJsonWithFileDialog(
+      extension: string,
+    ): Promise<any | undefined>;
+    file_saveObjectToJsonWithFileDialog(
+      extension: string,
+      defaultName: string,
+      obj: any,
+    ): Promise<boolean>;
     file_getOpenDirectoryWithDialog(): Promise<string | undefined>;
-    file_loadJsonFileContent(filePath: string): Promise<any>;
+    file_loadJsonFileContent(fileHandle: FileSystemFileHandle): Promise<any>;
 
     platform_openUrlInDefaultBrowser(path: string): Promise<void>;
 

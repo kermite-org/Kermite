@@ -42,6 +42,7 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
         handler: projectManagementMenuActions.handleDeleteProject,
       },
     ),
+    { type: 'separator' },
     {
       type: 'menuEntry',
       text: 'import from file',
@@ -49,8 +50,13 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
     },
     {
       type: 'menuEntry',
-      text: 'open data folder',
-      handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
+      text: 'export to file',
+      handler: projectManagementMenuActions.handleExportLocalPackageToFile,
     },
+    // {
+    //   type: 'menuEntry',
+    //   text: 'open data folder',
+    //   handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
+    // },
   ];
 }

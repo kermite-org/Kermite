@@ -48,14 +48,14 @@ export const profilesActions = {
     });
   },
 
-  importFromFile: (filePath: string) => {
-    dispatchCoreAction({ profile_importFromFile: { filePath } });
+  importFromFile: async (fileHandle: FileSystemFileHandle) => {
+    await dispatchCoreAction({ profile_importFromFile: { fileHandle } });
   },
 
-  exportToFile: async (filePath: string) => {
+  exportToFile: async (fileHandle: FileSystemFileHandle) => {
     await dispatchCoreAction({
       profile_exportToFile: {
-        filePath,
+        fileHandle,
         profileData: assignerModel.profileData,
       },
     });

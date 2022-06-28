@@ -121,8 +121,8 @@ export class ApplicationRoot {
         fileDialogLoaders.getSavingJsonFilePathWithDialog,
       file_loadObjectFromJsonWithFileDialog:
         fileDialogLoaders.loadObjectFromJsonWithFileDialog,
-      file_saveObjectToJsonWithFileDialog: async (obj) =>
-        fileDialogLoaders.saveObjectToJsonWithFileDialog(obj),
+      file_saveObjectToJsonWithFileDialog:
+        fileDialogLoaders.saveObjectToJsonWithFileDialog,
       file_getOpenDirectoryWithDialog:
         fileDialogLoaders.getOpeningDirectoryPathWithDialog,
       file_loadJsonFileContent: fileDialogLoaders.loadJsonFileContent,

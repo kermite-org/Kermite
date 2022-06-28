@@ -54,8 +54,9 @@ export const SettingsPage = () => {
               checked={flagUseLocalResources}
               setChecked={setFlagUseLocalResources}
               disabled={!flagDeveloperMode}
+              if={false}
             />
-            <div>
+            <div if={false}>
               <div
                 class={!canChangeLocalRepositoryFolderPath && 'text-disabled'}
               >

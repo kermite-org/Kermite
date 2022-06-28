@@ -1,4 +1,7 @@
-import { fsxReadJsonFile, fsxWriteJsonFile } from '~/shell/funcs';
+import {
+  fsxReadJsonFromFileHandle,
+  fsxWriteJsonToFileHandle,
+} from '~/shell/funcs';
 
 export const fileDialogLoaders = {
   getOpeningDirectoryPathWithDialog() {
@@ -11,7 +14,9 @@ export const fileDialogLoaders = {
     // return undefined;
     throw new Error('obsolete function invoked');
   },
-  getOpeningJsonFilePathWithDialog() {
+  async getOpeningJsonFilePathWithDialog(
+    extension: string,
+  ): Promise<FileSystemFileHandle | undefined> {
     // const result = await dialog.showOpenDialog(appGlobal.mainWindow!, {
     //   properties: ['openFile'],
     //   filters: [
@@ -25,9 +30,29 @@ export const fileDialogLoaders = {
     //   return result.filePaths[0];
     // }
     // return undefined;
-    throw new Error('obsolete function invoked');
+    // throw new Error('obsolete function invoked');
+    try {
+      const [fileHandle] = await window.showOpenFilePicker({
+        types: [
+          {
+            description: extension,
+            accept: {
+              'application/json': [extension],
+            },
+          },
+        ],
+      });
+      return fileHandle;
+    } catch (error) {
+      return undefined;
+    }
   },
-  getSavingJsonFilePathWithDialog() {
+  async getSavingJsonFilePathWithDialog(
+    extension: string,
+    defaultFileName: string,
+  ): Promise<FileSystemFileHandle | undefined> {
+    // const file =
+    // return fileHandle.getFile();
     // const result = await dialog.showSaveDialog(appGlobal.mainWindow!, {
     //   properties: ['showOverwriteConfirmation'],
     //   filters: [
@@ -38,13 +63,32 @@ export const fileDialogLoaders = {
     //   ],
     // });
     // return result.filePath;
-    throw new Error('obsolete function invoked');
-  },
-  loadObjectFromJsonWithFileDialog(): any | undefined {
+    // throw new Error('obsolete function invoked');
     try {
-      const filePath = fileDialogLoaders.getOpeningJsonFilePathWithDialog();
-      if (filePath) {
-        const obj = fsxReadJsonFile(filePath);
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: defaultFileName,
+        types: [
+          {
+            description: extension,
+            accept: {
+              'application/json': [extension],
+            },
+          },
+        ],
+      });
+      return fileHandle;
+    } catch (error) {
+      return undefined;
+    }
+  },
+  async loadObjectFromJsonWithFileDialog(
+    extension: string,
+  ): Promise<any | undefined> {
+    try {
+      const fileHandle =
+        await fileDialogLoaders.getOpeningJsonFilePathWithDialog(extension);
+      if (fileHandle) {
+        const obj = await fsxReadJsonFromFileHandle(fileHandle);
         return obj;
       }
     } catch (error) {
@@ -52,11 +96,19 @@ export const fileDialogLoaders = {
       return undefined;
     }
   },
-  saveObjectToJsonWithFileDialog(obj: any): boolean {
+  async saveObjectToJsonWithFileDialog(
+    extension: string,
+    defaultFileName: string,
+    obj: any,
+  ): Promise<boolean> {
     try {
-      const filePath = fileDialogLoaders.getSavingJsonFilePathWithDialog();
-      if (filePath) {
-        fsxWriteJsonFile(filePath, obj);
+      const fileHandle =
+        await fileDialogLoaders.getSavingJsonFilePathWithDialog(
+          extension,
+          defaultFileName,
+        );
+      if (fileHandle) {
+        await fsxWriteJsonToFileHandle(fileHandle, obj);
         return true;
       }
       return false;
@@ -65,7 +117,9 @@ export const fileDialogLoaders = {
       return false;
     }
   },
-  loadJsonFileContent(filePath: string): any | undefined {
-    return fsxReadJsonFile(filePath);
+  async loadJsonFileContent(
+    fileHandle: FileSystemFileHandle,
+  ): Promise<any | undefined> {
+    return await fsxReadJsonFromFileHandle(fileHandle);
   },
 };

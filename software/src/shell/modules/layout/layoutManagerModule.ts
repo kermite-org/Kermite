@@ -3,7 +3,6 @@ import {
   createFallbackPersistKeyboardDesign,
   duplicateObjectByJsonStringifyParse,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
 import { LayoutFileLoader } from '~/shell/loaders/layoutFileLoader';
 import {
   commitCoreState,
@@ -14,22 +13,22 @@ import {
   projectPackagesReader,
 } from '~/shell/modules/core';
 
-const layoutManagerModuleHelper = {
-  getCurrentEditLayoutFilePath(): string | undefined {
-    const { layoutEditSource } = coreState;
-    if (layoutEditSource.type === 'ProjectLayout') {
-      const { projectId } = layoutEditSource;
-      const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
-      if (projectInfo) {
-        return appEnv.resolveUserDataFilePath(
-          `data/projects/${projectInfo?.packageName}.kmpkg.json`,
-        );
-      }
-    } else if (layoutEditSource.type === 'File') {
-      return layoutEditSource.filePath;
-    }
-  },
-};
+// const layoutManagerModuleHelper = {
+//   getCurrentEditLayoutFilePath(): string | undefined {
+//     const { layoutEditSource } = coreState;
+//     if (layoutEditSource.type === 'ProjectLayout') {
+//       const { projectId } = layoutEditSource;
+//       const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
+//       if (projectInfo) {
+//         return appEnv.resolveUserDataFilePath(
+//           `data/projects/${projectInfo?.packageName}.kmpkg.json`,
+//         );
+//       }
+//     } else if (layoutEditSource.type === 'File') {
+//       return layoutEditSource.filePath;
+//     }
+//   },
+// };
 
 export const layoutManagerModule = createCoreModule({
   layout_createNewLayout() {
@@ -61,8 +60,9 @@ export const layoutManagerModule = createCoreModule({
         });
       }
     } else if (layoutEditSource.type === 'File') {
-      const { filePath } = layoutEditSource;
-      LayoutFileLoader.saveLayoutToFile(filePath, design);
+      // const { filePath } = layoutEditSource;
+      // LayoutFileLoader.saveLayoutToFile(filePath, design);
+      throw new Error('overwrite for individual layout is not supported');
     } else if (layoutEditSource.type === 'ProjectLayout') {
       const { projectId, layoutName } = layoutEditSource;
       layoutManagerModule.layout_saveProjectLayout({
@@ -73,22 +73,24 @@ export const layoutManagerModule = createCoreModule({
     }
     commitCoreState({ loadedLayoutData: design });
   },
-  layout_loadFromFile({ filePath }) {
-    const loadedDesign = LayoutFileLoader.loadLayoutFromFile(filePath);
+  async layout_loadFromFile({ fileHandle }) {
+    const loadedDesign = await LayoutFileLoader.loadLayoutFromFile(fileHandle);
+    const filePath = (await fileHandle.getFile()).name;
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
       loadedLayoutData: loadedDesign,
     });
   },
-  layout_saveToFile({ filePath, design }) {
-    LayoutFileLoader.saveLayoutToFile(filePath, design);
+  async layout_saveToFile({ fileHandle, design }) {
+    await LayoutFileLoader.saveLayoutToFile(fileHandle, design);
+    const filePath = (await fileHandle.getFile()).name;
     commitCoreState({
       layoutEditSource: { type: 'File', filePath },
       loadedLayoutData: design,
     });
   },
-  layout_exportToFile({ filePath, design }) {
-    LayoutFileLoader.saveLayoutToFile(filePath, design);
+  async layout_exportToFile({ fileHandle, design }) {
+    await LayoutFileLoader.saveLayoutToFile(fileHandle, design);
   },
   layout_createProjectLayout({ projectId, layoutName }) {
     const projectInfo = projectPackagesReader.getLocalProjectInfo(projectId);
