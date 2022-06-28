@@ -154,7 +154,7 @@ function updateRemotePackagesDifferential(
   const updatedProjectKeys = getObjectKeys(remoteDigestMap).filter(
     (key) => !(localDigestMap[key] === remoteDigestMap[key]),
   );
-  removedProjectKeys.map(async (projectKey) => {
+  removedProjectKeys.forEach((projectKey) => {
     const filePath = pathJoin(
       remotePackagesFolderPath,
       `${projectKey}.kmpkg_wrapper`,
