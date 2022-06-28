@@ -69,7 +69,7 @@ export const pathRelative = path.relative;
 
 export const fsExistsSync = fs.existsSync;
 
-export const fsRmdirSync = fs.rmdirSync;
+export const fsRmSync = fs.rmSync;
 
 export const fsStatSync = fs.statSync;
 
