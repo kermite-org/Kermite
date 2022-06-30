@@ -1,5 +1,9 @@
 import { removeArrayItems, removeArrayItemsMatched } from '~/shared';
 
+const configs = {
+  memoryStorageRevisionLatest: 2,
+};
+
 function pathRelative(from: string, to: string): string {
   const regex = new RegExp('^' + from + '/');
   return to.replace(regex, '');
@@ -36,7 +40,7 @@ type IMemoryFileSystemPersistData = {
 
 function createMemoryFileSystem(): IMemoryFileSystem {
   const localStorageKey = 'kermite-app-virtual-file-system';
-  let memoryStorageRevision = 1;
+  let memoryStorageRevision = configs.memoryStorageRevisionLatest;
   let fileEntities: IVirtualFileEntity[] = [];
 
   function findFileEntityByPath(path: string) {
