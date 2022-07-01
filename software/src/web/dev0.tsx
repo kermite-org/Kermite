@@ -29,7 +29,7 @@ applyGlobalStyle(css`
 function apiTest() {
   (async () => {
     const res = await fetch(
-      'https://app.kermite.org/krs/resources2/index.json',
+      'https://assets.kermite.org/krs/resources2/index.json',
     );
     const obj = await res.json();
     console.log({ obj });

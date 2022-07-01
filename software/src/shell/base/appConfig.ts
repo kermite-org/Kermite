@@ -19,8 +19,8 @@ export const appConfig = {
   pageTitle: 'Kermite',
   initialPageWidth: 1280,
   initialPageHeight: 800,
-  onlineResourcesBaseUrl: 'https://app.kermite.org/krs/resources2',
-  kermiteServerUrl: 'https://dev.server.kermite.org',
+  onlineResourcesBaseUrl: 'https://assets.kermite.org/krs/resources2',
+  kermiteServerUrl: 'https://server.kermite.org',
   useDebugLocalFirmwares: !!processEnv.FE_USE_DEBUG_LOCAL_FIRMWARES,
 };
 if (processEnv.FE_USE_KERMITE_SERVER_LOCAL) {

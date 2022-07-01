@@ -19,7 +19,7 @@ const projectItems: IProjectKeyboardListProjectItem[] = [
     onlineProjectAttrs: {
       authorDisplayName: 'yahiro',
       authorIconUrl:
-        'https://dev.server.kermite.org/api/avatar/8c2e05fa-4809-4365-b891-6a942d298fd8',
+        'https://server.kermite.org/api/avatar/8c2e05fa-4809-4365-b891-6a942d298fd8',
       isOfficial: true,
       isDevelopment: false,
       revision: 0,
@@ -32,7 +32,7 @@ const projectItems: IProjectKeyboardListProjectItem[] = [
     onlineProjectAttrs: {
       authorDisplayName: 'yahiro',
       authorIconUrl:
-        'https://dev.server.kermite.org/api/avatar/8c2e05fa-4809-4365-b891-6a942d298fd8',
+        'https://server.kermite.org/api/avatar/8c2e05fa-4809-4365-b891-6a942d298fd8',
       isOfficial: false,
       isDevelopment: false,
       revision: 1,

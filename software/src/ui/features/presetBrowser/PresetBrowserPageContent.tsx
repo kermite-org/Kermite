@@ -63,7 +63,7 @@ const KermiteServerLinkPart: FC = () => {
     <div class={style}>
       User profiles are served on &nbsp;
       <a
-        href="https://dev.server.kermite.org"
+        href="https://server.kermite.org"
         target="_blank"
         class="link"
         rel="noreferrer"
