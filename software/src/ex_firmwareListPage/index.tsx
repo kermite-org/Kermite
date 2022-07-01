@@ -1,6 +1,5 @@
 import { applyGlobalStyle, css, FC, jsx, render, rerender } from 'alumina';
-import { flattenArray } from '~/shared';
-import { IKrsSummaryJsonData } from '~/shared/defs/OnlineResourceTypes';
+import { IKrsFirmwaresSummaryJsonData } from '~/shared/defs/onlineResourceTypes';
 
 const globalCss = css`
   * {
@@ -26,11 +25,11 @@ const globalCss = css`
 
 const state = new (class {
   error: string = '';
-  loadedData?: IKrsSummaryJsonData;
+  loadedData?: IKrsFirmwaresSummaryJsonData;
 })();
 
 async function fetchFirmwareListingData() {
-  const url = 'https://app.kermite.org/krs/resources/summary.json';
+  const url = 'https://assets.kermite.org/krs/resources2/index.firmwares.json';
   try {
     console.log(`fetching ${url}`);
     const res = await fetch(url);
@@ -46,12 +45,13 @@ async function fetchFirmwareListingData() {
 }
 
 interface IFirmwareItem {
+  firmwareId: string;
   projectPath: string;
-  keyboardName: string;
   variationName: string;
-  targetMcu: string;
+  targetMcu: 'rp2040';
   buildRevision: number;
   buildStatus: string;
+  buildTimestamp: string;
   sourceUrl: string;
   distUrl: string;
 }
@@ -107,29 +107,27 @@ const PageRoot: FC = () => {
     loadedData.info.updateAt,
   ).toLocaleString();
 
-  const firmwareItems: IFirmwareItem[] = flattenArray(
-    loadedData.projects.map((project) => {
-      return project.firmwares.map((firmware) => ({
-        projectPath: project.projectPath,
-        keyboardName: project.keyboardName,
-        variationName: firmware.variationName,
-        targetMcu: firmware.targetDevice,
-        buildRevision: firmware.buildRevision,
-        buildStatus: 'ok',
-        sourceUrl: `https://github.com/kermite-org/Kermite/tree/master/firmware/src/projects/${project.projectPath}/${firmware.variationName}`,
-        distUrl: `https://github.com/kermite-org/KermiteResourceStore/tree/master/resources/variants/${project.projectPath}`,
-      }));
-    }),
-  );
+  const firmwareItems: IFirmwareItem[] = loadedData.firmwares.map((it) => ({
+    firmwareId: it.firmwareId,
+    projectPath: it.firmwareProjectPath,
+    // keyboardName: it.keyboardName,
+    variationName: it.variationName,
+    targetMcu: it.targetDevice,
+    buildRevision: it.releaseBuildRevision,
+    buildStatus: it.buildResult === 'success' ? 'ok' : 'ng',
+    buildTimestamp: it.buildTimestamp,
+    sourceUrl: `https://github.com/kermite-org/Kermite/tree/master/firmware/src/projects/${it.firmwareProjectPath}/${it.variationName}`,
+    distUrl: `https://github.com/kermite-org/KermiteResourceStore/tree/master/resources2/firmwares/${it.firmwareProjectPath}`,
+  }));
 
   return (
-    <div css={cssPageRoot}>
+    <div class={cssPageRoot}>
       <h1>Kermite Firmware Build Status</h1>
       <div className="main-table-frame">
         <table>
           <thead>
             <tr>
-              <th>keyboard name</th>
+              <th>firmware id</th>
               <th>project path</th>
               <th>variation name</th>
               <th>target mcu</th>
@@ -142,7 +140,7 @@ const PageRoot: FC = () => {
           <tbody>
             {firmwareItems.map((item) => (
               <tr key={item.projectPath + '_' + item.variationName}>
-                <td>{item.keyboardName}</td>
+                <td>{item.firmwareId}</td>
                 <td>{item.projectPath}</td>
                 <td>{item.variationName}</td>
                 <td>{item.targetMcu}</td>
@@ -159,13 +157,13 @@ const PageRoot: FC = () => {
           </tbody>
         </table>
       </div>
-      <div className="text-info">last updation: {lastUpdateTimeText}</div>
+      <div className="text-info">last update: {lastUpdateTimeText}</div>
     </div>
   );
 };
 
 window.addEventListener('load', () => {
-  console.log('firmware list page 0629a');
+  console.log('firmware list page 220625a');
   applyGlobalStyle(globalCss);
   const appDiv = document.getElementById('app');
   render(() => <PageRoot />, appDiv);

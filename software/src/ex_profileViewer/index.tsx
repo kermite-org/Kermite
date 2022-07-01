@@ -1,6 +1,6 @@
 import { applyGlobalStyle, css, FC, jsx, render, rerender } from 'alumina';
-import { kmsColors } from '~/ex_profileViewer/KmsColors';
 import { KmsPresetKeyboardSection } from '~/ex_profileViewer/KmsPresetKeyboardSection';
+import { kmsColors } from '~/ex_profileViewer/kmsColors';
 import {
   debounce,
   fallbackProfileData,
@@ -8,9 +8,9 @@ import {
   IProfileData,
   ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
+import { ProfileDataMigrator } from '~/shell/loaders/profileDataMigrator';
 import { ScalerBox } from '~/ui/elements';
-import { usePresetKeyboardSectionModel } from '~/ui/fabrics/PresetKeyboardSection/model';
+import { usePresetKeyboardSectionModel } from '~/ui/fabrics/presetKeyboardSection/model';
 
 const globalCss = css`
   * {
@@ -75,7 +75,7 @@ async function fetchProfile() {
     }
   } else if (profileId) {
     // fetch profile from kermite server
-    const profileUrl = `https://dev.server.kermite.org/api/profiles/${profileId}`;
+    const profileUrl = `https://server.kermite.org/api/profiles/${profileId}`;
     try {
       console.log(`loading profile from ${profileUrl}`);
       const res = await fetch(profileUrl);
@@ -114,7 +114,7 @@ const ProfileViewContentRoot: FC = () => {
   `;
   return (
     <ScalerBox contentWidth={800} contentHeight={400}>
-      <div css={cssBase}>
+      <div class={cssBase}>
         <div if={!!state.error} className="errorText">
           {state.error}
         </div>
@@ -139,7 +139,7 @@ const PageRoot: FC = () => {
   `;
 
   return (
-    <div css={cssPageRoot}>
+    <div class={cssPageRoot}>
       <div class="rootPanel">
         <ProfileViewContentRoot />
       </div>

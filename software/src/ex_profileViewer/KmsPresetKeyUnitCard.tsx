@@ -1,5 +1,5 @@
 import { jsx, css } from 'alumina';
-import { kmsColors } from '~/ex_profileViewer/KmsColors';
+import { kmsColors } from '~/ex_profileViewer/kmsColors';
 import { IDisplayKeyShape } from '~/shared';
 import { KeyUnitShape } from '~/ui/elements';
 
@@ -39,12 +39,12 @@ export const KmsPresetKeyUnitCard = (props: {
       transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.r}) `}
       key={keyUnitId}
     >
-      <KeyUnitShape shape={shape} css={cssKeyShape} />
-      <text css={cssKeyText} x={0} y={-2} if={!isLayerFallback}>
+      <KeyUnitShape shape={shape} class={cssKeyShape} />
+      <text class={cssKeyText} x={0} y={-2} if={!isLayerFallback}>
         {primaryText}
       </text>
 
-      <text css={cssKeyText} x={0} y={4} if={!isLayerFallback}>
+      <text class={cssKeyText} x={0} y={4} if={!isLayerFallback}>
         {secondaryText}
       </text>
     </g>

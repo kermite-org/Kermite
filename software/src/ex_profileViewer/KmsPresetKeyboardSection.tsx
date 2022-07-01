@@ -1,7 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { KmsPresetKeyboardView } from '~/ex_profileViewer/KmsPresetKeyboardView';
 import { KmsPresetLayersBox } from '~/ex_profileViewer/KmsPresetLayersBox';
-import { IPresetKeyboardSectionModel } from '~/ui/fabrics/PresetKeyboardSection/model';
+import { IPresetKeyboardSectionModel } from '~/ui/fabrics/presetKeyboardSection/model';
 
 type Props = {
   className?: string;
@@ -34,7 +34,7 @@ export const KmsPresetKeyboardSection: FC<Props> = ({
     setCurrentLayerId,
   },
 }) => (
-  <div css={style} className={className}>
+  <div class={style} className={className}>
     <div class="keyboardPart">
       <KmsPresetKeyboardView
         keyUnits={keyUnits}

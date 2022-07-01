@@ -1,9 +1,9 @@
 import { jsx, css, FC } from 'alumina';
-import { kmsColors } from '~/ex_profileViewer/KmsColors';
 import {
   IPresetKeyUnitViewModel,
   KmsPresetKeyUnitCard,
 } from '~/ex_profileViewer/KmsPresetKeyUnitCard';
+import { kmsColors } from '~/ex_profileViewer/kmsColors';
 import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
 import {
   KeyboardBodyShape,
@@ -34,7 +34,7 @@ export const KmsPresetKeyboardView: FC<IPresetKeyboardViewProps> = ({
   displayArea,
   outlineShapes,
 }) => (
-  <div css={style}>
+  <div class={style}>
     <KeyboardSvgFrameWithAutoScaler
       displayArea={displayArea}
       dpiScale={configs.dpiScale}

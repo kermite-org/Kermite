@@ -1,6 +1,5 @@
 import { css, FC, jsx } from 'alumina';
 import { KmsPresetLayerItem } from '~/ex_profileViewer/KmsPresetLayerItem';
-import { texts } from '~/ui/base';
 
 type Props = {
   layers: {
@@ -28,11 +27,7 @@ export const KmsPresetLayersBox: FC<Props> = ({
   currentLayerId,
   setCurrentLayerId,
 }) => (
-  <div
-    css={style}
-    data-hint={texts.hint_presetBrowser_layers}
-    onClick={() => setCurrentLayerId('')}
-  >
+  <div class={style} onClick={() => setCurrentLayerId('')}>
     {layers.reverse().map((la) => (
       <KmsPresetLayerItem
         key={la.layerId}

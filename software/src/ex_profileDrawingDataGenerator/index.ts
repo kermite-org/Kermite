@@ -12,7 +12,7 @@ import {
   IProjectPackageFileContent,
   ProfileDataConverter,
 } from '~/shared';
-import { ProfileDataMigrator } from '~/shell/loaders/ProfileDataMigrator';
+import { ProfileDataMigrator } from '~/shell/loaders/profileDataMigrator';
 import {
   getAssignEntryTexts,
   getAssignForKeyUnitInInitialLayerStack,

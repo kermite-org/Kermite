@@ -9,7 +9,7 @@ type IProcessEnv = {
   FE_DEBUG_SUPPRESS_ERROR_DIALOG?: boolean;
 };
 
-export const processEnv = (import.meta as any).env as IProcessEnv;
+export const processEnv = ((import.meta as any).env as IProcessEnv) || {};
 // console.log({ processEnv });
 
 export const appConfig = {

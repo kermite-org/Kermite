@@ -1,8 +1,7 @@
-import fs from 'fs';
-import readline from 'readline';
-import { build, cliopts } from 'estrella';
-import open from 'open';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs');
+const readline = require('readline');
+const { build, cliopts } = require('estrella');
+const open = require('open');
 const servor = require('servor');
 
 const [opts] = cliopts.parse(
@@ -25,25 +24,25 @@ const reqBuildProfileViewer = opts['x-build-profile-viewer'];
 const reqDebugFirmwareStatsPage = opts['x-debug-firmware-stats-page'];
 const reqBuildFirmwareStatsPage = opts['x-build-firmware-stats-page'];
 
-type IKeyPressEvent = {
-  sequence: string;
-  name: string;
-  ctrl: boolean;
-  shift: boolean;
-  meta: boolean;
-};
+// type IKeyPressEvent = {
+//   sequence: string;
+//   name: string;
+//   ctrl: boolean;
+//   shift: boolean;
+//   meta: boolean;
+// };
 
-async function readKey(): Promise<IKeyPressEvent> {
+async function readKey() {
   readline.emitKeypressEvents(process.stdin);
   process.stdin.setRawMode(true);
-  const res = await new Promise<IKeyPressEvent>((resolve) => {
-    process.stdin.once('keypress', (_, key: any) => resolve(key));
+  const res = await new Promise((resolve) => {
+    process.stdin.once('keypress', (_, key) => resolve(key));
   });
   process.stdin.setRawMode(false);
   return res;
 }
 
-function launchDebugServer(distDir: string) {
+function launchDebugServer(distDir) {
   servor({
     root: distDir,
     fallback: 'index.html',
@@ -62,7 +61,7 @@ function launchDebugServer(distDir: string) {
   })();
 }
 
-function patchOutputIndexHtmlBundleImport(htmlFilPath: string) {
+function patchOutputIndexHtmlBundleImport(htmlFilPath) {
   const text = fs.readFileSync(htmlFilPath, { encoding: 'utf-8' });
   const tt = Date.now().toString();
   const modText = text.replace(
@@ -72,7 +71,7 @@ function patchOutputIndexHtmlBundleImport(htmlFilPath: string) {
   fs.writeFileSync(htmlFilPath, modText, { encoding: 'utf-8' });
 }
 
-function startWatchPage(folderName: string) {
+function startWatchPage(folderName) {
   const srcDir = `./src/${folderName}`;
   const distDir = `./dist/${folderName}`;
   fs.mkdirSync(distDir, { recursive: true });
@@ -119,7 +118,7 @@ async function makeProfileDrawingDataGeneratorModule() {
   );
 }
 
-function buildDebugProfileViewer(watch: boolean) {
+function buildDebugProfileViewer(watch) {
   const srcDir = './src/ex_profileViewer';
   const distDir = `./dist_ex/profile-viewer`;
   fs.mkdirSync(distDir, { recursive: true });
@@ -146,7 +145,7 @@ function buildDebugProfileViewer(watch: boolean) {
   }
 }
 
-function buildDebugFirmwareStatsPage(watch: boolean) {
+function buildDebugFirmwareStatsPage(watch) {
   const srcDir = './src/ex_firmwareListPage';
   const distDir = `./dist_ex/firmware-stats`;
   fs.mkdirSync(distDir, { recursive: true });

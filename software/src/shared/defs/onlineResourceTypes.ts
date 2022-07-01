@@ -1,23 +1,18 @@
 import { IFirmwareTargetDevice } from './domainTypes';
 
-export interface IKrsRemoteProjectResourceInfoSource {
-  projectId: string;
-  projectPath: string;
-  keyboardName: string;
-  layoutNames: string[];
-  presetNames: string[];
-  firmwares: {
-    variationName: string;
-    targetDevice: IFirmwareTargetDevice;
-    binaryFileName: string;
-    buildRevision: number;
-    buildTimestamp: string;
-    romUsage: number;
-    ramUsage: number;
-  }[];
+export interface IKrsFirmwareItemSource {
+  firmwareId: string;
+  firmwareProjectPath: string;
+  variationName: string;
+  targetDevice: IFirmwareTargetDevice;
+  buildResult: 'success' | 'failure';
+  firmwareFileName: string;
+  metadataFileName: string;
+  releaseBuildRevision: number;
+  buildTimestamp: string;
 }
 
-export interface IKrsSummaryJsonData {
+export interface IKrsFirmwaresSummaryJsonData {
   info: {
     buildStats: {
       numSuccess: number;
@@ -31,5 +26,5 @@ export interface IKrsSummaryJsonData {
     updateAt: string;
     filesRevision: number;
   };
-  projects: IKrsRemoteProjectResourceInfoSource[];
+  firmwares: IKrsFirmwareItemSource[];
 }

@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { kmsColors } from '~/ex_profileViewer/KmsColors';
+import { kmsColors } from '~/ex_profileViewer/kmsColors';
 import { withStopPropagation } from '~/ui/utils';
 
 type Props = {
@@ -36,7 +36,7 @@ export const KmsPresetLayerItem: FC<Props> = ({
   onClick,
 }) => (
   <div
-    css={style}
+    class={style}
     onClick={withStopPropagation(onClick)}
     data-active={isActive}
   >
