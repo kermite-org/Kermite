@@ -8,9 +8,22 @@ const servor = require('servor');
 const [opts] = cliopts.parse(
   ['x-mockview', 'start mockview'],
   ['x-web', 'start web'],
+  ['x-build-profile-drawing-generator', 'build outward modules'],
+  ['x-debug-profile-viewer', 'debug profile viewer'],
+  ['x-build-profile-viewer', 'build profile viewer'],
+  ['x-debug-firmware-stats-page', 'debug firmware stats page'],
+  ['x-build-firmware-stats-page', 'build firmware stats page'],
 );
+
 const reqMockView = opts['x-mockview'];
 const reqWeb = opts['x-web'];
+const reqBuildProfileDrawingDataGenerator =
+  opts['x-build-profile-drawing-generator'];
+
+const reqDebugProfileViewer = opts['x-debug-profile-viewer'];
+const reqBuildProfileViewer = opts['x-build-profile-viewer'];
+const reqDebugFirmwareStatsPage = opts['x-debug-firmware-stats-page'];
+const reqBuildFirmwareStatsPage = opts['x-build-firmware-stats-page'];
 
 type IKeyPressEvent = {
   sequence: string;
@@ -49,6 +62,16 @@ function launchDebugServer(distDir: string) {
   })();
 }
 
+function patchOutputIndexHtmlBundleImport(htmlFilPath: string) {
+  const text = fs.readFileSync(htmlFilPath, { encoding: 'utf-8' });
+  const tt = Date.now().toString();
+  const modText = text.replace(
+    '<script src="./index.js"></script>',
+    `<script src="./index.js?${tt}"></script>`,
+  );
+  fs.writeFileSync(htmlFilPath, modText, { encoding: 'utf-8' });
+}
+
 function startWatchPage(folderName: string) {
   const srcDir = `./src/${folderName}`;
   const distDir = `./dist/${folderName}`;
@@ -73,12 +96,115 @@ function startWatchPage(folderName: string) {
   launchDebugServer(distDir);
 }
 
-function entry() {
+async function makeProfileDrawingDataGeneratorModule() {
+  const srcDir = './src/ex_profileDrawingDataGenerator';
+  const distDir = `./dist_ex`;
+  fs.mkdirSync(distDir, { recursive: true });
+
+  return await new Promise((resolve) =>
+    build({
+      entry: `${srcDir}/index.ts`,
+      outfile: `${distDir}/kermite_profile_drawing_data_generator.js`,
+      define: {
+        'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+      },
+      bundle: true,
+      minify: false,
+      watch: false,
+      clear: false,
+      tslint: false,
+      sourcemap: false,
+      onEnd: resolve,
+    }),
+  );
+}
+
+function buildDebugProfileViewer(watch: boolean) {
+  const srcDir = './src/ex_profileViewer';
+  const distDir = `./dist_ex/profile-viewer`;
+  fs.mkdirSync(distDir, { recursive: true });
+  fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
+  patchOutputIndexHtmlBundleImport(`${distDir}/index.html`);
+
+  build({
+    entry: `${srcDir}/index.tsx`,
+    outfile: `${distDir}/index.js`,
+    define: {
+      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+    },
+    bundle: true,
+    minify: false,
+    watch,
+    clear: false,
+    tslint: false,
+    sourcemap: true,
+    sourcesContent: true,
+  });
+
+  if (watch) {
+    launchDebugServer(distDir);
+  }
+}
+
+function buildDebugFirmwareStatsPage(watch: boolean) {
+  const srcDir = './src/ex_firmwareListPage';
+  const distDir = `./dist_ex/firmware-stats`;
+  fs.mkdirSync(distDir, { recursive: true });
+  fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
+  patchOutputIndexHtmlBundleImport(`${distDir}/index.html`);
+
+  build({
+    entry: `${srcDir}/index.tsx`,
+    outfile: `${distDir}/index.js`,
+    define: {
+      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+    },
+    bundle: true,
+    minify: false,
+    watch,
+    clear: false,
+    tslint: false,
+    sourcemap: true,
+    sourcesContent: true,
+  });
+
+  if (watch) {
+    launchDebugServer(distDir);
+  }
+}
+
+async function entry() {
   if (reqMockView) {
     startWatchPage('ui-mock-view');
+    return;
   }
   if (reqWeb) {
     startWatchPage('web');
+    return;
+  }
+
+  if (reqDebugProfileViewer) {
+    buildDebugProfileViewer(true);
+    return;
+  }
+
+  if (reqBuildProfileViewer) {
+    buildDebugProfileViewer(false);
+    return;
+  }
+
+  if (reqDebugFirmwareStatsPage) {
+    buildDebugFirmwareStatsPage(true);
+    return;
+  }
+
+  if (reqBuildFirmwareStatsPage) {
+    buildDebugFirmwareStatsPage(false);
+    return;
+  }
+
+  if (reqBuildProfileDrawingDataGenerator) {
+    await makeProfileDrawingDataGeneratorModule();
   }
 }
 

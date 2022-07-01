@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".."
+  },
+  "include": [
+    "./**/*",
+    "../qx/**/*",
+    "../shared/**/*",
+    "../shell/**/*",
+    "../ui/common/**/*",
+    "../ui/common-svg/**/*"
+  ]
+}
