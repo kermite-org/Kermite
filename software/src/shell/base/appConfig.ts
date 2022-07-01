@@ -10,7 +10,7 @@ export const processEnv = (import.meta as any).env as IProcessEnv;
 // console.log({ processEnv });
 
 export const appConfig = {
-  applicationVersion: 'v220629a',
+  applicationVersion: 'v220701_1547',
   isDevelopment: processEnv.NODE_ENV === 'development',
   // isDevelopment: location.host === 'localhost',
   // applicationVersion: app.getVersion(),
@@ -19,8 +19,8 @@ export const appConfig = {
   pageTitle: 'Kermite',
   initialPageWidth: 1280,
   initialPageHeight: 800,
-  onlineResourcesBaseUrl: 'https://app.kermite.org/krs/resources2',
-  kermiteServerUrl: 'https://dev.server.kermite.org',
+  onlineResourcesBaseUrl: 'https://assets.kermite.org/krs/resources2',
+  kermiteServerUrl: 'https://server.kermite.org',
   useDebugLocalFirmwares: !!processEnv.FE_USE_DEBUG_LOCAL_FIRMWARES,
 };
 if (processEnv.FE_USE_KERMITE_SERVER_LOCAL) {

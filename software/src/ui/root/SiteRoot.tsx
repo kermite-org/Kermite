@@ -1,4 +1,5 @@
-import { jsx, applyGlobalStyle, css, useEffect, FC } from 'alumina';
+import { jsx, applyGlobalStyle, css, useEffect, FC, useMemo } from 'alumina';
+import { getSearchQueryObject } from '~/shared';
 import { router, globalHintMouseMoveHandlerEffect, appUi } from '~/ui/base';
 import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
@@ -62,8 +63,12 @@ const cssSiteRoot = css`
 `;
 
 const AppView: FC = () => {
+  const queries = useMemo(getSearchQueryObject, []);
+  const isEditorDemoMode = !!queries.editor_demo;
   const isWidgetMode = uiReaders.pagePath === '/widget';
-  if (isWidgetMode) {
+  if (isEditorDemoMode) {
+    return <WidgetZoneRoot />;
+  } else if (isWidgetMode) {
     return <WidgetZoneRoot />;
   } else {
     return <ConfiguratorZoneRoot />;

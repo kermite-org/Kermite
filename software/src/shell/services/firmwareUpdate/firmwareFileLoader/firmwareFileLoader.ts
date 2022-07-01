@@ -24,7 +24,7 @@ import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpda
 import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
 
 const config = {
-  remoteBaseUrl: 'https://app.kermite.org/krs/resources2',
+  remoteBaseUrl: 'https://assets.kermite.org/krs/resources2',
 };
 
 type IFirmwareFetchResult = { fileName: string; data: Uint8Array };
