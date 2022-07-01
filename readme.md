@@ -52,11 +52,11 @@ Access https://app.kermite.org to get started. Follow the wizard on the top scre
 Specification has been changed drastically, from a desktop app with Electron to a web app running in a browser. The desktop app is no longer offered and only the browser version will be developed/maintained from now on; AVR is difficult to maintain compatibility with and only RP2040 MCU is supported.
 
 ## Others
-[KermiteServer](https://dev.server.kermite.org/) A server to post profiles. (Under test operation)
+[KermiteServer](https://server.kermite.org/) A server to post profiles. (Under test operation)
 
-[Firmwave Build Status](https://app.kermite.org/firmware-stats/) Build status of supported firmware.
+[Firmwave Build Status](https://assets.kermite.org/firmware-stats/) Build status of supported firmware.
 
-[Project Id Generator](https://app.kermite.org/krs/generator/) A generator for ProjectId, which is required when creating a custom firmware.
+[Project Id Generator](https://assets.kermite.org/krs/generator/) A generator for ProjectId, which is required when creating a custom firmware.
 
 ## Contact
 https://discord.gg/PNpEn3Z2kT

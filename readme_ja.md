@@ -56,11 +56,11 @@ https://app.kermite.org
 2022/06
 構成を大幅に変更し、Electronによるデスクトップアプリから、ブラウザで動作するWebアプリになりました。デスクトップアプリは提供を終了し、今後はブラウザ版のみを開発/保守していきます。AVRは互換性を維持するのが難しく、対応MCUはRP2040のみとなっています。
 ## その他
-[KermiteServer](https://dev.server.kermite.org/) プロファイルを投稿できるサーバーです。(試験運用中)
+[KermiteServer](https://server.kermite.org/) プロファイルを投稿できるサーバーです。(試験運用中)
 
-[Firmwave Build Status](https://app.kermite.org/firmware-stats/) 対応ファームウェアのビルド状況です
+[Firmwave Build Status](https://assets.kermite.org/firmware-stats/) 対応ファームウェアのビルド状況です
 
-[Project Id Generator](https://app.kermite.org/krs/generator/) カスタムファームウェアを新しく作る際に必要なProjectIdのジェネレータです
+[Project Id Generator](https://assets.kermite.org/krs/generator/) カスタムファームウェアを新しく作る際に必要なProjectIdのジェネレータです
 
 ## 連絡先
 https://discord.gg/PNpEn3Z2kT
