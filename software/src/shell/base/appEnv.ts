@@ -3,7 +3,7 @@ import { pathJoin } from '~/shell/funcs';
 import { processEnv } from './appConfig';
 
 export const appEnv = new (class {
-  isDevelopment = processEnv.NODE_ENV === 'development';
+  isDevelopment = processEnv.DEV;
   // isDevelopment = location.host === 'localhost';
 
   // platform = process.platform;

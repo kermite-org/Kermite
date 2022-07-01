@@ -3,7 +3,7 @@ import {
   IDeviceSelectionStatus,
   IntervalTimerWrapper,
 } from '~/shared';
-import { applicationStorage } from '~/shell/base';
+import { appEnv, applicationStorage } from '~/shell/base';
 import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfosWebHid,
@@ -159,7 +159,19 @@ export class DeviceSelectionManager {
       console.log(`[WARN] WebHID is not supported`);
       return;
     }
-    this.updateEnumeration();
+
+    try {
+      await this.updateEnumeration();
+    } catch (error) {
+      if (appEnv.isDevelopment) {
+        console.log(`error on WebHID first enumeration`);
+        console.log(error);
+        return;
+      } else {
+        throw error;
+      }
+    }
+
     await this.restoreConnection();
     this.timerWrapper.start(this.updateEnumeration, 2000);
   }
