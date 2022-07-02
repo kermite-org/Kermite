@@ -4,6 +4,7 @@ import {
   copyObjectProps,
   duplicateObjectByJsonStringifyParse,
   fallbackProfileData,
+  featureConfig,
   getDisplayKeyboardDesignSingleCached,
   IAssignEntry,
   IAssignEntryWithLayerFallback,
@@ -209,7 +210,9 @@ const actions = {
 
   setCurrentKeyUnitId(keyUnitId: string) {
     state.currentKeyUnitId = keyUnitId;
-    state.dualModeEditTargetOperationSig = 'pri';
+    if (featureConfig.selectPrimarySlotOnKeySelectionChange) {
+      state.dualModeEditTargetOperationSig = 'pri';
+    }
   },
 
   setDualModeEditTargetOperationSig(sig: IDualModeEditTargetOperationSig) {
