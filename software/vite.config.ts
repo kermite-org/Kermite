@@ -33,6 +33,7 @@ export default async ({ mode }) => {
       EnvironmentPlugin({
         FE_USE_KERMITE_SERVER_LOCAL: null,
         FE_USE_DEBUG_LOCAL_FIRMWARES: null,
+        FE_DEBUG_SUPPRESS_ERROR_DIALOG: null,
       }),
     ],
     // avoid 'Buffer is not defined' exception raised when reading error.stack
