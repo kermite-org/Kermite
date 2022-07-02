@@ -162,6 +162,7 @@ export interface IKeyboardDeviceInfo {
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';
+  lastConnectedDevicePath: string | undefined;
 }
 
 export interface IKeyboardDeviceAttributes {
