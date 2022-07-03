@@ -46,14 +46,15 @@ export function createProfileSelectionMenuItems(
       text: texts.assignerMenu.importFromFile,
       hint: texts.assignerMenuHint.importFromFile,
       handler: vm.handleImportFromFile,
-      hidden: !uiReaders.isDeveloperMode,
+      // hidden: !uiReaders.isDeveloperMode,
     },
     {
       type: 'menuEntry',
       text: texts.assignerMenu.exportToFile,
       hint: texts.assignerMenuHint.exportToFile,
       handler: vm.handleExportToFile,
-      hidden: !(uiReaders.isDeveloperMode && vm.isEditProfileAvailable),
+      // hidden: !(uiReaders.isDeveloperMode && vm.isEditProfileAvailable),
+      hidden: !vm.isEditProfileAvailable,
     },
     { type: 'separator' },
     {
