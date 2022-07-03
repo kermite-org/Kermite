@@ -1,4 +1,4 @@
-import { PinName } from '@/_CoreDefinitions';
+import { PinName } from '@/coreDefinitions';
 
 export const PinNameToPinNumberMap: Record<PinName, number> = {
   GP0: 0,
