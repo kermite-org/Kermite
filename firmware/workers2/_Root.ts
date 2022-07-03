@@ -1,5 +1,5 @@
-import { serializeCustomKeyboardSpec } from '@/CustomKeyboardDataSerializer';
-import { keyboardSpec_km60, keyboardSpec_mp2105 } from '@/KeyboardVariants';
+import { serializeCustomKeyboardSpec } from '@/_CustomKeyboardDataSerializer';
+import { keyboardSpec_km60, keyboardSpec_mp2105 } from '@/_KeyboardVariants';
 import * as fs from 'fs';
 
 function compareArray(ar1: number[], ar2: number[]): boolean {

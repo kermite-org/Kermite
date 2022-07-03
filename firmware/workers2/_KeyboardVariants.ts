@@ -1,4 +1,4 @@
-import { IKermiteStandardKeyboaredSpec } from '@/CoreDefinitions';
+import { IKermiteStandardKeyboaredSpec } from '@/_CoreDefinitions';
 
 export const keyboardSpec_mp2105: IKermiteStandardKeyboaredSpec = {
   baseFirmwareType: 'RpUnified',
