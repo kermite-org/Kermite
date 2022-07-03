@@ -220,6 +220,7 @@ export type IProfileEditSource =
     }
   | {
       type: 'ProfileNewlyCreated';
+      sourceProfileName?: string;
     }
   | {
       type: 'InternalProfile';

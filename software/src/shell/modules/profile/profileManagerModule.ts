@@ -86,14 +86,17 @@ export const profileManagerModule = createCoreModule({
     if (!profileData) {
       throw new Error('failed to load profile');
     }
+    const sourceProfileName =
+      presetSpec.type === 'preset' ? presetSpec.presetName : undefined;
+
     commitCoreState({
-      profileEditSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated', sourceProfileName },
       loadedProfileData: profileData,
     });
   },
-  profile_createProfileExternal({ profileData }) {
+  profile_createProfileExternal({ profileData, sourceProfileName }) {
     commitCoreState({
-      profileEditSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated', sourceProfileName },
       loadedProfileData: profileData,
     });
   },

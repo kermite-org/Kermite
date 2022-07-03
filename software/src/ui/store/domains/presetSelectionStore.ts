@@ -299,8 +299,16 @@ function createPresetSelectionStore(): IPresetSelectionStore {
 
   const actions: IActions = {
     async createProfile() {
+      const { presetType, presetSignifier } = helpers.decodePresetKey(
+        state.currentPresetKey,
+      );
+      const sourceProfileName =
+        (presetType === 'projectProfile' && presetSignifier) || undefined;
       await dispatchCoreAction({
-        profile_createProfileExternal: { profileData: state.loadedProfileData },
+        profile_createProfileExternal: {
+          profileData: state.loadedProfileData,
+          sourceProfileName,
+        },
       });
       uiActions.navigateTo('/assigner');
     },

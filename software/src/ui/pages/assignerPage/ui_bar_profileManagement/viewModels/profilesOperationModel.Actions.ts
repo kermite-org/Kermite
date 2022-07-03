@@ -102,12 +102,18 @@ const deleteProfile = async () => {
 };
 
 const handleSaveUnsavedProfile = async () => {
-  if (profilesReader.profileEditSource.type !== 'InternalProfile') {
+  const { profileEditSource } = profilesReader;
+  if (profileEditSource.type !== 'InternalProfile') {
     const projectId = assignerModel.profileData.projectId;
+
+    const defaultSavingName =
+      (profileEditSource.type === 'ProfileNewlyCreated' &&
+        profileEditSource.sourceProfileName) ||
+      '';
     const newProfileName = await inputNewProfileName(
       texts.assignerProfileNameEditModal.modalTitleSave,
       projectId,
-      '',
+      defaultSavingName,
     );
     if (newProfileName !== undefined) {
       profilesActions.saveUnsavedProfileAs(newProfileName);

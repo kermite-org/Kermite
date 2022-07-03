@@ -131,7 +131,10 @@ export type ICoreAction = Partial<{
     targetProjectId: string;
     presetSpec: IPresetSpec;
   };
-  profile_createProfileExternal: { profileData: IProfileData };
+  profile_createProfileExternal: {
+    profileData: IProfileData;
+    sourceProfileName?: string;
+  };
   profile_createProfileFromLayout: {
     projectId: string;
     layout: IPersistKeyboardDesign;
