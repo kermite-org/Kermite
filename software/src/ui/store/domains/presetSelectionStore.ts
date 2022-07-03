@@ -41,6 +41,7 @@ type IPresetItem = {
 type IUserProfileItem = {
   presetKey: string; // userProfile#${profileId}
   presetType: 'userProfile';
+  profileGuid: string;
   profileName: string;
   userName: string;
   profileData: IProfileData;
@@ -116,6 +117,7 @@ const helpers = {
   createUserProfileItem(profile: IServerProfileInfo): IUserProfileItem {
     return {
       presetKey: helpers.createPresetKey('userProfile', profile.id),
+      profileGuid: profile.id,
       presetType: 'userProfile',
       profileName: profile.profileName,
       userName: profile.userName,
@@ -302,8 +304,15 @@ function createPresetSelectionStore(): IPresetSelectionStore {
       const { presetType, presetSignifier } = helpers.decodePresetKey(
         state.currentPresetKey,
       );
-      const sourceProfileName =
-        (presetType === 'projectProfile' && presetSignifier) || undefined;
+      let sourceProfileName: string | undefined;
+      if (presetType === 'projectProfile') {
+        sourceProfileName = presetSignifier;
+      } else if (presetType === 'userProfile') {
+        const item = state.userProfileItems.find(
+          (it) => it.presetKey === state.currentPresetKey,
+        );
+        sourceProfileName = item?.profileName;
+      }
       await dispatchCoreAction({
         profile_createProfileExternal: {
           profileData: state.loadedProfileData,
