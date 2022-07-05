@@ -5,7 +5,7 @@
   "private": "true",
   "scripts": {
     "prepare": "cd .. && make standard:rp:build",
-    "build": "ts-node -r tsconfig-paths/register Root.ts",
+    "build": "ts-node -r tsconfig-paths/register root.ts",
     "flash": "cd .. && make standard:rp:flash_patched_uf2"
   },
   "dependencies": {

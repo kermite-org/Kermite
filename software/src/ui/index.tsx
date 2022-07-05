@@ -17,14 +17,20 @@ function start() {
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));
 
-  window.addEventListener('beforeunload', () => {
+  const unloadHandler = () => {
     render(() => <div />, appDiv);
     if (appUi.skipPageTerminationTasks) {
       return;
     }
     uiSettingsPersistence.finalize();
     appRoot.terminate();
-  });
+  };
+
+  if (window.parent) {
+    window.addEventListener('unload', unloadHandler);
+  } else {
+    window.addEventListener('beforeunload', unloadHandler);
+  }
 }
 
 window.addEventListener('load', start);
