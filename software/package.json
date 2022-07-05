@@ -12,7 +12,7 @@
   "scripts": {
     "start0": "ts-node build.ts -x-watch -x-exec",
     "start0:dev": "cross-env NODE_ENV=development ts-node build.ts -x-watch -x-exec",
-    "start": "vite",
+    "start": "cross-env NODE_ENV=development vite",
     "build": "tsc && vite build",
     "build0": "cross-env NODE_ENV=production ts-node build.ts -x-build",
     "mockview": "cross-env NODE_ENV=development ts-node build2.ts -x-mockview",
@@ -42,6 +42,7 @@
     "@typescript-eslint/parser": "^5.29.0",
     "alumina-visor": "^0.1.6",
     "cross-env": "^7.0.3",
+    "devcert": "^1.2.2",
     "dotenv": "^16.0.1",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",

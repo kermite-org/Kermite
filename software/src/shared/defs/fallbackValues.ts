@@ -67,4 +67,5 @@ export const fallbackKeyboardDeviceInfo: IKeyboardDeviceInfo = {
 export const fallbackDeviceSelectionStatus: IDeviceSelectionStatus = {
   allDeviceInfos: [],
   currentDevicePath: 'none',
+  lastConnectedDevicePath: undefined,
 };

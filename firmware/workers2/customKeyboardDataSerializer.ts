@@ -1,6 +1,6 @@
-import { IKermiteStandardKeyboaredSpec, PinName } from '@/CoreDefinitions';
-import { PinNameToPinNumberMap } from '@/DataTables';
-import { convertArrayElementsToBytes, padByteArray } from '@/Helpers';
+import { IKermiteStandardKeyboaredSpec, PinName } from '@/coreDefinitions';
+import { PinNameToPinNumberMap } from '@/dataTables';
+import { convertArrayElementsToBytes, padByteArray } from '@/helpers';
 
 function mapPinNameToPinNumber(pinName: PinName): number {
   const pinNumber = PinNameToPinNumberMap[pinName];

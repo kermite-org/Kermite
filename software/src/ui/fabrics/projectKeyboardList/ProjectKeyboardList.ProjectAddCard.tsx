@@ -1,5 +1,6 @@
 import { css, FC, jsx, useEffect, useRef } from 'alumina';
 import { fileExtensions, IFileReadHandle } from '~/shared';
+import { appUi } from '~/ui/base';
 import { Icon, modalError } from '~/ui/components';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
@@ -29,8 +30,10 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
 
     const onDrop = async (e: DragEvent) => {
       e.preventDefault();
+      baseDiv.classList.remove('--drop-hover');
       const file = e.dataTransfer?.files[0];
       if (file) {
+        appUi.rerender();
         const fileName = file.name;
         if (!fileName.endsWith(fileExtensions.package)) {
           await modalError(
@@ -41,7 +44,6 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
         const contentText = await file.text();
         onFileDrop({ fileName, contentText });
       }
-      baseDiv.classList.remove('--drop-hover');
     };
 
     baseDiv.addEventListener('dragover', onDragOver);

@@ -44,11 +44,6 @@ function makeProfileNameSelectorOption(
 
 const selectorValueNewlyCreated = '__PROFILE_NEWLY_CREATED__';
 
-const selectorOptionNewlyCreated: ISelectorOption = {
-  label: '(untitled)',
-  value: selectorValueNewlyCreated,
-};
-
 function makeProfileSelectionSource(
   visibleProfileEntries: IProfileEntry[],
   profileEditSource: IProfileEditSource,
@@ -64,8 +59,12 @@ function makeProfileSelectionSource(
   };
 
   if (profileEditSource.type === 'ProfileNewlyCreated') {
+    const firstOption: ISelectorOption = {
+      label: `(new) ${profileEditSource.sourceProfileName || 'untitled'}`,
+      value: selectorValueNewlyCreated,
+    };
     return {
-      options: [selectorOptionNewlyCreated, ...optionsBase],
+      options: [firstOption, ...optionsBase],
       value: selectorValueNewlyCreated,
       setValue,
     };

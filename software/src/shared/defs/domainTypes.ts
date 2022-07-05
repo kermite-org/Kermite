@@ -162,6 +162,7 @@ export interface IKeyboardDeviceInfo {
 export interface IDeviceSelectionStatus {
   allDeviceInfos: IKeyboardDeviceInfo[];
   currentDevicePath: string | 'none';
+  lastConnectedDevicePath: string | undefined;
 }
 
 export interface IKeyboardDeviceAttributes {
@@ -219,6 +220,7 @@ export type IProfileEditSource =
     }
   | {
       type: 'ProfileNewlyCreated';
+      sourceProfileName?: string;
     }
   | {
       type: 'InternalProfile';

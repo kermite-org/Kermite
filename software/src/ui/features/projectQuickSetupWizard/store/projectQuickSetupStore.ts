@@ -22,10 +22,6 @@ import { StandardFirmwareEditor_ExposedModel } from '~/ui/featureEditors';
 import { projectQuickSetupStoreHelpers } from '~/ui/features/projectQuickSetupWizard/store/projectQuickSetupStoreHelpers';
 import { dispatchCoreAction, globalSettingsWriter, uiState } from '~/ui/store';
 
-const constants = {
-  firmwareName: 'default',
-};
-
 type IState = {
   projectId: string;
   keyboardName: string;
@@ -69,7 +65,6 @@ const readers = {
     );
   },
   emitDraftProjectInfo(): IProjectPackageInfo {
-    const { firmwareName } = constants;
     const {
       projectId,
       keyboardName,
@@ -87,12 +82,12 @@ const readers = {
     });
     const firmwareEntry: IStandardFirmwareEntry = {
       type: 'standard',
-      firmwareName,
+      firmwareName: 'main',
       variationId,
       standardFirmwareConfig: firmwareConfig,
     };
     const layoutEntry: IProjectLayoutEntry = {
-      layoutName: 'default',
+      layoutName: 'main',
       data: layout,
     };
     projectInfo.firmwares.push(firmwareEntry);
@@ -151,7 +146,7 @@ const actions = {
       profile_createProfileUnnamed: {
         targetProjectOrigin: 'local',
         targetProjectId: projectId,
-        presetSpec: { type: 'blank', layoutName: 'default' },
+        presetSpec: { type: 'blank', layoutName: 'main' },
       },
     });
   },
@@ -219,7 +214,6 @@ const effects = {
 };
 
 export const projectQuickSetupStore = {
-  constants,
   state,
   readers,
   actions,
