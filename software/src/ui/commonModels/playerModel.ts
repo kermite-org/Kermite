@@ -17,7 +17,10 @@ import {
 } from '~/shared';
 import { ipcAgent } from '~/ui/base';
 import { ILayerStackItem, IPlayerModel } from '~/ui/commonModels/interfaces';
-import { useRoutingChannelModel } from '~/ui/commonModels/parameterBasedModeModels';
+import {
+  useRoutingChannelModel,
+  useSystemLayoutModel,
+} from '~/ui/commonModels/parameterBasedModeModels';
 
 function translateKeyIndexToKeyUnitId(
   keyIndex: number,
@@ -104,13 +107,35 @@ function translateKeyInputOperation(
   return op;
 }
 
+type IVirtualKeyShiftTable = { [vk in VirtualKey]?: VirtualKey };
+
+function applyAssignOperationShift(
+  op: IAssignOperationKeyInput,
+  shiftHold: boolean,
+  virtualKeyShiftTable: IVirtualKeyShiftTable,
+): IAssignOperationKeyInput {
+  if (shiftHold) {
+    const modVirtualKey = virtualKeyShiftTable[op.virtualKey];
+    if (modVirtualKey) {
+      return {
+        ...op,
+        virtualKey: modVirtualKey,
+      };
+    }
+  }
+  return op;
+}
+
 function applyOperationRouting(
   op: IAssignOperation | undefined,
   profile: IProfileData,
   routingChannel: number,
+  shiftHold: boolean,
+  virtualKeyShiftTable: IVirtualKeyShiftTable,
 ): IAssignOperation | undefined {
   if (op?.type === 'keyInput') {
-    return translateKeyInputOperation(op, profile, routingChannel);
+    const op2 = applyAssignOperationShift(op, shiftHold, virtualKeyShiftTable);
+    return translateKeyInputOperation(op2, profile, routingChannel);
   }
   return op;
 }
@@ -119,11 +144,19 @@ function applyAssignRouting(
   assign: IAssignEntry,
   profile: IProfileData,
   routingChannel: number,
+  shiftHold: boolean,
+  virtualKeyShiftTable: IVirtualKeyShiftTable,
 ): IAssignEntry {
   if (assign.type === 'single') {
     return {
       ...assign,
-      op: applyOperationRouting(assign.op, profile, routingChannel),
+      op: applyOperationRouting(
+        assign.op,
+        profile,
+        routingChannel,
+        shiftHold,
+        virtualKeyShiftTable,
+      ),
     };
   } else if (assign.type === 'dual') {
     return {
@@ -132,16 +165,22 @@ function applyAssignRouting(
         assign.primaryOp,
         profile,
         routingChannel,
+        shiftHold,
+        virtualKeyShiftTable,
       ),
       secondaryOp: applyOperationRouting(
         assign.secondaryOp,
         profile,
         routingChannel,
+        shiftHold,
+        virtualKeyShiftTable,
       ),
       tertiaryOp: applyOperationRouting(
         assign.tertiaryOp,
         profile,
         routingChannel,
+        shiftHold,
+        virtualKeyShiftTable,
       ),
     };
   }
@@ -153,6 +192,8 @@ function getDynamicKeyAssign(
   layerStateFlags: number,
   keyUnitId: string,
   routingChannel: number,
+  shiftHold: boolean,
+  virtualKeyShiftTable: IVirtualKeyShiftTable,
 ): IAssignEntry | undefined {
   const { layers } = profileData;
   for (let i = layers.length - 1; i >= 0; i--) {
@@ -170,7 +211,13 @@ function getDynamicKeyAssign(
         return undefined;
       }
       if (assign) {
-        return applyAssignRouting(assign, profileData, routingChannel);
+        return applyAssignRouting(
+          assign,
+          profileData,
+          routingChannel,
+          shiftHold,
+          virtualKeyShiftTable,
+        );
       }
     }
   }
@@ -227,6 +274,8 @@ const handleKeyEvents = (ev: IRealtimeKeyboardEvent, local: ILocalState) => {
         local.layerStateFlags,
         keyUnitId,
         local.routingChannel,
+        false,
+        {},
       );
       if (isAssignShift(assign)) {
         local.plainShiftPressed = isDown;
@@ -238,6 +287,53 @@ const handleKeyEvents = (ev: IRealtimeKeyboardEvent, local: ILocalState) => {
 };
 
 // ----------------------------------------------------------------------
+
+const virtualKeyShiftTableUs: { [vk in VirtualKey]?: VirtualKey } = {
+  K_Num_1: 'K_Exclamation',
+  K_Num_2: 'K_AtMark',
+  K_Num_3: 'K_Sharp',
+  K_Num_4: 'K_Dollar',
+  K_Num_5: 'K_Percent',
+  K_Num_6: 'K_Hat',
+  K_Num_7: 'K_Ampersand',
+  K_Num_8: 'K_Asterisk',
+  K_Num_9: 'K_LeftParenthesis',
+  K_Num_0: 'K_RightParenthesis',
+  K_Minus: 'K_Underscore',
+  K_Equal: 'K_Plus',
+  K_LeftSquareBracket: 'K_LeftCurlyBrace',
+  K_RightSquareBracket: 'K_RightCurlyBrace',
+  K_BackSlash: 'K_VerticalBar',
+  K_Semicolon: 'K_Colon',
+  K_SingleQuote: 'K_DoubleQuote',
+  K_Comma: 'K_LessThan',
+  K_Dot: 'K_GreaterThan',
+  K_Slash: 'K_Question',
+};
+
+const virtualKeyShiftTableJis: { [vk in VirtualKey]?: VirtualKey } = {
+  K_Num_1: 'K_Exclamation',
+  K_Num_2: 'K_DoubleQuote',
+  K_Num_3: 'K_Sharp',
+  K_Num_4: 'K_Dollar',
+  K_Num_5: 'K_Percent',
+  K_Num_6: 'K_Ampersand',
+  K_Num_7: 'K_SingleQuote',
+  K_Num_8: 'K_LeftParenthesis',
+  K_Num_9: 'K_RightParenthesis',
+  K_Minus: 'K_Equal',
+  K_Hat: 'K_Tilde',
+  K_Yen: 'K_VerticalBar',
+  K_AtMark: 'K_BackQuote',
+  K_LeftSquareBracket: 'K_LeftCurlyBrace',
+  K_Semicolon: 'K_Plus',
+  K_Colon: 'K_Asterisk',
+  K_RightSquareBracket: 'K_RightCurlyBrace',
+  K_Comma: 'K_LessThan',
+  K_Dot: 'K_GreaterThan',
+  K_Slash: 'K_Question',
+  K_BackSlash: 'K_Underscore',
+};
 
 function createLocalState(): ILocalState {
   return {
@@ -261,6 +357,7 @@ export function usePlayerModel(): IPlayerModel {
     [],
   );
   const { routingChannel } = useRoutingChannelModel();
+  const { systemLayoutIndex } = useSystemLayoutModel();
   local.routingChannel = routingChannel;
   const {
     keyStates,
@@ -271,6 +368,10 @@ export function usePlayerModel(): IPlayerModel {
     plainShiftPressed,
   } = local;
   const { layers, settings } = profileData;
+  const shiftHold = checkShiftHold(layers, layerStateFlags, plainShiftPressed);
+  const virtualKeyShiftTable =
+    systemLayoutIndex === 0 ? virtualKeyShiftTableUs : virtualKeyShiftTableJis;
+
   return {
     holdKeyIndices,
     keyStates,
@@ -278,13 +379,15 @@ export function usePlayerModel(): IPlayerModel {
     profileSettings: settings,
     displayDesign,
     layerStackItems: makeLayerStackItems(layers, layerStateFlags),
-    shiftHold: checkShiftHold(layers, layerStateFlags, plainShiftPressed),
+    shiftHold,
     getDynamicKeyAssign: (keyUnitId: string) =>
       getDynamicKeyAssign(
         profileData,
         layerStateFlags,
         keyUnitId,
         routingChannel,
+        shiftHold,
+        virtualKeyShiftTable,
       ),
     setProfileData: (profile: IProfileData) => setProfileData(profile, local),
   };
