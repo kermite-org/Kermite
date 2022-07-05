@@ -35,6 +35,11 @@ const cssGlobal = css`
     font-family: 'Roboto', 'Kosugi', sans-serif;
   }
 
+  input,
+  textarea {
+    font-family: 'Roboto', 'Kosugi', sans-serif;
+  }
+
   body {
     overflow: hidden;
     user-select: none;
