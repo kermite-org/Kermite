@@ -111,9 +111,19 @@ type IVirtualKeyShiftTable = { [vk in VirtualKey]?: VirtualKey };
 
 function applyAssignOperationShift(
   op: IAssignOperationKeyInput,
+  profile: IProfileData,
   shiftHold: boolean,
   virtualKeyShiftTable: IVirtualKeyShiftTable,
+  layerIndex: number,
 ): IAssignOperationKeyInput {
+  if (profile.settings.shiftCancelMode === 'all') {
+    return op;
+  }
+  const layer = profile.layers[layerIndex];
+  const isShiftLayer = (layer.attachedModifiers & 0b0010) > 0;
+  if (profile.settings.shiftCancelMode === 'shiftLayer' && isShiftLayer) {
+    return op;
+  }
   if (shiftHold) {
     const modVirtualKey = virtualKeyShiftTable[op.virtualKey];
     if (modVirtualKey) {
@@ -132,9 +142,16 @@ function applyOperationRouting(
   routingChannel: number,
   shiftHold: boolean,
   virtualKeyShiftTable: IVirtualKeyShiftTable,
+  layerIndex: number,
 ): IAssignOperation | undefined {
   if (op?.type === 'keyInput') {
-    const op2 = applyAssignOperationShift(op, shiftHold, virtualKeyShiftTable);
+    const op2 = applyAssignOperationShift(
+      op,
+      profile,
+      shiftHold,
+      virtualKeyShiftTable,
+      layerIndex,
+    );
     return translateKeyInputOperation(op2, profile, routingChannel);
   }
   return op;
@@ -146,6 +163,7 @@ function applyAssignRouting(
   routingChannel: number,
   shiftHold: boolean,
   virtualKeyShiftTable: IVirtualKeyShiftTable,
+  layerIndex: number,
 ): IAssignEntry {
   if (assign.type === 'single') {
     return {
@@ -156,6 +174,7 @@ function applyAssignRouting(
         routingChannel,
         shiftHold,
         virtualKeyShiftTable,
+        layerIndex,
       ),
     };
   } else if (assign.type === 'dual') {
@@ -167,6 +186,7 @@ function applyAssignRouting(
         routingChannel,
         shiftHold,
         virtualKeyShiftTable,
+        layerIndex,
       ),
       secondaryOp: applyOperationRouting(
         assign.secondaryOp,
@@ -174,6 +194,7 @@ function applyAssignRouting(
         routingChannel,
         shiftHold,
         virtualKeyShiftTable,
+        layerIndex,
       ),
       tertiaryOp: applyOperationRouting(
         assign.tertiaryOp,
@@ -181,6 +202,7 @@ function applyAssignRouting(
         routingChannel,
         shiftHold,
         virtualKeyShiftTable,
+        layerIndex,
       ),
     };
   }
@@ -217,6 +239,7 @@ function getDynamicKeyAssign(
           routingChannel,
           shiftHold,
           virtualKeyShiftTable,
+          i,
         );
       }
     }
