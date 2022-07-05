@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs');
 const readline = require('readline');
 const { build, cliopts } = require('estrella');
@@ -12,6 +13,8 @@ const [opts] = cliopts.parse(
   ['x-build-profile-viewer', 'build profile viewer'],
   ['x-debug-firmware-stats-page', 'debug firmware stats page'],
   ['x-build-firmware-stats-page', 'build firmware stats page'],
+  ['x-debug-event-demo-site', 'debug event demo site'],
+  ['x-build-event-demo-site', 'build event demo site'],
 );
 
 const reqMockView = opts['x-mockview'];
@@ -23,6 +26,9 @@ const reqDebugProfileViewer = opts['x-debug-profile-viewer'];
 const reqBuildProfileViewer = opts['x-build-profile-viewer'];
 const reqDebugFirmwareStatsPage = opts['x-debug-firmware-stats-page'];
 const reqBuildFirmwareStatsPage = opts['x-build-firmware-stats-page'];
+
+const reqDebugEventDemoSite = opts['x-debug-event-demo-site'];
+const reqBuildEventDemoSite = opts['x-build-event-demo-site'];
 
 // type IKeyPressEvent = {
 //   sequence: string;
@@ -100,7 +106,7 @@ async function makeProfileDrawingDataGeneratorModule() {
   const distDir = `./dist_ex`;
   fs.mkdirSync(distDir, { recursive: true });
 
-  return await new Promise((resolve) =>
+  return new Promise((resolve) =>
     build({
       entry: `${srcDir}/index.ts`,
       outfile: `${distDir}/kermite_profile_drawing_data_generator.js`,
@@ -118,9 +124,7 @@ async function makeProfileDrawingDataGeneratorModule() {
   );
 }
 
-function buildDebugProfileViewer(watch) {
-  const srcDir = './src/ex_profileViewer';
-  const distDir = `./dist_ex/profile-viewer`;
+function buildPage(srcDir, distDir, watch) {
   fs.mkdirSync(distDir, { recursive: true });
   fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
   patchOutputIndexHtmlBundleImport(`${distDir}/index.html`);
@@ -145,31 +149,22 @@ function buildDebugProfileViewer(watch) {
   }
 }
 
+function buildDebugProfileViewer(watch) {
+  const srcDir = './src/ex_profileViewer';
+  const distDir = `./dist_ex/profile-viewer`;
+  buildPage(srcDir, distDir, watch);
+}
+
 function buildDebugFirmwareStatsPage(watch) {
   const srcDir = './src/ex_firmwareListPage';
   const distDir = `./dist_ex/firmware-stats`;
-  fs.mkdirSync(distDir, { recursive: true });
-  fs.copyFileSync(`${srcDir}/index.html`, `${distDir}/index.html`);
-  patchOutputIndexHtmlBundleImport(`${distDir}/index.html`);
+  buildPage(srcDir, distDir, watch);
+}
 
-  build({
-    entry: `${srcDir}/index.tsx`,
-    outfile: `${distDir}/index.js`,
-    define: {
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
-    },
-    bundle: true,
-    minify: false,
-    watch,
-    clear: false,
-    tslint: false,
-    sourcemap: true,
-    sourcesContent: true,
-  });
-
-  if (watch) {
-    launchDebugServer(distDir);
-  }
+function buildDebugEventDemoSite(watch) {
+  const srcDir = './src/ex_eventDemoSite';
+  const distDir = `./dist_ex/event-demo-site`;
+  buildPage(srcDir, distDir, watch);
 }
 
 async function entry() {
@@ -199,6 +194,16 @@ async function entry() {
 
   if (reqBuildFirmwareStatsPage) {
     buildDebugFirmwareStatsPage(false);
+    return;
+  }
+
+  if (reqDebugEventDemoSite) {
+    buildDebugEventDemoSite(true);
+    return;
+  }
+
+  if (reqBuildEventDemoSite) {
+    buildDebugEventDemoSite(false);
     return;
   }
 

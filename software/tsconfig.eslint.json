@@ -3,7 +3,7 @@
   "include": [
     "src/**/*",
     "build.ts",
-    "build2.ts",
+    "build2.js",
     "jest.config.js",
     "vite.config.ts"
   ]

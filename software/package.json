@@ -22,6 +22,8 @@
     "build_profile_viewer": "node build2.js -x-build-profile-viewer",
     "debug_firmware_stats_page": "node build2.js -x-debug-firmware-stats-page",
     "build_firmware_stats_page": "node build2.js -x-build-firmware-stats-page",
+    "debug_event_demo_site": "vite serve src/ex_eventDemoSite",
+    "build_event_demo_site": "tsc && vite build src/ex_eventDemoSite",
     "clean": "rm -rf dist .cache",
     "typecheck": "tsc",
     "typecheck:full": "tsc -b src/*",
