@@ -1,5 +1,8 @@
 import { IProfileData, IRealtimeKeyboardEvent } from '~/shared';
-import { DeviceSelectionManager } from '~/shell/services/keyboardDevice/deviceSelectionManager';
+import {
+  DeviceSelectionManager,
+  IDeviceSelectionManagerEvent,
+} from '~/shell/services/keyboardDevice/deviceSelectionManager';
 import { KeyboardDeviceServiceCore } from '~/shell/services/keyboardDevice/deviceServiceCoreImpl';
 import { IKeyboardDeviceService } from '~/shell/services/keyboardDevice/interfaces';
 import { KeyMappingEmitter } from '~/shell/services/keyboardDevice/keyMappingEmitter';
@@ -14,17 +17,26 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
 
   async selectTargetDevice(path: string) {
     await this.selectionManager.selectTargetDevice(path);
-    this.core.setDevice(this.selectionManager.getDevice());
   }
 
   async selectHidDevice() {
     await this.selectionManager.selectHidDevice();
-    this.core.setDevice(this.selectionManager.getDevice());
+    // this.core.setDevice(this.selectionManager.getDevice());
   }
 
+  private handleDeviceSelectionManagerEvent = (
+    ev: IDeviceSelectionManagerEvent,
+  ) => {
+    if (ev.deviceChanged) {
+      this.core.setDevice(this.selectionManager.getDevice());
+    }
+  };
+
   async initialize() {
+    this.selectionManager.eventPort.subscribe(
+      this.handleDeviceSelectionManagerEvent,
+    );
     await this.selectionManager.initialize();
-    this.core.setDevice(this.selectionManager.getDevice());
   }
 
   async disposeConnectedHidDevice() {
@@ -32,6 +44,9 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
   }
 
   terminate() {
+    this.selectionManager.eventPort.unsubscribe(
+      this.handleDeviceSelectionManagerEvent,
+    );
     this.selectionManager.terminate();
   }
 

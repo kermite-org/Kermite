@@ -4,6 +4,7 @@ import {
   IntervalTimerWrapper,
 } from '~/shared';
 import { appEnv, applicationStorage } from '~/shell/base';
+import { createEventPort } from '~/shell/funcs';
 import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfosWebHid,
@@ -31,8 +32,14 @@ const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   },
 ];
 
+export type IDeviceSelectionManagerEvent = {
+  deviceChanged: 1;
+};
+
 export class DeviceSelectionManager {
   private device: IDeviceWrapper | undefined;
+
+  eventPort = createEventPort<IDeviceSelectionManagerEvent>();
 
   getDevice() {
     return this.device;
@@ -54,7 +61,6 @@ export class DeviceSelectionManager {
     if (this.device) {
       this.device.writeSingleFrame(Packets.connectionClosingFrame);
       await this.device.close();
-      this.device = undefined;
     }
   }
 
@@ -90,12 +96,14 @@ export class DeviceSelectionManager {
       this.setStatus({ currentDevicePath: 'none' });
       console.log(`device closed: ${deviceName}`);
       this.device = undefined;
+      this.eventPort.emit({ deviceChanged: 1 });
     });
     this.setStatus({
       currentDevicePath: deviceName,
       lastConnectedDevicePath: deviceName,
     });
     this.device = device;
+    this.eventPort.emit({ deviceChanged: 1 });
   }
 
   private async openPreAuthorizedDeviceByProductName(productName: string) {
@@ -184,7 +192,6 @@ export class DeviceSelectionManager {
       e.device.productName === this.device.keyboardDeviceInfo.productName
     ) {
       await this.device.close();
-      this.device = undefined;
     }
   };
 
