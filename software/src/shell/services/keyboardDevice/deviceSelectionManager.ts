@@ -127,7 +127,7 @@ export class DeviceSelectionManager {
     }
   }
 
-  async selectHidDevice() {
+  async requestAddNewHidDevice() {
     const hidDevices = await navigator.hid.requestDevice({
       filters: [
         // {

@@ -30,7 +30,7 @@ export interface IAppIpcContract {
     device_connectToDevice(path: string): Promise<void>;
     device_setCustomParameterValue(index: number, value: number): Promise<void>;
     device_resetParameters(): Promise<void>;
-    device_selectHidDevice(): Promise<void>;
+    device_requestAddNewHidDevice(): Promise<void>;
 
     firmup_uploadFirmware(
       origin: IResourceOrigin,

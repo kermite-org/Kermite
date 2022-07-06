@@ -19,8 +19,8 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     await this.selectionManager.selectTargetDevice(path);
   }
 
-  async selectHidDevice() {
-    await this.selectionManager.selectHidDevice();
+  async requestAddNewHidDevice() {
+    await this.selectionManager.requestAddNewHidDevice();
     // this.core.setDevice(this.selectionManager.getDevice());
   }
 

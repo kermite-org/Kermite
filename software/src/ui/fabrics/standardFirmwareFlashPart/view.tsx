@@ -32,7 +32,7 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
   } = useModalDisplayStateModel();
 
   const onDeviceAddButton = () => {
-    ipcAgent.async.device_selectHidDevice();
+    ipcAgent.async.device_requestAddNewHidDevice();
   };
 
   return (
