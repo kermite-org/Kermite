@@ -14,7 +14,11 @@ export const EditorDemoPage: FC = () => {
   return (
     <div class={style}>
       <div class="editor-row">
-        <textarea placeholder="テスト入力欄" ref={textAreaRef} />
+        <textarea
+          placeholder="テスト入力欄"
+          ref={textAreaRef}
+          spellcheck={false}
+        />
         <div class="btn-delete" onClick={handleClearText}>
           消去
         </div>
