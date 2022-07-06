@@ -70,7 +70,7 @@ export const systemActionAssignSelectionSource: SystemAction[] = [
   'GlowColorPrev',
   'GlowColorNext',
   'GlowPatternRoll',
-  'ResetToDfuMode',
+  // 'ResetToDfuMode',
   'SystemLayoutSetPrimary',
   'SystemLayoutSetSecondary',
   'SystemLayoutNext',
