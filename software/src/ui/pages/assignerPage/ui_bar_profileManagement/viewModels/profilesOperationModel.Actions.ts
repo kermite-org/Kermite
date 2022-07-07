@@ -44,6 +44,7 @@ const inputNewProfileName = async (
   modalTitle: string,
   projectId: string,
   currentName: string,
+  allowSavingWithCurrentName?: boolean,
 ): Promise<string | undefined> => {
   const existingProfileNames = profilesReader.allProfileEntries
     .filter((it) => it.projectId === projectId)
@@ -54,6 +55,7 @@ const inputNewProfileName = async (
     resourceTypeNameText: 'profile name',
     currentName,
     existingResourceNames: existingProfileNames,
+    allowSavingWithCurrentName,
   });
 };
 
@@ -114,8 +116,22 @@ const handleSaveUnsavedProfile = async () => {
       texts.assignerProfileNameEditModal.modalTitleSave,
       projectId,
       defaultSavingName,
+      true,
     );
     if (newProfileName !== undefined) {
+      const isAlreadyExist = profilesReader.allProfileEntries.find(
+        (it) => it.projectId === projectId && it.profileName === newProfileName,
+      );
+      if (isAlreadyExist) {
+        const isOk = await modalConfirm({
+          caption: 'save',
+          message: `Profile ${newProfileName} already exists. Overwrite it?`,
+        });
+        if (!isOk) {
+          return;
+        }
+      }
+
       profilesActions.saveUnsavedProfileAs(newProfileName);
     }
   }
