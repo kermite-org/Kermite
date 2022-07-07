@@ -1,6 +1,6 @@
 #pragma once
 
-#define KERMITE_FIRMWARE_ID "RcYEeq"
+#define KERMITE_FIRMWARE_ID "RcYEe2"
 
 #define KS_NUM_SCAN_SLOTS 4
 
