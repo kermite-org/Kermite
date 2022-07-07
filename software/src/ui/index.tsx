@@ -7,7 +7,7 @@ import { SiteRoot } from '~/ui/root/SiteRoot';
 import { commitUiState, uiSettingsPersistence } from '~/ui/store';
 
 function start() {
-  console.log(`kermite_web ${appConfig.applicationVersion}`);
+  console.log(`kermite_webapp ${appConfig.applicationVersion}`);
   appRoot.initialize();
   const appDiv = document.getElementById('app');
 

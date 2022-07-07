@@ -226,9 +226,9 @@ export const profileManagerModule = createCoreModule({
     if (!newProfileEntry.projectId) {
       throw new Error('blank project id');
     }
-    if (profilesReader.hasProfileEntry(newProfileEntry)) {
-      throw new Error(errorTextInvalidOperation);
-    }
+    // if (profilesReader.hasProfileEntry(newProfileEntry)) {
+    //   throw new Error(errorTextInvalidOperation);
+    // }
     profileManagerCore.saveProfile(newProfileEntry, profileData);
     const allProfileEntries = profileManagerCore.listAllProfileEntries();
     const newProfileData = profileManagerCore.loadProfile(newProfileEntry);

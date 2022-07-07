@@ -16,6 +16,7 @@ import {
   uiState,
   uiStateDriverEffect,
 } from '~/ui/store';
+import { EditorDemoPage } from '../pages/EditorDemoPage';
 
 const cssGlobal = css`
   * {
@@ -31,6 +32,11 @@ const cssGlobal = css`
   }
 
   #app {
+    font-family: 'Roboto', 'Kosugi', sans-serif;
+  }
+
+  input,
+  textarea {
     font-family: 'Roboto', 'Kosugi', sans-serif;
   }
 
@@ -67,7 +73,7 @@ const AppView: FC = () => {
   const isEditorDemoMode = !!queries.editor_demo;
   const isWidgetMode = uiReaders.pagePath === '/widget';
   if (isEditorDemoMode) {
-    return <WidgetZoneRoot />;
+    return <EditorDemoPage />;
   } else if (isWidgetMode) {
     return <WidgetZoneRoot />;
   } else {

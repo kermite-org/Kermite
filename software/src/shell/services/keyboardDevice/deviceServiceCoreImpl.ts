@@ -37,7 +37,9 @@ function createConnectedStatus(
       projectId: attrsRes.projectId,
       variationId: attrsRes.variationId,
       deviceInstanceCode: attrsRes.deviceInstanceCode,
-      keyboardName: keyboardDeviceInfo.productName.replace(/#.{4}$/, ''),
+      keyboardName: keyboardDeviceInfo.productName
+        .replace(/#.{4}$/, '')
+        .replace(/^Kermite /, ''),
       productName: keyboardDeviceInfo.productName,
       manufacturerName: keyboardDeviceInfo.manufacturerName,
       firmwareVariationName: attrsRes.firmwareVariationName,

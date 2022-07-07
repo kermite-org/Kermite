@@ -8,6 +8,7 @@ export const resourceManagementUtils = {
     resourceTypeNameText: string;
     currentName?: string;
     existingResourceNames: string[];
+    allowSavingWithCurrentName?: boolean;
   }): Promise<string | undefined> {
     const {
       modalTitle,
@@ -15,6 +16,7 @@ export const resourceManagementUtils = {
       resourceTypeNameText,
       existingResourceNames,
       currentName = '',
+      allowSavingWithCurrentName,
     } = args;
 
     const checkedResourceNames = existingResourceNames.filter(
@@ -33,6 +35,7 @@ export const resourceManagementUtils = {
       message: modalMessage,
       defaultText: currentName,
       validator,
+      allowSavingWithDefaultText: allowSavingWithCurrentName,
     });
   },
 };
