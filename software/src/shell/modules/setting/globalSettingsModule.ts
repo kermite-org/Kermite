@@ -35,25 +35,6 @@ const globalSettingsModuleHelpers = {
       if (!isGlobalProjectIncludedInResources) {
         globalSettings.globalProjectSpec = undefined;
       }
-      // ローカルのプロジェクトが選択されており、開発者モードが解除された場合、オンラインのプロジェクトを選ぶ
-      if (
-        globalProjectSpec.origin === 'local' &&
-        !globalSettings.developerMode
-      ) {
-        const onlineInfo = projectInfos.find(
-          (info) =>
-            info.origin === 'online' &&
-            info.projectId === globalProjectSpec.projectId,
-        );
-        if (onlineInfo) {
-          globalSettings.globalProjectSpec = {
-            origin: 'online',
-            projectId: onlineInfo.projectId,
-          };
-        } else {
-          globalSettings.globalProjectSpec = undefined;
-        }
-      }
     }
   },
 };
