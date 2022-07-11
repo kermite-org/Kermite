@@ -65,5 +65,6 @@ const style = (width: number | undefined) => css`
   }
   &:disabled {
     opacity: 0.5;
+    cursor: inherit;
   }
 `;
