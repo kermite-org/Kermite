@@ -2,7 +2,7 @@
 
 ## Overview
 
-Kermite is a software for DIY keyboards, which includes firmware to run on MCU and utility software to configure key mappings. It supports DIY keyboards using RP2040 (microcontroller). The utility software runs on browser.
+Kermite is a software for DIY keyboards, which includes firmware to run on MCU and utility software to configure keymappings. It supports DIY keyboards using RP2040 (microcontroller). The utility software runs on browser.
 
 ## Features
 
@@ -16,7 +16,7 @@ The layout of keys can be edited on screen; GUI-based operations allow easy layo
 
 ### Key Mapping Configuration
 
-The key mapping can be visually changed using the utility software. The configuration is stored in the MCU's internal data storage area.
+keymapping can be visually changed using the utility software. The configuration is stored in the MCU's internal data storage area.
 
 ### Real-time Keyboard View
 
@@ -52,7 +52,7 @@ Access https://app.kermite.org to get started. Follow the wizard on the top scre
 Specification has been changed drastically, from a desktop app with Electron to a web app running in a browser. The desktop app is no longer offered and only the browser version will be developed/maintained from now on; AVR is difficult to maintain compatibility with and only RP2040 MCU is supported.
 
 ## Others
-[KermiteServer](https://server.kermite.org/) A server to post profiles. (Under test operation)
+[KermiteServer](https://server.kermite.org/) A server where you can post keyboard definitions and key mappings.
 
 [Firmwave Build Status](https://assets.kermite.org/firmware-stats/) Build status of supported firmware.
 
