@@ -81,9 +81,7 @@ export function createProfileSelectionMenuItems(
       text: 'Submit on KermiteServer',
       hint: 'Submit on KermiteServer',
       handler: vm.handlePostToServer,
-      hidden: !(
-        uiReaders.isLocalProjectSelectedForEdit && !!vm.currentProfileProjectId
-      ),
+      hidden: !vm.isCurrentProfileInternal,
     },
     { type: 'separator' },
     // {
