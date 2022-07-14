@@ -1,5 +1,6 @@
 import {
   createProjectKey,
+  encodeTextToBase64String,
   fileExtensions,
   IFileReadHandle,
   IFileWriteHandle,
@@ -9,7 +10,7 @@ import {
   uniqueArrayItemsByField,
   validateResourceName,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig, appEnv } from '~/shell/base';
 import {
   fsExistsSync,
   fsxDeleteFile,
@@ -228,6 +229,16 @@ export const projectPackageProvider = {
   ) {
     const savingData = convertProjectPackageInfoToFileContent(info);
     await fsxWriteJsonToFileHandle(fileHandle, savingData);
+  },
+  submitLocalProjectPackageToServerSite(info: IProjectPackageInfo) {
+    const savingData = convertProjectPackageInfoToFileContent(info);
+    const dataUrl = `data:text/plain;base64,${encodeTextToBase64String(
+      JSON.stringify(savingData),
+    )}`;
+    window.open(
+      `${appConfig.kermiteServerUrl}/request?packageData=${dataUrl}`,
+      '_blank',
+    );
   },
   openLocalProjectsFolder() {
     // const folderPath = getUserProjectsFolderPath();

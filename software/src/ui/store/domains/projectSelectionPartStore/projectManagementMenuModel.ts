@@ -55,6 +55,14 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
         handler: projectManagementMenuActions.handleExportLocalPackageToFile,
       },
     ),
+    ...optInArrayItem<IGeneralMenuItem>(
+      isUserProjectSelected && {
+        type: 'menuEntry',
+        text: 'publish on KermiteServer',
+        handler:
+          projectManagementMenuActions.handleSubmitLocalProjectPackageToServer,
+      },
+    ),
     // {
     //   type: 'menuEntry',
     //   text: 'open data folder',

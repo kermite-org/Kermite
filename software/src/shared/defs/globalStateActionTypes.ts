@@ -104,6 +104,7 @@ export type ICoreAction = Partial<{
     fileHandle: IFileWriteHandle;
     projectId: string;
   };
+  project_submitLocalProjectPackageToServerSite: { projectId: string };
   project_openLocalProjectsFolder: 1;
   project_addLocalProjectFromFile: { fileHandle: IFileReadHandle };
 

@@ -146,6 +146,15 @@ export const projectPackageModule = createCoreModule({
       );
     }
   },
+  project_submitLocalProjectPackageToServerSite({ projectId }) {
+    const project = projectPackageModuleHelper.findProjectInfo(
+      'local',
+      projectId,
+    );
+    if (project) {
+      projectPackageProvider.submitLocalProjectPackageToServerSite(project);
+    }
+  },
   project_openLocalProjectsFolder() {
     projectPackageProvider.openLocalProjectsFolder();
   },

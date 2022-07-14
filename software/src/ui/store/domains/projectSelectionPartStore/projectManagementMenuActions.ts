@@ -167,6 +167,13 @@ export const projectManagementMenuActions = {
       }
     }
   },
+  handleSubmitLocalProjectPackageToServer() {
+    const project = projectPackagesReader.getEditTargetProject();
+    if (project) {
+      const { projectId } = project;
+      projectPackagesActions.submitLocalProjectPackageToServer(projectId);
+    }
+  },
   handleOpenLocalProjectsFolder() {
     dispatchCoreAction({ project_openLocalProjectsFolder: 1 });
   },
