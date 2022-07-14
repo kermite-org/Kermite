@@ -1,13 +1,15 @@
 import {
+  encodeTextToBase64String,
   fileExtensions,
   IFileReadHandle,
   IFileWriteHandle,
   IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
+  ProfileDataConverter,
   validateResourceName,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig, appEnv } from '~/shell/base';
 import {
   fspCopyFile,
   fspReaddir,
@@ -142,6 +144,23 @@ export const profileManagerCore = {
       fileHandle,
       profileData,
       profileName,
+    );
+  },
+  postProfileToServerSite(
+    profileEntry: IProfileEntry,
+    profileData: IProfileData,
+  ) {
+    const persistProfileData =
+      ProfileDataConverter.convertProfileToPersistFileData(
+        profileData,
+        profileEntry.profileName,
+      );
+    const dataUrl = `data:text/plain;base64,${encodeTextToBase64String(
+      JSON.stringify(persistProfileData),
+    )}`;
+    window.open(
+      `${appConfig.kermiteServerUrl}/post?profileData=${dataUrl}`,
+      '_blank',
     );
   },
   deleteProfile(profileEntry: IProfileEntry): void {

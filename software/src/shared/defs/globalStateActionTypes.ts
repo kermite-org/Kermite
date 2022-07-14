@@ -156,6 +156,9 @@ export type ICoreAction = Partial<{
     fileHandle: IFileWriteHandle;
     profileData: IProfileData;
   };
+  profile_postProfileToServerSite: {
+    profileData: IProfileData;
+  };
   profile_openUserProfilesFolder: 1;
   profile_setEditProfileData: { editProfileData: IProfileData };
 

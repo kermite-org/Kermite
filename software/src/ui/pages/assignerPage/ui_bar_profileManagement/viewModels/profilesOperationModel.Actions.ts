@@ -180,6 +180,10 @@ const handleExportToFile = async () => {
   }
 };
 
+const handlePostToServer = () => {
+  profilesActions.postProfileToServerSite();
+};
+
 const openUserProfilesFolder = () => {
   profilesActions.openUserProfilesFolder();
 };
@@ -216,4 +220,5 @@ export const profilesOperationActions = {
   onWriteButton,
   toggleRoutingPanel,
   handleSaveUnsavedProfile,
+  handlePostToServer,
 };
