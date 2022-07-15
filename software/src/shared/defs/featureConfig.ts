@@ -3,5 +3,7 @@ export const featureConfig = {
   useFileSystemAccessApiForSaving: true,
   selectPrimarySlotOnKeySelectionChange: false,
   // selectPrimarySlotOnKeySelectionChange: true,
-  debugFullFeatures: location.search.includes('debugFullFeatures=1'),
+  debugFullFeatures:
+    location.host.startsWith('localhost') ||
+    location.search.includes('debugFullFeatures=1'),
 };
