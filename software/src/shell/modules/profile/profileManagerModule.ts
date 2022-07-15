@@ -285,6 +285,17 @@ export const profileManagerModule = createCoreModule({
   async profile_exportToFile({ fileHandle, profileData }) {
     await profileManagerCore.saveExternalProfileFile(fileHandle, profileData);
   },
+  async profile_postProfileToServerSite({ profileData }) {
+    const profileEntry = profilesReader.getCurrentInternalProfileEntry();
+    if (profileEntry) {
+      await profileManagerCore.postProfileToServerSite(
+        profileEntry,
+        profileData,
+      );
+    } else {
+      throw new Error(errorTextInvalidOperation);
+    }
+  },
 
   profile_openUserProfilesFolder() {
     // const { profileEditSource: editSource } = coreState;

@@ -104,6 +104,7 @@ export type ICoreAction = Partial<{
     fileHandle: IFileWriteHandle;
     projectId: string;
   };
+  project_submitLocalProjectPackageToServerSite: { projectId: string };
   project_openLocalProjectsFolder: 1;
   project_addLocalProjectFromFile: { fileHandle: IFileReadHandle };
 
@@ -154,6 +155,9 @@ export type ICoreAction = Partial<{
   profile_importFromFile: { fileHandle: IFileReadHandle };
   profile_exportToFile: {
     fileHandle: IFileWriteHandle;
+    profileData: IProfileData;
+  };
+  profile_postProfileToServerSite: {
     profileData: IProfileData;
   };
   profile_openUserProfilesFolder: 1;

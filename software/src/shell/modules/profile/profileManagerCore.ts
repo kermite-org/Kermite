@@ -5,6 +5,7 @@ import {
   IPersistProfileFileData,
   IProfileData,
   IProfileEntry,
+  ProfileDataConverter,
   validateResourceName,
 } from '~/shared';
 import { appEnv } from '~/shell/base';
@@ -143,6 +144,29 @@ export const profileManagerCore = {
       profileData,
       profileName,
     );
+  },
+  async postProfileToServerSite(
+    profileEntry: IProfileEntry,
+    profileData: IProfileData,
+  ) {
+    const persistProfileData =
+      ProfileDataConverter.convertProfileToPersistFileData(
+        profileData,
+        profileEntry.profileName,
+      );
+    const res = await fetch(`https://server.kermite.org/api/cache`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ data: JSON.stringify(persistProfileData) }),
+      mode: 'cors',
+    });
+    if (res.status === 200) {
+      const obj = await res.json();
+      const { key } = obj;
+      window.open(`https://server.kermite.org/post?key=${key}`);
+    }
   },
   deleteProfile(profileEntry: IProfileEntry): void {
     const filePath = getProfileFilePath(profileEntry);

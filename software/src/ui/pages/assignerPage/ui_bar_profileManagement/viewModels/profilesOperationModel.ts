@@ -38,6 +38,7 @@ export interface IProfileManagementPartViewModel {
   toggleRoutingPanel(): void;
   isMenuItemSaveEnabled: boolean;
   isEditProfileAvailable: boolean;
+  handlePostToServer(): void;
 }
 
 export function makeProfilesOperationModel(): IProfileManagementPartViewModel {
@@ -70,6 +71,7 @@ export function makeProfilesOperationModel(): IProfileManagementPartViewModel {
     onWriteButton,
     toggleRoutingPanel,
     handleSaveUnsavedProfile,
+    handlePostToServer,
   } = profilesOperationActions;
 
   return {
@@ -97,5 +99,6 @@ export function makeProfilesOperationModel(): IProfileManagementPartViewModel {
     toggleRoutingPanel,
     isMenuItemSaveEnabled,
     isEditProfileAvailable,
+    handlePostToServer,
   };
 }
