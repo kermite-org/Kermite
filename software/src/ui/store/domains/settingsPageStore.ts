@@ -1,3 +1,4 @@
+import { featureConfig } from '~/shared';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
 import {
   commitUiSettings,
@@ -33,7 +34,7 @@ interface ISettingsPageStore {
 const helpers = {
   createUiScalingSelectorOptions(): ISelectorOption[] {
     const sourceScales = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3];
-    if (appUi.processEnv.FE_ADD_SMALL_UI_SCALES) {
+    if (featureConfig.debugFullFeatures) {
       sourceScales.unshift(...[0.3, 0.4, 0.5, 0.6]);
     }
     return sourceScales.map((val) => ({
