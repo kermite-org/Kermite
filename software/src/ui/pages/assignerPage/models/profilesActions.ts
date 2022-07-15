@@ -66,12 +66,18 @@ export const profilesActions = {
       },
     });
   },
-
   exportProfileAsProjectPreset: (projectId: string, presetName: string) => {
     dispatchCoreAction({
       profile_saveAsProjectPreset: {
         projectId,
         presetName,
+        profileData: assignerModel.profileData,
+      },
+    });
+  },
+  postProfileToServerSite: async () => {
+    await dispatchCoreAction({
+      profile_postProfileToServerSite: {
         profileData: assignerModel.profileData,
       },
     });

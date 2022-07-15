@@ -481,3 +481,7 @@ export function getSearchQueryObject(): any {
   sp.forEach((value, key) => (obj[key] = value));
   return obj;
 }
+
+export function encodeTextToBase64String(text: string): string {
+  return window.btoa(unescape(encodeURIComponent(text)));
+}

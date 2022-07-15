@@ -229,6 +229,22 @@ export const projectPackageProvider = {
     const savingData = convertProjectPackageInfoToFileContent(info);
     await fsxWriteJsonToFileHandle(fileHandle, savingData);
   },
+  async submitLocalProjectPackageToServerSite(info: IProjectPackageInfo) {
+    const savingData = convertProjectPackageInfoToFileContent(info);
+    const res = await fetch(`https://server.kermite.org/api/cache`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ data: JSON.stringify(savingData) }),
+      mode: 'cors',
+    });
+    if (res.status === 200) {
+      const obj = await res.json();
+      const { key } = obj;
+      window.open(`https://server.kermite.org/request?key=${key}`);
+    }
+  },
   openLocalProjectsFolder() {
     // const folderPath = getUserProjectsFolderPath();
     // await fsxEnsureFolderExists(folderPath);

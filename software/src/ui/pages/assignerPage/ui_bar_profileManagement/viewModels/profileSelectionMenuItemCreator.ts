@@ -76,6 +76,14 @@ export function createProfileSelectionMenuItems(
       ),
     },
     { type: 'separator' },
+    {
+      type: 'menuEntry',
+      text: 'Submit on KermiteServer',
+      hint: 'Submit on KermiteServer',
+      handler: vm.handlePostToServer,
+      hidden: !vm.isCurrentProfileInternal,
+    },
+    { type: 'separator' },
     // {
     //   type: 'menuEntry',
     //   text: texts.assignerMenu.openUserProfilesFolder,
