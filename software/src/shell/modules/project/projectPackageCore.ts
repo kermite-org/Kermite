@@ -1,6 +1,5 @@
 import {
   createProjectKey,
-  encodeTextToBase64String,
   fileExtensions,
   IFileReadHandle,
   IFileWriteHandle,
@@ -10,7 +9,7 @@ import {
   uniqueArrayItemsByField,
   validateResourceName,
 } from '~/shared';
-import { appConfig, appEnv } from '~/shell/base';
+import { appEnv } from '~/shell/base';
 import {
   fsExistsSync,
   fsxDeleteFile,
