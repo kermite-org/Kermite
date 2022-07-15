@@ -180,8 +180,8 @@ const handleExportToFile = async () => {
   }
 };
 
-const handlePostToServer = () => {
-  profilesActions.postProfileToServerSite();
+const handlePostToServer = async () => {
+  await profilesActions.postProfileToServerSite();
 };
 
 const openUserProfilesFolder = () => {

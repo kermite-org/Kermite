@@ -285,10 +285,13 @@ export const profileManagerModule = createCoreModule({
   async profile_exportToFile({ fileHandle, profileData }) {
     await profileManagerCore.saveExternalProfileFile(fileHandle, profileData);
   },
-  profile_postProfileToServerSite({ profileData }) {
+  async profile_postProfileToServerSite({ profileData }) {
     const profileEntry = profilesReader.getCurrentInternalProfileEntry();
     if (profileEntry) {
-      profileManagerCore.postProfileToServerSite(profileEntry, profileData);
+      await profileManagerCore.postProfileToServerSite(
+        profileEntry,
+        profileData,
+      );
     } else {
       throw new Error(errorTextInvalidOperation);
     }

@@ -75,8 +75,8 @@ export const profilesActions = {
       },
     });
   },
-  postProfileToServerSite: () => {
-    dispatchCoreAction({
+  postProfileToServerSite: async () => {
+    await dispatchCoreAction({
       profile_postProfileToServerSite: {
         profileData: assignerModel.profileData,
       },

@@ -351,8 +351,8 @@ export const projectPackagesActions = {
       project_exportLocalProjectToFile: { fileHandle, projectId },
     });
   },
-  submitLocalProjectPackageToServer(projectId: string) {
-    dispatchCoreAction({
+  async submitLocalProjectPackageToServer(projectId: string) {
+    await dispatchCoreAction({
       project_submitLocalProjectPackageToServerSite: { projectId },
     });
   },

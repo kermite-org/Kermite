@@ -1,4 +1,4 @@
-import { featureConfig, optInArrayItem } from '~/shared';
+import { optInArrayItem } from '~/shared';
 import { IGeneralMenuItem } from '~/ui/base';
 import { projectPackagesReader } from '~/ui/store';
 import { projectManagementMenuActions } from '~/ui/store/domains/projectSelectionPartStore/projectManagementMenuActions';
@@ -56,13 +56,12 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
       },
     ),
     ...optInArrayItem<IGeneralMenuItem>(
-      featureConfig.debugFullFeatures &&
-        isUserProjectSelected && {
-          type: 'menuEntry',
-          text: 'publish on KermiteServer',
-          handler:
-            projectManagementMenuActions.handleSubmitLocalProjectPackageToServer,
-        },
+      isUserProjectSelected && {
+        type: 'menuEntry',
+        text: 'publish on KermiteServer',
+        handler:
+          projectManagementMenuActions.handleSubmitLocalProjectPackageToServer,
+      },
     ),
     // {
     //   type: 'menuEntry',

@@ -167,11 +167,11 @@ export const projectManagementMenuActions = {
       }
     }
   },
-  handleSubmitLocalProjectPackageToServer() {
+  async handleSubmitLocalProjectPackageToServer() {
     const project = projectPackagesReader.getEditTargetProject();
     if (project) {
       const { projectId } = project;
-      projectPackagesActions.submitLocalProjectPackageToServer(projectId);
+      await projectPackagesActions.submitLocalProjectPackageToServer(projectId);
     }
   },
   handleOpenLocalProjectsFolder() {

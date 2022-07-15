@@ -145,7 +145,7 @@ export const profileManagerCore = {
       profileName,
     );
   },
-  postProfileToServerSite(
+  async postProfileToServerSite(
     profileEntry: IProfileEntry,
     profileData: IProfileData,
   ) {
@@ -154,75 +154,18 @@ export const profileManagerCore = {
         profileData,
         profileEntry.profileName,
       );
-    // const dataUrl = `data:text/plain;base64,${encodeTextToBase64String(
-    //   JSON.stringify(persistProfileData),
-    // )}`;
-    // window.open(
-    //   `${appConfig.kermiteServerUrl}/post?profileData=${dataUrl}`,
-    //   '_blank',
-    // );
-
-    if (0) {
-      // window.postMessageで送るパターン
-      // const targetPageUrl = `http://localhost:3001`;
-      // const targetPageOrigin = `http://localhost:3001`;
-      const targetPageUrl = `https://app.kermite.org`;
-      const targetPageOrigin = `https://kermite.org`;
-      const win = window.open(targetPageUrl)!;
-
-      window.addEventListener(
-        'message',
-        (ev) => {
-          if (
-            ev.origin === targetPageOrigin &&
-            ev.data.action === 'pageLoaded'
-          ) {
-            win.postMessage(
-              {
-                action: 'setSubmissionData',
-                content: persistProfileData,
-              },
-              targetPageOrigin,
-            );
-          }
-        },
-        true,
-      );
-    }
-
-    if (0) {
-      const win = window.open('./profileSubmissionAdaptorPage.html');
-      if (win) {
-        win.onload = () => {
-          console.log('sub window loaded');
-          (win as any).setSubmissionData(persistProfileData);
-          // win.postMessage(
-          //   {
-          //     action: 'setSubmissionData',
-          //     content: persistProfileData,
-          //   },
-          //   '*',
-          // );
-        };
-      }
-    }
-
-    if (1) {
-      (async () => {
-        const res = await fetch(`https://server.kermite.org/api/cache`, {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({ data: JSON.stringify(persistProfileData) }),
-          mode: 'cors',
-        });
-        if (res.status === 200) {
-          const obj = await res.json();
-          const { key } = obj;
-          window.open(`https://server.kermite.org/post?key=${key}`);
-        }
-      })();
+    const res = await fetch(`https://server.kermite.org/api/cache`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ data: JSON.stringify(persistProfileData) }),
+      mode: 'cors',
+    });
+    if (res.status === 200) {
+      const obj = await res.json();
+      const { key } = obj;
+      window.open(`https://server.kermite.org/post?key=${key}`);
     }
   },
   deleteProfile(profileEntry: IProfileEntry): void {

@@ -230,35 +230,20 @@ export const projectPackageProvider = {
     const savingData = convertProjectPackageInfoToFileContent(info);
     await fsxWriteJsonToFileHandle(fileHandle, savingData);
   },
-  submitLocalProjectPackageToServerSite(info: IProjectPackageInfo) {
+  async submitLocalProjectPackageToServerSite(info: IProjectPackageInfo) {
     const savingData = convertProjectPackageInfoToFileContent(info);
-
-    if (0) {
-      const dataUrl = `data:text/plain;base64,${encodeTextToBase64String(
-        JSON.stringify(savingData),
-      )}`;
-      window.open(
-        `${appConfig.kermiteServerUrl}/request?packageData=${dataUrl}`,
-        '_blank',
-      );
-    }
-
-    if (1) {
-      (async () => {
-        const res = await fetch(`https://server.kermite.org/api/cache`, {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-          },
-          body: JSON.stringify({ data: JSON.stringify(savingData) }),
-          mode: 'cors',
-        });
-        if (res.status === 200) {
-          const obj = await res.json();
-          const { key } = obj;
-          window.open(`https://server.kermite.org/request?key=${key}`);
-        }
-      })();
+    const res = await fetch(`https://server.kermite.org/api/cache`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ data: JSON.stringify(savingData) }),
+      mode: 'cors',
+    });
+    if (res.status === 200) {
+      const obj = await res.json();
+      const { key } = obj;
+      window.open(`https://server.kermite.org/request?key=${key}`);
     }
   },
   openLocalProjectsFolder() {

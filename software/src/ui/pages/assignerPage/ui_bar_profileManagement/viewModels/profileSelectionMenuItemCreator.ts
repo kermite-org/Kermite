@@ -1,4 +1,3 @@
-import { featureConfig } from '~/shared';
 import { IGeneralMenuItem, texts } from '~/ui/base';
 import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
 import { IProfileManagementPartViewModel } from './profilesOperationModel';
@@ -76,13 +75,13 @@ export function createProfileSelectionMenuItems(
         uiReaders.isLocalProjectSelectedForEdit && !!vm.currentProfileProjectId
       ),
     },
-    // { type: 'separator' },
+    { type: 'separator' },
     {
       type: 'menuEntry',
       text: 'Submit on KermiteServer',
       hint: 'Submit on KermiteServer',
       handler: vm.handlePostToServer,
-      hidden: !(featureConfig.debugFullFeatures && vm.isCurrentProfileInternal),
+      hidden: !vm.isCurrentProfileInternal,
     },
     { type: 'separator' },
     // {
