@@ -11,15 +11,8 @@
 #include "km0/visualizer/oledDisplay.h"
 #include "km0/visualizer/rgbLighting.h"
 #include "km0/wrapper/generalKeyboard.h"
+#include "standard_firmare_defs.h"
 
-enum {
-  BoardType_None = 0,
-  BoardType_ChipAtMega32U4__OBSOLETE = 1,
-  BoardType_ProMicro__OBSOLETE = 2,
-  BoardType_ChipRP2040 = 3,
-  BoardType_ProMicroRP2040 = 4,
-  BoardType_RpiPico = 5
-};
 typedef struct {
   uint8_t dataHeader[5];
   uint8_t boardType;
