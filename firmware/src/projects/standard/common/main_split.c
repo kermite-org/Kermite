@@ -19,11 +19,12 @@
 #include "km0/visualizer/rgbLighting.h"
 #endif
 
+#include "standard_firmare_defs.h"
+
 typedef struct {
   uint8_t dataHeader[5];
-  bool useBoardLedsProMicroAvr__OBSOLETE;
-  bool useBoardLedsProMicroRp;
-  bool useBoardLedsRpiPico;
+  uint8_t boardType;
+  bool useBoardLeds;
   bool useDebugUart;
   bool useMatrixKeyScanner;
   bool useDirectWiredKeyScanner;
@@ -47,9 +48,8 @@ typedef struct {
 
 KermiteKeyboardDefinitionData defs = {
   .dataHeader = { '$', 'K', 'M', 'D', 'F' },
-  .useBoardLedsProMicroAvr__OBSOLETE = false,
-  .useBoardLedsProMicroRp = false,
-  .useBoardLedsRpiPico = false,
+  .boardType = 0,
+  .useBoardLeds = false,
   .useDebugUart = false,
   .useMatrixKeyScanner = false,
   .useDirectWiredKeyScanner = false,
@@ -164,11 +164,13 @@ static void setupBoard(int8_t side) {
 }
 
 int main() {
-  if (defs.useBoardLedsProMicroRp) {
-    boardIoImpl_setupLeds_proMicroRp();
-  }
-  if (defs.useBoardLedsRpiPico) {
-    boardIoImpl_setupLeds_rpiPico();
+  if (defs.useBoardLeds) {
+    if (defs.boardType == BoardType_ProMicroRP2040 && boardIoImpl_setupLeds_proMicroRp) {
+      boardIoImpl_setupLeds_proMicroRp();
+    }
+    if (defs.boardType == BoardType_RpiPico && boardIoImpl_setupLeds_rpiPico) {
+      boardIoImpl_setupLeds_rpiPico();
+    }
   }
   if (defs.useDebugUart) {
     debugUart_initialize(38400);

@@ -82,6 +82,7 @@ namespace fetcherLocalDebugStandard {
   } = {
     // AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
     RpUnified: '/debug_local_firmwares/standard_rp.uf2',
+    RpSplit: '/debug_local_firmwares/standard_rp_split.uf2',
     // AvrSplit: pathResolve(
     //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
     // ),
