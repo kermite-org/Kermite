@@ -1,3 +1,4 @@
+import { featureConfig } from '~/shared';
 import { appUi, ipcAgent, ISelectorOption } from '~/ui/base';
 import {
   commitUiSettings,
@@ -26,13 +27,14 @@ interface ISettingsPageStore {
     handleSelectLocalRepositoryFolder(): void;
     setUiScalingSelectionValue(value: string): void;
     setFlagShowDevelopmentPackages(value: boolean): void;
+    discardPageStorage(): void;
   };
 }
 
 const helpers = {
   createUiScalingSelectorOptions(): ISelectorOption[] {
     const sourceScales = [0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3];
-    if (appUi.processEnv.FE_ADD_SMALL_UI_SCALES) {
+    if (featureConfig.debugFullFeatures) {
       sourceScales.unshift(...[0.3, 0.4, 0.5, 0.6]);
     }
     return sourceScales.map((val) => ({
@@ -128,6 +130,16 @@ function createSettingsPageStore(): ISettingsPageStore {
     },
     setFlagShowDevelopmentPackages(value) {
       globalSettingsWriter.writeValue('showDevelopmentPackages', value);
+    },
+    discardPageStorage() {
+      const ok = window.confirm(
+        'このページ内で保存しているデータを消去して初期状態に戻します。よろしいですか',
+      );
+      if (ok) {
+        localStorage.clear();
+        appUi.skipPageTerminationTasks = true;
+        location.reload();
+      }
     },
   };
 

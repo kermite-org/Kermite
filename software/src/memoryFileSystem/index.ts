@@ -1,5 +1,9 @@
 import { removeArrayItems, removeArrayItemsMatched } from '~/shared';
 
+const configs = {
+  memoryStorageRevisionLatest: 2,
+};
+
 function pathRelative(from: string, to: string): string {
   const regex = new RegExp('^' + from + '/');
   return to.replace(regex, '');
@@ -12,6 +16,8 @@ interface IVirtualFileEntity {
 }
 
 interface IMemoryFileSystem {
+  get memoryStorageRevision(): number;
+  setMemoryStorageRevision(rev: number): void;
   initialize(): void;
   terminate(): void;
   isExist(path: string): boolean;
@@ -23,10 +29,18 @@ interface IMemoryFileSystem {
   renameFile(oldPath: string, newPath: string): void;
   enumerateFilesPathStartWith(path: string): string[];
   deleteFilesPathStartWith(path: string): void;
+  getAllFileEntities(): IVirtualFileEntity[];
 }
+
+type IMemoryFileSystemPersistData = {
+  memoryStorageRevision: number;
+  fileEntities: IVirtualFileEntity[];
+  items?: IVirtualFileEntity[]; // old member
+};
 
 function createMemoryFileSystem(): IMemoryFileSystem {
   const localStorageKey = 'kermite-app-virtual-file-system';
+  let memoryStorageRevision = configs.memoryStorageRevisionLatest;
   let fileEntities: IVirtualFileEntity[] = [];
 
   function findFileEntityByPath(path: string) {
@@ -34,16 +48,28 @@ function createMemoryFileSystem(): IMemoryFileSystem {
   }
 
   return {
+    get memoryStorageRevision() {
+      return memoryStorageRevision;
+    },
+    setMemoryStorageRevision(rev) {
+      memoryStorageRevision = rev;
+    },
     initialize() {
       const text = localStorage.getItem(localStorageKey);
       if (text) {
-        const data = JSON.parse(text) as { items: IVirtualFileEntity[] };
-        fileEntities = data.items;
+        const data = JSON.parse(text) as IMemoryFileSystemPersistData;
+        memoryStorageRevision = data.memoryStorageRevision ?? 1;
+        fileEntities = data.items || data.fileEntities;
+        console.log({ memoryStorageRevision });
         console.log({ fileEntities });
       }
     },
     terminate() {
-      const text = JSON.stringify({ items: fileEntities });
+      const persistData: IMemoryFileSystemPersistData = {
+        fileEntities,
+        memoryStorageRevision,
+      };
+      const text = JSON.stringify(persistData);
       localStorage.setItem(localStorageKey, text);
     },
     isExist(path) {
@@ -105,6 +131,9 @@ function createMemoryFileSystem(): IMemoryFileSystem {
       for (const item of items) {
         removeArrayItems(fileEntities, item);
       }
+    },
+    getAllFileEntities() {
+      return fileEntities;
     },
   };
 }

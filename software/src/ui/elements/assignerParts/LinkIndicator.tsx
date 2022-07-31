@@ -17,7 +17,7 @@ export const LinkIndicator: FC<Props> = ({ isActive }) => (
 
 const style = css`
   color: #aaa;
-  opacity: 0.5;
+  opacity: 0.8;
 
   &[data-active] {
     color: ${colors.clLinkIndicator};

@@ -1,4 +1,5 @@
-import { jsx, applyGlobalStyle, css, useEffect, FC } from 'alumina';
+import { jsx, applyGlobalStyle, css, useEffect, FC, useMemo } from 'alumina';
+import { getSearchQueryObject } from '~/shared';
 import { router, globalHintMouseMoveHandlerEffect, appUi } from '~/ui/base';
 import { appErrorNotifierEffect } from '~/ui/commonModels';
 import {
@@ -15,6 +16,7 @@ import {
   uiState,
   uiStateDriverEffect,
 } from '~/ui/store';
+import { EditorDemoPage } from '../pages/EditorDemoPage';
 
 const cssGlobal = css`
   * {
@@ -33,9 +35,15 @@ const cssGlobal = css`
     font-family: 'Roboto', 'Kosugi', sans-serif;
   }
 
+  input,
+  textarea {
+    font-family: 'Roboto', 'Kosugi', sans-serif;
+  }
+
   body {
     overflow: hidden;
     user-select: none;
+    touch-action: none;
   }
 
   select {
@@ -61,8 +69,12 @@ const cssSiteRoot = css`
 `;
 
 const AppView: FC = () => {
+  const queries = useMemo(getSearchQueryObject, []);
+  const isEditorDemoMode = !!queries.editor_demo;
   const isWidgetMode = uiReaders.pagePath === '/widget';
-  if (isWidgetMode) {
+  if (isEditorDemoMode) {
+    return <EditorDemoPage />;
+  } else if (isWidgetMode) {
     return <WidgetZoneRoot />;
   } else {
     return <ConfiguratorZoneRoot />;
@@ -70,12 +82,10 @@ const AppView: FC = () => {
 };
 
 const InitialLoadingView: FC = () => {
-  useEffect(() => {
-    (async () => {
-      await lazyInitializeCoreServices();
-      commitUiState({ initialLoading: false });
-      appUi.rerender();
-    })();
+  useEffect(async () => {
+    await lazyInitializeCoreServices();
+    commitUiState({ initialLoading: false });
+    appUi.rerender();
   }, []);
   return <div>Loading...</div>;
 };

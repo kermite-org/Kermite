@@ -86,14 +86,17 @@ export const profileManagerModule = createCoreModule({
     if (!profileData) {
       throw new Error('failed to load profile');
     }
+    const sourceProfileName =
+      presetSpec.type === 'preset' ? presetSpec.presetName : undefined;
+
     commitCoreState({
-      profileEditSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated', sourceProfileName },
       loadedProfileData: profileData,
     });
   },
-  profile_createProfileExternal({ profileData }) {
+  profile_createProfileExternal({ profileData, sourceProfileName }) {
     commitCoreState({
-      profileEditSource: { type: 'ProfileNewlyCreated' },
+      profileEditSource: { type: 'ProfileNewlyCreated', sourceProfileName },
       loadedProfileData: profileData,
     });
   },
@@ -223,9 +226,9 @@ export const profileManagerModule = createCoreModule({
     if (!newProfileEntry.projectId) {
       throw new Error('blank project id');
     }
-    if (profilesReader.hasProfileEntry(newProfileEntry)) {
-      throw new Error(errorTextInvalidOperation);
-    }
+    // if (profilesReader.hasProfileEntry(newProfileEntry)) {
+    //   throw new Error(errorTextInvalidOperation);
+    // }
     profileManagerCore.saveProfile(newProfileEntry, profileData);
     const allProfileEntries = profileManagerCore.listAllProfileEntries();
     const newProfileData = profileManagerCore.loadProfile(newProfileEntry);
@@ -269,16 +272,29 @@ export const profileManagerModule = createCoreModule({
     }
   },
 
-  profile_importFromFile({ filePath }) {
-    const profile = profileManagerCore.loadExternalProfileFile(filePath);
+  async profile_importFromFile({ fileHandle }) {
+    const profile = await profileManagerCore.loadExternalProfileFile(
+      fileHandle,
+    );
     commitCoreState({
       profileEditSource: { type: 'ProfileNewlyCreated' },
       loadedProfileData: profile,
     });
   },
 
-  profile_exportToFile({ filePath, profileData }) {
-    profileManagerCore.saveExternalProfileFile(filePath, profileData);
+  async profile_exportToFile({ fileHandle, profileData }) {
+    await profileManagerCore.saveExternalProfileFile(fileHandle, profileData);
+  },
+  async profile_postProfileToServerSite({ profileData }) {
+    const profileEntry = profilesReader.getCurrentInternalProfileEntry();
+    if (profileEntry) {
+      await profileManagerCore.postProfileToServerSite(
+        profileEntry,
+        profileData,
+      );
+    } else {
+      throw new Error(errorTextInvalidOperation);
+    }
   },
 
   profile_openUserProfilesFolder() {

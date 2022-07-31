@@ -25,6 +25,7 @@ export const LayersPanelContent: FC = () => {
 };
 
 const style = css`
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 3px;

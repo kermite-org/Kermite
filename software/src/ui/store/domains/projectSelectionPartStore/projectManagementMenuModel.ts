@@ -42,15 +42,31 @@ export function createProjectManagementMenuItems(): IGeneralMenuItem[] {
         handler: projectManagementMenuActions.handleDeleteProject,
       },
     ),
+    { type: 'separator' },
     {
       type: 'menuEntry',
       text: 'import from file',
       handler: projectManagementMenuActions.handleSelectLocalPackageToImport,
     },
-    {
-      type: 'menuEntry',
-      text: 'open data folder',
-      handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
-    },
+    ...optInArrayItem<IGeneralMenuItem>(
+      isUserProjectSelected && {
+        type: 'menuEntry',
+        text: 'export to file',
+        handler: projectManagementMenuActions.handleExportLocalPackageToFile,
+      },
+    ),
+    ...optInArrayItem<IGeneralMenuItem>(
+      isUserProjectSelected && {
+        type: 'menuEntry',
+        text: 'publish on KermiteServer',
+        handler:
+          projectManagementMenuActions.handleSubmitLocalProjectPackageToServer,
+      },
+    ),
+    // {
+    //   type: 'menuEntry',
+    //   text: 'open data folder',
+    //   handler: projectManagementMenuActions.handleOpenLocalProjectsFolder,
+    // },
   ];
 }

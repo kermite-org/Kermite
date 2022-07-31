@@ -3,7 +3,8 @@ import {
   IDeviceSelectionStatus,
   IntervalTimerWrapper,
 } from '~/shared';
-import { applicationStorage } from '~/shell/base';
+import { appEnv, applicationStorage } from '~/shell/base';
+import { createEventPort } from '~/shell/funcs';
 import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfosWebHid,
@@ -31,8 +32,14 @@ const deviceSpecificationParams: IDeviceSpecificationParams[] = [
   },
 ];
 
+export type IDeviceSelectionManagerEvent = {
+  deviceChanged: 1;
+};
+
 export class DeviceSelectionManager {
   private device: IDeviceWrapper | undefined;
+
+  eventPort = createEventPort<IDeviceSelectionManagerEvent>();
 
   getDevice() {
     return this.device;
@@ -50,17 +57,16 @@ export class DeviceSelectionManager {
     commitCoreState({ deviceSelectionStatus });
   }
 
-  private async closeDevice() {
+  private async closeDeviceManuallySafely() {
     if (this.device) {
       this.device.writeSingleFrame(Packets.connectionClosingFrame);
       await this.device.close();
-      this.device = undefined;
     }
   }
 
   private async openHidDevice(hidDevice: HIDDevice) {
     const deviceName = hidDevice.productName;
-    await this.closeDevice();
+    await this.closeDeviceManuallySafely();
     const device = await DeviceWrapper.openWebHidDevice(hidDevice);
     if (!device) {
       console.log(`failed to open device: ${deviceName}`);
@@ -86,12 +92,18 @@ export class DeviceSelectionManager {
     );
     console.log(`device opened: ${deviceName}`);
     device.onClosed(() => {
-      this.updateEnumeration();
+      // this.updateEnumeration();
       this.setStatus({ currentDevicePath: 'none' });
       console.log(`device closed: ${deviceName}`);
+      this.device = undefined;
+      this.eventPort.emit({ deviceChanged: 1 });
     });
-    this.setStatus({ currentDevicePath: deviceName });
+    this.setStatus({
+      currentDevicePath: deviceName,
+      lastConnectedDevicePath: deviceName,
+    });
     this.device = device;
+    this.eventPort.emit({ deviceChanged: 1 });
   }
 
   private async openPreAuthorizedDeviceByProductName(productName: string) {
@@ -106,14 +118,16 @@ export class DeviceSelectionManager {
 
   async selectTargetDevice(path: string) {
     if (path !== this.status.currentDevicePath) {
-      await this.closeDevice();
       if (path !== 'none') {
         await this.openPreAuthorizedDeviceByProductName(path);
+      } else {
+        await this.closeDeviceManuallySafely();
+        this.setStatus({ lastConnectedDevicePath: undefined });
       }
     }
   }
 
-  async selectHidDevice() {
+  async requestAddNewHidDevice() {
     const hidDevices = await navigator.hid.requestDevice({
       filters: [
         // {
@@ -138,26 +152,79 @@ export class DeviceSelectionManager {
   }
 
   private updateEnumeration = async () => {
-    const infos = await enumerateSupportedDeviceInfosWebHid();
-    if (!compareObjectByJsonStringify(infos, this.status.allDeviceInfos)) {
-      this.setStatus({ allDeviceInfos: infos });
+    const deviceInfos = await enumerateSupportedDeviceInfosWebHid();
+    if (
+      !compareObjectByJsonStringify(deviceInfos, this.status.allDeviceInfos)
+    ) {
+      this.setStatus({ allDeviceInfos: deviceInfos });
+      await this.restoreConnectionOnDevicePlugged();
     }
   };
 
-  private async restoreConnection() {
-    const initialDevicePath =
-      applicationStorage.readItem<string>('currentDevicePath');
-    if (initialDevicePath) {
-      await this.openPreAuthorizedDeviceByProductName(initialDevicePath);
+  private async restoreConnectionOnDevicePlugged() {
+    const deviceInfos = this.status.allDeviceInfos;
+    if (
+      !this.device &&
+      deviceInfos.length > 0 &&
+      this.status.lastConnectedDevicePath
+    ) {
+      const deviceInfo = deviceInfos.find(
+        (it) => it.productName === this.status.lastConnectedDevicePath,
+      );
+      if (deviceInfo) {
+        console.log(`auto reconnect to device: ${deviceInfo.productName}`);
+        await this.openPreAuthorizedDeviceByProductName(deviceInfo.productName);
+      }
     }
   }
+
+  // private async restoreConnectionOnStart() {
+  //   const initialDevicePath =
+  //     applicationStorage.readItem<string>('currentDevicePath');
+  //   if (initialDevicePath) {
+  //     await this.openPreAuthorizedDeviceByProductName(initialDevicePath);
+  //   }
+  // }
+
+  private handleWebHidDeviceDisconnect = async (e: HIDConnectionEvent) => {
+    if (
+      this.device &&
+      e.device.productName === this.device.keyboardDeviceInfo.productName
+    ) {
+      await this.device.close();
+    }
+  };
 
   private timerWrapper = new IntervalTimerWrapper();
 
   async initialize() {
-    this.updateEnumeration();
-    await this.restoreConnection();
+    if (!('hid' in navigator)) {
+      console.log(`[WARN] WebHID is not supported`);
+      return;
+    }
+
+    this.status.lastConnectedDevicePath =
+      applicationStorage.readItem('lastConnectedDevicePath') || undefined;
+
+    try {
+      await this.updateEnumeration();
+    } catch (error) {
+      if (appEnv.isDevelopment) {
+        console.log(`error on WebHID first enumeration`);
+        console.log(error);
+        return;
+      } else {
+        throw error;
+      }
+    }
+
+    // await this.restoreConnectionOnStart();
     this.timerWrapper.start(this.updateEnumeration, 2000);
+
+    navigator.hid.addEventListener(
+      'disconnect',
+      this.handleWebHidDeviceDisconnect,
+    );
   }
 
   terminate() {
@@ -165,11 +232,20 @@ export class DeviceSelectionManager {
       'currentDevicePath',
       this.status.currentDevicePath,
     );
+    applicationStorage.writeItem(
+      'lastConnectedDevicePath',
+      this.status.lastConnectedDevicePath,
+    );
     this.timerWrapper.stop();
     // await this.closeDevice();
+
+    navigator.hid.removeEventListener(
+      'disconnect',
+      this.handleWebHidDeviceDisconnect,
+    );
   }
 
   async disposeConnectedHidDevice() {
-    await this.closeDevice();
+    await this.closeDeviceManuallySafely();
   }
 }

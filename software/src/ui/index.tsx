@@ -7,7 +7,7 @@ import { SiteRoot } from '~/ui/root/SiteRoot';
 import { commitUiState, uiSettingsPersistence } from '~/ui/store';
 
 function start() {
-  console.log(`kermite_web ${appConfig.applicationVersion}`);
+  console.log(`kermite_webapp ${appConfig.applicationVersion}`);
   appRoot.initialize();
   const appDiv = document.getElementById('app');
 
@@ -17,11 +17,20 @@ function start() {
   render(() => <SiteRoot />, appDiv);
   window.addEventListener('resize', debounce(appUi.rerender, 100));
 
-  window.addEventListener('beforeunload', () => {
+  const unloadHandler = () => {
     render(() => <div />, appDiv);
+    if (appUi.skipPageTerminationTasks) {
+      return;
+    }
     uiSettingsPersistence.finalize();
     appRoot.terminate();
-  });
+  };
+
+  if (window.parent) {
+    window.addEventListener('unload', unloadHandler);
+  } else {
+    window.addEventListener('beforeunload', unloadHandler);
+  }
 }
 
 window.addEventListener('load', start);

@@ -84,6 +84,7 @@ export const modalTextEdit = createModal(
     defaultText?: string;
     caption: string;
     validator?: (text: string) => string | undefined;
+    allowSavingWithDefaultText?: boolean;
   }) => {
     const { message, defaultText, caption, validator } = args;
     const editValues = {
@@ -110,7 +111,10 @@ export const modalTextEdit = createModal(
         min-height: 20px;
       `;
 
-      const baseValid = !!editValues.text && editValues.text !== defaultText;
+      let baseValid = !!editValues.text; // && editValues.text !== defaultText;
+      if (!args.allowSavingWithDefaultText && editValues.text === defaultText) {
+        baseValid = false;
+      }
       const errorText = baseValid && validator?.(editValues.text);
       const isValid = baseValid && !errorText;
 

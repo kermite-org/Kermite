@@ -1,9 +1,13 @@
 import { css, FC, jsx } from 'alumina';
-import { colors } from '~/ui/base';
+import { colors, texts } from '~/ui/base';
+import { ConfigurationButton } from '~/ui/elements';
 import { KeyAssignEditView } from '~/ui/featureEditors';
 import { ProfileConfigurationModalLayer } from '~/ui/featureEditors/profileEditor/ui_modal_profileConfiguration';
-import { updateProfileDataSourceHandling } from '~/ui/pages/assignerPage/models';
-import { DeviceControlSection } from './ui_bar_deviceControlSection/DeviceControlSection';
+import {
+  profilesReader,
+  updateProfileDataSourceHandling,
+} from '~/ui/pages/assignerPage/models';
+import { uiActions } from '~/ui/store';
 import { ProfileManagementPart } from './ui_bar_profileManagement/ProfileManagementPart';
 
 export const AssignerPage: FC = () => {
@@ -12,7 +16,15 @@ export const AssignerPage: FC = () => {
     <div class={style}>
       <div class="topRow">
         <ProfileManagementPart class="profile-management-part" />
-        <DeviceControlSection />
+        {/* <DeviceControlSection /> */}
+        <div class="buttons-part">
+          <ConfigurationButton
+            onClick={() => uiActions.navigateTo('/widget')}
+            iconSpec="fa fa-feather-alt"
+            data-hint={texts.titleBarHint.switchToWidgetView}
+            disabled={!profilesReader.isEditProfileAvailable}
+          />
+        </div>
       </div>
       <div class="mainRow">
         <KeyAssignEditView />
@@ -36,7 +48,11 @@ const style = css`
     align-items: center;
 
     > .profile-management-part {
-      margin-right: 50px;
+      margin-right: 40px;
+    }
+
+    > .buttons-part {
+      margin: 0 10px;
     }
   }
 

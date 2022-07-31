@@ -1,4 +1,4 @@
-import { IProjectPackageInfo } from '~/shared';
+import { fileExtensions, IProjectPackageInfo } from '~/shared';
 import { ipcAgent, ISelectorOption } from '~/ui/base';
 import { modalConfirm } from '~/ui/components';
 import { callProjectSelectionModal } from '~/ui/elements/featureModals';
@@ -141,9 +141,37 @@ export const projectManagementMenuActions = {
     }
   },
   async handleSelectLocalPackageToImport() {
-    const filePath = await ipcAgent.async.file_getOpenJsonFilePathWithDialog();
-    if (filePath) {
-      await projectPackagesActions.importLocalPackageFile(filePath);
+    const fileHandle = await ipcAgent.async.file_getOpenJsonFilePathWithDialog(
+      fileExtensions.package,
+    );
+    if (fileHandle) {
+      await projectPackagesActions.importLocalPackageFile(fileHandle);
+    }
+  },
+  async handleExportLocalPackageToFile() {
+    const project = projectPackagesReader.getEditTargetProject();
+    if (project) {
+      const { projectId, keyboardName } = project;
+      const ext = fileExtensions.package;
+      const fileName = `${keyboardName.toLowerCase()}${ext}`;
+      const fileHandle =
+        await ipcAgent.async.file_getSaveJsonFilePathWithDialog(ext, fileName);
+      if (fileHandle) {
+        await projectPackagesActions.exportLocalPackageToFile(
+          fileHandle,
+          projectId,
+        );
+        if (fileHandle.isPreSelectedFile) {
+          modalConfirm({ caption: 'export to file', message: 'file saved.' });
+        }
+      }
+    }
+  },
+  async handleSubmitLocalProjectPackageToServer() {
+    const project = projectPackagesReader.getEditTargetProject();
+    if (project) {
+      const { projectId } = project;
+      await projectPackagesActions.submitLocalProjectPackageToServer(projectId);
     }
   },
   handleOpenLocalProjectsFolder() {

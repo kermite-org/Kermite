@@ -1,13 +1,3 @@
 {
   "files.associations": { "*.c": "cpp" },
-  "json.schemas": [
-    {
-      "fileMatch": ["project.json"],
-      "url": "./.vscode/schemas/project.schema.json"
-    },
-    {
-      "fileMatch": ["*.layout.json"],
-      "url": "./.vscode/schemas/layout.schema.json"
-    }
-  ]
 }

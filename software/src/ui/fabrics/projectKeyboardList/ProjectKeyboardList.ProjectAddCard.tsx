@@ -1,10 +1,12 @@
 import { css, FC, jsx, useEffect, useRef } from 'alumina';
-import { Icon } from '~/ui/components';
+import { fileExtensions, IFileReadHandle } from '~/shared';
+import { appUi } from '~/ui/base';
+import { Icon, modalError } from '~/ui/components';
 import { projectKeyboardListCardCommonStyles } from '~/ui/fabrics/projectKeyboardList/ProjectKeyboardList.CardCommonStyles';
 
 type Props = {
   onClick: () => void;
-  onFileDrop: (filePath: string) => void;
+  onFileDrop: (fileHandle: IFileReadHandle) => void;
 };
 
 export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
@@ -26,14 +28,22 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
       baseDiv.classList.remove('--drop-hover');
     };
 
-    const onDrop = (e: DragEvent) => {
+    const onDrop = async (e: DragEvent) => {
       e.preventDefault();
-      const file = e.dataTransfer?.files[0];
-      if (file && file.type === 'application/json') {
-        throw new Error('TODO: support importing package file');
-        // onFileDrop(file.path);
-      }
       baseDiv.classList.remove('--drop-hover');
+      const file = e.dataTransfer?.files[0];
+      if (file) {
+        appUi.rerender();
+        const fileName = file.name;
+        if (!fileName.endsWith(fileExtensions.package)) {
+          await modalError(
+            `Invalid file. Only ${fileExtensions.package} file can be loaded.`,
+          );
+          return;
+        }
+        const contentText = await file.text();
+        onFileDrop({ fileName, contentText });
+      }
     };
 
     baseDiv.addEventListener('dragover', onDragOver);
@@ -55,7 +65,7 @@ export const ProjectKeyboardListProjectAddCard: FC<Props> = ({
           <div class="texts">
             Add keyboard definition
             <br />
-            (*.kmpkg.json)
+            (*{fileExtensions.package})
           </div>
         </div>
       </div>

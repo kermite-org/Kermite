@@ -86,25 +86,10 @@ const helpers = {
         (it) => !it.onlineProjectAttributes?.isDevelopment,
       );
     }
-    if (!isDeveloperMode) {
-      const onlineProjects = helpers.createSourceProjectItems(
-        targetProjectPackages.filter(
-          (it) => !it.onlineProjectAttributes?.isDevelopment,
-        ),
-        'online',
-      );
-      const localProjects = helpers.createSourceProjectItems(
-        targetProjectPackages.filter((it) => !it.isDraft),
-        'local',
-        '(local)',
-      );
-      return [...onlineProjects, ...localProjects];
-    } else {
-      return helpers.createSourceProjectItems(
-        targetProjectPackages,
-        resourceOrigin,
-      );
-    }
+    return helpers.createSourceProjectItems(
+      targetProjectPackages,
+      resourceOrigin,
+    );
   },
 };
 
@@ -124,8 +109,16 @@ function createProjectSelectionPartStore(): IProjectSelectionPartStore {
   );
 
   const readers: IReaders = {
-    get canSelectResourceOrigin() {
-      return uiReaders.isDeveloperMode;
+    get canSelectResourceOrigin(): boolean {
+      if (uiReaders.isDeveloperMode) {
+        return true;
+      } else {
+        return (
+          !!uiReaders.allProjectPackageInfos.find(
+            (it) => it.origin === 'local',
+          ) || false
+        );
+      }
     },
     get sourceProjectItems() {
       return sourceProjectItemsSelector();
@@ -141,7 +134,7 @@ function createProjectSelectionPartStore(): IProjectSelectionPartStore {
       };
     },
     get isMenuButtonVisible() {
-      return state.tabResourceOrigin === 'local';
+      return uiReaders.isDeveloperMode && state.tabResourceOrigin === 'local';
     },
     get menuItems() {
       return createProjectManagementMenuItems();

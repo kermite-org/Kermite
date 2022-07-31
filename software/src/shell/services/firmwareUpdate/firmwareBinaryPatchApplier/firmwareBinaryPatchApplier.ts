@@ -42,7 +42,7 @@ function getCustomDataLocation(
   }[type];
   const markerPosition = getBinaryContentMarkerIndex(binaryBytes, markerCode);
   if (markerPosition === -1) {
-    throw new Error('cannot find marker');
+    throw new Error(`cannot find marker ${markerCode}`);
   }
   return markerPosition + 5;
 }

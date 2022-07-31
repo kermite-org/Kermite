@@ -1,4 +1,4 @@
-import { appUi, texts } from '~/ui/base';
+import { texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
 
@@ -47,20 +47,15 @@ const itemsSource: NavigationItemSource[] = [
     pageName: texts.sideMenuApps.shapePreview,
     iconSpec: 'fa fa-file-code',
     hint: texts.sideMenuAppsHint.shapePreview,
-    isAvailable: () => appUi.isDevelopment && uiReaders.isDeveloperMode,
-  },
-  {
-    pagePath: '/firmwareUpdate',
-    pageName: texts.sideMenuApps.firmwareUpdate,
-    iconSpec: 'fa fa-microchip',
-    hint: texts.sideMenuAppsHint.firmwareUpdate,
-  },
-  {
-    pagePath: '/firmwareFlash',
-    pageName: 'flash',
-    iconSpec: 'fa fa-microchip',
-    hint: texts.sideMenuAppsHint.firmwareUpdate,
+    // isAvailable: () => appUi.isDevelopment && uiReaders.isDeveloperMode,
     isAvailable: () => false,
+  },
+  {
+    pagePath: '/projectReview',
+    pageName: 'review',
+    iconSpec: 'fa fa-globe',
+    hint: 'review page',
+    isAvailable: () => uiReaders.isDeveloperMode,
   },
   {
     pagePath: '/projectResource',
@@ -76,11 +71,17 @@ const itemsSource: NavigationItemSource[] = [
     hint: texts.sideMenuAppsHint.projectSelection,
   },
   {
-    pagePath: '/projectReview',
-    pageName: 'review',
-    iconSpec: 'fa fa-globe',
-    hint: 'review page',
-    isAvailable: () => uiReaders.isDeveloperMode,
+    pagePath: '/firmwareUpdate',
+    pageName: texts.sideMenuApps.firmwareUpdate,
+    iconSpec: 'fa fa-microchip',
+    hint: texts.sideMenuAppsHint.firmwareUpdate,
+  },
+  {
+    pagePath: '/firmwareFlash',
+    pageName: 'flash',
+    iconSpec: 'fa fa-microchip',
+    hint: texts.sideMenuAppsHint.firmwareUpdate,
+    isAvailable: () => false,
   },
   {
     pagePath: '/settings',

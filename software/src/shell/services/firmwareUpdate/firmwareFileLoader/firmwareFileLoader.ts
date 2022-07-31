@@ -24,7 +24,7 @@ import { IStandardKeyboardInjectedMetaData } from '~/shell/services/firmwareUpda
 import { IFirmwareBinaryFileSpec } from '~/shell/services/firmwareUpdate/types';
 
 const config = {
-  remoteBaseUrl: 'https://app.kermite.org/krs/resources2',
+  remoteBaseUrl: 'https://assets.kermite.org/krs/resources2',
 };
 
 type IFirmwareFetchResult = { fileName: string; data: Uint8Array };
@@ -82,6 +82,7 @@ namespace fetcherLocalDebugStandard {
   } = {
     // AvrUnified: pathResolve('../firmware/build/standard/avr/standard_avr.hex'),
     RpUnified: '/debug_local_firmwares/standard_rp.uf2',
+    RpSplit: '/debug_local_firmwares/standard_rp_split.uf2',
     // AvrSplit: pathResolve(
     //   '../firmware/build/standard/avr_split/standard_avr_split.hex',
     // ),

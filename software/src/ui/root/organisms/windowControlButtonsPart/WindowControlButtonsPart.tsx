@@ -30,6 +30,7 @@ export const WindowControlButtonsPart: FC = () => {
         icon="fa fa-window-minimize"
         onClick={onMinimizeButton}
         hint={texts.titleBarHint.minimizeWindow}
+        if={false}
       />
       <WindowControlButton
         icon={
@@ -37,11 +38,13 @@ export const WindowControlButtonsPart: FC = () => {
         }
         onClick={onMaximizeButton}
         hint={texts.titleBarHint.maximizeWindow}
+        if={false}
       />
       <WindowControlButton
         icon="fa fa-times"
         onClick={onCloseButton}
         hint={texts.titleBarHint.closeApplication}
+        if={false}
       />
     </div>
   );

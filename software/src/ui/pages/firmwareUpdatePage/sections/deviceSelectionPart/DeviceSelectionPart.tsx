@@ -9,7 +9,7 @@ export const DeviceSelectionPart: FC = () => {
     useDeviceSelectionPartModel();
 
   const onSelectionButton = () => {
-    ipcAgent.async.device_selectHidDevice();
+    ipcAgent.async.device_requestAddNewHidDevice();
   };
   return (
     <div class={style}>

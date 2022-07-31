@@ -474,3 +474,14 @@ export function optInArrayItem<T>(item: T | undefined | false): T[] {
 export function isIncluded<T>(value: T) {
   return (...source: T[]) => source.includes(value);
 }
+
+export function getSearchQueryObject(): any {
+  const obj: any = {};
+  const sp = new URLSearchParams(location.search);
+  sp.forEach((value, key) => (obj[key] = value));
+  return obj;
+}
+
+export function encodeTextToBase64String(text: string): string {
+  return window.btoa(unescape(encodeURIComponent(text)));
+}

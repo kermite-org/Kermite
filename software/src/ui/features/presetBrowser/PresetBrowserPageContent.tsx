@@ -1,5 +1,5 @@
 import { css, FC, jsx, useEffect } from 'alumina';
-import { ipcAgent, texts } from '~/ui/base';
+import { texts } from '~/ui/base';
 import { CommonPageFrame } from '~/ui/components';
 import { PresetKeyboardSection, PresetSelectionSection } from '~/ui/fabrics';
 import { presetSelectionStore } from '~/ui/store/domains/presetSelectionStore';
@@ -50,22 +50,26 @@ const KermiteServerLinkPart: FC = () => {
     margin-top: 10px;
     display: flex;
     justify-content: flex-end;
-    .link {
+    > a.link {
       color: blue;
       cursor: pointer;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   `;
-  const onClick = () => {
-    ipcAgent.async.platform_openUrlInDefaultBrowser(
-      'https://dev.server.kermite.org/',
-    );
-  };
   return (
     <div class={style}>
       User profiles are served on &nbsp;
-      <span class="link" onClick={onClick}>
+      <a
+        href="https://server.kermite.org"
+        target="_blank"
+        class="link"
+        rel="noreferrer"
+      >
         KermiteServer
-      </span>
+      </a>
     </div>
   );
 };

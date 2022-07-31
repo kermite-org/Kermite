@@ -28,10 +28,10 @@ interface IProjectPackageWrapperFileContent {
 }
 
 function loadLocalDigestMap(folderPath: string): Record<string, number> {
-  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper.json');
+  const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper');
   return createDictionaryFromKeyValues(
     projectKeys.map((projectKey) => {
-      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper.json`);
+      const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper`);
       const content = fsxReadJsonFile(
         filePath,
       ) as IProjectPackageWrapperFileContent;
@@ -86,7 +86,7 @@ interface IApiProjectPackageWrapperItemPartial {
   keyboardName: string;
   projectId: string;
   userId: string;
-  data: string; // content of .kmpkg.json
+  data: string; // content of .kmpkg
   dataHash: string;
   revision: number;
   official: boolean;
@@ -143,7 +143,7 @@ async function fetchProjectPackageWrapperItem(
   };
 }
 
-function updateRemotePackagesDifferential(
+async function updateRemotePackagesDifferential(
   remotePackagesFolderPath: string,
   localDigestMap: Record<string, number>,
   remoteDigestMap: Record<string, number>,
@@ -154,25 +154,27 @@ function updateRemotePackagesDifferential(
   const updatedProjectKeys = getObjectKeys(remoteDigestMap).filter(
     (key) => !(localDigestMap[key] === remoteDigestMap[key]),
   );
-  removedProjectKeys.map(async (projectKey) => {
+  removedProjectKeys.forEach((projectKey) => {
     const filePath = pathJoin(
       remotePackagesFolderPath,
-      `${projectKey}.kmpkg_wrapper.json`,
+      `${projectKey}.kmpkg_wrapper`,
     );
     fsxDeleteFile(filePath);
   });
-  updatedProjectKeys.map(async (projectKey) => {
-    const timeStamp = remoteDigestMap[projectKey];
-    const wrapperFileContent = await fetchProjectPackageWrapperItem(
-      projectKey,
-      timeStamp,
-    );
-    const filePath = pathJoin(
-      remotePackagesFolderPath,
-      `${projectKey}.kmpkg_wrapper.json`,
-    );
-    fsxWriteJsonFile(filePath, wrapperFileContent);
-  });
+  await Promise.all(
+    updatedProjectKeys.map(async (projectKey) => {
+      const timeStamp = remoteDigestMap[projectKey];
+      const wrapperFileContent = await fetchProjectPackageWrapperItem(
+        projectKey,
+        timeStamp,
+      );
+      const filePath = pathJoin(
+        remotePackagesFolderPath,
+        `${projectKey}.kmpkg_wrapper`,
+      );
+      fsxWriteJsonFile(filePath, wrapperFileContent);
+    }),
+  );
   if (updatedProjectKeys.length === 0 && removedProjectKeys.length === 0) {
     console.log('all project packages are up to date');
   }
@@ -192,7 +194,7 @@ export async function remoteResourceUpdater2_updateRemoteProjectPackages() {
   console.log('update remote project packages');
   const localDigestMap = loadLocalDigestMap(remotePackagesFolderPath);
   const remoteDigestMap = await loadRemoteDigestMap();
-  updateRemotePackagesDifferential(
+  await updateRemotePackagesDifferential(
     remotePackagesFolderPath,
     localDigestMap,
     remoteDigestMap,

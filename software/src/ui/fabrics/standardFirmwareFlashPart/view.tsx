@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { IProjectPackageInfo } from '~/shared';
-import { ipcAgent, texts } from '~/ui/base';
+import { ipcAgent, languageKey, texts } from '~/ui/base';
 import { useModalDisplayStateModel } from '~/ui/commonModels';
 import { GeneralButton } from '~/ui/components';
 import { svgImage_resetByHand } from '~/ui/constants';
@@ -10,6 +10,23 @@ import { useStandardFirmwareFlashPartModel } from '~/ui/fabrics/standardFirmware
 type Props = {
   projectInfo: IProjectPackageInfo;
   variationId: string;
+};
+
+const localTextSources = {
+  english: {
+    p1: `1. Reset the device to bootloader mode.`,
+    p2: `2. Download the uf2 file and write it to the device's drive.`,
+    p3: `3. Connect to the device. Press the button and select your device from the list.`,
+    btnUf2Download: 'download uf2 file',
+    btnAddDevice: 'add device',
+  },
+  japanese: {
+    p1: '1.デバイスをリセットしてブートローダモードにします。',
+    p2: '2.uf2ファイルをダウンロードしてデバイスのドライブに書き込みます。',
+    p3: '3.デバイスに接続します。以下のボタンを押して、リストからデバイスを選択してください。',
+    btnUf2Download: 'uf2ファイルダウンロード',
+    btnAddDevice: 'デバイスを追加',
+  },
 };
 
 export const StandardFirmwareFlashPart: FC<Props> = ({
@@ -32,8 +49,10 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
   } = useModalDisplayStateModel();
 
   const onDeviceAddButton = () => {
-    ipcAgent.async.device_selectHidDevice();
+    ipcAgent.async.device_requestAddNewHidDevice();
   };
+
+  const localTexts = localTextSources[languageKey];
 
   return (
     <div class={style}>
@@ -47,29 +66,26 @@ export const StandardFirmwareFlashPart: FC<Props> = ({
           {texts.firmwareFlashSection.howToReset}
         </div>
       </div>
-
       <div class="image-box">{svgImage_resetByHand}</div>
       <div class="text-part2">
-        <p>1.デバイスをリセットしてブートローダモードにします。</p>
+        <p>{localTexts.p1}</p>
         <div>
-          <p>
-            2.uf2ファイルをダウンロードしてデバイスのドライブに書き込みます。
-          </p>
+          <p>{localTexts.p2}</p>
           <div>
             <button
               onClick={onDownloadButton}
               disabled={targetDeviceType !== 'rp2040'}
             >
-              uf2ファイルダウンロード
+              {localTexts.btnUf2Download}
             </button>
           </div>
         </div>
         <div>
-          <p>
-            3.デバイスに接続します。以下のボタンを押して、リストからデバイスを選択してください。
-          </p>
+          <p>{localTexts.p3}</p>
           <div>
-            <button onClick={onDeviceAddButton}>add device</button>
+            <button onClick={onDeviceAddButton}>
+              {localTexts.btnAddDevice}
+            </button>
           </div>
         </div>
       </div>
@@ -150,6 +166,11 @@ const style = css`
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    button {
+      padding: 2px 7px;
+      margin-top: 2px;
+    }
   }
   > .text-part {
     width: 300px;

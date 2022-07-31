@@ -1,5 +1,5 @@
 #pragma once
 
-#define KERMITE_FIRMWARE_ID "066MbL"
+#define KERMITE_FIRMWARE_ID "066Mb0"
 
 #define KM0_KEYBOARD__NUM_SCAN_SLOTS 12
