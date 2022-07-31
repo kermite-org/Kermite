@@ -18,6 +18,9 @@ export async function fetchText(uri: string): Promise<string> {
   console.log(`fetching ${uri}`);
   try {
     const res = await fetch(uri);
+    if (res.status !== 200) {
+      throw new Error(`api error, status: ${res.status}`);
+    }
     return await res.text();
   } catch (error) {
     throw new AppError('FailedToLoadRemoteResource', { url: uri }, error);
@@ -28,6 +31,9 @@ export async function fetchBinary(uri: string): Promise<Uint8Array> {
   console.log(`fetching ${uri}`);
   try {
     const res = await fetch(uri);
+    if (res.status !== 200) {
+      throw new Error(`api error, status: ${res.status}`);
+    }
     const data = await res.arrayBuffer();
     return new Uint8Array(data);
   } catch (error) {
