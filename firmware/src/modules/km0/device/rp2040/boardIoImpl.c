@@ -37,8 +37,19 @@ void boardIoImpl_setupLeds_rpiPico() {
 }
 
 void boardIoImpl_setupLeds_tiny2040() {
+  //GP19: green
+  //GP20: blue
   boardIoImpl_setupLeds(GP19, GP20, true);
-  //red off
+  //GP18: red (off)
   digitalIo_setOutput(GP18);
   digitalIo_setHigh(GP18);
+}
+
+void boardIoImpl_setupLeds_seeedXiaoRp2040(){
+  //GP16: green
+  //GP25: blue
+  boardIoImpl_setupLeds(GP16, GP25, true);
+  //GP17: red (off)
+  digitalIo_setOutput(GP17);
+  digitalIo_setHigh(GP17);
 }
