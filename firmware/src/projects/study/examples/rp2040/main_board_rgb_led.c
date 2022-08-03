@@ -4,10 +4,11 @@
 #include "km0/device/system.h"
 
 int main() {
-  // boardIoImpl_setupLeds_proMicroRp();
+  boardIoImpl_setupLeds_proMicroRp();
   // boardIoImpl_setupLeds_qtPyRp();
   // boardIoImpl_setupLeds_tiny2040();
-  boardIoImpl_setupLeds_seeedXiaoRp2040();
+  // boardIoImpl_setupLeds_seeedXiaoRp2040();
+  // boardIoImpl_setupLeds_kb2040();
 
   while (true) {
     boardIo_writeLed1(true);
