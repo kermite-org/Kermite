@@ -171,6 +171,7 @@ int main() {
     if (defs.boardType == BoardType_RpiPico && boardIoImpl_setupLeds_rpiPico) {
       boardIoImpl_setupLeds_rpiPico();
     }
+    configManager_setParameterExposeFlagsForBoardLeds();
   }
   if (defs.useDebugUart) {
     debugUart_initialize(38400);
