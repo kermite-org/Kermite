@@ -1,7 +1,9 @@
 import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
 import {
+  boardAssignsData_kb2040,
   boardAssignsData_proMicroRp2040,
   boardAssignsData_rpiPico,
+  boardAssignsData_xiaoRp2040,
 } from '~/ui/fabrics/controllerPinAssignsSection/data';
 import {
   IBoardPinAssignsData,
@@ -61,6 +63,8 @@ const boardTypeToAssignsDataSourceMap: Record<
   ChipRP2040: undefined,
   ProMicroRP2040: boardAssignsData_proMicroRp2040,
   RpiPico: boardAssignsData_rpiPico,
+  KB2040: boardAssignsData_kb2040,
+  SeeedXiaoRP2040: boardAssignsData_xiaoRp2040,
 };
 
 export function createBoardAssignsData(
