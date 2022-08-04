@@ -185,5 +185,8 @@ enum LogicalKey {
   LK_RoutingSource_Any,
   LK_RoutingDestination_Keep,
   LK_Lang1Kana,
-  LK_Lang2Eisu
+  LK_Lang2Eisu,
+  LK_AudioMute,
+  LK_AudioVolumeUp,
+  LK_AudioVolumeDown,
 };

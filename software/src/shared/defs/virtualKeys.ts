@@ -183,7 +183,10 @@ export type VirtualKey =
   | 'K_RoutingSource_Any'
   | 'K_RoutingDestination_Keep'
   | 'K_Lang1Kana'
-  | 'K_Lang2Eisu';
+  | 'K_Lang2Eisu'
+  | 'K_AudioMute'
+  | 'K_AudioVolumeUp'
+  | 'K_AudioVolumeDown';
 
 export type ModifierVirtualKey = 'K_Shift' | 'K_Ctrl' | 'K_Alt' | 'K_Gui';
 
