@@ -1,4 +1,9 @@
-export type IBoardImageSig = 'proMicro' | 'proMicroRp2040' | 'rpiPico';
+export type IBoardImageSig =
+  | 'proMicro'
+  | 'proMicroRp2040'
+  | 'rpiPico'
+  | 'kb2040'
+  | 'xiaoRp2040';
 
 export type IBoardPinAssignsData = {
   unitPixels: number;

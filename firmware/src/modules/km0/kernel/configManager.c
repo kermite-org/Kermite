@@ -113,6 +113,11 @@ uint16_t configManager_getParameterExposeFlags() {
   return parameterExposeFlags;
 }
 
+void configManager_setParameterExposeFlagsForBoardLeds(){
+  configManager_setParameterExposeFlag(SystemParameter_HeartbeatLed);
+  configManager_setParameterExposeFlag(SystemParameter_KeyHoldIndicatorLed);
+}
+
 void configManager_addParameterChangeListener(ParameterChangedListener listener) {
   if (utils_checkPointerArrayIncludes((void **)parameterChangedListeners, numParameterChangedListeners, listener)) {
     return;
