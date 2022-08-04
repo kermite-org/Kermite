@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { appUi, colors } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { SetupNavigationFrame } from '~/ui/features';
