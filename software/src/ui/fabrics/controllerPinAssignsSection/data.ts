@@ -130,7 +130,7 @@ export const boardAssignsData_xiaoRp2040: IBoardPinAssignsData = {
     'GP26',
     'GP27',
     'GP28',
-    'GP28',
+    'GP29',
     'GP6',
     'GP7',
     'GP0',
