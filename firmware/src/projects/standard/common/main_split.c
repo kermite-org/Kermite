@@ -5,7 +5,7 @@
 #include "km0/device/debugUart.h"
 #include "km0/device/system.h"
 #include "km0/kernel/firmwareMetadata.h"
-#include "km0/kernel/configmanager.h"
+#include "km0/kernel/configManager.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_directWired.h"
