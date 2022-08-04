@@ -6,5 +6,7 @@ enum {
   BoardType_ProMicro__OBSOLETE = 2,
   BoardType_ChipRP2040 = 3,
   BoardType_ProMicroRP2040 = 4,
-  BoardType_RpiPico = 5
+  BoardType_RpiPico = 5,
+  BoardType_Kb2040 = 6,
+  BoardType_XiaoRp2040 = 7,
 };
