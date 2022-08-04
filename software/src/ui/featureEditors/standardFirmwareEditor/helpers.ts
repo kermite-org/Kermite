@@ -189,8 +189,16 @@ export const standardFirmwareEditModelHelpers = {
     const isRp = mcuType === 'rp';
 
     if (isRp) {
-      if (!isIncluded(boardType)('ChipRP2040', 'ProMicroRP2040', 'RpiPico')) {
-        editValues.boardType = 'ProMicroRP2040';
+      if (
+        !isIncluded(boardType)(
+          'ChipRP2040',
+          'ProMicroRP2040',
+          'RpiPico',
+          'KB2040',
+          'SeeedXiaoRP2040',
+        )
+      ) {
+        editValues.boardType = 'RpiPico';
       }
     }
     if (diff.baseFirmwareType) {
