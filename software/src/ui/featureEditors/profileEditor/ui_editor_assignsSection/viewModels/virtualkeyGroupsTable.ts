@@ -186,6 +186,9 @@ const assignKeysGroup8: VirtualKey[] = [
   'K_RCtrl',
   'K_RAlt',
   'K_RGui',
+  'K_AudioMute',
+  'K_AudioVolumeDown',
+  'K_AudioVolumeUp',
 ];
 
 export const virtualKeyGroupsTable: VirtualKey[][] = [

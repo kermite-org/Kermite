@@ -109,6 +109,10 @@ enum HidKey {
   KU_F24,
 
   KU_Menu = 118,
+  
+  KU_AudioMute = 127,
+  KU_AudioVolumeUp,
+  KU_AudioVolumeDown,
 
   KU_KeyPad_00 = 176,
   KU_KeyPad_BackSpace = 187,
@@ -352,6 +356,9 @@ static const LogicalKeyItem logicalKeyItems[] = {
   { LK_PrintScreen, "PrtScr", KU_PrintScreen },
   { LK_PauseBreak, "PauseBreak", KU_Pause },
   { LK_Menu, "Menu", KU_Menu },
+  { LK_AudioMute, "Mute", KU_AudioMute },
+  { LK_AudioVolumeUp, "VolumeUp", KU_AudioVolumeUp },
+  { LK_AudioVolumeDown, "VolumeDown", KU_AudioVolumeDown },
 };
 
 #define SizeLogicalKeyItem sizeof(LogicalKeyItem)

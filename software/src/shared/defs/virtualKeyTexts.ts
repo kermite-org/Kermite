@@ -175,4 +175,7 @@ export const VirtualKeyTexts: { [key in VirtualKey]?: string } = {
   K_U9: 'U9',
   K_Lang1Kana: 'かな',
   K_Lang2Eisu: '英数',
+  K_AudioMute: 'mute',
+  K_AudioVolumeDown: 'vol-',
+  K_AudioVolumeUp: 'vol+',
 };
