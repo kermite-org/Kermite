@@ -23,9 +23,13 @@ const constants = {
   baseFirmwareTypeOptions: ['RpUnified', 'RpSplit', 'RpOddSplit'].map(
     makePlainSelectorOption,
   ),
-  boardTypeOptionsRp: ['ProMicroRP2040', 'RpiPico', 'ChipRP2040'].map(
-    makePlainSelectorOption,
-  ),
+  boardTypeOptionsRp: [
+    'RpiPico',
+    'ProMicroRP2040',
+    'KB2040',
+    'SeeedXiaoRP2040',
+    'ChipRP2040',
+  ].map(makePlainSelectorOption),
   availablePinsTextRp: 'GP0~GP29',
 } as const;
 

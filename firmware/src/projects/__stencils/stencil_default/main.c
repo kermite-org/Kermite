@@ -50,12 +50,14 @@ int main() {
 #ifdef KS_USE_BOARD_LEDS_PROMICRO_RP
   if (boardIoImpl_setupLeds_proMicroRp) {
     boardIoImpl_setupLeds_proMicroRp();
+    configManager_setParameterExposeFlagsForBoardLeds();
   }
 #endif
 
 #ifdef KS_USE_BOARD_LEDS_RPI_PICO
   if (boardIoImpl_setupLeds_rpiPico) {
     boardIoImpl_setupLeds_rpiPico();
+    configManager_setParameterExposeFlagsForBoardLeds();
   }
 #endif
 

@@ -8,3 +8,5 @@ void boardIoImpl_setupLeds_proMicroRp() __attribute__((weak));
 void boardIoImpl_setupLeds_rpiPico() __attribute__((weak));
 void boardIoImpl_setupLeds_qtPyRp() __attribute__((weak));
 void boardIoImpl_setupLeds_tiny2040() __attribute__((weak));
+void boardIoImpl_setupLeds_seeedXiaoRp2040() __attribute__((weak));
+void boardIoImpl_setupLeds_kb2040() __attribute__((weak));

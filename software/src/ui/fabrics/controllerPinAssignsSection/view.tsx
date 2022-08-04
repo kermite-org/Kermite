@@ -4,9 +4,11 @@ import {
   IStandardFirmwareConfig,
 } from '~/shared';
 import {
+  svgImage_boardKb2040,
   svgImage_boardProMicro,
   svgImage_boardProMicroRp2040,
   svgImage_boardRpiPico,
+  svgImage_boardXiaoRp2040,
 } from '~/ui/constants';
 import { createBoardAssignsData } from '~/ui/fabrics/controllerPinAssignsSection/model';
 import {
@@ -44,6 +46,8 @@ const svgImagesMap: { [key in IBoardImageSig]: JSX.Element } = {
   proMicro: svgImage_boardProMicro,
   proMicroRp2040: svgImage_boardProMicroRp2040,
   rpiPico: svgImage_boardRpiPico,
+  kb2040: svgImage_boardKb2040,
+  xiaoRp2040: svgImage_boardXiaoRp2040,
 };
 
 const BoardPinAssignsView: FC<{ data: IBoardPinAssignsDataEx }> = ({
