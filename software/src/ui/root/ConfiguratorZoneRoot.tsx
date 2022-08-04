@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { appUi, colors } from '~/ui/base';
+import { colors } from '~/ui/base';
 import { CustomWindowFrame, DevToolPullTab } from '~/ui/components';
 import { LoadingOverlay } from '~/ui/components/overlay/LoadingOverlay';
 import { SetupNavigationFrame } from '~/ui/features';
@@ -33,10 +33,7 @@ export const ConfiguratorZoneRoot: FC = () => {
         )}
         <PageModals />
         <LoadingOverlay isLoading={uiState.isLoading} />
-        <DevToolPullTab
-          if={appUi.isDevelopment}
-          handler={siteModel.toggleDevToolVisible}
-        />
+        <DevToolPullTab if={false} handler={siteModel.toggleDevToolVisible} />
       </div>
     </CustomWindowFrame>
   );

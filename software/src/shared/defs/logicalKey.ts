@@ -186,6 +186,9 @@ export enum LogicalKey {
   LK_RoutingDestination_Keep,
   LK_Lang1Kana,
   LK_Lang2Eisu,
+  LK_AudioMute,
+  LK_AudioVolumeUp,
+  LK_AudioVolumeDown,
 }
 
 const virtualKeyToLogicalKeyMappingTable: {
@@ -376,6 +379,9 @@ const virtualKeyToLogicalKeyMappingTable: {
   K_RoutingDestination_Keep: LogicalKey.LK_RoutingDestination_Keep,
   K_Lang1Kana: LogicalKey.LK_Lang1Kana,
   K_Lang2Eisu: LogicalKey.LK_Lang2Eisu,
+  K_AudioMute: LogicalKey.LK_AudioMute,
+  K_AudioVolumeUp: LogicalKey.LK_AudioVolumeUp,
+  K_AudioVolumeDown: LogicalKey.LK_AudioVolumeDown,
 };
 
 export function getLogicalKeyForVirtualKey(virtualKey: VirtualKey): number {
