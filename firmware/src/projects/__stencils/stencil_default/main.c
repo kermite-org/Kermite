@@ -1,6 +1,7 @@
 #include "km0/base/configImport.h"
 #include "km0/device/digitalIo.h"
 #include "km0/device/system.h"
+#include "km0/kernel/configManager.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/wrapper/generalKeyboard.h"
 
