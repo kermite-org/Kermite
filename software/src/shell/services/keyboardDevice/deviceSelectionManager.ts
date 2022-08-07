@@ -9,6 +9,7 @@ import { commitCoreState, coreState } from '~/shell/modules/core';
 import {
   enumerateSupportedDeviceInfosWebHid,
   IDeviceSpecificationParams,
+  isDeviceRawHidInterface,
 } from '~/shell/services/keyboardDevice/deviceEnumerator';
 import {
   DeviceWrapper,
@@ -109,7 +110,7 @@ export class DeviceSelectionManager {
   private async openPreAuthorizedDeviceByProductName(productName: string) {
     const hidDevices = await navigator.hid.getDevices();
     const hidDevice = hidDevices.find(
-      (d) => d.collections.length > 0 && d.productName === productName,
+      (d) => isDeviceRawHidInterface(d) && d.productName === productName,
     );
     if (hidDevice) {
       await this.openHidDevice(hidDevice);
@@ -145,7 +146,7 @@ export class DeviceSelectionManager {
       ],
     });
     // console.log({ hidDevices });
-    const hidDevice = hidDevices.find((d) => d.collections.length > 0);
+    const hidDevice = hidDevices.find(isDeviceRawHidInterface);
     if (hidDevice) {
       await this.openHidDevice(hidDevice);
     }
