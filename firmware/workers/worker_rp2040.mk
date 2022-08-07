@@ -271,10 +271,10 @@ size: $(OBJS)
 	@$(LD) $(LD_FLAGS) $(OBJS) -o $(ELF) $(BOOT_S)
 
 flash: $(UF2)
-	cp $(UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)
+	cp $(UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)/$(CORE_NAME).uf2
 
 flash_patched_uf2: $(PATCHED_UF2)
-	cp $(PATCHED_UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)
+	cp $(PATCHED_UF2) $(RP2040_UF2_TARGET_DRIVE_PATH)/$(CORE_NAME).uf2
 
 
 flash_via_swd: $(ELF)
