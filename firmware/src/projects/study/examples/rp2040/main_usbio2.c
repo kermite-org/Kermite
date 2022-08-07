@@ -59,7 +59,7 @@ void keyboardTask0() {
 void keyboardTask1() {
   bool nextPressed = readButton(1);
   if (!pressed1 && nextPressed) {
-    reportBuf[0] = 1 << 1; // right button down
+    reportBuf[0] = 1 << 1; // mouse right button down
     usbIoCore_hidMouse_writeReport(reportBuf);
     printf("key1 down\n");
 
@@ -69,6 +69,24 @@ void keyboardTask1() {
     printf("key1 up\n");
   }
   pressed1 = nextPressed;
+}
+
+void keyboardTask2() {
+  bool nextPressed = readButton(2);
+  if (!pressed2 && nextPressed) {
+    // consumer control volume decrement
+    reportBuf[0] = 0xEA;
+    reportBuf[1] = 0;
+    usbIoCore_hidConsumerControl_writeReport(reportBuf);
+    printf("key1 down\n");
+
+  } else if (pressed2 && !nextPressed) {
+    reportBuf[0] = 0;
+    reportBuf[1] = 0;
+    usbIoCore_hidConsumerControl_writeReport(reportBuf);
+    printf("key1 up\n");
+  }
+  pressed2 = nextPressed;
 }
 
 int main() {
@@ -95,6 +113,7 @@ int main() {
     if (cnt % 10 == 0) {
       keyboardTask0();
       keyboardTask1();
+      keyboardTask2();
     }
     delayMs(1);
     cnt++;

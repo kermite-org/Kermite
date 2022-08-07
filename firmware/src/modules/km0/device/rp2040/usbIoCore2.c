@@ -29,6 +29,7 @@ enum {
 enum {
   REPORT_ID_KEYBOARD = 1,
   REPORT_ID_MOUSE,
+  REPORT_ID_CONSUMER_CONTROL,
 };
 
 volatile static bool isConnected = false;
@@ -67,7 +68,8 @@ uint8_t const *tud_descriptor_device_cb(void) {
 
 static uint8_t const desc_hid_report_shared[] = {
   TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(REPORT_ID_KEYBOARD)),
-  TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(REPORT_ID_MOUSE))
+  TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(REPORT_ID_MOUSE)),
+  TUD_HID_REPORT_DESC_CONSUMER(HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL))
 };
 
 // static uint8_t const desc_hid_report_mouse[] = {
@@ -292,9 +294,18 @@ bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
   return true;
 }
 
-bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
+bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes7) {
   if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
-    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_MOUSE, pReportBytes3, 7);
+    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_MOUSE, pReportBytes7, 7);
+  } else {
+    // enqueueMouseEmitInternalBuffer(pReportBytes3);
+  }
+  return true;
+}
+
+bool usbIoCore_hidConsumerControl_writeReport(uint8_t *pReportBytes2) {
+  if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
+    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_CONSUMER_CONTROL, pReportBytes2, 7);
   } else {
     // enqueueMouseEmitInternalBuffer(pReportBytes3);
   }
