@@ -1,4 +1,4 @@
-//based on tinyusb multiple interfaces example
+// based on tinyusb multiple interfaces example
 
 #include "km0/device/usbIoCore.h"
 #include "km0/base/configImport.h"
@@ -21,10 +21,15 @@
 #endif
 
 enum {
-  ITF_KEYBOARD = 0,
-  ITF_MOUSE = 1,
-  ITF_RAWHID = 2,
-  ITF_NUM_INTERFACES = 3,
+  ITF_NUM_HID_SHARED = 0,
+  ITF_NUM_RAWHID,
+  ITF_NUM_TOTAL,
+};
+
+enum {
+  REPORT_ID_KEYBOARD = 1,
+  REPORT_ID_MOUSE,
+  REPORT_ID_CONSUMER_CONTROL,
 };
 
 volatile static bool isConnected = false;
@@ -61,93 +66,10 @@ uint8_t const *tud_descriptor_device_cb(void) {
 //--------------------------------------------------------------------
 // HID Report Descriptors
 
-// clang-format off
-// Keyboard Report Descriptor Template
-#define TUD_HID_REPORT_DESC_KEYBOARD__MODIFIED(...) \
-  HID_USAGE_PAGE ( HID_USAGE_PAGE_DESKTOP     )                    ,\
-  HID_USAGE      ( HID_USAGE_DESKTOP_KEYBOARD )                    ,\
-  HID_COLLECTION ( HID_COLLECTION_APPLICATION )                    ,\
-    /* Report ID if any */\
-    __VA_ARGS__ \
-    /* 8 bits Modifier Keys (Shfit, Control, Alt) */ \
-    HID_USAGE_PAGE ( HID_USAGE_PAGE_KEYBOARD )                     ,\
-      HID_USAGE_MIN    ( 224                                    )  ,\
-      HID_USAGE_MAX    ( 231                                    )  ,\
-      HID_LOGICAL_MIN  ( 0                                      )  ,\
-      HID_LOGICAL_MAX  ( 1                                      )  ,\
-      HID_REPORT_COUNT ( 8                                      )  ,\
-      HID_REPORT_SIZE  ( 1                                      )  ,\
-      HID_INPUT        ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE )  ,\
-      /* 8 bit reserved */ \
-      HID_REPORT_COUNT ( 1                                      )  ,\
-      HID_REPORT_SIZE  ( 8                                      )  ,\
-      HID_INPUT        ( HID_CONSTANT                           )  ,\
-    /* 6-byte Keycodes */ \
-    HID_USAGE_PAGE ( HID_USAGE_PAGE_KEYBOARD )                     ,\
-      HID_USAGE_MIN    ( 0                                   )     ,\
-      HID_USAGE_MAX    ( 255                                 )     ,\
-      HID_LOGICAL_MIN  ( 0                                   )     ,\
-      /*HID_LOGICAL_MAX  ( 255                               )   ,*/\
-      HID_LOGICAL_MAX_N  ( 255, 2 ) /*JISキーボードで\_¥|などの文字が入力できない問題を改善*/ ,\
-      HID_REPORT_COUNT ( 6                                   )     ,\
-      HID_REPORT_SIZE  ( 8                                   )     ,\
-      HID_INPUT        ( HID_DATA | HID_ARRAY | HID_ABSOLUTE )     ,\
-    /* 5-bit LED Indicator Kana | Compose | ScrollLock | CapsLock | NumLock */ \
-    HID_USAGE_PAGE  ( HID_USAGE_PAGE_LED                   )       ,\
-      HID_USAGE_MIN    ( 1                                       ) ,\
-      HID_USAGE_MAX    ( 5                                       ) ,\
-      HID_REPORT_COUNT ( 5                                       ) ,\
-      HID_REPORT_SIZE  ( 1                                       ) ,\
-      HID_OUTPUT       ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE  ) ,\
-      /* led padding */ \
-      HID_REPORT_COUNT ( 1                                       ) ,\
-      HID_REPORT_SIZE  ( 3                                       ) ,\
-      HID_OUTPUT       ( HID_CONSTANT                            ) ,\
-  HID_COLLECTION_END
-// clang-format on
-
-// clang-format off
-// Mouse Report Descriptor Template
-#define TUD_HID_REPORT_DESC_MOUSE__MODIFIED(...) \
-  HID_USAGE_PAGE ( HID_USAGE_PAGE_DESKTOP      )                   ,\
-  HID_USAGE      ( HID_USAGE_DESKTOP_MOUSE     )                   ,\
-  HID_COLLECTION ( HID_COLLECTION_APPLICATION  )                   ,\
-    /* Report ID if any */\
-    __VA_ARGS__ \
-    HID_USAGE      ( HID_USAGE_DESKTOP_POINTER )                   ,\
-    HID_COLLECTION ( HID_COLLECTION_PHYSICAL   )                   ,\
-      HID_USAGE_PAGE  ( HID_USAGE_PAGE_BUTTON  )                   ,\
-        HID_USAGE_MIN   ( 1                                      ) ,\
-        HID_USAGE_MAX   ( 5                                      ) ,\
-        HID_LOGICAL_MIN ( 0                                      ) ,\
-        HID_LOGICAL_MAX ( 1                                      ) ,\
-        /* Left, Right, Middle, Backward, Forward buttons */ \
-        HID_REPORT_COUNT( 5                                      ) ,\
-        HID_REPORT_SIZE ( 1                                      ) ,\
-        HID_INPUT       ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
-        /* 3 bit padding */ \
-        HID_REPORT_COUNT( 1                                      ) ,\
-        HID_REPORT_SIZE ( 3                                      ) ,\
-        HID_INPUT       ( HID_CONSTANT                           ) ,\
-      HID_USAGE_PAGE  ( HID_USAGE_PAGE_DESKTOP )                   ,\
-        /* X, Y position [-127, 127] */ \
-        HID_USAGE       ( HID_USAGE_DESKTOP_X                    ) ,\
-        HID_USAGE       ( HID_USAGE_DESKTOP_Y                    ) ,\
-        HID_LOGICAL_MIN ( 0x81                                   ) ,\
-        HID_LOGICAL_MAX ( 0x7f                                   ) ,\
-        HID_REPORT_COUNT( 2                                      ) ,\
-        HID_REPORT_SIZE ( 8                                      ) ,\
-        HID_INPUT       ( HID_DATA | HID_VARIABLE | HID_RELATIVE ) ,\
-    HID_COLLECTION_END                                            , \
-  HID_COLLECTION_END \
-// clang-format on
-
-static uint8_t const desc_hid_report_keyboard[] = {
-  TUD_HID_REPORT_DESC_KEYBOARD__MODIFIED()
-};
-
-static uint8_t const desc_hid_report_mouse[] = {
-  TUD_HID_REPORT_DESC_MOUSE__MODIFIED()
+static uint8_t const desc_hid_report_shared[] = {
+  TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(REPORT_ID_KEYBOARD)),
+  TUD_HID_REPORT_DESC_MOUSE(HID_REPORT_ID(REPORT_ID_MOUSE)),
+  TUD_HID_REPORT_DESC_CONSUMER(HID_REPORT_ID(REPORT_ID_CONSUMER_CONTROL))
 };
 
 static uint8_t const desc_hid_report_rawhid[] = {
@@ -155,11 +77,9 @@ static uint8_t const desc_hid_report_rawhid[] = {
 };
 
 uint8_t const *tud_hid_descriptor_report_cb(uint8_t itf) {
-  if (itf == ITF_KEYBOARD) {
-    return desc_hid_report_keyboard;
-  } else if (itf == ITF_MOUSE) {
-    return desc_hid_report_mouse;
-  } else if (itf == ITF_RAWHID) {
+  if (itf == ITF_NUM_HID_SHARED) {
+    return desc_hid_report_shared;
+  } else if (itf == ITF_NUM_RAWHID) {
     return desc_hid_report_rawhid;
   }
   return NULL;
@@ -168,27 +88,23 @@ uint8_t const *tud_hid_descriptor_report_cb(uint8_t itf) {
 //--------------------------------------------------------------------
 // Configuration Descriptor
 
-#define CONFIG_TOTAL_LEN (TUD_CONFIG_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
+#define CONFIG_TOTAL_LEN (TUD_CONFIG_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
 // #define CONFIG_TOTAL_LEN (TUD_CONFIG_DESC_LEN + TUD_HID_INOUT_DESC_LEN + TUD_HID_DESC_LEN + TUD_HID_INOUT_DESC_LEN)
 
-#define EPNUM_HID_MOUSE 0x01
-#define EPNUM_HID_KEYBOARD 0x02
-#define EPNUM_HID_RAWHID 0x03
+#define EPNUM_HID_SHARED 0x01
+#define EPNUM_HID_RAWHID 0x02
 
 static uint8_t const desc_configuration[] = {
   // Config number, interface count, string index, total length, attribute, power in mA
-  TUD_CONFIG_DESCRIPTOR(1, 3, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
+  TUD_CONFIG_DESCRIPTOR(1, ITF_NUM_TOTAL, 0, CONFIG_TOTAL_LEN, TUSB_DESC_CONFIG_ATT_REMOTE_WAKEUP, 100),
 
   // Interface number, string index, protocol, report descriptor len, EP In & Out address, size & polling interval
-  TUD_HID_DESCRIPTOR(ITF_KEYBOARD, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard),
-                     0x80 | EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
-  // TUD_HID_INOUT_DESCRIPTOR(ITF_KEYBOARD, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_keyboard),
-  //                          EPNUM_HID_KEYBOARD, 0x80 | EPNUM_HID_KEYBOARD, CFG_TUD_HID_EP_BUFSIZE, 10),
-  TUD_HID_DESCRIPTOR(ITF_MOUSE, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_mouse),
-                     0x80 | EPNUM_HID_MOUSE, CFG_TUD_HID_EP_BUFSIZE, 10),
+  TUD_HID_DESCRIPTOR(ITF_NUM_HID_SHARED, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_shared),
+                     0x80 | EPNUM_HID_SHARED, CFG_TUD_HID_EP_BUFSIZE, 5),
+
   // Interface number, string index, protocol, report descriptor len, EP In & Out address, size & polling interval
-  TUD_HID_INOUT_DESCRIPTOR(ITF_RAWHID, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_rawhid),
-                           EPNUM_HID_RAWHID, 0x80 | EPNUM_HID_RAWHID, CFG_TUD_HID_EP_BUFSIZE, 10)
+  TUD_HID_INOUT_DESCRIPTOR(ITF_NUM_RAWHID, 0, HID_ITF_PROTOCOL_NONE, sizeof(desc_hid_report_rawhid),
+                           EPNUM_HID_RAWHID, 0x80 | EPNUM_HID_RAWHID, CFG_TUD_HID_EP_BUFSIZE, 5)
 
 };
 
@@ -199,20 +115,16 @@ uint8_t const *tud_descriptor_configuration_cb(uint8_t index) {
 //--------------------------------------------------------------------
 // String Descriptors
 
-
-
 static char altProductNameTextBuf[] = "00000000000000000000000000000000";
 static char altSerialNumberTextBuf[] = "00000000000000000000000000000000000000";
-
 
 // array of pointer to string descriptors
 static char const *string_desc_arr[] = {
   (const char[]){ 0x09, 0x04 }, // 0: is supported language is English (0x0409)
   KM0_USB__MANUFACTURER_TEXT,   // 1: Manufacturer
   altProductNameTextBuf,        // 2: Product
-  altSerialNumberTextBuf,   // 3: Serials, should use chip ID
+  altSerialNumberTextBuf,       // 3: Serials, should use chip ID
 };
-
 
 static uint16_t _desc_str[32];
 
@@ -274,7 +186,7 @@ uint16_t tud_hid_get_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t
   return 0;
 }
 
-//TOOD: 必要なら多面バッファを構成
+// TOOD: 必要なら多面バッファを構成
 static uint8_t rawHidReceivedBuf[64];
 static uint32_t rawHidReceivedPageCount = 0;
 
@@ -283,10 +195,10 @@ static uint32_t rawHidReceivedPageCount = 0;
 void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t report_type, uint8_t const *buffer, uint16_t bufsize) {
   // printf("set report %d %d %d, %d bytes\n", itf, report_id, report_type, bufsize);
 
-  if(itf == ITF_KEYBOARD && bufsize == 1){
+  if (itf == ITF_NUM_HID_SHARED && bufsize == 1) {
     keyboardLedStatus = buffer[0];
   }
-  if (itf == ITF_RAWHID) {
+  if (itf == ITF_NUM_RAWHID) {
     memcpy(rawHidReceivedBuf, buffer, bufsize);
     rawHidReceivedPageCount++;
   }
@@ -294,9 +206,9 @@ void tud_hid_set_report_cb(uint8_t itf, uint8_t report_id, hid_report_type_t rep
 
 //--------------------------------------------------------------------
 
-//RawHIDのフレームを複数続けて送りたい場合に、後続のフレームが書き込めず失われるため
+// RawHIDのフレームを複数続けて送りたい場合に、後続のフレームが書き込めず失われるため
 //多面バッファを使用して送信する
-//TODO: 無駄が多いので、複数のリアルタイムイベントを1つのフレームに詰めて送る実装にしたい
+// TODO: 無駄が多いので、複数のリアルタイムイベントを1つのフレームに詰めて送る実装にしたい
 
 #define RawHidTxBufPageNum 8
 static uint8_t rawhid_txbuf[RawHidTxBufPageNum][64] = { 0 };
@@ -312,8 +224,8 @@ static void enqueueRawHidEmitInternalBuffer(uint8_t *pDataBytes64) {
 
 static void shiftOutRawHidEmitInternalBuffer() {
   if (rawhid_txbuf_flags[rawhid_txbuf_ri]) {
-    if (tud_hid_n_ready(ITF_RAWHID)) {
-      tud_hid_n_report(ITF_RAWHID, 0, rawhid_txbuf[rawhid_txbuf_ri], 64);
+    if (tud_hid_n_ready(ITF_NUM_RAWHID)) {
+      tud_hid_n_report(ITF_NUM_RAWHID, 0, rawhid_txbuf[rawhid_txbuf_ri], 64);
       rawhid_txbuf_flags[rawhid_txbuf_ri] = false;
       rawhid_txbuf_ri = (rawhid_txbuf_ri + 1) % RawHidTxBufPageNum;
     }
@@ -336,8 +248,8 @@ static void enqueueKeyboardEmitInternalBuffer(uint8_t *pDataBytes64) {
 
 static void shiftOutKeyboardEmitInternalBuffer() {
   if (keboard_txbuf_flags[keboard_txbuf_ri]) {
-    if (tud_hid_n_ready(ITF_KEYBOARD)) {
-      tud_hid_n_report(ITF_KEYBOARD, 0, keboard_txbuf[keboard_txbuf_ri], 8);
+    if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
+      tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_KEYBOARD, keboard_txbuf[keboard_txbuf_ri], 8);
       keboard_txbuf_flags[keboard_txbuf_ri] = false;
       keboard_txbuf_ri = (keboard_txbuf_ri + 1) % KeyboardTxBufPageNum;
     }
@@ -351,9 +263,9 @@ static void shiftOutKeyboardEmitInternalBuffer() {
 // Note: For composite reports, report[0] is report ID
 void tud_hid_report_complete_cb(uint8_t itf, uint8_t const *report, uint8_t len) {
   (void)len;
-  if (itf == ITF_KEYBOARD) {
+  if (itf == ITF_NUM_HID_SHARED) {
     shiftOutKeyboardEmitInternalBuffer();
-  } else if (itf == ITF_RAWHID) {
+  } else if (itf == ITF_NUM_RAWHID) {
     shiftOutRawHidEmitInternalBuffer();
   }
 }
@@ -366,17 +278,26 @@ void usbIoCore_initialize() {
 }
 
 bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
-  if (tud_hid_n_ready(ITF_KEYBOARD)) {
-    tud_hid_n_report(ITF_KEYBOARD, 0, pReportBytes8, 8);
+  if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
+    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_KEYBOARD, pReportBytes8, 8);
   } else {
     enqueueKeyboardEmitInternalBuffer(pReportBytes8);
   }
   return true;
 }
 
-bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
-  if (tud_hid_n_ready(ITF_MOUSE)) {
-    tud_hid_n_report(ITF_MOUSE, 0, pReportBytes3, 3);
+bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes7) {
+  if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
+    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_MOUSE, pReportBytes7, 7);
+  } else {
+    // enqueueMouseEmitInternalBuffer(pReportBytes3);
+  }
+  return true;
+}
+
+bool usbIoCore_hidConsumerControl_writeReport(uint8_t *pReportBytes2) {
+  if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
+    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_CONSUMER_CONTROL, pReportBytes2, 7);
   } else {
     // enqueueMouseEmitInternalBuffer(pReportBytes3);
   }
@@ -388,8 +309,8 @@ uint8_t usbIoCore_hidKeyboard_getStatusLedFlags() {
 }
 
 bool usbIoCore_genericHid_writeData(uint8_t *pDataBytes64) {
-  if (tud_hid_n_ready(ITF_RAWHID)) {
-    tud_hid_n_report(ITF_RAWHID, 0, pDataBytes64, 64);
+  if (tud_hid_n_ready(ITF_NUM_RAWHID)) {
+    tud_hid_n_report(ITF_NUM_RAWHID, 0, pDataBytes64, 64);
   } else {
     enqueueRawHidEmitInternalBuffer(pDataBytes64);
   }
@@ -409,7 +330,7 @@ char *usbIoCore_getSerialNumberTextBufferPointer() {
   return altSerialNumberTextBuf;
 }
 
-void usbIoCore_setProductName(char *productName){
+void usbIoCore_setProductName(char *productName) {
   strcpy(altProductNameTextBuf, productName);
 }
 
