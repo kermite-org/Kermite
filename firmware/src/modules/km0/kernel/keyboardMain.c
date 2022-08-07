@@ -55,7 +55,7 @@ static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
 
-static uint8_t localHidMouseReport[3] = { 0 };
+static uint8_t localHidMouseReport[7] = { 0 };
 
 //メインロジックをPC側ユーティリティのLogicSimulatorに移譲するモード
 static bool isSimulatorModeEnabled = false;
@@ -116,7 +116,6 @@ static char *writeTextBytes(char *buf, char *text, int len) {
   utils_copyTextBytes(buf, text, len);
   return buf + len;
 }
-
 
 static char tempProductNameBuf[32];
 

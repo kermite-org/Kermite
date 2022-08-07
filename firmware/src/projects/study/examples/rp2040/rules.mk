@@ -17,11 +17,13 @@ MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
 
 # MODULE_SRCS += km0/scanner/keyScanner_encoders.c
 
-# PROJECT_SRCS += main_blink.c
-PROJECT_SRCS += main_board_rgb_led.c
+PROJECT_SRCS += main_blink.c
+# PROJECT_SRCS += main_board_rgb_led.c
 #PROJECT_SRCS += main_debug_uart.c
 #PROJECT_SRCS += main_usbio.c
+#PROJECT_SRCS += main_usbio_shared_interface.c
 #PROJECT_SRCS += main_storage.c
 #PROJECT_SRCS += main_singleWire.c
 # PROJECT_SRCS += main_serialLed.c
 #PROJECT_SRCS += main_rotary_encoder.c
+
