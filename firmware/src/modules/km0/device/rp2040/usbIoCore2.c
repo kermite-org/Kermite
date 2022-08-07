@@ -294,7 +294,7 @@ bool usbIoCore_hidKeyboard_writeReport(uint8_t *pReportBytes8) {
 
 bool usbIoCore_hidMouse_writeReport(uint8_t *pReportBytes3) {
   if (tud_hid_n_ready(ITF_NUM_HID_SHARED)) {
-    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_MOUSE, pReportBytes3, 3);
+    tud_hid_n_report(ITF_NUM_HID_SHARED, REPORT_ID_MOUSE, pReportBytes3, 7);
   } else {
     // enqueueMouseEmitInternalBuffer(pReportBytes3);
   }
