@@ -1,4 +1,5 @@
 import { css, FC, jsx, useEffect } from 'alumina';
+import { isDeviceRawHidInterface } from '~/shell/services/keyboardDevice/deviceEnumerator';
 import { Packets } from '~/shell/services/keyboardDevice/packets';
 
 async function openHidDevice(device: HIDDevice) {
@@ -28,7 +29,7 @@ async function connectToNewDevice() {
         { vendorId: 0xf055, productId: 0xa579 },
       ],
     })
-  ).filter((d) => d.collections.length > 0);
+  ).filter(isDeviceRawHidInterface);
 
   console.log({ devices });
 
@@ -38,7 +39,7 @@ async function connectToNewDevice() {
 
 async function reconnectToDevice() {
   const devices = (await navigator.hid.getDevices()).filter(
-    (d) => d.collections.length > 0,
+    isDeviceRawHidInterface,
   );
   console.log({ devices });
   const device = devices[0];

@@ -74,11 +74,17 @@ export function enumerateSupportedDeviceInfos(
     .map(makeKeyboardDeviceInfoFromDeviceSpec);
 }
 
+export function isDeviceRawHidInterface(device: HIDDevice) {
+  return device.collections.some(
+    (col) => col.usagePage === 0xff00 && col.usage === 0x01,
+  );
+}
+
 export async function enumerateSupportedDeviceInfosWebHid(): Promise<
   IKeyboardDeviceInfo[]
 > {
   const hidDevices = (await navigator.hid.getDevices()).filter(
-    (d) => d.collections.length > 0,
+    isDeviceRawHidInterface,
   );
   const na = 'N/A';
   return hidDevices.map((d) => ({
