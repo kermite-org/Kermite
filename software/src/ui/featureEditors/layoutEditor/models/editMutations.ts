@@ -441,6 +441,12 @@ class EditMutations {
     editManager.reset();
   }
 
+  replaceKeyboardDesign(design: IEditKeyboardDesign) {
+    editUpdater.commitEditor((editor) => {
+      editor.design = design;
+    });
+  }
+
   rebase() {
     editUpdater.patchEditor((editor) => {
       editor.loadedDesign = editReader.design;

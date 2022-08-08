@@ -1,6 +1,7 @@
 import { IGeneralMenuItem } from '~/ui/base';
 import { layoutManagerActions } from '~/ui/pages/layoutEditorPage/models/layoutManagerActions';
 import { layoutManagerReader } from '~/ui/pages/layoutEditorPage/models/layoutManagerReaders';
+import { uiReaders } from '~/ui/store';
 
 function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
   return [
@@ -59,6 +60,12 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
       text: 'export to file',
       handler: layoutManagerActions.exportToFileWithDialog,
       disabled: !layoutManagerReader.canSaveToFile,
+    },
+    {
+      type: 'menuEntry',
+      text: 'copy from project layout',
+      handler: layoutManagerActions.openCopyFromProjectModal,
+      disabled: !uiReaders.isGlobalProjectSelected,
     },
     {
       type: 'menuEntry',
