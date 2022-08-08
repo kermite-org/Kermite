@@ -1,5 +1,5 @@
 import { useState } from 'alumina';
-import { validateResourceName } from '~/shared';
+import { isIncluded, validateResourceName } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import { modalError } from '~/ui/components';
 import { IProjectAttachmentFileSelectorModalModel } from '~/ui/elements/featureModals';
@@ -107,7 +107,7 @@ export function makeProjectLayoutSelectorModalModel():
   | undefined {
   const [currentLayoutName, setCurrentLayoutName] = useState('');
   const { modalState } = layoutManagerReader;
-  if (modalState === 'None') {
+  if (!isIncluded(modalState)('LoadFromProject', 'SaveToProject')) {
     return undefined;
   }
 
