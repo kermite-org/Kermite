@@ -60,6 +60,7 @@ export const layoutManagerActions = {
     }
   },
   openLoadFromProjectModal: () => setModalState('LoadFromProject'),
+  openCopyFromProjectModal: () => setModalState('CopyFromProject'),
   openSaveToProjectModal: () => setModalState('SaveToProject'),
   closeModal: () => setModalState('None'),
   async createNewLayout() {

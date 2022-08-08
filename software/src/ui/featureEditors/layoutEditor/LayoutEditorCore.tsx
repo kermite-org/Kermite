@@ -68,6 +68,12 @@ export namespace LayoutEditorCore {
     editMutations.rebase();
   }
 
+  export function replaceKeyboardDesign(persistDesign: IPersistKeyboardDesign) {
+    const design =
+      KeyboardDesignConverter.convertKeyboardDesignPersistToEdit(persistDesign);
+    editMutations.replaceKeyboardDesign(design);
+  }
+
   export function getIsModified(): boolean {
     return editReader.isModified;
   }
