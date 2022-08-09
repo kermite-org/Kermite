@@ -6,7 +6,13 @@ import {
   IEditOutlineShape,
 } from './dataSchema';
 
-export type IEditMode = 'select' | 'move' | 'key' | 'shape' | 'delete';
+export type IEditMode =
+  | 'select'
+  | 'move'
+  | 'key'
+  | 'shape'
+  | 'delete'
+  | 'shape_ex';
 export interface IEditState {
   loadedDesign: IEditKeyboardDesign;
   design: IEditKeyboardDesign;
