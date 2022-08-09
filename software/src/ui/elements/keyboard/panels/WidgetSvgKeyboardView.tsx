@@ -3,6 +3,7 @@ import { IDisplayKeyboardDesign, linerInterpolateValue } from '~/shared';
 import { IWidgetKeyUnitCardViewModel } from '~/ui/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { WidgetKeyUnitCard } from '~/ui/elements/keyboard/keyUnitCards/WidgetKeyUnitCard';
+import { KeyboardBodyShapeExtra } from '~/ui/elements/keyboard/keyboardBody';
 import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
 
 type Props = {
@@ -33,6 +34,11 @@ export const WidgetSvgKeyboardView: FC<Props> = ({ keyboardDesign, cards }) => {
       >
         <KeyboardBodyShape
           outlineShapes={keyboardDesign.outlineShapes}
+          fillColor={fillColor}
+          strokeColor={strokeColor}
+        />
+        <KeyboardBodyShapeExtra
+          shape={keyboardDesign.extraShape}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />

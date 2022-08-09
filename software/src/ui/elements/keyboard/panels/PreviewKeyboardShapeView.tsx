@@ -2,8 +2,11 @@ import { jsx, css, FC } from 'alumina';
 import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { PreviewKeyEntityCard } from '~/ui/elements/keyboard/keyUnitCards/PreviewKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
-import { PreviewDisplayAreaBox } from '~/ui/elements/keyboard/keyboardBody/PreviewBoundingBox';
+import {
+  KeyboardBodyShapeExtra,
+  KeyboardBodyShape,
+  PreviewDisplayAreaBox,
+} from '~/ui/elements/keyboard/keyboardBody';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
@@ -39,6 +42,11 @@ export const PreviewKeyboardShapeView: FC<Props> = ({
       >
         <KeyboardBodyShape
           outlineShapes={keyboardDesign.outlineShapes}
+          fillColor={fillColor}
+          strokeColor={strokeColor}
+        />
+        <KeyboardBodyShapeExtra
+          shape={keyboardDesign.extraShape}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />
