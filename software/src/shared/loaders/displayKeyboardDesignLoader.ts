@@ -3,6 +3,7 @@ import {
   IDisplayKeyEntity,
   IDisplayKeyShape,
   IDisplayOutlineShape,
+  IExtraShapeDefinition,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignMirrorKeyEntity,
   IPersistKeyboardDesignRealKeyEntity,
@@ -21,6 +22,7 @@ import {
   getStdKeySize,
   ICoordUnit,
 } from '~/shared/loaders/placementUnitHelper';
+import { calculateExtraShapeBoundingBoxPoints } from './extraShapePathBoundingBoxHelper';
 
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;
@@ -141,6 +143,7 @@ export namespace DisplayKeyboardDesignLoader {
   function getBoundingBox(
     keyEntities: IDisplayKeyEntity[],
     outlineShapes: IDisplayOutlineShape[],
+    extraShape: IExtraShapeDefinition | undefined,
   ) {
     const xs: number[] = [];
     const ys: number[] = [];
@@ -200,6 +203,14 @@ export namespace DisplayKeyboardDesignLoader {
       xs.push(80);
       ys.push(-60);
       ys.push(60);
+    }
+
+    if (extraShape) {
+      const pts = calculateExtraShapeBoundingBoxPoints(extraShape);
+      pts.forEach((pt) => {
+        xs.push(pt.x);
+        ys.push(pt.y);
+      });
     }
 
     const left = Math.min(...xs);
@@ -300,12 +311,14 @@ export namespace DisplayKeyboardDesignLoader {
       }),
     );
 
-    const boundingBox = getBoundingBox(keyEntities, outlineShapes);
+    const { extraShape } = design;
+    const boundingBox = getBoundingBox(keyEntities, outlineShapes, extraShape);
 
     return {
       keyEntities,
       outlineShapes,
       displayArea: boundingBox,
+      extraShape,
     };
   }
 }

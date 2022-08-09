@@ -1,4 +1,8 @@
-import { getCoordUnitFromUnitSpec, ICoordUnit } from '~/shared';
+import {
+  getCoordUnitFromUnitSpec,
+  ICoordUnit,
+  IExtraShapeDefinition,
+} from '~/shared';
 import {
   decodeGridSpec,
   IGridSpecKey,
@@ -159,6 +163,10 @@ class EditReader {
 
   get currentOutlinePoint(): IEditOutlinePoint | undefined {
     return this.outlinePoints?.[this.currentPointIndex];
+  }
+
+  get extraShape(): IExtraShapeDefinition {
+    return appState.editor.design.extraShape;
   }
 
   get currentTransGroupId() {

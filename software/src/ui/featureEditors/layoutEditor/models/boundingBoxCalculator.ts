@@ -1,11 +1,12 @@
 import {
+  calculateExtraShapeBoundingBoxPoints,
   degToRad,
-  IKeyPlacementAnchor,
-  rotateCoord,
-  translateCoord,
   getCoordUnitFromUnitSpec,
   getKeySize,
   ICoordUnit,
+  IKeyPlacementAnchor,
+  rotateCoord,
+  translateCoord,
 } from '~/shared';
 import {
   IEditKeyboardDesign,
@@ -127,6 +128,13 @@ export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
       bottom: 60,
     };
   }
+
+  const { extraShape } = design;
+  const pts = calculateExtraShapeBoundingBoxPoints(extraShape);
+  pts.forEach((pt) => {
+    xs.push(pt.x);
+    ys.push(pt.y);
+  });
 
   const left = Math.min(...xs);
   const right = Math.max(...xs);

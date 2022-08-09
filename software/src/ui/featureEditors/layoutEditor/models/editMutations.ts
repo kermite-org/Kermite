@@ -348,6 +348,18 @@ class EditMutations {
     });
   }
 
+  setExtraShapePathText(path: string) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape.path = path;
+    });
+  }
+
+  setExtraShapeAttributeValue(propKey: 'x' | 'y' | 'scale', value: number) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape[propKey] = value;
+    });
+  }
+
   setTransGroupMirror(mirror: boolean) {
     const { currentTransGroupId } = editReader;
     if (!currentTransGroupId) {

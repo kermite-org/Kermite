@@ -89,6 +89,7 @@ export namespace KeyboardDesignConverter {
           ];
         }),
       ),
+      extraShape: source.extraShape || { path: '', x: 0, y: 0, scale: 1 },
       transGroups: createDictionaryFromKeyValues(
         source.transformationGroups.map((group, idx) => {
           const id = idx.toString();
@@ -170,6 +171,7 @@ export namespace KeyboardDesignConverter {
         })),
         groupIndex: groupIdToGroupIndex(shape.groupId),
       })),
+      extraShape: design.extraShape.path ? design.extraShape : undefined,
       transformationGroups: Object.values(design.transGroups).map((group) => ({
         x: roundNumber(group.x),
         y: roundNumber(group.y),
