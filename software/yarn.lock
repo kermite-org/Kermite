@@ -3855,6 +3855,18 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
+svg-path-bbox@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/svg-path-bbox/-/svg-path-bbox-1.2.2.tgz#af95fe933b63581476e43699331565c54d237135"
+  integrity sha512-kDSP1Po/kUZjDOzqgoLKJfc53SB9bXQgHr1kHN3z8J8zRT/1UVIDDHAs9Iyr3IAezktOtEQkJtWRuIQwtT6a/g==
+  dependencies:
+    svgpath "^2.2.0"
+
+svgpath@^2.2.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/svgpath/-/svgpath-2.5.0.tgz#d57434641d9aa9abae02a4038ebf281fa3005b10"
+  integrity sha512-o/vohwqjUO9nDAh4rcjE3KaW/v//At8UJu2LJMybXidf5QLQLVA4bxH0//4YCsr+1H4Gw1Wi/Jc62ynzSBYidw==
+
 terminal-link@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/terminal-link/-/terminal-link-2.1.1.tgz#14a64a27ab3c0df933ea546fba55f2d078edc994"

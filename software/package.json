@@ -29,7 +29,8 @@
   "dependencies": {
     "alumina": "^0.1.14",
     "immer": "^9.0.15",
-    "path-browserify": "^1.0.1"
+    "path-browserify": "^1.0.1",
+    "svg-path-bbox": "^1.2.2"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
