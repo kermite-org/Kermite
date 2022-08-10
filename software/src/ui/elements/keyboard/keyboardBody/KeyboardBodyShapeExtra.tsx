@@ -21,9 +21,12 @@ export const KeyboardBodyShapeExtra: FC<Props> = ({
   const scx = shape.scale;
   const scy = shape.scale * (shape.invertY ? -1 : 1);
   const transform = `translate(${shape.x},${shape.y}) scale(${scx},${scy})`;
+  const strokeWidth = shape.scale !== 0 ? 0.5 / shape.scale : 0.5;
+
   const style = css`
     fill: ${fillColor};
     stroke: ${strokeColor};
+    stroke-width: ${strokeWidth};
   `;
   return (
     <g transform={transform}>

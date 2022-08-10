@@ -13,7 +13,7 @@ export const processEnv = (import.meta as any).env as IProcessEnv;
 // console.log({ processEnv });
 
 export const appConfig = {
-  applicationVersion: 'v220810c',
+  applicationVersion: 'v220810d',
   isDevelopment: processEnv.DEV,
   // isDevelopment: location.host === 'localhost',
   // applicationVersion: app.getVersion(),
