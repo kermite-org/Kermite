@@ -217,12 +217,13 @@ export namespace DisplayKeyboardDesignLoader {
     const right = Math.max(...xs);
     const top = Math.min(...ys);
     const bottom = Math.max(...ys);
-    // return { top, left, bottom, right };
+
+    const outerMargin = 1;
     return {
       centerX: (left + right) / 2,
       centerY: (top + bottom) / 2,
-      width: right - left,
-      height: bottom - top,
+      width: right - left + outerMargin * 2,
+      height: bottom - top + outerMargin * 2,
     };
   }
 
