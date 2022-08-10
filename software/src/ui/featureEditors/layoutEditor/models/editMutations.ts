@@ -360,6 +360,12 @@ class EditMutations {
     });
   }
 
+  setExtraShapeInvertY(value: boolean) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape.invertY = value;
+    });
+  }
+
   setTransGroupMirror(mirror: boolean) {
     const { currentTransGroupId } = editReader;
     if (!currentTransGroupId) {

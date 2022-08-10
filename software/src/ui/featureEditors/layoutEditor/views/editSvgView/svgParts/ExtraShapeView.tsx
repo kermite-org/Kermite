@@ -8,7 +8,9 @@ export const ExtraShapeView: FC<{ shape: IExtraShapeDefinition }> = ({
   if (!validateSvgPathText(shape.path)) {
     return undefined;
   }
-  const transform = `translate(${shape.x},${shape.y}) scale(${shape.scale})`;
+  const scx = shape.scale;
+  const scy = shape.scale * (shape.invertY ? -1 : 1);
+  const transform = `translate(${shape.x},${shape.y}) scale(${scx},${scy})`;
   return (
     <g transform={transform}>
       <path d={shape.path} class={cssKeyboardOutlineShapeView} />

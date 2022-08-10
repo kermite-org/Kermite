@@ -23,6 +23,7 @@ export interface IExtraShapeDefinition {
   x: number;
   y: number;
   scale: number;
+  invertY: boolean;
 }
 export interface IPersistKeyboardDesign {
   formatRevision: 'LA01';

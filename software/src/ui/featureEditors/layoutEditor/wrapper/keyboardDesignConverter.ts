@@ -89,7 +89,13 @@ export namespace KeyboardDesignConverter {
           ];
         }),
       ),
-      extraShape: source.extraShape || { path: '', x: 0, y: 0, scale: 1 },
+      extraShape: source.extraShape || {
+        path: '',
+        x: 0,
+        y: 0,
+        scale: 1,
+        invertY: false,
+      },
       transGroups: createDictionaryFromKeyValues(
         source.transformationGroups.map((group, idx) => {
           const id = idx.toString();

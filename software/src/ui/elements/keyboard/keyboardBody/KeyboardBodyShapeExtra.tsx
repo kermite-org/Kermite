@@ -18,7 +18,9 @@ export const KeyboardBodyShapeExtra: FC<Props> = ({
   if (!validateSvgPathText(shape.path)) {
     return undefined;
   }
-  const transform = `translate(${shape.x},${shape.y}) scale(${shape.scale})`;
+  const scx = shape.scale;
+  const scy = shape.scale * (shape.invertY ? -1 : 1);
+  const transform = `translate(${shape.x},${shape.y}) scale(${scx},${scy})`;
   const style = css`
     fill: ${fillColor};
     stroke: ${strokeColor};

@@ -1,4 +1,5 @@
 import { css, FC, jsx } from 'alumina';
+import { HFlex, CheckBox } from '~/ui/components';
 import {
   ConfigPanelBox,
   ConfigSubContent,
@@ -35,6 +36,15 @@ function createExtraShapeEditPanelModel() {
   const vmY = createExtraShapeTransformPropModel('y');
   const vmScale = createExtraShapeTransformPropModel('scale');
 
+  const vmInvertY = {
+    get value() {
+      return editReader.extraShape.invertY;
+    },
+    setValue(value: boolean) {
+      editMutations.setExtraShapeInvertY(value);
+    },
+  };
+
   return () => {
     const { extraShape, extraShapePathValidationResult: pathValidationResult } =
       editReader;
@@ -46,6 +56,7 @@ function createExtraShapeEditPanelModel() {
       vmX,
       vmY,
       vmScale,
+      vmInvertY,
       setExtraShapePathText,
       pathValidationResult,
     };
@@ -59,6 +70,7 @@ export const ExtraShapeEditPanel: FC = () => {
     vmX,
     vmY,
     vmScale,
+    vmInvertY,
     pathValidationResult,
   } = useClosureModel(createExtraShapeEditPanelModel);
 
@@ -104,6 +116,13 @@ export const ExtraShapeEditPanel: FC = () => {
               labelWidth={70}
               inputWidth={80}
             />
+            <HFlex>
+              <span style={{ width: '70px' }}>invert Y</span>
+              <CheckBox
+                checked={vmInvertY.value}
+                setChecked={vmInvertY.setValue}
+              />
+            </HFlex>
           </ConfigVStack>
         </ConfigSubContent>
       </div>
