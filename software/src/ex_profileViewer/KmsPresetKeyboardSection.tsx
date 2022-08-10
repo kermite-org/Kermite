@@ -29,6 +29,7 @@ export const KmsPresetKeyboardSection: FC<Props> = ({
     keyUnits,
     displayArea,
     outlineShapes,
+    extraShape,
     layers,
     currentLayerId,
     setCurrentLayerId,
@@ -40,6 +41,7 @@ export const KmsPresetKeyboardSection: FC<Props> = ({
         keyUnits={keyUnits}
         displayArea={displayArea}
         outlineShapes={outlineShapes}
+        extraShape={extraShape}
       />
     </div>
     <div class="layersPart">

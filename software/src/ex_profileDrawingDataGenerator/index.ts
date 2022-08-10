@@ -6,6 +6,7 @@ import {
   IDisplayKeyEntity,
   IDisplayKeyShape,
   IDisplayOutlineShape,
+  IExtraShapeDefinition,
   ILayer,
   IPersistProfileData,
   IProfileData,
@@ -48,6 +49,7 @@ interface IProfileLayersDisplayModel {
   layers: ILayerDisplayModel[];
   keyUnits: IKeyUnitDisplayModel[];
   completedKeyUnitTexts: IKeyUnitTextDisplayModelsDict;
+  extraShape: IExtraShapeDefinition | undefined;
 }
 
 function createKeyUnitTextDisplayModel(
@@ -122,6 +124,7 @@ function createProfileLayersDisplayModel(
   return {
     displayArea: keyboardDesign.displayArea,
     outlineShapes: keyboardDesign.outlineShapes,
+    extraShape: keyboardDesign.extraShape,
     layers: outLayers,
     keyUnits,
     completedKeyUnitTexts,
@@ -147,6 +150,7 @@ function createProfileLayersDisplayModelFromPackage(
   return {
     displayArea: keyboardDesign.displayArea,
     outlineShapes: keyboardDesign.outlineShapes,
+    extraShape: keyboardDesign.extraShape,
     layers: [{ layerId: 'la0', layerName: 'main' }],
     keyUnits,
     completedKeyUnitTexts: {},
