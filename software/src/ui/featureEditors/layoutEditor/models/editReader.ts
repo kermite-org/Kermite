@@ -1,4 +1,9 @@
-import { getCoordUnitFromUnitSpec, ICoordUnit } from '~/shared';
+import {
+  getCoordUnitFromUnitSpec,
+  ICoordUnit,
+  IExtraShapeDefinition,
+  validateSvgPathText,
+} from '~/shared';
 import {
   decodeGridSpec,
   IGridSpecKey,
@@ -159,6 +164,20 @@ class EditReader {
 
   get currentOutlinePoint(): IEditOutlinePoint | undefined {
     return this.outlinePoints?.[this.currentPointIndex];
+  }
+
+  get extraShape(): IExtraShapeDefinition {
+    return appState.editor.design.extraShape;
+  }
+
+  get extraShapePathValidationResult(): string {
+    const shape = appState.editor.design.extraShape;
+    const { path } = shape;
+    if (!path) {
+      return '';
+    } else {
+      return validateSvgPathText(path) ? 'valid' : 'error';
+    }
   }
 
   get currentTransGroupId() {

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { applyGlobalStyle, css, FC, jsx, render, rerender } from 'alumina';
 import { debounce } from '~/shared';
 import { DeviceDevelopmentPage } from '~/web/DeviceDevelopmentPage';
+import { OutlinePathDevelopmentPage } from './OutlinePathDevelopmentPage';
 
 applyGlobalStyle(css`
   * {
@@ -40,7 +42,8 @@ const PageRoot: FC = () => {
   // useEffect(apiTest, []);
   return (
     <div>
-      <DeviceDevelopmentPage />
+      {/* <DeviceDevelopmentPage /> */}
+      <OutlinePathDevelopmentPage />
     </div>
   );
 };

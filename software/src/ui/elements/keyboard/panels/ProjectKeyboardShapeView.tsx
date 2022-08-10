@@ -3,7 +3,10 @@ import { IDisplayKeyboardDesign, IDisplayKeyEntity } from '~/shared';
 import { colors } from '~/ui/base';
 import { getKeyboardSvgViewBoxSpec } from '~/ui/base/uiDomainHelpers';
 import { ProjectKeyEntityCard } from '~/ui/elements/keyboard/keyUnitCards';
-import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody';
+import {
+  KeyboardBodyShape,
+  KeyboardBodyShapeExtra,
+} from '~/ui/elements/keyboard/keyboardBody';
 
 type Props = {
   keyboardDesign: IDisplayKeyboardDesign;
@@ -13,13 +16,19 @@ export const ProjectKeyboardShapeView: FC<Props> = ({ keyboardDesign }) => {
   const baseStrokeWidth = 0.5;
   const bodyFillColor = colors.projectKeyboard_bodyFill;
   const bodyStrokeColor = colors.projectKeyboard_bodyEdge;
-  const { displayArea, keyEntities, outlineShapes } = keyboardDesign;
+  const { displayArea, keyEntities, outlineShapes, extraShape } =
+    keyboardDesign;
   return (
     <div class={cssKeyboardShapeView}>
       <svg viewBox={getKeyboardSvgViewBoxSpec(displayArea)}>
         <g stroke-width={baseStrokeWidth} stroke-linejoin="round">
           <KeyboardBodyShape
             outlineShapes={outlineShapes}
+            fillColor={bodyFillColor}
+            strokeColor={bodyStrokeColor}
+          />
+          <KeyboardBodyShapeExtra
+            shape={extraShape}
             fillColor={bodyFillColor}
             strokeColor={bodyStrokeColor}
           />
