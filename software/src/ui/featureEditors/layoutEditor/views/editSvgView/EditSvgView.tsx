@@ -10,6 +10,7 @@ import {
   editReader,
 } from '~/ui/featureEditors/layoutEditor/models';
 import { CoordCursor } from '~/ui/featureEditors/layoutEditor/views/editSvgView/svgParts/CoordCursor';
+import { ExtraShapeView } from '~/ui/featureEditors/layoutEditor/views/editSvgView/svgParts/ExtraShapeView';
 import { FieldGrid } from '~/ui/featureEditors/layoutEditor/views/editSvgView/svgParts/FieldGrid';
 import {
   screenCoordToGroupTransformationCoord,
@@ -30,7 +31,7 @@ function getViewBoxSpec() {
   return `0 0 ${screenW} ${screenH}`;
 }
 
-function getTransformSpec() {
+function getSightTransformSpec() {
   const { sight } = editReader;
   const sc = 1 / sight.scale;
   const cx = sight.screenW / 2 - sight.pos.x * sc;
@@ -108,9 +109,10 @@ const onSvgScroll = (e: WheelEvent) => {
 };
 
 export const EditSvgView = () => {
-  const { ghost, showAxis, showGrid, sight, drawingShape } = editReader;
+  const { ghost, showAxis, showGrid, sight, drawingShape, extraShape } =
+    editReader;
   const viewBoxSpec = getViewBoxSpec();
-  const transformSpec = getTransformSpec();
+  const sightTransformSpec = getSightTransformSpec();
 
   useEffect(() => {
     const el = document.getElementById('domEditSvg');
@@ -139,7 +141,7 @@ export const EditSvgView = () => {
       onWheel={onSvgScroll}
       id="domEditSvg"
     >
-      <g transform={transformSpec}>
+      <g transform={sightTransformSpec}>
         {showGrid && <FieldGrid />}
         {showAxis && <FieldAxis />}
         {ghost && <KeyEntityCard ke={ghost} />}
@@ -155,6 +157,7 @@ export const EditSvgView = () => {
           ))}
         </g>
         {drawingShape && <KeyboardOutlineShapeView shape={drawingShape} />}
+        {extraShape && <ExtraShapeView shape={extraShape} />}
         {layouterAppFeatures.showCoordCrosshair && <CoordCursor />}
       </g>
     </svg>

@@ -317,6 +317,11 @@ export function translateCoord(
   p.y += ay;
 }
 
+export function scaleCoord(p: { x: number; y: number }, scale: number) {
+  p.x *= scale;
+  p.y *= scale;
+}
+
 export function getObjectKeys<T extends {}>(obj: T): (keyof T)[] {
   return Object.keys(obj) as (keyof T)[];
 }
