@@ -109,8 +109,15 @@ const onSvgScroll = (e: WheelEvent) => {
 };
 
 export const EditSvgView = () => {
-  const { ghost, showAxis, showGrid, sight, drawingShape, extraShape } =
-    editReader;
+  const {
+    ghost,
+    showAxis,
+    showGrid,
+    sight,
+    drawingShape,
+    extraShape,
+    extraShapePathValidationResult,
+  } = editReader;
   const viewBoxSpec = getViewBoxSpec();
   const sightTransformSpec = getSightTransformSpec();
 

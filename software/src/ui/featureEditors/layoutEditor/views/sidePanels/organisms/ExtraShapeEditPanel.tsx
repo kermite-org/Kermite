@@ -36,23 +36,48 @@ function createExtraShapeEditPanelModel() {
   const vmScale = createExtraShapeTransformPropModel('scale');
 
   return () => {
-    const { extraShape } = editReader;
+    const { extraShape, extraShapePathValidationResult: pathValidationResult } =
+      editReader;
     vmX.update(extraShape.x.toString());
     vmY.update(extraShape.y.toString());
     vmScale.update(extraShape.scale.toString());
-    return { extraShape, vmX, vmY, vmScale, setExtraShapePathText };
+    return {
+      extraShape,
+      vmX,
+      vmY,
+      vmScale,
+      setExtraShapePathText,
+      pathValidationResult,
+    };
   };
 }
 
 export const ExtraShapeEditPanel: FC = () => {
-  const { extraShape, setExtraShapePathText, vmX, vmY, vmScale } =
-    useClosureModel(createExtraShapeEditPanelModel);
+  const {
+    extraShape,
+    setExtraShapePathText,
+    vmX,
+    vmY,
+    vmScale,
+    pathValidationResult,
+  } = useClosureModel(createExtraShapeEditPanelModel);
 
   return (
     <ConfigPanelBox headerText="extra shape definition">
       <div class={cssPanelContent}>
         <div class="textarea-row">
-          <label>path</label>
+          <div class="top-row">
+            <label>path</label>
+            <p
+              class={[
+                'validation-result',
+                pathValidationResult === 'valid' && '--valid',
+                pathValidationResult === 'error' && '--error',
+              ]}
+            >
+              {pathValidationResult}
+            </p>
+          </div>
           <textarea
             value={extraShape.path}
             onInput={reflectValue(setExtraShapePathText)}
@@ -92,6 +117,20 @@ const cssPanelContent = css`
     flex-direction: column;
     gap: 2px;
     margin-bottom: 4px;
+
+    > .top-row {
+      display: flex;
+      justify-content: space-between;
+      > .validation-result {
+        &.--valid {
+          color: #0a0;
+        }
+
+        &.--error {
+          color: red;
+        }
+      }
+    }
 
     > textarea {
       width: 100%;

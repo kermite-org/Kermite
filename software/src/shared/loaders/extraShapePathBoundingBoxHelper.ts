@@ -7,6 +7,9 @@ export function calculateExtraShapeBoundingBoxPoints(
 ): { x: number; y: number }[] {
   if (extraShape.path) {
     const [bx0, by0, bx1, by1] = svgPathBbox(extraShape.path);
+    if ([bx0, by0, bx1, by1].some((it) => !isFinite(it))) {
+      return [];
+    }
     const p0 = { x: bx0, y: by0 };
     const p1 = { x: bx1, y: by1 };
     scaleCoord(p0, extraShape.scale);
