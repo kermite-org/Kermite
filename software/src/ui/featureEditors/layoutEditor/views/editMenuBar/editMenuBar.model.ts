@@ -1,4 +1,4 @@
-import { featureConfig, getObjectKeys } from '~/shared';
+import { getObjectKeys } from '~/shared';
 import { ISelectorOption } from '~/ui/base';
 import {
   editMutations,
@@ -50,18 +50,14 @@ function makeSnapDivisionViewModel() {
 }
 
 export function makeEditMenuBarViewModel() {
-  const modeDefs: Record<string, string> = {
+  const editModeVm = createModeSelectionViewModel({
     select: 'select',
     move: 'move',
     key: 'key',
     shape: 'shape',
     delete: 'delete',
-  };
-  if (featureConfig.debugFullFeatures) {
-    modeDefs.shape_ex = 'shape_ex';
-  }
-
-  const editModeVm = createModeSelectionViewModel(modeDefs);
+    shape_ex: 'shape_ex',
+  });
 
   const vmShowAxis = createToggleOptionViewModel('showAxis');
   const vmShowGrid = createToggleOptionViewModel('showGrid');
