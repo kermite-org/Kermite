@@ -1,4 +1,5 @@
 import { IProfileData, IRealtimeKeyboardEvent } from '~/shared';
+import { coreState } from '~/shell/modules/core';
 import {
   DeviceSelectionManager,
   IDeviceSelectionManagerEvent,
@@ -74,10 +75,17 @@ export class KeyboardDeviceService implements IKeyboardDeviceService {
     this.realtimeEventPort.emit(event);
   }
 
-  async emitKeyAssignsToDevice(editModel: IProfileData): Promise<boolean> {
-    return await KeyMappingEmitter.emitKeyAssignsToDevice(
+  async emitKeyAssignsToDevice(editModel: IProfileData): Promise<void> {
+    const device = this.selectionManager.getDevice();
+    if (!(device && coreState.deviceStatus.isConnected)) {
+      throw new Error('no device');
+    }
+    const { assignStorageCapacity } = coreState.deviceStatus.deviceAttrs;
+
+    await KeyMappingEmitter.emitKeyAssignsToDevice(
       editModel,
-      this.selectionManager.getDevice(),
+      device,
+      assignStorageCapacity,
     );
   }
 }

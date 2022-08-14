@@ -104,9 +104,9 @@ export class ApplicationRoot {
       config_writeKeyMappingToDevice: async () => {
         const profile = profilesReader.getCurrentProfile();
         if (profile) {
-          return await this.deviceService.emitKeyAssignsToDevice(profile);
+          await this.deviceService.emitKeyAssignsToDevice(profile);
         }
-        return false;
+        return true;
       },
       config_getProjectRootDirectoryPath: async () => {
         if (appEnv.isDevelopment) {
