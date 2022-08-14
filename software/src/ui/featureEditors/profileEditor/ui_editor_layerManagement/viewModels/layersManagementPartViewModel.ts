@@ -15,6 +15,7 @@ export interface ILayerManagementPartViewModel {
   canShiftBackCurrentLayer: boolean;
   canShiftForwardCurrentLayer: boolean;
   canDeleteCurrentLayer: boolean;
+  canAddNewLayer: boolean;
   shiftBackCurrentLayer(): void;
   shiftForwardCurrentLayer(): void;
   editCurrentLayer(): void;
@@ -75,11 +76,13 @@ export function makeLayerManagementPartViewModel(): ILayerManagementPartViewMode
     actions.shiftLayerOrder(curLayer.layerId, dir);
   };
 
+  const canEdit = profilesReader.isEditProfileAvailable;
   return {
-    canEdit: profilesReader.isEditProfileAvailable,
+    canEdit,
     canShiftBackCurrentLayer: canShiftCurrentLayerOrder(-1),
     canShiftForwardCurrentLayer: canShiftCurrentLayerOrder(1),
     canDeleteCurrentLayer: isCurrentLayerCustom,
+    canAddNewLayer: canEdit && layers.length < 16,
     shiftBackCurrentLayer: () => shiftCurrentLayerOrder(-1),
     shiftForwardCurrentLayer: () => shiftCurrentLayerOrder(1),
     deleteCurrentLayer: async () => {
