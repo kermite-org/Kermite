@@ -15,15 +15,16 @@ export const LayerManagementPart: FC<Props> = ({
     shiftBackCurrentLayer,
     shiftForwardCurrentLayer,
     editCurrentLayer,
-    deleteCurrentLayer,
+    canAddNewLayer,
     addNewLayer,
     canDeleteCurrentLayer,
+    deleteCurrentLayer,
   },
 }) => (
   <div class={style}>
     <LayerOperationButton
       icon="fa fa-plus"
-      enabled={canEdit}
+      enabled={canAddNewLayer}
       handler={addNewLayer}
       hint={texts.assignerLayerOpsHint.addNewLayer}
     />

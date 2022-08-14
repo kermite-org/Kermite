@@ -196,8 +196,6 @@ const onWriteButton = async () => {
   // todo: トーストにする?
   if (done) {
     await modalAlert('write succeeded.');
-  } else {
-    await modalAlert('write failed.');
   }
 };
 

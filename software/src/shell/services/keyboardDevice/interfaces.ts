@@ -9,7 +9,7 @@ export interface IKeyboardDeviceService {
   writeSimulatorHidReport(report: number[]): void;
   setCustomParameterValue(index: number, value: number): void;
   emitRealtimeEventFromSimulator(event: IRealtimeKeyboardEvent): void;
-  emitKeyAssignsToDevice(editModel: IProfileData): Promise<boolean>;
+  emitKeyAssignsToDevice(editModel: IProfileData): Promise<void>;
   initialize(): void;
   terminate(): void;
 }
