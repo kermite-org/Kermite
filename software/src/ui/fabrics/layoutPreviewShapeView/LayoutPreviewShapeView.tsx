@@ -1,7 +1,10 @@
 import { css, FC, jsx } from 'alumina';
 import { IDisplayKeyboardDesign } from '~/shared';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
-import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
+import {
+  KeyboardBodyShapeExtra,
+  KeyboardBodyShape,
+} from '~/ui/elements/keyboard/keyboardBody';
 import { CoordOriginMark } from '~/ui/fabrics/layoutPreviewShapeView/CoordOriginMark';
 import { LayoutPreviewKeyEntityCard } from '~/ui/fabrics/layoutPreviewShapeView/LayoutPreviewShapeView.KeyEntityCard';
 import { IDraftLayoutLabelEntity } from '~/ui/fabrics/layoutPreviewShapeView/layoutPreviewShapeViewTypes';
@@ -35,6 +38,11 @@ export const LayoutPreviewShapeView: FC<Props> = ({
       >
         <KeyboardBodyShape
           outlineShapes={keyboardDesign.outlineShapes}
+          fillColor={fillColor}
+          strokeColor={strokeColor}
+        />
+        <KeyboardBodyShapeExtra
+          shape={keyboardDesign.extraShape}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />

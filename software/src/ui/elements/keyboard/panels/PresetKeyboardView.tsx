@@ -1,14 +1,22 @@
 import { jsx, css, FC } from 'alumina';
-import { IDisplayArea, IDisplayOutlineShape } from '~/shared';
+import {
+  IDisplayArea,
+  IDisplayOutlineShape,
+  IExtraShapeDefinition,
+} from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
-import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
-import { PresetKeyUnitCard } from '~/ui/elements/keyboard/keyUnitCards/PresetKeyUnitCard';
-import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
+import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames';
+import { PresetKeyUnitCard } from '~/ui/elements/keyboard/keyUnitCards';
+import {
+  KeyboardBodyShape,
+  KeyboardBodyShapeExtra,
+} from '~/ui/elements/keyboard/keyboardBody';
 
 type Props = {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
+  extraShape: IExtraShapeDefinition | undefined;
 };
 
 export type IPresetKeyboardViewProps = Props;
@@ -25,6 +33,7 @@ export const PresetKeyboardView: FC<Props> = ({
   keyUnits,
   displayArea,
   outlineShapes,
+  extraShape,
 }) => (
   <div class={style}>
     <KeyboardSvgFrameWithAutoScaler
@@ -35,6 +44,11 @@ export const PresetKeyboardView: FC<Props> = ({
     >
       <KeyboardBodyShape
         outlineShapes={outlineShapes}
+        fillColor={configs.fillColor}
+        strokeColor={configs.strokeColor}
+      />
+      <KeyboardBodyShapeExtra
+        shape={extraShape}
         fillColor={configs.fillColor}
         strokeColor={configs.strokeColor}
       />

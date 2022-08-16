@@ -1,4 +1,8 @@
-import { IKeyIdMode, IKeyPlacementAnchor } from '~/shared';
+import {
+  IExtraShapeDefinition,
+  IKeyIdMode,
+  IKeyPlacementAnchor,
+} from '~/shared';
 
 // ------------------------------------------------------
 export interface IEditKeyEntity {
@@ -40,6 +44,7 @@ export interface IEditKeyboardDesign {
   keyEntities: { [id: string]: IEditKeyEntity };
   outlineShapes: { [id: string]: IEditOutlineShape };
   transGroups: { [id: string]: IEditTransGroup };
+  extraShape: IExtraShapeDefinition;
 }
 
 // ------------------------------------------------------

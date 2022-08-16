@@ -59,6 +59,10 @@ void boardIoImpl_setupLeds_qtPyRp() {
   boardIoImpl_setupLedsRgb(12, 11);
 }
 
-void boardIoImpl_setupLeds_kb2040(){
+void boardIoImpl_setupLeds_kb2040() {
   boardIoImpl_setupLedsRgb(17, -1);
+}
+
+void boardIoImpl_setupLeds_rp2040zero() {
+  boardIoImpl_setupLedsRgb(16, -1);
 }

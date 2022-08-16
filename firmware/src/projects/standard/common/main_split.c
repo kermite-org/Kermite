@@ -4,8 +4,8 @@
 #include "km0/device/boardLink.h"
 #include "km0/device/debugUart.h"
 #include "km0/device/system.h"
-#include "km0/kernel/firmwareMetadata.h"
 #include "km0/kernel/configManager.h"
+#include "km0/kernel/firmwareMetadata.h"
 #include "km0/kernel/keyboardMain.h"
 #include "km0/scanner/keyScanner_basicMatrix.h"
 #include "km0/scanner/keyScanner_directWired.h"
@@ -175,8 +175,11 @@ int main() {
     if (defs.boardType == BoardType_Kb2040 && boardIoImpl_setupLeds_kb2040) {
       boardIoImpl_setupLeds_kb2040();
     }
-    if (defs.boardType == BoardType_XiaoRp2040 && boardIoImpl_setupLeds_seeedXiaoRp2040) {
-      boardIoImpl_setupLeds_seeedXiaoRp2040();
+    if (defs.boardType == BoardType_XiaoRp2040 && boardIoImpl_setupLeds_xiaoRp2040) {
+      boardIoImpl_setupLeds_xiaoRp2040();
+    }
+    if (defs.boardType == BoardType_Rp2040Zero && boardIoImpl_setupLeds_rp2040zero) {
+      boardIoImpl_setupLeds_rp2040zero();
     }
     configManager_setParameterExposeFlagsForBoardLeds();
   }

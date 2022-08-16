@@ -2,6 +2,7 @@ import { IStandardFirmwareBoardType, IStandardFirmwareConfig } from '~/shared';
 import {
   boardAssignsData_kb2040,
   boardAssignsData_proMicroRp2040,
+  boardAssignsData_rp2040zero,
   boardAssignsData_rpiPico,
   boardAssignsData_xiaoRp2040,
 } from '~/ui/fabrics/controllerPinAssignsSection/data';
@@ -19,6 +20,12 @@ function pushPinFunctionName(
   const pinIndex = base.pinNames.findIndex((it) => it === pinName);
   if (pinIndex >= 0) {
     base.pinFunctionNames[pinIndex] = pinFunctionName;
+  }
+  if (base.pinNamesBottom && base.pinFunctionNamesBottom) {
+    const pinIndex = base.pinNamesBottom.findIndex((it) => it === pinName);
+    if (pinIndex >= 0) {
+      base.pinFunctionNamesBottom[pinIndex] = pinFunctionName;
+    }
   }
 }
 
@@ -51,7 +58,11 @@ function pushEncoderPinFunctionNames(
 function createBoardAssignsDataEx(
   base: IBoardPinAssignsData,
 ): IBoardPinAssignsDataEx {
-  return { ...base, pinFunctionNames: base.pinNames.map(() => '') };
+  return {
+    ...base,
+    pinFunctionNames: base.pinNames.map(() => ''),
+    pinFunctionNamesBottom: base.pinNamesBottom?.map(() => ''),
+  };
 }
 
 const boardTypeToAssignsDataSourceMap: Record<
@@ -64,7 +75,8 @@ const boardTypeToAssignsDataSourceMap: Record<
   ProMicroRP2040: boardAssignsData_proMicroRp2040,
   RpiPico: boardAssignsData_rpiPico,
   KB2040: boardAssignsData_kb2040,
-  SeeedXiaoRP2040: boardAssignsData_xiaoRp2040,
+  XiaoRP2040: boardAssignsData_xiaoRp2040,
+  RP2040Zero: boardAssignsData_rp2040zero,
 };
 
 export function createBoardAssignsData(

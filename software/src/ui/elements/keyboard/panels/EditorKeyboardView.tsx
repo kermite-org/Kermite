@@ -3,6 +3,7 @@ import { IDisplayKeyboardDesign } from '~/shared';
 import { IEditKeyUnitCardViewModel, colors } from '~/ui/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames/KeyboardSvgFrameWithAutoScaler';
 import { EditKeyUnitCard } from '~/ui/elements/keyboard/keyUnitCards/EditKeyUnitCard';
+import { KeyboardBodyShapeExtra } from '~/ui/elements/keyboard/keyboardBody';
 import { KeyboardBodyShape } from '~/ui/elements/keyboard/keyboardBody/KeyboardBodyShape';
 
 type Props = {
@@ -29,6 +30,11 @@ export const EditorKeyboardView: FC<Props> = ({
     >
       <KeyboardBodyShape
         outlineShapes={design.outlineShapes}
+        fillColor={bodyFillColor}
+        strokeColor="transparent"
+      />
+      <KeyboardBodyShapeExtra
+        shape={design.extraShape}
         fillColor={bodyFillColor}
         strokeColor="transparent"
       />

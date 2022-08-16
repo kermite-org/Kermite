@@ -6,13 +6,14 @@ import { usePresetKeyboardViewWrapperModel } from '~/ui/fabrics/presetKeyboardVi
 export const PresetKeyboardViewWrapper: FC<{ profileData: IProfileData }> = ({
   profileData,
 }) => {
-  const { keyUnits, displayArea, outlineShapes } =
+  const { keyUnits, displayArea, outlineShapes, extraShape } =
     usePresetKeyboardViewWrapperModel(profileData);
   return (
     <PresetKeyboardView
       keyUnits={keyUnits}
       displayArea={displayArea}
       outlineShapes={outlineShapes}
+      extraShape={extraShape}
     />
   );
 };

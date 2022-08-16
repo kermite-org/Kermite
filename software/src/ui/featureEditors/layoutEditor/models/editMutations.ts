@@ -348,6 +348,24 @@ class EditMutations {
     });
   }
 
+  setExtraShapePathText(path: string) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape.path = path;
+    });
+  }
+
+  setExtraShapeAttributeValue(propKey: 'x' | 'y' | 'scale', value: number) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape[propKey] = value;
+    });
+  }
+
+  setExtraShapeInvertY(value: boolean) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape.invertY = value;
+    });
+  }
+
   setTransGroupMirror(mirror: boolean) {
     const { currentTransGroupId } = editReader;
     if (!currentTransGroupId) {
@@ -439,6 +457,12 @@ class EditMutations {
     this.resetSitePosition();
     this.loadDefaultGridSnapSelection();
     editManager.reset();
+  }
+
+  replaceKeyboardDesign(design: IEditKeyboardDesign) {
+    editUpdater.commitEditor((editor) => {
+      editor.design = design;
+    });
   }
 
   rebase() {

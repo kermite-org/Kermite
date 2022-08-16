@@ -3,6 +3,7 @@ import {
   IDisplayKeyEntity,
   IDisplayKeyShape,
   IDisplayOutlineShape,
+  IExtraShapeDefinition,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignMirrorKeyEntity,
   IPersistKeyboardDesignRealKeyEntity,
@@ -21,6 +22,7 @@ import {
   getStdKeySize,
   ICoordUnit,
 } from '~/shared/loaders/placementUnitHelper';
+import { calculateExtraShapeBoundingBoxPoints } from './extraShapePathBoundingBoxHelper';
 
 export namespace DisplayKeyboardDesignLoader {
   type ISourceDesign = IPersistKeyboardDesign;
@@ -141,6 +143,7 @@ export namespace DisplayKeyboardDesignLoader {
   function getBoundingBox(
     keyEntities: IDisplayKeyEntity[],
     outlineShapes: IDisplayOutlineShape[],
+    extraShape: IExtraShapeDefinition | undefined,
   ) {
     const xs: number[] = [];
     const ys: number[] = [];
@@ -202,16 +205,25 @@ export namespace DisplayKeyboardDesignLoader {
       ys.push(60);
     }
 
+    if (extraShape) {
+      const pts = calculateExtraShapeBoundingBoxPoints(extraShape);
+      pts.forEach((pt) => {
+        xs.push(pt.x);
+        ys.push(pt.y);
+      });
+    }
+
     const left = Math.min(...xs);
     const right = Math.max(...xs);
     const top = Math.min(...ys);
     const bottom = Math.max(...ys);
-    // return { top, left, bottom, right };
+
+    const outerMargin = 1;
     return {
       centerX: (left + right) / 2,
       centerY: (top + bottom) / 2,
-      width: right - left,
-      height: bottom - top,
+      width: right - left + outerMargin * 2,
+      height: bottom - top + outerMargin * 2,
     };
   }
 
@@ -300,12 +312,14 @@ export namespace DisplayKeyboardDesignLoader {
       }),
     );
 
-    const boundingBox = getBoundingBox(keyEntities, outlineShapes);
+    const { extraShape } = design;
+    const boundingBox = getBoundingBox(keyEntities, outlineShapes, extraShape);
 
     return {
       keyEntities,
       outlineShapes,
       displayArea: boundingBox,
+      extraShape,
     };
   }
 }

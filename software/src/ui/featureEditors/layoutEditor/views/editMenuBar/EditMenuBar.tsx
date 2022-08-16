@@ -29,7 +29,7 @@ export const EditMenuBar: FC = () => {
         options={editModeVm.options}
         value={editModeVm.value}
         setValue={editModeVm.setValue}
-        buttonWidth={55}
+        buttonWidth={65}
       />
 
       <div class="buttonsBox">
