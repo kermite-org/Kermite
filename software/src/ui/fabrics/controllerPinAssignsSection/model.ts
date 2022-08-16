@@ -64,7 +64,7 @@ const boardTypeToAssignsDataSourceMap: Record<
   ProMicroRP2040: boardAssignsData_proMicroRp2040,
   RpiPico: boardAssignsData_rpiPico,
   KB2040: boardAssignsData_kb2040,
-  SeeedXiaoRP2040: boardAssignsData_xiaoRp2040,
+  XiaoRP2040: boardAssignsData_xiaoRp2040,
 };
 
 export function createBoardAssignsData(

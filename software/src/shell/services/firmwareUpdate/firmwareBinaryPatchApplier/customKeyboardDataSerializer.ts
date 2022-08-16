@@ -31,7 +31,7 @@ function mapBoardTypeToCode(
       ProMicroRP2040: 4,
       RpiPico: 5,
       KB2040: 6,
-      SeeedXiaoRP2040: 7,
+      XiaoRP2040: 7,
     }[boardType] || 0
   );
 }
