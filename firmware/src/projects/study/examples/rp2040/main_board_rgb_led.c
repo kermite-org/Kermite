@@ -7,8 +7,9 @@ int main() {
   boardIoImpl_setupLeds_proMicroRp();
   // boardIoImpl_setupLeds_qtPyRp();
   // boardIoImpl_setupLeds_tiny2040();
-  // boardIoImpl_setupLeds_seeedXiaoRp2040();
+  // boardIoImpl_setupLeds_xiaoRp2040();
   // boardIoImpl_setupLeds_kb2040();
+  // boardIoImpl_setupLeds_rp2040zero();
 
   while (true) {
     boardIo_writeLed1(true);

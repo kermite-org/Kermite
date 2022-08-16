@@ -45,7 +45,7 @@ void boardIoImpl_setupLeds_tiny2040() {
   digitalIo_setHigh(GP18);
 }
 
-void boardIoImpl_setupLeds_seeedXiaoRp2040(){
+void boardIoImpl_setupLeds_xiaoRp2040() {
   //GP16: green
   //GP25: blue
   boardIoImpl_setupLeds(GP16, GP25, true);

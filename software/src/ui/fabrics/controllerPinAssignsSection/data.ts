@@ -123,7 +123,7 @@ export const boardAssignsData_kb2040: IBoardPinAssignsData = {
 export const boardAssignsData_xiaoRp2040: IBoardPinAssignsData = {
   unitPixels: 18,
   boardUnitWidth: 7,
-  boardUnitHeight: 14,
+  boardUnitHeight: 10,
   pinsRowOffset: 2,
   boardImageSig: 'xiaoRp2040',
   pinNames: [
@@ -140,6 +140,36 @@ export const boardAssignsData_xiaoRp2040: IBoardPinAssignsData = {
     'GP3',
     '3V3',
     'GND',
-    'RAW',
+    '5V',
   ],
+};
+
+export const boardAssignsData_rp2040zero: IBoardPinAssignsData = {
+  unitPixels: 18,
+  boardUnitWidth: 7,
+  boardUnitHeight: 11,
+  pinsRowOffset: 1,
+  boardImageSig: 'rp2040Zero',
+  pinNames: [
+    '5V',
+    'GND',
+    '3V3',
+    'GP29',
+    'GP28',
+    'GP27',
+    'GP26',
+    'GP15',
+    'GP14',
+    //
+    'GP8',
+    'GP7',
+    'GP6',
+    'GP5',
+    'GP4',
+    'GP3',
+    'GP2',
+    'GP1',
+    'GP0',
+  ],
+  pinNamesBottom: ['GP13', 'GP12', 'GP11', 'GP10', 'GP9'],
 };
