@@ -32,6 +32,7 @@ function mapBoardTypeToCode(
       RpiPico: 5,
       KB2040: 6,
       XiaoRP2040: 7,
+      RP2040Zero: 8,
     }[boardType] || 0
   );
 }

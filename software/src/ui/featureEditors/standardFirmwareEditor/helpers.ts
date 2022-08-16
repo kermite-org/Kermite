@@ -196,6 +196,7 @@ export const standardFirmwareEditModelHelpers = {
           'RpiPico',
           'KB2040',
           'XiaoRP2040',
+          'RP2040Zero',
         )
       ) {
         editValues.boardType = 'RpiPico';

@@ -39,7 +39,12 @@ export type IStandardBaseFirmwareType =
 export type IStandardFirmwareBoardType =
   // | 'ChipAtMega32U4'
   // | 'ProMicro'
-  'ChipRP2040' | 'ProMicroRP2040' | 'RpiPico' | 'KB2040' | 'XiaoRP2040';
+  | 'ChipRP2040'
+  | 'ProMicroRP2040'
+  | 'RpiPico'
+  | 'KB2040'
+  | 'XiaoRP2040'
+  | 'RP2040Zero';
 
 export type IStandardFirmwareConfig = {
   baseFirmwareType: IStandardBaseFirmwareType;

@@ -28,6 +28,7 @@ const constants = {
     'ProMicroRP2040',
     'KB2040',
     'XiaoRP2040',
+    'RP2040Zero',
     'ChipRP2040',
   ].map(makePlainSelectorOption),
   availablePinsTextRp: 'GP0~GP29',
