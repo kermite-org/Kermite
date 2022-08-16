@@ -68,6 +68,9 @@ int main() {
     if (defs.boardType == BoardType_XiaoRp2040 && boardIoImpl_setupLeds_xiaoRp2040) {
       boardIoImpl_setupLeds_xiaoRp2040();
     }
+    if (defs.boardType == BoardType_Rp2040Zero && boardIoImpl_setupLeds_rp2040zero) {
+      boardIoImpl_setupLeds_rp2040zero();
+    }
     configManager_setParameterExposeFlagsForBoardLeds();
   }
   if (defs.useDebugUart) {
