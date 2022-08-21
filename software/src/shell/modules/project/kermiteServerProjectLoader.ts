@@ -36,11 +36,11 @@ function checkProjectFileContentSchema(
 function convertOnlinePackageDataToPackageInfo(
   data: IProjectPackageFileContent,
   onlineProjectAttributes: IOnlineProjectAttributes,
-  isAudit: boolean,
+  isSuspend: boolean,
 ): IProjectPackageInfo {
   const { keyboardName } = data;
   const packageName = keyboardName.toLowerCase();
-  const origin = isAudit ? 'online_audit' : 'online';
+  const origin = isSuspend ? 'online_suspend' : 'online';
   return {
     ...data,
     projectKey: createProjectKey(origin, data.projectId),
@@ -57,7 +57,7 @@ function loadProjectPackageWrapperFiles(
   const projectKeys = fsxListFileBaseNames(folderPath, '.kmpkg_wrapper');
   const items = projectKeys
     .map((projectKey) => {
-      const isAudit = projectKey.endsWith('_audit');
+      const isSuspend = projectKey.endsWith('_suspend');
       const filePath = pathJoin(folderPath, `${projectKey}.kmpkg_wrapper`);
       const wrapperItem = fsxReadJsonFile(
         filePath,
@@ -88,7 +88,7 @@ function loadProjectPackageWrapperFiles(
       return convertOnlinePackageDataToPackageInfo(
         packageFileContent,
         attrs,
-        isAudit,
+        isSuspend,
       );
     })
     .filter((it) => it) as IProjectPackageInfo[];

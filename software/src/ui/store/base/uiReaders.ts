@@ -19,7 +19,7 @@ export const uiReaders = {
   },
   get activeProjectPackageInfos(): IProjectPackageInfo[] {
     return uiState.core.allProjectPackageInfos.filter(
-      (it) => it.origin !== 'online_audit',
+      (it) => it.origin !== 'online_suspend',
     );
   },
   get allCustomFirmwareInfos(): ICustomFirmwareInfo[] {

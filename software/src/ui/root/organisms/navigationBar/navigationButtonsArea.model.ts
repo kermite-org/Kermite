@@ -1,3 +1,4 @@
+import { featureConfig } from '~/shared';
 import { texts } from '~/ui/base';
 import { PagePaths } from '~/ui/commonModels';
 import { uiActions, uiReaders } from '~/ui/store';
@@ -55,7 +56,7 @@ const itemsSource: NavigationItemSource[] = [
     pageName: 'review',
     iconSpec: 'fa fa-globe',
     hint: 'review page',
-    isAvailable: () => uiReaders.isDeveloperMode,
+    isAvailable: () => featureConfig.reviewerMode,
   },
   {
     pagePath: '/projectResource',
