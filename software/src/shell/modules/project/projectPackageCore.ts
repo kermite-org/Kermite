@@ -9,7 +9,7 @@ import {
   uniqueArrayItemsByField,
   validateResourceName,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig, appEnv } from '~/shell/base';
 import {
   fsExistsSync,
   fsxDeleteFile,
@@ -231,7 +231,7 @@ export const projectPackageProvider = {
   },
   async submitLocalProjectPackageToServerSite(info: IProjectPackageInfo) {
     const savingData = convertProjectPackageInfoToFileContent(info);
-    const res = await fetch(`https://server.kermite.org/api/cache`, {
+    const res = await fetch(`${appConfig.kermiteServerUrl}/api/cache`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -242,7 +242,7 @@ export const projectPackageProvider = {
     if (res.status === 200) {
       const obj = await res.json();
       const { key } = obj;
-      window.open(`https://server.kermite.org/request?key=${key}`);
+      window.open(`${appConfig.kermiteServerUrl}/request?key=${key}`);
     }
   },
   openLocalProjectsFolder() {

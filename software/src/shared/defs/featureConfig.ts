@@ -6,4 +6,7 @@ export const featureConfig = {
   debugFullFeatures:
     location.host.startsWith('localhost') ||
     location.search.includes('debugFullFeatures=1'),
+  reviewerMode:
+    location.host.startsWith('localhost') ||
+    location.search.includes('reviewerMode=1'),
 };

@@ -33,7 +33,7 @@ export const ProjectReviewPage: FC = () => {
           class="keyboard-list keyboard-list-dummy"
           if={projectItems.length === 0}
         >
-          No auditing packages
+          No suspended packages
         </div>
         <div class="main-row">
           <div class="left-column">

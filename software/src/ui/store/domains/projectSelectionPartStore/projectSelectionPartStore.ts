@@ -42,8 +42,8 @@ type IProjectSelectionPartStore = {
 
 const helpers = {
   getProjectItemPrefix(info: IProjectPackageInfo) {
-    if (info.origin === 'online_audit') {
-      return '(review)';
+    if (info.origin === 'online_suspend') {
+      return '(suspend)';
     }
     if (info.isDraft) {
       return '(draft)';
