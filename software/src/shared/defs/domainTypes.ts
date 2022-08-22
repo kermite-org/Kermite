@@ -18,7 +18,7 @@ export type IResourceOrigin =
   | 'local'
   | 'online'
   | 'local_draft'
-  | 'online_audit';
+  | 'online_suspend';
 
 // export type IFirmwareTargetDevice = 'atmega32u4' | 'rp2040';
 export type IFirmwareTargetDevice = 'rp2040';

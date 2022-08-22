@@ -8,7 +8,7 @@ import {
   ProfileDataConverter,
   validateResourceName,
 } from '~/shared';
-import { appEnv } from '~/shell/base';
+import { appConfig, appEnv } from '~/shell/base';
 import {
   fspCopyFile,
   fspReaddir,
@@ -154,7 +154,7 @@ export const profileManagerCore = {
         profileData,
         profileEntry.profileName,
       );
-    const res = await fetch(`https://server.kermite.org/api/cache`, {
+    const res = await fetch(`${appConfig.kermiteServerUrl}/api/cache`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -165,7 +165,7 @@ export const profileManagerCore = {
     if (res.status === 200) {
       const obj = await res.json();
       const { key } = obj;
-      window.open(`https://server.kermite.org/post?key=${key}`);
+      window.open(`${appConfig.kermiteServerUrl}/post?key=${key}`);
     }
   },
   deleteProfile(profileEntry: IProfileEntry): void {

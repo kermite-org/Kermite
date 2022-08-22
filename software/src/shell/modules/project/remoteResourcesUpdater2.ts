@@ -43,7 +43,7 @@ function loadLocalDigestMap(folderPath: string): Record<string, number> {
 
 interface IApiGetPackagesCatalogResponsePackagesItem {
   projectId: string;
-  status: 'Review' | 'Approval' | 'Rereview';
+  status: 'Package' | 'Suspend';
   timeStamp: number;
   // revision: number;
   // datahash: string;
@@ -61,9 +61,7 @@ async function loadRemoteDigestMap(): Promise<Record<string, number>> {
 
   const modPackages = catalogContent.packages.map((pkg) => ({
     projectId:
-      pkg.status === 'Review' || pkg.status === 'Rereview'
-        ? `${pkg.projectId}_audit`
-        : pkg.projectId,
+      pkg.status === 'Suspend' ? `${pkg.projectId}_suspend` : pkg.projectId,
     timeStamp: pkg.timeStamp,
   }));
 
@@ -91,26 +89,26 @@ interface IApiProjectPackageWrapperItemPartial {
   revision: number;
   official: boolean;
   development: boolean;
+  comment: string;
 }
 interface IApiPackagesProjectsResponse {
-  approvals: IApiProjectPackageWrapperItemPartial[];
-  reviews: IApiProjectPackageWrapperItemPartial[];
-  rereviews: IApiProjectPackageWrapperItemPartial[];
+  packages: IApiProjectPackageWrapperItemPartial[];
+  suspends: IApiProjectPackageWrapperItemPartial[];
 }
 
 async function fetchProjectPackageWrapperItem(
   projectKey: string,
   timeStamp: number,
 ): Promise<IProjectPackageWrapperFileContent> {
-  const projectId = projectKey.replace('_audit', '');
-  const isAudit = projectKey.endsWith('_audit');
+  const projectId = projectKey.replace('_suspend', '');
+  const isSuspend = projectKey.endsWith('_suspend');
   const data = (await fetchJson(
     `${appConfig.kermiteServerUrl}/api/packages/projects/${projectId}`,
   )) as IApiPackagesProjectsResponse;
 
-  const wrapperItemsSource = isAudit
-    ? [...data.reviews, ...data.rereviews]
-    : data.approvals;
+  const wrapperItemsSource = isSuspend
+    ? [...data.packages, ...data.suspends]
+    : data.packages;
   const wrapperItem = wrapperItemsSource[wrapperItemsSource.length - 1];
 
   const {
