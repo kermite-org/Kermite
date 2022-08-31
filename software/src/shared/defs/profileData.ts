@@ -1,4 +1,5 @@
 import { SystemAction } from '~/shared/defs/commandDefinitions';
+import { IConsumerControlAction } from '~/shared/defs/consumerControlDefinitions';
 import {
   createFallbackPersistKeyboardDesign,
   IPersistKeyboardDesign,
@@ -50,11 +51,17 @@ export type IAssignOperationSystemAction = {
   payloadValue: number;
 };
 
+export type IAssignOperationConsumerControl = {
+  type: 'consumerControl';
+  action: IConsumerControlAction;
+};
+
 export type IAssignOperation =
   | IAssignOperationKeyInput
   | IAssignOperationLayerCall
   | IAssignOperationClearExclusiveLayers
-  | IAssignOperationSystemAction;
+  | IAssignOperationSystemAction
+  | IAssignOperationConsumerControl;
 
 export type IProfileAssignType = 'single' | 'dual';
 

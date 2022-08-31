@@ -75,15 +75,13 @@ void keyboardTask2() {
   bool nextPressed = readButton(2);
   if (!pressed2 && nextPressed) {
     // consumer control volume decrement
-    reportBuf[0] = 0xEA;
-    reportBuf[1] = 0;
-    usbIoCore_hidConsumerControl_writeReport(reportBuf);
+    uint16_t keyCode = 0xEA;
+    usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
     printf("key1 down\n");
 
   } else if (pressed2 && !nextPressed) {
-    reportBuf[0] = 0;
-    reportBuf[1] = 0;
-    usbIoCore_hidConsumerControl_writeReport(reportBuf);
+    uint16_t keyCode = 0;
+    usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
     printf("key1 up\n");
   }
   pressed2 = nextPressed;

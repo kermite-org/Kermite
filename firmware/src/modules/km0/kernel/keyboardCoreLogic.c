@@ -8,6 +8,7 @@
 #include "km0/base/configImport.h"
 #include "km0/base/utils.h"
 #include "km0/device/dataMemory.h"
+#include "km0/device/usbIoCore.h"
 #include <stdio.h>
 
 /*
@@ -626,6 +627,7 @@ enum {
   ExOpType_LayerClearExclusive = 2,
   ExOpType_SystemAction = 3,
   ExOpType_MovePointerMovement = 4,
+  ExOpType_ConsumerControl = 5,
 };
 
 enum {
@@ -738,6 +740,10 @@ static void handleOperationOn(uint32_t opWord) {
       uint8_t payloadValue = (opWord >> 8) & 0xff;
       configManager_handleSystemAction(actionCode, payloadValue);
     }
+    if (exOpType == ExOpType_ConsumerControl) {
+      uint16_t keyCode = (opWord >> 8) & 0xFFFF;
+      usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
+    }
   }
 
   if (!isLayerCall) {
@@ -763,6 +769,10 @@ static void handleOperationOff(uint32_t opWord) {
       if (fInvocationMode == InvocationMode_Hold) {
         layerMutations_deactivate(layerIndex);
       }
+    }
+    if (exOpType == ExOpType_ConsumerControl) {
+      uint16_t keyCode = 0;
+      usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
     }
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
