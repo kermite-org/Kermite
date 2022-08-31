@@ -641,6 +641,7 @@ const ExOpType = {
   LayerClearExclusive: 2,
   SystemAction: 3,
   MovePointerMovement: 4,
+  ConsumerControl: 5,
 };
 
 const InvocationMode = {
@@ -760,6 +761,10 @@ function handleOperationOn(opWord: u32) {
       const actionCode = (opWord >> 16) & 0xff;
       const payloadValue = (opWord >> 8) & 0xff;
       console.log(`system action ${actionCode}`);
+    }
+    if (exOpType === ExOpType.ConsumerControl) {
+      const keyCode = (opWord >> 8) & 0xffff;
+      console.log(`consumer control ${keyCode}`);
     }
   }
 

@@ -1,4 +1,5 @@
 import { IPersistProfileData, IServerProfileInfo } from '~/shared';
+import { appConfig } from '~/shell/base';
 import { cacheRemoteResource, fetchJson } from '~/shell/funcs';
 import { ProfileFileLoader } from '~/shell/loaders/profileFileLoader';
 
@@ -25,11 +26,9 @@ export namespace PresetHubServerTypes {
   };
 }
 
-const serverUrlBase = `https://server.kermite.org`;
-
 export const userPresetHubDataLoader = {
   async getServerProjectIds(): Promise<string[]> {
-    const url = `${serverUrlBase}/api/profiles/projectids`;
+    const url = `${appConfig.kermiteServerUrl}/api/profiles/projectids`;
     const data =
       await cacheRemoteResource<PresetHubServerTypes.GetProfilesProjectIdsResponse>(
         fetchJson,
@@ -38,7 +37,7 @@ export const userPresetHubDataLoader = {
     return data.projectIds || [];
   },
   async getServerProfiles(projectId: string): Promise<IServerProfileInfo[]> {
-    const url = `${serverUrlBase}/api/profiles/projects/${projectId}`;
+    const url = `${appConfig.kermiteServerUrl}/api/profiles/projects/${projectId}`;
     const data =
       await cacheRemoteResource<PresetHubServerTypes.GetPublicProfilesResponse>(
         fetchJson,
