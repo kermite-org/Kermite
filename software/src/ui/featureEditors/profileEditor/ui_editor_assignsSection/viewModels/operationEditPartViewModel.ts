@@ -1,4 +1,6 @@
 import {
+  consumerControlActionToLabelTextMap,
+  consumerControlAssignSelectionSource,
   encodeSingleModifierVirtualKey,
   ModifierVirtualKey,
   systemActionAssignSelectionSource,
@@ -200,6 +202,23 @@ export function makeOperationEditPartViewModel(): IOperationEditPartViewModel {
       isEnabled: true,
       hint: getSystemActionNote(sa),
     }));
+
+  const consumerControlEntries: IOperationCardViewModel[] =
+    consumerControlAssignSelectionSource.map((cc) => ({
+      sig: cc,
+      text: consumerControlActionToLabelTextMap[cc],
+      isCurrent:
+        editOperation?.type === 'consumerControl' &&
+        editOperation.action === cc,
+      setCurrent: () =>
+        writeEditOperation({
+          type: 'consumerControl',
+          action: cc,
+        }),
+      isEnabled: true,
+      hint: 'Set consumer control assign.',
+    }));
+  virtualKeyEntryGroups2.push(consumerControlEntries);
 
   return {
     virtualKeyEntryGroups,

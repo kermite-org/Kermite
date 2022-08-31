@@ -17,3 +17,4 @@ export * from './virtualKeyTexts';
 export * from './constants';
 export * from './infrastructureTypes';
 export * from './featureConfig';
+export * from './consumerControlDefinitions';

@@ -93,6 +93,11 @@ namespace AssignStorageBinaryFormat {
     bit7_0: { fMoveAmountY: s8 };
   };
 
+  type OpConsumerControl = BasedOn<u24> & {
+    bit23_16: { headByte: ExOperationHeadByte<0b101> };
+    bit15_0: { consumerKeyCode: u16 };
+  };
+
   type AssignOperation = VariableLength<1, 4> &
     (
       | OpNoOperation
@@ -101,6 +106,7 @@ namespace AssignStorageBinaryFormat {
       | OpLayerClearExclusive
       | OpSystemAction
       | OpMousePointerMove
+      | OpConsumerControl
     );
 
   // --------------------

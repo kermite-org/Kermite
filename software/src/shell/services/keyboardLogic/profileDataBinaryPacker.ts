@@ -15,6 +15,7 @@ import {
   systemActionToCodeMap,
   encodeModifierVirtualKeys,
   IProfileSettingsM,
+  consumerControlActionToKeyCodeMap,
 } from '~/shared';
 import {
   blo,
@@ -117,6 +118,9 @@ FFF: extended operation type, 0b100 for mouse pointer movement
 AAAA_AAAA: movement amount x, -128~127
 BBBB_BBBB: movement amount y, -128~127
 
+Consumer Control
+0b11xx_x101 KKKK_KKKK KKKK_KKKK
+KKKK_KKKK KKKK_KKKK: consumer control key code
 */
 function encodeAssignOperation(
   op: IAssignOperation | undefined,
@@ -164,6 +168,12 @@ function encodeAssignOperation(
     const fExOperationType = 0b011;
     const actionCode = systemActionToCodeMap[op.action] || 0;
     return [(fAssignType << 6) | fExOperationType, actionCode, op.payloadValue];
+  }
+  if (op?.type === 'consumerControl') {
+    const fAssignType = 0b11;
+    const fExOperationType = 0b101;
+    const keyCode = consumerControlActionToKeyCodeMap[op.action] || 0;
+    return [(fAssignType << 6) | fExOperationType, bhi(keyCode), blo(keyCode)];
   }
   return [0];
 }

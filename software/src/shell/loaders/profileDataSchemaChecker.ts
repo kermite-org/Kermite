@@ -39,6 +39,10 @@ const vAssignOperation = () =>
       action: vString(),
       payloadValue: vNumber(),
     }),
+    vObject({
+      type: vValueEquals('consumerControl'),
+      action: vString(),
+    }),
   ]);
 
 export const profileDataSchemaChecker = vObject({

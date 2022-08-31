@@ -8,6 +8,7 @@ import {
   IAssignEntry,
   decodeModifierVirtualKeys,
   IProfileSettings,
+  consumerControlActionToLabelTextMap,
 } from '~/shared';
 
 function getAssignOperationText(
@@ -36,6 +37,9 @@ function getAssignOperationText(
   }
   if (op?.type === 'systemAction') {
     return systemActionToLabelTextMap[op.action] || '';
+  }
+  if (op?.type === 'consumerControl') {
+    return consumerControlActionToLabelTextMap[op.action] || '';
   }
   return '';
 }
