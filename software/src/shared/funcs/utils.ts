@@ -42,6 +42,13 @@ export function removeArrayItemOne<T>(ar: T[], a: T) {
   }
 }
 
+export function countArrayItemsMatched<T>(
+  ar: T[],
+  cond: (a: T) => boolean,
+): number {
+  return ar.filter(cond).length;
+}
+
 export function removeArrayItemsMatched<T>(
   ar: T[],
   cond: (a: T) => boolean,

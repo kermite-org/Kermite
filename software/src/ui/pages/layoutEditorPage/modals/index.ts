@@ -1,2 +1,2 @@
 export * from './LayoutUpdateModal';
-export * from './kicadImporter/KicadImporterModal';
+export * from './KicadImporterModal';

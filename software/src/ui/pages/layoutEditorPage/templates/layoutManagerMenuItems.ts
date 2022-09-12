@@ -69,7 +69,7 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
     },
     {
       type: 'menuEntry',
-      text: 'kicad importer',
+      text: 'kicad pcb file loader',
       handler: layoutManagerActions.openKicadImporterModal,
     },
     {
