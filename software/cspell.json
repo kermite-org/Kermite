@@ -14,7 +14,8 @@
     "atmega",
     "firmwares",
     "kermite",
-    "oneshot"
+    "oneshot",
+    "kicad"
   ],
   "import": []
 }
