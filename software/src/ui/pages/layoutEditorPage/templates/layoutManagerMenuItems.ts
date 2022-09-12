@@ -69,6 +69,11 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
     },
     {
       type: 'menuEntry',
+      text: 'kicad importer',
+      handler: layoutManagerActions.openKicadImporterModal,
+    },
+    {
+      type: 'menuEntry',
       text: 'save to project',
       handler: layoutManagerActions.openSaveToProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
