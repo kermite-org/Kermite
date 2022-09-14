@@ -1,36 +1,41 @@
-import { jsx, css, FC } from 'alumina';
-import { IExtraShapeDefinition, validateSvgPathText } from '~/shared';
+import { css, domStyled, FC, jsx } from 'alumina';
+import { IDisplayExtraShape, validateSvgPathText } from '~/shared';
 
-type Props = {
-  shape: IExtraShapeDefinition | undefined;
+const KeyboardBodyShapeExtraSingle: FC<{
+  shape: IDisplayExtraShape;
   fillColor: string;
   strokeColor: string;
-};
-
-export const KeyboardBodyShapeExtra: FC<Props> = ({
-  shape,
-  fillColor,
-  strokeColor,
-}) => {
-  if (!shape) {
-    return undefined;
-  }
+}> = ({ shape, fillColor, strokeColor }) => {
   if (!validateSvgPathText(shape.path)) {
     return undefined;
   }
-  const scx = shape.scale;
-  const scy = shape.scale * (shape.invertY ? -1 : 1);
-  const transform = `translate(${shape.x},${shape.y}) scale(${scx},${scy})`;
-  const strokeWidth = shape.scale !== 0 ? 0.5 / shape.scale : 0.5;
+  const strokeWidth = 0.5 / shape.scaleForLineWeight;
 
-  const style = css`
-    fill: ${fillColor};
-    stroke: ${strokeColor};
-    stroke-width: ${strokeWidth};
-  `;
+  return domStyled(
+    <path d={shape.path} />,
+    css`
+      fill: ${fillColor};
+      stroke: ${strokeColor};
+      stroke-width: ${strokeWidth};
+    `,
+  );
+};
+
+export const KeyboardBodyShapeExtra: FC<{
+  shapes: IDisplayExtraShape[];
+  fillColor: string;
+  strokeColor: string;
+}> = ({ shapes, fillColor, strokeColor }) => {
   return (
-    <g transform={transform}>
-      <path d={shape.path} class={style} />
+    <g>
+      {shapes.map((shape, idx) => (
+        <KeyboardBodyShapeExtraSingle
+          key={idx}
+          shape={shape}
+          fillColor={fillColor}
+          strokeColor={strokeColor}
+        />
+      ))}
     </g>
   );
 };

@@ -1,5 +1,5 @@
 import {
-  IExtraShapeDefinition,
+  IPersistExtraShape,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignRealKeyEntity,
 } from '~/shared';
@@ -17,7 +17,7 @@ export function keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign
       angle: fp.at.angle,
       groupIndex: 0,
     }));
-  const extraShape: IExtraShapeDefinition = {
+  const extraShape: IPersistExtraShape = {
     path: outlineShapePathBuilder_buildPathSpecString(pcbShapeData.outlines),
     x: 0,
     y: 0,

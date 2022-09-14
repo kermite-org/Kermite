@@ -38,7 +38,7 @@ export const WidgetSvgKeyboardView: FC<Props> = ({ keyboardDesign, cards }) => {
           strokeColor={strokeColor}
         />
         <KeyboardBodyShapeExtra
-          shape={keyboardDesign.extraShape}
+          shapes={keyboardDesign.extraShapes}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />

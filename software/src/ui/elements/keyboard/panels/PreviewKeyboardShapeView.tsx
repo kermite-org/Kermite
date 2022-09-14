@@ -46,7 +46,7 @@ export const PreviewKeyboardShapeView: FC<Props> = ({
           strokeColor={strokeColor}
         />
         <KeyboardBodyShapeExtra
-          shape={keyboardDesign.extraShape}
+          shapes={keyboardDesign.extraShapes}
           fillColor={fillColor}
           strokeColor={strokeColor}
         />

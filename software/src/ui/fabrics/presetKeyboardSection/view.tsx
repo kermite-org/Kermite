@@ -14,7 +14,7 @@ export const PresetKeyboardSection: FC<Props> = ({ profileData }) => {
     keyUnits,
     displayArea,
     outlineShapes,
-    extraShape,
+    extraShapes,
     layers,
     currentLayerId,
     setCurrentLayerId,
@@ -26,7 +26,7 @@ export const PresetKeyboardSection: FC<Props> = ({ profileData }) => {
           keyUnits={keyUnits}
           displayArea={displayArea}
           outlineShapes={outlineShapes}
-          extraShape={extraShape}
+          extraShapes={extraShapes}
         />
       </div>
       <div class="layersPart">
