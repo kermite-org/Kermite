@@ -366,6 +366,12 @@ class EditMutations {
     });
   }
 
+  setExtraShapeGroupId(groupId: string) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape.groupId = groupId;
+    });
+  }
+
   setTransGroupMirror(mirror: boolean) {
     const { currentTransGroupId } = editReader;
     if (!currentTransGroupId) {

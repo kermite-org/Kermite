@@ -23,6 +23,7 @@ export function keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign
     y: 0,
     scale: 1,
     invertY: false,
+    groupIndex: 0,
   };
   return {
     formatRevision: 'LA01',

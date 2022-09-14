@@ -67,7 +67,7 @@ export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
     setup: { ...defaultKeyboardDesignSetup },
     keyEntities: {},
     outlineShapes: {},
-    extraShape: { path: '', x: 0, y: 0, scale: 1, invertY: false },
+    extraShape: { path: '', x: 0, y: 0, scale: 1, invertY: false, groupId: '' },
     transGroups: {
       '0': {
         id: '0',

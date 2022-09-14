@@ -1,8 +1,4 @@
-import {
-  IExtraShapeDefinition,
-  IKeyIdMode,
-  IKeyPlacementAnchor,
-} from '~/shared';
+import { IKeyIdMode, IKeyPlacementAnchor } from '~/shared';
 
 // ------------------------------------------------------
 export interface IEditKeyEntity {
@@ -26,6 +22,15 @@ export type IEditOutlineShape = {
   groupId: string;
 };
 
+export interface IEditExtraShape {
+  path: string;
+  x: number;
+  y: number;
+  scale: number;
+  invertY: boolean;
+  groupId: string;
+}
+
 export type IEditTransGroup = {
   id: string; // 編集中のみ一意の値を保持,永続化の際には保存しない, 値はインデクスを文字列化したもの
   // groupId: string;
@@ -44,7 +49,7 @@ export interface IEditKeyboardDesign {
   keyEntities: { [id: string]: IEditKeyEntity };
   outlineShapes: { [id: string]: IEditOutlineShape };
   transGroups: { [id: string]: IEditTransGroup };
-  extraShape: IExtraShapeDefinition;
+  extraShape: IEditExtraShape;
 }
 
 // ------------------------------------------------------

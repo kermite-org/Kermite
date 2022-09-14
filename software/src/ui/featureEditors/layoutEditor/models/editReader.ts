@@ -1,7 +1,6 @@
 import {
   getCoordUnitFromUnitSpec,
   ICoordUnit,
-  IExtraShapeDefinition,
   validateSvgPathText,
 } from '~/shared';
 import {
@@ -12,6 +11,7 @@ import { createSimpleSelector } from '~/ui/utils';
 import { appState, IEnvBoolPropKey } from './appState';
 import { getKeyboardDesignBoundingBox } from './boundingBoxCalculator';
 import {
+  IEditExtraShape,
   IEditKeyEntity,
   IEditOutlinePoint,
   IEditOutlineShape,
@@ -166,7 +166,7 @@ class EditReader {
     return this.outlinePoints?.[this.currentPointIndex];
   }
 
-  get extraShape(): IExtraShapeDefinition {
+  get extraShape(): IEditExtraShape {
     return appState.editor.design.extraShape;
   }
 

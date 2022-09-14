@@ -24,6 +24,7 @@ export interface IExtraShapeDefinition {
   y: number;
   scale: number;
   invertY: boolean;
+  groupIndex?: number;
 }
 export interface IPersistKeyboardDesign {
   formatRevision: 'LA01';
