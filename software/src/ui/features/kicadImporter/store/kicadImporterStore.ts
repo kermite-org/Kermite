@@ -6,11 +6,11 @@ import {
   IFootprintDisplayMode,
 } from '../base';
 import { fileDialogHelpers_loadLocalTextFileWithDialog } from '../funcs';
+import { kicadFileContentLoader } from '../loaders';
 import {
   footprintSeeker_findDefaultFootprintSearchWord,
-  kicadFileContentLoader,
-} from '../loaders';
-import { keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign } from '../modules';
+  keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign,
+} from '../modules';
 import { kicadPcbTestData_sp2104 } from './testData';
 
 function createKicadImporterStore() {
