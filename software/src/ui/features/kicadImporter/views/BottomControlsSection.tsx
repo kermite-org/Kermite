@@ -3,11 +3,11 @@ import { GeneralButton } from '~/ui/components';
 import { kicadImporterStore } from '../store';
 
 export const BottomControlsSection: FC = () => {
-  const { loadKicadPcbFile, exportJson } = kicadImporterStore.actions;
+  const { loadKicadPcbFile, applyImportLayout } = kicadImporterStore.actions;
   return domStyled(
     <div>
       <GeneralButton onClick={loadKicadPcbFile} text="load file (.kicad_pcb)" />
-      <GeneralButton text="apply layout" onClick={exportJson} />
+      <GeneralButton text="apply layout" onClick={applyImportLayout} />
     </div>,
     css`
       display: flex;

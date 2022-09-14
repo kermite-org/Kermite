@@ -1,11 +1,16 @@
 import { cloneObject } from '~/shared';
 import { appUi } from '~/ui/base';
-import { fallbackPcbShapeData, IFootprintDisplayMode } from '../base';
+import {
+  diKicadImporter,
+  fallbackPcbShapeData,
+  IFootprintDisplayMode,
+} from '../base';
 import { fileDialogHelpers_loadLocalTextFileWithDialog } from '../funcs';
 import {
   footprintSeeker_findDefaultFootprintSearchWord,
   kicadFileContentLoader,
 } from '../loaders';
+import { keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign } from '../modules';
 import { kicadPcbTestData_sp2104 } from './testData';
 
 function createKicadImporterStore() {
@@ -56,17 +61,18 @@ function createKicadImporterStore() {
     setFootprintDisplayMode(mode: IFootprintDisplayMode) {
       state.footprintDisplayMode = mode;
     },
-    exportJson() {
-      // const {
-      //   pcbShapeData: { boundingBox, outlines },
-      // } = state;
-      // const { filteredFootprints: footprints } = readers;
-      // const documentObject = {
-      //   outlines,
-      //   boundingBox,
-      //   footprints,
-      // };
-      // jsonExporter_openPcbShapeDataJsonInNewTab(documentObject);
+    applyImportLayout() {
+      const {
+        pcbShapeData: { boundingBox, outlines },
+      } = state;
+      const { filteredFootprints: footprints } = readers;
+      const design =
+        keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign({
+          outlines,
+          boundingBox,
+          footprints,
+        });
+      diKicadImporter.applyImportLayout(design);
     },
   };
 
