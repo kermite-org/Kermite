@@ -2,6 +2,10 @@ import { degToRad, sortOrderBy } from '~/shared';
 import { IPcbShapeData, IPoint, kicadImporterConfig } from '../base';
 import { vectorOp } from '../funcs';
 import { calculatePcbShapeBoundingBox } from './boundingBoxCalculator';
+import {
+  coordRounder_roundFootprintsCoord,
+  coordRounder_roundGraphicsCoord,
+} from './coordRounder';
 import { calculateCircleRadiusFrom3PointArc } from './geometryHelpers';
 import { pathComposer_composePath } from './pathComposer';
 
@@ -274,6 +278,10 @@ function extractPcbEntities(source: ISExpressionRoot): IPcbShapeData {
 
   const paths = pathComposer_composePath([...lines, ...arcs, ...curves]);
   const outlines = [...rects, ...circles, ...polygons, ...paths];
+
+  coordRounder_roundFootprintsCoord(footprints);
+  coordRounder_roundGraphicsCoord(outlines);
+
   const boundingBox = calculatePcbShapeBoundingBox(
     footprints,
     outlines,
