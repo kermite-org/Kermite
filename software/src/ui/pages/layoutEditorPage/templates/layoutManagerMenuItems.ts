@@ -11,6 +11,11 @@ function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
       handler: layoutManagerActions.createNewLayout,
       disabled: !layoutManagerReader.canCreateNewLayout,
     },
+    {
+      type: 'menuEntry',
+      text: 'kicad pcb file loader',
+      handler: layoutManagerActions.openKicadImporterModal,
+    },
     // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
     { type: 'separator' },
     {
