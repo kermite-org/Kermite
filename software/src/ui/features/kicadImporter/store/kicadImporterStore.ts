@@ -1,9 +1,11 @@
 import { cloneObject } from '~/shared';
 import { appUi } from '~/ui/base';
+import { modalError } from '~/ui/components';
 import {
   diKicadImporter,
   fallbackPcbShapeData,
   IFootprintDisplayMode,
+  IPcbShapeData,
 } from '../base';
 import { fileDialogHelpers_loadLocalTextFileWithDialog } from '../funcs';
 import { kicadFileContentLoader } from '../loaders';
@@ -22,7 +24,14 @@ function createKicadImporterStore() {
 
   const internalActions = {
     loadPcbFileContent(text: string) {
-      const pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
+      let pcbShapeData: IPcbShapeData;
+      try {
+        pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
+      } catch (error) {
+        console.error(error);
+        modalError(`an error occurred while loading file`);
+        return;
+      }
       console.log({ pcbShapeData });
       state.pcbShapeData = pcbShapeData;
       state.footprintSearchWord =
