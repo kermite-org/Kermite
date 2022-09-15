@@ -56,6 +56,10 @@ const cssKeyRect = css`
     stroke: #4bb;
   }
 
+  &[data-pressed] {
+    fill: #0f03;
+  }
+
   &[data-ghost] {
     opacity: 0.3;
   }
@@ -134,6 +138,8 @@ const KeyEntityCardSingle = (props: {
   const showBoth = showKeyId && showKeyIndex;
 
   const keyIndex = isMirror ? ke.mirrorKeyIndex : ke.keyIndex;
+
+  const isPressed = editReader.pressedKeyIndices.includes(keyIndex);
 
   const identifierText = getKeyIdentifierText(
     ke,
@@ -215,6 +221,7 @@ const KeyEntityCardSingle = (props: {
           class={cssKeyRect}
           data-selected={isSelected}
           data-ghost={isGhost}
+          data-pressed={isPressed}
           onPointerDown={onMouseDown}
         />
         {idTexts}
@@ -232,6 +239,7 @@ const KeyEntityCardSingle = (props: {
         class={cssKeyRect}
         data-selected={isSelected}
         data-ghost={isGhost}
+        data-pressed={isPressed}
         onPointerDown={onMouseDown}
       />
       {idTexts}
