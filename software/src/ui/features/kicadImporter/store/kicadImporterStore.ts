@@ -13,6 +13,7 @@ import {
   footprintSeeker_findDefaultFootprintSearchWord,
   keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign,
 } from '../modules';
+import { kicadPcbTestData_sp2104 } from './testData';
 
 function createKicadImporterStore() {
   const state = {
@@ -84,6 +85,9 @@ function createKicadImporterStore() {
         internalActions.loadPcbFileContent(res.contentText);
         appUi.rerender();
       }
+    },
+    loadTestData() {
+      internalActions.loadPcbFileContent(kicadPcbTestData_sp2104);
     },
     setFootprintSearchWord(word: string) {
       state.footprintSearchWord = word;
