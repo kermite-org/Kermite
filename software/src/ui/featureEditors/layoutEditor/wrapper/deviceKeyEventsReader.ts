@@ -6,15 +6,23 @@ import {
 
 function handleKeyIndexReflectionInput(keyIndex: number) {
   if (editReader.enableKeyIndexReflection) {
-    const ke1 = editReader.currentKeyEntity;
+    const { allKeyEntities, currentKeyEntity, isCurrentKeyMirror } = editReader;
+    const ke1 = currentKeyEntity;
     if (ke1) {
-      const ke0 = editReader.allKeyEntities.find(
-        (ke) => ke.keyIndex === keyIndex,
-      );
-      if (ke0) {
-        editMutations.changeKeyProperty('keyIndex', -1, ke0.id);
+      const ke0a = allKeyEntities.find((ke) => ke.keyIndex === keyIndex);
+      if (ke0a) {
+        editMutations.changeKeyProperty('keyIndex', -1, ke0a.id);
       }
-      editMutations.changeKeyProperty('keyIndex', keyIndex, ke1.id);
+      const ke0b = allKeyEntities.find((ke) => ke.mirrorKeyIndex === keyIndex);
+      if (ke0b) {
+        editMutations.changeKeyProperty('mirrorKeyIndex', -1, ke0b.id);
+      }
+
+      if (isCurrentKeyMirror) {
+        editMutations.changeKeyProperty('mirrorKeyIndex', keyIndex, ke1.id);
+      } else {
+        editMutations.changeKeyProperty('keyIndex', keyIndex, ke1.id);
+      }
     }
   }
 }
