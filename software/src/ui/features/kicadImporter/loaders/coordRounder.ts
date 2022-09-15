@@ -16,7 +16,12 @@ export function coordRounder_roundGraphicsCoord(
 ) {
   graphicsNodes.forEach((gr) => {
     if (gr.type === 'path') {
-      gr.segments.forEach((seg) => (seg.points = seg.points.map(roundCoordXY)));
+      gr.segments.forEach((seg) => {
+        seg.points = seg.points.map(roundCoordXY);
+        if (seg.type === 'grArc') {
+          seg.radius = roundCoord(seg.radius);
+        }
+      });
     } else if (gr.type === 'grCircle') {
       gr.center = roundCoordXY(gr.center);
       gr.radius = roundCoord(gr.radius);
