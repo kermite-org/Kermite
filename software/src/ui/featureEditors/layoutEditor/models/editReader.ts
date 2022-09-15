@@ -109,6 +109,10 @@ class EditReader {
     return appState.env.snapToGrid;
   }
 
+  get enableKeyIndexReflection() {
+    return appState.env.enableKeyIndexReflection;
+  }
+
   get currentKeyEntity(): IEditKeyEntity | undefined {
     const { design, currentKeyEntityId } = appState.editor;
     return design.keyEntities[currentKeyEntityId || ''];

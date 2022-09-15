@@ -414,10 +414,20 @@ class EditMutations {
   changeKeyProperty = <K extends IEditPropKey>(
     propKey: K,
     value: IEditKeyEntity[K],
+    keyId?: string,
   ) => {
-    editUpdater.patchEditKeyEntity((ke) => {
-      ke[propKey] = value;
-    });
+    if (!keyId) {
+      editUpdater.patchEditKeyEntity((ke) => {
+        ke[propKey] = value;
+      });
+    } else {
+      editUpdater.patchEditor((draft) => {
+        const ke = draft.design.keyEntities[keyId];
+        if (ke) {
+          ke[propKey] = value;
+        }
+      });
+    }
   };
 
   setEditScreenSize(w: number, h: number) {
