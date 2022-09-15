@@ -126,7 +126,9 @@ const KeyEntityCardSingle = (props: {
     }
   };
 
-  const isSelected = ke.id === editReader.currentKeyEntity?.id;
+  const isSelected =
+    ke.id === editReader.currentKeyEntity?.id &&
+    editReader.isCurrentKeyMirror === isMirror;
   const isGhost = ke === editReader.ghost;
 
   const { coordUnit, sizeUnit, placementAnchor, showKeyId, showKeyIndex } =
