@@ -6,7 +6,7 @@ import { kicadImporterStore } from '../store';
 
 export const TopControlsSection: FC = () => {
   const {
-    state: { footprintSearchWord, footprintDisplayMode },
+    state: { footprintSearchWord, footprintDisplayMode, dataLoaded },
     readers: { numFootprintsMatched },
     actions: { setFootprintSearchWord, setFootprintDisplayMode },
   } = kicadImporterStore;
@@ -22,6 +22,7 @@ export const TopControlsSection: FC = () => {
             value={footprintSearchWord}
             setValue={setFootprintSearchWord}
             width={inputWidth}
+            disabled={!dataLoaded}
           />
         </div>
         <div if={false}>
@@ -35,8 +36,10 @@ export const TopControlsSection: FC = () => {
         </div>
       </div>
 
-      <div>
-        <p>{numFootprintsMatched} footprints matched.</p>
+      <div class="second-row">
+        <p class={['count-text', dataLoaded && 'active']}>
+          <p>{numFootprintsMatched} footprints matched.</p>
+        </p>
       </div>
     </div>,
     css`
@@ -53,6 +56,13 @@ export const TopControlsSection: FC = () => {
           display: flex;
           flex-direction: column;
           gap: 2px;
+        }
+      }
+
+      > .second-row {
+        visibility: hidden;
+        > .count-text.active {
+          visibility: visible;
         }
       }
     `,

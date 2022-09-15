@@ -13,13 +13,13 @@ import {
   footprintSeeker_findDefaultFootprintSearchWord,
   keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign,
 } from '../modules';
-import { kicadPcbTestData_sp2104 } from './testData';
 
 function createKicadImporterStore() {
   const state = {
     pcbShapeData: cloneObject(fallbackPcbShapeData),
     footprintSearchWord: '',
     footprintDisplayMode: 'rect14x14' as IFootprintDisplayMode,
+    dataLoaded: false,
   };
 
   const internalActions = {
@@ -33,10 +33,15 @@ function createKicadImporterStore() {
         return;
       }
       console.log({ pcbShapeData });
-      state.pcbShapeData = pcbShapeData;
-      state.footprintSearchWord =
-        footprintSeeker_findDefaultFootprintSearchWord(pcbShapeData);
-      appUi.rerender();
+      if (
+        pcbShapeData.outlines.length > 0 ||
+        pcbShapeData.footprints.length > 0
+      ) {
+        state.pcbShapeData = pcbShapeData;
+        state.footprintSearchWord =
+          footprintSeeker_findDefaultFootprintSearchWord(pcbShapeData);
+        state.dataLoaded = true;
+      }
     },
   };
 
@@ -53,16 +58,19 @@ function createKicadImporterStore() {
   };
 
   const actions = {
+    reset() {
+      state.pcbShapeData = cloneObject(fallbackPcbShapeData);
+      state.footprintSearchWord = '';
+      state.dataLoaded = false;
+    },
     async loadKicadPcbFile() {
       const res = await fileDialogHelpers_loadLocalTextFileWithDialog(
         '.kicad_pcb',
       );
       if (res) {
         internalActions.loadPcbFileContent(res.contentText);
+        appUi.rerender();
       }
-    },
-    loadTestData() {
-      internalActions.loadPcbFileContent(kicadPcbTestData_sp2104);
     },
     setFootprintSearchWord(word: string) {
       state.footprintSearchWord = word;

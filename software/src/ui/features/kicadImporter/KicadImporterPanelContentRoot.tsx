@@ -7,7 +7,8 @@ import {
 } from './views';
 
 export const KicadImporterPanelContentRoot: FC = () => {
-  effectOnMount(() => kicadImporterStore.actions.loadTestData());
+  effectOnMount(() => kicadImporterStore.actions.reset());
+
   return domStyled(
     <div>
       <div class="inner">
