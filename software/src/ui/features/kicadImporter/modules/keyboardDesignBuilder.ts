@@ -14,7 +14,7 @@ export function keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign
       keyId: fp.referenceName,
       x: fp.at.x,
       y: fp.at.y,
-      angle: fp.at.angle,
+      angle: fp.at.angle !== undefined ? -fp.at.angle : undefined,
       groupIndex: 0,
     }));
   const extraShape: IPersistExtraShape = {
