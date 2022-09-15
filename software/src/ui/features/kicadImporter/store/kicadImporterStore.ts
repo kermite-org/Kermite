@@ -1,4 +1,4 @@
-import { cloneObject } from '~/shared';
+import { checkArrayItemsUnique, cloneObject } from '~/shared';
 import { appUi } from '~/ui/base';
 import { modalError } from '~/ui/components';
 import {
@@ -27,6 +27,19 @@ function createKicadImporterStore() {
       let pcbShapeData: IPcbShapeData;
       try {
         pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
+
+        const referenceNames = pcbShapeData.footprints.map(
+          (it) => it.referenceName,
+        );
+        if (
+          referenceNames.includes('') ||
+          referenceNames.includes(undefined as any)
+        ) {
+          throw new Error(`invalid reference name`);
+        }
+        if (!checkArrayItemsUnique(referenceNames)) {
+          throw new Error(`reference name duplication`);
+        }
       } catch (error) {
         console.error(error);
         modalError(`an error occurred while loading file`);
