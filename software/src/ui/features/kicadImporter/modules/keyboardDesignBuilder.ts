@@ -8,13 +8,14 @@ import { outlineShapePathBuilder_buildPathSpecString } from './outlineShapePathB
 
 export function keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign(
   pcbShapeData: IPcbShapeData,
+  invertFacing: boolean,
 ): IPersistKeyboardDesign {
   const keyEntities: IPersistKeyboardDesignRealKeyEntity[] =
     pcbShapeData.footprints.map((fp) => ({
       keyId: fp.referenceName,
       x: fp.at.x,
       y: fp.at.y,
-      angle: fp.at.angle !== undefined ? -fp.at.angle : undefined,
+      angle: -((fp.at.angle || 0) + (invertFacing ? 180 : 0)),
       groupIndex: 0,
     }));
   const extraShape: IPersistExtraShape = {

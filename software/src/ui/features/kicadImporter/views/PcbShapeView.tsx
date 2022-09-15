@@ -44,7 +44,7 @@ const footprintRefTextYMap: Record<IFootprintDisplayMode, number> = {
 
 export const PcbShapeView: FC = () => {
   const {
-    state: { pcbShapeData, footprintDisplayMode },
+    state: { pcbShapeData, footprintDisplayMode, isKeyFacingInverted },
     readers: { filteredFootprints },
   } = kicadImporterStore;
   const { boundingBox: bb, outlines } = pcbShapeData;
@@ -54,6 +54,9 @@ export const PcbShapeView: FC = () => {
 
   const footprintRenderer = footprintRendererMap[footprintDisplayMode];
   const footprintRefTextY = footprintRefTextYMap[footprintDisplayMode];
+
+  const additionalAngleForInvertFacing = isKeyFacingInverted ? 180 : 0;
+
   return domStyled(
     <div id="domSvgPcbShapeViewOuter">
       <svg viewBox={viewBoxSpec}>
@@ -73,7 +76,7 @@ export const PcbShapeView: FC = () => {
               href="#footprint"
               key={idx}
               transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
-                fp.at.angle || 0
+                (fp.at.angle || 0) + additionalAngleForInvertFacing
               )})`}
             />
           ))}
@@ -91,7 +94,7 @@ export const PcbShapeView: FC = () => {
             <g
               key={idx}
               transform={`translate(${fp.at.x} ${fp.at.y}) rotate(${-(
-                fp.at.angle || 0
+                (fp.at.angle || 0) + additionalAngleForInvertFacing
               )})`}
             >
               <text x={0} y={footprintRefTextY}>

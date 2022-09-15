@@ -21,6 +21,7 @@ function createKicadImporterStore() {
     footprintSearchWord: '',
     footprintDisplayMode: 'rect14x14' as IFootprintDisplayMode,
     dataLoaded: false,
+    isKeyFacingInverted: false,
   };
 
   const internalActions = {
@@ -95,17 +96,24 @@ function createKicadImporterStore() {
     setFootprintDisplayMode(mode: IFootprintDisplayMode) {
       state.footprintDisplayMode = mode;
     },
+    setKeyFacingInverted(value: boolean) {
+      state.isKeyFacingInverted = value;
+    },
     applyImportLayout() {
       const {
+        isKeyFacingInverted,
         pcbShapeData: { boundingBox, outlines },
       } = state;
       const { filteredFootprints: footprints } = readers;
       const design =
-        keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign({
-          outlines,
-          boundingBox,
-          footprints,
-        });
+        keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign(
+          {
+            outlines,
+            boundingBox,
+            footprints,
+          },
+          isKeyFacingInverted,
+        );
       diKicadImporter.applyImportLayout(design);
     },
   };

@@ -1,14 +1,23 @@
 import { css, domStyled, FC, jsx } from 'alumina';
 import { makePlainSelectorOption } from '~/ui/base';
-import { GeneralInput, GeneralSelector } from '~/ui/components';
+import { CheckBoxLine, GeneralInput, GeneralSelector } from '~/ui/components';
 import { allFootprintDisplayModes } from '../base';
 import { kicadImporterStore } from '../store';
 
 export const TopControlsSection: FC = () => {
   const {
-    state: { footprintSearchWord, footprintDisplayMode, dataLoaded },
+    state: {
+      footprintSearchWord,
+      footprintDisplayMode,
+      dataLoaded,
+      isKeyFacingInverted,
+    },
     readers: { numFootprintsMatched },
-    actions: { setFootprintSearchWord, setFootprintDisplayMode },
+    actions: {
+      setFootprintSearchWord,
+      setFootprintDisplayMode,
+      setKeyFacingInverted,
+    },
   } = kicadImporterStore;
 
   const inputWidth = 150;
@@ -22,6 +31,14 @@ export const TopControlsSection: FC = () => {
             value={footprintSearchWord}
             setValue={setFootprintSearchWord}
             width={inputWidth}
+            disabled={!dataLoaded}
+          />
+        </div>
+        <div>
+          <CheckBoxLine
+            text="invert facing"
+            checked={isKeyFacingInverted}
+            setChecked={setKeyFacingInverted}
             disabled={!dataLoaded}
           />
         </div>
