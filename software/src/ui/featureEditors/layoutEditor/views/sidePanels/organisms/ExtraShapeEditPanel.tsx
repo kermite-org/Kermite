@@ -180,7 +180,7 @@ const cssPanelContent = css`
 
     > textarea {
       width: 100%;
-      height: 240px;
+      height: 120px;
       overflow-y: auto;
       padding: 5px;
       resize: none;
