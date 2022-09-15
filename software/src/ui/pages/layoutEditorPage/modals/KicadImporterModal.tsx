@@ -11,7 +11,7 @@ diKicadImporter.applyImportLayout = (design) => {
 };
 
 export const KicadImporterModal: FC = () => {
-  const modalTitle = 'Import layout from Kicad PCB design file';
+  const modalTitle = 'Import layout from KiCad PCB design file';
 
   const handleClose = layoutManagerActions.closeModal;
   return (
