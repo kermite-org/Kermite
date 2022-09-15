@@ -29,19 +29,6 @@ function createKicadImporterStore() {
       let pcbShapeData: IPcbShapeData;
       try {
         pcbShapeData = kicadFileContentLoader.loadKicadPcbFileContent(text);
-
-        const referenceNames = pcbShapeData.footprints.map(
-          (it) => it.referenceName,
-        );
-        if (
-          referenceNames.includes('') ||
-          referenceNames.includes(undefined as any)
-        ) {
-          throw new Error(`invalid reference name`);
-        }
-        if (!checkArrayItemsUnique(referenceNames)) {
-          throw new Error(`reference name duplication`);
-        }
       } catch (error) {
         console.error(error);
         modalError(`an error occurred while loading file`);
@@ -55,6 +42,7 @@ function createKicadImporterStore() {
         state.pcbShapeData = pcbShapeData;
         state.footprintSearchWord =
           footprintSeeker_findDefaultFootprintSearchWord(pcbShapeData);
+        state.isKeyFacingInverted = false;
         state.dataLoaded = true;
       }
     },
@@ -105,6 +93,16 @@ function createKicadImporterStore() {
         pcbShapeData: { boundingBox, outlines },
       } = state;
       const { filteredFootprints: footprints } = readers;
+
+      const referenceNames = footprints.map((it) => it.referenceName);
+
+      if (!checkArrayItemsUnique(referenceNames)) {
+        console.log(`invalid reference names`);
+        console.log({ referenceNames });
+        modalError(`footprint reference name duplication detected`);
+        return;
+      }
+
       const design =
         keyboardDesignBuilder_convertPcbShapeDataToPersistKeyboardDesign(
           {
