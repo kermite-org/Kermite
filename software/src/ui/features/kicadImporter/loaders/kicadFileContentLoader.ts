@@ -26,6 +26,7 @@ function readSExpressionArgs(src: string): ISExpressionRawString[] {
   let depth = 0;
   let nodeText = '';
   let inString = false;
+  let prevChr: string | undefined;
   src.split('').forEach((chr) => {
     if (chr === '(' && !inString) {
       nodeText += '(';
@@ -43,13 +44,14 @@ function readSExpressionArgs(src: string): ISExpressionRawString[] {
         nodeText = '';
       }
     } else {
-      if (chr === '"') {
+      if (chr === '"' && prevChr !== '\\') {
         inString = !inString;
       }
       if (depth > 0 || chr !== ' ' || inString) {
         nodeText += chr;
       }
     }
+    prevChr = chr;
   });
   if (nodeText) {
     nodes.push(nodeText);
