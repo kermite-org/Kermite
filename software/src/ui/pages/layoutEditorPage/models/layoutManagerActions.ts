@@ -61,6 +61,7 @@ export const layoutManagerActions = {
   },
   openLoadFromProjectModal: () => setModalState('LoadFromProject'),
   openCopyFromProjectModal: () => setModalState('CopyFromProject'),
+  openKicadImporterModal: () => setModalState('LoadKicadPcbShape'),
   openSaveToProjectModal: () => setModalState('SaveToProject'),
   closeModal: () => setModalState('None'),
   async createNewLayout() {

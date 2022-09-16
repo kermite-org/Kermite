@@ -4,7 +4,7 @@ import {
   IDisplayOutlineShape,
   IProfileData,
   getDisplayKeyboardDesignSingleCached,
-  IExtraShapeDefinition,
+  IDisplayExtraShape,
 } from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
 import { makePresetKeyUnitViewModels } from '~/ui/elements';
@@ -13,7 +13,7 @@ export interface IPresetKeyboardSectionModel {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
-  extraShape: IExtraShapeDefinition | undefined;
+  extraShapes: IDisplayExtraShape[];
   layers: {
     layerId: string;
     layerName: string;
@@ -38,7 +38,7 @@ export function usePresetKeyboardSectionModel(
     displayDesign,
     currentLayerId,
   );
-  const { displayArea, outlineShapes, extraShape } = displayDesign;
+  const { displayArea, outlineShapes, extraShapes } = displayDesign;
 
   const layers = profileData.layers.map((la) => ({
     layerId: la.layerId,
@@ -49,7 +49,7 @@ export function usePresetKeyboardSectionModel(
     keyUnits,
     displayArea,
     outlineShapes,
-    extraShape,
+    extraShapes,
     layers,
     currentLayerId,
     setCurrentLayerId,

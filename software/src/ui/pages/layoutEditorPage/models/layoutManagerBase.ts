@@ -6,7 +6,8 @@ export type ILayoutManagerModalState =
   | 'None'
   | 'LoadFromProject'
   | 'SaveToProject'
-  | 'CopyFromProject';
+  | 'CopyFromProject'
+  | 'LoadKicadPcbShape';
 export const layoutManagerState = new (class {
   layoutEditSource: ILayoutEditSource = { type: 'CurrentProfile' };
   modalState: ILayoutManagerModalState = 'None';

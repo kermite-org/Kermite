@@ -11,6 +11,11 @@ function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
       handler: layoutManagerActions.createNewLayout,
       disabled: !layoutManagerReader.canCreateNewLayout,
     },
+    {
+      type: 'menuEntry',
+      text: 'kicad pcb file loader',
+      handler: layoutManagerActions.openKicadImporterModal,
+    },
     // { text: 'edit current profile layout', command: 'loadCurrentProfileLayout' },
     { type: 'separator' },
     {
@@ -66,6 +71,11 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
       text: 'copy from project layout',
       handler: layoutManagerActions.openCopyFromProjectModal,
       disabled: !uiReaders.isGlobalProjectSelected,
+    },
+    {
+      type: 'menuEntry',
+      text: 'kicad pcb file loader',
+      handler: layoutManagerActions.openKicadImporterModal,
     },
     {
       type: 'menuEntry',

@@ -9,6 +9,7 @@ export const layoutManagerRootModel = {
 
     useEffect(() => {
       layoutManagerState.modalState = 'None';
+      // layoutManagerState.modalState = 'LoadKicadPcbShape';
     }, []);
 
     useEffect(() => {

@@ -1,14 +1,21 @@
-import { jsx, css, FC } from 'alumina';
-import { HFlex, GeneralSelector } from '~/ui/components';
+import { css, FC, jsx } from 'alumina';
+import { GeneralSelector, HFlex } from '~/ui/components';
 import {
-  ConfigVStack,
   ConfigPanelBox,
+  ConfigVStack,
   GeneralConfigTextEditRow,
 } from '~/ui/elements';
+import { editReader } from '~/ui/featureEditors/layoutEditor/models';
 import { useKeyEntityEditPanelModel } from '~/ui/featureEditors/layoutEditor/views/sidePanels/models/keyEntityEditPanel.model';
 
 export const KeyEntityEditPanel: FC = () => {
   const { keyEntityAttrsVm: vm } = useKeyEntityEditPanelModel();
+
+  const reflectInput =
+    editReader.enableKeyIndexReflection &&
+    editReader.currentKeyEntity &&
+    editReader.pressedKeyIndices.length > 0;
+
   return (
     <ConfigPanelBox headerText="key properties">
       <ConfigVStack>
@@ -36,6 +43,7 @@ export const KeyEntityEditPanel: FC = () => {
           {...vm.vmKeyIndex}
           labelWidth={80}
           inputWidth={80}
+          class={[cssKeyIndexInput, reflectInput && '--reflect-input']}
         />
         <div class={cssErrorText}>{vm.vmKeyIndex.errorText}</div>
         <HFlex>
@@ -53,4 +61,12 @@ export const KeyEntityEditPanel: FC = () => {
 const cssErrorText = css`
   color: red;
   font-size: 14px;
+`;
+
+const cssKeyIndexInput = css`
+  &.--reflect-input {
+    > input {
+      background: #0f04;
+    }
+  }
 `;

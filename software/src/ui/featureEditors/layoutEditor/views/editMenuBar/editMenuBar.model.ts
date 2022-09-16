@@ -70,6 +70,10 @@ export function makeEditMenuBarViewModel() {
   const vmShowKeyId = createToggleOptionViewModel('showKeyId');
   const vmShowKeyIndex = createToggleOptionViewModel('showKeyIndex');
 
+  const vmEnableKeyIndexReflection = createToggleOptionViewModel(
+    'enableKeyIndexReflection',
+  );
+
   return {
     canUndo: editMutations.canUndo,
     canRedo: editMutations.canRedo,
@@ -83,5 +87,6 @@ export function makeEditMenuBarViewModel() {
     resetKeyboardDesign,
     vmShowKeyId,
     vmShowKeyIndex,
+    vmEnableKeyIndexReflection,
   };
 }
