@@ -1,4 +1,3 @@
-import { featureConfig, optInArrayItem } from '~/shared';
 import { IGeneralMenuItem } from '~/ui/base';
 import { layoutManagerActions } from '~/ui/pages/layoutEditorPage/models/layoutManagerActions';
 import { layoutManagerReader } from '~/ui/pages/layoutEditorPage/models/layoutManagerReaders';
@@ -37,14 +36,12 @@ function createLayoutManagerMenuItems_editLayoutFile(): IGeneralMenuItem[] {
       handler: layoutManagerActions.openLoadFromProjectModal,
       disabled: !layoutManagerReader.canOpenProjectIoModal,
     },
-    ...optInArrayItem(
-      featureConfig.debugFullFeatures && {
-        type: 'menuEntry' as const,
-        text: 'save to project',
-        handler: layoutManagerActions.openSaveToProjectModal,
-        disabled: !layoutManagerReader.canOpenProjectIoModal,
-      },
-    ),
+    {
+      type: 'menuEntry',
+      text: 'save to project',
+      handler: layoutManagerActions.openSaveToProjectModal,
+      disabled: !layoutManagerReader.canOpenProjectIoModal,
+    },
     { type: 'separator' },
     {
       type: 'menuEntry',
@@ -75,13 +72,11 @@ function createLayoutManagerMenuItems_editCurrentProfileLayout(): IGeneralMenuIt
       handler: layoutManagerActions.openCopyFromProjectModal,
       disabled: !uiReaders.isGlobalProjectSelected,
     },
-    ...optInArrayItem(
-      featureConfig.debugFullFeatures && {
-        type: 'menuEntry' as const,
-        text: 'kicad pcb file loader',
-        handler: layoutManagerActions.openKicadImporterModal,
-      },
-    ),
+    {
+      type: 'menuEntry',
+      text: 'kicad pcb file loader',
+      handler: layoutManagerActions.openKicadImporterModal,
+    },
     {
       type: 'menuEntry',
       text: 'save to project',
