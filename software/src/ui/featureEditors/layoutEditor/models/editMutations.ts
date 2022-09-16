@@ -432,30 +432,17 @@ class EditMutations {
 
   replaceKeyIndexByDevicePhysicalKey(newKeyIndex: number) {
     const { currentKeyEntityId } = appState.editor;
-    const { currentKeyEntity, isCurrentKeyMirror, keyIdMode } = editReader;
+    const { currentKeyEntity, isCurrentKeyMirror } = editReader;
     if (!(currentKeyEntityId && currentKeyEntity)) return;
-    const originalKeyIndex = currentKeyEntity.keyIndex;
-    const needKeyIndexSwap = keyIdMode === 'auto';
+    if (currentKeyEntity.keyIndex === newKeyIndex) return;
     editUpdater.commitEditor((editor) => {
       const allKeyEntities = Object.values(editor.design.keyEntities);
       const ke0a = allKeyEntities.find((ke) => ke.keyIndex === newKeyIndex);
       const ke0b = allKeyEntities.find(
         (ke) => ke.mirrorKeyIndex === newKeyIndex,
       );
-      if (needKeyIndexSwap) {
-        if (ke0a && ke0b) {
-          ke0a.keyIndex = -1;
-          ke0b.mirrorKeyIndex = -1;
-        } else if (ke0a) {
-          ke0a.keyIndex = originalKeyIndex;
-        } else if (ke0b) {
-          ke0b.mirrorKeyIndex = originalKeyIndex;
-        }
-      } else {
-        if (ke0a) ke0a.keyIndex = -1;
-        if (ke0b) ke0b.keyIndex = -1;
-      }
-
+      if (ke0a) ke0a.keyIndex = -1;
+      if (ke0b) ke0b.mirrorKeyIndex = -1;
       const ke1 = editor.design.keyEntities[currentKeyEntityId];
       if (isCurrentKeyMirror) {
         ke1.mirrorKeyIndex = newKeyIndex;
