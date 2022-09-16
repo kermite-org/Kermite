@@ -120,7 +120,7 @@ function pickEntities<T>(
           }
         }),
       );
-    }) as T[];
+    }) as unknown as T[];
 }
 
 function tupleToPointXY(xy: [number, number]): IPoint {
