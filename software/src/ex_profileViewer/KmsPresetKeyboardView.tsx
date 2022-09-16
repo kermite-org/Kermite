@@ -1,4 +1,4 @@
-import { jsx, css, FC } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import {
   IPresetKeyUnitViewModel,
   KmsPresetKeyUnitCard,
@@ -6,8 +6,8 @@ import {
 import { kmsColors } from '~/ex_profileViewer/kmsColors';
 import {
   IDisplayArea,
+  IDisplayExtraShape,
   IDisplayOutlineShape,
-  IExtraShapeDefinition,
 } from '~/shared';
 import {
   KeyboardBodyShape,
@@ -19,7 +19,7 @@ export type IPresetKeyboardViewProps = {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
-  extraShape: IExtraShapeDefinition | undefined;
+  extraShapes: IDisplayExtraShape[];
 };
 
 const configs = {
@@ -39,7 +39,7 @@ export const KmsPresetKeyboardView: FC<IPresetKeyboardViewProps> = ({
   keyUnits,
   displayArea,
   outlineShapes,
-  extraShape,
+  extraShapes,
 }) => (
   <div class={style}>
     <KeyboardSvgFrameWithAutoScaler
@@ -54,7 +54,7 @@ export const KmsPresetKeyboardView: FC<IPresetKeyboardViewProps> = ({
         strokeColor={configs.strokeColor}
       />
       <KeyboardBodyShapeExtra
-        shape={extraShape}
+        shapes={extraShapes}
         fillColor={configs.fillColor}
         strokeColor={configs.strokeColor}
       />
