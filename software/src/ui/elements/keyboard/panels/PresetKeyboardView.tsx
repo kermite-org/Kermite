@@ -1,8 +1,8 @@
 import { jsx, css, FC } from 'alumina';
 import {
   IDisplayArea,
+  IDisplayExtraShape,
   IDisplayOutlineShape,
-  IExtraShapeDefinition,
 } from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
 import { KeyboardSvgFrameWithAutoScaler } from '~/ui/elements/keyboard/frames';
@@ -16,7 +16,7 @@ type Props = {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
-  extraShape: IExtraShapeDefinition | undefined;
+  extraShapes: IDisplayExtraShape[];
 };
 
 export type IPresetKeyboardViewProps = Props;
@@ -33,7 +33,7 @@ export const PresetKeyboardView: FC<Props> = ({
   keyUnits,
   displayArea,
   outlineShapes,
-  extraShape,
+  extraShapes,
 }) => (
   <div class={style}>
     <KeyboardSvgFrameWithAutoScaler
@@ -48,7 +48,7 @@ export const PresetKeyboardView: FC<Props> = ({
         strokeColor={configs.strokeColor}
       />
       <KeyboardBodyShapeExtra
-        shape={extraShape}
+        shapes={extraShapes}
         fillColor={configs.fillColor}
         strokeColor={configs.strokeColor}
       />

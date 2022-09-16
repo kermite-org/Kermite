@@ -4,7 +4,7 @@ import { layoutManagerRootModel } from '~/ui/pages/layoutEditorPage/models/layou
 import { makeProjectLayoutSelectorModalModel } from '~/ui/pages/layoutEditorPage/models/projectLayoutSelectorModalModel';
 import { LayoutManagerTopBar } from '~/ui/pages/layoutEditorPage/organisms/LayoutManagerTopBar';
 import { useLayoutManagerTopBarModel } from '~/ui/pages/layoutEditorPage/templates/layoutManagerTopBarModel';
-import { LayoutUpdateModal } from '../modals/LayoutUpdateModal';
+import { KicadImporterModal, LayoutUpdateModal } from '../modals';
 import { layoutManagerReader } from '../models/layoutManagerReaders';
 
 export const LayoutManagerTopBarTemplate: FC = () => {
@@ -14,11 +14,14 @@ export const LayoutManagerTopBarTemplate: FC = () => {
 
   const isLayoutUpdateModalVisible =
     layoutManagerReader.modalState === 'CopyFromProject';
+  const isKicadImporterModalVisible =
+    layoutManagerReader.modalState === 'LoadKicadPcbShape';
   return (
     <div>
       <LayoutManagerTopBar {...topBarModel} />
       {modalModel && <ProjectAttachmentFileSelectorModal vm={modalModel} />}
       {isLayoutUpdateModalVisible && <LayoutUpdateModal />}
+      {isKicadImporterModalVisible && <KicadImporterModal />}
     </div>
   );
 };

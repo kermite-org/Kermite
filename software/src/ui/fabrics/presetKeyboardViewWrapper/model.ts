@@ -1,9 +1,9 @@
 import {
+  getDisplayKeyboardDesignSingleCached,
   IDisplayArea,
+  IDisplayExtraShape,
   IDisplayOutlineShape,
   IProfileData,
-  getDisplayKeyboardDesignSingleCached,
-  IExtraShapeDefinition,
 } from '~/shared';
 import { IPresetKeyUnitViewModel } from '~/ui/base';
 import { makePresetKeyUnitViewModels } from '~/ui/elements/keyboard';
@@ -12,7 +12,7 @@ export interface IPresetKeyboardViewWrapperModel {
   keyUnits: IPresetKeyUnitViewModel[];
   displayArea: IDisplayArea;
   outlineShapes: IDisplayOutlineShape[];
-  extraShape: IExtraShapeDefinition | undefined;
+  extraShapes: IDisplayExtraShape[];
 }
 
 export function usePresetKeyboardViewWrapperModel(
@@ -25,6 +25,6 @@ export function usePresetKeyboardViewWrapperModel(
     keyUnits: makePresetKeyUnitViewModels(profileData, displayDesign, ''),
     displayArea: displayDesign.displayArea,
     outlineShapes: displayDesign.outlineShapes,
-    extraShape: displayDesign.extraShape,
+    extraShapes: displayDesign.extraShapes,
   };
 }

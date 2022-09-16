@@ -18,12 +18,13 @@ export interface IPersistKeyboardDesignMirrorKeyEntity {
   keyIndex?: number;
 }
 
-export interface IExtraShapeDefinition {
+export interface IPersistExtraShape {
   path: string;
   x: number;
   y: number;
   scale: number;
   invertY: boolean;
+  groupIndex?: number;
 }
 export interface IPersistKeyboardDesign {
   formatRevision: 'LA01';
@@ -41,7 +42,7 @@ export interface IPersistKeyboardDesign {
     points: { x: number; y: number }[];
     groupIndex?: number;
   }[];
-  extraShape?: IExtraShapeDefinition;
+  extraShape?: IPersistExtraShape;
   transformationGroups: {
     // groupId: string;
     x: number;
@@ -106,11 +107,16 @@ export interface IDisplayOutlineShape {
   points: { x: number; y: number }[];
 }
 
+export interface IDisplayExtraShape {
+  path: string;
+  scaleForLineWeight: number;
+}
+
 export interface IDisplayKeyboardDesign {
   keyEntities: IDisplayKeyEntity[];
   outlineShapes: IDisplayOutlineShape[];
   displayArea: IDisplayArea;
-  extraShape?: IExtraShapeDefinition;
+  extraShapes: IDisplayExtraShape[];
 }
 
 export function createFallbackDisplayKeyboardDesign(): IDisplayKeyboardDesign {
@@ -123,5 +129,6 @@ export function createFallbackDisplayKeyboardDesign(): IDisplayKeyboardDesign {
       width: 100,
       height: 100,
     },
+    extraShapes: [],
   };
 }

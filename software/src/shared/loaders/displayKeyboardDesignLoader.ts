@@ -1,9 +1,11 @@
+import svgpath from 'svgpath';
 import {
+  IDisplayExtraShape,
   IDisplayKeyboardDesign,
   IDisplayKeyEntity,
   IDisplayKeyShape,
   IDisplayOutlineShape,
-  IExtraShapeDefinition,
+  IPersistExtraShape,
   IPersistKeyboardDesign,
   IPersistKeyboardDesignMirrorKeyEntity,
   IPersistKeyboardDesignRealKeyEntity,
@@ -53,6 +55,30 @@ export namespace DisplayKeyboardDesignLoader {
     });
     return {
       points,
+    };
+  }
+
+  function transformExtraShape(
+    shape: IPersistExtraShape,
+    isMirror: boolean,
+    design: ISourceDesign,
+  ): IDisplayExtraShape {
+    const mi = isMirror ? -1 : 1;
+
+    const groupIndex = convertUndefinedToDefaultValue(shape.groupIndex, -1);
+    const { groupX, groupY, groupAngle } = getGroupTransAmount(
+      design.transformationGroups[groupIndex],
+    );
+
+    const path = svgpath(shape.path)
+      .scale(mi, shape.invertY ? -1 : 1)
+      .translate(shape.x, shape.y)
+      .rotate(groupAngle * mi)
+      .translate(groupX * mi, groupY)
+      .toString();
+    return {
+      path,
+      scaleForLineWeight: shape.scale,
     };
   }
 
@@ -143,7 +169,7 @@ export namespace DisplayKeyboardDesignLoader {
   function getBoundingBox(
     keyEntities: IDisplayKeyEntity[],
     outlineShapes: IDisplayOutlineShape[],
-    extraShape: IExtraShapeDefinition | undefined,
+    extraShapes: IDisplayExtraShape[],
   ) {
     const xs: number[] = [];
     const ys: number[] = [];
@@ -205,13 +231,13 @@ export namespace DisplayKeyboardDesignLoader {
       ys.push(60);
     }
 
-    if (extraShape) {
-      const pts = calculateExtraShapeBoundingBoxPoints(extraShape);
+    extraShapes.forEach((shape) => {
+      const pts = calculateExtraShapeBoundingBoxPoints(shape.path);
       pts.forEach((pt) => {
         xs.push(pt.x);
         ys.push(pt.y);
       });
-    }
+    });
 
     const left = Math.min(...xs);
     const right = Math.max(...xs);
@@ -312,14 +338,29 @@ export namespace DisplayKeyboardDesignLoader {
       }),
     );
 
-    const { extraShape } = design;
-    const boundingBox = getBoundingBox(keyEntities, outlineShapes, extraShape);
+    const extraShapes: IDisplayExtraShape[] = (() => {
+      if (design.extraShape) {
+        const shape = design.extraShape;
+        const groupIndex = convertUndefinedToDefaultValue(shape.groupIndex, -1);
+        const group = design.transformationGroups[groupIndex];
+        if (group?.mirror) {
+          return [
+            transformExtraShape(shape, false, design),
+            transformExtraShape(shape, true, design),
+          ];
+        } else {
+          return [transformExtraShape(shape, false, design)];
+        }
+      }
+      return [];
+    })();
+    const boundingBox = getBoundingBox(keyEntities, outlineShapes, extraShapes);
 
     return {
       keyEntities,
       outlineShapes,
       displayArea: boundingBox,
-      extraShape,
+      extraShapes,
     };
   }
 }

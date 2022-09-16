@@ -1,5 +1,5 @@
 import { css, FC, jsx } from 'alumina';
-import { HFlex, CheckBox } from '~/ui/components';
+import { HFlex, CheckBox, GeneralSelector } from '~/ui/components';
 import {
   ConfigPanelBox,
   ConfigSubContent,
@@ -14,6 +14,7 @@ import {
 } from '~/ui/featureEditors/layoutEditor/models';
 import { reflectValue } from '~/ui/utils';
 import { createConfigTextEditModelDynamic } from '../models/slots/configTextEditModel';
+import { makeSelectorModel } from '../models/slots/selectorModel';
 
 function createExtraShapeTransformPropModel(propKey: 'x' | 'y' | 'scale') {
   const numberPatterns = [/^-?\d+\.?\d*$/];
@@ -27,6 +28,23 @@ function createExtraShapeTransformPropModel(propKey: 'x' | 'y' | 'scale') {
     },
     editMutations.endEdit,
   );
+}
+
+function makeGroupIdSelectorModel() {
+  const { extraShape, allTransGroups } = editReader;
+  return makeSelectorModel<string>({
+    sources: [
+      ['', '--'],
+      ...allTransGroups.map(
+        (group) => [group.id, group.id] as [string, string],
+      ),
+    ],
+    reader: () => extraShape.groupId,
+    writer: (newValue: string) => {
+      editMutations.setExtraShapeGroupId(newValue);
+      editMutations.setCurrentTransGroupById(newValue);
+    },
+  });
 }
 
 function createExtraShapeEditPanelModel() {
@@ -51,12 +69,16 @@ function createExtraShapeEditPanelModel() {
     vmX.update(extraShape.x.toString());
     vmY.update(extraShape.y.toString());
     vmScale.update(extraShape.scale.toString());
+
+    const vmGroupId = makeGroupIdSelectorModel();
+
     return {
       extraShape,
       vmX,
       vmY,
       vmScale,
       vmInvertY,
+      vmGroupId,
       setExtraShapePathText,
       pathValidationResult,
     };
@@ -71,6 +93,7 @@ export const ExtraShapeEditPanel: FC = () => {
     vmY,
     vmScale,
     vmInvertY,
+    vmGroupId,
     pathValidationResult,
   } = useClosureModel(createExtraShapeEditPanelModel);
 
@@ -123,6 +146,10 @@ export const ExtraShapeEditPanel: FC = () => {
                 setChecked={vmInvertY.setValue}
               />
             </HFlex>
+            <HFlex>
+              <span style={{ width: '70px' }}>groupId</span>
+              <GeneralSelector {...vmGroupId} width={80} />
+            </HFlex>
           </ConfigVStack>
         </ConfigSubContent>
       </div>
@@ -153,7 +180,7 @@ const cssPanelContent = css`
 
     > textarea {
       width: 100%;
-      height: 240px;
+      height: 120px;
       overflow-y: auto;
       padding: 5px;
       resize: none;

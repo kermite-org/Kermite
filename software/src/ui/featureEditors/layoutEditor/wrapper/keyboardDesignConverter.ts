@@ -66,6 +66,8 @@ export namespace KeyboardDesignConverter {
       return base;
     });
 
+    const xs = source.extraShape;
+
     return {
       setup: {
         placementUnit: source.setup.placementUnit,
@@ -89,13 +91,23 @@ export namespace KeyboardDesignConverter {
           ];
         }),
       ),
-      extraShape: source.extraShape || {
-        path: '',
-        x: 0,
-        y: 0,
-        scale: 1,
-        invertY: false,
-      },
+      extraShape: xs
+        ? {
+            path: xs.path,
+            x: xs.x,
+            y: xs.y,
+            scale: xs.scale,
+            invertY: xs.invertY,
+            groupId: groupIndexToGroupId(xs.groupIndex),
+          }
+        : {
+            path: '',
+            x: 0,
+            y: 0,
+            scale: 1,
+            invertY: false,
+            groupId: '',
+          },
       transGroups: createDictionaryFromKeyValues(
         source.transformationGroups.map((group, idx) => {
           const id = idx.toString();
@@ -117,6 +129,7 @@ export namespace KeyboardDesignConverter {
   export function convertKeyboardDesignEditToPersist(
     design: IEditKeyboardDesign,
   ): IPersistKeyboardDesign {
+    const xs = design.extraShape;
     return {
       formatRevision: 'LA01',
       setup: {
@@ -177,7 +190,16 @@ export namespace KeyboardDesignConverter {
         })),
         groupIndex: groupIdToGroupIndex(shape.groupId),
       })),
-      extraShape: design.extraShape.path ? design.extraShape : undefined,
+      extraShape: xs.path
+        ? {
+            path: xs.path,
+            x: roundNumber(xs.x),
+            y: roundNumber(xs.y),
+            scale: xs.scale,
+            invertY: xs.invertY,
+            groupIndex: groupIdToGroupIndex(design.extraShape.groupId),
+          }
+        : undefined,
       transformationGroups: Object.values(design.transGroups).map((group) => ({
         x: roundNumber(group.x),
         y: roundNumber(group.y),

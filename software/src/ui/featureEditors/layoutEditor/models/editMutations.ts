@@ -366,6 +366,12 @@ class EditMutations {
     });
   }
 
+  setExtraShapeGroupId(groupId: string) {
+    editUpdater.patchEditor((editor) => {
+      editor.design.extraShape.groupId = groupId;
+    });
+  }
+
   setTransGroupMirror(mirror: boolean) {
     const { currentTransGroupId } = editReader;
     if (!currentTransGroupId) {
@@ -408,11 +414,43 @@ class EditMutations {
   changeKeyProperty = <K extends IEditPropKey>(
     propKey: K,
     value: IEditKeyEntity[K],
+    keyId?: string,
   ) => {
-    editUpdater.patchEditKeyEntity((ke) => {
-      ke[propKey] = value;
-    });
+    if (!keyId) {
+      editUpdater.patchEditKeyEntity((ke) => {
+        ke[propKey] = value;
+      });
+    } else {
+      editUpdater.patchEditor((draft) => {
+        const ke = draft.design.keyEntities[keyId];
+        if (ke) {
+          ke[propKey] = value;
+        }
+      });
+    }
   };
+
+  replaceKeyIndexByDevicePhysicalKey(newKeyIndex: number) {
+    const { currentKeyEntityId } = appState.editor;
+    const { currentKeyEntity, isCurrentKeyMirror } = editReader;
+    if (!(currentKeyEntityId && currentKeyEntity)) return;
+    if (currentKeyEntity.keyIndex === newKeyIndex) return;
+    editUpdater.commitEditor((editor) => {
+      const allKeyEntities = Object.values(editor.design.keyEntities);
+      const ke0a = allKeyEntities.find((ke) => ke.keyIndex === newKeyIndex);
+      const ke0b = allKeyEntities.find(
+        (ke) => ke.mirrorKeyIndex === newKeyIndex,
+      );
+      if (ke0a) ke0a.keyIndex = -1;
+      if (ke0b) ke0b.mirrorKeyIndex = -1;
+      const ke1 = editor.design.keyEntities[currentKeyEntityId];
+      if (isCurrentKeyMirror) {
+        ke1.mirrorKeyIndex = newKeyIndex;
+      } else {
+        ke1.keyIndex = newKeyIndex;
+      }
+    });
+  }
 
   setEditScreenSize(w: number, h: number) {
     editUpdater.patchEnvState((env) => {

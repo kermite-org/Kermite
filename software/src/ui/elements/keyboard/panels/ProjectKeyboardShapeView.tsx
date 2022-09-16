@@ -16,7 +16,7 @@ export const ProjectKeyboardShapeView: FC<Props> = ({ keyboardDesign }) => {
   const baseStrokeWidth = 0.5;
   const bodyFillColor = colors.projectKeyboard_bodyFill;
   const bodyStrokeColor = colors.projectKeyboard_bodyEdge;
-  const { displayArea, keyEntities, outlineShapes, extraShape } =
+  const { displayArea, keyEntities, outlineShapes, extraShapes } =
     keyboardDesign;
   return (
     <div class={cssKeyboardShapeView}>
@@ -28,7 +28,7 @@ export const ProjectKeyboardShapeView: FC<Props> = ({ keyboardDesign }) => {
             strokeColor={bodyStrokeColor}
           />
           <KeyboardBodyShapeExtra
-            shape={extraShape}
+            shapes={extraShapes}
             fillColor={bodyFillColor}
             strokeColor={bodyStrokeColor}
           />
