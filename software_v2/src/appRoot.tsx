@@ -1,50 +1,26 @@
 import { applyGlobalStyle, css, domStyled, FC, jsx } from "alumina";
 import { render } from "alumina";
-
-type IProjectKeymapEntity = {
-  name: string;
-};
-
-type IProjectLayoutEntity = {
-  name: string;
-};
-
-type IProjectFirmwareEntity = {
-  name: string;
-};
-
-type ILocalProject = {
-  projectName: string;
-  keymaps: IProjectKeymapEntity[];
-  layouts: IProjectLayoutEntity[];
-  firmwares: IProjectFirmwareEntity[];
-};
-
-type IAppStore = {
-  currentProject: ILocalProject;
-};
-
-function createAppStore(): IAppStore {
-  return {
-    currentProject: {
-      projectName: "unnamed project",
-      keymaps: [{ name: "keymap1" }, { name: "keymap2" }],
-      layouts: [{ name: "layout1" }],
-      firmwares: [{ name: "firmware1" }],
-    },
-  };
-}
-
-const appStore = createAppStore();
-
-function createNewProject() {}
+import {
+  diOnlineProjectImporter,
+  OnlineProjectImporterView,
+} from "./apps/onlineProjectImporter";
+import { appStore } from "./appStore";
+import { copyObjectProps } from "./utils";
 
 const MenuBar: FC = () => {
+  const { actions } = appStore;
+  const handleCreateProjectFromOnline = () =>
+    actions.openModel("onlineProjectImporter");
+  const handleCreateBlankProject = actions.loadBlankProject;
+
   return domStyled(
     <div>
       <ul>
         <li>プロジェクト</li>
-        <li onClick={createNewProject}>-新規作成</li>
+        <li onClick={handleCreateProjectFromOnline}>
+          -新規作成(オンラインから)
+        </li>
+        <li onClick={handleCreateBlankProject}>-新規作成(空のプロジェクト)</li>
         <li onClick={undefined}>-エクスポート</li>
         <li>--------</li>
         <li onClick={undefined}>-キーマップ作成</li>
@@ -88,7 +64,8 @@ const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
 };
 
 const ProjectResourcePanel: FC = () => {
-  const { projectName, keymaps, layouts, firmwares } = appStore.currentProject;
+  const { projectName, keymaps, layouts, firmwares } =
+    appStore.state.currentProject;
   return domStyled(
     <div>
       <h3>プロジェクト</h3>
@@ -169,6 +146,7 @@ const PageRoot: FC = () => {
       list-style: none;
     }
   `);
+  const { modalType } = appStore.state;
   return domStyled(
     <div>
       <div class="app-title-bar">Kermite</div>
@@ -182,6 +160,7 @@ const PageRoot: FC = () => {
         </div>
         <div class="main-column">editor</div>
       </div>
+      <OnlineProjectImporterView if={modalType === "onlineProjectImporter"} />
     </div>,
     css`
       height: 100%;
@@ -229,6 +208,12 @@ const PageRoot: FC = () => {
 };
 
 function start() {
+  const { actions } = appStore;
+  copyObjectProps(diOnlineProjectImporter, {
+    saveProject: actions.loadProject,
+    close: actions.closeModal,
+  });
+
   render(() => <PageRoot />, document.getElementById("app"));
 }
 
