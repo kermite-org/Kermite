@@ -1,7 +1,86 @@
 import { applyGlobalStyle, css, domStyled, FC, jsx } from "alumina";
 import { render } from "alumina";
 
+type IProjectKeymapEntity = {
+  name: string;
+};
+
+type IProjectLayoutEntity = {
+  name: string;
+};
+
+type IProjectFirmwareEntity = {
+  name: string;
+};
+
+type ILocalProject = {
+  projectName: string;
+  keymaps: IProjectKeymapEntity[];
+  layouts: IProjectLayoutEntity[];
+  firmwares: IProjectFirmwareEntity[];
+};
+
+type IAppStore = {
+  currentProject: ILocalProject;
+};
+
+function createAppStore(): IAppStore {
+  return {
+    currentProject: {
+      projectName: "unnamed project",
+      keymaps: [],
+      layouts: [],
+      firmwares: [],
+    },
+  };
+}
+
+const appStore = createAppStore();
+
 function createNewProject() {}
+
+const MenuBar: FC = () => {
+  return domStyled(
+    <div>
+      <ul>
+        <li>プロジェクト</li>
+        <li onClick={createNewProject}>-新規作成</li>
+        <li onClick={undefined}>-エクスポート</li>
+        <li>--------</li>
+        <li onClick={undefined}>-キーマップ作成</li>
+        <li onClick={undefined}>-レイアウト作成</li>
+        <li onClick={undefined}>-ファームウェア作成</li>
+      </ul>
+      <ul>
+        <li>編集</li>
+        <li onClick={undefined}>-元に戻す</li>
+        <li onClick={undefined}>-やり直し</li>
+      </ul>
+    </div>,
+    css`
+      display: flex;
+      gap: 20px;
+
+      > ul {
+        > li:not(:first-child) {
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    `
+  );
+};
+
+const ProjectResourcePanel: FC = () => {
+  return domStyled(
+    <div>
+      <h3>プロジェクト</h3>
+      <div>{appStore.currentProject.projectName}</div>
+    </div>
+  );
+};
 
 const PageRoot: FC = () => {
   applyGlobalStyle(css`
@@ -12,21 +91,42 @@ const PageRoot: FC = () => {
     }
 
     html,
-    body,
+    body {
+      height: 100%;
+    }
+
     #app {
       height: 100%;
+      font-family: "Noto Sans JP", sans-serif;
+      font-size: 16px;
+      color: #222;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    ul,
+    li {
+      list-style: none;
     }
   `);
   return domStyled(
     <div>
       <div class="app-title-bar">Kermite</div>
       <div class="top-bar">
-        ファイル
-        <br />
-        <div onClick={createNewProject}>-新規プロジェクト作成</div>
+        <MenuBar />
       </div>
       <div class="main-row">
-        <div class="side-bar">プロジェクト</div>
+        <div class="side-bar">
+          <ProjectResourcePanel />
+          <div>デバイス</div>
+        </div>
         <div class="main-column">editor</div>
       </div>
     </div>,
@@ -34,9 +134,6 @@ const PageRoot: FC = () => {
       height: 100%;
       display: flex;
       flex-direction: column;
-      font-family: "Noto Sans JP", sans-serif;
-      font-size: 16px;
-      color: #222;
 
       > .app-title-bar {
         flex-shrink: 0;
@@ -60,6 +157,13 @@ const PageRoot: FC = () => {
           border: solid 1px #aaa;
           border-right: none;
           padding: 5px;
+
+          display: flex;
+          flex-direction: column;
+
+          > div:nth-child(2) {
+            margin-top: auto;
+          }
         }
         > .main-column {
           flex-grow: 1;
