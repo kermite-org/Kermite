@@ -28,9 +28,9 @@ function createAppStore(): IAppStore {
   return {
     currentProject: {
       projectName: "unnamed project",
-      keymaps: [],
-      layouts: [],
-      firmwares: [],
+      keymaps: [{ name: "keymap1" }, { name: "keymap2" }],
+      layouts: [{ name: "layout1" }],
+      firmwares: [{ name: "firmware1" }],
     },
   };
 }
@@ -73,12 +73,65 @@ const MenuBar: FC = () => {
   );
 };
 
+const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
+  return domStyled(
+    <div>{text}</div>,
+    css`
+      display: inline-flex;
+      width: 26px;
+      height: 26px;
+      justify-content: center;
+      align-items: center;
+      border: solid 1px #222;
+    `
+  );
+};
+
 const ProjectResourcePanel: FC = () => {
+  const { projectName, keymaps, layouts, firmwares } = appStore.currentProject;
   return domStyled(
     <div>
       <h3>プロジェクト</h3>
-      <div>{appStore.currentProject.projectName}</div>
-    </div>
+      <div>{projectName}</div>
+      <div class="entities-row">
+        <ul>
+          {keymaps.map((item) => (
+            <li>
+              <ProjectItemIcon text="K" />
+              {item.name}
+            </li>
+          ))}
+        </ul>
+        <ul>
+          {layouts.map((item) => (
+            <li>
+              <ProjectItemIcon text="L" />
+              {item.name}
+            </li>
+          ))}
+        </ul>
+        <ul>
+          {firmwares.map((item) => (
+            <li>
+              <ProjectItemIcon text="F" />
+              {item.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>,
+    css`
+      > .entities-row {
+        display: flex;
+        flex-direction: column;
+        > ul > li {
+          padding: 3px 0;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+      }
+    `
   );
 };
 
@@ -152,7 +205,7 @@ const PageRoot: FC = () => {
 
         display: flex;
         > .side-bar {
-          width: 200px;
+          width: 180px;
           flex-shrink: 0;
           border: solid 1px #aaa;
           border-right: none;
