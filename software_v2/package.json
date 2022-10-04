@@ -1,0 +1,53 @@
+{
+  "name": "kermite",
+  "productName": "Kermite",
+  "version": "0.2.0",
+  "author": "yahiro",
+  "description": "keyboard software",
+  "license": "MIT",
+  "engines": {
+    "node": "16"
+  },
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=development vite",
+    "build": "tsc && vite build",
+    "test": "jest",
+    "visor": "alumina-visor serve"
+  },
+  "dependencies": {
+    "alumina": "^0.1.14",
+    "immer": "^9.0.15",
+    "svg-path-bbox": "^1.2.2",
+    "svgpath": "^2.5.0"
+  },
+  "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@types/node": "^18.8.1",
+    "@types/w3c-web-hid": "^1.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "alumina-visor": "^0.1.6",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-import-resolver-typescript": "^3.5.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-standard": "^5.0.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.4",
+    "vite-plugin-environment": "^1.1.2"
+  },
+  "volta": {
+    "node": "16.15.1",
+    "yarn": "1.22.17"
+  }
+}
