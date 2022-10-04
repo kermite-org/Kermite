@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "lib": ["dom", "esnext"],
+    "jsx": "react",
+    "jsxFactory": "jsx",
+    "jsxFragmentFactory": "Fragment",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["./*"]
+    }
+  },
+  "include": ["src/**/*", "src/**/*.json"]
+}
