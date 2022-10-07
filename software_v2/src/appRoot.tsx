@@ -53,6 +53,7 @@ const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
       display: inline-flex;
       width: 26px;
       height: 26px;
+      flex-shrink: 0;
       justify-content: center;
       align-items: center;
       border: solid 1px #222;

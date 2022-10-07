@@ -73,7 +73,7 @@ type IProjectPackageFileContentPKG0 = {
 type IProjectPackageFileContentPKG1 = {
   formatRevision: "PKG1";
   projectId: string;
-  keyboardName: string;
+  projectName: string;
   //カスタムファームウェアはドロップして標準ファームウェアのみ残す
   firmwares: IStandardFirmwareEntryForPKG1[];
   layouts: IProjectLayoutEntryForPKG1[];
@@ -147,7 +147,7 @@ export function serverPackageMigrator_migratePackagePKG0ToPKG1(
   return {
     formatRevision: "PKG1",
     projectId: source.projectId,
-    keyboardName: source.keyboardName,
+    projectName: source.keyboardName,
     profiles,
     layouts,
     firmwares,
