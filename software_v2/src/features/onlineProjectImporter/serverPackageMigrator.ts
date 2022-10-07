@@ -2,22 +2,36 @@ import { compareObjectByJsonStringify } from "~/funcs";
 
 type IPersistKeyboardDesign_stub = { [key in string]: any };
 
-type IStandardFirmwareEntry = {
+type IStandardFirmwareEntryForPKG0 = {
   type: "standard";
-  variationId: any;
-  firmwareName: any;
+  variationId: string;
+  firmwareName: string;
   standardFirmwareConfig: any;
 };
 
-type ICustomFirmwareEntry = {
+type ICustomFirmwareEntryForPKG0 = {
   type: "custom";
-  variationId: any;
-  firmwareName: any;
+  variationId: string;
+  firmwareName: string;
   customFirmwareId: any;
 };
 
-type IProjectLayoutEntry = {
+type IStandardFirmwareEntryForPKG1 = {
+  name: string;
+  data: {
+    type: "standard";
+    variationId: string;
+    standardFirmwareConfig: any;
+  };
+};
+
+type IProjectLayoutEntryForPKG0 = {
   layoutName: string;
+  data: IPersistKeyboardDesign_stub;
+};
+
+type IProjectLayoutEntryForPKG1 = {
+  name: string;
   data: IPersistKeyboardDesign_stub;
 };
 
@@ -48,8 +62,8 @@ type IProjectPackageFileContentPKG0 = {
   projectId: string;
   keyboardName: string;
   //標準ファームウェアとカスタムファームウェアがある
-  firmwares: (IStandardFirmwareEntry | ICustomFirmwareEntry)[];
-  layouts: IProjectLayoutEntry[];
+  firmwares: (IStandardFirmwareEntryForPKG0 | ICustomFirmwareEntryForPKG0)[];
+  layouts: IProjectLayoutEntryForPKG0[];
   profiles: {
     profileName: string;
     data: IPersistProfileDataForPKG0;
@@ -61,17 +75,17 @@ type IProjectPackageFileContentPKG1 = {
   projectId: string;
   keyboardName: string;
   //カスタムファームウェアはドロップして標準ファームウェアのみ残す
-  firmwares: IStandardFirmwareEntry[];
-  layouts: IProjectLayoutEntry[];
+  firmwares: IStandardFirmwareEntryForPKG1[];
+  layouts: IProjectLayoutEntryForPKG1[];
   profiles: {
-    profileName: string;
+    name: string;
     data: IPersistProfileDataForPKG1;
   }[];
 };
 
 function findReferredLayoutName(
   layout: IPersistKeyboardDesign_stub,
-  layouts: IProjectLayoutEntry[]
+  layouts: IProjectLayoutEntryForPKG0[]
 ): string | undefined {
   const referredLayout = layouts.find((la) =>
     compareObjectByJsonStringify(layout, la.data)
@@ -86,7 +100,7 @@ export function serverPackageMigrator_migratePackagePKG0ToPKG1(
     return source;
   }
 
-  const additionalLayoutEntities: IProjectLayoutEntry[] = [];
+  const additionalLayoutEntities: IProjectLayoutEntryForPKG1[] = [];
 
   const profiles = source.profiles.map((prof) => {
     const profileLayout = prof.data.keyboardDesign;
@@ -97,13 +111,13 @@ export function serverPackageMigrator_migratePackagePKG0ToPKG1(
     if (!referredLayoutName) {
       referredLayoutName = `layout_for_profile_${prof.profileName}`;
       additionalLayoutEntities.push({
-        layoutName: referredLayoutName,
+        name: referredLayoutName,
         data: profileLayout,
       });
     }
     const { keyboardDesign: _, ...dataRestProps } = prof.data;
     return {
-      profileName: prof.profileName,
+      name: prof.profileName,
       data: {
         ...dataRestProps,
         formatRevision: "PRF07" as const,
@@ -112,11 +126,23 @@ export function serverPackageMigrator_migratePackagePKG0ToPKG1(
     };
   });
 
-  const layouts = [...source.layouts, ...additionalLayoutEntities];
+  const layouts = [
+    ...source.layouts.map((la) => ({ name: la.layoutName, data: la.data })),
+    ...additionalLayoutEntities,
+  ];
 
-  const firmwares = source.firmwares.filter(
-    (it) => it.type === "standard"
-  ) as IStandardFirmwareEntry[];
+  const firmwares = (
+    source.firmwares.filter(
+      (it) => it.type === "standard"
+    ) as IStandardFirmwareEntryForPKG0[]
+  ).map((it) => ({
+    name: it.firmwareName,
+    data: {
+      type: "standard",
+      variationId: it.variationId,
+      standardFirmwareConfig: it.standardFirmwareConfig,
+    },
+  })) as IStandardFirmwareEntryForPKG1[];
 
   return {
     formatRevision: "PKG1",
