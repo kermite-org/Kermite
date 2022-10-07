@@ -71,7 +71,7 @@ const ProjectResourcePanel: FC = () => {
         <ul>
           {profiles.map((item) => (
             <li>
-              <ProjectItemIcon text="K" />
+              <ProjectItemIcon text="P" />
               {item.name}
             </li>
           ))}

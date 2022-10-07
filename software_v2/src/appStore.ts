@@ -12,9 +12,12 @@ function createBlankProject(): ILocalProject {
 function createInitialProjectDummy(): ILocalProject {
   return {
     projectName: "initial dummy project",
-    profiles: [{ name: "profile1" }, { name: "profile2" }],
-    layouts: [{ name: "layout1" }],
-    firmwares: [{ name: "firmware1" }],
+    profiles: [
+      { name: "profile1", data: {} },
+      { name: "profile2", data: {} },
+    ],
+    layouts: [{ name: "layout1", data: {} }],
+    firmwares: [{ name: "firmware1", data: {} }],
   };
 }
 

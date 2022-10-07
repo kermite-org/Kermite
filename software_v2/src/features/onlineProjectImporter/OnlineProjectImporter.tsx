@@ -14,9 +14,9 @@ export const diOnlineProjectImporter = {
 function emitTestProject() {
   const project: ILocalProject = {
     projectName: "project1",
-    profiles: [{ name: "profile2" }],
-    layouts: [{ name: "layout3" }],
-    firmwares: [{ name: "firmware4" }],
+    profiles: [{ name: "profile2", data: {} }],
+    layouts: [{ name: "layout3", data: {} }],
+    firmwares: [{ name: "firmware4", data: {} }],
   };
   diOnlineProjectImporter.saveProject(project);
   diOnlineProjectImporter.close();
