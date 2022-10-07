@@ -1,6 +1,6 @@
 import { asyncRerender, css, domStyled, effectOnMount, FC, jsx } from "alumina";
 import { reflectValue } from "~/funcs";
-import { KermiteServerBase64Icon } from "./KermiteServerBase64Icon";
+import { KermiteServerBase64Icon } from "~/components";
 import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
