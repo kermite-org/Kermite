@@ -1,101 +1,61 @@
 import { appConfig } from "~/base";
 import { fetchJson } from "~/funcs";
+import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from "./serverPackageMigrator";
 
+type IProjectPackageFileContent_stub = any;
 export interface IServerPackageWrapperItem {
   projectId: string;
   keyboardName: string;
-  data: IProjectPackageFileContent;
-  // dataHash: string;
+  data: IProjectPackageFileContent_stub;
   authorDisplayName: string;
   authorIconUrl: string;
-  // revision: number;
   isOfficial: boolean;
   isDevelopment: boolean;
-  // timeStamp: number;
-}
-
-export interface IServerPackagesLoader {
-  loaderServerPackages(): Promise<IServerPackageWrapperItem[]>;
-}
-
-type IApiPackagesCatalogResponse = {
-  packages: {
-    projectId: string;
-    status: "Package";
-    timeStamp: number;
-  }[];
-};
-
-interface IApiProjectPackageWrapperItemPartial {
-  id: string;
-  keyboardName: string;
-  projectId: string;
-  userId: string;
-  data: string; // content of .kmpkg
+  comment: string;
   dataHash: string;
   revision: number;
-  official: boolean;
-  development: boolean;
-  comment: string;
+  timeStamp: number;
 }
 
-type IApiPackagesProjectsProjectIdResponse = {
-  packages: IApiProjectPackageWrapperItemPartial[];
-  suspends: IApiProjectPackageWrapperItemPartial[];
-};
+namespace nsServerPackageLoaderCore {
+  type IApiPackagesCatalogResponse = {
+    packages: {
+      projectId: string;
+      status: "Package";
+      timeStamp: number;
+    }[];
+  };
 
-interface IUserApiResponsePartial {
-  // id: string;
-  displayName: string;
-  // comment: string;
-  // role: string;
-  // loginProvider: string;
-  // showLinkId: boolean;
-}
+  type IApiProjectPackageWrapperItemPartial = {
+    id: string;
+    keyboardName: string;
+    projectId: string;
+    userId: string;
+    data: string; // content of .kmpkg
+    dataHash: string;
+    revision: number;
+    official: boolean;
+    development: boolean;
+    comment: string;
+  };
 
-type IStandardFirmwareConfig_stub = any;
-type IPersistKeyboardDesign_stub = any;
-type IIPersistProfileData_stub = any;
+  type IApiPackagesProjectsProjectIdResponse = {
+    packages: IApiProjectPackageWrapperItemPartial[];
+    suspends: IApiProjectPackageWrapperItemPartial[];
+  };
 
-export interface IStandardFirmwareEntry {
-  type: "standard";
-  variationId: string;
-  firmwareName: string;
-  standardFirmwareConfig: IStandardFirmwareConfig_stub;
-}
+  type IApiUsersUserIdResponsePartial = {
+    // id: string;
+    displayName: string;
+    // comment: string;
+    // role: string;
+    // loginProvider: string;
+    // showLinkId: boolean;
+  };
 
-export interface ICustomFirmwareEntry {
-  type: "custom";
-  variationId: string;
-  firmwareName: string;
-  customFirmwareId: string;
-}
-
-export type IProjectFirmwareEntry =
-  | IStandardFirmwareEntry
-  | ICustomFirmwareEntry;
-
-export interface IProjectLayoutEntry {
-  layoutName: string;
-  data: IPersistKeyboardDesign_stub;
-}
-
-export interface IProjectProfileEntry {
-  profileName: string;
-  data: IIPersistProfileData_stub;
-}
-
-export interface IProjectPackageFileContent {
-  formatRevision: "PKG0";
-  projectId: string;
-  keyboardName: string;
-  firmwares: IProjectFirmwareEntry[];
-  layouts: IProjectLayoutEntry[];
-  profiles: IProjectProfileEntry[];
-}
-
-export const serverPackagesLoader: IServerPackagesLoader = {
-  async loaderServerPackages() {
+  export async function loadServerPackages(): Promise<
+    IServerPackageWrapperItem[]
+  > {
     const { kermiteServerUrl } = appConfig;
     const catalogRes = (await fetchJson(
       `${kermiteServerUrl}/api/packages/catalog`
@@ -109,6 +69,8 @@ export const serverPackagesLoader: IServerPackagesLoader = {
             `${appConfig.kermiteServerUrl}/api/packages/projects/${pk.projectId}`
           )) as IApiPackagesProjectsProjectIdResponse;
 
+          console.log({ packageRes });
+
           const packageRawData = packageRes.packages[0];
           if (packageRawData) {
             const {
@@ -118,29 +80,49 @@ export const serverPackagesLoader: IServerPackagesLoader = {
               development: isDevelopment,
               data: rawData,
               userId,
+              comment,
+              dataHash,
+              revision,
             } = packageRawData;
             const userInfo = (await fetchJson(
               `${appConfig.kermiteServerUrl}/api/users/${userId}`
-            )) as IUserApiResponsePartial;
+            )) as IApiUsersUserIdResponsePartial;
             const authorDisplayName = userInfo.displayName;
             const authorIconUrl = `${appConfig.kermiteServerUrl}/api/avatar/${userId}`;
+
+            const data = serverPackageMigrator_migratePackagePKG0ToPKG1(
+              JSON.parse(rawData)
+            );
 
             const content: IServerPackageWrapperItem = {
               projectId,
               keyboardName,
-              data: JSON.parse(rawData),
-              // dataHash,
-              // revision,
+              data,
               isOfficial,
               isDevelopment,
               authorDisplayName,
               authorIconUrl,
-              // timeStamp,
+              comment,
+              dataHash,
+              revision,
+              timeStamp: pk.timeStamp,
             };
             return content;
           }
         })
       )
     ).filter((it) => !!it) as IServerPackageWrapperItem[];
+  }
+}
+
+//--------
+//entry
+export interface IServerPackagesLoader {
+  loaderServerPackages(): Promise<IServerPackageWrapperItem[]>;
+}
+
+export const serverPackagesLoader: IServerPackagesLoader = {
+  async loaderServerPackages() {
+    return nsServerPackageLoaderCore.loadServerPackages();
   },
 };
