@@ -94,6 +94,7 @@ export const OnlineProjectImporterView: FC = () => {
                 <li>createdByBoardAuthor: {sp.isOfficial.toString()}</li>
                 <li>underDevelopment: {sp.isDevelopment.toString()}</li>
                 <li>default layout: layout goes here</li>
+                <li>comment: {sp.comment}</li>
               </ul>
             )}
           </div>
