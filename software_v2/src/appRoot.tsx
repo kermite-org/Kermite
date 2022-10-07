@@ -61,7 +61,7 @@ const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
 };
 
 const ProjectResourcePanel: FC = () => {
-  const { projectName, keymaps, layouts, firmwares } =
+  const { projectName, profiles, layouts, firmwares } =
     appStore.state.currentProject;
   return domStyled(
     <div>
@@ -69,7 +69,7 @@ const ProjectResourcePanel: FC = () => {
       <div>{projectName}</div>
       <div class="entities-row">
         <ul>
-          {keymaps.map((item) => (
+          {profiles.map((item) => (
             <li>
               <ProjectItemIcon text="K" />
               {item.name}

@@ -1,4 +1,4 @@
-type IProjectKeymapEntity = {
+type IProjectProfileEntity = {
   name: string;
 };
 
@@ -12,7 +12,7 @@ type IProjectFirmwareEntity = {
 
 type ILocalProject = {
   projectName: string;
-  keymaps: IProjectKeymapEntity[];
+  profiles: IProjectProfileEntity[];
   layouts: IProjectLayoutEntity[];
   firmwares: IProjectFirmwareEntity[];
 };

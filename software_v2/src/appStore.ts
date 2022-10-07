@@ -3,7 +3,7 @@ type IModelType = "onlineProjectImporter";
 function createBlankProject(): ILocalProject {
   return {
     projectName: "unnamed project",
-    keymaps: [],
+    profiles: [],
     layouts: [],
     firmwares: [],
   };
@@ -12,7 +12,7 @@ function createBlankProject(): ILocalProject {
 function createInitialProjectDummy(): ILocalProject {
   return {
     projectName: "initial dummy project",
-    keymaps: [{ name: "keymap1" }, { name: "keymap2" }],
+    profiles: [{ name: "profile1" }, { name: "profile2" }],
     layouts: [{ name: "layout1" }],
     firmwares: [{ name: "firmware1" }],
   };
