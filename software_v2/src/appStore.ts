@@ -5,6 +5,7 @@ function createBlankProject(): ILocalProject {
     formatRevision: "PKG1",
     projectId: "AAAA",
     projectName: "unnamed project",
+    variationName: "",
     profiles: [],
     layouts: [],
     firmwares: [],
@@ -14,6 +15,7 @@ function createBlankProject(): ILocalProject {
 function createInitialProjectDummy(): ILocalProject {
   return {
     projectName: "initial dummy project",
+    variationName: "",
     formatRevision: "PKG1",
     projectId: "AAAA",
     profiles: [

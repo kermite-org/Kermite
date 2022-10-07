@@ -17,6 +17,7 @@ type ILocalProject = {
   formatRevision: "PKG1";
   projectId: string;
   projectName: string;
+  variationName: string;
   profiles: IProjectProfileEntity[];
   layouts: IProjectLayoutEntity[];
   firmwares: IProjectFirmwareEntity[];
