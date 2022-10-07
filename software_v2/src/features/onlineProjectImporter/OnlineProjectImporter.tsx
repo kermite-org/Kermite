@@ -13,6 +13,8 @@ export const diOnlineProjectImporter = {
 
 function emitTestProject() {
   const project: ILocalProject = {
+    formatRevision: "PKG1",
+    projectId: "AAAA",
     projectName: "project1",
     profiles: [{ name: "profile2", data: {} }],
     layouts: [{ name: "layout3", data: {} }],
