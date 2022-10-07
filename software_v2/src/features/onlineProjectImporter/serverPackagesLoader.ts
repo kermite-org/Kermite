@@ -1,5 +1,5 @@
 import { appConfig } from "~/base";
-import { fetchJson } from "~/funcs";
+import { fetchJsonCached } from "~/funcs";
 import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from "./serverPackageMigrator";
 
 export interface IServerPackageWrapperItem {
@@ -56,19 +56,19 @@ namespace nsServerPackageLoaderCore {
     IServerPackageWrapperItem[]
   > {
     const { kermiteServerUrl } = appConfig;
-    const catalogRes = (await fetchJson(
+    const catalogRes = (await fetchJsonCached(
       `${kermiteServerUrl}/api/packages/catalog`
     )) as IApiPackagesCatalogResponse;
-    console.log({ catalogRes });
+    // console.log({ catalogRes });
 
     return (
       await Promise.all(
         catalogRes.packages.map(async (pk) => {
-          const packageRes = (await fetchJson(
+          const packageRes = (await fetchJsonCached(
             `${appConfig.kermiteServerUrl}/api/packages/projects/${pk.projectId}`
           )) as IApiPackagesProjectsProjectIdResponse;
 
-          console.log({ packageRes });
+          // console.log({ packageRes });
 
           const packageRawData = packageRes.packages[0];
           if (packageRawData) {
@@ -83,7 +83,7 @@ namespace nsServerPackageLoaderCore {
               dataHash,
               revision,
             } = packageRawData;
-            const userInfo = (await fetchJson(
+            const userInfo = (await fetchJsonCached(
               `${appConfig.kermiteServerUrl}/api/users/${userId}`
             )) as IApiUsersUserIdResponsePartial;
             const authorDisplayName = userInfo.displayName;

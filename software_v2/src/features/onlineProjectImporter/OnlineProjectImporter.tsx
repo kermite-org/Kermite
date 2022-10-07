@@ -28,7 +28,7 @@ function createStore() {
   const actions = {
     async loadServerPackages() {
       const packages = await serverPackagesLoader.loaderServerPackages();
-      console.log({ packages });
+      // console.log({ packages });
       state.allPackages = packages;
       asyncRerender();
     },

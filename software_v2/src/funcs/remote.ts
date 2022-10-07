@@ -10,3 +10,11 @@ export async function fetchJson(uri: string): Promise<any> {
     throw new Error(`failed to load remote resource ${uri}`);
   }
 }
+
+const fetchJsonCached__cachedRequests: { [key in string]: Promise<any> } = {};
+export async function fetchJsonCached(uri: string): Promise<any> {
+  if (!fetchJsonCached__cachedRequests[uri]) {
+    fetchJsonCached__cachedRequests[uri] = fetchJson(uri);
+  }
+  return await fetchJsonCached__cachedRequests[uri];
+}
