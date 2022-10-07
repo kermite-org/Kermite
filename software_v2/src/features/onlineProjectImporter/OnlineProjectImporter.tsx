@@ -14,7 +14,7 @@ export const diOnlineProjectImporter = {
 function emitTestProject() {
   const project: ILocalProject = {
     projectName: "project1",
-    keymaps: [{ name: "keymap2" }],
+    profiles: [{ name: "profile2" }],
     layouts: [{ name: "layout3" }],
     firmwares: [{ name: "firmware4" }],
   };
