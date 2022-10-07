@@ -22,7 +22,7 @@ type IProjectLayoutEntry = {
 };
 
 type IPersistProfileDataForPKG0 = {
-  formatRevision: any;
+  formatRevision: "PRF06";
   projectId: any;
   settings: any;
   layers: any;
@@ -33,7 +33,7 @@ type IPersistProfileDataForPKG0 = {
 };
 
 type IPersistProfileDataForPKG1 = {
-  formatRevision: any;
+  formatRevision: "PRF07";
   projectId: any;
   settings: any;
   layers: any;
@@ -106,6 +106,7 @@ export function serverPackageMigrator_migratePackagePKG0ToPKG1(
       profileName: prof.profileName,
       data: {
         ...dataRestProps,
+        formatRevision: "PRF07" as const,
         referredLayoutName,
       },
     };
