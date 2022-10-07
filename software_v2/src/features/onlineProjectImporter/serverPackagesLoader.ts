@@ -2,11 +2,10 @@ import { appConfig } from "~/base";
 import { fetchJson } from "~/funcs";
 import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from "./serverPackageMigrator";
 
-type IProjectPackageFileContent_stub = any;
 export interface IServerPackageWrapperItem {
   projectId: string;
   keyboardName: string;
-  data: IProjectPackageFileContent_stub;
+  data: ILocalProject;
   authorDisplayName: string;
   authorIconUrl: string;
   isOfficial: boolean;

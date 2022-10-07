@@ -11,29 +11,16 @@ export const diOnlineProjectImporter = {
   close: () => {},
 };
 
-function emitTestProject() {
-  const project: ILocalProject = {
-    formatRevision: "PKG1",
-    projectId: "AAAA",
-    projectName: "project1",
-    profiles: [{ name: "profile2", data: {} }],
-    layouts: [{ name: "layout3", data: {} }],
-    firmwares: [{ name: "firmware4", data: {} }],
-  };
-  diOnlineProjectImporter.saveProject(project);
-  diOnlineProjectImporter.close();
-}
-
 function createStore() {
   const state = {
     allPackages: [] as IServerPackageWrapperItem[],
-    selectedProjectId: "",
+    selectedPackageProjectId: "",
   };
 
   const readers = {
-    get selectedProject() {
+    get selectedPackage() {
       return state.allPackages.find(
-        (pk) => pk.projectId === state.selectedProjectId
+        (pk) => pk.projectId === state.selectedPackageProjectId
       );
     },
   };
@@ -45,8 +32,15 @@ function createStore() {
       state.allPackages = packages;
       asyncRerender();
     },
-    setProjectSelected(projectId: string) {
-      state.selectedProjectId = projectId;
+    setSelectedPackageProjectId(projectId: string) {
+      state.selectedPackageProjectId = projectId;
+    },
+    importProjectSelected() {
+      const pkg = readers.selectedPackage;
+      if (pkg) {
+        diOnlineProjectImporter.saveProject(pkg.data);
+        diOnlineProjectImporter.close();
+      }
     },
   };
   return { state, readers, actions };
@@ -56,9 +50,13 @@ const store = createStore();
 
 export const OnlineProjectImporterView: FC = () => {
   const {
-    state: { allPackages, selectedProjectId },
-    readers: { selectedProject },
-    actions: { loadServerPackages, setProjectSelected },
+    state: { allPackages, selectedPackageProjectId },
+    readers: { selectedPackage: sp },
+    actions: {
+      loadServerPackages,
+      setSelectedPackageProjectId,
+      importProjectSelected,
+    },
   } = store;
   effectOnMount(loadServerPackages);
 
@@ -70,8 +68,8 @@ export const OnlineProjectImporterView: FC = () => {
           <div class="selection-column">
             <select
               size={20}
-              value={selectedProjectId}
-              onChange={reflectValue(setProjectSelected) as any}
+              value={selectedPackageProjectId}
+              onChange={reflectValue(setSelectedPackageProjectId) as any}
             >
               {allPackages.map((pk) => (
                 <option key={pk.projectId} value={pk.projectId}>
@@ -81,31 +79,27 @@ export const OnlineProjectImporterView: FC = () => {
             </select>
           </div>
           <div class="detail-column">
-            {selectedProject && (
+            {sp && (
               <ul>
-                <li>projectId: {selectedProject.projectId}</li>
-                <li>keyboardName: {selectedProject.keyboardName}</li>
-                <li>authorName: {selectedProject.authorDisplayName}</li>
+                <li>projectId: {sp.projectId}</li>
+                <li>keyboardName: {sp.keyboardName}</li>
+                <li>authorName: {sp.authorDisplayName}</li>
                 <li>
                   icon:
                   <KermiteServerBase64Icon
                     class="user-icon"
-                    iconUrl={selectedProject.authorIconUrl}
+                    iconUrl={sp.authorIconUrl}
                   />
                 </li>
-                <li>
-                  createdByBoardAuthor: {selectedProject.isOfficial.toString()}
-                </li>
-                <li>
-                  underDevelopment: {selectedProject.isDevelopment.toString()}
-                </li>
+                <li>createdByBoardAuthor: {sp.isOfficial.toString()}</li>
+                <li>underDevelopment: {sp.isDevelopment.toString()}</li>
                 <li>default layout: layout goes here</li>
               </ul>
             )}
           </div>
         </div>
         <div>
-          <button onClick={emitTestProject}>apply</button>
+          <button onClick={importProjectSelected}>apply</button>
           <button onClick={diOnlineProjectImporter.close}>close</button>
         </div>
       </div>
