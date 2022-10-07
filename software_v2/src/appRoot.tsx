@@ -18,6 +18,7 @@ const MenuBar: FC = () => {
           -新規作成(オンラインから)
         </li>
         <li onClick={handleCreateBlankProject}>-新規作成(空のプロジェクト)</li>
+        <li onClick={undefined}>-プロジェクト設定</li>
         <li onClick={undefined}>-エクスポート</li>
         <li>--------</li>
         <li onClick={undefined}>-キーマップ作成</li>
