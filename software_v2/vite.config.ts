@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import EnvironmentPlugin from "vite-plugin-environment";
+import path from "path";
 
 export default async ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), "") };
@@ -11,6 +12,11 @@ export default async ({ mode }) => {
       emptyOutDir: true,
       minify: false,
       sourcemap: true,
+    },
+    resolve: {
+      alias: {
+        "~": path.join(__dirname, "src/"),
+      },
     },
     plugins: [
       EnvironmentPlugin({
@@ -36,7 +42,7 @@ export default async ({ mode }) => {
     clearScreen: false,
     server: {
       port: 3000,
-      host: "0.0.0.0",
+      // host: "0.0.0.0",
     },
   });
 };
