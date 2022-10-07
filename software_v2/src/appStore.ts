@@ -2,6 +2,8 @@ type IModelType = "onlineProjectImporter";
 
 function createBlankProject(): ILocalProject {
   return {
+    formatRevision: "PKG1",
+    projectId: "AAAA",
     projectName: "unnamed project",
     profiles: [],
     layouts: [],
@@ -12,6 +14,8 @@ function createBlankProject(): ILocalProject {
 function createInitialProjectDummy(): ILocalProject {
   return {
     projectName: "initial dummy project",
+    formatRevision: "PKG1",
+    projectId: "AAAA",
     profiles: [
       { name: "profile1", data: {} },
       { name: "profile2", data: {} },

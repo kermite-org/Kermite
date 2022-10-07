@@ -14,6 +14,8 @@ type IProjectFirmwareEntity = {
 };
 
 type ILocalProject = {
+  formatRevision: "PKG1";
+  projectId: string;
   projectName: string;
   profiles: IProjectProfileEntity[];
   layouts: IProjectLayoutEntity[];
