@@ -1,6 +1,20 @@
-import { asyncRerender, css, domStyled, effectOnMount, FC, jsx } from "alumina";
-import { reflectValue } from "~/funcs";
+import {
+  asyncRerender,
+  css,
+  domStyled,
+  effectOnMount,
+  FC,
+  jsx,
+  useInlineEffect,
+  useLocal,
+} from "alumina";
 import { KermiteServerBase64Icon } from "~/components";
+import { createFallbackProjectPackage } from "~/entityInitializer";
+import { reflectValue } from "~/funcs";
+import {
+  createImportResourceSelectorStore,
+  ImportResourceSelector,
+} from "../importResourceSelector/ImportResourceSelector";
 import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
@@ -12,6 +26,8 @@ export const diOnlineProjectImporter = {
 };
 
 function createStore() {
+  const importResourceSelectorStore = createImportResourceSelectorStore();
+
   const state = {
     allPackages: [] as IServerPackageWrapperItem[],
     selectedPackageProjectId: "",
@@ -22,6 +38,10 @@ function createStore() {
       return state.allPackages.find(
         (pk) => pk.projectId === state.selectedPackageProjectId
       );
+    },
+    get canApply() {
+      const { importItems } = importResourceSelectorStore.getOutputProps();
+      return importItems.length > 0;
     },
   };
 
@@ -36,19 +56,42 @@ function createStore() {
       state.selectedPackageProjectId = projectId;
     },
     importProjectSelected() {
-      const pkg = readers.selectedPackage;
-      if (pkg) {
-        diOnlineProjectImporter.saveProject(pkg.data);
-        diOnlineProjectImporter.close();
+      if (!readers.selectedPackage) {
+        return;
       }
+      const pkg = readers.selectedPackage.data;
+
+      const { importItems } = importResourceSelectorStore.getOutputProps();
+
+      const newProject: ILocalProject = {
+        ...pkg,
+        profiles: pkg.profiles.filter((it) =>
+          importItems.find(
+            (q) => q.itemType === "profile" && q.itemName === it.name
+          )
+        ),
+        layouts: pkg.layouts.filter((it) =>
+          importItems.find(
+            (q) => q.itemType === "layout" && q.itemName === it.name
+          )
+        ),
+        firmwares: pkg.firmwares.filter((it) =>
+          importItems.find(
+            (q) => q.itemType === "firmware" && q.itemName === it.name
+          )
+        ),
+      };
+      diOnlineProjectImporter.saveProject(newProject);
+      diOnlineProjectImporter.close();
     },
   };
-  return { state, readers, actions };
+
+  return { state, readers, actions, importResourceSelectorStore };
 }
 
-const store = createStore();
-
 export const OnlineProjectImporterView: FC = () => {
+  const store = useLocal(createStore);
+
   const {
     state: { allPackages, selectedPackageProjectId },
     readers: { selectedPackage: sp },
@@ -57,8 +100,16 @@ export const OnlineProjectImporterView: FC = () => {
       setSelectedPackageProjectId,
       importProjectSelected,
     },
+    importResourceSelectorStore,
   } = store;
   effectOnMount(loadServerPackages);
+
+  useInlineEffect(() => {
+    importResourceSelectorStore.setInputProps({
+      localProject: createFallbackProjectPackage(),
+      remoteProject: sp?.data || createFallbackProjectPackage(),
+    });
+  }, [sp]);
 
   return domStyled(
     <div>
@@ -69,7 +120,7 @@ export const OnlineProjectImporterView: FC = () => {
             <select
               size={20}
               value={selectedPackageProjectId}
-              onChange={reflectValue(setSelectedPackageProjectId) as any}
+              onChange={reflectValue(setSelectedPackageProjectId)}
             >
               {allPackages.map((pk) => (
                 <option key={pk.projectId} value={pk.projectId}>
@@ -98,9 +149,17 @@ export const OnlineProjectImporterView: FC = () => {
               </ul>
             )}
           </div>
+          <div>
+            <ImportResourceSelector store={importResourceSelectorStore} />
+          </div>
         </div>
         <div>
-          <button onClick={importProjectSelected}>apply</button>
+          <button
+            onClick={importProjectSelected}
+            disabled={!store.readers.canApply}
+          >
+            apply
+          </button>
           <button onClick={diOnlineProjectImporter.close}>close</button>
         </div>
       </div>
