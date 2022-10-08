@@ -5,7 +5,7 @@ import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from "./serverPackageM
 export interface IServerPackageWrapperItem {
   projectId: string;
   keyboardName: string;
-  data: ILocalProject;
+  data: IProjectPackage;
   authorDisplayName: string;
   authorIconUrl: string;
   isOfficial: boolean;

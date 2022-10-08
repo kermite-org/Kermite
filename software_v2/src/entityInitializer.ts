@@ -1,4 +1,4 @@
-export function createFallbackProjectPackage(): ILocalProject {
+export function createFallbackProjectPackage(): IProjectPackage {
   return {
     formatRevision: "PKG1",
     projectId: "",

@@ -21,7 +21,7 @@ import {
 } from "./serverPackagesLoader";
 
 export const diOnlineProjectImporter = {
-  saveProject: (_: ILocalProject) => {},
+  saveProject: (_: IProjectPackage) => {},
   close: () => {},
 };
 
@@ -63,7 +63,7 @@ function createStore() {
 
       const { importItems } = importResourceSelectorStore.getOutputProps();
 
-      const newProject: ILocalProject = {
+      const newProject: IProjectPackage = {
         ...pkg,
         profiles: pkg.profiles.filter((it) =>
           importItems.find(
