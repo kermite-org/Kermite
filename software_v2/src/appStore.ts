@@ -1,3 +1,5 @@
+import { IProjectPackage } from "./base";
+
 type IModelType = "onlineProjectImporter";
 
 function createBlankProject(): IProjectPackage {

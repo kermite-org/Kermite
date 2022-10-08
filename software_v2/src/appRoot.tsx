@@ -2,7 +2,7 @@ import { applyGlobalStyle, css, domStyled, FC, jsx } from "alumina";
 import { render } from "alumina";
 import { diOnlineProjectImporter, OnlineProjectImporterView } from "./features";
 import { appStore } from "./appStore";
-import { copyObjectProps } from "./utils";
+import { copyObjectProps } from "./funcs";
 
 const MenuBar: FC = () => {
   const { actions } = appStore;

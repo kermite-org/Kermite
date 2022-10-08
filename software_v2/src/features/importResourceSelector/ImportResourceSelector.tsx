@@ -1,4 +1,5 @@
 import { FC, jsx } from "alumina";
+import { IProjectPackage } from "~/base";
 import { reflectChecked } from "~/funcs";
 
 type InputProps = {
