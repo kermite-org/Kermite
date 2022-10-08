@@ -1,3 +1,5 @@
+import { IProjectPackage } from "./entityTypes";
+
 export function createFallbackProjectPackage(): IProjectPackage {
   return {
     formatRevision: "PKG1",

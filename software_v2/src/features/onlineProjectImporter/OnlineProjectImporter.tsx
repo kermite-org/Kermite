@@ -9,7 +9,7 @@ import {
   useLocal,
 } from "alumina";
 import { KermiteServerBase64Icon } from "~/components";
-import { createFallbackProjectPackage } from "~/entityInitializer";
+import { createFallbackProjectPackage } from "~/base/entityInitializer";
 import { reflectValue } from "~/funcs";
 import {
   createImportResourceSelectorStore,
@@ -19,6 +19,7 @@ import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
 } from "./serverPackagesLoader";
+import { IProjectPackage } from "~/base";
 
 export const diOnlineProjectImporter = {
   saveProject: (_: IProjectPackage) => {},
