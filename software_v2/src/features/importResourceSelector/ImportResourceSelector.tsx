@@ -2,8 +2,8 @@ import { FC, jsx } from "alumina";
 import { reflectChecked } from "~/funcs";
 
 type InputProps = {
-  localProject: ILocalProject;
-  remoteProject: ILocalProject;
+  localProject: IProjectPackage;
+  remoteProject: IProjectPackage;
 };
 
 type IItemType = "profile" | "layout" | "firmware";

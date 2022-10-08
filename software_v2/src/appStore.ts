@@ -1,6 +1,6 @@
 type IModelType = "onlineProjectImporter";
 
-function createBlankProject(): ILocalProject {
+function createBlankProject(): IProjectPackage {
   return {
     formatRevision: "PKG1",
     projectId: "AAAA",
@@ -12,7 +12,7 @@ function createBlankProject(): ILocalProject {
   };
 }
 
-function createInitialProjectDummy(): ILocalProject {
+function createInitialProjectDummy(): IProjectPackage {
   return {
     projectName: "initial dummy project",
     variationName: "",
@@ -39,7 +39,7 @@ function createAppStore() {
     closeModal() {
       state.modalType = undefined;
     },
-    loadProject(project: ILocalProject) {
+    loadProject(project: IProjectPackage) {
       state.currentProject = project;
     },
     loadBlankProject() {

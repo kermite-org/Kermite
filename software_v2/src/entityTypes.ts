@@ -13,7 +13,7 @@ type IProjectFirmwareEntity = {
   data: any;
 };
 
-type ILocalProject = {
+type IProjectPackage = {
   formatRevision: "PKG1";
   projectId: string;
   projectName: string;
