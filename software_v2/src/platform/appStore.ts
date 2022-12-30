@@ -1,6 +1,6 @@
 import {
   IProjectPackage,
-  createFallbackPersistKeyboardDesign,
+  createFallbackPersistKeyboardLayout,
   createFallbackPersistProfileData,
 } from '~/app-shared';
 
@@ -28,7 +28,7 @@ function createInitialProjectDummy(): IProjectPackage {
       { name: 'profile1', data: createFallbackPersistProfileData() },
       { name: 'profile2', data: createFallbackPersistProfileData() },
     ],
-    layouts: [{ name: 'layout1', data: createFallbackPersistKeyboardDesign() }],
+    layouts: [{ name: 'layout1', data: createFallbackPersistKeyboardLayout() }],
     firmwares: [
       {
         name: 'firmware1',
@@ -45,6 +45,7 @@ function createInitialProjectDummy(): IProjectPackage {
 function createAppStore() {
   const state = {
     modalType: undefined as IModelType | undefined,
+    editorTargetPath: undefined as string | undefined,
     currentProject: createInitialProjectDummy(),
   };
 
@@ -60,6 +61,16 @@ function createAppStore() {
     },
     loadBlankProject() {
       state.currentProject = createBlankProject();
+    },
+    setEditorTargetPath(path: string | undefined) {
+      state.editorTargetPath = path;
+    },
+    openProfile(profileName: string) {
+      state.editorTargetPath = undefined;
+    },
+    openLayout(layoutName: string) {
+      const { projectId } = state.currentProject;
+      state.editorTargetPath = `${projectId}/layout/${layoutName}`;
     },
   };
   return {
