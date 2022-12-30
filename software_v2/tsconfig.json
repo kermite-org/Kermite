@@ -16,12 +16,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
     "noEmit": true,
     "baseUrl": "./src",
     "paths": {
       "~/*": ["./*"]
     }
   },
-  "include": ["src/**/*", "src/**/*.json"]
+  "include": ["src/**/*"]
 }

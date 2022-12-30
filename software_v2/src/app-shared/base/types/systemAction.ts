@@ -1,0 +1,15 @@
+export type SystemAction =
+  | 'None'
+  | 'GlowToggle'
+  | 'GlowPatternRoll'
+  | 'GlowColorPrev'
+  | 'GlowColorNext'
+  | 'GlowBrightnessMinus'
+  | 'GlowBrightnessPlus'
+  | 'ResetToDfuMode'
+  | 'SystemLayoutSetPrimary'
+  | 'SystemLayoutSetSecondary'
+  | 'SystemLayoutNext'
+  | 'RoutingChannelSetMain'
+  | 'RoutingChannelSetAlter'
+  | 'RoutingChannelNext';
