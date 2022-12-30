@@ -1,4 +1,4 @@
-import { IProjectPackage } from "./base";
+import { IProjectPackage } from "~/app-shared";
 
 type IModelType = "onlineProjectImporter";
 
