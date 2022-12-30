@@ -1,13 +1,13 @@
-import { IProjectPackage } from "~/app-shared";
+import { IProjectPackage } from '~/app-shared';
 
-type IModelType = "onlineProjectImporter";
+type IModelType = 'onlineProjectImporter';
 
 function createBlankProject(): IProjectPackage {
   return {
-    formatRevision: "PKG1",
-    projectId: "AAAA",
-    projectName: "unnamed project",
-    variationName: "",
+    formatRevision: 'PKG1',
+    projectId: 'AAAA',
+    projectName: 'unnamed project',
+    variationName: '',
     profiles: [],
     layouts: [],
     firmwares: [],
@@ -16,16 +16,16 @@ function createBlankProject(): IProjectPackage {
 
 function createInitialProjectDummy(): IProjectPackage {
   return {
-    projectName: "initial dummy project",
-    variationName: "",
-    formatRevision: "PKG1",
-    projectId: "AAAA",
+    projectName: 'initial dummy project',
+    variationName: '',
+    formatRevision: 'PKG1',
+    projectId: 'AAAA',
     profiles: [
-      { name: "profile1", data: {} },
-      { name: "profile2", data: {} },
+      { name: 'profile1', data: {} },
+      { name: 'profile2', data: {} },
     ],
-    layouts: [{ name: "layout1", data: {} }],
-    firmwares: [{ name: "firmware1", data: {} }],
+    layouts: [{ name: 'layout1', data: {} }],
+    firmwares: [{ name: 'firmware1', data: {} }],
   };
 }
 

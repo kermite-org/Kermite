@@ -1,1 +1,1 @@
-export * from "./KermiteServerBase64Icon";
+export * from './KermiteServerBase64Icon';

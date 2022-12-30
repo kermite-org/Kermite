@@ -1,1 +1,1 @@
-import "./platform/appRoot";
+import './platform/appRoot';

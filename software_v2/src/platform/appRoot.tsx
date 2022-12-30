@@ -1,8 +1,8 @@
-import { jsx, render } from "alumina";
-import { copyObjectProps } from "~/app-shared";
-import { PageRoot } from "./PageRoot";
-import { appStore } from "./appStore";
-import { diOnlineProjectImporter } from "~/feature-online-project-importer";
+import { jsx, render } from 'alumina';
+import { copyObjectProps } from '~/app-shared';
+import { PageRoot } from './PageRoot';
+import { appStore } from './appStore';
+import { diOnlineProjectImporter } from '~/feature-online-project-importer';
 
 function start() {
   const { actions } = appStore;
@@ -10,7 +10,7 @@ function start() {
     saveProject: actions.loadProject,
     close: actions.closeModal,
   });
-  render(() => <PageRoot />, document.getElementById("app"));
+  render(() => <PageRoot />, document.getElementById('app'));
 }
 
-window.addEventListener("load", start);
+window.addEventListener('load', start);

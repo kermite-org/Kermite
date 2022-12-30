@@ -1,3 +1,3 @@
 export const appConfig = {
-  kermiteServerUrl: "https://server.kermite.org",
+  kermiteServerUrl: 'https://server.kermite.org',
 };

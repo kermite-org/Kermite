@@ -1,5 +1,5 @@
-import { asyncRerender, FC, jsx } from "alumina";
-import { useFetcher } from "~/app-shared/funcs";
+import { asyncRerender, FC, jsx } from 'alumina';
+import { useFetcher } from '~/app-shared/funcs';
 
 type Props = {
   iconUrl: string;
@@ -13,8 +13,8 @@ export const KermiteServerBase64Icon: FC<Props> = ({ iconUrl }) => {
       asyncRerender();
       return data.avatar;
     },
-    "",
-    [iconUrl]
+    '',
+    [iconUrl],
   );
   const src = `data:image/png;base64,${iconDataBase64}`;
   return <img src={src} />;

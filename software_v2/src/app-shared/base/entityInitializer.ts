@@ -1,11 +1,11 @@
-import { IProjectPackage } from "./entityTypes";
+import { IProjectPackage } from './entityTypes';
 
 export function createFallbackProjectPackage(): IProjectPackage {
   return {
-    formatRevision: "PKG1",
-    projectId: "",
-    projectName: "",
-    variationName: "",
+    formatRevision: 'PKG1',
+    projectId: '',
+    projectName: '',
+    variationName: '',
     profiles: [],
     layouts: [],
     firmwares: [],

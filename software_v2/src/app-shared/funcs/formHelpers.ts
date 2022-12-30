@@ -1,6 +1,6 @@
 export function reflectValue<T extends string>(proc: (value: T) => void) {
   return (
-    e: JSX.TargetedEvent<HTMLInputElement | HTMLSelectElement, Event>
+    e: JSX.TargetedEvent<HTMLInputElement | HTMLSelectElement, Event>,
   ) => {
     proc((e.currentTarget as HTMLInputElement).value as T);
   };

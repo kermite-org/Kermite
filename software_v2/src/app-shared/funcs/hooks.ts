@@ -1,9 +1,9 @@
-import { useState, useEffect } from "alumina";
+import { useState, useEffect } from 'alumina';
 
 export function useFetcher<T>(
   func: () => Promise<T>,
   defaultValue: T,
-  deps: any[] = []
+  deps: any[] = [],
 ): T {
   const [value, setValue] = useState(defaultValue);
   useEffect(() => {

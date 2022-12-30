@@ -1,12 +1,12 @@
-import { FC, jsx } from "alumina";
-import { IProjectPackage, reflectChecked } from "~/app-shared";
+import { FC, jsx } from 'alumina';
+import { IProjectPackage, reflectChecked } from '~/app-shared';
 
 type InputProps = {
   localProject: IProjectPackage;
   remoteProject: IProjectPackage;
 };
 
-type IItemType = "profile" | "layout" | "firmware";
+type IItemType = 'profile' | 'layout' | 'firmware';
 type IResourceListItem = {
   itemKey: string;
   label: string;
@@ -45,7 +45,7 @@ export function createImportResourceSelectorStore() {
     const { profiles, layouts, firmwares } = props.remoteProject;
     state.resourceListItems = [
       ...profiles.map((it) => ({
-        itemType: "profile" as const,
+        itemType: 'profile' as const,
         itemName: it.name,
         itemKey: `profile__${it.name}`,
         label: it.name,
@@ -53,7 +53,7 @@ export function createImportResourceSelectorStore() {
         canSelect: true,
       })),
       ...layouts.map((it) => ({
-        itemType: "layout" as const,
+        itemType: 'layout' as const,
         itemName: it.name,
         itemKey: `layout__${it.name}`,
         label: it.name,
@@ -61,7 +61,7 @@ export function createImportResourceSelectorStore() {
         canSelect: true,
       })),
       ...firmwares.map((it) => ({
-        itemType: "firmware" as const,
+        itemType: 'firmware' as const,
         itemName: it.name,
         itemKey: `firmware__${it.name}`,
         label: it.name,
@@ -100,7 +100,7 @@ export const ImportResourceSelector: FC<{
             <input
               type="checkbox"
               onChange={reflectChecked((checked) =>
-                setItemChecked(item.itemKey, checked)
+                setItemChecked(item.itemKey, checked),
               )}
             ></input>
             ({item.itemType}) {item.label}
