@@ -1,6 +1,13 @@
 import { compareObjectByJsonStringify } from '~/app-shared';
 
-type IPersistKeyboardDesign_stub = { [key in string]: any };
+type IPersistKeyboardDesignPKGX = {
+  formatRevision: 'LA01';
+  setup: any;
+  keyEntities: any;
+  outlineShapes: any[];
+  extraShape?: any;
+  transformationGroups: any[];
+};
 
 type IStandardFirmwareEntryForPKG0 = {
   type: 'standard';
@@ -27,12 +34,12 @@ type IStandardFirmwareEntryForPKG1 = {
 
 type IProjectLayoutEntryForPKG0 = {
   layoutName: string;
-  data: IPersistKeyboardDesign_stub;
+  data: IPersistKeyboardDesignPKGX;
 };
 
 type IProjectLayoutEntryForPKG1 = {
   name: string;
-  data: IPersistKeyboardDesign_stub;
+  data: IPersistKeyboardDesignPKGX;
 };
 
 type IPersistProfileDataForPKG0 = {
@@ -43,7 +50,7 @@ type IPersistProfileDataForPKG0 = {
   assigns: any;
   mappingEntries: any;
   //プロファイルはプロファイル固有レイアウトを内包している
-  keyboardDesign: IPersistKeyboardDesign_stub;
+  keyboardDesign: IPersistKeyboardDesignPKGX;
 };
 
 type IPersistProfileDataForPKG1 = {
@@ -85,7 +92,7 @@ type IProjectPackageFileContentPKG1 = {
 };
 
 function findReferredLayoutName(
-  layout: IPersistKeyboardDesign_stub,
+  layout: IPersistKeyboardDesignPKGX,
   layouts: IProjectLayoutEntryForPKG0[],
 ): string | undefined {
   const referredLayout = layouts.find((la) =>

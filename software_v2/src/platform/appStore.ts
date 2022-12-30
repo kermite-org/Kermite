@@ -1,4 +1,8 @@
-import { IProjectPackage } from '~/app-shared';
+import {
+  IProjectPackage,
+  createFallbackPersistKeyboardDesign,
+  createFallbackPersistProfileData,
+} from '~/app-shared';
 
 type IModelType = 'onlineProjectImporter';
 
@@ -21,11 +25,20 @@ function createInitialProjectDummy(): IProjectPackage {
     formatRevision: 'PKG1',
     projectId: 'AAAA',
     profiles: [
-      { name: 'profile1', data: {} },
-      { name: 'profile2', data: {} },
+      { name: 'profile1', data: createFallbackPersistProfileData() },
+      { name: 'profile2', data: createFallbackPersistProfileData() },
     ],
-    layouts: [{ name: 'layout1', data: {} }],
-    firmwares: [{ name: 'firmware1', data: {} }],
+    layouts: [{ name: 'layout1', data: createFallbackPersistKeyboardDesign() }],
+    firmwares: [
+      {
+        name: 'firmware1',
+        data: {
+          type: 'standard',
+          variationId: 'variation1',
+          standardFirmwareConfig: {} as any,
+        },
+      },
+    ],
   };
 }
 
