@@ -49,7 +49,7 @@ type IPersistProfileDataForPKG0 = {
   layers: any;
   assigns: any;
   mappingEntries: any;
-  //プロファイルはプロファイル固有レイアウトを内包している
+  // プロファイルはプロファイル固有レイアウトを内包している
   keyboardDesign: IPersistKeyboardDesignPKGX;
 };
 
@@ -60,7 +60,7 @@ type IPersistProfileDataForPKG1 = {
   layers: any;
   assigns: any;
   mappingEntries: any;
-  //プロファイルはレイアウトの参照を保持する
+  // プロファイルはレイアウトの参照を保持する
   referredLayoutName: string;
 };
 
@@ -68,7 +68,7 @@ type IProjectPackageFileContentPKG0 = {
   formatRevision: 'PKG0';
   projectId: string;
   keyboardName: string;
-  //標準ファームウェアとカスタムファームウェアがある
+  // 標準ファームウェアとカスタムファームウェアがある
   firmwares: (IStandardFirmwareEntryForPKG0 | ICustomFirmwareEntryForPKG0)[];
   layouts: IProjectLayoutEntryForPKG0[];
   profiles: {
@@ -82,7 +82,7 @@ type IProjectPackageFileContentPKG1 = {
   projectId: string;
   projectName: string;
   variationName: string;
-  //カスタムファームウェアはドロップして標準ファームウェアのみ残す
+  // カスタムファームウェアはドロップして標準ファームウェアのみ残す
   firmwares: IStandardFirmwareEntryForPKG1[];
   layouts: IProjectLayoutEntryForPKG1[];
   profiles: {

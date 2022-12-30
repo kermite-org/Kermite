@@ -113,14 +113,15 @@ namespace nsServerPackageLoaderCore {
   }
 }
 
-//--------
-//entry
+// --------
+// entry
+
 export interface IServerPackagesLoader {
   loaderServerPackages(): Promise<IServerPackageWrapperItem[]>;
 }
 
 export const serverPackagesLoader: IServerPackagesLoader = {
   async loaderServerPackages() {
-    return nsServerPackageLoaderCore.loadServerPackages();
+    return await nsServerPackageLoaderCore.loadServerPackages();
   },
 };

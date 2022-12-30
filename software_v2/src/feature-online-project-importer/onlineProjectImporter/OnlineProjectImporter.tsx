@@ -1,28 +1,28 @@
 import {
+  FC,
   asyncRerender,
   css,
   domStyled,
   effectOnMount,
-  FC,
   jsx,
   useInlineEffect,
   useLocal,
 } from 'alumina';
 import {
-  createFallbackProjectPackage,
   IProjectPackage,
   KermiteServerBase64Icon,
+  createFallbackProjectPackage,
   reflectValue,
 } from '~/app-shared';
+import { diOnlineProjectImporter } from '../di';
 import {
-  createImportResourceSelectorStore,
   ImportResourceSelector,
+  createImportResourceSelectorStore,
 } from '../importResourceSelector/ImportResourceSelector';
 import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
 } from './serverPackagesLoader';
-import { diOnlineProjectImporter } from '../di';
 
 function createStore() {
   const importResourceSelectorStore = createImportResourceSelectorStore();

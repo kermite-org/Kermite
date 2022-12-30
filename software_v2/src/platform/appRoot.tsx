@@ -1,8 +1,8 @@
 import { jsx, render } from 'alumina';
 import { copyObjectProps } from '~/app-shared';
+import { diOnlineProjectImporter } from '~/feature-online-project-importer';
 import { PageRoot } from './PageRoot';
 import { appStore } from './appStore';
-import { diOnlineProjectImporter } from '~/feature-online-project-importer';
 
 function start() {
   const { actions } = appStore;
