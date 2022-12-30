@@ -1,7 +1,7 @@
-import { applyGlobalStyle, css, domStyled, FC, jsx } from 'alumina';
+import { FC, applyGlobalStyle, css, domStyled, jsx } from 'alumina';
+import { OnlineProjectImporterView } from '~/feature-online-project-importer';
 import { appStore } from './appStore';
 import { globalStyle } from './globalStyle';
-import { OnlineProjectImporterView } from '~/feature-online-project-importer';
 
 const MenuBar: FC = () => {
   const { actions } = appStore;
@@ -71,7 +71,7 @@ const ProjectResourcePanel: FC = () => {
       <div class="entities-row">
         <ul>
           {profiles.map((item) => (
-            <li>
+            <li key={item.name}>
               <ProjectItemIcon text="P" />
               {item.name}
             </li>
@@ -79,7 +79,7 @@ const ProjectResourcePanel: FC = () => {
         </ul>
         <ul>
           {layouts.map((item) => (
-            <li>
+            <li key={item.name}>
               <ProjectItemIcon text="L" />
               {item.name}
             </li>
@@ -87,7 +87,7 @@ const ProjectResourcePanel: FC = () => {
         </ul>
         <ul>
           {firmwares.map((item) => (
-            <li>
+            <li key={item.name}>
               <ProjectItemIcon text="F" />
               {item.name}
             </li>
