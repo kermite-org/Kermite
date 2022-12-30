@@ -14,7 +14,7 @@ type IProjectFirmwareEntity = {
 };
 
 export type IProjectPackage = {
-  formatRevision: "PKG1";
+  formatRevision: 'PKG1';
   projectId: string;
   projectName: string;
   variationName: string;

@@ -1,4 +1,4 @@
-import { css } from "alumina";
+import { css } from 'alumina';
 
 export const globalStyle = css`
   * {
@@ -14,7 +14,7 @@ export const globalStyle = css`
 
   #app {
     height: 100%;
-    font-family: "Noto Sans JP", sans-serif;
+    font-family: 'Noto Sans JP', sans-serif;
     font-size: 16px;
     color: #222;
   }

@@ -1,12 +1,12 @@
-import { applyGlobalStyle, css, domStyled, FC, jsx } from "alumina";
-import { appStore } from "./appStore";
-import { globalStyle } from "./globalStyle";
-import { OnlineProjectImporterView } from "~/feature-online-project-importer";
+import { applyGlobalStyle, css, domStyled, FC, jsx } from 'alumina';
+import { appStore } from './appStore';
+import { globalStyle } from './globalStyle';
+import { OnlineProjectImporterView } from '~/feature-online-project-importer';
 
 const MenuBar: FC = () => {
   const { actions } = appStore;
   const handleCreateProjectFromOnline = () =>
-    actions.openModel("onlineProjectImporter");
+    actions.openModel('onlineProjectImporter');
   const handleCreateBlankProject = actions.loadBlankProject;
 
   return domStyled(
@@ -42,7 +42,7 @@ const MenuBar: FC = () => {
           }
         }
       }
-    `
+    `,
   );
 };
 
@@ -57,7 +57,7 @@ const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
       justify-content: center;
       align-items: center;
       border: solid 1px #222;
-    `
+    `,
   );
 };
 
@@ -106,7 +106,7 @@ const ProjectResourcePanel: FC = () => {
           gap: 3px;
         }
       }
-    `
+    `,
   );
 };
 
@@ -127,7 +127,7 @@ export const PageRoot: FC = () => {
         </div>
         <div class="main-column">editor</div>
       </div>
-      <OnlineProjectImporterView if={modalType === "onlineProjectImporter"} />
+      <OnlineProjectImporterView if={modalType === 'onlineProjectImporter'} />
     </div>,
     css`
       height: 100%;
@@ -170,6 +170,6 @@ export const PageRoot: FC = () => {
           padding: 5px;
         }
       }
-    `
+    `,
   );
 };

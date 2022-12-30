@@ -7,35 +7,35 @@ import {
   jsx,
   useInlineEffect,
   useLocal,
-} from "alumina";
+} from 'alumina';
 import {
   createFallbackProjectPackage,
   IProjectPackage,
   KermiteServerBase64Icon,
   reflectValue,
-} from "~/app-shared";
+} from '~/app-shared';
 import {
   createImportResourceSelectorStore,
   ImportResourceSelector,
-} from "../importResourceSelector/ImportResourceSelector";
+} from '../importResourceSelector/ImportResourceSelector';
 import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
-} from "./serverPackagesLoader";
-import { diOnlineProjectImporter } from "../di";
+} from './serverPackagesLoader';
+import { diOnlineProjectImporter } from '../di';
 
 function createStore() {
   const importResourceSelectorStore = createImportResourceSelectorStore();
 
   const state = {
     allPackages: [] as IServerPackageWrapperItem[],
-    selectedPackageProjectId: "",
+    selectedPackageProjectId: '',
   };
 
   const readers = {
     get selectedPackage() {
       return state.allPackages.find(
-        (pk) => pk.projectId === state.selectedPackageProjectId
+        (pk) => pk.projectId === state.selectedPackageProjectId,
       );
     },
     get canApply() {
@@ -66,18 +66,18 @@ function createStore() {
         ...pkg,
         profiles: pkg.profiles.filter((it) =>
           importItems.find(
-            (q) => q.itemType === "profile" && q.itemName === it.name
-          )
+            (q) => q.itemType === 'profile' && q.itemName === it.name,
+          ),
         ),
         layouts: pkg.layouts.filter((it) =>
           importItems.find(
-            (q) => q.itemType === "layout" && q.itemName === it.name
-          )
+            (q) => q.itemType === 'layout' && q.itemName === it.name,
+          ),
         ),
         firmwares: pkg.firmwares.filter((it) =>
           importItems.find(
-            (q) => q.itemType === "firmware" && q.itemName === it.name
-          )
+            (q) => q.itemType === 'firmware' && q.itemName === it.name,
+          ),
         ),
       };
       diOnlineProjectImporter.saveProject(newProject);
@@ -204,6 +204,6 @@ export const OnlineProjectImporterView: FC = () => {
         width: 40px;
         height: 40px;
       }
-    `
+    `,
   );
 };

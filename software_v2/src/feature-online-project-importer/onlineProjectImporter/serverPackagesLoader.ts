@@ -1,5 +1,5 @@
-import { IProjectPackage, appConfig, fetchJsonCached } from "~/app-shared";
-import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from "./serverPackageMigrator";
+import { IProjectPackage, appConfig, fetchJsonCached } from '~/app-shared';
+import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from './serverPackageMigrator';
 
 export interface IServerPackageWrapperItem {
   projectId: string;
@@ -19,7 +19,7 @@ namespace nsServerPackageLoaderCore {
   type IApiPackagesCatalogResponse = {
     packages: {
       projectId: string;
-      status: "Package";
+      status: 'Package';
       timeStamp: number;
     }[];
   };
@@ -56,7 +56,7 @@ namespace nsServerPackageLoaderCore {
   > {
     const { kermiteServerUrl } = appConfig;
     const catalogRes = (await fetchJsonCached(
-      `${kermiteServerUrl}/api/packages/catalog`
+      `${kermiteServerUrl}/api/packages/catalog`,
     )) as IApiPackagesCatalogResponse;
     // console.log({ catalogRes });
 
@@ -64,7 +64,7 @@ namespace nsServerPackageLoaderCore {
       await Promise.all(
         catalogRes.packages.map(async (pk) => {
           const packageRes = (await fetchJsonCached(
-            `${appConfig.kermiteServerUrl}/api/packages/projects/${pk.projectId}`
+            `${appConfig.kermiteServerUrl}/api/packages/projects/${pk.projectId}`,
           )) as IApiPackagesProjectsProjectIdResponse;
 
           // console.log({ packageRes });
@@ -83,13 +83,13 @@ namespace nsServerPackageLoaderCore {
               revision,
             } = packageRawData;
             const userInfo = (await fetchJsonCached(
-              `${appConfig.kermiteServerUrl}/api/users/${userId}`
+              `${appConfig.kermiteServerUrl}/api/users/${userId}`,
             )) as IApiUsersUserIdResponsePartial;
             const authorDisplayName = userInfo.displayName;
             const authorIconUrl = `${appConfig.kermiteServerUrl}/api/avatar/${userId}`;
 
             const data = serverPackageMigrator_migratePackagePKG0ToPKG1(
-              JSON.parse(rawData)
+              JSON.parse(rawData),
             );
 
             const content: IServerPackageWrapperItem = {
@@ -107,7 +107,7 @@ namespace nsServerPackageLoaderCore {
             };
             return content;
           }
-        })
+        }),
       )
     ).filter((it) => !!it) as IServerPackageWrapperItem[];
   }
