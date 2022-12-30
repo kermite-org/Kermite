@@ -47,6 +47,7 @@ function createAppStore() {
     modalType: undefined as IModelType | undefined,
     currentProject: createInitialProjectDummy(),
   };
+
   const actions = {
     openModel(modalType: IModelType) {
       state.modalType = modalType;
