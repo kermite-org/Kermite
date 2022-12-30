@@ -2,8 +2,9 @@ import { jsx, render } from 'alumina';
 import { copyObjectProps } from '~/app-shared';
 import { diOnlineProjectImporter } from '~/feature-online-project-importer';
 import { PageRoot } from './PageRoot';
-import { appPersistence } from './appPersistence';
 import { appStore } from './appStore';
+import { setupRetainerAppPersistence } from './retainerAppPersistence';
+import { setupRetainerEditItemLoader } from './retainerEditItemLoader';
 
 function start() {
   const { actions } = appStore;
@@ -11,13 +12,9 @@ function start() {
     saveProject: actions.loadProject,
     close: actions.closeModal,
   });
-  appPersistence.load();
+  setupRetainerAppPersistence();
+  setupRetainerEditItemLoader();
   render(() => <PageRoot />, document.getElementById('app'));
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') {
-      appPersistence.save();
-    }
-  });
 }
 
 window.addEventListener('load', start);

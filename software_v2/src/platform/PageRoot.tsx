@@ -1,4 +1,5 @@
 import { FC, applyGlobalStyle, css, domStyled, jsx } from 'alumina';
+import { LayoutEditorView } from '~/feature-layout-editor';
 import { OnlineProjectImporterView } from '~/feature-online-project-importer';
 import { appStore } from './appStore';
 import { globalStyle } from './globalStyle';
@@ -64,6 +65,8 @@ const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
 const ProjectResourcePanel: FC = () => {
   const { projectName, profiles, layouts, firmwares } =
     appStore.state.currentProject;
+
+  const { openProfile, openLayout } = appStore.actions;
   return domStyled(
     <div>
       <h3>プロジェクト</h3>
@@ -71,7 +74,7 @@ const ProjectResourcePanel: FC = () => {
       <div class="entities-row">
         <ul>
           {profiles.map((item) => (
-            <li key={item.name}>
+            <li key={item.name} onClick={() => openProfile(item.name)}>
               <ProjectItemIcon text="P" />
               {item.name}
             </li>
@@ -79,7 +82,7 @@ const ProjectResourcePanel: FC = () => {
         </ul>
         <ul>
           {layouts.map((item) => (
-            <li key={item.name}>
+            <li key={item.name} onClick={() => openLayout(item.name)}>
               <ProjectItemIcon text="L" />
               {item.name}
             </li>
@@ -104,10 +107,22 @@ const ProjectResourcePanel: FC = () => {
           display: flex;
           align-items: center;
           gap: 3px;
+          cursor: pointer;
         }
       }
     `,
   );
+};
+
+const EditorAreaContent: FC = () => {
+  const { editorTargetPath } = appStore.state;
+  if (!editorTargetPath) {
+    return <div>no content</div>;
+  }
+  const editorType = editorTargetPath.split('/')[1];
+  if (editorType === 'layout') {
+    return <LayoutEditorView itemPath={editorTargetPath} />;
+  }
 };
 
 export const PageRoot: FC = () => {
@@ -125,7 +140,9 @@ export const PageRoot: FC = () => {
           <ProjectResourcePanel />
           <div>デバイス</div>
         </div>
-        <div class="main-column">editor</div>
+        <div class="main-column">
+          <EditorAreaContent />
+        </div>
       </div>
       <OnlineProjectImporterView if={modalType === 'onlineProjectImporter'} />
     </div>,
