@@ -1,9 +1,2 @@
-import {
-  diOnlineProjectImporter,
-  OnlineProjectImporterView,
-} from "./onlineProjectImporter/OnlineProjectImporter";
-
-export const featureOnlineProjectImporterExports = {
-  diOnlineProjectImporter,
-  OnlineProjectImporterView,
-};
+export * from "./di";
+export { OnlineProjectImporterView } from "./onlineProjectImporter/OnlineProjectImporter";
