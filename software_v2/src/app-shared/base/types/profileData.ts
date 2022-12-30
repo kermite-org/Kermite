@@ -1,5 +1,5 @@
 import { IConsumerControlAction } from './consumerControlAction';
-import { IPersistKeyboardDesign } from './keyboardDesign';
+import { IPersistKeyboardLayout } from './keyboardLayout';
 import { SystemAction } from './systemAction';
 import { VirtualKey } from './virtualKeys';
 
@@ -145,7 +145,7 @@ export type IMappingEntry = {
 
 export type IProfileData = {
   projectId: string;
-  keyboardDesign: IPersistKeyboardDesign;
+  keyboardLayout: IPersistKeyboardLayout;
   settings: IProfileSettings;
   layers: ILayer[];
   assigns: IAssignsDictionary;
@@ -164,7 +164,7 @@ export const profileFormatRevisionLatest = 'PRF07';
 export type IPersistProfileData = {
   formatRevision: ProfileFormatRevisionLatest;
   projectId: string;
-  // keyboardDesign: IPersistKeyboardDesign;
+  // keyboardDesign: IPersistKeyboardLayout;  //old version
   settings: IProfileSettings;
   layers: ILayer[];
   assigns: IPersistAssignEntry[];
