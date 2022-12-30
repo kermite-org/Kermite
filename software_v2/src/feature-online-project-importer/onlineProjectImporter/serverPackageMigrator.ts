@@ -1,6 +1,6 @@
 import { compareObjectByJsonStringify } from '~/app-shared';
 
-type IPersistKeyboardDesignPKGX = {
+type IPersistKeyboardLayoutPKGX = {
   formatRevision: 'LA01';
   setup: any;
   keyEntities: any;
@@ -34,12 +34,12 @@ type IStandardFirmwareEntryForPKG1 = {
 
 type IProjectLayoutEntryForPKG0 = {
   layoutName: string;
-  data: IPersistKeyboardDesignPKGX;
+  data: IPersistKeyboardLayoutPKGX;
 };
 
 type IProjectLayoutEntryForPKG1 = {
   name: string;
-  data: IPersistKeyboardDesignPKGX;
+  data: IPersistKeyboardLayoutPKGX;
 };
 
 type IPersistProfileDataForPKG0 = {
@@ -50,7 +50,7 @@ type IPersistProfileDataForPKG0 = {
   assigns: any;
   mappingEntries: any;
   // プロファイルはプロファイル固有レイアウトを内包している
-  keyboardDesign: IPersistKeyboardDesignPKGX;
+  keyboardDesign: IPersistKeyboardLayoutPKGX;
 };
 
 type IPersistProfileDataForPKG1 = {
@@ -92,7 +92,7 @@ type IProjectPackageFileContentPKG1 = {
 };
 
 function findReferredLayoutName(
-  layout: IPersistKeyboardDesignPKGX,
+  layout: IPersistKeyboardLayoutPKGX,
   layouts: IProjectLayoutEntryForPKG0[],
 ): string | undefined {
   const referredLayout = layouts.find((la) =>

@@ -1,6 +1,6 @@
 import {
-  IDisplayKeyboardDesign,
-  IPersistKeyboardDesign,
+  IDisplayKeyboardLayout,
+  IPersistKeyboardLayout,
   IPersistProfileData,
   IProfileData,
   IProjectPackage,
@@ -33,7 +33,7 @@ export function createFallbackPersistProfileData(): IPersistProfileData {
 export function createFallbackProfileData(): IProfileData {
   return {
     projectId: '',
-    keyboardDesign: createFallbackPersistKeyboardDesign(),
+    keyboardLayout: createFallbackPersistKeyboardLayout(),
     settings: {
       assignType: 'single',
       shiftCancelMode: 'none',
@@ -53,8 +53,8 @@ export function createFallbackProfileData(): IProfileData {
   };
 }
 
-export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
-  const defaultKeyboardDesignSetup: IPersistKeyboardDesign['setup'] = {
+export function createFallbackPersistKeyboardLayout(): IPersistKeyboardLayout {
+  const defaultKeyboardLayoutSetup: IPersistKeyboardLayout['setup'] = {
     placementUnit: 'KP 19.05',
     placementAnchor: 'topLeft',
     keySizeUnit: 'KP 19.05',
@@ -62,14 +62,14 @@ export function createFallbackPersistKeyboardDesign(): IPersistKeyboardDesign {
   };
   return {
     formatRevision: 'LA01',
-    setup: { ...defaultKeyboardDesignSetup },
+    setup: { ...defaultKeyboardLayoutSetup },
     keyEntities: [],
     outlineShapes: [],
     transformationGroups: [],
   };
 }
 
-export function createFallbackDisplayKeyboardDesign(): IDisplayKeyboardDesign {
+export function createFallbackDisplayKeyboardLayout(): IDisplayKeyboardLayout {
   return {
     keyEntities: [],
     outlineShapes: [],

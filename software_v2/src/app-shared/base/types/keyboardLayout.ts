@@ -2,7 +2,7 @@ export type IKeyPlacementAnchor = 'topLeft' | 'center';
 
 export type IKeyIdMode = 'auto' | 'manual';
 
-export interface IPersistKeyboardDesignRealKeyEntity {
+export interface IPersistKeyboardLayoutRealKeyEntity {
   keyId: string;
   x: number;
   y: number;
@@ -12,7 +12,7 @@ export interface IPersistKeyboardDesignRealKeyEntity {
   groupIndex?: number;
 }
 
-export interface IPersistKeyboardDesignMirrorKeyEntity {
+export interface IPersistKeyboardLayoutMirrorKeyEntity {
   keyId: string;
   mirrorOf: string;
   keyIndex?: number;
@@ -26,7 +26,7 @@ export interface IPersistExtraShape {
   invertY: boolean;
   groupIndex?: number;
 }
-export interface IPersistKeyboardDesign {
+export interface IPersistKeyboardLayout {
   formatRevision: 'LA01';
   setup: {
     placementUnit: string; // 'mm' | 'KP x <y>'
@@ -35,8 +35,8 @@ export interface IPersistKeyboardDesign {
     keyIdMode: IKeyIdMode;
   };
   keyEntities: (
-    | IPersistKeyboardDesignRealKeyEntity
-    | IPersistKeyboardDesignMirrorKeyEntity
+    | IPersistKeyboardLayoutRealKeyEntity
+    | IPersistKeyboardLayoutMirrorKeyEntity
   )[];
   outlineShapes: {
     points: { x: number; y: number }[];
@@ -95,7 +95,7 @@ export interface IDisplayExtraShape {
   scaleForLineWeight: number;
 }
 
-export interface IDisplayKeyboardDesign {
+export interface IDisplayKeyboardLayout {
   keyEntities: IDisplayKeyEntity[];
   outlineShapes: IDisplayOutlineShape[];
   displayArea: IDisplayArea;

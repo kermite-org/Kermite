@@ -1,4 +1,4 @@
-import { IPersistKeyboardDesign } from './keyboardDesign';
+import { IPersistKeyboardLayout } from './keyboardLayout';
 import { IPersistProfileData } from './profileData';
 import { IStandardFirmwareEntityData } from './standardFirmware';
 
@@ -9,7 +9,7 @@ type IProjectProfileEntity = {
 
 type IProjectLayoutEntity = {
   name: string;
-  data: IPersistKeyboardDesign;
+  data: IPersistKeyboardLayout;
 };
 
 type IProjectFirmwareEntity = {
