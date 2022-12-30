@@ -1,6 +1,5 @@
 import { FC, jsx } from "alumina";
-import { IProjectPackage } from "~/base";
-import { reflectChecked } from "~/funcs";
+import { IProjectPackage, reflectChecked } from "~/app-shared";
 
 type InputProps = {
   localProject: IProjectPackage;

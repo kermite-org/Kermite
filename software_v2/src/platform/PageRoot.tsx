@@ -1,6 +1,6 @@
 import { applyGlobalStyle, css, domStyled, FC, jsx } from "alumina";
+import { featureOnlineProjectImporterExports } from "~/feature-online-project-importer";
 import { appStore } from "./appStore";
-import { OnlineProjectImporterView } from "./features";
 import { globalStyle } from "./globalStyle";
 
 const MenuBar: FC = () => {
@@ -127,7 +127,9 @@ export const PageRoot: FC = () => {
         </div>
         <div class="main-column">editor</div>
       </div>
-      <OnlineProjectImporterView if={modalType === "onlineProjectImporter"} />
+      <featureOnlineProjectImporterExports.OnlineProjectImporterView
+        if={modalType === "onlineProjectImporter"}
+      />
     </div>,
     css`
       height: 100%;

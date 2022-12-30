@@ -1,5 +1,4 @@
-import { appConfig, IProjectPackage } from "~/base";
-import { fetchJsonCached } from "~/funcs";
+import { IProjectPackage, appConfig, fetchJsonCached } from "~/app-shared";
 import { serverPackageMigrator_migratePackagePKG0ToPKG1 } from "./serverPackageMigrator";
 
 export interface IServerPackageWrapperItem {

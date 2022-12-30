@@ -8,9 +8,12 @@ import {
   useInlineEffect,
   useLocal,
 } from "alumina";
-import { KermiteServerBase64Icon } from "~/components";
-import { createFallbackProjectPackage } from "~/base/entityInitializer";
-import { reflectValue } from "~/funcs";
+import {
+  createFallbackProjectPackage,
+  IProjectPackage,
+  KermiteServerBase64Icon,
+  reflectValue,
+} from "~/app-shared";
 import {
   createImportResourceSelectorStore,
   ImportResourceSelector,
@@ -19,7 +22,6 @@ import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
 } from "./serverPackagesLoader";
-import { IProjectPackage } from "~/base";
 
 export const diOnlineProjectImporter = {
   saveProject: (_: IProjectPackage) => {},

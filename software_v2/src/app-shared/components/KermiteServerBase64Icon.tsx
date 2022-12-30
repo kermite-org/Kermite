@@ -1,5 +1,5 @@
 import { asyncRerender, FC, jsx } from "alumina";
-import { useFetcher } from "~/funcs";
+import { useFetcher } from "~/app-shared/funcs";
 
 type Props = {
   iconUrl: string;

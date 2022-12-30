@@ -1,4 +1,4 @@
-import { compareObjectByJsonStringify } from "~/funcs";
+import { compareObjectByJsonStringify } from "~/app-shared";
 
 type IPersistKeyboardDesign_stub = { [key in string]: any };
 

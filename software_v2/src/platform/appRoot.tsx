@@ -1,12 +1,12 @@
 import { jsx, render } from "alumina";
-import { appStore } from "./appStore";
-import { diOnlineProjectImporter } from "./features";
-import { copyObjectProps } from "./funcs";
+import { copyObjectProps } from "~/app-shared";
+import { featureOnlineProjectImporterExports } from "~/feature-online-project-importer";
 import { PageRoot } from "./PageRoot";
+import { appStore } from "./appStore";
 
 function start() {
   const { actions } = appStore;
-  copyObjectProps(diOnlineProjectImporter, {
+  copyObjectProps(featureOnlineProjectImporterExports.diOnlineProjectImporter, {
     saveProject: actions.loadProject,
     close: actions.closeModal,
   });
