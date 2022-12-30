@@ -22,11 +22,7 @@ import {
   IServerPackageWrapperItem,
   serverPackagesLoader,
 } from "./serverPackagesLoader";
-
-export const diOnlineProjectImporter = {
-  saveProject: (_: IProjectPackage) => {},
-  close: () => {},
-};
+import { diOnlineProjectImporter } from "../di";
 
 function createStore() {
   const importResourceSelectorStore = createImportResourceSelectorStore();
