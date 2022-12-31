@@ -1,5 +1,5 @@
-import { jsx, css, FC } from 'alumina';
-import { makeCssColor } from '~/fe-shared';
+import { FC, css, jsx } from 'alumina';
+import { makeCssColor } from '~/app-shared';
 import { editReader } from '../../../models';
 
 export const DisplayAreaFrame: FC = () => {

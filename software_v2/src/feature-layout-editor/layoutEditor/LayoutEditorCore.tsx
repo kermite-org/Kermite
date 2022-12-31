@@ -1,6 +1,8 @@
 import { jsx, useEffect } from 'alumina';
-import { IPersistKeyboardLayout } from '~/app-shared';
-import { windowKeyboardEventEffect } from '~/fe-shared';
+import {
+  IPersistKeyboardLayout,
+  windowKeyboardEventEffect,
+} from '~/app-shared';
 import {
   IEditState,
   IEnvState,
@@ -11,11 +13,7 @@ import {
   editReader,
 } from './models';
 import { LayoutEditorViewRoot } from './views';
-import {
-  KeyboardDesignConverter,
-  keyboardOperationHandler,
-  // setupDeviceKeyEventsListener,
-} from './wrapper';
+import { KeyboardDesignConverter, keyboardOperationHandler } from './wrapper';
 
 interface IBackingStoreData {
   editor: IEditState;

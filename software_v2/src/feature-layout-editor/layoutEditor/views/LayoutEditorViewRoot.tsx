@@ -1,5 +1,5 @@
-import { jsx, css } from 'alumina';
-import { colors } from '~/fe-shared';
+import { css, jsx } from 'alumina';
+import { colors } from '~/app-shared';
 import { EditMenuBar } from './editMenuBar/EditMenuBar';
 import { EditSvgViewContainer } from './editSvgView';
 import { EditorSideColumnContent } from './sidePanels';

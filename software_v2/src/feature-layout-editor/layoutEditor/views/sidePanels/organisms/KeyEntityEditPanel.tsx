@@ -5,7 +5,7 @@ import {
   GeneralConfigTextEditRow,
   GeneralSelector,
   HFlex,
-} from '~/fe-shared-2';
+} from '~/fe-shared';
 import { editReader } from '../../../models';
 import { useKeyEntityEditPanelModel } from '../models';
 

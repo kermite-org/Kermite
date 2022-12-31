@@ -1,4 +1,4 @@
-import { ISelectorOption } from '~/fe-shared';
+import { ISelectorOption } from '~/app-shared';
 
 export type IGridSpec =
   | { unit: 'mm'; pitch: number }

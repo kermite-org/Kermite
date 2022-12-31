@@ -1,6 +1,5 @@
 import { FC, jsx } from 'alumina';
-import { makeIntegersRange } from '~/app-shared';
-import { colors } from '~/fe-shared';
+import { colors, makeIntegersRange } from '~/app-shared';
 import { editReader } from '../../../models';
 import {
   getGroupOuterSvgTransformSpec,

@@ -1,5 +1,5 @@
 import { css, jsx } from 'alumina';
-import { ICommonSelectorViewModel } from '~/fe-shared';
+import { ICommonSelectorViewModel } from '~/app-shared';
 import {
   ConfigPanelBox,
   ConfigRow,
@@ -7,7 +7,7 @@ import {
   ConfigSubHeader,
   GeneralConfigTextEditRow,
   RibbonSelector,
-} from '~/fe-shared-2';
+} from '~/fe-shared';
 import {
   IConfigTextEditModel,
   useDesignConfigurationPanelModel,

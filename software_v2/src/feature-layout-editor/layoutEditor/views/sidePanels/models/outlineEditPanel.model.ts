@@ -1,4 +1,4 @@
-import { ICommonSelectorViewModel } from '~/fe-shared';
+import { ICommonSelectorViewModel } from '~/app-shared';
 import { useClosureModel } from '../../../common';
 import { editMutations, editReader } from '../../../models';
 import {

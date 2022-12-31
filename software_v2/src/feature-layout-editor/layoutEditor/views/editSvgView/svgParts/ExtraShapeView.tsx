@@ -1,7 +1,6 @@
-import { css, domStyled, FC, jsx } from 'alumina';
-import { validateSvgPathText } from '~/app-shared-2';
-import { makeCssColor } from '~/fe-shared';
-import { editReader, IEditExtraShape } from '../../../models';
+import { FC, css, domStyled, jsx } from 'alumina';
+import { makeCssColor, validateSvgPathText } from '~/app-shared';
+import { IEditExtraShape, editReader } from '../../../models';
 
 const ExtraShapeViewSingle: FC<{
   shape: IEditExtraShape;

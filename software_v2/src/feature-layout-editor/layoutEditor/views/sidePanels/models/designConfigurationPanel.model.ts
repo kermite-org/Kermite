@@ -1,9 +1,9 @@
 import {
+  ICommonSelectorViewModel,
   IKeyIdMode,
   IKeyPlacementAnchor,
   defaultKeyboardDesignSetup,
 } from '~/app-shared';
-import { ICommonSelectorViewModel } from '~/fe-shared';
 import { useClosureModel } from '../../../common';
 import { editMutations, editReader } from '../../../models';
 import {

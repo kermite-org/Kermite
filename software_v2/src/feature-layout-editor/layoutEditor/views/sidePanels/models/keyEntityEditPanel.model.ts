@@ -1,5 +1,5 @@
 import { useLocal } from 'alumina';
-import { ICommonSelectorViewModel } from '~/fe-shared';
+import { ICommonSelectorViewModel } from '~/app-shared';
 import { useClosureModel } from '../../../common';
 import {
   IEditKeyEntity,

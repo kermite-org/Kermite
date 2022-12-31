@@ -1,5 +1,5 @@
 import { FC, jsx } from 'alumina';
-import { colors } from '~/fe-shared';
+import { colors } from '~/app-shared';
 import { editReader } from '../../../models';
 import { getWorldViewBounds } from '../coordHelpers';
 

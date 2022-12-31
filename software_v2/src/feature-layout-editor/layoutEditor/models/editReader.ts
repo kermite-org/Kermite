@@ -1,9 +1,9 @@
 import {
   ICoordUnit,
+  createSimpleSelector,
   getCoordUnitFromUnitSpec,
   validateSvgPathText,
-} from '~/app-shared-2';
-import { createSimpleSelector } from '~/fe-shared';
+} from '~/app-shared';
 import { IEnvBoolPropKey, appState } from './appState';
 import { getKeyboardDesignBoundingBox } from './boundingBoxCalculator';
 import {

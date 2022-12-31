@@ -1,5 +1,5 @@
-import { jsx, css, FC } from 'alumina';
-import { colors } from '~/fe-shared';
+import { FC, css, jsx } from 'alumina';
+import { colors } from '~/app-shared';
 import { editReader } from '../../../models';
 
 export const InformationOverlay: FC = () => {
