@@ -1,8 +1,9 @@
-import { jsx, render } from 'alumina';
-import { copyObjectProps } from '~/app-shared';
+import { asyncRerender, jsx, render } from 'alumina';
+import { appUi, copyObjectProps } from '~/app-shared';
 import { diOnlineProjectImporter } from '~/feature-online-project-importer';
 import { PageRoot } from './PageRoot';
 import { appStore } from './appStore';
+import { deviceStore } from './deviceStore';
 import { setupRetainerAppPersistence } from './retainerAppPersistence';
 import { setupRetainerEditItemLoader } from './retainerEditItemLoader';
 
@@ -14,6 +15,8 @@ function start() {
   });
   setupRetainerAppPersistence();
   setupRetainerEditItemLoader();
+  deviceStore.actions.restoreConnection();
+  appUi.rerender = asyncRerender;
   render(() => <PageRoot />, document.getElementById('app'));
 }
 
