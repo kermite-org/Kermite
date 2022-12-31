@@ -65,12 +65,17 @@ function createAppStore() {
     setEditorTargetPath(path: string | undefined) {
       state.editorTargetPath = path;
     },
-    openProfile(profileName: string) {
-      state.editorTargetPath = undefined;
+    openProfileEditor(profileName: string) {
+      const { projectId } = state.currentProject;
+      state.editorTargetPath = `${projectId}/profile/${profileName}`;
     },
-    openLayout(layoutName: string) {
+    openLayoutEditor(layoutName: string) {
       const { projectId } = state.currentProject;
       state.editorTargetPath = `${projectId}/layout/${layoutName}`;
+    },
+    openFirmwareEditor(firmwareName: string) {
+      const { projectId } = state.currentProject;
+      state.editorTargetPath = `${projectId}/firmware/${firmwareName}`;
     },
   };
   return {

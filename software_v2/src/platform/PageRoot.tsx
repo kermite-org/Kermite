@@ -1,6 +1,7 @@
 import { FC, applyGlobalStyle, css, domStyled, jsx } from 'alumina';
 import { LayoutEditorView } from '~/feature-layout-editor';
 import { OnlineProjectImporterView } from '~/feature-online-project-importer';
+import { ProfileEditorView } from '~/feature-profile-editor';
 import { appStore } from './appStore';
 import { globalStyle } from './globalStyle';
 
@@ -66,7 +67,8 @@ const ProjectResourcePanel: FC = () => {
   const { projectName, profiles, layouts, firmwares } =
     appStore.state.currentProject;
 
-  const { openProfile, openLayout } = appStore.actions;
+  const { openProfileEditor, openLayoutEditor, openFirmwareEditor } =
+    appStore.actions;
   return domStyled(
     <div>
       <h3>プロジェクト</h3>
@@ -74,7 +76,7 @@ const ProjectResourcePanel: FC = () => {
       <div class="entities-row">
         <ul>
           {profiles.map((item) => (
-            <li key={item.name} onClick={() => openProfile(item.name)}>
+            <li key={item.name} onClick={() => openProfileEditor(item.name)}>
               <ProjectItemIcon text="P" />
               {item.name}
             </li>
@@ -82,7 +84,7 @@ const ProjectResourcePanel: FC = () => {
         </ul>
         <ul>
           {layouts.map((item) => (
-            <li key={item.name} onClick={() => openLayout(item.name)}>
+            <li key={item.name} onClick={() => openLayoutEditor(item.name)}>
               <ProjectItemIcon text="L" />
               {item.name}
             </li>
@@ -90,7 +92,7 @@ const ProjectResourcePanel: FC = () => {
         </ul>
         <ul>
           {firmwares.map((item) => (
-            <li key={item.name}>
+            <li key={item.name} onClick={() => openFirmwareEditor(item.name)}>
               <ProjectItemIcon text="F" />
               {item.name}
             </li>
@@ -116,13 +118,17 @@ const ProjectResourcePanel: FC = () => {
 
 const EditorAreaContent: FC = () => {
   const { editorTargetPath } = appStore.state;
-  if (!editorTargetPath) {
-    return <div>no content</div>;
+
+  if (editorTargetPath) {
+    const editorType = editorTargetPath.split('/')[1];
+    if (editorType === 'profile') {
+      return <ProfileEditorView itemPath={editorTargetPath} />;
+    }
+    if (editorType === 'layout') {
+      return <LayoutEditorView itemPath={editorTargetPath} />;
+    }
   }
-  const editorType = editorTargetPath.split('/')[1];
-  if (editorType === 'layout') {
-    return <LayoutEditorView itemPath={editorTargetPath} />;
-  }
+  return <div>no content</div>;
 };
 
 export const PageRoot: FC = () => {
