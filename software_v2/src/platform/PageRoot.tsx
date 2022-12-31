@@ -3,6 +3,7 @@ import { LayoutEditorView } from '~/feature-layout-editor';
 import { OnlineProjectImporterView } from '~/feature-online-project-importer';
 import { ProfileEditorView } from '~/feature-profile-editor';
 import { appStore } from './appStore';
+import { deviceStore } from './deviceStore';
 import { globalStyle } from './globalStyle';
 
 export const PageRoot: FC = () => {
@@ -18,7 +19,7 @@ export const PageRoot: FC = () => {
       <div class="main-row">
         <div class="side-bar">
           <ProjectResourcePanel />
-          <div>デバイス</div>
+          <DeviceStatusPanel />
         </div>
         <div class="main-column">
           <EditorAreaContent />
@@ -154,6 +155,22 @@ const ProjectItemIcon: FC<{ text: string }> = ({ text }) => {
       align-items: center;
       border: solid 1px #222;
     `,
+  );
+};
+
+const DeviceStatusPanel: FC = () => {
+  const { openNewDevice, closeDevice } = deviceStore.actions;
+  const { currentDeviceProductName } = deviceStore.readers;
+  return domStyled(
+    <div>
+      <div>device</div>
+      <div>{currentDeviceProductName}</div>
+      <div>
+        <button onClick={openNewDevice}>connect</button>
+        <button onClick={closeDevice}>close</button>
+      </div>
+    </div>,
+    css``,
   );
 };
 

@@ -4,29 +4,37 @@ import {
   localStorageHelper_writeItem,
 } from '~/app-shared';
 import { appStore } from './appStore';
+import { deviceStore } from './deviceStore';
 
 type IAppPersistData = {
   currentProject: IProjectPackage;
   editorTargetPath: string | undefined;
+  targetDeviceProductName: string | undefined;
 };
 
 function createAppPersistence() {
   const storageKey = 'kermite-app-data';
   return {
     load() {
-      const obj = localStorageHelper_readItemSafe<IAppPersistData>(storageKey);
-      if (obj) {
-        if (obj.currentProject) {
-          appStore.actions.loadProject(obj.currentProject);
+      const data = localStorageHelper_readItemSafe<IAppPersistData>(storageKey);
+      if (data) {
+        if (data.currentProject) {
+          appStore.actions.loadProject(data.currentProject);
         }
-        appStore.actions.setEditorTargetPath(obj.editorTargetPath);
+        appStore.actions.setEditorTargetPath(data.editorTargetPath);
+        if (data.targetDeviceProductName) {
+          deviceStore.state.targetDeviceProductName =
+            data.targetDeviceProductName;
+        }
       }
     },
     save() {
       const { currentProject, editorTargetPath } = appStore.state;
+      const { targetDeviceProductName } = deviceStore.state;
       localStorageHelper_writeItem<IAppPersistData>(storageKey, {
         currentProject,
         editorTargetPath,
+        targetDeviceProductName,
       });
     },
   };
