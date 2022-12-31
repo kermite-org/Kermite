@@ -35,6 +35,7 @@ export function setupRetainerEditItemLoader() {
     }
   };
   diProfileEditor.loadProfile = loadProjectResourceItem;
+  diProfileEditor.loadLayout = loadProjectResourceItem;
   diProfileEditor.saveProfile = saveProjectResourceItem;
   diLayoutEditor.loadLayout = loadProjectResourceItem;
   diLayoutEditor.saveLayout = saveProjectResourceItem;

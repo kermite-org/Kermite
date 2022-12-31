@@ -21,6 +21,12 @@ export function reflectFieldValue<T>(target: T, fieldName: keyof T) {
   };
 }
 
+export function reflectFieldChecked<T>(target: T, fieldName: keyof T) {
+  return (e: Event) => {
+    target[fieldName] = (e.currentTarget as HTMLInputElement).checked as any;
+  };
+}
+
 export const reflectFloatValue = (destFn: (value: number) => void) => {
   return reflectValue((text: string) => {
     const value = parseFloat(text);
