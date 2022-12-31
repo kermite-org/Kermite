@@ -1,23 +1,42 @@
-import { IPersistKeyboardLayout, replaceArrayItem } from '~/app-shared';
 import { diLayoutEditor } from '~/feature-layout-editor';
+import { diProfileEditor } from '~/feature-profile-editor';
 import { appStore } from './appStore';
 
 export function setupRetainerEditItemLoader() {
-  diLayoutEditor.loadLayout = (itemPath: string) => {
+  function getProjectResourceItem(itemPath: string) {
+    const [projectId, itemType, itemName] = itemPath.split('/');
     const { currentProject } = appStore.state;
-    const itemName = itemPath.split('/')[2];
-    const layout = currentProject.layouts.find((la) => la.name === itemName);
-    return layout?.data;
+    if (projectId === currentProject.projectId) {
+      const itemsPropName = {
+        profile: 'profiles' as const,
+        layout: 'layouts' as const,
+        firmware: 'firmwares' as const,
+      }[itemType];
+      if (itemsPropName) {
+        const items = currentProject[itemsPropName] as {
+          name: string;
+          data: any;
+        }[];
+        const item = items.find((it) => it.name === itemName);
+        return item;
+      }
+    }
+    return undefined;
+  }
+
+  const loadProjectResourceItem = (itemPath: string) => {
+    const item = getProjectResourceItem(itemPath);
+    return item?.data;
   };
-  diLayoutEditor.saveLayout = (
-    itemPath: string,
-    layout: IPersistKeyboardLayout,
-  ) => {
-    const { currentProject } = appStore.state;
-    const itemName = itemPath.split('/')[2];
-    replaceArrayItem(currentProject.layouts, (la) => la.name === itemName, {
-      name: itemName,
-      data: layout,
-    });
+  const saveProjectResourceItem = (itemPath: string, data: any) => {
+    const item = getProjectResourceItem(itemPath);
+    if (item) {
+      item.data = data;
+    }
   };
+
+  diProfileEditor.loadProfile = loadProjectResourceItem;
+  diProfileEditor.saveProfile = saveProjectResourceItem;
+  diLayoutEditor.loadLayout = loadProjectResourceItem;
+  diLayoutEditor.saveLayout = saveProjectResourceItem;
 }
