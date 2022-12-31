@@ -1,5 +1,6 @@
 import { FC, jsx, useMemo } from 'alumina';
 import { diLayoutEditor } from './di';
+import { LayoutEditorGeneralComponent } from './layoutEditor';
 
 function createStore(itemPath: string) {
   const layout = diLayoutEditor.loadLayout(itemPath);
@@ -10,11 +11,5 @@ function createStore(itemPath: string) {
 
 export const LayoutEditorView: FC<{ itemPath: string }> = ({ itemPath }) => {
   const { layout } = useMemo(() => createStore(itemPath), [itemPath]);
-
-  return (
-    <div>
-      layout editor
-      {JSON.stringify(layout, null, ' ')}
-    </div>
-  );
+  return <LayoutEditorGeneralComponent layout={layout} />;
 };

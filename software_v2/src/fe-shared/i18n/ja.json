@@ -1,0 +1,352 @@
+{
+  "welcomePage": {
+    "language_english": "English",
+    "language_japanese": "日本語",
+    "profileSetupWizardButton": "プロファイル作成ウィザード",
+    "projectQuickSetupWizardButton": "プロジェクトクイックセットアップ",
+    "darkThemeOption": "ダークテーマ",
+    "developerModeOption": "開発者モード",
+    "version": "バージョン"
+  },
+  "welcomePageHint": {
+    "language_english": "UIを英語表示に切り替えます。",
+    "language_japanese": "UIを日本語表示に切り替えます。",
+    "profileSetupWizardButton": "既存のキーボードのセットアップを行います。",
+    "projectQuickSetupWizardButton": "新しいキーボードに対してファームウェアを定義してプロファイルを作成します。",
+    "darkThemeOption": "テーマを切り替えます。",
+    "developerModeOption": "開発者モードを切り替えます。開発者モードではキーボード定義を編集できます。"
+  },
+  "wizardCommon": {
+    "buttonNext": "次へ",
+    "buttonBack": "戻る",
+    "buttonCancel": "中止",
+    "buttonComplete": "完了",
+    "step": "ステップ"
+  },
+  "profileWizardFrame": {
+    "headerStep1KeyboardSelection": "キーボード定義選択",
+    "headerStep2DeviceSetup": "デバイスセットアップ",
+    "headerStep3PresetSelection": "プリセット選択"
+  },
+  "projectWizardFrame": {
+    "headerStep1FirmwareConfiguration": "ファームウェア設定",
+    "headerStep2DeviceSetup": "デバイスセットアップ",
+    "headerStep3layoutSettings": "レイアウトテンプレート設定"
+  },
+  "firmwareVariationSelectionSection": {
+    "sectionHeader": "ファームウェア選択"
+  },
+  "deviceAutoConnectionSection": {
+    "sectionHeader": "デバイス状態",
+    "targetKeyboard": "対象キーボード",
+    "status_connected": "接続されています",
+    "status_noDeviceAvailable": "デバイスがありません"
+  },
+  "firmwareFlashSection": {
+    "sectionHeader": "ファームウェア書き込み",
+    "targetMcu": "対象MCU",
+    "howToReset": "リセット方法",
+    "resetDeviceToFlashFirmware": "ファームウェアを書き込むためには、デバイスをリセットしてください",
+    "deviceIncompatible": "認識されたデバイスが書込み対象のファームウェアと互換性がありません。",
+    "modalSuccessTitle": "ファームウェア書込み",
+    "modalSuccessMessage": "書き込みに成功しました。",
+    "modalOperationCommandLogTitle": "エラーログ"
+  },
+  "standardFirmwareConfiguration": {
+    "keyboardName": "キーボード名",
+    "headerFirmwareConfiguration": "ファームウェア設定",
+    "headerKeysPreview": "キー配置プレビュー",
+    "headerBoardAssignsView": "ボードピンアサイン",
+    "buttonReset": "リセット"
+  },
+  "layoutGeneratorConfiguration": {
+    "headerLayoutConfiguration": "レイアウト設定",
+    "keyPlacementAnchor": "キー配置アンカー",
+    "invertColumnPlacement": "列を反転"
+  },
+  "titleBarHint": {
+    "switchToWidgetView": "ウィジェット表示に切り替えます。",
+    "minimizeWindow": "ウインドウを最小化します。",
+    "maximizeWindow": "ウインドウを最大化します。",
+    "closeApplication": "アプリケーションを終了します。"
+  },
+  "globalMenu": {
+    "showTestInputArea": "テスト入力欄を表示",
+    "theme_light": "ライトテーマ",
+    "theme_dark": "ダークテーマ",
+    "language_english": "English",
+    "language_japanese": "日本語"
+  },
+  "globalMenuHint": {
+    "globalMenuButton": "グローバルメニューを表示します。",
+    "showTestInputArea": "テスト入力欄を表示します。",
+    "theme_light": "ライトテーマに切り替えます。",
+    "theme_dark": "ダークテーマに切り替えます。",
+    "language_english": "UIを英語表示に切り替えます。",
+    "language_japanese": "UIを日本語表示に切り替えます。"
+  },
+  "assignerMenu": {
+    "newProfile": "新規作成",
+    "saveProfile": "名前をつけて保存",
+    "renameProfile": "名前を変更",
+    "copyProfile": "別名で保存",
+    "deleteProfile": "削除",
+    "importFromFile": "外部ファイルから読み込み",
+    "exportToFile": "外部ファイルに保存",
+    "saveAsPreset": "プリセットとして保存",
+    "openUserProfilesFolder": "データの保存場所を開く"
+  },
+  "assignerMenuHint": {
+    "newProfile": "新規プロファイルを作成します。",
+    "saveProfile": "プロファイルに名前をつけて保存します。",
+    "renameProfile": "プロファイルの名前を変更します。",
+    "copyProfile": "プロファイルを別名で保存します。",
+    "deleteProfile": "プロファイルを削除します。",
+    "importFromFile": "ディスク上の任意にあるファイルからプロファイルを読み込みます。",
+    "exportToFile": "プロファイルをディスク上の任意の場所にファイルとして保存します。",
+    "saveAsPreset": "プロファイルをプロジェクトのプリセットとして保存します。",
+    "openUserProfilesFolder": "プロファイルの保存場所をOSのファイルマネージャで開きます。"
+  },
+  "assignerTopBar": {
+    "saveAssignsButton": "保存",
+    "writeAssignsButton": "書き込み"
+  },
+  "assignerTopBarHint": {
+    "profileOperationsMenu": "プロファイル管理メニューを開きます。",
+    "saveAssignsButton": "編集中のプロファイルを保存します",
+    "writeAssignsButton": "プロファイルを保存して、デバイスにキーマッピングを書き込みます。",
+    "selectCurrentProfile": "プロファイルを選択します。",
+    "profileConfigurationButton": "プロファイル設定ダイアログを開きます。",
+    "connectedKeyboardName": "接続しているキーボードの品種名を表示しています。",
+    "deviceConnectionStatus": "キーボードの接続状態を表示しています。"
+  },
+  "assignerTestInputArea": {
+    "clearButton": "クリア"
+  },
+  "assignerTestInputAreaHint": {
+    "inputField": "キーボードの動作確認用の入力欄です。",
+    "clearButton": "入力欄をクリアします。"
+  },
+  "assignerKeyboardViewHint": {
+    "layerStates": "デバイスの現在のレイヤ状態を表示しています。",
+    "keyUnit": "アサイン設定対象のキーを選択します"
+  },
+  "assignerAssignsPaletteHint": {
+    "pri": "プライマリアサインスロットを選択します。キーを押下またはタップしたときに適用されます。",
+    "sec": "セカンダリアサインスロットを選択します。キーを押下またはタップしたときに適用されます。",
+    "ter": "ターシャリアサインスロットを割り当てます。キーを素早く2回タップしたときに適用されます。",
+    "none": "アサインを解除します。",
+    "transparent": "透過アサインを割り当てます。アサイン探索処理が次のレイヤに引き継がれます。",
+    "block": "ブロックアサインを割り当てます。アサイン探索処理がこのレイヤで終了します。",
+    "keyInput": "キー入力を割り当てます。",
+    "modifiers": "キー入力に対して適用されるモディファイヤキーを割り当てます。",
+    "layers": "レイヤ呼び出しを割り当てます。",
+    "clearExclusiveGroup": "排他レイヤグループに対して、グループに所属する全レイヤを解除します。",
+    "layerInvocationModeSelector": "レイヤ呼び出しモードを選択します。"
+  },
+  "assignerLayers": {
+    "layerListHeader": "レイヤ"
+  },
+  "assignerLayersHint": {
+    "layerListHeader": "プロファイルが持っているレイヤのリストです。",
+    "layerListItems": "編集対象のレイヤを選択します。"
+  },
+  "assignerLayerOpsHint": {
+    "addNewLayer": "新規レイヤを追加します。",
+    "editLayerProperties": "レイヤの設定を編集します。",
+    "deleteLayer": "レイヤを削除します。",
+    "bringBackward": "レイヤを後ろに移動します。",
+    "bringForward": "レイヤを前に移動します。"
+  },
+  "assignerProfilePropertiesPart": {
+    "sectionHeader": "プロファイル属性",
+    "keyboard": "キーボード",
+    "assignModel": "ロジックモデル"
+  },
+  "assignerProfilePropertiesPartHint": {
+    "sectionHeader": "プロファイルの設定を表示しています。",
+    "keyboard": "プロファイルが参照しているキーボード定義の名前を表示しています。",
+    "assignModel": "プロファイルのアサインモデルを表示しています。"
+  },
+  "assignerDisplaySettingsPart": {
+    "sectionHeader": "表示設定",
+    "layerDisplayMode": "レイヤ表示モード",
+    "showFallbackAssigns": "デフォルトアサインを表示"
+  },
+  "assignerDisplaySettingsPartHint": {
+    "sectionHeader": "画面の表示に関連する設定を行います。",
+    "layerDisplayMode": "レイヤ表示モードを設定します。LIVEモードでは、デバイスのレイヤ状態に同期して表示されるレイヤが切り替わります。",
+    "showFallbackAssigns": "レイヤのデフォルトアサインを表示します。"
+  },
+  "assignerDeviceSettingsPart": {
+    "sectionHeader": "デバイス設定",
+    "simulatorMode": "シミュレータモード",
+    "muteMode": "ミュートモード",
+    "systemLayout": "システムレイアウト",
+    "routingChannel": "ルーティングチャネル"
+  },
+  "assignerDeviceSettingsPartHint": {
+    "sectionHeader": "デバイスで保持されているキー入力関連の設定です。",
+    "simulatorMode": "キーボードをシミュレータモードで動作させます。キー入力ロジックがアプリ内のシミュレータ実装によって処理されます。",
+    "muteMode": "キーボードの出力をミュートします。",
+    "systemLayout": "OSが認識するキーボードレイアウトを設定します",
+    "routingChannel": "アサインルーティングチャネルを選択します。"
+  },
+  "assignerProfileConfigModal": {
+    "modalTitle": "プロファイル設定",
+    "assignModel": "ロジックモデル",
+    "dualMode_header": "Dualモード設定",
+    "dualMode_primaryDefaultTrigger": "プライマリデフォルトトリガ",
+    "dualMode_secondaryDefaultTrigger": "セカンダリデフォルトトリガ",
+    "dualMode_tapHoldThreshold": "タップ判定時間",
+    "dualMode_useInterruptHold": "割り込みホールド機能を使用",
+    "shiftCancel": "Shiftキャンセル"
+  },
+  "assignerProfileConfigModalHint": {
+    "assignModel": "ロジックモデルを選択します。(single: キーに対して単一の機能を割り当てるモデル, dual: キー毎にタップ/ホールドによって切り替わる複数の機能を割り当てるモデル)",
+    "dualMode_header": "ロジックモデル:dual に固有の設定です",
+    "dualMode_primaryDefaultTrigger": "セカンダリアサインがない場合のプライマリアサインの実行トリガを指定します。(down: 押下時に適用, tap: タップで適用)",
+    "dualMode_tapHoldThreshold": "キーを押し続けたときにホールドしたとみなされる時間を指定します。",
+    "dualMode_useInterruptHold": "ホールド時間に満たないときに割り込んで他のキーが押された場合に、1つ目のキーをホールド状態に移行します。",
+    "shiftCancel": "shiftを押しながら本来shiftなしで入力される記号を入力したい場合に、shiftを一時的にキャンセル状態にします。"
+  },
+  "assignerLayerModal": {
+    "modalTitleAdd": "レイヤを追加",
+    "modalTitleEdit": "レイヤプロパティ",
+    "layerName": "レイヤ名",
+    "defaultScheme": "デフォルトスキーム",
+    "attachedModifiers": "添付モディファイヤ",
+    "exclusionGroup": "レイヤ排他グループ",
+    "initialActive": "初期状態でレイヤを有効化"
+  },
+  "assignerLayerModalHint": {
+    "layerName": "レイヤの名前を設定します。",
+    "defaultScheme": "キーのデフォルトの挙動を設定します(transparent: スキップして次のレイヤに進む, block: 探索終了)",
+    "attachedModifiers": "レイヤを有効化したときに同時に有効になるモディファイヤキーを設定します。",
+    "exclusionGroup": "レイヤ排他グループを設定します。同じグループに所属するレイヤのうち、1つのみが有効になります。",
+    "initialActive": "キーボードの起動時に、レイヤが始めから有効化された状態にします。"
+  },
+  "assignerNewProfileModal": {
+    "modalTitle": "プロファイルを作成",
+    "profileName": "プロファイル名",
+    "targetKeyboard": "キーボード",
+    "layout": "レイアウト"
+  },
+  "assignerConfirmModal": {
+    "deleteProfile_modalTitle": "プロファイルを削除",
+    "deleteProfile_modalMessage": "プロファイル {PROFILE_NAME} が削除されます。よろしいですか?",
+    "loadProfile_modalTitle": "プロファイルを読み込み",
+    "loadProfile_modalMessage": "保存されていない変更は破棄されます。よろしいですか。"
+  },
+  "assignerProfileNameEditModal": {
+    "modalTitleRename": "プロファイルの名前を変更",
+    "modalTitleCopy": "プロファイルを別名で保存",
+    "modalTitleSave": "プロファイルを保存",
+    "newProfileName": "プロファイル名"
+  },
+  "presetBrowser": {
+    "pageTitle": "プリセットブラウザ",
+    "selectionTitle_keyboard": "キーボード",
+    "selectionTitle_preset": "プリセット",
+    "createProfileButton": "プロファイルを作成",
+    "layers": "レイヤ"
+  },
+  "presetBrowserHint": {
+    "selection_keyboard": "キーボードの品種を選択します。",
+    "selection_preset": "プリセットを選択します。",
+    "createProfileButton": "選択されたプリセットから新しいプロファイルを作成します。",
+    "projectLinkButton": "接続されているデバイスに紐付くキーボード品種を選択します。",
+    "layers": "選択されたプリセットのレイヤリストを表示しています。"
+  },
+  "deviceSelection": {
+    "sectionTitle": "デバイス選択"
+  },
+  "deviceSelectionHint": {
+    "selectionArea": "対応しているデバイスが列挙されます。接続するデバイスを選択します。"
+  },
+  "deviceInformation": {
+    "sectionTitle": "デバイス情報",
+    "fieldName_port": "ポート",
+    "fieldName_resourceOrigin": "リソースオリジン",
+    "fieldName_firmwareId": "ファームウェアID",
+    "value_resourceOrigin_local": "ローカル",
+    "value_resourceOrigin_online": "オンライン",
+    "fieldName_projectPath": "プロジェクトパス",
+    "fieldName_keyboardName": "キーボード名",
+    "fieldName_instanceNumber": "個体番号",
+    "fieldName_firmwareVariation": "ファームウェアバリエーション",
+    "fieldName_mcuName": "MCU品種名",
+    "fieldName_firmwareRevision": "ファームウェアリビジョン",
+    "fieldName_firmwareLatestRevision": "ファームウェア最新リビジョン",
+    "fieldName_firmwareLatestTimestamp": "ファームウェア最新ビルド日時",
+    "fieldName_keymappingAreaSize": "キーマッピング領域サイズ"
+  },
+  "deviceCustomParameters": {
+    "sectionTitle": "カスタムパラメータ",
+    "parametersUnavailable": "パラメータの定義が利用できません。"
+  },
+  "deviceCustomParametersHint": {
+    "sectionArea": "ファームウェア固有のパラメータを設定します。"
+  },
+  "deviceFirmwareUpdate": {
+    "sectionTitle": "ファームウェア書き込み",
+    "operationAlertText": "誤ったファームウェアを書き込むとデバイスが破損する可能性があります。ご注意ください。",
+    "projectSelector": "デバイスに書き込むファームウェアを選択します。",
+    "usageText": "デバイスのリセットボタンを2回タップして、ファームウェア書き込みモードにしてください。",
+    "deviceDetected": "{DEVICE_NAME}に対応デバイスを認識しました。",
+    "writeButton": "書き込む",
+    "writing": "書き込んでいます...",
+    "success": "成功しました!",
+    "failure": "書き込みに失敗しました。",
+    "logButton": "ログ",
+    "doneButton": "完了"
+  },
+  "settings": {
+    "pageTitle": "設定",
+    "header_resources": "リソース",
+    "configUseOnlineProjectResources": "オンラインプロジェクトリソースを使用",
+    "configUseLocalProjectResources": "ローカルリポジトリ内のリソースを参照",
+    "configKermiteRootDirectory": "Kermiteのソースコードの場所",
+    "header_userInterface": "ユーザーインターフェイス",
+    "configUiScaling": "UIスケーリング"
+  },
+  "settingsHint": {
+    "configUseOnlineProjectResources": "オンラインリソースを使用します。KermiteResourceStoreリポジトリに配置してあるデータを参照します。",
+    "configUseLocalProjectResources": "ローカルマシンにあるリソースを使用します。Kermiteのソースコードの場所の指定が必要です。",
+    "configKermiteRootDirectory": "Kermiteのソースコードのルートフォルダを指定します (ファームウェア開発者向け)",
+    "configUiScaling": "画面のスケーリング値を設定します。文字の大きさが変わります。"
+  },
+  "statusBarHint": {
+    "toggleHintMessageVisibility": "ヒントの表示/非表示を切り替えます。"
+  },
+  "projectAttachmentFileSelectionModal": {
+    "savePreset_modalTitle": "プロジェクトのプリセットとして保存",
+    "saveLayout_modalTitle": "プロジェクトのレイアウトとして保存",
+    "loadLayout_modalTitle": "プロジェクトのレイアウトを読み込み",
+    "project": "プロジェクト",
+    "preset": "プリセット",
+    "layout": "レイアウト"
+  },
+  "sideMenuApps": {
+    "assigner": "メイン",
+    "layoutEditor": "レイアウト",
+    "presetBrowser": "プリセット",
+    "shapePreview": "プレビュー",
+    "firmwareUpdate": "デバイス",
+    "settings": "設定",
+    "projectSelection": "キーボード",
+    "projectResourceEdit": "リソース",
+    "entrance": "スタート"
+  },
+  "sideMenuAppsHint": {
+    "assigner": "キーアサインを編集します。",
+    "layoutEditor": "キーの配置を編集します。",
+    "presetBrowser": "プリセットを閲覧します。",
+    "shapePreview": "キーボードの形状を表示します。",
+    "firmwareUpdate": "デバイスの管理を行います。",
+    "settings": "アプリの設定を行います。",
+    "projectSelection": "キーボード定義を選択します。",
+    "projectResourceEdit": "プロジェクトリソースを編集します。",
+    "entrance": "スタート画面です。"
+  }
+}

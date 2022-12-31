@@ -1,0 +1,121 @@
+import { createDefaultKeyboardLayoutSetup } from '~/app-shared';
+import {
+  IEditKeyEntity,
+  IEditKeyboardDesign,
+  IEditOutlineShape,
+} from './dataSchema';
+import { IGridSpecKey } from './gridDefinitions';
+
+export type IEditMode =
+  | 'select'
+  | 'move'
+  | 'key'
+  | 'shape'
+  | 'delete'
+  | 'shape_ex';
+export interface IEditState {
+  loadedDesign: IEditKeyboardDesign;
+  design: IEditKeyboardDesign;
+  currentKeyEntityId: string | undefined;
+  isCurrentKeyMirror: boolean;
+  currentShapeId: string | undefined;
+  currentPointIndex: number;
+  editMode: IEditMode;
+  drawingShape: IEditOutlineShape | undefined;
+  currentTransGroupId: string | undefined;
+}
+
+export interface ISight {
+  pos: {
+    x: number;
+    y: number;
+  };
+  scale: number;
+  screenW: number;
+  screenH: number;
+}
+export interface IEnvState {
+  ghost: IEditKeyEntity | undefined;
+  sight: ISight;
+  showAxis: boolean;
+  showGrid: boolean;
+  snapToGrid: boolean;
+  gridSpecKey: IGridSpecKey;
+  showKeyId: boolean;
+  showKeyIndex: boolean;
+  pressedKeyIndices: number[];
+  worldMousePos: {
+    x: number;
+    y: number;
+  };
+  enableKeyIndexReflection: boolean;
+}
+
+export type IEnvBoolPropKey =
+  | 'showAxis'
+  | 'showGrid'
+  | 'snapToGrid'
+  | 'showKeyId'
+  | 'showKeyIndex'
+  | 'enableKeyIndexReflection';
+
+interface IAppState {
+  editor: IEditState;
+  env: IEnvState;
+}
+
+export function createFallbackEditKeyboardDesign(): IEditKeyboardDesign {
+  return {
+    setup: createDefaultKeyboardLayoutSetup(),
+    keyEntities: {},
+    outlineShapes: {},
+    extraShape: { path: '', x: 0, y: 0, scale: 1, invertY: false, groupId: '' },
+    transGroups: {
+      '0': {
+        id: '0',
+        x: 0,
+        y: 0,
+        angle: 0,
+        mirror: false,
+      },
+    },
+  };
+}
+
+export const appState: IAppState = {
+  editor: {
+    loadedDesign: createFallbackEditKeyboardDesign(),
+    design: createFallbackEditKeyboardDesign(),
+    currentKeyEntityId: undefined,
+    isCurrentKeyMirror: false,
+    currentShapeId: undefined,
+    currentPointIndex: -1,
+    editMode: 'select',
+    drawingShape: undefined,
+    currentTransGroupId: undefined,
+  },
+  env: {
+    ghost: undefined,
+    sight: {
+      pos: {
+        x: 0,
+        y: 0,
+      },
+      scale: 0.3,
+      screenW: 600,
+      screenH: 400,
+    },
+    showAxis: true,
+    showGrid: true,
+    snapToGrid: true,
+    gridSpecKey: 'kp_div4',
+    showKeyId: true,
+    showKeyIndex: true,
+    pressedKeyIndices: [],
+    worldMousePos: {
+      x: 0,
+      y: 0,
+    },
+    enableKeyIndexReflection: false,
+  },
+};

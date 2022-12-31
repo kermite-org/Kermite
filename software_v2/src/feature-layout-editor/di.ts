@@ -1,7 +1,7 @@
 import { IPersistKeyboardLayout } from '~/app-shared';
 
 type IDiLayoutEditor = {
-  loadLayout(itemPath: string): IPersistKeyboardLayout | undefined;
+  loadLayout(itemPath: string): IPersistKeyboardLayout;
   saveLayout(itemPath: string, layout: IPersistKeyboardLayout): void;
 };
 

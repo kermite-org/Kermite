@@ -1,0 +1,352 @@
+{
+  "welcomePage": {
+    "language_english": "English",
+    "language_japanese": "Japanese",
+    "profileSetupWizardButton": "Profile Setup Wizard",
+    "projectQuickSetupWizardButton": "Project Quick Setup Wizard",
+    "darkThemeOption": "dark theme",
+    "developerModeOption": "developer mode",
+    "version": "version"
+  },
+  "welcomePageHint": {
+    "language_english": "Change UI language to English.",
+    "language_japanese": "Change UI language to Japanese.",
+    "profileSetupWizardButton": "Setup a keyboard with existing project resources.",
+    "projectQuickSetupWizardButton": "Define firmware and create a profile for a new keyboard.",
+    "darkThemeOption": "Switch theme.",
+    "developerModeOption": "Toggles developer mode. keyboard projects can be edit in developer mode."
+  },
+  "wizardCommon": {
+    "buttonNext": "next",
+    "buttonBack": "back",
+    "buttonCancel": "cancel",
+    "buttonComplete": "complete",
+    "step": "step"
+  },
+  "profileWizardFrame": {
+    "headerStep1KeyboardSelection": "Keyboard Product Selection",
+    "headerStep2DeviceSetup": "Device Setup",
+    "headerStep3PresetSelection": "Preset Selection"
+  },
+  "projectWizardFrame": {
+    "headerStep1FirmwareConfiguration": "Firmware Configuration",
+    "headerStep2DeviceSetup": "Device Setup",
+    "headerStep3layoutSettings": "Layout Template Settings"
+  },
+  "firmwareVariationSelectionSection": {
+    "sectionHeader": "Firmware Variation"
+  },
+  "deviceAutoConnectionSection": {
+    "sectionHeader": "Device Connection Status",
+    "targetKeyboard": "target keyboard",
+    "status_connected": "Connected",
+    "status_noDeviceAvailable": "No Device Available"
+  },
+  "firmwareFlashSection": {
+    "sectionHeader": "Flash Firmware",
+    "targetMcu": "target mcu",
+    "howToReset": "how to reset",
+    "resetDeviceToFlashFirmware": "reset device to flash firmware",
+    "deviceIncompatible": "Detected device is not compatible to the target firmware.",
+    "modalSuccessTitle": "Firmware Flash",
+    "modalSuccessMessage": "Write succeeded.",
+    "modalOperationCommandLogTitle": "Operation Command Log"
+  },
+  "standardFirmwareConfiguration": {
+    "keyboardName": "Keyboard Name",
+    "headerFirmwareConfiguration": "Firmware Configuration",
+    "headerKeysPreview": "Keys Preview",
+    "headerBoardAssignsView": "Board Assigns View",
+    "buttonReset": "reset"
+  },
+  "layoutGeneratorConfiguration": {
+    "headerLayoutConfiguration": "Layout Configuration",
+    "keyPlacementAnchor": "key placement anchor",
+    "invertColumnPlacement": "invert column placement"
+  },
+  "titleBarHint": {
+    "switchToWidgetView": "Switch to widget view",
+    "minimizeWindow": "Minimize window",
+    "maximizeWindow": "Maximize window",
+    "closeApplication": "Close application"
+  },
+  "globalMenu": {
+    "showTestInputArea": "Show test input area",
+    "theme_light": "Light Theme",
+    "theme_dark": "Dark Theme",
+    "language_english": "English",
+    "language_japanese": "Japanese"
+  },
+  "globalMenuHint": {
+    "globalMenuButton": "Show global menu",
+    "showTestInputArea": "Show text filed for key input test",
+    "theme_light": "Switch to light theme",
+    "theme_dark": "Switch to dark theme",
+    "language_english": "Show UI in English",
+    "language_japanese": "Show UI in Japanese"
+  },
+  "assignerMenu": {
+    "newProfile": "new",
+    "saveProfile": "save",
+    "renameProfile": "rename",
+    "copyProfile": "copy",
+    "deleteProfile": "delete",
+    "importFromFile": "import from file",
+    "exportToFile": "export to file",
+    "saveAsPreset": "save as preset",
+    "openUserProfilesFolder": "open user profiles folder"
+  },
+  "assignerMenuHint": {
+    "newProfile": "Create new profile",
+    "saveProfile": "Save profile",
+    "renameProfile": "Rename profile",
+    "copyProfile": "Duplicate profile",
+    "deleteProfile": "Delete profile",
+    "importFromFile": "Load profile from a file located anywhere on the disk.",
+    "exportToFile": "Save profile as a file to any location on the disk.",
+    "saveAsPreset": "Save profile as preset",
+    "openUserProfilesFolder": "Open user profiles folder in default file manager of OS."
+  },
+
+  "assignerTopBar": {
+    "saveAssignsButton": "save",
+    "writeAssignsButton": "write"
+  },
+  "assignerTopBarHint": {
+    "profileOperationsMenu": "Open profile operations menu",
+    "saveAssignsButton": "Save edit profile",
+    "writeAssignsButton": "Save edit profile and write keymapping to the device",
+    "selectCurrentProfile": "Select current profile",
+    "profileConfigurationButton": "Open profile configuration modal",
+    "connectedKeyboardName": "Connected keyboard name",
+    "deviceConnectionStatus": "Device connection status"
+  },
+  "assignerTestInputArea": {
+    "clearButton": "clear"
+  },
+  "assignerTestInputAreaHint": {
+    "inputField": "Test input area for typing.",
+    "clearButton": "Clear input text."
+  },
+  "assignerKeyboardViewHint": {
+    "layerStates": "Layer states: Affects current layer states of the device.",
+    "keyUnit": "Select edit target key"
+  },
+  "assignerAssignsPaletteHint": {
+    "pri": "Select primary assign slot. Primary assigns are fired when key down or tap.",
+    "sec": "Select secondary assign slot. Secondary assigns are fired when key hold.",
+    "ter": "Select tertiary assign slot. Tertiary assigns are fired when double tap detected.",
+    "none": "Clear assign",
+    "transparent": "Set transparent assign. lookup flow skips the layer.",
+    "block": "Set block assign. lookup flow is stopped.",
+    "keyInput": "Set key input assigns.",
+    "modifiers": "Set modifiers attached to key input",
+    "layers": "Set layer assigns",
+    "clearExclusiveGroup": "Clear all layers belongs to the same exclusion group",
+    "layerInvocationModeSelector": "Select layer invocation mode"
+  },
+  "assignerLayers": {
+    "layerListHeader": "Layers"
+  },
+  "assignerLayersHint": {
+    "layerListHeader": "Layer List",
+    "layerListItems": "Select edit target layer"
+  },
+  "assignerLayerOpsHint": {
+    "addNewLayer": "Add new layer",
+    "editLayerProperties": "Edit layer properties",
+    "deleteLayer": "Delete layer",
+    "bringBackward": "Bring layer backward",
+    "bringForward": "Bring layer forward"
+  },
+  "assignerProfilePropertiesPart": {
+    "sectionHeader": "Profile Properties",
+    "keyboard": "keyboard",
+    "assignModel": "Logic Model"
+  },
+  "assignerProfilePropertiesPartHint": {
+    "sectionHeader": "Shows profile configuration",
+    "keyboard": "Keyboard package name referenced by the profile",
+    "assignModel": "Logic model for current profile"
+  },
+  "assignerDisplaySettingsPart": {
+    "sectionHeader": "Display Settings",
+    "layerDisplayMode": "Layer Display Mode",
+    "showFallbackAssigns": "Show Fallback Assigns"
+  },
+  "assignerDisplaySettingsPartHint": {
+    "sectionHeader": "Configure how the view rendered",
+    "layerDisplayMode": "Set layer display mode. In LIVE mode, active layers of the device are affected to the view in the app.",
+    "showFallbackAssigns": "Show fallback assigns of the layer."
+  },
+  "assignerDeviceSettingsPart": {
+    "sectionHeader": "Device Settings",
+    "simulatorMode": "Simulator Mode",
+    "muteMode": "Mute Mode",
+    "systemLayout": "System Layout",
+    "routingChannel": "Routing Channel"
+  },
+  "assignerDeviceSettingsPartHint": {
+    "simulatorMode": "Runs the keyboard in simulation mode. Key input logic is processed by the simulator implementation on the app.",
+    "muteMode": "Mute keyboard output.",
+    "systemLayout": "Select keyboard layout recognized by OS.",
+    "routingChannel": "Select assign routing channel."
+  },
+  "assignerProfileConfigModal": {
+    "modalTitle": "profile configuration",
+    "assignModel": "logic model",
+    "dualMode_header": "dual mode settings",
+    "dualMode_primaryDefaultTrigger": "primary default trigger",
+    "dualMode_secondaryDefaultTrigger": "secondary default trigger",
+    "dualMode_tapHoldThreshold": "tap hold threshold",
+    "dualMode_useInterruptHold": "use interrupt hold",
+    "shiftCancel": "shift cancel mode"
+  },
+  "assignerProfileConfigModalHint": {
+    "assignModel": "Select logic model. (single: single assign for each key, dual: multiple assigns for each key)",
+    "dualMode_header": "Settings specific for logic model Dual.",
+    "dualMode_primaryDefaultTrigger": "Set trigger action of primary assign when there is no assign for secondary slot. ",
+    "dualMode_tapHoldThreshold": "Adjust the time threshold for top/hold detection.",
+    "dualMode_useInterruptHold": "Regard first key as hold when subsequent keys pressed within the time.",
+    "shiftCancel": "Temporary disable shifts for non-shifted symbol inputs."
+  },
+  "assignerLayerModal": {
+    "modalTitleAdd": "Add Layer",
+    "modalTitleEdit": "Edit Layer Properties",
+    "layerName": "Layer Name",
+    "defaultScheme": "Default Scheme",
+    "attachedModifiers": "Attached Modifiers",
+    "exclusionGroup": "Exclusion Group",
+    "initialActive": "Initial Active"
+  },
+  "assignerLayerModalHint": {
+    "layerName": "Set layer name.",
+    "defaultScheme": "Set default behavior for keys. (transparent: skip this layer, block: stop lookup flow)",
+    "attachedModifiers": "Set attached modifiers activated together with the layer.",
+    "exclusionGroup": "Set layer exclusive group. Only at least one layer would activated at a time for layers within same group.",
+    "initialActive": "Activate layer on startup."
+  },
+  "assignerProfileNameEditModal": {
+    "modalTitleRename": "Rename Profile",
+    "modalTitleCopy": "Save Profile As",
+    "modalTitleSave": "Save Profile",
+    "newProfileName": "New Profile Name"
+  },
+  "assignerNewProfileModal": {
+    "modalTitle": "Create Profile",
+    "profileName": "Profile Name",
+    "targetKeyboard": "Target Keyboard",
+    "layout": "Layout"
+  },
+  "assignerConfirmModal": {
+    "deleteProfile_modalTitle": "Delete Profile",
+    "deleteProfile_modalMessage": "Profile {PROFILE_NAME} will be deleted. Are you sure?",
+    "loadProfile_modalTitle": "Load Profile",
+    "loadProfile_modalMessage": "Unsaved changes will be lost. Are you ok?"
+  },
+  "presetBrowser": {
+    "pageTitle": "Preset Browser",
+    "selectionTitle_keyboard": "Keyboard",
+    "selectionTitle_preset": "Preset",
+    "createProfileButton": "Create Profile",
+    "layers": "Layers"
+  },
+  "presetBrowserHint": {
+    "selection_keyboard": "Select keyboard model.",
+    "selection_preset": "Select preset profile.",
+    "createProfileButton": "Create a new profile based on the selected preset.",
+    "projectLinkButton": "Select keyboard model corresponds to the connected device.",
+    "layers": "Showing layers for selected preset."
+  },
+  "deviceSelection": {
+    "sectionTitle": "Device Selection"
+  },
+  "deviceSelectionHint": {
+    "selectionArea": "Supported devices are enumerated. Select device to connect."
+  },
+  "deviceInformation": {
+    "sectionTitle": "Device Information",
+    "fieldName_port": "Port",
+    "fieldName_resourceOrigin": "Resource Origin",
+    "fieldName_firmwareId": "Firmware ID",
+    "value_resourceOrigin_local": "Local",
+    "value_resourceOrigin_online": "Online",
+    "fieldName_projectPath": "Project Path",
+    "fieldName_keyboardName": "Keyboard Name",
+    "fieldName_instanceNumber": "Instance Number",
+    "fieldName_firmwareVariation": "Firmware Variation Name",
+    "fieldName_mcuName": "MCU Name",
+    "fieldName_firmwareRevision": "Firmware Revision",
+    "fieldName_firmwareLatestRevision": "Firmware Latest Revision",
+    "fieldName_firmwareLatestTimestamp": "Firmware Latest Build Timestamp",
+    "fieldName_keymappingAreaSize": "Keymapping Area Size"
+  },
+  "deviceCustomParameters": {
+    "sectionTitle": "Custom Parameters",
+    "parametersUnavailable": "Parameter definitions are unavailable."
+  },
+  "deviceCustomParametersHint": {
+    "sectionArea": "Configure firmware specific parameters. "
+  },
+  "deviceFirmwareUpdate": {
+    "sectionTitle": "Firmware Update",
+    "operationAlertText": "Note: Wrong firmware selection may damage the hardware. Be careful.",
+    "projectSelector": "Select target keyboard project.",
+    "usageText": "Double tap the reset button on the device.",
+    "deviceDetected": "{DEVICE_NAME} detected.",
+    "writeButton": "write",
+    "writing": "Writing...",
+    "success": "Success!",
+    "failure": "Failure",
+    "logButton": "log",
+    "doneButton": "done"
+  },
+  "settings": {
+    "pageTitle": "Configurations",
+    "header_resources": "Resources",
+    "configUseOnlineProjectResources": "Use Online Project Resources",
+    "configUseLocalProjectResources": "Use Local Repository Resources",
+    "configKermiteRootDirectory": "Kermite Root Directory",
+    "header_userInterface": "User Interface",
+    "configUiScaling": "UI Scaling"
+  },
+  "settingsHint": {
+    "configUseOnlineProjectResources": "Use online resource. Access to KermiteResourceStore repository for the data.",
+    "configUseLocalProjectResources": "Use data resources on local machine.  Location of Kermite source code directory should be specified.",
+    "configKermiteRootDirectory": "Specify source code directory of Kermite. (for developers)",
+    "configUiScaling": "Set scaling value for UI."
+  },
+  "statusBarHint": {
+    "toggleHintMessageVisibility": "Toggle visibility for UI hints."
+  },
+  "projectAttachmentFileSelectionModal": {
+    "savePreset_modalTitle": "Save As Project Preset",
+    "saveLayout_modalTitle": "Save As Project Layout",
+    "loadLayout_modalTitle": "Load From Project Layout",
+    "project": "Project",
+    "preset": "Preset",
+    "layout": "Layout"
+  },
+  "sideMenuApps": {
+    "assigner": "Main",
+    "layoutEditor": "Layouter",
+    "presetBrowser": "Presets",
+    "shapePreview": "Preview",
+    "firmwareUpdate": "Device",
+    "settings": "Settings",
+    "projectSelection": "Keyboard",
+    "projectResourceEdit": "Resources",
+    "entrance": "Entrance"
+  },
+  "sideMenuAppsHint": {
+    "assigner": "Edit key assigns",
+    "layoutEditor": "Edit keyboard layout",
+    "presetBrowser": "View presets",
+    "shapePreview": "Preview keyboard shapes",
+    "firmwareUpdate": "Manage supported keyboard devices",
+    "settings": "Manage application settings",
+    "projectSelection": "Select keyboard definition",
+    "projectResourceEdit": "Edit project resources",
+    "entrance": "Entrance view"
+  }
+}

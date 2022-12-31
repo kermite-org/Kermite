@@ -53,16 +53,20 @@ export function createFallbackProfileData(): IProfileData {
   };
 }
 
-export function createFallbackPersistKeyboardLayout(): IPersistKeyboardLayout {
-  const defaultKeyboardLayoutSetup: IPersistKeyboardLayout['setup'] = {
+export function createDefaultKeyboardLayoutSetup(): IPersistKeyboardLayout['setup'] {
+  return {
     placementUnit: 'KP 19.05',
     placementAnchor: 'topLeft',
     keySizeUnit: 'KP 19.05',
     keyIdMode: 'auto',
   };
+}
+export const defaultKeyboardDesignSetup = createDefaultKeyboardLayoutSetup();
+
+export function createFallbackPersistKeyboardLayout(): IPersistKeyboardLayout {
   return {
     formatRevision: 'LA01',
-    setup: { ...defaultKeyboardLayoutSetup },
+    setup: createDefaultKeyboardLayoutSetup(),
     keyEntities: [],
     outlineShapes: [],
     transformationGroups: [],
