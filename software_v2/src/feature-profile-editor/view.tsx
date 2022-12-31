@@ -1,6 +1,6 @@
 import { FC, jsx, useMemo } from 'alumina';
-import { getDisplayKeyboardDesignSingleCached } from '~/app-shared';
 import { diProfileEditor } from './di';
+import { AssignerGeneralComponent } from './profileEditor';
 
 function createStore(itemPath: string) {
   const profile = diProfileEditor.loadProfile(itemPath);
@@ -9,25 +9,18 @@ function createStore(itemPath: string) {
   const layoutItemPath = `${projectId}/layout/${layoutName}`;
   const layout = diProfileEditor.loadLayout(layoutItemPath);
 
-  const displayDesign = getDisplayKeyboardDesignSingleCached(layout);
-
   return {
     profile,
-    displayDesign,
+    layout,
   };
 }
 
 export const ProfileEditorView: FC<{ itemPath: string }> = ({ itemPath }) => {
-  const { profile, displayDesign } = useMemo(
-    () => createStore(itemPath),
-    [itemPath],
-  );
-
+  const { profile, layout } = useMemo(() => createStore(itemPath), [itemPath]);
   return (
-    <div>
-      profile editor
-      {JSON.stringify(profile, null, ' ')}
-      {JSON.stringify(displayDesign, null, ' ')}
-    </div>
+    <AssignerGeneralComponent
+      originalProfile={profile}
+      keyboardLayout={layout}
+    />
   );
 };
