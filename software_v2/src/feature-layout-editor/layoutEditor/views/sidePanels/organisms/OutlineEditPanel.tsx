@@ -7,7 +7,7 @@ import {
   GeneralConfigTextEditRow,
   GeneralSelector,
   HFlex,
-} from '~/fe-shared-2';
+} from '~/fe-shared';
 import { useOutlineEditPanelModel } from '../models';
 
 export const OutlineEditPanel: FC = () => {

@@ -1,17 +1,15 @@
 import svgpath from 'svgpath';
 import {
+  ICoordUnit,
   IKeyPlacementAnchor,
+  calculateExtraShapeBoundingBoxPoints,
   degToRad,
+  getCoordUnitFromUnitSpec,
+  getKeySize,
   radToDeg,
   rotateCoord,
   translateCoord,
 } from '~/app-shared';
-import {
-  ICoordUnit,
-  calculateExtraShapeBoundingBoxPoints,
-  getCoordUnitFromUnitSpec,
-  getKeySize,
-} from '~/app-shared-2';
 import {
   IEditExtraShape,
   IEditKeyEntity,

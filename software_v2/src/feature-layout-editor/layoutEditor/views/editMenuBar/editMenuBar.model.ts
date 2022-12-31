@@ -1,5 +1,4 @@
-import { getObjectKeys } from '~/app-shared';
-import { ISelectorOption } from '~/fe-shared';
+import { ISelectorOption, getObjectKeys } from '~/app-shared';
 import {
   IEditMode,
   IEnvBoolPropKey,

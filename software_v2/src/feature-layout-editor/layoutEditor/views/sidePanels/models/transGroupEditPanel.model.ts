@@ -1,4 +1,4 @@
-import { ICommonCheckboxViewModel } from '~/fe-shared';
+import { ICommonCheckboxViewModel } from '~/app-shared';
 import { useClosureModel } from '../../../common';
 import { editMutations, editReader } from '../../../models';
 import {

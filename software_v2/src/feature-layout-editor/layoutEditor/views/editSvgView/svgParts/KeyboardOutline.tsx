@@ -1,12 +1,11 @@
-import { jsx, css } from 'alumina';
-import { degToRad } from '~/app-shared';
-import { colors, makeCssColor, uiTheme } from '~/fe-shared';
+import { css, jsx } from 'alumina';
+import { colors, degToRad, makeCssColor, uiTheme } from '~/app-shared';
 import { IPosition, startDragSession } from '../../../common';
 import {
-  editReader,
-  editMutations,
   IEditOutlinePoint,
   IEditOutlineShape,
+  editMutations,
+  editReader,
 } from '../../../models';
 import {
   applyInverseGroupTransform,

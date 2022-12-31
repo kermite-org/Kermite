@@ -1,5 +1,5 @@
 import { FC, jsx } from 'alumina';
-import { colors } from '~/fe-shared';
+import { colors } from '~/app-shared';
 import { applyCoordSnapping, editReader } from '../../../models';
 
 export const CoordCursor: FC = () => {

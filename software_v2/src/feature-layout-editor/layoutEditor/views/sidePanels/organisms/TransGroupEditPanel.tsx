@@ -7,7 +7,7 @@ import {
   ConfigVStack,
   GeneralConfigTextEditRow,
   HFlex,
-} from '~/fe-shared-2';
+} from '~/fe-shared';
 import { useTransGroupEditPanelModel } from '../models';
 import { TransGroupListPart } from './TransGroupListPart';
 

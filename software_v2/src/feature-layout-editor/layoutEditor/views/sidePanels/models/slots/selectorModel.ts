@@ -1,4 +1,4 @@
-import { ICommonSelectorViewModel } from '~/fe-shared';
+import { ICommonSelectorViewModel } from '~/app-shared';
 
 export function makeSelectorModel<T extends string>(props: {
   sources: [T, string][];

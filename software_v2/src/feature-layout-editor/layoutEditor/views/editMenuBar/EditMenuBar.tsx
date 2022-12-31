@@ -5,7 +5,7 @@ import {
   Icon,
   RibbonSelector,
   ToggleButton,
-} from '~/fe-shared-2';
+} from '~/fe-shared';
 import { makeEditMenuBarViewModel } from './editMenuBar.model';
 
 export const EditMenuBar: FC = () => {

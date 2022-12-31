@@ -10,10 +10,10 @@ import {
 } from 'alumina';
 import {
   IProjectPackage,
-  KermiteServerBase64Icon,
   createFallbackProjectPackage,
   reflectValue,
 } from '~/app-shared';
+import { KermiteServerBase64Icon } from '~/fe-shared';
 import { diOnlineProjectImporter } from '../di';
 import {
   ImportResourceSelector,

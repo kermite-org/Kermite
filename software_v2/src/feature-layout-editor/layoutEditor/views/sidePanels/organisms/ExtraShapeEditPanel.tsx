@@ -9,7 +9,7 @@ import {
   GeneralConfigTextEditRow,
   GeneralSelector,
   HFlex,
-} from '~/fe-shared-2';
+} from '~/fe-shared';
 import { useClosureModel } from '../../../common';
 import { editMutations, editReader } from '../../../models';
 import { createConfigTextEditModelDynamic, makeSelectorModel } from '../models';

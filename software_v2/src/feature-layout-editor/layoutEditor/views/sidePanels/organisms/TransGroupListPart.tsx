@@ -1,6 +1,6 @@
 import { FC, css, jsx } from 'alumina';
-import { colors } from '~/fe-shared';
-import { ConfigSubHeader, GeneralButton } from '~/fe-shared-2';
+import { colors } from '~/app-shared';
+import { ConfigSubHeader, GeneralButton } from '~/fe-shared';
 import { editMutations } from '../../../models';
 import { useTransGroupListPartModel } from '../models';
 

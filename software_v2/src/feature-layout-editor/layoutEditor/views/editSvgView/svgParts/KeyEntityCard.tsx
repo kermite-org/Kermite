@@ -1,7 +1,11 @@
 import { css, jsx } from 'alumina';
-import { degToRad } from '~/app-shared';
-import { getIsoEnterSvgPathSpecText, getKeySize } from '~/app-shared-2';
-import { colors, uiTheme } from '~/fe-shared';
+import {
+  colors,
+  degToRad,
+  getIsoEnterSvgPathSpecText,
+  getKeySize,
+  uiTheme,
+} from '~/app-shared';
 import { IPosition, startDragSession } from '../../../common';
 import {
   IEditKeyEntity,
