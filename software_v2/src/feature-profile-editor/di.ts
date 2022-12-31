@@ -1,7 +1,8 @@
-import { IPersistProfileData } from '~/app-shared';
+import { IPersistKeyboardLayout, IPersistProfileData } from '~/app-shared';
 
 type IDiProfileEditor = {
-  loadProfile(itemPath: string): IPersistProfileData | undefined;
+  loadProfile(itemPath: string): IPersistProfileData;
+  loadLayout(itemPath: string): IPersistKeyboardLayout;
   saveProfile(itemPath: string, profile: IPersistProfileData): void;
 };
 
