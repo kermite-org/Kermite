@@ -1,13 +1,14 @@
 import { asyncRerender, jsx, render } from 'alumina';
-import { appUi, copyObjectProps } from '~/app-shared';
+import { appUi, copyObjectProps, debounce } from '~/app-shared';
 import { diOnlineProjectImporter } from '~/feature-online-project-importer';
-import { PageRoot } from './PageRoot';
 import { appStore } from './appStore';
 import { deviceStore } from './deviceStore';
+import { PageRoot } from './PageRoot';
 import { setupRetainerAppPersistence } from './retainerAppPersistence';
 import { setupRetainerEditItemLoader } from './retainerEditItemLoader';
 
 function start() {
+  appUi.rerender = asyncRerender;
   const { actions } = appStore;
   copyObjectProps(diOnlineProjectImporter, {
     saveProject: actions.loadProject,
@@ -16,8 +17,8 @@ function start() {
   setupRetainerAppPersistence();
   setupRetainerEditItemLoader();
   deviceStore.actions.restoreConnection();
-  appUi.rerender = asyncRerender;
   render(() => <PageRoot />, document.getElementById('app'));
+  window.addEventListener('resize', debounce(appUi.rerender, 100));
 }
 
 window.addEventListener('load', start);
