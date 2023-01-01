@@ -6,9 +6,7 @@ function createProfileEditorConfig() {
     deviceStatus: {
       isConnected: false,
     },
-    stopLiveMode() {},
     isEditProfileAvailable: true,
-    commitUiState(_args: any) {},
     allProjectPackageInfos: [] as {
       keyboardName: string;
       projectId: string;
@@ -17,9 +15,6 @@ function createProfileEditorConfig() {
       keyboardName: string;
       projectId: string;
     }[],
-    uiState: {
-      showTestInputArea: false,
-    },
     CanWriteKeyMappingToDevice: false,
     useSystemLayoutModel: () => ({
       systemLayoutIndex: 0,

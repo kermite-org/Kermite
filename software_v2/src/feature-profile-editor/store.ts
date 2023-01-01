@@ -38,6 +38,7 @@ function createProfileEditorStore() {
     showLayersDynamic: false,
     showLayerDefaultAssign: false,
     showProfileAdvancedOptions: false,
+    showTestInputArea: false,
   };
 
   const readers = {
@@ -67,6 +68,9 @@ function createProfileEditorStore() {
     },
     get showProfileAdvancedOptions() {
       return state.showProfileAdvancedOptions;
+    },
+    get showTestInputArea() {
+      return state.showTestInputArea;
     },
   };
 
@@ -107,11 +111,15 @@ function createProfileEditorStore() {
       showLayersDynamic?: boolean;
       showLayerDefaultAssign?: boolean;
       showProfileAdvancedOptions?: boolean;
+      showTestInputArea?: boolean;
     }): void {
       copyObjectPropsPartial(state, settings);
     },
     stopLiveMode() {
       state.showLayersDynamic = false;
+    },
+    toggleShowTestInputArea() {
+      state.showTestInputArea = !state.showTestInputArea;
     },
   };
 

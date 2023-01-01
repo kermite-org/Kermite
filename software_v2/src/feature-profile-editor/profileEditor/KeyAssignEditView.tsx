@@ -1,8 +1,6 @@
 import { FC, css, jsx } from 'alumina';
 import { colors } from '~/app-shared';
 import { profileEditorStore } from '../store';
-import { profileEditorConfig } from './adapters';
-import { assignerModel } from './models';
 import { TestInputArea } from './ui_bar_testInputArea/TestInputArea';
 import { AssignEditSection } from './ui_editor_assignsSection';
 import { KeyboardSection } from './ui_editor_keyboardSection/KeyboardSection';
@@ -16,21 +14,15 @@ import {
 import { ActionRoutingPanel } from './ui_modal_routingPanel/ActionRoutingPanel';
 
 export const KeyAssignEditView: FC = () => {
-  const { isUserProfileEditorView } = assignerModel;
-  const { routingPanelVisible } = profileEditorStore.readers;
+  const { routingPanelVisible, showTestInputArea } = profileEditorStore.readers;
   return (
     <div class={cssKeyAssignEditView}>
-      <div
-        class={cssEditTopBarBox}
-        if={
-          isUserProfileEditorView &&
-          profileEditorConfig.uiState.showTestInputArea
-        }
-      >
-        <TestInputArea />
-      </div>
       <div class={cssEditMainRow}>
         <div class={cssEditMainColumn}>
+          <div class={cssEditTopBarBox} if={showTestInputArea}>
+            <TestInputArea />
+          </div>
+
           <div class="keyboardPartBox">
             <KeyboardSection />
           </div>
@@ -44,11 +36,10 @@ export const KeyAssignEditView: FC = () => {
             <ProfileOperationPartContent />
           </div>
 
-          {isUserProfileEditorView && (
-            <div class="topPartBox">
-              <DisplaySettingsPanelContent />
-            </div>
-          )}
+          <div class="topPartBox">
+            <DisplaySettingsPanelContent />
+          </div>
+
           <div class="layersPartBox">
             <LayersPanelContent />
           </div>

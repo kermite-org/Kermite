@@ -78,10 +78,6 @@ const readers = {
   get dualModeEditTargetOperationSig(): IDualModeEditTargetOperationSig {
     return state.dualModeEditTargetOperationSig;
   },
-  get isUserProfileEditorView(): boolean {
-    // return uiReaders.pagePath === '/assigner';
-    return true;
-  },
 
   get profileAssignType(): IProfileAssignType {
     return state.profileData.settings.assignType;
