@@ -10,16 +10,24 @@ export const ProfileOperationPartContent: FC = () => {
     actions: { writeKeymapping },
   } = profileEditorConfig;
   const {
-    actions: { openConfigurationPanel, openRoutingPanel },
+    actions: {
+      openConfigurationPanel,
+      openRoutingPanel,
+      toggleShowTestInputArea,
+    },
   } = profileEditorStore;
   return domStyled(
     <div>
       <div class="config-buttons-part">
         <ConfigurationButton
-          onClick={openConfigurationPanel}
           iconSpec="fa fa-cog"
+          onClick={openConfigurationPanel}
         />
-        <ConfigurationButton onClick={openRoutingPanel} iconSpec="fa fa-list" />
+        <ConfigurationButton iconSpec="fa fa-list" onClick={openRoutingPanel} />
+        <ConfigurationButton
+          iconSpec="far fa-edit"
+          onClick={toggleShowTestInputArea}
+        />
       </div>
       <OperationButtonWithIcon
         onClick={writeKeymapping}

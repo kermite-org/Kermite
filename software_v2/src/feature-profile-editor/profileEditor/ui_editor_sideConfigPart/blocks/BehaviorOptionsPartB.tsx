@@ -3,7 +3,6 @@ import { texts } from '~/app-shared';
 import { CheckBoxLine, ConfigurationButton } from '~/fe-shared';
 import { profileEditorStore } from '../../../store';
 import { profileEditorConfig } from '../../adapters';
-import { assignerModel } from '../../models';
 
 export const BehaviorOptionsPartB: FC = () => {
   const {
@@ -11,7 +10,6 @@ export const BehaviorOptionsPartB: FC = () => {
     actions: { openConfigurationPanel, openRoutingPanel, commitUiSetting },
   } = profileEditorStore;
 
-  const { isUserProfileEditorView } = assignerModel;
   return (
     <div class={style}>
       <CheckBoxLine
@@ -24,7 +22,7 @@ export const BehaviorOptionsPartB: FC = () => {
         disabled={!profileEditorConfig.isEditProfileAvailable}
       />
 
-      <div if={!isUserProfileEditorView} class="config-icons">
+      <div class="config-icons">
         <ConfigurationButton
           onClick={openConfigurationPanel}
           iconSpec="fa fa-cog"
