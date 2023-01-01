@@ -1,5 +1,5 @@
 import {
-  copyObjectProps,
+  copyObjectPropsPartial,
   createFallbackPersistKeyboardLayout,
   createFallbackPersistProfileData,
 } from '~/app-shared';
@@ -35,6 +35,9 @@ function createProfileEditorStore() {
     profile: fallbackProfile,
     layout: fallbackLayout,
     modalPanelType: undefined as IProfileModalPanelType | undefined,
+    showLayersDynamic: false,
+    showLayerDefaultAssign: false,
+    showProfileAdvancedOptions: false,
   };
 
   const readers = {
@@ -56,6 +59,15 @@ function createProfileEditorStore() {
     get routingPanelVisible() {
       return state.modalPanelType === 'routingPanel';
     },
+    get showLayersDynamic() {
+      return state.showLayersDynamic;
+    },
+    get showLayerDefaultAssign() {
+      return state.showLayerDefaultAssign;
+    },
+    get showProfileAdvancedOptions() {
+      return state.showProfileAdvancedOptions;
+    },
   };
 
   const actions = {
@@ -65,12 +77,7 @@ function createProfileEditorStore() {
       const layoutName = profile.referredLayoutName;
       const layoutItemPath = `${projectId}/layout/${layoutName}`;
       const layout = diProfileEditor.loadLayout(layoutItemPath);
-      copyObjectProps<Partial<typeof state>>(state, {
-        itemPath,
-        profileName,
-        profile,
-        layout,
-      });
+      copyObjectPropsPartial(state, { itemPath, profileName, profile, layout });
     },
     unloadProfile() {
       state.itemPath = '';
@@ -85,16 +92,26 @@ function createProfileEditorStore() {
       diProfileEditor.saveProfile(state.itemPath, newProfile);
       state.profile = newProfile;
     },
-    toggleConfigurationPanel() {
+    openConfigurationPanel() {
       state.modalPanelType = !state.modalPanelType
         ? 'configurationPanel'
         : undefined;
     },
-    toggleRoutingPanel() {
+    openRoutingPanel() {
       state.modalPanelType = !state.modalPanelType ? 'routingPanel' : undefined;
     },
     closeModal() {
       state.modalPanelType = undefined;
+    },
+    commitUiSetting(settings: {
+      showLayersDynamic?: boolean;
+      showLayerDefaultAssign?: boolean;
+      showProfileAdvancedOptions?: boolean;
+    }): void {
+      copyObjectPropsPartial(state, settings);
+    },
+    stopLiveMode() {
+      state.showLayersDynamic = false;
     },
   };
 

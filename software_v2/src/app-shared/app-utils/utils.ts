@@ -228,6 +228,17 @@ export function copyObjectProps<T extends {}>(target: T, source: T) {
   }
 }
 
+export function copyObjectPropsPartial<T extends {}>(
+  target: T,
+  source: Partial<T>,
+) {
+  for (const key in source) {
+    if (key in target) {
+      target[key] = source[key]!;
+    }
+  }
+}
+
 export function copyObjectPropsRecursive<T>(target: T, source: T) {
   for (const key in target) {
     if (source[key] !== undefined) {

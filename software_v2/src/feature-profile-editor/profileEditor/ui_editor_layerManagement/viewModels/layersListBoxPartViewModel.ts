@@ -1,4 +1,5 @@
 import { ILayer } from '~/app-shared';
+import { profileEditorStore } from '../../../store';
 import { profileEditorConfig } from '../../adapters';
 import { assignerModel } from '../../models';
 
@@ -19,7 +20,7 @@ function makeLayerListViewModel(layer: ILayer): ILayerListViewModel {
   const isCurrent = isLayerCurrent(layerId);
   const setCurrent = () => {
     setCurrentLayerId(layerId);
-    profileEditorConfig.stopLiveMode();
+    profileEditorStore.actions.stopLiveMode();
   };
   return {
     layerId,

@@ -1,9 +1,6 @@
 function createProfileEditorConfig() {
   return {
     settings: {
-      showLayersDynamic: false,
-      showLayerDefaultAssign: false,
-      showProfileAdvancedOptions: false,
       siteDpiScale: 1,
     },
     deviceStatus: {
@@ -11,11 +8,6 @@ function createProfileEditorConfig() {
     },
     stopLiveMode() {},
     isEditProfileAvailable: true,
-    commitUiSettings(_settings: {
-      showLayersDynamic?: boolean;
-      showLayerDefaultAssign?: boolean;
-      showProfileAdvancedOptions?: boolean;
-    }): void {},
     commitUiState(_args: any) {},
     allProjectPackageInfos: [] as {
       keyboardName: string;
@@ -26,8 +18,6 @@ function createProfileEditorConfig() {
       projectId: string;
     }[],
     uiState: {
-      // profileRoutingPanelVisible: false,
-      // profileConfigModalVisible: false,
       showTestInputArea: false,
     },
     CanWriteKeyMappingToDevice: false,
@@ -51,8 +41,6 @@ function createProfileEditorConfig() {
       },
     },
     actions: {
-      // openConfigurationModal() {},
-      // toggleRoutingPanel() {},
       writeKeymapping() {},
     },
   };

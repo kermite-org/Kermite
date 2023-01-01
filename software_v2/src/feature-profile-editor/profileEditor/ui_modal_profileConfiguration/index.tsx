@@ -1,8 +1,7 @@
-import { FC, css, jsx } from 'alumina';
+import { css, FC, jsx } from 'alumina';
 import { reflectChecked, texts } from '~/app-shared';
 import { ClosableOverlay, CommonDialogFrame } from '~/fe-shared';
 import { profileEditorStore } from '../../store';
-import { profileEditorConfig } from '../adapters';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import {
   DualModeSettingsPart,
@@ -10,20 +9,22 @@ import {
 } from './DualModeSettingsPart';
 import { ShiftCancelOptionPart } from './ShiftCancelOptionPart';
 
-const AdvancedOptionSwitchPart: FC = () => (
-  <div class={cssAdvancedOptionSwitchPart}>
-    <input
-      type="checkbox"
-      checked={profileEditorConfig.settings.showProfileAdvancedOptions}
-      onChange={reflectChecked((checked) =>
-        profileEditorConfig.commitUiSettings({
-          showProfileAdvancedOptions: checked,
-        }),
-      )}
-    />
-    <label>advanced options</label>
-  </div>
-);
+const AdvancedOptionSwitchPart: FC = () => {
+  const { showProfileAdvancedOptions } = profileEditorStore.readers;
+  const { commitUiSetting } = profileEditorStore.actions;
+  return (
+    <div class={cssAdvancedOptionSwitchPart}>
+      <input
+        type="checkbox"
+        checked={showProfileAdvancedOptions}
+        onChange={reflectChecked((checked) =>
+          commitUiSetting({ showProfileAdvancedOptions: checked }),
+        )}
+      />
+      <label>advanced options</label>
+    </div>
+  );
+};
 
 const cssAdvancedOptionSwitchPart = css`
   display: flex;
@@ -43,9 +44,7 @@ export const ProfileConfigurationModalLayer: FC = () => {
   if (!visible) {
     return null;
   }
-
-  const showAdvancedOptions =
-    profileEditorConfig.settings.showProfileAdvancedOptions;
+  const { showProfileAdvancedOptions } = profileEditorStore.readers;
 
   return (
     <ClosableOverlay close={closeModal}>
@@ -57,8 +56,8 @@ export const ProfileConfigurationModalLayer: FC = () => {
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
           <AdvancedOptionSwitchPart />
-          <DualModeSettingsPart2 if={showAdvancedOptions} />
-          <ShiftCancelOptionPart if={showAdvancedOptions} />
+          <DualModeSettingsPart2 if={showProfileAdvancedOptions} />
+          <ShiftCancelOptionPart if={showProfileAdvancedOptions} />
         </div>
       </CommonDialogFrame>
     </ClosableOverlay>
