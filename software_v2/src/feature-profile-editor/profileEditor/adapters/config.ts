@@ -26,9 +26,9 @@ function createProfileEditorConfig() {
       projectId: string;
     }[],
     uiState: {
-      profileRoutingPanelVisible: false,
+      // profileRoutingPanelVisible: false,
+      // profileConfigModalVisible: false,
       showTestInputArea: false,
-      profileConfigModalVisible: false,
     },
     CanWriteKeyMappingToDevice: false,
     useSystemLayoutModel: () => ({
@@ -51,8 +51,8 @@ function createProfileEditorConfig() {
       },
     },
     actions: {
-      openConfigurationModal() {},
-      toggleRoutingPanel() {},
+      // openConfigurationModal() {},
+      // toggleRoutingPanel() {},
       writeKeymapping() {},
     },
   };

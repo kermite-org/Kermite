@@ -6,6 +6,7 @@ import {
   GeneralSelectorN,
   getUnscaledOverlayStyle,
 } from '~/fe-shared';
+import { profileEditorStore } from '../../store';
 import { profileEditorConfig } from '../adapters';
 import { assignerModel } from '../models';
 import {
@@ -41,7 +42,7 @@ const actions = {
     });
   },
   handleClose() {
-    profileEditorConfig.commitUiState({ profileRoutingPanelVisible: false });
+    profileEditorStore.actions.closeModal();
   },
 };
 
