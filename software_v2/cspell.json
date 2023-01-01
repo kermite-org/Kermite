@@ -4,6 +4,6 @@
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [],
-  "ignoreWords": ["firmwares", "kermite", "keymap", "keymaps"],
+  "ignoreWords": ["firmwares", "kermite", "keymap", "keymaps", "keymapping"],
   "import": []
 }
