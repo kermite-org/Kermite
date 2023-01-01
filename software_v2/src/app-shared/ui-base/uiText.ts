@@ -14,6 +14,9 @@ const textSources: { [key in ILanguageKey]: any } = {
 
 export const uiTextConfigLoader = {
   loadLanguageKey(): ILanguageKey {
+    if (appUi.isDevelopment) {
+      return 'english';
+    }
     const languageKey = localStorage.getItem('languageKey') as ILanguageKey;
     if (Object.keys(textSources).includes(languageKey)) {
       return languageKey;

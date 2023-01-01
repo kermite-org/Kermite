@@ -45,6 +45,16 @@ function createProfileEditorConfig() {
       isMuteMode: false,
       setMuteMode(_mode: boolean) {},
     },
+    readers: {
+      get canWriteKeymapping() {
+        return true;
+      },
+    },
+    actions: {
+      openConfigurationModal() {},
+      toggleRoutingPanel() {},
+      writeKeymapping() {},
+    },
   };
 }
 

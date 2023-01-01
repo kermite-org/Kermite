@@ -10,6 +10,7 @@ import { LayersPanelContent } from './ui_editor_layerManagement';
 import {
   DisplaySettingsPanelContent,
   InputLogicOptionsPanelContent,
+  ProfileOperationPartContent,
   ProfilePropertiesPanelContent,
 } from './ui_editor_sideConfigPart/panels';
 import { ActionRoutingPanel } from './ui_modal_routingPanel/ActionRoutingPanel';
@@ -40,6 +41,10 @@ export const KeyAssignEditView: FC = () => {
           )}
         </div>
         <div class={cssEditSideBarColumn}>
+          <div>
+            <ProfileOperationPartContent />
+          </div>
+
           {isUserProfileEditorView && (
             <div class="topPartBox">
               <DisplaySettingsPanelContent />
@@ -48,10 +53,10 @@ export const KeyAssignEditView: FC = () => {
           <div class="layersPartBox">
             <LayersPanelContent />
           </div>
-          <div class="restPartBox">
+          <div class="restPartBox" if={false}>
             <ProfilePropertiesPanelContent />
           </div>
-          <div class="logicOptionsPartBox">
+          <div class="logicOptionsPartBox" if={false}>
             <InputLogicOptionsPanelContent />
           </div>
         </div>
@@ -136,7 +141,7 @@ const cssEditMainColumn = css`
 const panelPadding = '8px 10px';
 
 const cssEditSideBarColumn = css`
-  width: 240px;
+  width: 200px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
