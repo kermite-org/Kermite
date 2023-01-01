@@ -1,6 +1,7 @@
 import { FC, css, jsx } from 'alumina';
 import { reflectChecked, texts } from '~/app-shared';
 import { ClosableOverlay, CommonDialogFrame } from '~/fe-shared';
+import { profileEditorStore } from '../../store';
 import { profileEditorConfig } from '../adapters';
 import { AssignTypeSelectionPart } from './AssignTypeSelectionPart';
 import {
@@ -8,7 +9,6 @@ import {
   DualModeSettingsPart2,
 } from './DualModeSettingsPart';
 import { ShiftCancelOptionPart } from './ShiftCancelOptionPart';
-// import { commitUiSettings, uiReaders, uiState } from '~/ui/store';
 
 const AdvancedOptionSwitchPart: FC = () => (
   <div class={cssAdvancedOptionSwitchPart}>
@@ -35,9 +35,9 @@ const cssAdvancedOptionSwitchPart = css`
 `;
 
 export const ProfileConfigurationModalLayer: FC = () => {
-  const visible = profileEditorConfig.uiState.profileConfigModalVisible;
+  const visible = profileEditorStore.readers.configurationPanelVisible;
   const closeModal = () => {
-    profileEditorConfig.uiState.profileConfigModalVisible = false;
+    profileEditorStore.actions.closeModal();
   };
 
   if (!visible) {
@@ -47,11 +47,6 @@ export const ProfileConfigurationModalLayer: FC = () => {
   const showAdvancedOptions =
     profileEditorConfig.settings.showProfileAdvancedOptions;
 
-  // const showProjectSelectionUi =
-  //   showAdvancedOptions &&
-  //   profileEditorConfig.isDeveloperMode &&
-  //   !uiReaders.globalSettings.globalProjectSpec;
-
   return (
     <ClosableOverlay close={closeModal}>
       <CommonDialogFrame
@@ -59,7 +54,6 @@ export const ProfileConfigurationModalLayer: FC = () => {
         close={closeModal}
       >
         <div class={cssDialogContent}>
-          {/* <KeyboardProjectSelectionPart if={showProjectSelectionUi} /> */}
           <AssignTypeSelectionPart />
           <DualModeSettingsPart />
           <AdvancedOptionSwitchPart />

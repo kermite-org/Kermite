@@ -1,6 +1,6 @@
 import { FC, css, jsx } from 'alumina';
 import { colors } from '~/app-shared';
-// import { uiState } from '~/ui/store';
+import { profileEditorStore } from '../store';
 import { profileEditorConfig } from './adapters';
 import { assignerModel } from './models';
 import { TestInputArea } from './ui_bar_testInputArea/TestInputArea';
@@ -17,6 +17,7 @@ import { ActionRoutingPanel } from './ui_modal_routingPanel/ActionRoutingPanel';
 
 export const KeyAssignEditView: FC = () => {
   const { isUserProfileEditorView } = assignerModel;
+  const { routingPanelVisible } = profileEditorStore.readers;
   return (
     <div class={cssKeyAssignEditView}>
       <div
@@ -36,9 +37,7 @@ export const KeyAssignEditView: FC = () => {
           <div class="assignPartBox">
             <AssignEditSection />
           </div>
-          {profileEditorConfig.uiState.profileRoutingPanelVisible && (
-            <ActionRoutingPanel />
-          )}
+          {routingPanelVisible && <ActionRoutingPanel />}
         </div>
         <div class={cssEditSideBarColumn}>
           <div>
