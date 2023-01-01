@@ -66,7 +66,6 @@ export const PageRoot: FC = () => {
         > .main-column {
           flex-grow: 1;
           border: solid 1px #aaa;
-          padding: 5px;
           overflow-y: scroll;
         }
       }
