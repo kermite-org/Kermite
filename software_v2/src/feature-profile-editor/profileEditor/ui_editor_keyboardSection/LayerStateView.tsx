@@ -1,6 +1,6 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/app-shared';
-// import { uiReaders, uiState } from '~/ui/store';
+import { profileEditorStore } from '../../store';
 import { ILayerStackItem, profileEditorConfig } from '../adapters';
 
 type IPlayerModelPartial = {
@@ -13,12 +13,12 @@ type Props = {
 
 export const LayerStateView: FC<Props> = ({ playerModel }) => {
   const { isConnected } = profileEditorConfig.deviceStatus;
-  const visible = profileEditorConfig.settings.showLayersDynamic;
+  const { showLayersDynamic } = profileEditorStore.readers;
   return (
     <div
       class={cssLayerStateView}
       data-hint={texts.assignerKeyboardViewHint.layerStates}
-      if={visible}
+      if={showLayersDynamic}
     >
       {playerModel.layerStackItems.map((la) => {
         return (

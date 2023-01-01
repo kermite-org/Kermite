@@ -4,7 +4,7 @@ import {
   IEditKeyUnitCardViewModel,
 } from '~/app-shared';
 import { getAssignEntryTexts } from '~/fe-shared';
-import { profileEditorConfig } from '../adapters';
+import { profileEditorStore } from '../../store';
 import { assignerModel } from '../models';
 
 type IPlayerModelPartial = {
@@ -24,8 +24,8 @@ function getAssignForKeyUnit(
   keyUnitId: string,
   playerModel: IPlayerModelPartial,
 ): IAssignEntryWithLayerFallback | undefined {
-  const dynamic = profileEditorConfig.settings.showLayersDynamic;
-  return dynamic
+  const { showLayersDynamic } = profileEditorStore.readers;
+  return showLayersDynamic
     ? playerModel.getDynamicKeyAssign(keyUnitId) || {
         type: 'layerFallbackBlock',
       }
@@ -47,16 +47,16 @@ function makeEditKeyUnitCardViewModel(
   const isCurrent = currentKeyUnitId === keyUnitId;
   const setCurrent = () => {
     setCurrentKeyUnitId(keyUnitId);
-    profileEditorConfig.stopLiveMode();
+    profileEditorStore.actions.stopLiveMode();
   };
   const assign = getAssignForKeyUnit(keyUnitId, playerModel);
   const { primaryText, secondaryText, tertiaryText, isLayerFallback } =
     getAssignEntryTexts(assign, assignerModel.layers, settings);
 
-  const dynamic = profileEditorConfig.settings.showLayersDynamic;
+  const { showLayersDynamic } = profileEditorStore.readers;
   // const isHold = (dynamic && playerModel.keyStates[ke.keyId]) || false;
   const isHold = playerModel.keyStates[ke.keyId] || false;
-  const shiftHold = dynamic && playerModel.shiftHold;
+  const shiftHold = showLayersDynamic && playerModel.shiftHold;
 
   return {
     keyUnitId,
@@ -76,7 +76,7 @@ function makeEditKeyUnitCardViewModel(
 export function makeEditKeyUnitCardsPartViewModel(
   playerModel: IPlayerModelPartial,
 ): IEditKeyUnitCardPartViewModel {
-  const { showLayerDefaultAssign } = profileEditorConfig.settings;
+  const { showLayerDefaultAssign } = profileEditorStore.readers;
   return {
     cards: assignerModel.displayDesign.keyEntities.map((kp) =>
       makeEditKeyUnitCardViewModel(kp, playerModel),

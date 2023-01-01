@@ -1,9 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { ISelectorOption, texts } from '~/app-shared';
 import { RibbonSelector } from '~/fe-shared';
-import { profileEditorConfig } from '../../adapters';
-// import { profilesReader } from '~/ui/pages/assignerPage/models';
-// import { commitUiSettings, uiState } from '~/ui/store';
+import { profileEditorStore } from '../../../store';
 
 const options: ISelectorOption[] = [
   { label: 'EDIT', value: 'edit' },
@@ -11,12 +9,13 @@ const options: ISelectorOption[] = [
 ];
 
 export const LayerDisplayModePart: FC = () => {
-  const { settings, commitUiSettings, isEditProfileAvailable } =
-    profileEditorConfig;
-  const value = settings.showLayersDynamic ? 'live' : 'edit';
+  const { showLayersDynamic } = profileEditorStore.readers;
+  const { commitUiSetting } = profileEditorStore.actions;
+
+  const value = showLayersDynamic ? 'live' : 'edit';
 
   const setValue = (value: 'edit' | 'live') => {
-    commitUiSettings({ showLayersDynamic: value === 'live' });
+    commitUiSetting({ showLayersDynamic: value === 'live' });
   };
 
   return (
@@ -28,7 +27,6 @@ export const LayerDisplayModePart: FC = () => {
         setValue={setValue}
         hint={texts.assignerDisplaySettingsPartHint.layerDisplayMode}
         class="selector"
-        disabled={!isEditProfileAvailable}
       />
     </div>
   );
