@@ -52,6 +52,7 @@ export const AssignerGeneralComponent: FC<Props> = ({
 };
 
 const style = css`
+  height: 100%;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

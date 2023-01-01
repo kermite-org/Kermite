@@ -1,4 +1,4 @@
-import { FC, applyGlobalStyle, css, domStyled, jsx } from 'alumina';
+import { FC, applyGlobalStyle, css, domStyled, jsx, useState } from 'alumina';
 import { LayoutEditorView } from '~/feature-layout-editor';
 import { OnlineProjectImporterView } from '~/feature-online-project-importer';
 import { ProfileEditorView } from '~/feature-profile-editor';
@@ -67,7 +67,6 @@ export const PageRoot: FC = () => {
           flex-grow: 1;
           border: solid 1px #aaa;
           padding: 5px;
-
           overflow-y: scroll;
         }
       }
@@ -180,10 +179,13 @@ const MenuBar: FC = () => {
     actions.openModel('onlineProjectImporter');
   const handleCreateBlankProject = actions.loadBlankProject;
 
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleOpen = () => setIsOpen((prev) => !prev);
+
   return domStyled(
-    <div>
+    <div class={!isOpen && '--folded'}>
       <ul>
-        <li>プロジェクト</li>
+        <li onClick={toggleOpen}>プロジェクト</li>
         <li onClick={handleCreateProjectFromOnline}>
           -新規作成(オンラインから)
         </li>
@@ -196,7 +198,7 @@ const MenuBar: FC = () => {
         <li onClick={undefined}>-ファームウェア作成</li>
       </ul>
       <ul>
-        <li>編集</li>
+        <li onClick={toggleOpen}>編集</li>
         <li onClick={undefined}>-元に戻す</li>
         <li onClick={undefined}>-やり直し</li>
       </ul>
@@ -206,12 +208,20 @@ const MenuBar: FC = () => {
       gap: 20px;
 
       > ul {
+        > li:first-child {
+          cursor: default;
+        }
         > li:not(:first-child) {
           cursor: pointer;
           &:hover {
             text-decoration: underline;
           }
         }
+      }
+
+      &.--folded {
+        height: 26px;
+        overflow: hidden;
       }
     `,
   );
