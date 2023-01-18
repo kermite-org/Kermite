@@ -7,7 +7,7 @@ import {
   IStandardBaseFirmwareType,
   splitBytesN,
 } from '~/shared';
-import { ILayoutGeneratorOptions } from '~/ui/base';
+import { ILayoutGeneratorOptions, ILayoutTemplateAttributes } from '~/ui/base';
 import {
   IDraftLayoutLabelEntity,
   IDraftLayoutLabelEntityPinType,
@@ -342,4 +342,87 @@ export function createLayoutFromFirmwareSpec(
   fixCoordOrigin(design, isCentered);
 
   return [design, labelEntities];
+}
+
+function placeKeyEntitiesSet2(
+  design: IPersistKeyboardDesign,
+  numMatrixColumns: number,
+  numMatrixRows: number,
+  numIndividualKeys: number,
+  wrapX: number,
+  invertIndicesX: boolean,
+  invertIndicesY: boolean,
+  keyIndexBase: number,
+) {
+  const isSplit = false;
+  const dir = 1;
+
+  let mainKeyBlockHeight = 0;
+  if (numMatrixColumns > 0 && numMatrixRows > 0) {
+    const nx = numMatrixColumns;
+    const ny = numMatrixRows;
+    const keys = makeMatrixKeyEntities(
+      nx * ny,
+      nx,
+      0,
+      invertIndicesX,
+      invertIndicesY,
+      keyIndexBase,
+      isSplit,
+      dir,
+      1,
+    );
+    design.keyEntities.push(...keys);
+    keyIndexBase += keys.length;
+    mainKeyBlockHeight = ny;
+  }
+  if (numIndividualKeys > 0) {
+    const num = numIndividualKeys;
+    const nx = wrapX;
+    const offsetY = mainKeyBlockHeight;
+    const keys = makeMatrixKeyEntities(
+      num,
+      nx,
+      offsetY,
+      invertIndicesX,
+      false,
+      keyIndexBase,
+      isSplit,
+      dir,
+      1,
+    );
+    design.keyEntities.push(...keys);
+    keyIndexBase += keys.length;
+    if (!mainKeyBlockHeight) {
+      mainKeyBlockHeight = Math.ceil(num / nx);
+    }
+  }
+}
+
+export function createLayoutFromTemplateAttributes(
+  attrs: ILayoutTemplateAttributes,
+  layoutOptions: ILayoutGeneratorOptions,
+): IPersistKeyboardDesign {
+  const design = createFallbackPersistKeyboardDesign();
+
+  const { placementOrigin, invertX, invertY } = layoutOptions;
+  const isCentered = placementOrigin === 'center';
+  if (isCentered) {
+    design.setup.placementAnchor = 'center';
+  }
+  const wrapX = 4;
+  const keyIndexBase = 0;
+
+  placeKeyEntitiesSet2(
+    design,
+    attrs.numMatrixColumns,
+    attrs.numMatrixRows,
+    attrs.numIndividualKeys,
+    wrapX,
+    invertX,
+    invertY,
+    keyIndexBase,
+  );
+
+  return design;
 }

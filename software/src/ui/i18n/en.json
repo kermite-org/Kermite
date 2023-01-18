@@ -4,6 +4,7 @@
     "language_japanese": "Japanese",
     "profileSetupWizardButton": "Profile Setup Wizard",
     "projectQuickSetupWizardButton": "Project Quick Setup Wizard",
+    "externalFirmwareProjectSetupWizardButton": "External Firmware Project",
     "darkThemeOption": "dark theme",
     "developerModeOption": "developer mode",
     "version": "version"
@@ -32,6 +33,10 @@
     "headerStep1FirmwareConfiguration": "Firmware Configuration",
     "headerStep2DeviceSetup": "Device Setup",
     "headerStep3layoutSettings": "Layout Template Settings"
+  },
+  "exfProjectWizardFrame": {
+    "headerStep1deviceSetup": "Device Setup",
+    "headerStep2layoutSettings": "Layout Template Settings"
   },
   "firmwareVariationSelectionSection": {
     "sectionHeader": "Firmware Variation"
@@ -62,7 +67,13 @@
   "layoutGeneratorConfiguration": {
     "headerLayoutConfiguration": "Layout Configuration",
     "keyPlacementAnchor": "key placement anchor",
-    "invertColumnPlacement": "invert column placement"
+    "invertColumnPlacement": "Invert column placement"
+  },
+  "layoutTemplateConfiguration": {
+    "headerLayoutTemplateConfiguration": "Layout Template Configuration",
+    "numMatrixColumns": "Num matrix columns",
+    "numMatrixRows": "Num matrix rows",
+    "numIndividualKeys": "Num individual keys"
   },
   "titleBarHint": {
     "switchToWidgetView": "Switch to widget view",

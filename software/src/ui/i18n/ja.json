@@ -4,6 +4,7 @@
     "language_japanese": "日本語",
     "profileSetupWizardButton": "プロファイル作成ウィザード",
     "projectQuickSetupWizardButton": "プロジェクトクイックセットアップ",
+    "externalFirmwareProjectSetupWizardButton": "外部ファームウェアプロジェクト",
     "darkThemeOption": "ダークテーマ",
     "developerModeOption": "開発者モード",
     "version": "バージョン"
@@ -32,6 +33,10 @@
     "headerStep1FirmwareConfiguration": "ファームウェア設定",
     "headerStep2DeviceSetup": "デバイスセットアップ",
     "headerStep3layoutSettings": "レイアウトテンプレート設定"
+  },
+  "exfProjectWizardFrame": {
+    "headerStep1deviceSetup": "デバイスセットアップ",
+    "headerStep2layoutSettings": "レイアウトテンプレート設定"
   },
   "firmwareVariationSelectionSection": {
     "sectionHeader": "ファームウェア選択"
@@ -63,6 +68,12 @@
     "headerLayoutConfiguration": "レイアウト設定",
     "keyPlacementAnchor": "キー配置アンカー",
     "invertColumnPlacement": "列を反転"
+  },
+  "layoutTemplateConfiguration": {
+    "headerLayoutTemplateConfiguration": "レイアウトテンプレート設定",
+    "numMatrixColumns": "マトリクス列数",
+    "numMatrixRows": "マトリクス行数",
+    "numIndividualKeys": "個別キー数"
   },
   "titleBarHint": {
     "switchToWidgetView": "ウィジェット表示に切り替えます。",

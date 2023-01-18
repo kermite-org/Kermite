@@ -21,6 +21,7 @@ interface IWelcomePageStore {
     showProfileSetupWizard(): void;
     setDarkTheme(isDark: boolean): void;
     showProjectQuickSetupWizard(): void;
+    showExternalFirmwareProjectSetupWizard(): void;
     setDeveloperMode(value: boolean): void;
   };
 }
@@ -62,6 +63,9 @@ function createWelcomePageStore(): IWelcomePageStore {
     },
     showProjectQuickSetupWizard() {
       uiActions.showProjectQuickSetupWizard();
+    },
+    showExternalFirmwareProjectSetupWizard() {
+      uiActions.showExternalFirmwareProjectSetupWizard();
     },
     setDeveloperMode(value: boolean) {
       globalSettingsWriter.writeValue('developerMode', value);

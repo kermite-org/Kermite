@@ -21,6 +21,7 @@ export const WelcomePage: FC = () => {
       showProfileSetupWizard,
       setDarkTheme,
       showProjectQuickSetupWizard,
+      showExternalFirmwareProjectSetupWizard,
       setDeveloperMode,
     },
   } = welcomePageStore;
@@ -65,6 +66,15 @@ export const WelcomePage: FC = () => {
             if={isDeveloperMode}
           >
             {texts.welcomePage.projectQuickSetupWizardButton}
+          </WelcomePageButton>
+        </div>
+        <div class="row">
+          <WelcomePageButton
+            class="button"
+            onClick={showExternalFirmwareProjectSetupWizard}
+            if={isDeveloperMode}
+          >
+            {texts.welcomePage.externalFirmwareProjectSetupWizardButton}
           </WelcomePageButton>
         </div>
       </div>

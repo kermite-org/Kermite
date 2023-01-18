@@ -11,6 +11,7 @@ import {
   SettingsPage,
   WelcomePage,
 } from '~/ui/pages';
+import { ExternalFirmwareProjectSetupPage } from '~/ui/pages/ExternalFirmwareProjectSetupWizardPage';
 import { FirmwareFlashPage } from '~/ui/pages/FirmwareFlashPage';
 import { ProfileSetupWizardPage } from '~/ui/pages/ProfileSetupWizardPage';
 import { AssignerPage } from '~/ui/pages/assignerPage';
@@ -57,6 +58,9 @@ export const MainColumnRoutes: FC = () => {
       {pagePath === '/projectResource' && <ProjectResourcePage />}
       {pagePath.startsWith('/profileSetup') && <ProfileSetupWizardPage />}
       {pagePath.startsWith('/projectQuickSetup') && <ProjectQuickSetupPage />}
+      {pagePath.startsWith('/externalFirmwareProjectSetup') && (
+        <ExternalFirmwareProjectSetupPage />
+      )}
     </div>
   );
 };
