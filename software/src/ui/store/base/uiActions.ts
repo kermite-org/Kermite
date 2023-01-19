@@ -44,6 +44,9 @@ export const uiActions = {
   showProjectQuickSetupWizard() {
     uiActions.navigateTo('/projectQuickSetup/step1');
   },
+  showExternalFirmwareProjectSetupWizard() {
+    uiActions.navigateTo('/externalFirmwareProjectSetup/step1');
+  },
   setGlobalProjectSpec(spec: IGlobalProjectSpec) {
     globalSettingsWriter.writeValue('globalProjectSpec', spec);
   },
