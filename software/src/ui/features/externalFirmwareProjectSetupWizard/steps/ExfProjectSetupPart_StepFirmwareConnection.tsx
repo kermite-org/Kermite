@@ -3,7 +3,11 @@ import { colors, ipcAgent, languageKey } from '~/ui/base';
 import { ProjectKeyboardNameEditPart } from '~/ui/fabrics';
 import { exfProjectSetupStore } from '~/ui/features/externalFirmwareProjectSetupWizard/store/exfProjectSetupStore';
 
-const PlainLink: FC<{ url: string }> = ({ url }) => <a href={url}>{url}</a>;
+const PlainLink: FC<{ url: string }> = ({ url }) => (
+  <a href={url} target="_blank" rel="noreferrer">
+    {url}
+  </a>
+);
 
 const PlainButton: FC<{ text: string; onClick(): void }> = ({
   text,
@@ -34,7 +38,7 @@ export const ExfProjectSetupPart_StepFirmwareConnection: FC = () => {
         </div>
         <div>
           <p>
-            Create firmware inf Arduino or PlatformIO environment and write it
+            Create firmware with Arduino or PlatformIO environment and write it
             to the MCU.
             <br />
             For information how to make firmware, refer the resources below.
@@ -55,7 +59,7 @@ export const ExfProjectSetupPart_StepFirmwareConnection: FC = () => {
         </div>
         <div>
           Connect to the device.
-          <PlainButton onClick={onDeviceAddButton} text="デバイスを追加" />
+          <PlainButton onClick={onDeviceAddButton} text="add device" />
         </div>
       </div>
 
