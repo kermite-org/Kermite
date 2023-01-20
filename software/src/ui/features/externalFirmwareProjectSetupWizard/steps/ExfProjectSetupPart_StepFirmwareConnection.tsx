@@ -3,9 +3,9 @@ import { colors, ipcAgent, languageKey } from '~/ui/base';
 import { ProjectKeyboardNameEditPart } from '~/ui/fabrics';
 import { exfProjectSetupStore } from '~/ui/features/externalFirmwareProjectSetupWizard/store/exfProjectSetupStore';
 
-const PlainLink: FC<{ url: string }> = ({ url }) => (
+const PlainLink: FC<{ url: string; text?: string }> = ({ url, text }) => (
   <a href={url} target="_blank" rel="noreferrer">
-    {url}
+    {text || url}
   </a>
 );
 
@@ -74,12 +74,18 @@ export const ExfProjectSetupPart_StepFirmwareConnection: FC = () => {
             ファームウェアの作り方は、以下のリソースを参照してください。
           </p>
           <p>
-            KermiteCore_Arduino:&nbsp;
-            <PlainLink url="https://github.com/kermite-org/KermiteCore_Arduino" />
+            ライブラリのドキュメント:&nbsp;
+            <PlainLink
+              text="KermiteCore_Arduino (GitHub)"
+              url="https://github.com/kermite-org/KermiteCore_Arduino"
+            />
           </p>
-          <p if={false}>
-            (参考)日本語での解説:&nbsp;
-            <PlainLink url="https://zenn.dev/yahiro04/articles/kermite_2301xx" />
+          <p>
+            日本語での解説記事:&nbsp;
+            <PlainLink
+              text="Kermiteのファームウェアの作り方 (Zenn)"
+              url="https://zenn.dev/yahiro04/articles/kermite_230120"
+            />
           </p>
         </div>
 
