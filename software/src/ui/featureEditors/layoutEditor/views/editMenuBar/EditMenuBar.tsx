@@ -2,6 +2,7 @@ import { jsx, css, FC } from 'alumina';
 import {
   GeneralButton,
   GeneralSelector,
+  Icon,
   RibbonSelector,
   ToggleButton,
 } from '~/ui/components';
@@ -21,6 +22,7 @@ export const EditMenuBar: FC = () => {
     resetKeyboardDesign,
     vmShowKeyId,
     vmShowKeyIndex,
+    vmEnableKeyIndexReflection,
   } = makeEditMenuBarViewModel();
 
   return (
@@ -64,6 +66,18 @@ export const EditMenuBar: FC = () => {
         />
       </div>
 
+      <div class="buttonsBox">
+        <ToggleButton
+          width={45}
+          active={vmEnableKeyIndexReflection.active}
+          setActive={vmEnableKeyIndexReflection.setActive}
+          class="btn-key-input-reflection"
+        >
+          KI
+          <Icon spec="fas fa-bolt" />
+        </ToggleButton>
+      </div>
+
       <div class="buttonsBox" if={false}>
         <ToggleButton
           text="id"
@@ -105,5 +119,10 @@ const style = css`
     padding: 5px;
     cursor: pointer;
     user-select: none;
+  }
+
+  .btn-key-input-reflection {
+    display: flex;
+    gap: 4px;
   }
 `;

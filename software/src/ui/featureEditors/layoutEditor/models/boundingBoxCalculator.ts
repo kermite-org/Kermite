@@ -1,3 +1,4 @@
+import svgpath from 'svgpath';
 import {
   calculateExtraShapeBoundingBoxPoints,
   degToRad,
@@ -5,10 +6,12 @@ import {
   getKeySize,
   ICoordUnit,
   IKeyPlacementAnchor,
+  radToDeg,
   rotateCoord,
   translateCoord,
 } from '~/shared';
 import {
+  IEditExtraShape,
   IEditKeyboardDesign,
   IEditKeyEntity,
   IEditOutlineShape,
@@ -98,6 +101,32 @@ function addShapePoints(
   });
 }
 
+function addExtraShapePoints(
+  xs: number[],
+  ys: number[],
+  shape: IEditExtraShape,
+  design: IEditKeyboardDesign,
+  isMirror: boolean,
+) {
+  const mi = isMirror ? -1 : 1;
+  const group = design.transGroups[shape.groupId];
+  const { groupX, groupY, groupRot } = getGroupTransAmount(group);
+
+  const path = svgpath(shape.path)
+    .scale(mi, shape.invertY ? -1 : 1)
+    .translate(shape.x, shape.y)
+    .rotate(radToDeg(groupRot) * mi)
+    .translate(groupX * mi, groupY)
+    .toString();
+
+  const points = calculateExtraShapeBoundingBoxPoints(path);
+
+  points.forEach((p) => {
+    xs.push(p.x);
+    ys.push(p.y);
+  });
+}
+
 export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
   const coordUnit = getCoordUnitFromUnitSpec(design.setup.placementUnit);
   const sizeUnit = getCoordUnitFromUnitSpec(design.setup.keySizeUnit);
@@ -120,6 +149,15 @@ export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
     addShapePoints(xs, ys, shape, design, false);
   });
 
+  {
+    const { extraShape } = design;
+    const group = design.transGroups[extraShape.groupId];
+    if (group?.mirror) {
+      addExtraShapePoints(xs, ys, design.extraShape, design, true);
+    }
+    addExtraShapePoints(xs, ys, design.extraShape, design, false);
+  }
+
   if (xs.length === 0 || ys.length === 0) {
     return {
       left: -80,
@@ -128,13 +166,6 @@ export function getKeyboardDesignBoundingBox(design: IEditKeyboardDesign) {
       bottom: 60,
     };
   }
-
-  const { extraShape } = design;
-  const pts = calculateExtraShapeBoundingBoxPoints(extraShape);
-  pts.forEach((pt) => {
-    xs.push(pt.x);
-    ys.push(pt.y);
-  });
 
   const left = Math.min(...xs);
   const right = Math.max(...xs);

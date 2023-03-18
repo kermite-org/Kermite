@@ -13,3 +13,15 @@ export const fallbackLayoutGeneratorOptions: ILayoutGeneratorOptions = {
   invertY: false,
   wrapX: -1,
 };
+
+export type ILayoutTemplateAttributes = {
+  numMatrixColumns: number;
+  numMatrixRows: number;
+  numIndividualKeys: number;
+};
+
+export const fallbackLayoutTemplateAttributes: ILayoutTemplateAttributes = {
+  numMatrixColumns: 0,
+  numMatrixRows: 0,
+  numIndividualKeys: 0,
+};

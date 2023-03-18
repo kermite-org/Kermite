@@ -34,7 +34,7 @@ export const EditorKeyboardView: FC<Props> = ({
         strokeColor="transparent"
       />
       <KeyboardBodyShapeExtra
-        shape={design.extraShape}
+        shapes={design.extraShapes}
         fillColor={bodyFillColor}
         strokeColor="transparent"
       />

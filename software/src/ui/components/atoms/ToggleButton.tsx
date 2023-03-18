@@ -1,4 +1,4 @@
-import { FC, jsx, css } from 'alumina';
+import { FC, jsx, css, AluminaChildren } from 'alumina';
 import { colors, uiTheme } from '~/ui/base';
 import { ButtonBase } from '~/ui/components/atoms/ButtonBase';
 
@@ -7,11 +7,13 @@ interface Props {
   setActive(active: boolean): void;
   width?: number;
   disabled?: boolean;
-  text: string;
+  text?: string;
+  children?: AluminaChildren;
 }
 
 export const ToggleButton: FC<Props> = ({
   text,
+  children,
   active,
   setActive,
   width,
@@ -23,7 +25,8 @@ export const ToggleButton: FC<Props> = ({
     disabled={disabled}
     onClick={() => setActive(!active)}
   >
-    <span>{text}</span>
+    <span if={text !== undefined}>{text}</span>
+    {children}
   </ButtonBase>
 );
 

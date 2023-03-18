@@ -4,7 +4,7 @@ export const featureConfig = {
   selectPrimarySlotOnKeySelectionChange: false,
   // selectPrimarySlotOnKeySelectionChange: true,
   debugFullFeatures:
-    location.host.startsWith('localhost') ||
+    // location.host.startsWith('localhost') ||
     location.search.includes('debugFullFeatures=1'),
   reviewerMode:
     location.host.startsWith('localhost') ||
