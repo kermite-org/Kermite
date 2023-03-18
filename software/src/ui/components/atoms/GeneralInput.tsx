@@ -13,6 +13,8 @@ interface Props {
   onFocus?(): void;
   onBlur?(): void;
   hint?: string;
+  min?: number;
+  max?: number;
 }
 
 export const GeneralInput: FC<Props> = ({
@@ -26,11 +28,15 @@ export const GeneralInput: FC<Props> = ({
   onFocus,
   onBlur,
   hint,
+  min,
+  max,
 }) => {
   return (
     <input
       class={style(width)}
       type={type}
+      min={min}
+      max={max}
       value={value}
       onInput={setValue && reflectValue(setValue)}
       disabled={disabled}

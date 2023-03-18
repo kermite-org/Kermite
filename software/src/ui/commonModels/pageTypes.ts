@@ -16,6 +16,9 @@ export type PagePaths =
   | '/profileSetup/step1'
   | '/profileSetup/step2'
   | '/profileSetup/step3'
+  | '/externalFirmwareProjectSetup/step1'
+  | '/externalFirmwareProjectSetup/step2'
+  | '/externalFirmwareProjectSetup/step3'
   | '/firmwareFlash'
   | '/projectReview';
 
@@ -60,3 +63,5 @@ export type IPageModelSpec = never;
 export type IProjectQuickSetupStep = 'step1' | 'step2' | 'step3';
 
 export type IProfileSetupStep = 'step1' | 'step2' | 'step3';
+
+export type IExtProjectSetupStep = 'step1' | 'step2';
