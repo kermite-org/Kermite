@@ -7,6 +7,7 @@ import {
   IStandardBaseFirmwareType,
   isIncluded,
   compareArray,
+  getSearchQueryObject,
 } from '~/shared';
 import {
   IMultiplePinsFieldKey,
@@ -15,6 +16,13 @@ import {
   IStandardFirmwareEditValues,
   IStandardFirmwareMcuType,
 } from '~/ui/featureEditors/standardFirmwareEditor/types';
+
+const configs = {
+  reqCheckPinsDuplication: true,
+};
+if (getSearchQueryObject().debug_disable_pins_duplication_chuck === '1') {
+  configs.reqCheckPinsDuplication = false;
+}
 
 const availablePinsRp = generateNumberSequence(30).map((i) => 'GP' + i);
 
@@ -374,27 +382,30 @@ export const standardFirmwareEditModelHelpers = {
         return 'lighting pin and num LEDs should be specified';
       }
     }
-    const allPins = [
-      ...((useMatrixKeyScanner && matrixRowPins) || []),
-      ...((useMatrixKeyScanner && matrixColumnPins) || []),
-      ...((useDirectWiredKeyScanner && directWiredPins) || []),
-      ...((useEncoder && encoderPins) || []),
-      ...((useLighting && lightingPin && [lightingPin]) || []),
-      ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
-    ];
-    if (!checkArrayItemsUnique(allPins)) {
-      return 'pin duplication detected';
-    }
-    const allPinsR = [
-      ...((useMatrixKeyScanner && matrixRowPinsR) || []),
-      ...((useMatrixKeyScanner && matrixColumnPinsR) || []),
-      ...((useDirectWiredKeyScanner && directWiredPinsR) || []),
-      ...((useEncoder && encoderPinsR) || []),
-      ...((useLighting && lightingPin && [lightingPin]) || []),
-      ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
-    ];
-    if (!checkArrayItemsUnique(allPinsR)) {
-      return 'pin duplication detected';
+
+    if (configs.reqCheckPinsDuplication) {
+      const allPins = [
+        ...((useMatrixKeyScanner && matrixRowPins) || []),
+        ...((useMatrixKeyScanner && matrixColumnPins) || []),
+        ...((useDirectWiredKeyScanner && directWiredPins) || []),
+        ...((useEncoder && encoderPins) || []),
+        ...((useLighting && lightingPin && [lightingPin]) || []),
+        ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
+      ];
+      if (!checkArrayItemsUnique(allPins)) {
+        return 'pin duplication detected';
+      }
+      const allPinsR = [
+        ...((useMatrixKeyScanner && matrixRowPinsR) || []),
+        ...((useMatrixKeyScanner && matrixColumnPinsR) || []),
+        ...((useDirectWiredKeyScanner && directWiredPinsR) || []),
+        ...((useEncoder && encoderPinsR) || []),
+        ...((useLighting && lightingPin && [lightingPin]) || []),
+        ...((isSplit && singleWireSignalPin && [singleWireSignalPin]) || []),
+      ];
+      if (!checkArrayItemsUnique(allPinsR)) {
+        return 'pin duplication detected';
+      }
     }
 
     return '';
