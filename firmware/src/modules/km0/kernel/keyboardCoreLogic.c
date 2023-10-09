@@ -62,6 +62,7 @@ enum {
 
 #define NumHidReportBytes 8
 #define NumHidHoldKeySlots 6
+#define NumHidMouseReportBytes 7
 
 typedef struct {
   uint8_t hidReportBuf[NumHidReportBytes];
@@ -69,6 +70,7 @@ typedef struct {
   uint8_t shiftCancelCount;
   uint8_t hidKeyCodes[NumHidHoldKeySlots];
   uint8_t nextKeyPos;
+  uint8_t hidMouseReportBuf[NumHidMouseReportBytes];
 } HidReportState;
 
 static HidReportState hidReportState;
@@ -97,6 +99,10 @@ static void resetHidReportState() {
     rs->hidKeyCodes[i] = 0;
   }
   rs->nextKeyPos = 0;
+
+  for(uint8_t i = 0; i < NumHidMouseReportBytes; i++){
+    rs->hidMouseReportBuf[i] = 0;
+  }
 }
 
 static uint8_t *getOutputHidReport() {
@@ -698,6 +704,26 @@ static OutputKeyStrokeAction convertKeyInputOperationWordToOutputKeyStrokeAction
   return action;
 }
 
+static void emitMouseButtonAction(uint8_t code, bool isDown){
+// MouseButtonLeft: 1,
+// MouseButtonRight: 2,
+// MouseButtonCenter: 3,
+// MouseButtonBack: 4,
+// MouseButtonForward: 5,
+// MouseWheelUp: 6,
+// MouseWheelDown: 7,
+  HidReportState *rs = &hidReportState;
+  if(code <= 5){
+    uint8_t bitPos = code - 1;
+    bit_spec(rs->hidMouseReportBuf[0], bitPos, isDown);
+    usbIoCore_hidMouse_writeReport(rs->hidMouseReportBuf);
+  }else if(code == 6 ||code == 7){
+    int8_t dir = code == 6 ? 1 : -1;
+    rs->hidMouseReportBuf[3] = isDown ? dir : 0;
+    usbIoCore_hidMouse_writeReport(rs->hidMouseReportBuf);
+  }
+}
+
 static void handleOperationOn(uint32_t opWord) {
   uint8_t opType = (opWord >> 30) & 0b11;
   if (opType == OpType_KeyInput) {
@@ -741,8 +767,15 @@ static void handleOperationOn(uint32_t opWord) {
       configManager_handleSystemAction(actionCode, payloadValue);
     }
     if (exOpType == ExOpType_ConsumerControl) {
+      //マウスのボタン/スクロールのアサインを低コストで暫定対応実装するため
+      //ConsumerControlのアサイン領域にマウスボタンのアサインを混ぜ込む
+      //本来的には独立したアサイン領域と伝達経路を確保すべき
       uint16_t keyCode = (opWord >> 8) & 0xFFFF;
-      usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
+      if(keyCode <= 7){
+        emitMouseButtonAction(keyCode, true);
+      }else{
+        usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
+      }
     }
   }
 
@@ -771,8 +804,13 @@ static void handleOperationOff(uint32_t opWord) {
       }
     }
     if (exOpType == ExOpType_ConsumerControl) {
-      uint16_t keyCode = 0;
-      usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
+      uint16_t keyCode = (opWord >> 8) & 0xFFFF;
+      if(keyCode <= 7){
+        emitMouseButtonAction(keyCode, false);
+      }else{
+        keyCode = 0;
+        usbIoCore_hidConsumerControl_writeReport((uint8_t *)&keyCode);
+      }
     }
   }
   layerMutations_recoverMainLayerIfAllLayeresDisabled();
