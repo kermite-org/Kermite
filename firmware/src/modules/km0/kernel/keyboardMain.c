@@ -50,7 +50,11 @@ scanSlotFlags, nextScanSlotFlags
  前半に左手側,後半に右手側のキー状態を持つ
 */
 static uint8_t scanSlotFlags[NumScanSlotBytes] = { 0 };
+static uint8_t intermediateScanSlotFlags[NumScanSlotBytes] = { 0 };
 static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
+
+static uint8_t debouncingWaitMs = 50;
+static uint8_t debouncingTickCounter[NumScanSlots] = { 0 };
 
 static uint16_t localLayerFlags = 0;
 static uint8_t localHidReport[8] = { 0 };
@@ -350,10 +354,31 @@ static void onPhysicalKeyStateChanged(uint8_t scanIndex, bool isDown) {
 //----------------------------------------------------------------------
 
 //キー状態更新処理
-static void processKeyStatesUpdate() {
+static void processKeyStatesUpdate(uint8_t elapsed) {
+  if (debouncingWaitMs > 0) {
+    for (uint8_t i = 0; i < NumScanSlots; i++) {
+      uint8_t curr = utils_readArrayedBitFlagsBit(intermediateScanSlotFlags, i);
+      uint8_t next = utils_readArrayedBitFlagsBit(inputScanSlotFlags, i);
+
+      if (debouncingTickCounter[i] == 0) {
+      } else if (debouncingTickCounter[i] < elapsed) {
+        debouncingTickCounter[i] = 0;
+      } else {
+        debouncingTickCounter[i] -= elapsed;
+      }
+
+      if (next != curr && debouncingTickCounter[i] == 0) {
+        utils_writeArrayedBitFlagsBit(intermediateScanSlotFlags, i, next);
+        debouncingTickCounter[i] = debouncingWaitMs;
+      }
+    }
+  } else {
+    utils_copyBytes(intermediateScanSlotFlags, inputScanSlotFlags, NumScanSlotBytes);
+  }
+
   for (uint8_t i = 0; i < NumScanSlots; i++) {
     uint8_t curr = utils_readArrayedBitFlagsBit(scanSlotFlags, i);
-    uint8_t next = utils_readArrayedBitFlagsBit(inputScanSlotFlags, i);
+    uint8_t next = utils_readArrayedBitFlagsBit(intermediateScanSlotFlags, i);
     if (!curr && next) {
       onPhysicalKeyStateChanged(i, true);
     }
@@ -447,7 +472,7 @@ void keyboardMain_processKeyInputUpdate() {
   uint32_t tickMs = system_getSystemTimeMs();
   uint32_t elapsed = utils_clamp(tickMs - prevTickMs, 0, 100);
 
-  processKeyStatesUpdate();
+  processKeyStatesUpdate(elapsed);
   keyboardCoreLogic_processTicker(elapsed);
   processKeyboardCoreLogicOutput();
 
