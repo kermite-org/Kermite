@@ -53,7 +53,7 @@ static uint8_t scanSlotFlags[NumScanSlotBytes] = { 0 };
 static uint8_t intermediateScanSlotFlags[NumScanSlotBytes] = { 0 };
 static uint8_t inputScanSlotFlags[NumScanSlotBytes] = { 0 };
 
-static uint8_t debouncingWaitMs = 50;
+static uint8_t debouncingWaitMs = 30;
 static uint8_t debouncingTickCounter[NumScanSlots] = { 0 };
 
 static uint16_t localLayerFlags = 0;
