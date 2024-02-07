@@ -1,3 +1,4 @@
+import { memoryFileSystem } from '~/memoryFileSystem';
 import {
   fileExtensions,
   IFileReadHandle,
@@ -125,6 +126,7 @@ export const profileManagerCore = {
       profileData,
       profileEntry.profileName,
     );
+    memoryFileSystem.forceSavedToLocalStorage();
   },
   async loadExternalProfileFile(
     fileHandle: IFileReadHandle,

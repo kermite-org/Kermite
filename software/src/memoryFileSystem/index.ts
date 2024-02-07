@@ -20,6 +20,7 @@ interface IMemoryFileSystem {
   setMemoryStorageRevision(rev: number): void;
   initialize(): void;
   terminate(): void;
+  forceSavedToLocalStorage(): void;
   isExist(path: string): boolean;
   readFile(path: string): string;
   writeFile(path: string, content: string): void;
@@ -65,6 +66,14 @@ function createMemoryFileSystem(): IMemoryFileSystem {
       }
     },
     terminate() {
+      const persistData: IMemoryFileSystemPersistData = {
+        fileEntities,
+        memoryStorageRevision,
+      };
+      const text = JSON.stringify(persistData);
+      localStorage.setItem(localStorageKey, text);
+    },
+    forceSavedToLocalStorage() {
       const persistData: IMemoryFileSystemPersistData = {
         fileEntities,
         memoryStorageRevision,
