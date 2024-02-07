@@ -1,9 +1,13 @@
 function creteLogStorage() {
   const storageKey = `kermite_debug_log_storage`;
 
-  type ILogStorageObject = {
+  type ILogStorageItem = {
     revision: number;
     message: string;
+  };
+
+  type ILogStorageObject = {
+    items: ILogStorageItem[];
   };
 
   const m = {
@@ -12,14 +16,22 @@ function creteLogStorage() {
       if (text) {
         try {
           const obj = JSON.parse(text);
-          return obj;
+          if (obj.items) {
+            return obj;
+          }
         } catch (_) {}
       }
-      return { revision: 0, message: 'initial data' };
+      return { items: [{ revision: 0, message: 'initial data' }] };
     },
     write(message: string) {
       const obj = m.read();
-      const newObj: ILogStorageObject = { revision: obj.revision + 1, message };
+      const newItem: ILogStorageItem = {
+        revision: obj.items[0].revision + 1,
+        message,
+      };
+      const newObj: ILogStorageObject = {
+        items: [newItem, ...obj.items].slice(0, 5),
+      };
       localStorage.setItem(storageKey, JSON.stringify(newObj));
     },
   };
@@ -27,7 +39,9 @@ function creteLogStorage() {
   return {
     show() {
       const obj = m.read();
-      console.log(`logStorage, ${obj.revision}: ${obj.message}`);
+      for (const item of obj.items) {
+        console.log(`logStorage, ${item.revision}: ${item.message}`);
+      }
     },
     write(message: string) {
       m.write(message);

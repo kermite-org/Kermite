@@ -20,6 +20,7 @@ function start() {
   window.addEventListener('resize', debounce(appUi.rerender, 100));
 
   const beforeUnloadHandler = () => {
+    logStorage.write(`beforeUnload handler started`);
     render(() => <div />, appDiv);
     if (appUi.skipPageTerminationTasks) {
       return;
