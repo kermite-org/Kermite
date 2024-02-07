@@ -61,7 +61,9 @@ function createMemoryFileSystem(): IMemoryFileSystem {
         const data = JSON.parse(text) as IMemoryFileSystemPersistData;
         memoryStorageRevision = data.memoryStorageRevision ?? 1;
         fileEntities = data.items || data.fileEntities;
-        console.log({ memoryStorageRevision });
+        // console.log({ memoryStorageRevision });
+        const totalByteLength = new TextEncoder().encode(text).length;
+        console.log(`memory storage size: ${totalByteLength}`);
         console.log({ fileEntities });
       }
     },
