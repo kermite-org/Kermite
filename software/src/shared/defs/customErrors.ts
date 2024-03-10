@@ -11,6 +11,7 @@ export type IAppErrorsSource = {
   FailedToLoadRemoteResource: { url: string };
   // [key: string]: { [key in string]?: string };
   InvalidLocalFileExtension: { fileName: string };
+  IncompatibleFirmwareVersion: {};
 };
 
 type IErrorType = keyof IAppErrorsSource;
@@ -28,6 +29,7 @@ const errorTextMapEN: { [key in IErrorType]: string } = {
   InvalidProfileFileSchema: `Invalid schema for file.`,
   FailedToLoadRemoteResource: `Failed to fetch remote resource.`,
   InvalidLocalFileExtension: `Invalid file extension.`,
+  IncompatibleFirmwareVersion: `Incompatible firmware version. Please update the firmware.`,
 };
 
 const errorTextMapJP: { [key in IErrorType]: string } = {
@@ -42,6 +44,7 @@ const errorTextMapJP: { [key in IErrorType]: string } = {
   InvalidProfileFileSchema: `プロファイルファイルの形式が不正です。`,
   FailedToLoadRemoteResource: `リソースの取得に失敗しました。`,
   InvalidLocalFileExtension: `ファイルの拡張子が不正です。`,
+  IncompatibleFirmwareVersion: `ファームウェアのバージョンに互換性がありません。\n最新のファームウェアに更新してください。`,
 };
 
 const fieldNameDictionaryJP: { [key: string]: string } = {
@@ -57,6 +60,7 @@ export type IAppErrorData<T extends keyof IAppErrorsSource> =
       type: T;
       params: IAppErrorsSource[T];
       stack: string;
+      messageOverride?: string;
     }
   | {
       isAppError: false;
@@ -67,12 +71,19 @@ export class AppError<T extends keyof IAppErrorsSource> extends Error {
   type: T;
   params: IAppErrorsSource[T];
   originalError: any;
+  messageOverride?: string;
 
-  constructor(type: T, params: IAppErrorsSource[T], original?: any) {
+  constructor(
+    type: T,
+    params: IAppErrorsSource[T],
+    original?: any,
+    messageOverride?: string,
+  ) {
     super(original?.message || type);
     this.type = type;
     this.params = params;
     this.originalError = original;
+    this.messageOverride = messageOverride;
   }
 }
 
@@ -107,6 +118,7 @@ export function getAppErrorData(
       type: error.type,
       params: error.params,
       stack: makeCompactStackTrace(error),
+      messageOverride: error.messageOverride,
     };
   } else {
     return {
@@ -118,7 +130,7 @@ export function getAppErrorData(
 
 export function makeDisplayErrorMessage(errorData: IAppErrorData<any>) {
   if (errorData.isAppError) {
-    const { type, params, stack } = errorData;
+    const { type, params, stack, messageOverride } = errorData;
     const headline = errorTextMapJP[type as IErrorType] || type; // TODO: 多言語対応
     const paramsLines = Object.keys(params)
       .map(
@@ -128,7 +140,7 @@ export function makeDisplayErrorMessage(errorData: IAppErrorData<any>) {
     return `${headline}${paramsLines ? '\n' + paramsLines : ''}
 
 詳細:
-${stack}
+${messageOverride ?? stack}
 `;
   } else {
     return errorData.stack;

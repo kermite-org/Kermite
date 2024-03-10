@@ -83,8 +83,8 @@ export const ExfProjectSetupPart_StepFirmwareConnection: FC = () => {
           <p>
             日本語での解説記事:&nbsp;
             <PlainLink
-              text="Kermiteのファームウェアの作り方 Arduino実践編 (Zenn)"
-              url="https://zenn.dev/yahiro04/articles/kermite_230120"
+              text="Kermiteのファームウェアの作り方 Arduino実践編"
+              url="https://kermite-developer-guide.deno.dev/article/kermite_230120"
             />
           </p>
         </div>

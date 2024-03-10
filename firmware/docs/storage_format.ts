@@ -25,7 +25,7 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       storageSystemParametersRevision: U8;
       softwareStorageFomartRevision: U8;
     };
-    systemParameters: Chunk<0xaa30, 10> & {
+    systemParameters: Chunk<0xaa30, 11> & {
       emitRealtimeEvents: U8;
       keyHoldLedOutput: U8;
       heartBeatLedOutput: U8;
@@ -36,6 +36,7 @@ BB BB ...: チャンクのボディデータ, LL LL で規定されるサイズ�
       glowColor: U8;
       glowBrightness: U8;
       glowPattern: U8;
+      debounceWaitMs: U8;
     };
     customParameters: Chunk<0xaa40, "KM0_KEYBOARD__NUM_CUSTOM_PARAMETERS"> & {};
     profileData: Chunk<0xaa70> & {
