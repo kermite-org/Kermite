@@ -26,10 +26,21 @@ export type ICustomParameterSpec_Select = {
   defaultValue: number;
 };
 
+export type ICustomParameterSpec_NumberEdit = {
+  type: 'numberEdit';
+  slotIndex: number;
+  label: string;
+  minValue: number;
+  maxValue: number;
+  defaultValue: number;
+  unit: string;
+};
+
 export type ICustomParameterSpec =
   | ICustomParameterSpec_Toggle
   | ICustomParameterSpec_Linear
-  | ICustomParameterSpec_Select;
+  | ICustomParameterSpec_Select
+  | ICustomParameterSpec_NumberEdit;
 
 export const SystemParameterDefinitions: ICustomParameterSpec[] = [
   {
@@ -107,6 +118,15 @@ export const SystemParameterDefinitions: ICustomParameterSpec[] = [
     defaultValue: 0,
     maxValue: 255, // read from firmware
   },
+  {
+    slotIndex: 10,
+    type: 'numberEdit',
+    label: 'Debouncing Wait',
+    minValue: 0,
+    maxValue: 200,
+    defaultValue: 0,
+    unit: 'ms',
+  },
 ];
 
 export function getSystemParameterDefinitionBySystemParameterKey(
@@ -123,6 +143,7 @@ export function getSystemParameterDefinitionBySystemParameterKey(
     'glowColor',
     'glowBrightness',
     'glowPattern',
+    'debounceWaitMs',
   ];
   const index = keys.indexOf(systemParameterKey);
   if (index >= 0) {

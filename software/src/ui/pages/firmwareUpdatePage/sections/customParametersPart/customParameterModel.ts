@@ -27,6 +27,16 @@ export type ICustomParameterModel =
       setValue(value: number): void;
     }
   | {
+      type: 'numberEdit';
+      slotIndex: number;
+      label: string;
+      unit: string;
+      min: number;
+      max: number;
+      value: number;
+      setValue(value: number): void;
+    }
+  | {
       type: 'invalidType';
       slotIndex: number;
       label: string;
@@ -37,8 +47,8 @@ export function makeParameterModel(
   currentValue: number,
   maxValueOverride: number,
 ): ICustomParameterModel {
-  const { label, slotIndex } = parameterSpec;
-  if (parameterSpec.type === 'toggle') {
+  const { type, label, slotIndex } = parameterSpec;
+  if (type === 'toggle') {
     return {
       type: 'toggle',
       slotIndex,
@@ -52,7 +62,7 @@ export function makeParameterModel(
       },
     };
   }
-  if (parameterSpec.type === 'selection') {
+  if (type === 'selection') {
     const options: ISelectorOption[] = parameterSpec.options.map((it) => ({
       value: it.value.toString(),
       label: it.label,
@@ -73,7 +83,7 @@ export function makeParameterModel(
       setSelectionKey,
     };
   }
-  if (parameterSpec.type === 'linear') {
+  if (type === 'linear') {
     const setValue = (value: number) => {
       ipcAgent.async.device_setCustomParameterValue(slotIndex, value >> 0);
     };
@@ -85,6 +95,21 @@ export function makeParameterModel(
       max: maxValueOverride,
       value: currentValue,
       setValue,
+    };
+  }
+  if (type === 'numberEdit') {
+    const setValue = (value: number) => {
+      ipcAgent.async.device_setCustomParameterValue(slotIndex, value >> 0);
+    };
+    return {
+      type: 'numberEdit',
+      slotIndex,
+      label,
+      min: parameterSpec.minValue,
+      max: parameterSpec.maxValue,
+      value: currentValue,
+      setValue,
+      unit: parameterSpec.unit,
     };
   }
   return { type: 'invalidType', slotIndex, label };

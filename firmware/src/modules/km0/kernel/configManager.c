@@ -43,6 +43,7 @@ static const T_SystemParametersSet systemParametersDefault = {
   .glowColor = 0,
   .glowBrightness = 20,
   .glowPattern = 0,
+  .debounceWaitMs = 0,
 };
 
 static T_SystemParametersSet systemParameterMaxValues = {
@@ -56,6 +57,7 @@ static T_SystemParametersSet systemParameterMaxValues = {
   .glowColor = 255,
   .glowBrightness = 255,
   .glowPattern = 255,
+  .debounceWaitMs = 200,
 };
 
 static void notifyParameterChanged(uint8_t eventType, uint8_t parameterIndex, uint8_t value) {
@@ -113,7 +115,7 @@ uint16_t configManager_getParameterExposeFlags() {
   return parameterExposeFlags;
 }
 
-void configManager_setParameterExposeFlagsForBoardLeds(){
+void configManager_setParameterExposeFlagsForBoardLeds() {
   configManager_setParameterExposeFlag(SystemParameter_HeartbeatLed);
   configManager_setParameterExposeFlag(SystemParameter_KeyHoldIndicatorLed);
 }
