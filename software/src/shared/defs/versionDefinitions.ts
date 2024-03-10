@@ -22,4 +22,5 @@ export const ProfileBinaryFormatRevision = 5;
 // 210706, 3, emitKeyStrokeを削除
 // 210706, 4, systemLayoutをUS:0,JIS:1に戻す
 // 210712, 5, glowDirectionとglowSpeedを削除
-export const ConfigParametersRevision = 5;
+// 240310, 6, debouncingWaitMsを追加
+export const ConfigParametersRevision = 6;

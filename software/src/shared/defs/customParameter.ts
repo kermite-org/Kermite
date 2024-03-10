@@ -107,6 +107,13 @@ export const SystemParameterDefinitions: ICustomParameterSpec[] = [
     defaultValue: 0,
     maxValue: 255, // read from firmware
   },
+  {
+    slotIndex: 10,
+    type: 'linear',
+    label: 'Debouncing Wait',
+    defaultValue: 0,
+    maxValue: 100,
+  },
 ];
 
 export function getSystemParameterDefinitionBySystemParameterKey(
@@ -123,6 +130,7 @@ export function getSystemParameterDefinitionBySystemParameterKey(
     'glowColor',
     'glowBrightness',
     'glowPattern',
+    'debounceWaitMs',
   ];
   const index = keys.indexOf(systemParameterKey);
   if (index >= 0) {
