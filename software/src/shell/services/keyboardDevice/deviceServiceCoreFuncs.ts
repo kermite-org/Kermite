@@ -1,4 +1,5 @@
 import {
+  AppError,
   ConfigParametersRevision,
   ConfigStorageFormatRevision,
   delayMs,
@@ -21,8 +22,11 @@ function checkRevisionValue(
   softwareValue: number,
 ) {
   if (firmwareValue !== softwareValue) {
-    throw new Error(
-      `incompatible ${label} (software:${softwareValue}, firmware:${firmwareValue})`,
+    throw new AppError(
+      'IncompatibleFirmwareVersion',
+      {},
+      {},
+      `Incompatible ${label} (software:${softwareValue}, firmware:${firmwareValue})`,
     );
   }
 }
