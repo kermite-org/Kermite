@@ -26,10 +26,21 @@ export type ICustomParameterSpec_Select = {
   defaultValue: number;
 };
 
+export type ICustomParameterSpec_NumberEdit = {
+  type: 'numberEdit';
+  slotIndex: number;
+  label: string;
+  minValue: number;
+  maxValue: number;
+  defaultValue: number;
+  unit: string;
+};
+
 export type ICustomParameterSpec =
   | ICustomParameterSpec_Toggle
   | ICustomParameterSpec_Linear
-  | ICustomParameterSpec_Select;
+  | ICustomParameterSpec_Select
+  | ICustomParameterSpec_NumberEdit;
 
 export const SystemParameterDefinitions: ICustomParameterSpec[] = [
   {
@@ -109,10 +120,12 @@ export const SystemParameterDefinitions: ICustomParameterSpec[] = [
   },
   {
     slotIndex: 10,
-    type: 'linear',
+    type: 'numberEdit',
     label: 'Debouncing Wait',
+    minValue: 0,
+    maxValue: 200,
     defaultValue: 0,
-    maxValue: 100,
+    unit: 'ms',
   },
 ];
 

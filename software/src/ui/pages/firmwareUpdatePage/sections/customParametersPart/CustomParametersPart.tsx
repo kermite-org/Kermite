@@ -1,6 +1,7 @@
 import { css, FC, jsx } from 'alumina';
 import { texts } from '~/ui/base';
-import { GeneralSelector, CheckBox, Slider } from '~/ui/components';
+import { CheckBox, GeneralSelector, Slider } from '~/ui/components';
+import { NumberInputEx } from '~/ui/components/molecules/NumberInputEx';
 import { PartBody, PartHeader } from '~/ui/pages/firmwareUpdatePage/Components';
 import { useCustomParametersPartModel } from '~/ui/pages/firmwareUpdatePage/sections/customParametersPart/customParametersPartModel';
 
@@ -46,6 +47,16 @@ export const CustomParametersPart: FC = () => {
                       min={item.min}
                       max={item.max}
                       onChange={item.setValue}
+                    />
+                  )}
+                  {item.type === 'numberEdit' && (
+                    <NumberInputEx
+                      value={item.value}
+                      min={item.min}
+                      max={item.max}
+                      setValue={item.setValue}
+                      width={70}
+                      unit={item.unit}
                     />
                   )}
                 </div>
