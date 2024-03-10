@@ -24,4 +24,5 @@ tsconfig.tsbuildinfo
 
 /public/debug_local_firmwares/
 
+.env
 
