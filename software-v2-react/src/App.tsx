@@ -20,11 +20,10 @@ function App() {
     // void apiDev();
   }, []);
   return (
-    <>
-      <Box color={"red"}>hello mui system</Box>
+    <Box display={"flex"}>
       <ProjectImporterView />
       <ProjectSelectionView />
-    </>
+    </Box>
   );
 }
 
