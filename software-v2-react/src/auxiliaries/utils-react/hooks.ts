@@ -5,11 +5,11 @@ export function useEffectAsync(fn: () => Promise<void>, deps: any[]) {
   useEffect(() => void fn(), deps);
 }
 
-export function useAsyncResource<T>(fn: () => Promise<T>) {
+export function useAsyncResource<T>(fn: () => Promise<T>, deps: any[]) {
   const [value, setValue] = useState<T | undefined>(undefined);
   useEffectAsync(async () => {
     const newValue = await fn();
     setValue(newValue);
-  }, []);
+  }, deps);
   return value;
 }
