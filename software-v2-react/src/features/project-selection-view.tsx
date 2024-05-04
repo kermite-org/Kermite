@@ -1,8 +1,12 @@
 import { Box } from "@mui/system";
-import { FC, useState } from "react";
+import { useAtom } from "jotai/react";
+import { atomWithStorage } from "jotai/utils";
+import { FC } from "react";
+
+const projectIdAtom = atomWithStorage("krm2_currentProjectId", "aaa");
 
 export const ProjectSelectionView: FC = () => {
-  const [currentProjectId, setCurrentProjectId] = useState("aaa");
+  const [currentProjectId, setCurrentProjectId] = useAtom(projectIdAtom);
   const projectIds = ["aaa", "bbb", "ccc"];
 
   return (
@@ -17,6 +21,7 @@ export const ProjectSelectionView: FC = () => {
           key={id}
           onClick={() => setCurrentProjectId(id)}
           bgcolor={id === currentProjectId ? "#0CF" : "transparent"}
+          sx={{ cursor: "pointer" }}
         >
           {id}
         </Box>
