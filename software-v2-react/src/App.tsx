@@ -1,5 +1,6 @@
 import { Box } from "@mui/system";
 import { useEffect } from "react";
+import { ProjectImporterView } from "./features/project-importer-view";
 import { ProjectSelectionView } from "./features/project-selection-view";
 
 async function apiDev() {
@@ -21,6 +22,7 @@ function App() {
   return (
     <>
       <Box color={"red"}>hello mui system</Box>
+      <ProjectImporterView />
       <ProjectSelectionView />
     </>
   );
