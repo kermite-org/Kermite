@@ -84,14 +84,11 @@ static void encoderInstance_decodeInputOnPhaseAEdge(EncoderConfig *config, Encod
 }
 
 static uint8_t encoderInstance_pullRotationEventOne(EncoderState *state) {
-  static uint32_t tick = 0;
-  if ((++tick & 3) == 0) {
-    if (state->rots_num > 0) {
-      uint8_t rot = state->rots_buf & 1;
-      state->rots_buf >>= 1;
-      state->rots_num--;
-      return rot;
-    }
+  if (state->rots_num > 0) {
+    uint8_t rot = state->rots_buf & 1;
+    state->rots_buf >>= 1;
+    state->rots_num--;
+    return rot;
   }
   return rot_none;
 }
