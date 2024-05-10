@@ -11,16 +11,14 @@
 #define NumScanSlots (NumEncoders * 2)
 
 static EncoderConfig encoderConfigs[NumEncoders] = {
-  { .pinA = GP15, .pinB = GP26, .scanIndexBase = 0 },
-  { .pinA = GP27, .pinB = GP28, .scanIndexBase = 2 },
-
+  { .pinA = GP2, .pinB = GP3, .scanIndexBase = 0 },
+  { .pinA = GP4, .pinB = GP5, .scanIndexBase = 2 },
 };
 
 int main() {
   // debugUart_initialize(38400);
-  boardIoImpl_setupLeds_rp2040zero();
+  boardIoImpl_setupLeds_kb2040();
   keyScanner_encoders_initialize(NumEncoders, encoderConfigs);
-  keyboardMain_useKeyScanner(keyScanner_directWired_update);
   keyboardMain_useKeyScanner(keyScanner_encoders_update);
   generalKeyboard_start();
   return 0;
