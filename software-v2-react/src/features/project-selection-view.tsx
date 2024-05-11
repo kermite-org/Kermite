@@ -36,16 +36,16 @@ export const ProjectSelectionView: FC = () => {
   };
 
   return (
-    <Box flexDirection={"column"} border="solid 1px #888" minWidth={"100px"}>
+    <Box flexDirection="column" border="solid 1px #888" minWidth="100px">
       {projectItems.map((item) => (
         <Box
           key={item.projectId}
           onClick={() => handleLoadProject(item.projectId)}
           bgcolor={item.projectId === currentProjectId ? "#0CF" : "transparent"}
           sx={{ cursor: "pointer" }}
-          maxWidth={"110px"}
-          whiteSpace={"nowrap"}
-          overflow={"hidden"}
+          maxWidth="110px"
+          whiteSpace="nowrap"
+          overflow="hidden"
         >
           {item.keyboardName}
         </Box>

@@ -6,7 +6,7 @@ import { ProjectMenuView } from "./features/project-menu-view";
 
 function App() {
   return (
-    <Box display={"flex"}>
+    <Box display="flex">
       <ProjectImporterView />
       <div>
         <ProjectSelectionView />

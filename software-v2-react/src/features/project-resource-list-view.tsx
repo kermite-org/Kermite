@@ -31,7 +31,7 @@ export const ProjectResourceListView: FC = () => {
   const [currentAssetPath, setCurrentAssetPath] = useCurrentAssetPath();
 
   return (
-    <Box flexDirection={"column"} border="solid 1px #888" minWidth={"100px"}>
+    <Box flexDirection="column" border="solid 1px #888" minWidth="100px">
       {assetItems.map((item) => (
         <Box
           key={item.assetPath}

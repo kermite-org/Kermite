@@ -21,9 +21,9 @@ export const ProjectImporterView: FC = () => {
       </Box>
       <Box
         display="inline-flex"
-        flexDirection={"column"}
+        flexDirection="column"
         border="solid 1px #888"
-        minWidth={"100px"}
+        minWidth="100px"
       >
         {allProjectIds.map((id) => (
           <Box

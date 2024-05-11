@@ -8,7 +8,7 @@ module.exports = {
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
-  plugins: ["react-refresh"],
+  plugins: ["react", "react-refresh"],
   rules: {
     "react-refresh/only-export-components": [
       "warn",
@@ -16,5 +16,6 @@ module.exports = {
     ],
     "@typescript-eslint/no-unused-vars": ["warn"],
     "@typescript-eslint/no-explicit-any": ["off"],
+    "react/jsx-curly-brace-presence": "warn",
   },
 };
