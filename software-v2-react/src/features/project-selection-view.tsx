@@ -1,19 +1,18 @@
 import { Box } from "@mui/system";
-import { useAtom } from "jotai/react";
 import { FC } from "react";
 import { useAsyncResource } from "../auxiliaries/utils-react/hooks";
 import { bucketDb } from "../core/bucket-db-instance";
-import { projectIdAtom } from "../store";
 import { useBucketDbRevision } from "../core/bucket-db-notifier";
+import { useCurrentProjectId } from "../store";
 
 const m = {
   async loadLocalProjectIds() {
-    return await bucketDb.project.listKeys();
+    return [...(await bucketDb.project.listKeys()), ""];
   },
 };
 
 export const ProjectSelectionView: FC = () => {
-  const [currentProjectId, setCurrentProjectId] = useAtom(projectIdAtom);
+  const [currentProjectId, setCurrentProjectId] = useCurrentProjectId();
   const dbRevision = useBucketDbRevision();
   const projectIds =
     useAsyncResource(m.loadLocalProjectIds, [dbRevision]) ?? [];
@@ -27,7 +26,7 @@ export const ProjectSelectionView: FC = () => {
           bgcolor={id === currentProjectId ? "#0CF" : "transparent"}
           sx={{ cursor: "pointer" }}
         >
-          {id}
+          {id || "--"}
         </Box>
       ))}
     </Box>
