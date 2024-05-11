@@ -1,9 +1,8 @@
 import { Box } from "@mui/system";
-import { useAtom } from "jotai";
 import { FC } from "react";
 import { useAsyncResource } from "../auxiliaries/utils-react/hooks";
 import { bucketDb } from "../core/bucket-db-instance";
-import { assetPathAtom, useCurrentProjectId } from "../store";
+import { useCurrentAssetPath, useCurrentProjectId } from "../store";
 
 type IAssetItem = {
   assetPath: string;
@@ -29,7 +28,7 @@ export const ProjectResourceListView: FC = () => {
       () => m.loadLocalProjectAssetItems(currentProjectId),
       [currentProjectId]
     ) ?? [];
-  const [currentAssetPath, setCurrentAssetPath] = useAtom(assetPathAtom);
+  const [currentAssetPath, setCurrentAssetPath] = useCurrentAssetPath();
 
   return (
     <Box flexDirection={"column"} border="solid 1px #888" minWidth={"100px"}>
