@@ -5,9 +5,21 @@ import { bucketDb } from "../core/bucket-db-instance";
 import { useBucketDbRevision } from "../core/bucket-db-notifier";
 import { useCurrentAssetPath, useCurrentProjectId } from "../store";
 
+type IProjectItem = {
+  projectId: string;
+  keyboardName: string;
+};
+
 const m = {
-  async loadLocalProjectIds() {
-    return [...(await bucketDb.project.listKeys()), ""];
+  async loadLocalProjectIds(): Promise<IProjectItem[]> {
+    const items = await bucketDb.project.getAll();
+    return [
+      ...items.map((item) => ({
+        projectId: item.path,
+        keyboardName: item.value.keyboardName,
+      })),
+      { projectId: "", keyboardName: "--" },
+    ];
   },
 };
 
@@ -15,7 +27,7 @@ export const ProjectSelectionView: FC = () => {
   const [currentProjectId, setCurrentProjectId] = useCurrentProjectId();
   const [, setCurrentAssetPath] = useCurrentAssetPath();
   const dbRevision = useBucketDbRevision();
-  const projectIds =
+  const projectItems =
     useAsyncResource(m.loadLocalProjectIds, [dbRevision]) ?? [];
 
   const handleLoadProject = (projectId: string) => {
@@ -25,14 +37,17 @@ export const ProjectSelectionView: FC = () => {
 
   return (
     <Box flexDirection={"column"} border="solid 1px #888" minWidth={"100px"}>
-      {projectIds.map((id) => (
+      {projectItems.map((item) => (
         <Box
-          key={id}
-          onClick={() => handleLoadProject(id)}
-          bgcolor={id === currentProjectId ? "#0CF" : "transparent"}
+          key={item.projectId}
+          onClick={() => handleLoadProject(item.projectId)}
+          bgcolor={item.projectId === currentProjectId ? "#0CF" : "transparent"}
           sx={{ cursor: "pointer" }}
+          maxWidth={"110px"}
+          whiteSpace={"nowrap"}
+          overflow={"hidden"}
         >
-          {id || "--"}
+          {item.keyboardName}
         </Box>
       ))}
     </Box>

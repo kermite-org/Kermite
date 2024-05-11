@@ -5,9 +5,8 @@ type IBucket<T> = {
   set(path: string, value: T): Promise<void>;
   delete(path: string): Promise<void>;
   listKeys(pathPrefix?: string): Promise<string[]>;
-  getManyByPrefix(
-    pathPrefix: string
-  ): Promise<{ subPath: string; value: T | undefined }[]>;
+  getAll(): Promise<{ path: string; value: T }[]>;
+  getManyByPrefix(pathPrefix: string): Promise<{ subPath: string; value: T }[]>;
   setManyByPrefix(
     pathPrefix: string,
     items: { subPath: string; value: T }[]
@@ -74,11 +73,18 @@ export async function createBucketDb<
           pathPrefix && IDBKeyRange.bound(pathPrefix, pathPrefix + "~")
         )) as string[];
       },
+      async getAll() {
+        const paths = await bucket.listKeys();
+        return await mapPromisesSequential(paths, async (path) => {
+          const value = (await bucket.get(path))!;
+          return { path, value };
+        });
+      },
       async getManyByPrefix(pathPrefix) {
         const paths = await bucket.listKeys(pathPrefix);
         return await mapPromisesSequential(paths, async (path) => {
           const subPath = path.replace(new RegExp("^" + pathPrefix), "");
-          const value = await bucket.get(path);
+          const value = (await bucket.get(path))!;
           return { subPath, value };
         });
       },
