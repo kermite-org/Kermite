@@ -4,6 +4,7 @@ import { FC } from "react";
 import { useAsyncResource } from "../auxiliaries/utils-react/hooks";
 import { bucketDb } from "../core/bucket-db-instance";
 import { projectIdAtom } from "../store";
+import { useBucketDbRevision } from "../core/bucket-db-notifier";
 
 const m = {
   async loadLocalProjectIds() {
@@ -13,7 +14,9 @@ const m = {
 
 export const ProjectSelectionView: FC = () => {
   const [currentProjectId, setCurrentProjectId] = useAtom(projectIdAtom);
-  const projectIds = useAsyncResource(m.loadLocalProjectIds, []) ?? [];
+  const dbRevision = useBucketDbRevision();
+  const projectIds =
+    useAsyncResource(m.loadLocalProjectIds, [dbRevision]) ?? [];
 
   return (
     <Box flexDirection={"column"} border="solid 1px #888" minWidth={"100px"}>

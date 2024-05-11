@@ -2,6 +2,7 @@ import { Box } from "@mui/system";
 import { FC, useMemo, useState } from "react";
 import useSWR from "swr";
 import { bucketDb } from "../core/bucket-db-instance";
+import { useBucketDbNotifier } from "../core/bucket-db-notifier";
 
 const kermiteServerEndpoints = {
   base: `https://server.kermite.org`,
@@ -69,6 +70,8 @@ export const ProjectImporterView: FC = () => {
     fetcher
   );
 
+  const dbNotifier = useBucketDbNotifier();
+
   if (!allProjectIds) return undefined;
 
   const importSelectedPackage = async () => {
@@ -103,6 +106,7 @@ export const ProjectImporterView: FC = () => {
       projectAssetItems
     );
     console.log(`project ${keyboardName} imported`);
+    dbNotifier.notify();
     // console.log({ content });
   };
 
