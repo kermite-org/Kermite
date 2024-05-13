@@ -125,7 +125,7 @@ void keyScanner_encoders_update(uint8_t *keyStateBitFlags) {
     EncoderConfig *config = &encoderConfigs[i];
     EncoderState *state = &encoderStates[i];
     uint8_t rot = encoderInstance_pullRotationEventOne(state);
-    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, rot == rot_ccw);
-    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, rot == rot_cw);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 0, rot == rot_cw);
+    utils_writeArrayedBitFlagsBit(keyStateBitFlags, config->scanIndexBase + 1, rot == rot_ccw);
   }
 }
