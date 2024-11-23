@@ -14,6 +14,7 @@ MODULE_SRCS += km0/device/rp2040/neoPixelCore.c
 MODULE_SRCS += km0/device/rp2040/serialLed.c
 MODULE_SRCS += km0/device/rp2040/pinObserver.c
 MODULE_SRCS += km0/device/rp2040/boardI2c.c
+MODULE_SRCS += km0/device/rp2040/boardLink_singleWire_handlerDummy.c
 MODULE_SRCS += km0/kernel/dataStorage.c
 MODULE_SRCS += km0/kernel/configManager.c
 MODULE_SRCS += km0/kernel/firmwareMetadata.c
