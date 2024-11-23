@@ -12,3 +12,7 @@ void boardLink_exchangeFramesBlocking(); //送信+受信
 
 void boardLink_setupSlaveReceiver(void (*f)(void));
 void boardLink_clearSlaveReceiver();
+
+//外部の別の割り込みハンドラから通信受信のハンドラを呼び出す
+//RP2040でコアごとにピン変化割り込みのハンドラが単一のものが共有される仕様の対策
+void boardLink_invokePinChangedHandlerFromOther(int pin, int edge);
