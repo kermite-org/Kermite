@@ -114,6 +114,8 @@ MODULE_PIOASM_SRCS += km0/device/rp2040/singleWire4.pio
 MODULE_SRCS += km0/device/rp2040/boardLink_singleWire.c
 MODULE_SRCS += km0/wrapper/splitKeyboard.c
 PROJECT_STENCIL_SRCS += main_split.c
+else
+MODULE_SRCS += km0/device/rp2040/boardLink_singleWire_handlerDummy.c
 endif
 
 ifneq ($(KL_USE_CUSTOM_DATA),)
