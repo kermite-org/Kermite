@@ -8,7 +8,6 @@
 #include "km0/wrapper/splitKeyboard.h"
 
 #define NumEncoders 1
-#define NumScanSlots (NumEncoders * 2)
 
 static EncoderConfig encoderConfigs[NumEncoders] = {
   { .pinA = GP4, .pinB = GP5, .scanIndexBase = 0 },
@@ -24,7 +23,7 @@ static void setupBoard(int8_t side) {
 }
 
 int main() {
-  // debugUart_initialize(38400);
+  debugUart_initialize(115200);
   boardIoImpl_setupLeds_kb2040();
   splitKeyboard_setBoardConfigCallback(setupBoard);
   splitKeyboard_start();
