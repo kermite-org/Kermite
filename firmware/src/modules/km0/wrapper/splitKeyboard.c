@@ -76,7 +76,7 @@ static uint8_t sw_txbuf[SingleWireMaxPacketSize] = { 0 };
 static uint8_t sw_rxbuf[SingleWireMaxPacketSize] = { 0 };
 
 bool isRightHand = false;
-void (*boardConfigCallback)(int8_t side) = NULL;
+void (*boardConfigCallback)(int8_t side, bool isMaster) = NULL;
 
 int8_t configuredBoardSide = -1;
 
@@ -97,12 +97,12 @@ static void taskForEach100ms(void (*taskFunc)(uint32_t)) {
 
 //-------------------------------------------------------
 
-static void setBoardSide(int8_t side) {
+static void setBoardSide(int8_t side, bool isMaster) {
   if (side != configuredBoardSide) {
     isRightHand = side == 1;
     printf("board side: %s\n", isRightHand ? "RIGHT" : "LEFT");
     if (boardConfigCallback) {
-      boardConfigCallback(side);
+      boardConfigCallback(side, isMaster);
     }
     configuredBoardSide = side;
   }
@@ -254,7 +254,7 @@ static void master_handleMasterParameterChanged(uint8_t eventType, uint8_t param
     enqueueMasterStatePacket(SplitOp_MasterParameterChanged, parameterIndex, value);
   }
   if (pi == SystemParameter_MasterSide) {
-    setBoardSide(value);
+    setBoardSide(value, true);
   }
 }
 
@@ -264,7 +264,7 @@ static void master_handleMasterKeySlotStateChanged(uint8_t slotIndex, bool isDow
 
 static void master_setupBoard() {
   uint8_t side = configManager_readParameter(SystemParameter_MasterSide);
-  setBoardSide(side);
+  setBoardSide(side, true);
 }
 
 static void master_ledTask(uint32_t step) {
@@ -424,7 +424,7 @@ static void slave_consumeMasterStatePackets() {
       if (parameterIndex == SystemParameter_MasterSide) {
         uint8_t masterSide = value;
         uint8_t slaveSide = (masterSide == 0) ? 1 : 0;
-        setBoardSide(slaveSide);
+        setBoardSide(slaveSide, false);
       }
     }
   }
@@ -609,7 +609,7 @@ void splitKeyboard_setNumScanSlots(uint8_t _numScanSlotsLeft, uint8_t _numScanSl
   numScanSlotBytesRight = (numScanSlotsRight + 7) / 8;
 }
 
-void splitKeyboard_setBoardConfigCallback(void (*callback)(int8_t side)) {
+void splitKeyboard_setBoardConfigCallback(void (*callback)(int8_t side, bool isMaster)) {
   boardConfigCallback = callback;
 }
 
