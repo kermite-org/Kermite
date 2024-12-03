@@ -75,7 +75,7 @@ KermiteKeyboardDefinitionData defs = {
 static EncoderConfig encoderConfigs[1] = { { .pinA = 0, .pinB = 0, .scanIndexBase = 0 } };
 static EncoderConfig encoderConfigsR[1] = { { .pinA = 0, .pinB = 0, .scanIndexBase = 0 } };
 
-static void setupBoard(int8_t side) {
+static void setupBoard(int8_t side, bool isMaster) {
 
   uint8_t *pins = defs.keyScannerPins;
 
@@ -139,8 +139,12 @@ static void setupBoard(int8_t side) {
       config->pinA = encoderPins[0];
       config->pinB = encoderPins[1];
       config->scanIndexBase = scanIndexBaseL;
-      keyScanner_encoders_initialize(1, encoderConfigs);
-      keyboardMain_useKeyScanner(keyScanner_encoders_update);
+      if (isMaster) {
+        keyScanner_encoders_initialize(1, encoderConfigs);
+        keyboardMain_useKeyScanner(keyScanner_encoders_update);
+      } else {
+        //encoders are not supported in slave side
+      }
       scanIndexBaseL += 2;
     }
     if (side == 1 && defs.numEncoderRight == 1) {
@@ -148,8 +152,12 @@ static void setupBoard(int8_t side) {
       config->pinA = encoderPinsR[0];
       config->pinB = encoderPinsR[1];
       config->scanIndexBase = scanIndexBaseR;
-      keyScanner_encoders_initialize(1, encoderConfigs);
-      keyboardMain_useKeyScanner(keyScanner_encoders_update);
+      if (isMaster) {
+        keyScanner_encoders_initialize(1, encoderConfigs);
+        keyboardMain_useKeyScanner(keyScanner_encoders_update);
+      } else {
+        //encoders are not supported in slave side
+      }
       scanIndexBaseR += 2;
     }
   }
